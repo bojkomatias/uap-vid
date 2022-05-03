@@ -1,0 +1,7 @@
+version: '3' 
+services: 
+  uap-research: #Our container app name
+    build: 
+      context: . #Compose will use this context to find a Dockerfile
+    ports: 
+      - "3000:3000"
