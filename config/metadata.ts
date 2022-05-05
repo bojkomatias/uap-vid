@@ -5,24 +5,33 @@ export const ProtocolMetadata: Protocol = {
     content: [
         {
             // 1. Identificacion del Proyecto
-            name: 'Identification',
+            name: 'identification',
             content: [
                 // 1.1 Titulo
-                { type: InputType.text, title: 'Titulo', value: '' },
+                { type: InputType.text, title: 'titulo', value: '' },
                 {
-                    type: InputType.number,
-                    title: 'Carrera',
+                    type: InputType.text,
+                    title: 'carrera y materia',
                     value: '',
+                },
+                {
+                    type: InputType.table,
+                    title: 'miembros del equipo',
+                    keys: ['director', 'integrantes'],
+                    value: [
+                        { role: 'director', name: '' },
+                        { role: 'codirector', name: '' },
+                    ],
                 },
             ],
         },
         {
-            name: 'Duración del proyecto',
+            name: 'duración del proyecto',
             content: [
-                { type: InputType.text, title: 'Titulo', value: '' },
+                { type: InputType.text, title: 'escala temporal', value: '' },
                 {
                     type: InputType.text,
-                    title: 'Carrera',
+                    title: 'dias',
                     value: '',
                 },
             ],
