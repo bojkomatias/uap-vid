@@ -7,16 +7,16 @@ const Stepper = ({
     setSection,
 }: PropsWithChildren<{ currentSection: Section; setSection: Function }>) => {
     return (
-        <div className="mx-auto flex h-2 w-1/4 items-center justify-between gap-6 bg-base-100">
+        <div className="mx-auto flex h-2 w-2/3 items-center justify-between gap-6 bg-base-100">
             {ProtocolMetadata.content.map((section: Section) => (
                 <button
                     key={section.name}
                     className={`
-                    rounded-full h-8 w-8 transform border transition-all duration-500 ease-in-out 
+                    h-8 w-8 transform rounded-full border transition-all duration-500 ease-in-out 
                         ${
                             currentSection.name == section.name
-                                ? 'scale-100 bg-primary-700 hover:scale-110'
-                                : 'scale-75 bg-base-300 hover:scale-90'
+                                ? 'scale-110 bg-primary-700 hover:scale-125'
+                                : 'scale-90 bg-base-300 hover:scale-100'
                         }`}
                     onClick={() => setSection(section)}
                 ></button>
