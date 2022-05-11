@@ -11,7 +11,11 @@ export default function Page() {
             <div className="text-primary -translate-y-8 text-4xl font-bold">
                 Inicio
             </div>
-            <div className="-translate-y-8">home</div>
+            <div className="-translate-y-8 p-10">
+                <div className="text-primary">
+                    <a href="/protocol/p">Nuevo proyecto de investigación</a>
+                </div>
+            </div>
         </>
     )
 }
