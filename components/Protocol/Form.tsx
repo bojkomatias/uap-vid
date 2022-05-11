@@ -6,7 +6,7 @@ import Table from '../Atomic/Table'
 
 export const Form = ({ section }: PropsWithChildren<{ section: Section }>) => {
     return (
-        <div className="mx-auto mt-16 w-3/4 rounded-md bg-base-100 p-6">
+        <div className="mx-auto my-5 w-3/4 rounded-md bg-base-100 p-6">
             <div className="text-xl font-bold capitalize">{section.name}</div>
             <div className="mt-2 rounded-md border p-6">
                 {section.content.map((i: InputT) => (
