@@ -12,7 +12,7 @@ export default function Page() {
                 Inicio
             </div>
             <div className="-translate-y-8 p-10">
-                <div className="text-primary">
+                <div className="text-primary font-bold">
                     <a href="/protocol/p">Nuevo proyecto de investigación</a>
                 </div>
             </div>
