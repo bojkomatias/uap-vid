@@ -1,11 +1,10 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { MenuIcon, UserIcon, XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { navigation } from '../../config/navigation'
 import { Button } from '../Atomic/Button'
-import AccountBoxIcon from '@mui/icons-material/AccountBox'
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -27,7 +26,7 @@ export default function Example() {
                     </p>
                     <div className="transition-all duration-150 hover:scale-[1.07]">
                         <a href="/profile">
-                            <AccountBoxIcon fontSize="large"></AccountBoxIcon>
+                            <UserIcon className="h-6 w-6" />
                         </a>
                     </div>
                 </div>
