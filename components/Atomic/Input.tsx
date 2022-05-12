@@ -7,7 +7,7 @@ const Input = ({ input }: PropsWithChildren<{ input: Input }>) => {
             placeholder={input.title}
             type={input.type}
             name={input.title}
-            className="w-full rounded-sm p-2 placeholder:capitalize"
+            className=" shadowInner focus:border-primary sm:text-md w-full p-3 py-2 pl-3 pr-10  capitalize shadow-inner placeholder:capitalize focus:outline-none  focus:ring-1 focus:ring-primary-100"
         />
     )
 }
