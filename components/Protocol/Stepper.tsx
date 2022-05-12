@@ -8,7 +8,7 @@ const Stepper = ({
 }: PropsWithChildren<{ currentSection: Section; setSection: Function }>) => {
     return (
         <div className="mx-auto flex h-10 w-1/2  items-center justify-between gap-4 bg-base-100">
-            {ProtocolMetadata.content.map((section: Section) => (
+            {ProtocolMetadata.data.map((section: Section) => (
                 <button
                     key={section.name}
                     className={`

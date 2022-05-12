@@ -2,11 +2,11 @@ import { InputType } from './enums'
 import { Protocol } from './types'
 
 export const ProtocolMetadata: Protocol = {
-    content: [
+    data: [
         {
             // 1. Identificacion del Proyecto
             name: 'identification',
-            content: [
+            data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: '' },
                 {
@@ -40,7 +40,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'duración del proyecto',
-            content: [
+            data: [
                 {
                     type: InputType.select,
                     title: 'escala temporal',
@@ -50,7 +50,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'cronograma de tareas (se puede pensar mejor para el sistema)',
-            content: [
+            data: [
                 {
                     type: InputType.table,
                     title: 'escala temporal',
@@ -60,7 +60,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'informe de avance (ver que onda)',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '4.1',
@@ -85,7 +85,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'presupuesto de gastos directos',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '5.1',
@@ -105,7 +105,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'presupuesto (puede haber un selector de tipos en vez de muchas tablas)',
-            content: [
+            data: [
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
@@ -125,7 +125,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'descripcion del proyecto',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '7.1',
@@ -135,7 +135,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'introduccion del proyecto',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '8.1',
@@ -145,7 +145,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'método',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '9.1',
@@ -155,7 +155,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'publicación cientifica',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '10.1',
@@ -165,11 +165,11 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             name: 'lista bibliografica preeliminar',
-            content: [],
+            data: [],
         },
         {
             name: 'curricullum del director (ver que onda)',
-            content: [
+            data: [
                 {
                     type: InputType.text,
                     title: '12.1',

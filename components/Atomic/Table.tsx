@@ -1,9 +1,10 @@
 import { TrashIcon, ViewGridAddIcon } from '@heroicons/react/outline'
 import { useForm, formList } from '@mantine/form'
 import { PropsWithChildren } from 'react'
-import { Input } from '../../config/types'
+import { Input as InputT } from '../../config/types'
+import Input from './Input'
 
-export default function Table({ data }: PropsWithChildren<{ data: Input }>) {
+export default function Table({ data }: PropsWithChildren<{ data: InputT }>) {
     const headers = Object.keys(data.value[0])
     const table = useForm({
         initialValues: {
@@ -14,7 +15,6 @@ export default function Table({ data }: PropsWithChildren<{ data: Input }>) {
         <div key={index} className="m-2 flex w-full justify-evenly gap-3">
             {headers.map((_, i) => (
                 <input
-                    placeholder={headers[i]}
                     key={i}
                     type="text"
                     {...table.getListInputProps('data', index, headers[i])}

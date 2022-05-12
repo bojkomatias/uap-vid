@@ -8,9 +8,9 @@ export interface Input {
 
 export interface Section {
     name: string
-    content: Input[]
+    data: Input[]
 }
 
 export interface Protocol {
-    content: Section[]
+    data: Section[]
 }

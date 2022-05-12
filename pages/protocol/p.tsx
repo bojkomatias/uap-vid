@@ -7,8 +7,9 @@ import { Section } from '../../config/types'
 import Stepper from '../../components/Protocol/Stepper'
 
 export default function ProtocolPage() {
+    // ! this should be metadata IF NEW, and real data if EXISTING
     const [currentSection, setCurrentSection] = useState<Section>(
-        ProtocolMetadata.content[0]
+        ProtocolMetadata.data[0]
     )
     return (
         <>
