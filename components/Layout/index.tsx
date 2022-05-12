@@ -1,14 +1,20 @@
 import Footer from './Footer'
 import Nav from './Nav'
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 
 const Layout = ({ children }: any) => {
     return (
         <>
             <Nav />
 
-            <main className="shadowCustom mx-auto my-28 min-h-[65vh] w-[1280px] rounded-[5]">
+            <motion.main
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="shadowCustom mx-auto my-28  min-h-[70vh] w-[1280px] opacity-0 transition-all duration-150 "
+            >
                 {children}
-            </main>
+            </motion.main>
             <Footer />
         </>
     )
