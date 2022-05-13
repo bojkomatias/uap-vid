@@ -7,7 +7,6 @@ const Layout = ({ children }: any) => {
     return (
         <>
             <Nav />
-
             <motion.main
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}

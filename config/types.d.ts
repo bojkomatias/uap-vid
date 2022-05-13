@@ -7,6 +7,7 @@ export interface Input {
 }
 
 export interface Section {
+    id: number
     name: string
     data: Input[]
 }

@@ -6,7 +6,11 @@ module.exports = {
         colors: {
             current: 'currentColor',
             base: colors.neutral,
-            primary: '#003C71',
+            primary: {
+                DEFAULT: '#003C71',
+                100: '#003c7011',
+                200: colors.sky,
+            },
             secondary: colors.gray,
             white: colors.white,
             black: colors.black,

@@ -8,11 +8,11 @@ export default function Page() {
     return (
         <>
             {' '}
-            <div className="text-primary -translate-y-8 text-4xl font-bold">
+            <div className="-translate-y-8 text-4xl font-bold text-primary">
                 Inicio
             </div>
             <div className="-translate-y-8 p-10">
-                <div className="text-primary font-bold">
+                <div className="font-bold text-primary">
                     <a href="/protocol/p">Nuevo proyecto de investigación</a>
                 </div>
             </div>

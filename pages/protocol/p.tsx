@@ -5,6 +5,8 @@ import { Form } from '../../components/Protocol/Form'
 import { ProtocolMetadata } from '../../config/metadata'
 import { Section } from '../../config/types'
 import Stepper from '../../components/Protocol/Stepper'
+import { Button } from '../../components/Atomic/Button'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
 export default function ProtocolPage() {
     // ! this should be metadata IF NEW, and real data if EXISTING
@@ -14,15 +16,33 @@ export default function ProtocolPage() {
 
     return (
         <>
-            <div className="text-primary -translate-y-8  text-4xl font-bold">
+            <div className="-translate-y-8 text-4xl font-bold text-primary">
                 Protocolo de investigación
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
-                <Stepper
-                    currentSection={currentSection}
-                    setSection={setCurrentSection}
-                />
+                <Stepper currentSection={currentSection} />
                 <Form section={currentSection} />
+                <div className="flex w-full justify-between px-8">
+                    <Button
+                        onClick={() => {
+                            if (currentSection.id == 1) return
+                            setCurrentSection(
+                                ProtocolMetadata.data[currentSection.id - 2]
+                            )
+                        }}
+                    >
+                        <ChevronLeftIcon className="h-6 w-6" />
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            setCurrentSection(
+                                ProtocolMetadata.data[currentSection.id]
+                            )
+                        }
+                    >
+                        <ChevronRightIcon className="h-6 w-6" />
+                    </Button>
+                </div>
             </div>
         </>
     )

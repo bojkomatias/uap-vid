@@ -10,12 +10,15 @@ const Input = ({
             placeholder={input.title}
             type={input.type}
             name={input.title}
+            required
             onChange={(e) =>
                 updateData({
-                    [input.title]: e.target.value,
+                    title: input.title,
+                    type: input.type,
+                    value: e.target.value,
                 })
             }
-            className="shadowInner sm:text-md focus:ring-primary-100 w-full p-3 py-2 pl-3 pr-10  capitalize shadow-inner placeholder:capitalize focus:border-primary  focus:outline-none focus:ring-1"
+            className="input"
         />
     )
 }

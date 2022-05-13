@@ -16,6 +16,7 @@
         "@mantine/form": "^4.2.4",
         "@mantine/hooks": "^4.2.4",
         "@mantine/next": "^4.2.4",
+        "@mantine/rte": "^4.2.4",
         "framer-motion": "^6.3.3",
         "next": "latest",
         "react": "^17.0.2",
