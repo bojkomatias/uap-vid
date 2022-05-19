@@ -2,11 +2,12 @@ import { InputType } from './enums'
 import { Protocol } from './types'
 
 export const ProtocolMetadata: Protocol = {
-    content: [
+    data: [
         {
             // 1. Identificacion del Proyecto
-            name: 'identification',
-            content: [
+            id: 1,
+            name: 'identificación',
+            data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: '' },
                 {
@@ -17,14 +18,19 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'miembros del equipo',
-                    value: [{ role: 'Director', name: '', hours: '' }],
+                    value: [{ role: '', name: '', hours: '' }],
                 },
                 {
                     type: InputType.select,
                     title: 'modalidad del proyecto',
                     value: [
-                        'Proyecto regular de investigacion (PRI)',
-                        'Proyecto de investigacion con becados (PIB)',
+                        'Proyecto regular de investigación (PRI)',
+                        'Proyecto de investigación con becados (PIB)',
+                        'Proyecto de investigación desde las cátedras (PIC)',
+                        'Proyecto de investigación institucional (PII)',
+                        'Proyecto de investigación interfacultades (PIIF)',
+                        'Proyecto I + D + i (PIDi)',
+                        'Tesis',
                     ],
                 },
                 {
@@ -34,78 +40,68 @@ export const ProtocolMetadata: Protocol = {
                         'Facultad de Ciencias Economicas y de la Administracion (FACEA)',
                         'Facultad de Ciencias de la Salud (FCS)',
                         'Facultad de Humanidades, Educacion y Ciencias Sociales (FHECIS)',
+                        'Facultad de Teología (FT)',
+                        'Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET)',
+                        'Centro de investigación o departamento',
+                        'Escuela de graduados (EG)',
                     ],
                 },
             ],
         },
         {
+            id: 2,
             name: 'duración del proyecto',
-            content: [
+            data: [
                 {
                     type: InputType.select,
                     title: 'escala temporal',
-                    value: ['Doce (12) meses', 'Veinticuatro (24) meses'],
+                    value: [
+                        '12 meses',
+                        '24 meses',
+                        '36 meses',
+                        '48 meses',
+                        '60 meses',
+                    ],
                 },
             ],
         },
         {
-            name: 'cronograma de tareas (se puede pensar mejor para el sistema)',
-            content: [
+            id: 3,
+            name: 'cronograma de tareas',
+            data: [
                 {
                     type: InputType.table,
-                    title: 'escala temporal',
+                    title: 'cronograma',
                     value: [{ task: '', date: '', duration: '' }],
                 },
             ],
         },
         {
-            name: 'informe de avance (ver que onda)',
-            content: [
+            id: 4,
+            name: 'informe de avance',
+            data: [
                 {
-                    type: InputType.text,
-                    title: '4.1',
-                    value: '',
-                },
-                {
-                    type: InputType.text,
-                    title: '4.2',
-                    value: '',
-                },
-                {
-                    type: InputType.text,
-                    title: '4.3',
-                    value: '',
-                },
-                {
-                    type: InputType.text,
-                    title: '4.4',
+                    type: InputType.textarea,
+                    title: 'informe de avance',
                     value: '',
                 },
             ],
         },
         {
+            id: 5,
             name: 'presupuesto de gastos directos',
-            content: [
+            data: [
                 {
-                    type: InputType.text,
-                    title: '5.1',
-                    value: '',
-                },
-                {
-                    type: InputType.text,
-                    title: '5.1.1',
-                    value: '',
-                },
-                {
-                    type: InputType.text,
-                    title: '5.1.2',
+                    type: InputType.textarea,
+                    title: 'gastos directos',
                     value: '',
                 },
             ],
         },
         {
-            name: 'presupuesto (puede haber un selector de tipos en vez de muchas tablas)',
-            content: [
+            id: 6,
+            name: 'presupuesto',
+            data: [
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
@@ -124,55 +120,61 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            name: 'descripcion del proyecto',
-            content: [
+            id: 7,
+            name: 'descripción del proyecto',
+            data: [
                 {
-                    type: InputType.text,
-                    title: '7.1',
+                    type: InputType.textarea,
+                    title: 'descripción del proyecto',
                     value: '',
                 },
             ],
         },
         {
-            name: 'introduccion del proyecto',
-            content: [
+            id: 8,
+            name: 'introducción del proyecto',
+            data: [
                 {
-                    type: InputType.text,
-                    title: '8.1',
+                    type: InputType.textarea,
+                    title: 'introducción del proyecto',
                     value: '',
                 },
             ],
         },
         {
+            id: 9,
             name: 'método',
-            content: [
+            data: [
                 {
-                    type: InputType.text,
-                    title: '9.1',
+                    type: InputType.textarea,
+                    title: 'método',
                     value: '',
                 },
             ],
         },
         {
+            id: 10,
             name: 'publicación cientifica',
-            content: [
+            data: [
                 {
-                    type: InputType.text,
-                    title: '10.1',
+                    type: InputType.textarea,
+                    title: 'publicación cientifica',
                     value: '',
                 },
             ],
         },
         {
+            id: 11,
             name: 'lista bibliografica preeliminar',
-            content: [],
+            data: [],
         },
         {
-            name: 'curricullum del director (ver que onda)',
-            content: [
+            id: 12,
+            name: 'curricullum del director',
+            data: [
                 {
                     type: InputType.text,
-                    title: '12.1',
+                    title: 'curriculum del director',
                     value: '',
                 },
             ],
