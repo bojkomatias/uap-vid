@@ -3,7 +3,7 @@ module.exports = {
     presets: [],
     theme: {
         fontFamily: {
-            sans: ['Montserrat Alternates', ...defaultTheme.fontFamily.sans],
+            sans: ['Roboto', ...defaultTheme.fontFamily.sans],
             serif: [...defaultTheme.fontFamily.serif],
             mono: ['Syne Mono', ...defaultTheme.fontFamily.mono],
         },
