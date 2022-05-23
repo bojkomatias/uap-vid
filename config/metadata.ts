@@ -1,12 +1,13 @@
 import { InputType } from './enums'
 import { Protocol } from './types'
-
+import { Helpers } from './helpers'
 export const ProtocolMetadata: Protocol = {
     data: [
         {
             // 1. Identificacion del Proyecto
             id: 1,
             name: 'identificación',
+            description: Helpers[0],
             data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: '' },
@@ -78,50 +79,26 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             id: 4,
-            name: 'informe de avance',
-            data: [
-                {
-                    type: InputType.textarea,
-                    title: 'informe de avance',
-                    value: '',
-                },
-            ],
-        },
-        {
-            id: 5,
             name: 'presupuesto de gastos directos',
+            description: Helpers[0],
             data: [
                 {
                     type: InputType.textarea,
                     title: 'gastos directos',
                     value: '',
                 },
-            ],
-        },
-        {
-            id: 6,
-            name: 'presupuesto',
-            data: [
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
-                    value: [{ detail: '', amount: '', year: '' }],
-                },
-                {
-                    type: InputType.table,
-                    title: 'libros',
-                    value: [{ detail: '', amount: '', year: '' }],
-                },
-                {
-                    type: InputType.table,
-                    title: 'viajes',
-                    value: [{ detail: '', amount: '', year: '' }],
+                    value: [{ type: '', detail: '', amount: '', year: '' }],
                 },
             ],
         },
+
         {
-            id: 7,
+            id: 5,
             name: 'descripción del proyecto',
+
             data: [
                 {
                     type: InputType.textarea,
@@ -131,7 +108,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            id: 8,
+            id: 6,
             name: 'introducción del proyecto',
             data: [
                 {
@@ -142,7 +119,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            id: 9,
+            id: 7,
             name: 'método',
             data: [
                 {
@@ -153,7 +130,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            id: 10,
+            id: 8,
             name: 'publicación cientifica',
             data: [
                 {
@@ -164,12 +141,12 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            id: 11,
+            id: 9,
             name: 'lista bibliografica preeliminar',
             data: [],
         },
         {
-            id: 12,
+            id: 10,
             name: 'curricullum del director',
             data: [
                 {
