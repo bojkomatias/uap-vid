@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.shadowCustom {
+    -webkit-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+}
+
+.shadowInner {
+    -webkit-box-shadow: inset 5px 5px 11px -10px rgba(0, 0, 0, 0.38);
+    box-shadow: inset 5px 5px 11px -10px rgba(0, 0, 0, 0.38);
+}
+
+@layer components {
+    .input {
+        @apply shadowInner w-full p-3 py-2 pl-3 pr-10 shadow-inner placeholder:text-xs placeholder:uppercase focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2;
+    }
+}

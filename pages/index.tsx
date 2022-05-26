@@ -6,7 +6,17 @@ import { Form } from '../components/Protocol/Form'
 
 export default function Page() {
     return (
-        <div className="mx-auto my-16 min-h-screen max-w-7xl px-4 sm:my-24 sm:px-6"></div>
+        <>
+            {' '}
+            <div className="-translate-y-8 text-4xl font-bold text-primary">
+                Inicio
+            </div>
+            <div className="-translate-y-8 p-10">
+                <div className="font-bold text-primary">
+                    <a href="/protocol/p">Nuevo proyecto de investigación</a>
+                </div>
+            </div>
+        </>
     )
 }
 

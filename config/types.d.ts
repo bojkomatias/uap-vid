@@ -7,10 +7,12 @@ export interface Input {
 }
 
 export interface Section {
+    id: number
     name: string
-    content: Input[]
+    description?: any
+    data: Input[]
 }
 
 export interface Protocol {
-    content: Section[]
+    data: Section[]
 }
