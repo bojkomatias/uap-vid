@@ -16,7 +16,13 @@ export default async function handler(
         res.status(200).json(data)
     }
 
-    if (req.method === 'POST' || req.method === 'PUT') {
+    if (req.method === 'POST') {
+        const collection = await getCollection(CollectionName.Protocols)
+        const data = await collection.insertOne(req.body)
+        res.status(200).json(data)
+    }
+
+    if (req.method === 'PUT') {
         const { protocol } = req.body
         const collection = await getCollection(CollectionName.Protocols)
         const updated = await collection.updateOne(
