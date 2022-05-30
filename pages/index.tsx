@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { Form } from '../components/Protocol/Form'
+import Link from 'next/link'
 
 export default function Page() {
     return (
@@ -13,7 +14,10 @@ export default function Page() {
             </div>
             <div className="-translate-y-8 p-10">
                 <div className="font-bold text-primary">
-                    <a href="/protocol/p">Nuevo proyecto de investigación</a>
+                    <Link href="/protocol/p">
+                        Nuevo proyecto de investigación
+                    </Link>{' '}
+                    <Link href="/exhibit">Ver los anexos</Link>
                 </div>
             </div>
         </>
