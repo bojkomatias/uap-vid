@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
-import useDb, { CollectionName } from '../../../utils/useDB'
+import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
 ) {
-    const collection = await useDb(CollectionName.Protocols)
+    const collection = await getCollection(CollectionName.Protocols)
     const data = await collection.find({}).toArray()
     if (!data) {
         res.status(404).end()
