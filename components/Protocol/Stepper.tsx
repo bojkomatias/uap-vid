@@ -15,9 +15,9 @@ const Stepper = ({
                     className={`
         h-4 w-4 transform rounded-full  transition-all duration-500 ease-in-out 
             ${
-                currentSection.id == index + 1
+                currentSection.sectionId == index + 1
                     ? 'scale-125 bg-primary'
-                    : currentSection.id > index + 1
+                    : currentSection.sectionId > index + 1
                     ? 'scale-110 bg-secondary-600'
                     : 'scale-90 bg-base-300 hover:scale-100'
             }`}

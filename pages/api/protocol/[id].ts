@@ -1,4 +1,6 @@
+import { ObjectId } from 'mongodb'
 import { NextApiRequest, NextApiResponse } from 'next/types'
+import { Protocol } from '../../../config/types'
 import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
 
 export default async function handler(
@@ -6,27 +8,28 @@ export default async function handler(
     res: NextApiResponse<any>
 ) {
     const { id } = req.query
+    console.log(id)
     if (req.method === 'GET') {
         const collection = await getCollection(CollectionName.Protocols)
-        const data = await collection.find({ _id: id }).toArray()
+        const data = await collection.findOne({
+            _id: new ObjectId(id as string),
+        })
+        console.log(data)
         if (!data) {
             res.status(404).end()
             return
         }
-        res.status(200).json(data)
-    }
-
-    if (req.method === 'POST') {
-        const collection = await getCollection(CollectionName.Protocols)
-        const data = await collection.insertOne(req.body)
-        res.status(200).json(data)
+        return res.status(200).json(data)
     }
 
     if (req.method === 'PUT') {
-        const { protocol } = req.body
+        console.log(req.body.data)
+        const protocol = req.body
         const collection = await getCollection(CollectionName.Protocols)
+        const filter = { _id: new ObjectId(id as string) }
+        delete protocol._id
         const updated = await collection.updateOne(
-            { _id: id },
+            filter,
             { $set: protocol },
             { upsert: true }
         )
@@ -34,6 +37,6 @@ export default async function handler(
             res.status(404).end()
             return
         }
-        res.status(200).json({ sucess: true })
+        return res.status(200).json({ sucess: true })
     }
 }

@@ -29,8 +29,8 @@ export default function Select({
 
     const filteredValues =
         query === ''
-            ? data.value
-            : data.value.filter((value: any) => {
+            ? data.options
+            : data.options?.filter((value: any) => {
                   return value.toLowerCase().includes(query.toLowerCase())
               })
 

@@ -8,10 +8,10 @@ export default function Table({
     data,
     updateData,
 }: PropsWithChildren<{ data: InputT; updateData: Function }>) {
-    const headers = Object.keys(data.value[0])
+    const headers = Object.keys(data.options[0])
     const table = useForm({
         initialValues: {
-            data: formList<any>(data.value),
+            data: formList<any>(data.options),
         },
     })
 
@@ -63,7 +63,7 @@ export default function Table({
 
             {fields}
             <a
-                onClick={() => table.addListItem('data', data.value[0])}
+                onClick={() => table.addListItem('data', data.options[0])}
                 className="cursor-pointer"
             >
                 <div className="group mt-5 flex items-center justify-center gap-2 bg-base-100 py-2 transition-all duration-200 hover:bg-primary">

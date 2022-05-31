@@ -5,7 +5,7 @@ export const ProtocolMetadata: Protocol = {
     data: [
         {
             // 1. Identificacion del Proyecto
-            id: 1,
+            sectionId: 1,
             name: 'identificación',
             description: Helpers[0],
             data: [
@@ -14,17 +14,18 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.text,
                     title: 'carrera y materia',
-                    value: '',
+                    value: null,
                 },
                 {
                     type: InputType.table,
                     title: 'miembros del equipo',
-                    value: [{ role: '', name: '', hours: '' }],
+                    options: [{ role: '', name: '', hours: '' }],
+                    value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'modalidad del proyecto',
-                    value: [
+                    options: [
                         'Proyecto regular de investigación (PRI)',
                         'Proyecto de investigación con becados (PIB)',
                         'Proyecto de investigación desde las cátedras (PIC)',
@@ -33,11 +34,13 @@ export const ProtocolMetadata: Protocol = {
                         'Proyecto I + D + i (PIDi)',
                         'Tesis',
                     ],
+                    value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'entre patrocinante',
-                    value: [
+
+                    options: [
                         'Facultad de Ciencias Economicas y de la Administracion (FACEA)',
                         'Facultad de Ciencias de la Salud (FCS)',
                         'Facultad de Humanidades, Educacion y Ciencias Sociales (FHECIS)',
@@ -46,113 +49,117 @@ export const ProtocolMetadata: Protocol = {
                         'Centro de investigación o departamento',
                         'Escuela de graduados (EG)',
                     ],
+                    value: null,
                 },
             ],
         },
         {
-            id: 2,
+            sectionId: 2,
             name: 'duración del proyecto',
             data: [
                 {
                     type: InputType.select,
                     title: 'escala temporal',
-                    value: [
+                    options: [
                         '12 meses',
                         '24 meses',
                         '36 meses',
                         '48 meses',
                         '60 meses',
                     ],
+                    value: null,
                 },
             ],
         },
         {
-            id: 3,
+            sectionId: 3,
             name: 'cronograma de tareas',
             data: [
                 {
                     type: InputType.table,
                     title: 'cronograma',
-                    value: [{ task: '', date: '', duration: '' }],
+                    options: [{ task: '', date: '', duration: '' }],
+                    value: null,
                 },
             ],
         },
         {
-            id: 4,
+            sectionId: 4,
             name: 'presupuesto de gastos directos',
             description: Helpers[0],
             data: [
                 {
                     type: InputType.textarea,
                     title: 'gastos directos',
-                    value: '',
+                    value: null,
                 },
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
-                    value: [{ type: '', detail: '', amount: '', year: '' }],
+                    options: [{ type: '', detail: '', amount: '', year: '' }],
+                    value: null,
                 },
             ],
         },
 
         {
-            id: 5,
+            sectionId: 5,
             name: 'descripción del proyecto',
 
             data: [
                 {
                     type: InputType.textarea,
                     title: 'descripción del proyecto',
-                    value: '',
+                    value: null,
                 },
             ],
         },
         {
-            id: 6,
+            sectionId: 6,
             name: 'introducción del proyecto',
             data: [
                 {
                     type: InputType.textarea,
                     title: 'introducción del proyecto',
-                    value: '',
+                    value: null,
                 },
             ],
         },
         {
-            id: 7,
+            sectionId: 7,
             name: 'método',
             data: [
                 {
                     type: InputType.textarea,
                     title: 'método',
-                    value: '',
+                    value: null,
                 },
             ],
         },
         {
-            id: 8,
+            sectionId: 8,
             name: 'publicación cientifica',
             data: [
                 {
                     type: InputType.textarea,
                     title: 'publicación cientifica',
-                    value: '',
+                    value: null,
                 },
             ],
         },
         {
-            id: 9,
+            sectionId: 9,
             name: 'lista bibliografica preeliminar',
             data: [],
         },
         {
-            id: 10,
+            sectionId: 10,
             name: 'curricullum del director',
             data: [
                 {
                     type: InputType.text,
                     title: 'curriculum del director',
-                    value: '',
+                    value: null,
                 },
             ],
         },

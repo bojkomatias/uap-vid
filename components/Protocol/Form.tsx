@@ -1,21 +1,26 @@
 import { PropsWithChildren, useEffect, useReducer, useState } from 'react'
-import { Section, Input as InputT } from '../../config/types'
+import { Section, Input as InputT, Protocol } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { useRouter } from 'next/router'
 
 export const Form = ({
     section,
+    protocol,
+    updateProtocol,
 }: PropsWithChildren<{
     section: Section
+    protocol: Protocol
+    updateProtocol: Function
 }>) => {
-    const [sectionData, setsectionData] = useState<InputT[]>([])
+    const [sectionData, setsectionData] = useState<InputT[]>(section.data)
 
     // ! We could save it here, maybe for autosaves as the user updates
-    const idempotentUpdate = (e: any) => {
+    const idempotentUpdateValue = (e: any) => {
         let oldData = sectionData
         if (sectionData.find((x) => x.title === e.title)) {
             oldData = sectionData.filter((x) => x.title !== e.title)
@@ -24,14 +29,24 @@ export const Form = ({
     }
 
     useEffect(() => {
-        return () => {
-            console.log('SAVING TO DATABASE CAUSE OF STEP CHANGE', {
-                id: section.id,
-                name: section.name,
-                data: sectionData,
-            })
+        // find section updated
+        const newProtocol = {
+            ...protocol,
+            data: [
+                ...protocol.data.filter(
+                    (x) => x.sectionId !== section.sectionId
+                ),
+                { ...section, data: sectionData },
+            ],
         }
-    }, [section])
+        updateProtocol(newProtocol)
+        console.log('protoco', newProtocol)
+        // timeout effect for performance in update protocol
+    }, [sectionData])
+
+    // const saveProtocol = () => {
+    //     const res = await fetch(`/api/protocols/${router.pathname}`, {')
+    // }
 
     return (
         <motion.div animate={{ opacity: 1 }} className="opacity-0">
@@ -59,22 +74,30 @@ export const Form = ({
                             {i.type === 'table' ? (
                                 <Table
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'select' ? (
                                 <Select
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'textarea' ? (
                                 <TextEditor
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : (
                                 <Input
                                     input={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             )}
                         </div>
