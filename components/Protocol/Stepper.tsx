@@ -2,7 +2,6 @@ import React, { PropsWithChildren } from 'react'
 import { ProtocolMetadata } from '../../config/metadata'
 import { Section } from '../../config/types'
 import { useForceUpdate } from '@mantine/hooks'
-import { useState, useEffect } from 'react'
 
 const Stepper = ({
     currentSection,
