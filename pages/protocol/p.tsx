@@ -19,7 +19,7 @@ export default function ProtocolPage() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación
             </div>{' '}
-            <div className="flex w-full justify-around px-5">
+            <div className="my-auto flex w-full justify-around px-5">
                 <Button
                     onClick={() => {
                         if (currentSection.id == 1) return

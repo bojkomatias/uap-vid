@@ -95,6 +95,24 @@ export default function Page() {
             ),
             url: '/protocol/p',
         },
+        {
+            title: ' Lista de proyectos de investigación',
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clipRule="evenodd"
+                    />
+                </svg>
+            ),
+            url: '/projects',
+        },
     ]
     return (
         <>
@@ -102,11 +120,11 @@ export default function Page() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
-            <div className="flex flex-1 -translate-y-8 items-center justify-around p-10">
+            <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
                     {content.map((item) => (
                         <a href={item.url}>
-                            <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:bg-primary hover:text-white">
+                            <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
                                 {item.icon}
                                 <p className="mx-auto"> {item.title}</p>
                             </div>
