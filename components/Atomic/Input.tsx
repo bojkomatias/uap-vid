@@ -10,6 +10,7 @@ const Input = ({
             placeholder={input.title}
             type={input.type}
             name={input.title}
+            defaultValue={input.value}
             required
             onChange={async (e) =>
                 updateData({

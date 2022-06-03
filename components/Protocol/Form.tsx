@@ -1,4 +1,10 @@
-import { PropsWithChildren, useEffect, useReducer, useState } from 'react'
+import {
+    PropsWithChildren,
+    useEffect,
+    useReducer,
+    useRef,
+    useState,
+} from 'react'
 import { Section, Input as InputT, Protocol } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
@@ -22,31 +28,53 @@ export const Form = ({
 
     // * Este metodo esta andando como corresponde, mantiene el orden y actualiza los datos.
     const idempotentUpdateValue = (e: any) => {
-        let oldData = sectionData
+        console.log('idempotentUpdateValue')
+
+        let newData = sectionData
         if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
-            oldData.splice(
+            newData.splice(
                 sectionData.findIndex((x) => x.title === e.title),
                 1,
                 e
             )
         }
-        return setsectionData(oldData)
-    }
-    useEffect(() => {
-        // find section updated
+        console.log(newData)
+
         const newProtocol = {
             ...protocol,
             data: protocol.data.splice(
                 protocol.data.findIndex(
                     (x) => x.sectionId !== section.sectionId
                 ),
-                0,
+                1,
                 { ...section, data: sectionData }
             ),
         }
-        console.log(sectionData)
+        console.log('Pasando la REF')
         updateProtocol(newProtocol)
-    }, [sectionData])
+        return setsectionData(newData)
+    }
+    // const first = useRef(true)
+    // useEffect(() => {
+    //     console.log('First first', first.current)
+    //     if (first.current) {
+    //         first.current = false
+    //         return
+    //     }
+    //     // find section updated
+    //     const newProtocol = {
+    //         ...protocol,
+    //         data: protocol.data.splice(
+    //             protocol.data.findIndex(
+    //                 (x) => x.sectionId !== section.sectionId
+    //             ),
+    //             1,
+    //             { ...section, data: sectionData }
+    //         ),
+    //     }
+    //     console.log('Pasando la REF')
+    //     updateProtocol(newProtocol)
+    // }, [sectionData])
 
     return (
         <motion.div animate={{ opacity: 1 }} className="opacity-0">
