@@ -10,7 +10,7 @@ const Stepper = ({
     currentSection: Section
 }>) => {
     return (
-        <div className="mx-auto mt-8 flex h-10 w-2/3 items-center justify-between gap-4 ">
+        <div className="mx-auto mt-10 mb-6 flex h-10 w-2/3 items-center justify-between gap-4">
             {ProtocolMetadata.data.map((section, index) => (
                 <button
                     key={index}

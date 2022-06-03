@@ -40,7 +40,7 @@ export const Form = ({
                     e.preventDefault()
                     console.log(sectionData)
                 }}
-                className="mx-auto my-5 w-[100%] rounded-md bg-white p-6"
+                className="rounded-md bg-white"
             >
                 <div className="flex items-center gap-4 ">
                     <span className="text-xl font-bold uppercase text-primary">
@@ -53,7 +53,7 @@ export const Form = ({
                         </div>
                     ) : null}
                 </div>
-                <div className="mt-5 min-h-[40vh]">
+                <div className="mt-5 min-h-[500px] max-w-[1120px] ">
                     {section.data.map((i: InputT) => (
                         <div key={i.title} className="m-3 p-1 ">
                             {i.type === 'table' ? (

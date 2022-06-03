@@ -30,7 +30,7 @@ export default function ProtocolPage() {
                 >
                     <ChevronLeftIcon className="w-6" />
                 </Button>
-                <div className="flex flex-1 -translate-y-8 flex-col">
+                <div className="mb-4 flex flex-1 -translate-y-12 flex-col">
                     <Stepper currentSection={currentSection} />
                     <Form section={currentSection} />
                 </div>

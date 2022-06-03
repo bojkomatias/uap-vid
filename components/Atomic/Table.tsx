@@ -25,7 +25,7 @@ export default function Table({
     }, [table.values])
 
     const fields = table.values.data.map((_, index) => (
-        <div key={index} className="my-2 flex w-full gap-3 ">
+        <div key={index} className="my-2 flex gap-3 ">
             {headers.map((_, i) => (
                 <input
                     key={i}

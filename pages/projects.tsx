@@ -50,6 +50,7 @@ export default function projects() {
                 'In hendrerit arcu eget elit laoreet viverra. Phasellus placerat ac arcu sit amet gravida. Sed vehicula ullamcorper lobortis. Etiam ullamcorper metus blandit magna sollicitudin fermentum vel vel ligula. Nullam porttitor nulla dictum ornare molestie. Duis accumsan elit sed urna viverra, ut iaculis mauris feugiat. Nulla et eleifend ligula. In sit amet luctus massa, in blandit erat. Suspendisse est nisi, tempor et consectetur vitae, condimentum ac sapien. Curabitur at dui elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin lorem ipsum, porttitor interdum ipsum gravida eu. Suspendisse quis odio ut dui ullamcorper egestas in nec nisi.',
         },
     ]
+
     return (
         <div className="transition-all duration-200">
             <div className="mx-auto mb-20 flex w-[1280px] flex-col justify-center px-20 py-10">

@@ -10,7 +10,7 @@ const Layout = ({ children }: any) => {
             <motion.main
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                className="shadowCustom mx-auto my-28  min-h-[70vh] w-[1280px] opacity-0 transition-all duration-150 "
+                className="shadowCustom mx-auto my-20  min-h-[70vh] max-w-[1280px] opacity-0 transition-all duration-150 "
             >
                 {children}
             </motion.main>

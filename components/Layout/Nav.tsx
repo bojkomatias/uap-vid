@@ -12,8 +12,8 @@ function classNames(...classes: any) {
 
 export default function Example() {
     return (
-        <nav className="bg-primary  w-screen">
-            <div className="text-white m-auto flex h-28 w-[1280px] items-center justify-between">
+        <nav className="w-screen  bg-primary">
+            <div className="mx-20 flex h-28 max-w-[1280px] items-center justify-between text-white 2xl:m-auto">
                 <div className="text-center text-[10px] uppercase tracking-wider transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]">
                     <a href="/">
                         <img src="/UAP-logo-home.png"></img>

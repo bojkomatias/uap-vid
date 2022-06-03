@@ -60,11 +60,15 @@ export default function faq(props: any) {
                             <div className="text-xs font-bold">
                                 <p>11/06/2017</p>
                             </div>
-                            <div className="flex justify-between gap-1">
+                            <div className="flex items-end justify-between gap-1">
                                 {' '}
-                                <div className="mt-2">{props.description}</div>
-                                <div className="mt-2 mr-5 mb-1  border border-primary p-2 text-sm">
-                                    Ver todos los detalles
+                                <div className="mt-2 w-[70%]">
+                                    {props.description}
+                                </div>
+                                <div className="mt-2 mr-5 mb-1">
+                                    <p className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 ">
+                                        Ver todos los detalles
+                                    </p>
                                 </div>
                             </div>
                         </div>
