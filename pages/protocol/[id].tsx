@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { Fragment } from 'react'
 import { Popover } from '@headlessui/react'
 import { Form } from '../../components/Protocol/Form'
@@ -13,13 +13,14 @@ export default function ProtocolPage({
     serverProtocol: Protocol
 }) {
     const router = useRouter()
-    console.log(router.query)
     const [protocol, setProtocol] = useState(serverProtocol)
     const [currentSection, setCurrentSection] = useState<Section>(
         protocol.data[0]
     )
+    const [debouncedProtocol] = useDebouncedValue(protocol, 2000)
+
     const updateProtocol = async (protocol: Protocol) => {
-        console.log(protocol)
+        console.log('Pegue a la api')
         const res = await fetch(`/api/protocol/${router.query.id}`, {
             method: 'PUT',
             mode: 'cors',
@@ -28,12 +29,13 @@ export default function ProtocolPage({
             },
             body: JSON.stringify(protocol),
         })
-        console.log(await res.json())
     }
+    const first = useRef(true)
 
-    useEffect(() => {
-        updateProtocol(protocol)
-    }, [protocol])
+    useEffect((): any => {
+        if (first) return (first.current = false)
+        updateProtocol(debouncedProtocol)
+    }, [debouncedProtocol])
 
     return (
         <>
@@ -41,7 +43,7 @@ export default function ProtocolPage({
                 Protocolo de investigación
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
-                <Stepper currentSection={currentSection} />
+                <Stepper currentSection={currentSection?.sectionId} />
                 <Form
                     protocol={protocol}
                     section={currentSection}
@@ -50,28 +52,38 @@ export default function ProtocolPage({
                 <div className="flex w-full justify-between px-8">
                     <Button
                         onClick={() => {
-                            if (currentSection.sectionId == 1) return
+                            if (currentSection.sectionId === 1) return
                             setCurrentSection(
-                                protocol.data.find(
-                                    (s) =>
-                                        s.sectionId ===
-                                        currentSection.sectionId - 1
-                                )!
+                                protocol.data[
+                                    protocol.data.findIndex(
+                                        (x) =>
+                                            x.sectionId ===
+                                            currentSection.sectionId - 1
+                                    )
+                                ]
                             )
                         }}
+                        className="h-8 w-8"
                     >
                         <ChevronLeftIcon className="h-6 w-6" />
                     </Button>
                     <Button
-                        onClick={() =>
-                            setCurrentSection(
-                                protocol.data.find(
-                                    (s) =>
-                                        s.sectionId ===
-                                        currentSection.sectionId + 1
-                                )!
+                        onClick={() => {
+                            if (
+                                currentSection.sectionId ===
+                                protocol.data.length
                             )
-                        }
+                                return
+                            setCurrentSection(
+                                protocol.data[
+                                    protocol.data.findIndex(
+                                        (x) =>
+                                            x.sectionId ===
+                                            currentSection.sectionId + 1
+                                    )
+                                ]
+                            )
+                        }}
                     >
                         <ChevronRightIcon className="h-6 w-6" />
                     </Button>
@@ -85,6 +97,7 @@ export default function ProtocolPage({
 // - Only if you need to pre-render a page whose data must be fetched at request time
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { useDebouncedValue } from '@mantine/hooks'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const string = `${process.env.NEXTURL}/api/protocol/${ctx.params?.id}`

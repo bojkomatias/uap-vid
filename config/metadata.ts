@@ -19,7 +19,9 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'miembros del equipo',
-                    options: [{ role: '', name: '', hours: '' }],
+                    options: [
+                        { name: 'name', text: 'Nombre', type: InputType.text },
+                    ],
                     value: null,
                 },
                 {

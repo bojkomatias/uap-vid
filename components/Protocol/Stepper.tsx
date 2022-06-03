@@ -5,7 +5,7 @@ import { Section } from '../../config/types'
 const Stepper = ({
     currentSection,
 }: PropsWithChildren<{
-    currentSection: Section
+    currentSection: number
 }>) => {
     return (
         <div className="mx-auto mt-8 flex h-10 w-2/3 items-center justify-between gap-4 ">
@@ -15,9 +15,9 @@ const Stepper = ({
                     className={`
         h-4 w-4 transform rounded-full  transition-all duration-500 ease-in-out 
             ${
-                currentSection.sectionId == index + 1
+                currentSection == index + 1
                     ? 'scale-125 bg-primary'
-                    : currentSection.sectionId > index + 1
+                    : currentSection > index + 1
                     ? 'scale-110 bg-secondary-600'
                     : 'scale-90 bg-base-300 hover:scale-100'
             }`}

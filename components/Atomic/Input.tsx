@@ -11,7 +11,7 @@ const Input = ({
             type={input.type}
             name={input.title}
             required
-            onChange={(e) =>
+            onChange={async (e) =>
                 updateData({
                     title: input.title,
                     type: input.type,

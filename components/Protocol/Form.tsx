@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
+import { useDebouncedValue } from '@mantine/hooks'
 
 export const Form = ({
     section,
@@ -19,34 +20,33 @@ export const Form = ({
 }>) => {
     const [sectionData, setsectionData] = useState<InputT[]>(section.data)
 
-    // ! We could save it here, maybe for autosaves as the user updates
+    // * Este metodo esta andando como corresponde, mantiene el orden y actualiza los datos.
     const idempotentUpdateValue = (e: any) => {
         let oldData = sectionData
-        if (sectionData.find((x) => x.title === e.title)) {
-            oldData = sectionData.filter((x) => x.title !== e.title)
+        if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
+            oldData.splice(
+                sectionData.findIndex((x) => x.title === e.title),
+                1,
+                e
+            )
         }
-        return setsectionData([...oldData, e])
+        return setsectionData(oldData)
     }
-
     useEffect(() => {
         // find section updated
         const newProtocol = {
             ...protocol,
-            data: [
-                ...protocol.data.filter(
+            data: protocol.data.splice(
+                protocol.data.findIndex(
                     (x) => x.sectionId !== section.sectionId
                 ),
-                { ...section, data: sectionData },
-            ],
+                0,
+                { ...section, data: sectionData }
+            ),
         }
+        console.log(sectionData)
         updateProtocol(newProtocol)
-        console.log('protoco', newProtocol)
-        // timeout effect for performance in update protocol
     }, [sectionData])
-
-    // const saveProtocol = () => {
-    //     const res = await fetch(`/api/protocols/${router.pathname}`, {')
-    // }
 
     return (
         <motion.div animate={{ opacity: 1 }} className="opacity-0">

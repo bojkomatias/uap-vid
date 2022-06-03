@@ -23,7 +23,6 @@ export default async function handler(
     }
 
     if (req.method === 'PUT') {
-        console.log(req.body.data)
         const protocol = req.body
         const collection = await getCollection(CollectionName.Protocols)
         const filter = { _id: new ObjectId(id as string) }

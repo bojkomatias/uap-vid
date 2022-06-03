@@ -11,7 +11,6 @@ export default async function handler(
 
         const collection = await getCollection(CollectionName.Protocols)
         const data = await collection.insertOne(req.body)
-        console.log(req.body)
 
         return res.status(200).json(data)
     }
