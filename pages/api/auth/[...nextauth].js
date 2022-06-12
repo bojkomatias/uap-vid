@@ -49,7 +49,6 @@ export default NextAuth({
                 if (!checkPassword) {
                     throw new Error('Password doesnt match')
                 }
-                console.log('jejejejeje')
                 return {
                     email: result.email,
                     id: result._id,
@@ -67,6 +66,7 @@ export default NextAuth({
                 : { lastLogin: new Date() }
 
             await users.updateOne({ email: user.email }, { $set: updateObject })
+            return true
         },
         jwt: ({ token, user }) => {
             if (user) {
