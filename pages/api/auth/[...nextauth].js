@@ -67,9 +67,6 @@ export default NextAuth({
                 : { lastLogin: new Date() }
 
             await users.updateOne({ email: user.email }, { $set: updateObject })
-
-            console.log('callback', user)
-            return false
         },
         jwt: ({ token, user }) => {
             if (user) {
