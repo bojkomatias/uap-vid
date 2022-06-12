@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { GetServerSideProps } from 'next'
+import { getSession } from "next-auth/react"
 export default function profile() {
     return (
         <>
@@ -9,4 +10,19 @@ export default function profile() {
             <div className="-translate-y-8">profile</div>
         </>
     )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) =>{
+    const session = await getSession({ req: ctx.req });
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/api/auth/signin',
+                permanent: false,
+            },
+        };
+    }
+    return {
+        props: { session },
+    };
 }

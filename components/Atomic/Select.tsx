@@ -22,6 +22,7 @@ export default function Select({
         updateData({
             type: data.type,
             title: data.title,
+            options: data.options,
             value: selectedValue,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,8 +30,8 @@ export default function Select({
 
     const filteredValues =
         query === ''
-            ? data.value
-            : data.value.filter((value: any) => {
+            ? data.options
+            : data.options?.filter((value: any) => {
                   return value.toLowerCase().includes(query.toLowerCase())
               })
 
@@ -53,7 +54,7 @@ export default function Select({
                     />
                 </Combobox.Button>
 
-                {filteredValues.length > 0 && (
+                {filteredValues?.length > 0 && (
                     <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base text-primary ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {filteredValues.map((value: any, index: any) => (
                             <Combobox.Option

@@ -1,8 +1,6 @@
-import type { ReactElement } from 'react'
-import Layout from '../components/Layout'
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { Form } from '../components/Protocol/Form'
+import { Button } from '../components/Atomic/Button'
+import { useRouter } from 'next/router'
+import { ProtocolMetadata } from '../config/metadata'
 
 export default function Page() {
     const content = [
@@ -114,6 +112,26 @@ export default function Page() {
             url: '/projects',
         },
     ]
+    const router = useRouter()
+    const redirectToProtocol = (id: string) => {
+        router.push(`/protocol/${id}/1`)
+    }
+    const createNewProtocol = async () => {
+        const protocol = ProtocolMetadata
+        console.log(protocol)
+        const res = await fetch('/api/protocol', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(protocol),
+        })
+        const data = await res.json()
+        console.log(data)
+        redirectToProtocol(data.insertedId)
+    }
+
     return (
         <>
             {' '}
@@ -123,7 +141,7 @@ export default function Page() {
             <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
                     {content.map((item) => (
-                        <a href={item.url}>
+                        <a key={item.title} href={item.url}>
                             <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
                                 {item.icon}
                                 <p className="mx-auto"> {item.title}</p>
