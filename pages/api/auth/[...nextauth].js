@@ -30,14 +30,10 @@ export default NextAuth({
             async authorize(credentials) {
                 const users = await getCollections(CollectionName.Users)
 
-                console.log(credentials)
-
                 //Find user with the email
                 const result = await users.findOne({
                     email: credentials.email,
                 })
-
-                console.log(result)
 
                 //NextAuth maneja el error
                 if (!result) {
@@ -53,12 +49,25 @@ export default NextAuth({
                 if (!checkPassword) {
                     throw new Error('Password doesnt match')
                 }
-
-                return { email: result.email }
+                console.log('jejejejeje')
+                return {
+                    email: result.email,
+                    id: result._id,
+                    role: result.role,
+                }
             },
         }),
     ],
     callbacks: {
+        signIn: async ({ user }) => {
+            const users = await getCollections(CollectionName.Users)
+
+            const updateObject = !users.role
+                ? { role: 'new-user', lastLogin: new Date() }
+                : { lastLogin: new Date() }
+
+            await users.updateOne({ email: user.email }, { $set: updateObject })
+        },
         jwt: ({ token, user }) => {
             if (user) {
                 token.user = user
