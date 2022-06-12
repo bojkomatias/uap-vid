@@ -17,16 +17,14 @@ import { useDebouncedValue } from '@mantine/hooks'
 
 export const Form = ({
     section,
-    protocol,
-    updateProtocol,
+    updateSection
 }: PropsWithChildren<{
-    section: Section
-    protocol: Protocol
-    updateProtocol: Function
+    section: Section,
+    updateSection: Function
 }>) => {
     const [sectionData, setsectionData] = useState<InputT[]>(section.data)
+    const [sectionEdited, setSectionEdited] = useState<Section>(section)
 
-    // * Este metodo esta andando como corresponde, mantiene el orden y actualiza los datos.
     const idempotentUpdateValue = (e: any) => {
         console.log('idempotentUpdateValue')
 
@@ -38,44 +36,14 @@ export const Form = ({
                 e
             )
         }
-        console.log(newData)
 
-        const newProtocol = {
-            ...protocol,
-            data: protocol.data.splice(
-                protocol.data.findIndex(
-                    (x) => x.sectionId !== section.sectionId
-                ),
-                1,
-                { ...section, data: sectionData }
-            ),
-        }
-        console.log('Pasando la REF')
-        updateProtocol(newProtocol)
+        setSectionEdited({...sectionEdited, data: newData })
+
+        console.log(sectionEdited)
+        updateSection(sectionEdited)
         return setsectionData(newData)
     }
-    // const first = useRef(true)
-    // useEffect(() => {
-    //     console.log('First first', first.current)
-    //     if (first.current) {
-    //         first.current = false
-    //         return
-    //     }
-    //     // find section updated
-    //     const newProtocol = {
-    //         ...protocol,
-    //         data: protocol.data.splice(
-    //             protocol.data.findIndex(
-    //                 (x) => x.sectionId !== section.sectionId
-    //             ),
-    //             1,
-    //             { ...section, data: sectionData }
-    //         ),
-    //     }
-    //     console.log('Pasando la REF')
-    //     updateProtocol(newProtocol)
-    // }, [sectionData])
-
+    
     return (
         <motion.div animate={{ opacity: 1 }} className="opacity-0">
             <form

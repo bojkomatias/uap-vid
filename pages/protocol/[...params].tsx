@@ -18,36 +18,37 @@ export default function ProtocolPage({
     protocolLength: number
 }) {
     const router = useRouter()
-    // const [currentSection, setCurrentSection] = useState<Section>(section)
-    // const [debouncedProtocol] = useDebouncedValue(protocol, 200)
+    const [savedEvent, setSavedEvent] = useState(false)
 
-    // useEffect((): any => {
-    //     const updateProtocol = async (protocol: Protocol) => {
-    //         const res = await fetch(`/api/protocol/${router.query.id}`, {
-    //             method: 'PUT',
-    //             mode: 'cors',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(protocol),
-    //         })
-    //         console.log('Pegue a la api', await res.json())
-    //     }
-    //     updateProtocol(protocol)
-    // }, [protocol, router.query.id])
-
+    useEffect(() => {
+      setTimeout(() => {
+        console.log('setTimeout');
+        
+        setSavedEvent(false)
+      }, 3000)
+    }, [savedEvent])
+    
+    const updateSection = async (section:Section) => {
+        console.log(section);
+        
+        const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(section),
+        })
+        setSavedEvent(true)
+    }
     return (
         <>
             <div className="-translate-y-8 text-4xl font-bold text-primary">
                 Protocolo de investigación
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
-                <Stepper protocolLength={protocolLength} currentSection={section.sectionId} />
-                {/* <Form
-                    protocol={protocol}
-                    section={currentSection}
-                    updateProtocol={setProtocol}
-                /> */}
+                <Stepper protocolLength={protocolLength} currentSection={section?.sectionId} />
+                <Form section={section} updateSection={updateSection} />
                 <div className="flex w-full justify-between px-8">
                     <Button
                         disabled={section?.sectionId === 1}
