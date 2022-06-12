@@ -18,6 +18,7 @@
         "@mantine/hooks": "^4.2.4",
         "@mantine/next": "^4.2.4",
         "@mantine/rte": "^4.2.4",
+        "bcryptjs": "^2.4.3",
         "framer-motion": "^6.3.3",
         "mongodb": "^4.6.0",
         "next": "latest",
