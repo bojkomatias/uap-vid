@@ -1,8 +1,5 @@
 import {
     PropsWithChildren,
-    useEffect,
-    useReducer,
-    useRef,
     useState,
 } from 'react'
 import { Section, Input as InputT, Protocol } from '../../config/types'
@@ -12,8 +9,6 @@ import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
-import { useRouter } from 'next/router'
-import { useDebouncedValue } from '@mantine/hooks'
 
 export const Form = ({
     section,
@@ -38,8 +33,6 @@ export const Form = ({
         }
 
         setSectionEdited({...sectionEdited, data: newData })
-
-        console.log(sectionEdited)
         updateSection(sectionEdited)
         return setsectionData(newData)
     }

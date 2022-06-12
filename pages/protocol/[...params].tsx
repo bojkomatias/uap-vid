@@ -1,8 +1,6 @@
-import { ReactElement, useEffect, useRef, useState } from 'react'
-import { Fragment } from 'react'
-import { Popover } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 import { Form } from '../../components/Protocol/Form'
-import { Protocol, Section } from '../../config/types'
+import { Section } from '../../config/types'
 import Stepper from '../../components/Protocol/Stepper'
 import { Button } from '../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
@@ -21,25 +19,28 @@ export default function ProtocolPage({
     const [savedEvent, setSavedEvent] = useState(false)
 
     useEffect(() => {
-      setTimeout(() => {
-        console.log('setTimeout');
-        
-        setSavedEvent(false)
-      }, 3000)
+        setTimeout(() => {
+            console.log('setTimeout');
+
+            setSavedEvent(false)
+        }, 3000)
     }, [savedEvent])
-    
-    const updateSection = async (section:Section) => {
+
+    const updateSection = async (section: Section) => {
         console.log(section);
-        
-        const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(section),
-        })
-        setSavedEvent(true)
+
+        setTimeout(async () => {
+            const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(section),
+            })
+            setSavedEvent(true)
+        }, 3000)
+
     }
     return (
         <>
@@ -48,6 +49,7 @@ export default function ProtocolPage({
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
                 <Stepper protocolLength={protocolLength} currentSection={section?.sectionId} />
+                {savedEvent ? (<h3>saved</h3>) : ''}
                 <Form section={section} updateSection={updateSection} />
                 <div className="flex w-full justify-between px-8">
                     <Button
@@ -76,17 +78,12 @@ export default function ProtocolPage({
 // - Only if you need to pre-render a page whose data must be fetched at request time
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import { useDebouncedValue } from '@mantine/hooks'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     console.log('params', ctx.params?.params);
     const [protocolId, sectionId] = ctx.params?.params as string[]
-
     const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
-    console.log(string);
-
     const data = await fetch(string).then((res) => res.json())
-    console.log('*******FUNCIONA ESTO?*********', data);
 
     return {
         props: { ...data, protocolId }
