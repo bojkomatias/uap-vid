@@ -1,18 +1,11 @@
-import type { ReactElement } from 'react'
-import Layout from '../components/Layout'
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { Form } from '../components/Protocol/Form'
-import { NextLink } from '@mantine/next'
 import { Button } from '../components/Atomic/Button'
-import { Protocol } from '../config/types'
 import { useRouter } from 'next/router'
 import { ProtocolMetadata } from '../config/metadata'
 
 export default function Page() {
     const router = useRouter()
     const redirectToProtocol = (id: string) => {
-        router.push(`/protocol/${id}`)
+        router.push(`/protocol/${id}/1`)
     }
     const createNewProtocol = async () => {
         const protocol = ProtocolMetadata

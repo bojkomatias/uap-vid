@@ -34,6 +34,8 @@ export default NextAuth({
                     email: credentials.email,
                 })
 
+                console.log(result)
+
                 //NextAuth maneja el error
                 if (!result) {
                     client.close()
@@ -42,8 +44,8 @@ export default NextAuth({
 
                 //Check hased password with DB password
                 const checkPassword = await compare(
-                    credentials.passowrd,
-                    result.passowrd
+                    credentials.password,
+                    result.password
                 )
 
                 if (!checkPassword) {

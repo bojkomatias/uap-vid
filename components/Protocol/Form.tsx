@@ -21,8 +21,6 @@ export const Form = ({
     const [sectionEdited, setSectionEdited] = useState<Section>(section)
 
     const idempotentUpdateValue = (e: any) => {
-        console.log('idempotentUpdateValue')
-
         let newData = sectionData
         if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
             newData.splice(
