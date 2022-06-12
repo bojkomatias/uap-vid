@@ -14,13 +14,14 @@ export default function Page() {
                     fill="currentColor"
                 >
                     <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                     />
                 </svg>
             ),
             url: '/protocol/p',
+            action: () => createNewProtocol(),
         },
         {
             title: ' Lista base de datos evaluadores',
@@ -141,12 +142,21 @@ export default function Page() {
             <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
                     {content.map((item) => (
-                        <a key={item.title} href={item.url}>
+                        item.action? (
+                            <a key={item.title}  onClick={item.action} >
                             <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
                                 {item.icon}
                                 <p className="mx-auto"> {item.title}</p>
                             </div>
                         </a>
+                            ) : (
+                                <a key={item.title} href={item.url} >
+                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                {item.icon}
+                                <p className="mx-auto"> {item.title}</p>
+                            </div>
+                        </a>) 
+                            
                     ))}
                 </div>
                 <div className="w-[40%]  font-bold text-primary">
