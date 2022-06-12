@@ -10,19 +10,52 @@ export const ProtocolMetadata: Protocol = {
             description: Helpers[0],
             data: [
                 // 1.1 Titulo
-                { type: InputType.text, title: 'titulo', value: '' },
+                { type: InputType.text, title: 'titulo', value: null },
                 {
-                    type: InputType.text,
-                    title: 'carrera y materia',
+                    type: InputType.select,
+                    title: 'carrera',
+                    options: ['Ingenieria en Sistemas'],
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'materia',
+                    options: ['Sistemas Operativos'],
                     value: null,
                 },
                 {
                     type: InputType.table,
-                    title: 'miembros del equipo',
+                    title: 'miembros del equipo y horas',
                     options: [
-                        { name: 'name', text: 'Nombre', type: InputType.text },
+                        {
+                            name: 'role',
+                            header: 'Rol',
+                            options: [
+                                'Director',
+                                'Coodirector',
+                                'Investigador UAP',
+                                'Investigador Externo UAP',
+                                'Técnico Asistente',
+                                'Técnico Asociado',
+                                'Técnico Principal',
+                                'Profesional Adjunto',
+                                'Profesional Principal',
+                                'Becario CONICET',
+                            ],
+                            type: InputType.select,
+                        },
+                        {
+                            name: 'name',
+                            header: 'Nombre',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'hours',
+                            header: 'Horas',
+                            type: InputType.text,
+                        },
                     ],
-                    value: null,
+                    value: [{ role: 'Director', name: '', hours: '' }],
                 },
                 {
                     type: InputType.select,
@@ -34,7 +67,7 @@ export const ProtocolMetadata: Protocol = {
                         'Proyecto de investigación institucional (PII)',
                         'Proyecto de investigación interfacultades (PIIF)',
                         'Proyecto I + D + i (PIDi)',
-                        'Tesis',
+                        'Proyecto Tesis Posgrado (PTP)',
                     ],
                     value: null,
                 },
@@ -107,11 +140,63 @@ export const ProtocolMetadata: Protocol = {
         {
             sectionId: 5,
             name: 'descripción del proyecto',
-
             data: [
                 {
-                    type: InputType.textarea,
-                    title: 'descripción del proyecto',
+                    type: InputType.select,
+                    title: 'Disciplina general y área específica',
+                    options: ['Ejemplo anexo A'],
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'Línea de investigación',
+                    options: ['Ejemplo anexo A'],
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Palabras clave',
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'Campo de aplicación',
+                    options: [
+                        'Ciencias exactas y naturales',
+                        'Ingeniería y tecnología',
+                        'Ciencias médicas',
+                        'Ciencias agrícolas y veterinarias',
+                        'Ciencias sociales',
+                        'Humanidades y artes',
+                    ],
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'Objetivo socioeconómico',
+                    options: [
+                        'Exploración y explotación de la tierra',
+                        'Medio ambiente',
+                        'Exploración y explotación de espacio',
+                        'Transporte, telecomunicación y otras infraestructuras',
+                        'Energía',
+                        'Producción y tecnología industrial',
+                        'Salud',
+                        'Agricultura',
+                        'Educación',
+                        'Cultura, recreación, religión y medios de comunicación',
+                        'Estructuras, procesos y sistemas políticos y sociales',
+                    ],
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'Tipo de investigación',
+                    options: [
+                        'Investigación básica',
+                        'Investigación aplicada',
+                        'Desarrollo experimental',
+                    ],
                     value: null,
                 },
             ],
@@ -121,8 +206,23 @@ export const ProtocolMetadata: Protocol = {
             name: 'introducción del proyecto',
             data: [
                 {
-                    type: InputType.textarea,
-                    title: 'introducción del proyecto',
+                    type: InputType.text,
+                    title: 'Estado actual del tema y principales antecedentes en la literatura',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Justificación científica, académico-institucional y social',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Definición del problema',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Objetivos',
                     value: null,
                 },
             ],
@@ -132,8 +232,12 @@ export const ProtocolMetadata: Protocol = {
             name: 'método',
             data: [
                 {
-                    type: InputType.textarea,
-                    title: 'método',
+                    type: InputType.select,
+                    title: 'Tipo de investigación (dudoso ver word)',
+                    options: [
+                        'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                        'Investigaciones de tipo teóricas',
+                    ],
                     value: null,
                 },
             ],
@@ -143,8 +247,18 @@ export const ProtocolMetadata: Protocol = {
             name: 'publicación cientifica',
             data: [
                 {
-                    type: InputType.textarea,
-                    title: 'publicación cientifica',
+                    type: InputType.select,
+                    title: 'Especificar cuál será el resultado de la investigación',
+                    options: [
+                        'Artículo científico',
+                        'Capítulo de libro',
+                        'Libro',
+                    ],
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Presentar un plan viable para la publicación de la investigación',
                     value: null,
                 },
             ],
@@ -152,7 +266,14 @@ export const ProtocolMetadata: Protocol = {
         {
             sectionId: 9,
             name: 'lista bibliografica preeliminar',
-            data: [],
+            data: [
+                {
+                    type: InputType.table,
+                    title: 'Cuadro bliblográfico',
+                    options: [{ author: '', title: '', year: '' }],
+                    value: null,
+                },
+            ],
         },
         {
             sectionId: 10,
@@ -160,7 +281,48 @@ export const ProtocolMetadata: Protocol = {
             data: [
                 {
                     type: InputType.text,
-                    title: 'curriculum del director',
+                    title: 'Formación académica (título, institución, fecha)',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Indicadores generales de calidad de la producción científica',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Publicaciones',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Participación en proyectos I D i',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Gestión de la actividad científica',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Miembro de comités internacionales',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Miembro de comités editoriales',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: '(Subcuadro) Premios obtenidos',
+                    value: null,
+                },
+                {
+                    type: InputType.select,
+                    title: 'Posee categoría docente investigador UAP',
+                    options: ['SI', 'NO'],
                     value: null,
                 },
             ],

@@ -1,6 +1,7 @@
 import { TrashIcon, PlusIcon } from '@heroicons/react/outline'
 import { useForm, formList } from '@mantine/form'
 import { PropsWithChildren, useEffect } from 'react'
+import { InputType } from '../../config/enums'
 import { Input as InputT } from '../../config/types'
 import Input from './Input'
 
@@ -8,10 +9,10 @@ export default function Table({
     data,
     updateData,
 }: PropsWithChildren<{ data: InputT; updateData: Function }>) {
-    const headers = Object.keys(data.options[0])
+    const headers = data.options.map((option: any) => option)
     const table = useForm({
         initialValues: {
-            data: formList<any>(data.options),
+            data: formList<any>(data.value),
         },
     })
 
@@ -22,18 +23,43 @@ export default function Table({
             options: data.options,
             value: table.values.data,
         })
+        console.log(table.values)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [table.values])
 
     const fields = table.values.data.map((_, index) => (
-        <div key={index} className="my-2 flex gap-3 ">
-            {headers.map((_, i) => (
-                <input
-                    key={i}
-                    type="text"
-                    {...table.getListInputProps('data', index, headers[i])}
-                    className="input"
-                />
+        <div key={index} className="my-2 flex w-full gap-3 ">
+            {headers.map((h: any, i: number) => (
+                <>
+                    {h.type === InputType.select ? (
+                        <select
+                            key={i}
+                            className="input"
+                            {...table.getListInputProps(
+                                'data',
+                                index,
+                                headers[i].name
+                            )}
+                        >
+                            {h.options.map((option: any, index: number) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            key={i}
+                            type="text"
+                            {...table.getListInputProps(
+                                'data',
+                                index,
+                                headers[i].name
+                            )}
+                            className="input"
+                        />
+                    )}
+                </>
             ))}
 
             <TrashIcon
@@ -47,12 +73,12 @@ export default function Table({
         <div>
             {fields.length > 0 ? (
                 <div className="flex justify-evenly capitalize ">
-                    {headers.map((header, index) => (
+                    {headers.map((header: any, index: any) => (
                         <span
                             key={index}
                             className="text-md w-[272px] font-extrabold text-primary "
                         >
-                            {header}
+                            {header.header}
                         </span>
                     ))}
                 </div>
