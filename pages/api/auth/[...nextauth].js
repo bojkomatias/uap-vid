@@ -20,15 +20,18 @@ export default NextAuth({
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: {
-                    label: 'Usuario',
-                    type: 'text',
+                email: {
+                    label: 'Email',
+                    type: 'email',
                     placeholder: 'jsmith@uap.edu.ar',
                 },
                 password: { label: 'Contraseña', type: 'password' },
             },
             async authorize(credentials) {
-                const users = getCollections(CollectionName.Users)
+                const users = await getCollections(CollectionName.Users)
+
+                console.log(credentials)
+
                 //Find user with the email
                 const result = await users.findOne({
                     email: credentials.email,
@@ -38,7 +41,6 @@ export default NextAuth({
 
                 //NextAuth maneja el error
                 if (!result) {
-                    client.close()
                     throw new Error('No user found with the email')
                 }
 
@@ -49,7 +51,6 @@ export default NextAuth({
                 )
 
                 if (!checkPassword) {
-                    client.close()
                     throw new Error('Password doesnt match')
                 }
 
@@ -57,4 +58,23 @@ export default NextAuth({
             },
         }),
     ],
+    callbacks: {
+        jwt: ({ token, user }) => {
+            if (user) {
+                token.user = user
+            }
+            return token
+        },
+        session: ({ session, token }) => {
+            if (token) {
+                session.user = token.user
+            }
+            return session
+        },
+    },
+    secret: 'test',
+    jwt: {
+        secret: 'test',
+        encryption: true,
+    },
 })
