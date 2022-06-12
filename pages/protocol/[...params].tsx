@@ -7,32 +7,34 @@ import Stepper from '../../components/Protocol/Stepper'
 import { Button } from '../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
+
 export default function ProtocolPage({
-    serverProtocol,
+    section,
+    protocolId,
+    protocolLength
 }: {
-    serverProtocol: Protocol
+    section: Section,
+    protocolId: number,
+    protocolLength: number
 }) {
     const router = useRouter()
-    const [protocol, setProtocol] = useState(serverProtocol)
-    const [currentSection, setCurrentSection] = useState<Section>(
-        protocol.data[0]
-    )
+    // const [currentSection, setCurrentSection] = useState<Section>(section)
     // const [debouncedProtocol] = useDebouncedValue(protocol, 200)
 
-    useEffect((): any => {
-        const updateProtocol = async (protocol: Protocol) => {
-            const res = await fetch(`/api/protocol/${router.query.id}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(protocol),
-            })
-            console.log('Pegue a la api', await res.json())
-        }
-        updateProtocol(protocol)
-    }, [protocol, router.query.id])
+    // useEffect((): any => {
+    //     const updateProtocol = async (protocol: Protocol) => {
+    //         const res = await fetch(`/api/protocol/${router.query.id}`, {
+    //             method: 'PUT',
+    //             mode: 'cors',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(protocol),
+    //         })
+    //         console.log('Pegue a la api', await res.json())
+    //     }
+    //     updateProtocol(protocol)
+    // }, [protocol, router.query.id])
 
     return (
         <>
@@ -40,23 +42,17 @@ export default function ProtocolPage({
                 Protocolo de investigación
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
-                <Stepper currentSection={currentSection} />
-                <Form
+                <Stepper protocolLength={protocolLength} currentSection={section.sectionId} />
+                {/* <Form
                     protocol={protocol}
                     section={currentSection}
                     updateProtocol={setProtocol}
-                />
+                /> */}
                 <div className="flex w-full justify-between px-8">
                     <Button
-                        disabled={currentSection?.sectionId === 1}
+                        disabled={section?.sectionId === 1}
                         onClick={() => {
-                            setCurrentSection(
-                                protocol.data.find(
-                                    (x) =>
-                                        x.sectionId ===
-                                        currentSection.sectionId - 1
-                                )!
-                            )
+                            router.push(`/protocol/${protocolId}/${section?.sectionId - 1}`)
                         }}
                         className="h-8 w-8"
                     >
@@ -64,13 +60,7 @@ export default function ProtocolPage({
                     </Button>
                     <Button
                         onClick={() =>
-                            setCurrentSection(
-                                protocol.data.find(
-                                    (x) =>
-                                        x.sectionId ===
-                                        currentSection.sectionId + 1
-                                )!
-                            )
+                            router.push(`/protocol/${protocolId}/${section?.sectionId + 1}`)
                         }
                     >
                         <ChevronRightIcon className="h-6 w-6" />
@@ -88,11 +78,16 @@ import { useRouter } from 'next/router'
 import { useDebouncedValue } from '@mantine/hooks'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const string = `${process.env.NEXTURL}/api/protocol/${ctx.params?.id}`
+    console.log('params', ctx.params?.params);
+    const [protocolId, sectionId] = ctx.params?.params as string[]
+
+    const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
+    console.log(string);
+
     const data = await fetch(string).then((res) => res.json())
-    console.log('*******FUNCIONA ESTO?*********', data.data[0]);
-    
+    console.log('*******FUNCIONA ESTO?*********', data);
+
     return {
-        props: { serverProtocol: data },
+        props: { ...data, protocolId }
     }
 }
