@@ -7,7 +7,7 @@ export const ProtocolMetadata: Protocol = {
             // 1. Identificacion del Proyecto
             sectionId: 1,
             name: 'identificación',
-            description: Helpers[0],
+            description: 0,
             data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: null },

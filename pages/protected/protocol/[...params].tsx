@@ -93,6 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const [protocolId, sectionId] = ctx.params?.params as string[]
     const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
     const data = await fetch(string).then((res) => res.json())
+    console.log(data)
 
     return {
         props: { ...data, protocolId },
