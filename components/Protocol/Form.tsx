@@ -9,6 +9,7 @@ import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { Helpers } from '../../config/helpers'
 
 export const Form = ({
     section,
@@ -48,12 +49,12 @@ export const Form = ({
                     <span className="text-xl font-bold uppercase text-primary">
                         {section.name}
                     </span>
-                    {section.description ? (
-                        <div className="group relative w-2/3">
+                    {section.description  !== null ? Helpers.map((x,i) => {if(section.description === i)return (
+                        <div key={i} className="group relative w-2/3">
                             <QuestionMarkCircleIcon className="h-5 w-5 cursor-pointer transition duration-300 group-hover:scale-110" />
-                            <section.description className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg group-hover:block prose-p:pl-6" />
-                        </div>
-                    ) : null}
+                            <x.fn className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg group-hover:block prose-p:pl-6" />
+                        </div>)})
+                     : null}
                 </div>
                 <div className="mt-5 min-h-[500px] max-w-[1120px] ">
                     {section.data.map((i: InputT) => (
