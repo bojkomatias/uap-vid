@@ -115,7 +115,7 @@ export default function Page() {
     ]
     const router = useRouter()
     const redirectToProtocol = (id: string) => {
-        router.push(`/protocol/${id}/1`)
+        router.push(`/protected/protocol/${id}/1`)
     }
     const createNewProtocol = async () => {
         const protocol = ProtocolMetadata
@@ -141,23 +141,23 @@ export default function Page() {
             </div>
             <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
-                    {content.map((item) => (
-                        item.action? (
-                            <a key={item.title}  onClick={item.action} >
-                            <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
-                                {item.icon}
-                                <p className="mx-auto"> {item.title}</p>
-                            </div>
-                        </a>
-                            ) : (
-                                <a key={item.title} href={item.url} >
+                    {content.map((item) =>
+                        item.action ? (
+                            <a key={item.title} onClick={item.action}>
                                 <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
-                                {item.icon}
-                                <p className="mx-auto"> {item.title}</p>
-                            </div>
-                        </a>) 
-                            
-                    ))}
+                                    {item.icon}
+                                    <p className="mx-auto"> {item.title}</p>
+                                </div>
+                            </a>
+                        ) : (
+                            <a key={item.title} href={item.url}>
+                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                    {item.icon}
+                                    <p className="mx-auto"> {item.title}</p>
+                                </div>
+                            </a>
+                        )
+                    )}
                 </div>
                 <div className="w-[40%]  font-bold text-primary">
                     <p className="mb-2">Notificaciones</p>

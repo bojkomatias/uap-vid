@@ -16,7 +16,7 @@ export default function Example() {
         <nav className="w-screen  bg-primary">
             <div className="mx-20 flex h-28 max-w-[1280px] items-center justify-between text-white 2xl:m-auto">
                 <div className="text-center text-[10px] uppercase tracking-wider transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]">
-                    <a href="/">
+                    <a href="/protected/">
                         <img src="/UAP-logo-home.png"></img>
                         <p>Vicerrectoría de Investigación y Desarrollo</p>
                     </a>
@@ -24,7 +24,7 @@ export default function Example() {
                 <div className="flex items-center gap-2">
                     <UserAuth />
                     <div className="transition-all duration-150 hover:scale-[1.07]">
-                        <a href="/profile">
+                        <a href="/protected/profile">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-8 w-8"

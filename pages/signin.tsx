@@ -11,7 +11,8 @@ function SignIn() {
 
     useEffect(() => {
         if (session) {
-            router.push('/protected')
+            console.log(session)
+            // router.push('/protected')
         }
     }, [session])
 
@@ -33,7 +34,7 @@ function SignIn() {
                 }}
             >
                 <input
-                    type="text"
+                    type="email"
                     className="input"
                     placeholder="Email"
                     onChange={(e) => setEmail(e.target.value)}

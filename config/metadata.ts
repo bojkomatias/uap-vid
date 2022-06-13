@@ -113,8 +113,24 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'cronograma',
-                    options: [{ task: '', date: '', duration: '' }],
-                    value: null,
+                    options: [
+                        {
+                            name: 'task',
+                            header: 'Tarea',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'date',
+                            header: 'Fecha',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'duration',
+                            header: 'Duración',
+                            type: InputType.text,
+                        },
+                    ],
+                    value: [],
                 },
             ],
         },
@@ -131,7 +147,28 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
-                    options: [{ type: '', detail: '', amount: '', year: '' }],
+                    options: [
+                        {
+                            name: 'type',
+                            header: 'Tipo',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'detail',
+                            header: 'Detalle',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'amount',
+                            header: 'Monto',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'year',
+                            header: 'Año',
+                            type: InputType.text,
+                        },
+                    ],
                     value: null,
                 },
             ],
@@ -270,7 +307,23 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'Cuadro bliblográfico',
-                    options: [{ author: '', title: '', year: '' }],
+                    options: [
+                        {
+                            name: 'author',
+                            header: 'Autor',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'title',
+                            header: 'Titulo',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'year',
+                            header: 'Año',
+                            type: InputType.text,
+                        },
+                    ],
                     value: null,
                 },
             ],
