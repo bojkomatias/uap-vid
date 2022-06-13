@@ -1,6 +1,6 @@
-import { Button } from '../components/Atomic/Button'
+import { Button } from '../../components/Atomic/Button'
 import { useRouter } from 'next/router'
-import { ProtocolMetadata } from '../config/metadata'
+import { ProtocolMetadata } from '../../config/metadata'
 
 export default function Page() {
     const content = [

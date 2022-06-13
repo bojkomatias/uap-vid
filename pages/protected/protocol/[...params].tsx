@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Form } from '../../components/Protocol/Form'
-import { Section } from '../../config/types'
-import Stepper from '../../components/Protocol/Stepper'
-import { Button } from '../../components/Atomic/Button'
+import { Form } from '../../../components/Protocol/Form'
+import { Section } from '../../../config/types'
+import Stepper from '../../../components/Protocol/Stepper'
+import { Button } from '../../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
 

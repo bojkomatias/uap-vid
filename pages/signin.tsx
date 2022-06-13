@@ -1,28 +1,51 @@
-import { signIn } from 'next-auth/react'
-import React from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { Button } from '../components/Atomic/Button'
 
 function SignIn() {
+    const { data: session } = useSession()
+    const router = useRouter()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    useEffect(() => {
+        if (session) {
+            router.push('/protected')
+        }
+    }, [session])
+
     return (
         <div>
             <Button onClick={() => signIn('azure-ad-b2c')}>
                 Sign In With AD B2C
             </Button>
 
-            <Button
-                onClick={() => {
-                    console.log('xs')
-                    signIn(
-                        'credentials', 
-                        {
-                            email: 'admin@admin.com',
-                            password: 'admin123',
-                        }
-                    )
+            <form
+                onSubmit={(e: any) => {
+                    e.preventDefault()
+                    console.log(process.env.NEXTAUTH_URL)
+                    signIn('credentials', {
+                        email: email,
+                        password: password,
+                        redirect: false,
+                    })
                 }}
             >
-                Login with Creds
-            </Button>
+                <input
+                    type="text"
+                    className="input"
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    className="input"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button type="submit">SAPE</Button>
+            </form>
         </div>
     )
 }
