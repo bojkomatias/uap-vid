@@ -17,6 +17,6 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
         return NextResponse.next()
     } else {
         // the user is not logged in, redirect to the sign-in page
-        return NextResponse.redirect('http://localhost:3000/signin')
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/signin`)
     }
 }
