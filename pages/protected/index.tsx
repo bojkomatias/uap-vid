@@ -1,8 +1,6 @@
-import type { ReactElement } from 'react'
-import Layout from '../components/Layout'
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { Form } from '../components/Protocol/Form'
+import { Button } from '../../components/Atomic/Button'
+import { useRouter } from 'next/router'
+import { ProtocolMetadata } from '../../config/metadata'
 
 export default function Page() {
     const content = [
@@ -16,13 +14,14 @@ export default function Page() {
                     fill="currentColor"
                 >
                     <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                     />
                 </svg>
             ),
             url: '/protocol/p',
+            action: () => createNewProtocol(),
         },
         {
             title: ' Lista base de datos evaluadores',
@@ -114,6 +113,26 @@ export default function Page() {
             url: '/projects',
         },
     ]
+    const router = useRouter()
+    const redirectToProtocol = (id: string) => {
+        router.push(`/protected/protocol/${id}/1`)
+    }
+    const createNewProtocol = async () => {
+        const protocol = ProtocolMetadata
+        console.log(protocol)
+        const res = await fetch('/api/protocol', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(protocol),
+        })
+        const data = await res.json()
+        console.log(data)
+        redirectToProtocol(data.insertedId)
+    }
+
     return (
         <>
             {' '}
@@ -122,14 +141,23 @@ export default function Page() {
             </div>
             <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
-                    {content.map((item) => (
-                        <a href={item.url}>
-                            <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
-                                {item.icon}
-                                <p className="mx-auto"> {item.title}</p>
-                            </div>
-                        </a>
-                    ))}
+                    {content.map((item) =>
+                        item.action ? (
+                            <a key={item.title} onClick={item.action}>
+                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                    {item.icon}
+                                    <p className="mx-auto"> {item.title}</p>
+                                </div>
+                            </a>
+                        ) : (
+                            <a key={item.title} href={item.url}>
+                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                    {item.icon}
+                                    <p className="mx-auto"> {item.title}</p>
+                                </div>
+                            </a>
+                        )
+                    )}
                 </div>
                 <div className="w-[40%]  font-bold text-primary">
                     <p className="mb-2">Notificaciones</p>

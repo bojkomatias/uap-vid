@@ -1,5 +1,5 @@
 import React from 'react'
-import ItemView from '../components/Atomic/ProtocolItemView'
+import ItemView from '../../components/Atomic/ProtocolItemView'
 
 export default function projects() {
     const content = [
@@ -55,7 +55,7 @@ export default function projects() {
         <div className="transition-all duration-200">
             <div className="mx-auto mb-20 flex w-[1280px] flex-col justify-center px-20 py-10">
                 {content.map((item) => (
-                    <div className="mt-5">
+                    <div key={item.title} className="mt-5">
                         <ItemView
                             title={item.title}
                             description={item.description}

@@ -1,5 +1,9 @@
-import { PropsWithChildren, useEffect, useReducer, useState } from 'react'
-import { Section, Input as InputT } from '../../config/types'
+import {
+    PropsWithChildren,
+    useState,
+    useEffect
+} from 'react'
+import { Section, Input as InputT, Protocol } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import Table from '../Atomic/Table'
@@ -10,18 +14,27 @@ import gsap from 'gsap'
 
 export const Form = ({
     section,
+    updateSection
 }: PropsWithChildren<{
-    section: Section
+    section: Section,
+    updateSection: Function
 }>) => {
-    const [sectionData, setsectionData] = useState<InputT[]>([])
+    const [sectionData, setsectionData] = useState<InputT[]>(section.data)
+    const [sectionEdited, setSectionEdited] = useState<Section>(section)
 
-    // ! We could save it here, maybe for autosaves as the user updates
-    const idempotentUpdate = (e: any) => {
-        let oldData = sectionData
-        if (sectionData.find((x) => x.title === e.title)) {
-            oldData = sectionData.filter((x) => x.title !== e.title)
+    const idempotentUpdateValue = (e: any) => {
+        let newData = sectionData
+        if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
+            newData.splice(
+                sectionData.findIndex((x) => x.title === e.title),
+                1,
+                e
+            )
         }
-        return setsectionData([...oldData, e])
+
+        setSectionEdited({...sectionEdited, data: newData })
+        updateSection(sectionEdited)
+        return setsectionData(newData)
     }
 
     useEffect(() => {
@@ -31,15 +44,9 @@ export const Form = ({
             { opacity: 1, scale: 1, duration: 0.5 }
         )
 
-        return () => {
-            console.log('SAVING TO DATABASE CAUSE OF STEP CHANGE', {
-                id: section.id,
-                name: section.name,
-                data: sectionData,
-            })
-        }
+     
     }, [section])
-
+    
     return (
         <div id="container" className="opacity-0">
             <form
@@ -66,22 +73,30 @@ export const Form = ({
                             {i.type === 'table' ? (
                                 <Table
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'select' ? (
                                 <Select
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'textarea' ? (
                                 <TextEditor
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : (
                                 <Input
                                     input={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             )}
                         </div>
