@@ -19,24 +19,25 @@ export default function ProtocolPage({
 
     useEffect(() => {
         setTimeout(() => {
-            console.log('setTimeout')
-
             setSavedEvent(false)
         }, 3000)
     }, [savedEvent])
 
     const updateSection = async (section: Section) => {
-        let timeout;
+        let timeout
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
-            const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(section),
-            })
+            const res = await fetch(
+                `/api/section/${protocolId}/${section?.sectionId}`,
+                {
+                    method: 'PUT',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(section),
+                }
+            )
             setSavedEvent(true)
         }, 3000)
     }
@@ -93,7 +94,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const [protocolId, sectionId] = ctx.params?.params as string[]
     const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
     const data = await fetch(string).then((res) => res.json())
-    console.log(data)
+    console.log(data.section)
 
     return {
         props: { ...data, protocolId },

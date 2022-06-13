@@ -12,15 +12,13 @@ function SignIn() {
     useEffect(() => {
         if (session) {
             console.log(session)
-            // router.push('/protected')
+            router.push('/protected')
         }
     }, [session])
 
     return (
         <div>
-            <Button onClick={() => signIn('azure-ad-b2c')}>
-                Sign In With AD B2C
-            </Button>
+            <Button onClick={() => signIn('azure-ad')}>Sign In With AD</Button>
 
             <form
                 onSubmit={(e: any) => {

@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth'
 import AzureADB2CProvider from 'next-auth/providers/azure-ad-b2c'
+import AzureADProvider from 'next-auth/providers/azure-ad'
 import getCollections, { CollectionName } from '../../../utils/bd/getCollection'
 
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -10,6 +11,11 @@ export default NextAuth({
         jwt: true,
     },
     providers: [
+        AzureADProvider({
+            clientId: process.env.AZURE_AD_CLIENT_ID,
+            clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+            tenantId: process.env.AZURE_AD_TENANT_ID,
+        }),
         AzureADB2CProvider({
             tenantId: process.env.AZURE_AD_B2C_TENANT_NAME,
             clientId: process.env.AZURE_AD_B2C_CLIENT_ID,
