@@ -1,10 +1,8 @@
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import React from 'react'
 import { Button } from '../components/Atomic/Button'
 
 function SignIn() {
-    const { data: session } = useSession()
-    console.log(session)
     return (
         <div>
             <Button onClick={() => signIn('azure-ad-b2c')}>
@@ -16,10 +14,9 @@ function SignIn() {
                     console.log('xs')
                     signIn(
                         'credentials', 
-                        { redirect },
                         {
-                            email: 'test@test.com',
-                            password: '123',
+                            email: 'admin@admin.com',
+                            password: 'admin123',
                         }
                     )
                 }}
