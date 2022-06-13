@@ -26,20 +26,17 @@ export default function ProtocolPage({
     }, [savedEvent])
 
     const updateSection = async (section: Section) => {
-        console.log(section)
-
-        setTimeout(async () => {
-            const res = await fetch(
-                `/api/section/${protocolId}/${section?.sectionId}`,
-                {
-                    method: 'PUT',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(section),
-                }
-            )
+        let timeout;
+        clearTimeout(timeout)
+        timeout = setTimeout(async () => {
+            const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(section),
+            })
             setSavedEvent(true)
         }, 3000)
     }
