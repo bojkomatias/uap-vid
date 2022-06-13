@@ -6,6 +6,7 @@ import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import gsap from 'gsap'
 
 export const Form = ({
     section,
@@ -24,6 +25,12 @@ export const Form = ({
     }
 
     useEffect(() => {
+        gsap.fromTo(
+            '#container',
+            { opacity: 0, scale: 0.97 },
+            { opacity: 1, scale: 1, duration: 0.5 }
+        )
+
         return () => {
             console.log('SAVING TO DATABASE CAUSE OF STEP CHANGE', {
                 id: section.id,
@@ -34,7 +41,7 @@ export const Form = ({
     }, [section])
 
     return (
-        <motion.div animate={{ opacity: 1 }} className="opacity-0">
+        <div id="container" className="opacity-0">
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
@@ -53,7 +60,7 @@ export const Form = ({
                         </div>
                     ) : null}
                 </div>
-                <div className="mt-5 min-h-[500px] max-w-[1120px] ">
+                <div className="mx-6 mt-5  max-w-[1120px]">
                     {section.data.map((i: InputT) => (
                         <div key={i.title} className="m-3 p-1 ">
                             {i.type === 'table' ? (
@@ -81,6 +88,6 @@ export const Form = ({
                     ))}
                 </div>
             </form>
-        </motion.div>
+        </div>
     )
 }

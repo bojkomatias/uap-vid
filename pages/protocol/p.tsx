@@ -16,10 +16,10 @@ export default function ProtocolPage() {
 
     return (
         <>
-            <div className="-translate-y-12 text-4xl font-bold text-primary">
+            <div className="ml-5 -translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación
             </div>{' '}
-            <div className="my-auto flex w-full justify-around px-5">
+            <div className="my-auto flex w-full justify-around  px-5">
                 <Button
                     onClick={() => {
                         if (currentSection.id == 1) return
@@ -42,7 +42,7 @@ export default function ProtocolPage() {
                         )
                     }
                 >
-                    <ChevronRightIcon className="h-6 w-6" />
+                    <ChevronRightIcon className="w-6" />
                 </Button>
             </div>
         </>
