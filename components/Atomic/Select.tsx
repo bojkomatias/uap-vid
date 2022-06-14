@@ -16,7 +16,7 @@ export default function Select({
     updateData: Function
 }>) {
     const [query, setQuery] = useState('')
-    const [selectedValue, setSelectedValue] = useState()
+    const [selectedValue, setSelectedValue] = useState(data.value)
 
     useEffect(() => {
         updateData({
@@ -25,6 +25,7 @@ export default function Select({
             options: data.options,
             value: selectedValue,
         })
+        console.log(data)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue])
 

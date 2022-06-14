@@ -1,8 +1,13 @@
 import { Button } from '../../components/Atomic/Button'
 import { useRouter } from 'next/router'
 import { ProtocolMetadata } from '../../config/metadata'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
+    const { data: session } = useSession()
+
+    console.log(session)
+
     const content = [
         {
             title: ' Postulación proyecto de investigación',
@@ -22,6 +27,7 @@ export default function Page() {
             ),
             url: '/protocol/p',
             action: () => createNewProtocol(),
+            roles: ['new-user', 'admin'],
         },
         {
             title: ' Lista base de datos evaluadores',
@@ -40,6 +46,7 @@ export default function Page() {
                 </svg>
             ),
             url: '/protocol/p',
+            roles: ['admin'],
         },
         {
             title: ' Seguimiento de proyectos aprobados',
@@ -59,6 +66,7 @@ export default function Page() {
                 </svg>
             ),
             url: '/protocol/p',
+            roles: ['admin'],
         },
         {
             title: ' Informes de avance',
@@ -74,6 +82,7 @@ export default function Page() {
                 </svg>
             ),
             url: '/protocol/p',
+            roles: ['admin'],
         },
         {
             title: ' Información de publicaciones científicas',
@@ -93,6 +102,7 @@ export default function Page() {
                 </svg>
             ),
             url: '/protocol/p',
+            roles: ['admin'],
         },
         {
             title: ' Lista de proyectos de investigación',
@@ -110,7 +120,8 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/projects',
+            url: '/protected/projects',
+            roles: ['new-user', 'admin'],
         },
     ]
     const router = useRouter()
@@ -139,50 +150,27 @@ export default function Page() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
-            <div className="flex -translate-y-8 items-center justify-around p-10">
-                <div className="w-[40%]  text-center font-bold text-primary">
+            <div className="flex h-full -translate-y-12 items-center justify-around">
+                <div className="my-auto flex min-h-[70vh] cursor-pointer flex-col justify-center text-center font-bold text-primary">
                     {content.map((item) =>
-                        item.action ? (
-                            <a key={item.title} onClick={item.action}>
-                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
-                                    {item.icon}
-                                    <p className="mx-auto"> {item.title}</p>
-                                </div>
-                            </a>
-                        ) : (
-                            <a key={item.title} href={item.url}>
-                                <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
-                                    {item.icon}
-                                    <p className="mx-auto"> {item.title}</p>
-                                </div>
-                            </a>
-                        )
+                        item.roles.includes(useSession().data?.user.role) ? (
+                            item.action ? (
+                                <a key={item.title} onClick={item.action}>
+                                    <div className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                        {item.icon}
+                                        <p className="mx-auto"> {item.title}</p>
+                                    </div>
+                                </a>
+                            ) : (
+                                <a key={item.title} href={item.url}>
+                                    <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
+                                        {item.icon}
+                                        <p className="mx-auto"> {item.title}</p>
+                                    </div>
+                                </a>
+                            )
+                        ) : null
                     )}
-                </div>
-                <div className="w-[40%]  font-bold text-primary">
-                    <p className="mb-2">Notificaciones</p>
-                    <div className="shadowInner border-primary p-5 font-normal">
-                        <p>
-                            Lorem, ipsum dolor sit amet consectetur adipisicing
-                            elit. Adipisci, repudiandae temporibus deserunt,
-                            quam repellendus consectetur at eligendi architecto,
-                            provident aut nobis alias deleniti dignissimos
-                            reprehenderit aliquid repellat tenetur voluptates
-                            tempora. Lorem, ipsum dolor sit amet consectetur
-                            adipisicing elit. Adipisci, repudiandae temporibus
-                            deserunt, quam repellendus consectetur at eligendi
-                            architecto, provident aut nobis alias deleniti
-                            dignissimos reprehenderit aliquid repellat tenetur
-                            voluptates tempora. Lorem, ipsum dolor sit amet
-                            consectetur adipisicing elit. Adipisci, repudiandae
-                            temporibus deserunt, quam repellendus consectetur at
-                            eligendi architecto, provident aut nobis alias
-                            deleniti dignissimos reprehenderit aliquid repellat
-                            tenetur voluptates tempora. Lorem, ipsum dolor sit
-                            amet consectetur adipisicing elit. Adipisci,
-                            repudiandae temporibus deserunt.
-                        </p>
-                    </div>
                 </div>
             </div>
         </>

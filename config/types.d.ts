@@ -10,7 +10,7 @@ export interface Input {
 export interface Section {
     sectionId: number
     name: string
-    description?: any
+    description?: number
     data: Input[]
 }
 

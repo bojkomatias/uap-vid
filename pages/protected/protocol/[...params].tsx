@@ -19,40 +19,40 @@ export default function ProtocolPage({
 
     useEffect(() => {
         setTimeout(() => {
-            console.log('setTimeout')
-
             setSavedEvent(false)
         }, 3000)
     }, [savedEvent])
 
     const updateSection = async (section: Section) => {
-        let timeout;
+        let timeout
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
-            const res = await fetch(`/api/section/${protocolId}/${section?.sectionId}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(section),
-            })
+            const res = await fetch(
+                `/api/section/${protocolId}/${section?.sectionId}`,
+                {
+                    method: 'PUT',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(section),
+                }
+            )
             setSavedEvent(true)
         }, 3000)
     }
     return (
         <>
-            <div className="-translate-y-8 text-4xl font-bold text-primary">
+            <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación
+                {/* {savedEvent ? <h3>saved</h3> : ''} */}
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
                 <Stepper
                     protocolLength={protocolLength}
                     currentSection={section?.sectionId}
                 />
-                {savedEvent ? <h3>saved</h3> : ''}
-                <Form section={section} updateSection={updateSection} />
-                <div className="flex w-full justify-between px-8">
+                <div className="flex w-full justify-between px-8 pb-8">
                     <Button
                         disabled={section?.sectionId === 1}
                         onClick={() => {
@@ -66,6 +66,8 @@ export default function ProtocolPage({
                     >
                         <ChevronLeftIcon className="h-6 w-6" />
                     </Button>
+                    <Form section={section} updateSection={updateSection} />
+
                     <Button
                         onClick={() =>
                             router.push(
@@ -93,6 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const [protocolId, sectionId] = ctx.params?.params as string[]
     const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
     const data = await fetch(string).then((res) => res.json())
+    console.log(data.section)
 
     return {
         props: { ...data, protocolId },

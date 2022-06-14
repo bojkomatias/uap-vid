@@ -24,7 +24,6 @@ export default function Table({
             options: data.options,
             value: table.values.data,
         })
-        console.log(table.values)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [table.values])
 

@@ -7,7 +7,7 @@ export const ProtocolMetadata: Protocol = {
             // 1. Identificacion del Proyecto
             sectionId: 1,
             name: 'identificación',
-            description: Helpers[0],
+            description: 0,
             data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: null },
@@ -130,7 +130,7 @@ export const ProtocolMetadata: Protocol = {
                             type: InputType.text,
                         },
                     ],
-                    value: [],
+                    value: [{ task: '', date: '', duration: '' }],
                 },
             ],
         },
@@ -169,7 +169,7 @@ export const ProtocolMetadata: Protocol = {
                             type: InputType.text,
                         },
                     ],
-                    value: null,
+                    value: [{ type: '', detail: '', amount: '', year: '' }],
                 },
             ],
         },
@@ -324,7 +324,7 @@ export const ProtocolMetadata: Protocol = {
                             type: InputType.text,
                         },
                     ],
-                    value: null,
+                    value: [{ author: '', title: '', year: '' }],
                 },
             ],
         },
