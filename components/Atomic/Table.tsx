@@ -90,7 +90,7 @@ export default function Table({
 
             {fields}
             <a
-                onClick={() => table.addListItem('data', data.options[0])}
+                onClick={() => table.addListItem('data', data.value[0])}
                 className="cursor-pointer"
             >
                 <div className="group mt-5 flex items-center justify-center gap-2 bg-base-100 py-2 transition-all duration-200 hover:bg-primary">
