@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, PropsWithChildren } from 'react'
+import { Section } from '../../config/types'
 
-export default function faq(props: any) {
+export default function faq({
+    identification,
+}: PropsWithChildren<{ identification: Section }>) {
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
     const trueStyle =
@@ -24,7 +27,9 @@ export default function faq(props: any) {
                         }
                     >
                         <div>
-                            <p>{props.title} </p>{' '}
+                            <p>
+                                {JSON.stringify(identification?.data[0].value)}{' '}
+                            </p>{' '}
                             <p
                                 className={
                                     show
@@ -62,9 +67,7 @@ export default function faq(props: any) {
                             </div>
                             <div className="flex items-end justify-between gap-1">
                                 {' '}
-                                <div className="mt-2 w-[70%]">
-                                    {props.description}
-                                </div>
+                                <div className="mt-2 w-[70%]"></div>
                                 <div className="mt-2 mr-5 mb-1">
                                     <p className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 ">
                                         Ver todos los detalles

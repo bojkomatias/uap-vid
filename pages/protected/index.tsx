@@ -110,7 +110,7 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/projects',
+            url: '/protected/projects',
         },
     ]
     const router = useRouter()
