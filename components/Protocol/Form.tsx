@@ -12,9 +12,11 @@ import { Helpers } from '../../config/helpers'
 export const Form = ({
     section,
     updateSection,
+    setSectionComplete,
 }: PropsWithChildren<{
     section: Section
     updateSection: Function
+    setSectionComplete: Function
 }>) => {
     const [sectionData, setsectionData] = useState<InputT[]>(section.data)
     const [sectionEdited, setSectionEdited] = useState<Section>(section)
@@ -31,10 +33,15 @@ export const Form = ({
 
         setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
+        // check if section is complete
+        const complete = sectionData.filter((e) => e.value === null)
+        if (complete.length === 0) setSectionComplete(true)
         return setsectionData(newData)
     }
 
     useEffect(() => {
+        setSectionComplete(false)
+
         gsap.fromTo(
             '#container',
             { opacity: 0, scale: 0.97 },

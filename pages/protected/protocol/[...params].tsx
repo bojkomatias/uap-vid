@@ -16,6 +16,7 @@ export default function ProtocolPage({
 }) {
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
+    const [isSectionComplete, setSectionComplete] = useState(false)
 
     useEffect(() => {
         setTimeout(() => {
@@ -66,9 +67,14 @@ export default function ProtocolPage({
                     >
                         <ChevronLeftIcon className="h-6 w-6" />
                     </Button>
-                    <Form section={section} updateSection={updateSection} />
+                    <Form
+                        section={section}
+                        updateSection={updateSection}
+                        setSectionComplete={setSectionComplete}
+                    />
 
                     <Button
+                        disabled={!isSectionComplete}
                         onClick={() =>
                             router.push(
                                 `/protected/protocol/${protocolId}/${
@@ -91,11 +97,9 @@ import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    console.log('params', ctx.params?.params)
     const [protocolId, sectionId] = ctx.params?.params as string[]
     const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
     const data = await fetch(string).then((res) => res.json())
-    console.log(data.section)
 
     return {
         props: { ...data, protocolId },
