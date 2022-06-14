@@ -1,7 +1,4 @@
-import {
-    PropsWithChildren,
-    useState,
-} from 'react'
+import { PropsWithChildren, useState, useEffect } from 'react'
 import { Section, Input as InputT, Protocol } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
@@ -9,13 +6,14 @@ import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import gsap from 'gsap'
 import { Helpers } from '../../config/helpers'
 
 export const Form = ({
     section,
-    updateSection
+    updateSection,
 }: PropsWithChildren<{
-    section: Section,
+    section: Section
     updateSection: Function
 }>) => {
     const [sectionData, setsectionData] = useState<InputT[]>(section.data)
@@ -31,13 +29,21 @@ export const Form = ({
             )
         }
 
-        setSectionEdited({...sectionEdited, data: newData })
+        setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
         return setsectionData(newData)
     }
-    
+
+    useEffect(() => {
+        gsap.fromTo(
+            '#container',
+            { opacity: 0, scale: 0.97 },
+            { opacity: 1, scale: 1, duration: 0.5 }
+        )
+    }, [section])
+
     return (
-        <motion.div animate={{ opacity: 1 }} className="opacity-0">
+        <div id="container" className="w-full opacity-0 ">
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
@@ -45,18 +51,26 @@ export const Form = ({
                 }}
                 className="rounded-md bg-white"
             >
-                <div className="flex items-center gap-4 ">
+                <div className="flex grow items-center">
                     <span className="text-xl font-bold uppercase text-primary">
                         {section.name}
                     </span>
-                    {section.description  !== null ? Helpers.map((x,i) => {if(section.description === i)return (
-                        <div key={i} className="group relative w-2/3">
-                            <QuestionMarkCircleIcon className="h-5 w-5 cursor-pointer transition duration-300 group-hover:scale-110" />
-                            <x.fn className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg group-hover:block prose-p:pl-6" />
-                        </div>)})
-                     : null}
+                    {section.description !== null
+                        ? Helpers.map((x, i) => {
+                              if (section.description === i)
+                                  return (
+                                      <div
+                                          key={i}
+                                          className="group relative w-2/3"
+                                      >
+                                          <QuestionMarkCircleIcon className="h-5 w-5 cursor-pointer transition duration-300 group-hover:scale-110" />
+                                          <x.fn className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg group-hover:block prose-p:pl-6" />
+                                      </div>
+                                  )
+                          })
+                        : null}
                 </div>
-                <div className="mt-5 min-h-[500px] max-w-[1120px] ">
+                <div className="mx-6 mt-5  max-w-[1120px]">
                     {section.data.map((i: InputT) => (
                         <div key={i.title} className="m-3 p-1 ">
                             {i.type === 'table' ? (
@@ -92,6 +106,6 @@ export const Form = ({
                     ))}
                 </div>
             </form>
-        </motion.div>
+        </div>
     )
 }

@@ -4,6 +4,7 @@ import { PropsWithChildren, useEffect } from 'react'
 import { InputType } from '../../config/enums'
 import { Input as InputT } from '../../config/types'
 import Input from './Input'
+import gsap from 'gsap'
 
 export default function Table({
     data,
@@ -63,7 +64,7 @@ export default function Table({
 
             <TrashIcon
                 onClick={() => table.removeListItem('data', index)}
-                className="my-auto w-24 flex-grow cursor-pointer items-center text-primary transition-all duration-200 hover:text-base-400"
+                className="my-auto w-24 flex-grow cursor-pointer items-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
             />
         </div>
     ))
@@ -75,7 +76,7 @@ export default function Table({
                     {headers.map((header: any, index: any) => (
                         <span
                             key={index}
-                            className="text-md w-[272px] font-extrabold text-primary "
+                            className="text-md font-extrabold text-primary xl:w-[256px]"
                         >
                             {header.header}
                         </span>
@@ -93,7 +94,7 @@ export default function Table({
                 className="cursor-pointer"
             >
                 <div className="group mt-5 flex items-center justify-center gap-2 bg-base-100 py-2 transition-all duration-200 hover:bg-primary">
-                    <p className="my-auto text-sm font-extrabold text-primary transition-all duration-200 group-hover:text-white">
+                    <p className="my-auto text-sm font-extrabold text-primary transition-all duration-200  group-hover:text-white">
                         Añadir otra fila
                     </p>
                     <PlusIcon className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />

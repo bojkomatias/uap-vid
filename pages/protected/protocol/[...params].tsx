@@ -43,17 +43,16 @@ export default function ProtocolPage({
     }
     return (
         <>
-            <div className="-translate-y-8 text-4xl font-bold text-primary">
+            <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación
+                {/* {savedEvent ? <h3>saved</h3> : ''} */}
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
                 <Stepper
                     protocolLength={protocolLength}
                     currentSection={section?.sectionId}
                 />
-                {savedEvent ? <h3>saved</h3> : ''}
-                <Form section={section} updateSection={updateSection} />
-                <div className="flex w-full justify-between px-8">
+                <div className="flex w-full justify-between px-8 pb-8">
                     <Button
                         disabled={section?.sectionId === 1}
                         onClick={() => {
@@ -67,6 +66,8 @@ export default function ProtocolPage({
                     >
                         <ChevronLeftIcon className="h-6 w-6" />
                     </Button>
+                    <Form section={section} updateSection={updateSection} />
+
                     <Button
                         onClick={() =>
                             router.push(

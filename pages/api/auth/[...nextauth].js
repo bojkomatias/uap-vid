@@ -43,7 +43,7 @@ export default NextAuth({
 
                 //NextAuth maneja el error
                 if (!result) {
-                    throw new Error('No user found with the email')
+                    throw new Error('No user found with thar email')
                 }
 
                 //Check hased password with DB password
@@ -53,7 +53,7 @@ export default NextAuth({
                 )
 
                 if (!checkPassword) {
-                    throw new Error('Password doesnt match')
+                    throw new Error("Password doesn't match")
                 }
                 return {
                     email: result.email,
