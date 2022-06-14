@@ -3,7 +3,8 @@ import { Section } from '../../config/types'
 
 export default function faq({
     identification,
-}: PropsWithChildren<{ identification: Section }>) {
+    _id,
+}: PropsWithChildren<{ identification: Section; _id: any }>) {
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
     const trueStyle =
@@ -27,9 +28,7 @@ export default function faq({
                         }
                     >
                         <div>
-                            <p>
-                                {JSON.stringify(identification?.data[0].value)}{' '}
-                            </p>{' '}
+                            <p>{identification?.data[0].value} </p>{' '}
                             <p
                                 className={
                                     show
@@ -37,7 +36,7 @@ export default function faq({
                                         : 'text-xs font-normal transition-all duration-500'
                                 }
                             >
-                                Facultad de Ciencias de la Salud, Medicina
+                                {identification?.data[1].value}
                             </p>
                         </div>
                         <div>
@@ -69,9 +68,12 @@ export default function faq({
                                 {' '}
                                 <div className="mt-2 w-[70%]"></div>
                                 <div className="mt-2 mr-5 mb-1">
-                                    <p className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 ">
+                                    <a
+                                        href={`/protected/protocol/${_id}/1`}
+                                        className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 "
+                                    >
                                         Ver todos los detalles
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
                         </div>

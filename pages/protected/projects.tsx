@@ -11,8 +11,12 @@ export default function projects({ protocols }: any) {
             <div className="mx-auto mb-20 flex w-[1280px] flex-col justify-center px-20 py-10">
                 {protocols.map((item: Protocol) => (
                     <div key={item._id} className="mt-5">
+                        {/* Se busca del protocolo solo la primera seccion, que tiene los datos de identirficacion */}
                         {item.data && item.data[0] ? (
-                            <ItemView identification={item.data[0]}></ItemView>
+                            <ItemView
+                                identification={item.data[0]}
+                                _id={item._id}
+                            ></ItemView>
                         ) : null}
                     </div>
                 ))}

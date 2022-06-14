@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth'
-import AzureADB2CProvider from 'next-auth/providers/azure-ad-b2c'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import getCollections, { CollectionName } from '../../../utils/bd/getCollection'
 
@@ -16,13 +15,7 @@ export default NextAuth({
             clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
             tenantId: process.env.AZURE_AD_TENANT_ID,
         }),
-        AzureADB2CProvider({
-            tenantId: process.env.AZURE_AD_B2C_TENANT_NAME,
-            clientId: process.env.AZURE_AD_B2C_CLIENT_ID,
-            clientSecret: process.env.AZURE_AD_B2C_CLIENT_SECRET,
-            primaryUserFlow: process.env.AZURE_AD_B2C_PRIMARY_USER_FLOW,
-            authorization: { params: { scope: 'offline_access openid' } },
-        }),
+
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
@@ -66,12 +59,20 @@ export default NextAuth({
     callbacks: {
         signIn: async ({ user }) => {
             const users = await getCollections(CollectionName.Users)
-
-            const updateObject = !users.role
+            const userExist = users.findOne({ email: user.email })
+            const updateObject = !user.role
                 ? { role: 'new-user', lastLogin: new Date() }
                 : { lastLogin: new Date() }
 
-            await users.updateOne({ email: user.email }, { $set: updateObject })
+            if (userExist) {
+                await users.updateOne(
+                    { email: user.email },
+                    { $set: updateObject }
+                )
+            } else {
+                users.insertOne({ ...users, updateObject })
+            }
+
             return true
         },
         jwt: ({ token, user }) => {
@@ -80,9 +81,11 @@ export default NextAuth({
             }
             return token
         },
-        session: ({ session, token }) => {
+        session: async ({ session, token }) => {
             if (token) {
-                session.user = token.user
+                const users = await getCollections(CollectionName.Users)
+                const user = await users.findOne({ email: token.user.email })
+                session.user = { ...token.user, user }
             }
             return session
         },
