@@ -7,10 +7,8 @@ export default async function handler(
     res: NextApiResponse<any>
 ) {
     if (req.method === 'POST') {
-        console.log('asdasdasdasdasdasdasdasdasdasd')
-
         const collection = await getCollection(CollectionName.Protocols)
-        const data = await collection.insertOne(req.body)
+        const data = await collection.insertOne({createdAt:Date.now() ,...req.body})
         console.log(data)
 
         return res.status(200).json(data)
