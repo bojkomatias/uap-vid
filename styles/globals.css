@@ -15,6 +15,6 @@
 
 @layer components {
     .input {
-        @apply shadowInner w-full p-3 py-2 pl-3 pr-10 shadow-inner placeholder:text-xs placeholder:uppercase focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-2;
+        @apply shadowInner w-full self-start p-3 py-2 pl-3 pr-10 shadow-inner placeholder:text-xs placeholder:uppercase focus:outline-none;
     }
 }

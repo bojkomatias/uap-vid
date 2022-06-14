@@ -1,26 +1,79 @@
-import type { ReactElement } from 'react'
-import Layout from '../components/Layout'
-import { Fragment } from 'react'
-import { Popover, Transition } from '@headlessui/react'
-import { Form } from '../components/Protocol/Form'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { Button } from '../components/Atomic/Button'
 
-export default function Page() {
+function SignIn() {
+    const { data: session } = useSession()
+    const router = useRouter()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    useEffect(() => {
+        if (session) {
+            console.log(session)
+            router.push('/protected')
+        }
+    }, [session])
+
     return (
-        <>
-            {' '}
-            <div className="-translate-y-8 text-4xl font-bold text-primary">
-                Inicio
-            </div>
-            <div className="-translate-y-8 p-10">
-                <div className="font-bold text-primary">
-                    <a href="/protocol/p">Nuevo proyecto de investigación</a>
+        <div className="shadowCustom flex h-[55vh] flex-col items-center justify-center">
+            <div className="mb-4 flex w-[80%] grow items-center text-sm font-bold uppercase text-primary">
+                <div className="flex flex-col items-center justify-center text-center">
+                    <img className="h-[50%] w-[50%]" src="/UAPazul.png"></img>
+                    <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>
-        </>
+
+            <form
+                className="my-auto flex flex-col"
+                onSubmit={(e: any) => {
+                    e.preventDefault()
+                    console.log(process.env.NEXTAUTH_URL)
+                    signIn('credentials', {
+                        email: email,
+                        password: password,
+                        redirect: false,
+                    })
+                }}
+            >
+                <div className="mx-6">
+                    {' '}
+                    <input
+                        type="email"
+                        className="input mb-4"
+                        placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        className="input"
+                        placeholder="Password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+
+                <div className="mx-6 mt-4 mb-10 flex flex-col">
+                    <button
+                        className="mb-2 border border-base-200 p-6 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
+                        type="submit"
+                    >
+                        Iniciar sesión
+                    </button>
+                    <button
+                        className="flex items-center justify-center  border border-base-200 text-primary transition-all duration-200 hover:border hover:border-primary"
+                        onClick={() => signIn('azure-ad')}
+                    >
+                        <div>Iniciar sesión con</div>
+                        <img
+                            className="ml-2 w-[15%]"
+                            src="/microsoft-svgrepo-com.svg"
+                        ></img>
+                    </button>
+                </div>
+            </form>
+        </div>
     )
 }
 
-// ! If need use for custom per page layout
-// Page.getLayout = function getLayout(page: ReactElement) {
-//     return <NestedLayout>{page}</NestedLayout>
-// }
+export default SignIn

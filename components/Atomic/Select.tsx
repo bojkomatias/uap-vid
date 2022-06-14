@@ -16,21 +16,23 @@ export default function Select({
     updateData: Function
 }>) {
     const [query, setQuery] = useState('')
-    const [selectedValue, setSelectedValue] = useState()
+    const [selectedValue, setSelectedValue] = useState(data.value)
 
     useEffect(() => {
         updateData({
             type: data.type,
             title: data.title,
+            options: data.options,
             value: selectedValue,
         })
+        console.log(data)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue])
 
     const filteredValues =
         query === ''
-            ? data.value
-            : data.value.filter((value: any) => {
+            ? data.options
+            : data.options?.filter((value: any) => {
                   return value.toLowerCase().includes(query.toLowerCase())
               })
 
@@ -53,7 +55,7 @@ export default function Select({
                     />
                 </Combobox.Button>
 
-                {filteredValues.length > 0 && (
+                {filteredValues?.length > 0 && (
                     <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base text-primary ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {filteredValues.map((value: any, index: any) => (
                             <Combobox.Option
