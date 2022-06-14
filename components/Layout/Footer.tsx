@@ -13,9 +13,9 @@ export default function Footer() {
                 </a>{' '}
             </div>
             <div className="mt-2 flex gap-1">
-                <div>WebApp desarrollada por </div>
+                <div className="font-thin">WebApp desarrollada por </div>
                 <a href="/">
-                    <p className="transition-all duration-200 hover:ml-1 hover:rotate-[35deg] hover:scale-125 hover:font-bold">
+                    <p className="font-thin transition-all duration-200 hover:ml-1 hover:rotate-[35deg] hover:scale-125 hover:font-bold">
                         TPC
                     </p>
                 </a>

@@ -20,7 +20,11 @@ function SignIn() {
         <div className="shadowCustom flex h-[55vh] flex-col items-center justify-center">
             <div className="mb-4 flex w-[80%] grow items-center text-sm font-bold uppercase text-primary">
                 <div className="flex flex-col items-center justify-center text-center">
-                    <img className="h-[50%] w-[50%]" src="/UAPazul.png"></img>
+                    <img
+                        className="h-[30%]
+                        w-[30%] transition-all duration-200 md:h-[50%] md:w-[50%]"
+                        src="/UAPazul.png"
+                    ></img>
                     <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>

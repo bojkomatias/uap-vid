@@ -15,7 +15,7 @@ const Layout = ({ children }: any) => {
                 <motion.main
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="mx-auto my-28 min-h-[70vh] w-[500px] scale-[85%] opacity-0 transition-all duration-150 2xl:scale-100"
+                    className="mx-auto my-28 min-h-[70vh] w-[500px] scale-[75%] opacity-0 transition-all duration-150 xl:scale-[85%] 2xl:scale-100"
                 >
                     {children}
                 </motion.main>
