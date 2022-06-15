@@ -11,9 +11,7 @@ export const exhibits = {
                         </a>
                     </li>
                     <li>
-                        <a href="#_Facultad_de_Ciencias_1">
-                            Facultad de Ciencias de la Salud
-                        </a>
+                        <a href="#_FCS">Facultad de Ciencias de la Salud</a>
                     </li>
                     <li>
                         <a href="#_Facultad_de_Humanidades_">
@@ -429,7 +427,7 @@ export const exhibits = {
                 <p>
                     <br />
                 </p>
-                <h1>Facultad d e Ciencias d e l a Salud</h1>
+                <h1 id="_FCS">Facultad de Ciencias de la Salud</h1>
                 <p>Líneas de investigación</p>
                 <table>
                     <tr>
