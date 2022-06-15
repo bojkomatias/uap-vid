@@ -1,6 +1,15 @@
+
+import type { ReactElement } from 'react'
+import Layout from '../components/Layout'
+import { Fragment } from 'react'
+import { Popover, Transition } from '@headlessui/react'
+import { Form } from '../components/Protocol/Form'
+import Link from 'next/link'
+
 import { Button } from '../components/Atomic/Button'
 import { useRouter } from 'next/router'
 import { ProtocolMetadata } from '../config/metadata'
+
 
 export default function Page() {
     const content = [
@@ -139,6 +148,14 @@ export default function Page() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
+
+            <div className="-translate-y-8 p-10">
+                <div className="font-bold text-primary">
+                    <Link href="/protocol/p">
+                        Nuevo proyecto de investigación
+                    </Link>{' '}
+                    <Link href="/exhibit">Ver los anexos</Link>
+
             <div className="flex -translate-y-8 items-center justify-around p-10">
                 <div className="w-[40%]  text-center font-bold text-primary">
                     {content.map((item) => (
@@ -183,6 +200,7 @@ export default function Page() {
                             repudiandae temporibus deserunt.
                         </p>
                     </div>
+
                 </div>
             </div>
         </>
