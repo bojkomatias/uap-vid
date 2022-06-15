@@ -53,7 +53,7 @@ export default function ProtocolPage({
                     protocolLength={protocolLength}
                     currentSection={section?.sectionId}
                 />
-                <div className="flex h-[70vh] w-full items-start justify-between px-8 pb-8">
+                <div className="flex min-h-[70vh] w-full items-start justify-between px-8 pb-8">
                     <Button
                         disabled={section?.sectionId === 1}
                         onClick={() => {
