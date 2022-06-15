@@ -59,10 +59,12 @@ export default NextAuth({
     callbacks: {
         signIn: async ({ user }) => {
             const users = await getCollections(CollectionName.Users)
-            const userExist = users.findOne({ email: user.email })
-            const updateObject = !user.role
+            const userExist = await users.findOne({ email: user.email })
+            const updateObject = !userExist.role
                 ? { role: 'new-user', lastLogin: new Date() }
                 : { lastLogin: new Date() }
+
+            console.log(updateObject)
 
             if (userExist) {
                 await users.updateOne(
@@ -70,7 +72,7 @@ export default NextAuth({
                     { $set: updateObject }
                 )
             } else {
-                users.insertOne({ ...users, updateObject })
+                await users.insertOne({ ...user, ...updateObject })
             }
 
             return true
