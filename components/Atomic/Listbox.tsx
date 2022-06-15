@@ -22,8 +22,8 @@ const ListBox = ({
         >
             {({ open }) => (
                 <>
-                    <div className="relative mt-1">
-                        <Listbox.Button className="input w-40">
+                    <div className="relative mt-1 w-full">
+                        <Listbox.Button className="input w-full">
                             <span className="block truncate">{user.role}</span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                 <SelectorIcon

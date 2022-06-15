@@ -1,19 +1,41 @@
+import { useRouter } from 'next/router'
+import { userInfo } from 'os'
 import { useState } from 'react'
 import { Button } from '../../../components/Atomic/Button'
+import ListBox from '../../../components/Atomic/Listbox'
 
 function NewUser() {
-    const [newUser, setNewUser] = useState({})
+    const router = useRouter()
+    const [newUser, setNewUser] = useState({ role: 'new-user' })
+
+    const CreateNewUser = async () => {
+        console.log(newUser)
+        const res = await fetch(`/api/auth/signup`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUser),
+        })
+        if (res.status === 201) router.push('/protected/admin/userlist')
+    }
+
     return (
         <div>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    console.log('Submitting', newUser)
+                    CreateNewUser()
                 }}
+                className="mx-auto flex w-1/2 flex-col items-center gap-10 pt-24"
             >
                 <input
+                    required
+                    className="input"
                     type="text"
                     name="name"
+                    placeholder="John Doe"
                     onChange={(e) =>
                         setNewUser({
                             ...newUser,
@@ -22,8 +44,11 @@ function NewUser() {
                     }
                 />{' '}
                 <input
+                    required
+                    className="input"
                     type="email"
                     name="email"
+                    placeholder="ejemplo@uap.edu.ar"
                     onChange={(e) =>
                         setNewUser({
                             ...newUser,
@@ -32,8 +57,11 @@ function NewUser() {
                     }
                 />
                 <input
+                    required
+                    className="input"
                     type="password"
                     name="password"
+                    placeholder="****"
                     onChange={(e) =>
                         setNewUser({
                             ...newUser,
@@ -41,7 +69,11 @@ function NewUser() {
                         })
                     }
                 />
-                LISTBOX ROLE
+                <ListBox
+                    user={newUser}
+                    UpdateRoleForUser={(_: any, e: any) => console.log(e)}
+                />
+                {/* Ignoro el primero param */}
                 <Button type="submit"> Crear Nuevo Usuario</Button>
             </form>
         </div>
