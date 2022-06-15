@@ -141,7 +141,7 @@ export const ProtocolMetadata: Protocol = {
             data: [
                 {
                     type: InputType.textarea,
-                    title: 'gastos directos',
+                    title: 'Gastos directos',
                     value: null,
                 },
                 {
@@ -181,13 +181,13 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.select,
                     title: 'Disciplina general y área específica',
-                    options: ['Ejemplo anexo A'],
+                    options: ['Ejemplo anexo A','Etica y responsabilidad social'],
                     value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'Línea de investigación',
-                    options: ['Ejemplo anexo A'],
+                    options: ['Ejemplo anexo A', 'Gestion de las organizaciones y responsabilidad social'],
                     value: null,
                 },
                 {
