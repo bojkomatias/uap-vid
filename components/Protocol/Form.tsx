@@ -1,5 +1,8 @@
-import { PropsWithChildren, useEffect, useReducer, useState } from 'react'
-import { Section, Input as InputT } from '../../config/types'
+import {
+    PropsWithChildren,
+    useState,
+} from 'react'
+import { Section, Input as InputT, Protocol } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import Table from '../Atomic/Table'
@@ -9,30 +12,29 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 
 export const Form = ({
     section,
+    updateSection
 }: PropsWithChildren<{
-    section: Section
+    section: Section,
+    updateSection: Function
 }>) => {
-    const [sectionData, setsectionData] = useState<InputT[]>([])
+    const [sectionData, setsectionData] = useState<InputT[]>(section.data)
+    const [sectionEdited, setSectionEdited] = useState<Section>(section)
 
-    // ! We could save it here, maybe for autosaves as the user updates
-    const idempotentUpdate = (e: any) => {
-        let oldData = sectionData
-        if (sectionData.find((x) => x.title === e.title)) {
-            oldData = sectionData.filter((x) => x.title !== e.title)
+    const idempotentUpdateValue = (e: any) => {
+        let newData = sectionData
+        if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
+            newData.splice(
+                sectionData.findIndex((x) => x.title === e.title),
+                1,
+                e
+            )
         }
-        return setsectionData([...oldData, e])
+
+        setSectionEdited({...sectionEdited, data: newData })
+        updateSection(sectionEdited)
+        return setsectionData(newData)
     }
-
-    useEffect(() => {
-        return () => {
-            console.log('SAVING TO DATABASE CAUSE OF STEP CHANGE', {
-                id: section.id,
-                name: section.name,
-                data: sectionData,
-            })
-        }
-    }, [section])
-
+    
     return (
         <motion.div animate={{ opacity: 1 }} className="opacity-0">
             <form
@@ -40,10 +42,10 @@ export const Form = ({
                     e.preventDefault()
                     console.log(sectionData)
                 }}
-                className="mx-auto my-5 w-5/6 rounded-md bg-white p-6"
+                className="rounded-md bg-white"
             >
                 <div className="flex items-center gap-4 ">
-                    <span className="text-2xl font-light uppercase text-primary">
+                    <span className="text-xl font-bold uppercase text-primary">
                         {section.name}
                     </span>
                     {section.description ? (
@@ -53,28 +55,36 @@ export const Form = ({
                         </div>
                     ) : null}
                 </div>
-                <div className="mt-5 min-h-[40vh]">
+                <div className="mt-5 min-h-[500px] max-w-[1120px] ">
                     {section.data.map((i: InputT) => (
                         <div key={i.title} className="m-3 p-1 ">
                             {i.type === 'table' ? (
                                 <Table
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'select' ? (
                                 <Select
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : i.type === 'textarea' ? (
                                 <TextEditor
                                     data={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             ) : (
                                 <Input
                                     input={i}
-                                    updateData={(e: any) => idempotentUpdate(e)}
+                                    updateData={(e: any) =>
+                                        idempotentUpdateValue(e)
+                                    }
                                 />
                             )}
                         </div>

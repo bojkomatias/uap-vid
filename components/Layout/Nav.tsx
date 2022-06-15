@@ -5,6 +5,7 @@ import { MenuIcon, UserIcon, XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { navigation } from '../../config/navigation'
 import { Button } from '../Atomic/Button'
+import UserAuth from './UserAuth'
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -12,8 +13,8 @@ function classNames(...classes: any) {
 
 export default function Example() {
     return (
-        <nav className="bg-primary  w-screen">
-            <div className="text-white m-auto flex h-28 w-[1280px] items-center justify-between">
+        <nav className="w-screen  bg-primary">
+            <div className="mx-20 flex h-28 max-w-[1280px] items-center justify-between text-white 2xl:m-auto">
                 <div className="text-center text-[10px] uppercase tracking-wider transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]">
                     <a href="/">
                         <img src="/UAP-logo-home.png"></img>
@@ -21,9 +22,7 @@ export default function Example() {
                     </a>
                 </div>
                 <div className="flex items-center gap-2">
-                    <p>
-                        Bienvenido <b>John Doe</b>
-                    </p>
+                    <UserAuth />
                     <div className="transition-all duration-150 hover:scale-[1.07]">
                         <a href="/profile">
                             <svg
