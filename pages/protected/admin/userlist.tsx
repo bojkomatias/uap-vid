@@ -10,6 +10,12 @@ function classNames(...classes: any) {
 }
 
 function UserList({ users }: any) {
+    const router = useRouter()
+    // Call this function whenever you want to
+    // refresh props!
+    const refreshData = () => {
+        router.replace(router.asPath)
+    }
     const UpdateRoleForUser = async (id: any, newRole: string) => {
         console.log(id, newRole)
         const res = await fetch(`/api/users/${id}`, {
@@ -21,6 +27,7 @@ function UserList({ users }: any) {
             body: JSON.stringify({ role: newRole }),
         })
         console.log(await res.json())
+        refreshData()
     }
     return (
         <div>
@@ -147,11 +154,11 @@ export default UserList
 // You should use getServerSideProps when:
 // - Only if you need to pre-render a page whose data must be fetched at request time
 import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const string = `${process.env.NEXTURL}/api/users/`
     const data = await fetch(string).then((res) => res.json())
-    console.log(data)
 
     return {
         props: {
