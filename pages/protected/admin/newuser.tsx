@@ -1,59 +1,82 @@
+import { useRouter } from 'next/router'
+import { userInfo } from 'os'
 import { useState } from 'react'
 import { Button } from '../../../components/Atomic/Button'
+import ListBox from '../../../components/Atomic/Listbox'
 
 function NewUser() {
-    const [newUser, setNewUser] = useState({})
+    const router = useRouter()
+    const [newUser, setNewUser] = useState({ role: 'new-user' })
+
+    const CreateNewUser = async () => {
+        console.log(newUser)
+        const res = await fetch(`/api/auth/signup`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUser),
+        })
+        if (res.status === 201) router.push('/protected/admin/userlist')
+    }
+
     return (
-        <>
-            <div className="grow">
-                <form
-                    className="h-full"
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                        console.log('Submitting', newUser)
-                    }}
-                >
-                    <input
-                        type="text"
-                        name="name"
-                        onChange={(e) =>
-                            setNewUser({
-                                ...newUser,
-                                [e.target.name]: e.target.value,
-                            })
-                        }
-                    />{' '}
-                    <input
-                        type="email"
-                        name="email"
-                        onChange={(e) =>
-                            setNewUser({
-                                ...newUser,
-                                [e.target.name]: e.target.value,
-                            })
-                        }
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        onChange={(e) =>
-                            setNewUser({
-                                ...newUser,
-                                [e.target.name]: e.target.value,
-                            })
-                        }
-                    />
-                    LISTBOX ROLE
-                </form>
-            </div>
-            <button
-                className="mr-16 mb-10 w-full p-4 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
-                type="submit"
+        <div>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    CreateNewUser()
+                }}
+                className="mx-auto flex w-1/2 flex-col items-center gap-10 pt-24"
             >
-                {' '}
-                Crear Nuevo Usuario
-            </button>
-        </>
+                <input
+                    required
+                    className="input"
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />{' '}
+                <input
+                    required
+                    className="input"
+                    type="email"
+                    name="email"
+                    placeholder="ejemplo@uap.edu.ar"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />
+                <input
+                    required
+                    className="input"
+                    type="password"
+                    name="password"
+                    placeholder="****"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />
+                <ListBox
+                    user={newUser}
+                    UpdateRoleForUser={(_: any, e: any) => console.log(e)}
+                />
+                {/* Ignoro el primero param */}
+                <Button type="submit"> Crear Nuevo Usuario</Button>
+            </form>
+        </div>
     )
 }
 

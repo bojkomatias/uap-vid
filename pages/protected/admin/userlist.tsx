@@ -27,26 +27,32 @@ function UserList({ users }: any) {
             </div>
             {users.map((user: any) => (
                 <div key={user.email} className="px-10 py-2 text-primary">
-                    <div className="flex items-center justify-around gap-6">
+                    <div className="grid grid-cols-3 items-center  gap-6">
                         <p>{user.email}</p>
                         <div className="flex gap-3">
                             {' '}
                             <p>
-                                {new Date(user.lastLogin).toLocaleDateString(
-                                    'es-ar'
-                                )}
+                                {user.lastLogin
+                                    ? new Date(
+                                          user.lastLogin
+                                      ).toLocaleDateString('es-ar')
+                                    : '--'}
                             </p>
                             <p>
-                                {new Date(user.lastLogin).toLocaleTimeString(
-                                    'es-ar'
-                                )}
+                                {user.lastLogin
+                                    ? new Date(
+                                          user.lastLogin
+                                      ).toLocaleTimeString('es-ar')
+                                    : '--'}
                             </p>
                         </div>
 
-                        <ListBox
-                            user={user}
-                            UpdateRoleForUser={UpdateRoleForUser}
-                        />
+                        <div className="w-full">
+                            <ListBox
+                                user={user}
+                                UpdateRoleForUser={UpdateRoleForUser}
+                            />
+                        </div>
                     </div>
                 </div>
             ))}

@@ -60,9 +60,10 @@ export default NextAuth({
         signIn: async ({ user }) => {
             const users = await getCollections(CollectionName.Users)
             const userExist = await users.findOne({ email: user.email })
-            const updateObject = !userExist.role
-                ? { role: 'new-user', lastLogin: new Date() }
-                : { lastLogin: new Date() }
+            const updateObject =
+                userExist && userExist.role
+                    ? { lastLogin: new Date() }
+                    : { role: 'new-user', lastLogin: new Date() }
 
             console.log(updateObject)
 
