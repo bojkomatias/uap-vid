@@ -8,7 +8,10 @@ export default function projects({ protocols }: any) {
 
     return (
         <div className="transition-all duration-200">
-            <div className="mx-auto mb-20 flex w-[1280px] flex-col justify-center px-20 py-10">
+            <div className="-translate-y-12 text-4xl font-bold text-primary">
+                Lista de proyectos de investigación
+            </div>
+            <div className="mx-auto mb-20 flex max-w-[1280px] flex-col justify-center px-20 py-10">
                 {protocols.map((item: Protocol) => (
                     <div key={item._id} className="mt-5">
                         {/* Se busca del protocolo solo la primera seccion, que tiene los datos de identirficacion */}

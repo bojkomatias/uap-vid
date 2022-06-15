@@ -12,7 +12,7 @@ export default function faq({
     const tStyle =
         ' border border-primary p-2 transition-all duration-200 text-primary'
     const fStyle =
-        ' p-2 border-white transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
+        ' p-2 border-base-200 transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
 
     const [show, setShow] = useState(false)
 
@@ -23,8 +23,8 @@ export default function faq({
                     <div
                         className={
                             show
-                                ? 'flex justify-between text-xl font-bold transition-all duration-200'
-                                : 'group flex justify-between text-sm font-bold transition-all duration-200'
+                                ? 'flex flex-col justify-between text-xl font-bold transition-all duration-200 md:flex-row'
+                                : 'text-md group flex flex-col justify-between font-bold transition-all duration-200 md:flex-row'
                         }
                     >
                         <div>
@@ -33,7 +33,7 @@ export default function faq({
                                 className={
                                     show
                                         ? 'text-sm transition-all duration-500'
-                                        : 'text-xs font-normal transition-all duration-500'
+                                        : 'text-sm font-normal transition-all duration-500'
                                 }
                             >
                                 {identification?.data[1].value}
@@ -44,8 +44,8 @@ export default function faq({
                                 xmlns="http://www.w3.org/2000/svg"
                                 className={
                                     show
-                                        ? 'mr-5 h-5 w-5 rotate-180 fill-primary transition-all duration-500'
-                                        : 'mr-5 h-5 w-5 fill-base-400 transition-all duration-300 group-hover:fill-primary'
+                                        ? 'mr-5 hidden h-5 w-5 rotate-180 fill-primary transition-all duration-500 md:block'
+                                        : 'mr-5 hidden h-5 w-5 fill-base-400 transition-all duration-300 group-hover:fill-primary md:block'
                                 }
                                 viewBox="0 0 20 20"
                             >
@@ -61,10 +61,10 @@ export default function faq({
                     <div className={show ? trueStyle : falseStyle}>
                         <div className="flex flex-col">
                             {' '}
-                            <div className="text-xs font-bold">
+                            <div className="text-sm font-bold">
                                 <p>11/06/2017</p>
                             </div>
-                            <div className="flex items-end justify-between gap-1">
+                            <div className="items-end justify-between gap-1 md:flex">
                                 {' '}
                                 <div className="mt-2 w-[70%]"></div>
                                 <div className="mt-2 mr-5 mb-1">
