@@ -20,13 +20,13 @@ function UserList({ users }: any) {
     }
     return (
         <div>
-            <div className="flex items-center justify-around gap-6 text-xl font-bold">
+            <div className="flex items-center justify-around gap-6 p-10 text-2xl font-bold text-primary">
                 <p>Email</p>
                 <p className="-translate-x-8">Último inicio de sesión</p>
                 <p className="-translate-x-10">Rol</p>
             </div>
             {users.map((user: any) => (
-                <div key={user.email} className="p-10 text-primary">
+                <div key={user.email} className="px-10 py-2 text-primary">
                     <div className="flex items-center justify-around gap-6">
                         <p>{user.email}</p>
                         <div className="flex gap-3">
