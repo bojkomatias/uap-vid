@@ -24,7 +24,7 @@ const Layout = ({ children }: any) => {
         )
     }
 
-    if (route === '/protected/profile') {
+    if (route === '/protected/profile' || route === 'protected/admin/newuser') {
         return (
             <>
                 <Nav />

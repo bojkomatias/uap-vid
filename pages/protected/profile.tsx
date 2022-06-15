@@ -10,7 +10,7 @@ export default function profile() {
 
     return (
         <>
-            <div className="h-full grow">
+            <div className="grow">
                 <div className=" -translate-y-12 text-4xl font-bold text-primary">
                     Perfil
                 </div>
