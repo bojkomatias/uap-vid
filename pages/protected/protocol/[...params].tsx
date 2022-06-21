@@ -4,6 +4,8 @@ import { Section } from '../../../config/types'
 import Stepper from '../../../components/Protocol/Stepper'
 import { Button } from '../../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 
 export default function ProtocolPage({
     section,
@@ -16,7 +18,7 @@ export default function ProtocolPage({
 }) {
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
-    const [isSectionComplete, setSectionComplete] = useState(false)
+    const [isSectionComplete, setSectionComplete] = useState()
 
     useEffect(() => {
         setTimeout(() => {
@@ -46,7 +48,6 @@ export default function ProtocolPage({
         <>
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación
-                {/* {savedEvent ? <h3>saved</h3> : ''} */}
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
                 <Stepper
@@ -90,11 +91,6 @@ export default function ProtocolPage({
         </>
     )
 }
-
-// You should use getServerSideProps when:
-// - Only if you need to pre-render a page whose data must be fetched at request time
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const [protocolId, sectionId] = ctx.params?.params as string[]

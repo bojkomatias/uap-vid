@@ -153,7 +153,7 @@ export default function Page() {
             <div className="flex h-full -translate-y-12 items-center justify-around">
                 <div className="my-auto flex min-h-[70vh] cursor-pointer flex-col justify-center text-center font-bold text-primary">
                     {content.map((item) =>
-                        item.roles.includes(useSession().data?.user.role) ? (
+                        item.roles.includes(session?.user?.role) ? (
                             item.action ? (
                                 <a key={item.title} onClick={item.action}>
                                     <div className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">

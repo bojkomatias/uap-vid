@@ -6,9 +6,14 @@ const TextEditor = ({
     data,
     updateData,
 }: PropsWithChildren<{ data: Input; updateData: Function }>) => {
-    const [value, onChange] = useState('')
+    const [value, onChange] = useState(data.value)
     useEffect(() => {
-        updateData({ type: data.type, title: data.title, value: value })
+        console.log('valeu', value)
+        updateData({
+            type: data.type,
+            title: data.title,
+            value: value,
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
 
@@ -16,7 +21,6 @@ const TextEditor = ({
         <RTLoader
             value={value}
             onChange={onChange}
-            placeholder={data.title}
             className="input min-h-[35vh]"
         />
     )

@@ -1,12 +1,8 @@
-import React from 'react'
-import { GetServerSideProps } from 'next'
-import { getSession } from 'next-auth/react'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { mapRange } from 'gsap'
 
 export default function profile() {
-    const session = useSession().data
-    console.log(session)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data: session } = useSession()
 
     return (
         <>
@@ -17,10 +13,10 @@ export default function profile() {
                 <div className="flex h-full -translate-y-8 flex-col p-20 text-primary">
                     <div className="flex  flex-col">
                         <div className="text-3xl">
-                            Email: {session.user?.email}
+                            Email: {session?.user?.email}
                         </div>
                         <div className="text-xl">
-                            Rol de usuario: {session.user?.user?.role}
+                            Rol de usuario: {session?.user?.role}
                         </div>
                     </div>
                 </div>
@@ -33,19 +29,4 @@ export default function profile() {
             </button>
         </>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession({ req: ctx.req })
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/api/auth/signin',
-                permanent: false,
-            },
-        }
-    }
-    return {
-        props: { session },
-    }
 }

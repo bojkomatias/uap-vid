@@ -41,6 +41,9 @@ function NewUser() {
 
     return (
         <div>
+            <div className="-translate-y-12 text-4xl font-bold text-primary">
+                Crear nuevo usuario
+            </div>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()

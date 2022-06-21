@@ -4,6 +4,7 @@ export interface Input {
     type: InputType
     title: string
     options?: any
+    condition?: any
     value: any
 }
 
