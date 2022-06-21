@@ -3,6 +3,8 @@ import { userInfo } from 'os'
 import { useState } from 'react'
 import { Button } from '../../../components/Atomic/Button'
 import ListBox from '../../../components/Atomic/Listbox'
+import { useNotifications } from '@mantine/notifications'
+import { Check } from 'tabler-icons-react'
 
 function NewUser() {
     const router = useRouter()
@@ -20,6 +22,22 @@ function NewUser() {
         })
         if (res.status === 201) router.push('/protected/admin/userlist')
     }
+
+    const notifications = useNotifications()
+    const showNotification = () => (
+        <div className="text-5xl">
+            {notifications.showNotification({
+                title: 'Usuario creado',
+                message: 'Nuevo usuario creado correctamente',
+                color: 'teal',
+                icon: <Check />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })}
+        </div>
+    )
 
     return (
         <div>
@@ -75,6 +93,7 @@ function NewUser() {
                 />
                 {/* Ignoro el primero param */}
                 <Button type="submit"> Crear Nuevo Usuario</Button>
+                <Button onClick={showNotification}>Toast</Button>
             </form>
         </div>
     )

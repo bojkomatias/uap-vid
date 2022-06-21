@@ -4,8 +4,8 @@ services:
         image: mongo:latest
         ports:
             - '27017:27017'
-        volumes:
-            - ~/apps/mongo-data:/data/db
+        # volumes:
+        #     - ~/apps/mongo-data:/data/db
         environment:
             - MONGO_INITDB_ROOT_USERNAME=admin
             - MONGO_INITDB_ROOT_PASSWORD=admin
