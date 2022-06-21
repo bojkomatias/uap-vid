@@ -42,18 +42,29 @@ export default function ProtocolPage({
                 }
             )
             setSavedEvent(true)
-        }, 3000)
+        }, 5000)
     }
     return (
         <>
             <div className="-translate-y-12 text-4xl font-bold text-primary">
-                Protocolo de investigación
+                Protocolo de investigación{' '}
+                <span
+                    className={
+                        savedEvent
+                            ? 'opacity-1 ml-2 text-sm transition-all duration-150'
+                            : 'ml-2 text-sm opacity-0 transition-all duration-150'
+                    }
+                >
+                    Se han guardado los datos automáticamente en la base de
+                    datos
+                </span>
             </div>{' '}
             <div className="flex h-full -translate-y-8 flex-col">
                 <Stepper
                     protocolLength={protocolLength}
                     currentSection={section?.sectionId}
                 />
+
                 <div className="flex min-h-[70vh] w-full items-start justify-between px-8 pb-8">
                     <Button
                         disabled={section?.sectionId === 1}

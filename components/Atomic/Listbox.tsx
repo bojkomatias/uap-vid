@@ -27,7 +27,7 @@ const ListBox = ({
                             <span className="block truncate">{user.role}</span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                 <SelectorIcon
-                                    className="text-gray-400 h-5 w-5"
+                                    className="text-gray-400 h-5 w-5 text-primary"
                                     aria-hidden="true"
                                 />
                             </span>
@@ -77,7 +77,7 @@ const ListBox = ({
                                                         )}
                                                     >
                                                         <CheckIcon
-                                                            className="h-5 w-5"
+                                                            className="h-5 w-5 text-primary"
                                                             aria-hidden="true"
                                                         />
                                                     </span>

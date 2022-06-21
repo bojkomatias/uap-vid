@@ -17,6 +17,7 @@ export default function projects({ protocols }: any) {
                         {/* Se busca del protocolo solo la primera seccion, que tiene los datos de identirficacion */}
                         {item.data && item.data[0] ? (
                             <ItemView
+                                dateOfCreation={item.createdAt}
                                 identification={item.data[0]}
                                 _id={item._id}
                             ></ItemView>

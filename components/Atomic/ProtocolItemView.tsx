@@ -2,6 +2,7 @@ import React, { useState, PropsWithChildren } from 'react'
 import { Section } from '../../config/types'
 
 export default function faq({
+    dateOfCreation,
     identification,
     _id,
 }: PropsWithChildren<{ identification: Section; _id: any }>) {
@@ -32,11 +33,11 @@ export default function faq({
                             <p
                                 className={
                                     show
-                                        ? 'text-sm transition-all duration-500'
-                                        : 'text-sm font-normal transition-all duration-500'
+                                        ? 'ml-1 text-sm transition-all duration-500'
+                                        : 'ml-1 text-sm font-normal transition-all duration-500'
                                 }
                             >
-                                {identification?.data[1].value}
+                                Facultad: {identification?.data[5].value}
                             </p>
                         </div>
                         <div>
@@ -61,12 +62,24 @@ export default function faq({
                     <div className={show ? trueStyle : falseStyle}>
                         <div className="flex flex-col">
                             {' '}
-                            <div className="text-sm font-bold">
-                                <p>11/06/2017</p>
+                            <div className=" mt-1 ml-4 text-sm font-semibold text-primary">
+                                {new Date(dateOfCreation).toLocaleDateString(
+                                    'es-ar'
+                                )}
                             </div>
                             <div className="items-end justify-between gap-1 md:flex">
-                                {' '}
-                                <div className="mt-2 w-[70%]"></div>
+                                <div className="ml-4 w-[70%] text-sm">
+                                    Carrera:{' '}
+                                    <span className="underline">
+                                        {identification?.data[1].value}
+                                    </span>{' '}
+                                    <br />
+                                    Modalidad:{' '}
+                                    <span className="underline">
+                                        {' '}
+                                        {identification?.data[4].value}{' '}
+                                    </span>
+                                </div>
                                 <div className="mt-2 mr-5 mb-1">
                                     <a
                                         href={`/protected/protocol/${_id}/1`}

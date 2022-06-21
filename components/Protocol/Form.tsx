@@ -5,7 +5,7 @@ import Select from '../Atomic/Select'
 import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { QuestionMark } from 'tabler-icons-react'
 import gsap from 'gsap'
 import { Helpers } from '../../config/helpers'
 
@@ -69,10 +69,11 @@ export const Form = ({
                                   return (
                                       <div
                                           key={i}
-                                          className="group relative w-2/3"
+                                          className="group relative hover:w-2/3"
                                       >
-                                          <QuestionMarkCircleIcon className="h-5 w-5 cursor-pointer transition duration-300 group-hover:scale-110" />
-                                          <x.fn className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg group-hover:block prose-p:pl-6" />
+                                          <QuestionMark className="pointer-events-none ml-2 h-4 w-4 cursor-pointer text-primary transition-all duration-300 group-hover:scale-[1.4]" />
+
+                                          <x.fn className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg transition-all duration-200 group-hover:block prose-p:pl-6" />
                                       </div>
                                   )
                           })
