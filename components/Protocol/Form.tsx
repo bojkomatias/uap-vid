@@ -34,14 +34,15 @@ export const Form = ({
         setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
         // check if section is complete
-        const complete = sectionData.filter((e) => e.value === null)
-        if (complete.length === 0) setSectionComplete(true)
+
         return setsectionData(newData)
     }
 
     useEffect(() => {
+        const complete = sectionData.filter((e) => e.value === null)
         setSectionComplete(false)
-
+        console.log(complete.length === 0)
+        if (complete.length === 0) setSectionComplete(true)
         gsap.fromTo(
             '#container',
             { opacity: 0, scale: 0.97 },

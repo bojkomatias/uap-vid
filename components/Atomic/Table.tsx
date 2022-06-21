@@ -1,6 +1,6 @@
 import { TrashIcon, PlusIcon } from '@heroicons/react/outline'
 import { useForm, formList } from '@mantine/form'
-import { PropsWithChildren, useEffect } from 'react'
+import { Fragment, PropsWithChildren, useEffect } from 'react'
 import { InputType } from '../../config/enums'
 import { Input as InputT } from '../../config/types'
 import Input from './Input'
@@ -30,10 +30,9 @@ export default function Table({
     const fields = table.values.data.map((_, index) => (
         <div key={index} className="my-2 flex w-full gap-3 ">
             {headers.map((h: any, i: number) => (
-                <>
+                <Fragment key={i}>
                     {h.type === InputType.select ? (
                         <select
-                            key={i}
                             className="input"
                             {...table.getListInputProps(
                                 'data',
@@ -49,7 +48,6 @@ export default function Table({
                         </select>
                     ) : (
                         <input
-                            key={i}
                             type="text"
                             {...table.getListInputProps(
                                 'data',
@@ -59,7 +57,7 @@ export default function Table({
                             className="input"
                         />
                     )}
-                </>
+                </Fragment>
             ))}
 
             <TrashIcon

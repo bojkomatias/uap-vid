@@ -25,7 +25,6 @@ export default function Select({
             options: data.options,
             value: selectedValue,
         })
-        console.log(data)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedValue])
 

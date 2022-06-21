@@ -1,6 +1,9 @@
 import { InputType } from './enums'
 import { Protocol } from './types'
-import { Helpers } from './helpers'
+import c from '././careers.json'
+const careers = c.map((c) => c.career)
+const assignments = c.map((c) => c.assignment).flat()
+
 export const ProtocolMetadata: Protocol = {
     data: [
         {
@@ -14,13 +17,13 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.select,
                     title: 'carrera',
-                    options: ['Ingenieria en Sistemas'],
+                    options: careers,
                     value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'materia',
-                    options: ['Sistemas Operativos'],
+                    options: assignments,
                     value: null,
                 },
                 {
@@ -91,6 +94,7 @@ export const ProtocolMetadata: Protocol = {
         {
             sectionId: 2,
             name: 'duración del proyecto',
+            description: 1,
             data: [
                 {
                     type: InputType.select,
@@ -137,7 +141,7 @@ export const ProtocolMetadata: Protocol = {
         {
             sectionId: 4,
             name: 'presupuesto de gastos directos',
-            description: Helpers[0],
+            description: 2,
             data: [
                 {
                     type: InputType.textarea,
@@ -181,13 +185,19 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.select,
                     title: 'Disciplina general y área específica',
-                    options: ['Ejemplo anexo A','Etica y responsabilidad social'],
+                    options: [
+                        'Ejemplo anexo A',
+                        'Etica y responsabilidad social',
+                    ],
                     value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'Línea de investigación',
-                    options: ['Ejemplo anexo A', 'Gestion de las organizaciones y responsabilidad social'],
+                    options: [
+                        'Ejemplo anexo A',
+                        'Gestion de las organizaciones y responsabilidad social',
+                    ],
                     value: null,
                 },
                 {
@@ -275,6 +285,11 @@ export const ProtocolMetadata: Protocol = {
                         'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
                         'Investigaciones de tipo teóricas',
                     ],
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Objetivos',
                     value: null,
                 },
             ],

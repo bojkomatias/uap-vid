@@ -24,16 +24,21 @@ function UserList({ users }: any) {
     }
     return (
         <div>
-             <div className="-translate-y-12 text-4xl font-bold text-primary">
+            <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Lista de usuarios
             </div>
-            <div className='w-full flex justify-end px-12'>
-                <a href="/protected/admin/newuser" className='flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]'>nuevo usuario</a>
+            <div className="flex w-full justify-end px-12">
+                <a
+                    href="/protected/admin/newuser"
+                    className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]"
+                >
+                    nuevo usuario
+                </a>
             </div>
             <div className="grid grid-cols-3 items-center gap-6 p-10 text-2xl font-bold text-primary">
                 <p>Email</p>
                 <p>Último inicio de sesión</p>
-                <p className='translate-x-10' >Rol</p>
+                <p className="translate-x-10">Rol</p>
             </div>
             {users.map((user: any) => (
                 <div key={user.email} className="px-10 py-2 text-primary">
