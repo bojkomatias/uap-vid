@@ -75,7 +75,7 @@ const updateSection = async (
 
     const result = await collection.updateOne(
         filter,
-        { $set: { 'data.$': section } },
+        { $set: { 'data.$': section, updatedAt:Date.now() } },
         {
             upsert: true,
         }

@@ -1,28 +1,33 @@
 import { InputType } from './enums'
 import { Protocol } from './types'
-import { Helpers } from './helpers'
+import c from '././careers.json'
+const careers = c.map((c) => c.career)
+const assignments = c.map((c) => c.assignment).flat()
+
 export const ProtocolMetadata: Protocol = {
+    createdAt: '',
     data: [
         {
             // 1. Identificacion del Proyecto
             sectionId: 1,
             name: 'identificación',
-            description: Helpers[0],
+            description: 0,
             data: [
                 // 1.1 Titulo
                 { type: InputType.text, title: 'titulo', value: null },
                 {
                     type: InputType.select,
                     title: 'carrera',
-                    options: ['Ingenieria en Sistemas'],
+                    options: careers,
+                    conditional: true,
                     value: null,
                 },
-                {
-                    type: InputType.select,
-                    title: 'materia',
-                    options: ['Sistemas Operativos'],
-                    value: null,
-                },
+                // {
+                //     type: InputType.select,
+                //     title: 'materia',
+                //     options: assignments,
+                //     value: null,
+                // },
                 {
                     type: InputType.table,
                     title: 'miembros del equipo y horas',
@@ -91,6 +96,7 @@ export const ProtocolMetadata: Protocol = {
         {
             sectionId: 2,
             name: 'duración del proyecto',
+            description: 1,
             data: [
                 {
                     type: InputType.select,
@@ -113,26 +119,63 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.table,
                     title: 'cronograma',
-                    options: [{ task: '', date: '', duration: '' }],
-                    value: null,
+                    options: [
+                        {
+                            name: 'task',
+                            header: 'Tarea',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'date',
+                            header: 'Fecha',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'duration',
+                            header: 'Duración',
+                            type: InputType.text,
+                        },
+                    ],
+                    value: [{ task: '', date: '', duration: '' }],
                 },
             ],
         },
         {
             sectionId: 4,
             name: 'presupuesto de gastos directos',
-            description: Helpers[0],
+            description: 2,
             data: [
                 {
                     type: InputType.textarea,
-                    title: 'gastos directos',
+                    title: 'Gastos directos',
                     value: null,
                 },
                 {
                     type: InputType.table,
                     title: 'insumos de laboratorio',
-                    options: [{ type: '', detail: '', amount: '', year: '' }],
-                    value: null,
+                    options: [
+                        {
+                            name: 'type',
+                            header: 'Tipo',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'detail',
+                            header: 'Detalle',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'amount',
+                            header: 'Monto',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'year',
+                            header: 'Año',
+                            type: InputType.text,
+                        },
+                    ],
+                    value: [{ type: '', detail: '', amount: '', year: '' }],
                 },
             ],
         },
@@ -144,13 +187,19 @@ export const ProtocolMetadata: Protocol = {
                 {
                     type: InputType.select,
                     title: 'Disciplina general y área específica',
-                    options: ['Ejemplo anexo A'],
+                    options: [
+                        'Ejemplo anexo A',
+                        'Etica y responsabilidad social',
+                    ],
                     value: null,
                 },
                 {
                     type: InputType.select,
                     title: 'Línea de investigación',
-                    options: ['Ejemplo anexo A'],
+                    options: [
+                        'Ejemplo anexo A',
+                        'Gestion de las organizaciones y responsabilidad social',
+                    ],
                     value: null,
                 },
                 {
@@ -233,11 +282,53 @@ export const ProtocolMetadata: Protocol = {
             data: [
                 {
                     type: InputType.select,
-                    title: 'Tipo de investigación (dudoso ver word)',
+                    title: 'Tipo de investigación',
                     options: [
                         'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
                         'Investigaciones de tipo teóricas',
                     ],
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Diseño o tipo de investigación ',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Participantes',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Lugar de desarrollo',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Intrumentos para la recolección de datos',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Procedimientos para la recolección de datos',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Procesamientos y análisis de datos',
+                    value: null,
+                },
+                {
+                    type: InputType.text,
+                    title: 'Grado de avance para obtener la resolución del Comité de Ética de Investigación',
+                    value: null,
+                },
+                // ! Aca es donde este deberia ser condicional si elegis la otra opcion
+                {
+                    type: InputType.textarea,
+
+                    title: 'Detallar la metodologia que se usara para la concreción',
                     value: null,
                 },
             ],
@@ -265,19 +356,35 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             sectionId: 9,
-            name: 'lista bibliografica preeliminar',
+            name: 'lista bibliográfica preeliminar',
             data: [
                 {
                     type: InputType.table,
                     title: 'Cuadro bliblográfico',
-                    options: [{ author: '', title: '', year: '' }],
-                    value: null,
+                    options: [
+                        {
+                            name: 'author',
+                            header: 'Autor',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'title',
+                            header: 'Titulo',
+                            type: InputType.text,
+                        },
+                        {
+                            name: 'year',
+                            header: 'Año',
+                            type: InputType.text,
+                        },
+                    ],
+                    value: [{ author: '', title: '', year: '' }],
                 },
             ],
         },
         {
             sectionId: 10,
-            name: 'curricullum del director',
+            name: 'curriculum del director',
             data: [
                 {
                     type: InputType.text,
@@ -323,6 +430,72 @@ export const ProtocolMetadata: Protocol = {
                     type: InputType.select,
                     title: 'Posee categoría docente investigador UAP',
                     options: ['SI', 'NO'],
+                    value: null,
+                },
+            ],
+        },
+        {
+            sectionId: 11,
+            name: 'método',
+            data: [
+                {
+                    type: InputType.select,
+                    title: 'Tipo de investigación',
+                    options: [
+                        'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                        'Investigaciones de tipo teóricas',
+                    ],
+                    conditionalValues: [
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Diseño o tipo de investigación ',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Participantes',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Lugar de desarrollo',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Intrumentos para la recolección de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Procedimientos para la recolección de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Procesamientos y análisis de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Grado de avance para obtener la resolución del Comité de Ética de Investigación',
+                            value: null,
+                        },
+                        // ! Aca es donde este deberia ser condicional si elegis la otra opcion
+                        {
+                            type: InputType.textarea,
+                            parent: 'Investigaciones de tipo teóricas',
+                            title: 'Detallar la metodologia que se usara para la concreción',
+                            value: null,
+                        },
+                    ],
                     value: null,
                 },
             ],

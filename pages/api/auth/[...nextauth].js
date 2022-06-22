@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth'
-import AzureADB2CProvider from 'next-auth/providers/azure-ad-b2c'
+import AzureADProvider from 'next-auth/providers/azure-ad'
 import getCollections, { CollectionName } from '../../../utils/bd/getCollection'
 
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -10,36 +10,33 @@ export default NextAuth({
         jwt: true,
     },
     providers: [
-        AzureADB2CProvider({
-            tenantId: process.env.AZURE_AD_B2C_TENANT_NAME,
-            clientId: process.env.AZURE_AD_B2C_CLIENT_ID,
-            clientSecret: process.env.AZURE_AD_B2C_CLIENT_SECRET,
-            primaryUserFlow: process.env.AZURE_AD_B2C_PRIMARY_USER_FLOW,
-            authorization: { params: { scope: 'offline_access openid' } },
+        AzureADProvider({
+            clientId: process.env.AZURE_AD_CLIENT_ID,
+            clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
+            tenantId: process.env.AZURE_AD_TENANT_ID,
         }),
+
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: {
-                    label: 'Usuario',
-                    type: 'text',
+                email: {
+                    label: 'Email',
+                    type: 'email',
                     placeholder: 'jsmith@uap.edu.ar',
                 },
                 password: { label: 'Contraseña', type: 'password' },
             },
             async authorize(credentials) {
-                const users = getCollections(CollectionName.Users)
+                const users = await getCollections(CollectionName.Users)
+
                 //Find user with the email
                 const result = await users.findOne({
                     email: credentials.email,
                 })
 
-                console.log(result)
-
                 //NextAuth maneja el error
                 if (!result) {
-                    client.close()
-                    throw new Error('No user found with the email')
+                    throw new Error('No user found with thar email')
                 }
 
                 //Check hased password with DB password
@@ -49,12 +46,56 @@ export default NextAuth({
                 )
 
                 if (!checkPassword) {
-                    client.close()
-                    throw new Error('Password doesnt match')
+                    throw new Error("Password doesn't match")
                 }
-
-                return { email: result.email }
+                return {
+                    email: result.email,
+                    id: result._id,
+                    role: result.role,
+                }
             },
         }),
     ],
+    callbacks: {
+        signIn: async ({ user }) => {
+            const users = await getCollections(CollectionName.Users)
+            const userExist = await users.findOne({ email: user.email })
+            const updateObject =
+                userExist && userExist.role
+                    ? { lastLogin: new Date() }
+                    : { role: 'new-user', lastLogin: new Date() }
+
+            console.log(updateObject)
+
+            if (userExist) {
+                await users.updateOne(
+                    { email: user.email },
+                    { $set: updateObject }
+                )
+            } else {
+                await users.insertOne({ ...user, ...updateObject })
+            }
+
+            return true
+        },
+        jwt: ({ token, user }) => {
+            if (user) {
+                token.user = user
+            }
+            return token
+        },
+        session: async ({ session, token }) => {
+            if (token) {
+                const users = await getCollections(CollectionName.Users)
+                const user = await users.findOne({ email: token.user.email })
+                session.user = { ...token.user, user }
+            }
+            return session
+        },
+    },
+    secret: 'test',
+    jwt: {
+        secret: 'test',
+        encryption: true,
+    },
 })

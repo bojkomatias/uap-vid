@@ -1,6 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, PropsWithChildren } from 'react'
+import { Section } from '../../config/types'
 
-export default function faq(props: any) {
+export default function Faq({
+    dateOfCreation,
+    identification,
+    _id,
+}: PropsWithChildren<{
+    dateOfCreation: string
+    identification: Section
+    _id: any
+}>) {
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
     const trueStyle =
@@ -8,7 +17,7 @@ export default function faq(props: any) {
     const tStyle =
         ' border border-primary p-2 transition-all duration-200 text-primary'
     const fStyle =
-        ' p-2 border-white transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
+        ' p-2 border-base-200 transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
 
     const [show, setShow] = useState(false)
 
@@ -19,20 +28,20 @@ export default function faq(props: any) {
                     <div
                         className={
                             show
-                                ? 'flex justify-between text-xl font-bold transition-all duration-200'
-                                : 'group flex justify-between text-sm font-bold transition-all duration-200'
+                                ? 'flex flex-col justify-between text-xl font-bold transition-all duration-200 md:flex-row'
+                                : 'text-md group flex flex-col justify-between font-bold transition-all duration-200 md:flex-row'
                         }
                     >
                         <div>
-                            <p>{props.title} </p>{' '}
+                            <p>{identification?.data[0]?.value} </p>{' '}
                             <p
                                 className={
                                     show
-                                        ? 'text-sm transition-all duration-500'
-                                        : 'text-xs font-normal transition-all duration-500'
+                                        ? 'ml-1 text-sm transition-all duration-500'
+                                        : 'ml-1 text-sm font-normal transition-all duration-500'
                                 }
                             >
-                                Facultad de Ciencias de la Salud, Medicina
+                                Facultad: {identification?.data[5]?.value}
                             </p>
                         </div>
                         <div>
@@ -40,8 +49,8 @@ export default function faq(props: any) {
                                 xmlns="http://www.w3.org/2000/svg"
                                 className={
                                     show
-                                        ? 'mr-5 h-5 w-5 rotate-180 fill-primary transition-all duration-500'
-                                        : 'mr-5 h-5 w-5 fill-base-400 transition-all duration-300 group-hover:fill-primary'
+                                        ? 'mr-5 hidden h-5 w-5 rotate-180 fill-primary transition-all duration-500 md:block'
+                                        : 'mr-5 hidden h-5 w-5 fill-base-400 transition-all duration-300 group-hover:fill-primary md:block'
                                 }
                                 viewBox="0 0 20 20"
                             >
@@ -57,18 +66,31 @@ export default function faq(props: any) {
                     <div className={show ? trueStyle : falseStyle}>
                         <div className="flex flex-col">
                             {' '}
-                            <div className="text-xs font-bold">
-                                <p>11/06/2017</p>
+                            <div className=" mt-1 ml-4 text-sm font-semibold text-primary">
+                                {new Date(dateOfCreation).toLocaleDateString(
+                                    'es-ar'
+                                )}
                             </div>
-                            <div className="flex items-end justify-between gap-1">
-                                {' '}
-                                <div className="mt-2 w-[70%]">
-                                    {props.description}
+                            <div className="items-end justify-between gap-1 md:flex">
+                                <div className="ml-4 w-[70%] text-sm">
+                                    Carrera:{' '}
+                                    <span className="underline">
+                                        {identification?.data[1]?.value}
+                                    </span>{' '}
+                                    <br />
+                                    Modalidad:{' '}
+                                    <span className="underline">
+                                        {' '}
+                                        {identification?.data[4]?.value}{' '}
+                                    </span>
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">
-                                    <p className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 ">
+                                    <a
+                                        href={`/protected/protocol/${_id}/1`}
+                                        className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 "
+                                    >
                                         Ver todos los detalles
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
                         </div>
