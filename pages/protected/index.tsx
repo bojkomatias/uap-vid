@@ -45,7 +45,7 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/protocol/p',
+            url: '#',
             roles: ['admin'],
         },
         {
@@ -65,7 +65,7 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/protocol/p',
+            url: '#',
             roles: ['admin'],
         },
         {
@@ -81,7 +81,7 @@ export default function Page() {
                     <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
                 </svg>
             ),
-            url: '/protocol/p',
+            url: '#',
             roles: ['admin'],
         },
         {
@@ -101,7 +101,7 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/protocol/p',
+            url: '#',
             roles: ['admin'],
         },
         {
@@ -176,7 +176,6 @@ export default function Page() {
     }
     const createNewProtocol = async () => {
         const protocol = ProtocolMetadata
-        console.log(protocol)
         const res = await fetch('/api/protocol', {
             method: 'POST',
             mode: 'cors',
@@ -186,7 +185,6 @@ export default function Page() {
             body: JSON.stringify(protocol),
         })
         const data = await res.json()
-        console.log(data)
         redirectToProtocol(data.insertedId)
     }
 
@@ -196,7 +194,7 @@ export default function Page() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
-            <div className="flex h-full  -translate-y-12 items-center justify-around">
+            <div className="mt-12 flex h-full -translate-y-12 items-center justify-around">
                 <div className="my-auto flex min-h-[70vh] w-1/3 cursor-pointer flex-col justify-center text-center font-bold text-primary ">
                     {content.map((item) =>
                         item.roles.includes(session?.user?.role) ? (

@@ -1,11 +1,10 @@
 import { PropsWithChildren, useState, useEffect } from 'react'
-import { Section, Input as InputT, Protocol } from '../../config/types'
+import { Section, Input as InputT } from '../../config/types'
 import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import Table from '../Atomic/Table'
-import { motion } from 'framer-motion'
 import TextEditor from '../Atomic/TextEditor'
-import { QuestionMark } from 'tabler-icons-react'
+import { QuestionMark, X } from 'tabler-icons-react'
 import gsap from 'gsap'
 import { Helpers } from '../../config/helpers'
 import { InputType } from '../../config/enums'
@@ -23,26 +22,55 @@ export const Form = ({
     const [sectionData, setsectionData] = useState<InputT[]>(section.data)
     const [sectionEdited, setSectionEdited] = useState<Section>(section)
 
-    const idempotentUpdateValue = (e: any) => {
+    const idempotentUpdateValue = (e: InputT) => {
         let newData = sectionData
-        if (sectionData.findIndex((x) => x.title === e.title) !== -1) {
-            newData.splice(
-                sectionData.findIndex((x) => x.title === e.title),
-                1,
-                e
-            )
+        let index = sectionData.findIndex((x) => x.title === e.title)
+        if (index !== -1) {
+            newData.splice(index, 1, e)
+            if (
+                sectionData[index].conditional ||
+                sectionData[index].conditionalValues
+            ) {
+                newData.splice(
+                    index + 1,
+                    0,
+                    ...getConditionalValues(
+                        e.title,
+                        e.value,
+                        e.conditionalValues
+                    )
+                )
+            }
         }
+        console.log('new', newData)
+        // const resData = newData.reduce((a, c) => {
+        //     ;(c.conditional || c.conditionalValues) && c.value
+        //         ? a.push(
+        //               c,
+        //               ...getConditionalValues(
+        //                   c.title,
+        //                   c.value,
+        //                   c.conditionalValues
+        //               )
+        //           )
+        //         : a.push(c)
+        //     return a
+        // }, [] as InputT[])
 
         setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
+
         return setsectionData(newData)
     }
 
     useEffect(() => {
         const complete = sectionData.filter((e) => e.value === null)
         setSectionComplete(false)
-        console.log(complete.length === 0)
+        console.log('is COMPLETE?', complete.length === 0)
         if (complete.length === 0) setSectionComplete(true)
+
+        setsectionData(section.data)
+
         gsap.fromTo(
             '#container',
             { opacity: 0, scale: 0.97 },
@@ -54,55 +82,35 @@ export const Form = ({
         switch (i.type) {
             case InputType.table:
                 return (
-                    <>
-                        <p className="text-[0.6rem] font-thin uppercase">
-                            {i.title}
-                        </p>
-                        <Table
-                            key={i.title}
-                            data={i}
-                            updateData={(e: any) => idempotentUpdateValue(e)}
-                        />
-                    </>
+                    <Table
+                        key={i.title}
+                        data={i}
+                        updateData={(e: any) => idempotentUpdateValue(e)}
+                    />
                 )
             case InputType.select:
                 return (
-                    <>
-                        <p className="text-[0.6rem] font-thin uppercase">
-                            {i.title}
-                        </p>
-                        <Select
-                            key={i.title}
-                            data={i}
-                            updateData={(e: any) => idempotentUpdateValue(e)}
-                        />
-                    </>
+                    <Select
+                        key={i.title}
+                        data={i}
+                        updateData={(e: any) => idempotentUpdateValue(e)}
+                    />
                 )
             case InputType.textarea:
                 return (
-                    <>
-                        <p className="text-[0.6rem] font-thin uppercase">
-                            {i.title}
-                        </p>
-                        <TextEditor
-                            key={i.title}
-                            data={i}
-                            updateData={(e: any) => idempotentUpdateValue(e)}
-                        />
-                    </>
+                    <TextEditor
+                        key={i.title}
+                        data={i}
+                        updateData={(e: any) => idempotentUpdateValue(e)}
+                    />
                 )
             default:
                 return (
-                    <>
-                        <p className="text-[0.6rem] font-thin uppercase">
-                            {i.title}
-                        </p>
-                        <Input
-                            key={i.title}
-                            input={i}
-                            updateData={(e: any) => idempotentUpdateValue(e)}
-                        />
-                    </>
+                    <Input
+                        key={i.title}
+                        input={i}
+                        updateData={(e: any) => idempotentUpdateValue(e)}
+                    />
                 )
         }
     }
@@ -139,9 +147,18 @@ export const Form = ({
                 <div className="mx-6 mt-5 max-w-[1120px]">
                     {sectionData.map((i: InputT) => (
                         <div key={i.title} className="m-3 p-1">
+                            <p
+                                className={`text-[0.6rem] font-thin uppercase transition duration-500  ${
+                                    i.value
+                                        ? 'opacity-100'
+                                        : 'translate-y-1 opacity-0'
+                                }`}
+                            >
+                                {i.title}
+                            </p>
                             {renderInputData(i)}
 
-                            {(i.conditional || i.conditionalValues) && i.value
+                            {/* {(i.conditional || i.conditionalValues) && i.value
                                 ? getConditionalValues(
                                       i.title,
                                       i.value,
@@ -149,21 +166,22 @@ export const Form = ({
                                   ).map((x: InputT) => {
                                       return (
                                           <div key={x.title} className="my-4">
+                                              <p
+                                                  className={`text-[0.6rem] font-thin uppercase transition duration-500  ${
+                                                      x.value
+                                                          ? 'opacity-100'
+                                                          : 'translate-y-1 opacity-0'
+                                                  }`}
+                                              >
+                                                  {x.title}
+                                              </p>
+                                              <pre>
+                                                  {JSON.stringify(x, null, 2)}
+                                              </pre>
                                               {renderInputData(x)}
                                           </div>
                                       )
                                   })
-                                : null}
-                            {/* {i.conditionalValues && i.value
-                                ? i.conditionalValues
-                                      .filter(
-                                          (z: InputT) => z.parent === i.value
-                                      )
-                                      .map((x: InputT) => (
-                                          <div key={x.title} className="my-4">
-                                              {renderInputData(getConditionalValues(x))}
-                                          </div>
-                                      ))
                                 : null} */}
                         </div>
                     ))}

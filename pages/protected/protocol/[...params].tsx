@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Form } from '../../../components/Protocol/Form'
-import { Section } from '../../../config/types'
-import Stepper from '../../../components/Protocol/Stepper'
-import { Button } from '../../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { Button } from '../../../components/Atomic/Button'
+import { Section } from '../../../config/types'
+import Stepper from '../../../components/Protocol/Stepper'
+import { Form } from '../../../components/Protocol/Form'
 
 export default function ProtocolPage({
     section,
@@ -19,15 +19,17 @@ export default function ProtocolPage({
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
     const [isSectionComplete, setSectionComplete] = useState()
-
+    const refreshData = () => {
+        router.replace(router.asPath)
+    }
     useEffect(() => {
         setTimeout(() => {
             setSavedEvent(false)
-            console.log(section)
         }, 3000)
     }, [savedEvent])
 
     const updateSection = async (section: Section) => {
+        console.log('Guardando en la DB', section)
         let timeout
         clearTimeout(timeout)
         timeout = setTimeout(async () => {

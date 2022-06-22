@@ -287,48 +287,57 @@ export const ProtocolMetadata: Protocol = {
                         'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
                         'Investigaciones de tipo teóricas',
                     ],
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Diseño o tipo de investigación ',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Participantes',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Lugar de desarrollo',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Intrumentos para la recolección de datos',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Procedimientos para la recolección de datos',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Procesamientos y análisis de datos',
-                    value: null,
-                },
-                {
-                    type: InputType.text,
-                    title: 'Grado de avance para obtener la resolución del Comité de Ética de Investigación',
-                    value: null,
-                },
-                // ! Aca es donde este deberia ser condicional si elegis la otra opcion
-                {
-                    type: InputType.textarea,
-
-                    title: 'Detallar la metodologia que se usara para la concreción',
+                    conditionalValues: [
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Diseño o tipo de investigación ',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Participantes',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Lugar de desarrollo',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Intrumentos para la recolección de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Procedimientos para la recolección de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Procesamientos y análisis de datos',
+                            value: null,
+                        },
+                        {
+                            type: InputType.text,
+                            parent: 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
+                            title: 'Grado de avance para obtener la resolución del Comité de Ética de Investigación',
+                            value: null,
+                        },
+                        // ! Aca es donde este deberia ser condicional si elegis la otra opcion
+                        {
+                            type: InputType.textarea,
+                            parent: 'Investigaciones de tipo teóricas',
+                            title: 'Detallar la metodologia que se usara para la concreción',
+                            value: null,
+                        },
+                    ],
                     value: null,
                 },
             ],

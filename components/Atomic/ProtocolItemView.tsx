@@ -21,6 +21,8 @@ export default function Faq({
 
     const [show, setShow] = useState(false)
 
+    console.log(identification)
+
     return (
         <div>
             <a className="cursor-pointer " onClick={() => setShow(!show)}>

@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
     const session = await getSession({ req: requestForNextAuth })
 
     // Middleware para proteger el acceso a solo administradores a estos archivos
-    if (session?.user?.role === 'new-user') {
+    if (session?.user?.role === 'admin') {
         return NextResponse.next()
     } else {
         // the user is not logged in, redirect to the sign-in page

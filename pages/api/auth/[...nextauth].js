@@ -88,7 +88,7 @@ export default NextAuth({
             if (token) {
                 const users = await getCollections(CollectionName.Users)
                 const user = await users.findOne({ email: token.user.email })
-                session.user = { ...token.user, user }
+                session.user = user
             }
             return session
         },
