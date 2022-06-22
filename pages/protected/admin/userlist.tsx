@@ -1,9 +1,12 @@
+import { useNotifications } from '@mantine/notifications'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { Check, X } from 'tabler-icons-react'
 import ListBox from '../../../components/Atomic/Listbox'
 
 function UserList({ users }: any) {
     const router = useRouter()
+    const notifications = useNotifications()
 
     const refreshData = () => {
         router.replace(router.asPath)
@@ -19,7 +22,28 @@ function UserList({ users }: any) {
             },
             body: JSON.stringify({ role: newRole }),
         })
-        console.log(await res.json())
+        if (res.status === 200)
+            notifications.showNotification({
+                title: 'Rol modificado',
+                message: 'Se actualizo el rol del usuario correctamente',
+                color: 'teal',
+                icon: <Check />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })
+        else if (res.status === 400)
+            notifications.showNotification({
+                title: 'Error',
+                message: 'Ocurrio un error al actualizar el rol del usuario',
+                color: 'red',
+                icon: <X />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })
         refreshData()
     }
     return (

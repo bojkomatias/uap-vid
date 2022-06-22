@@ -8,6 +8,8 @@ import TextEditor from '../Atomic/TextEditor'
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import gsap from 'gsap'
 import { Helpers } from '../../config/helpers'
+import { InputType } from '../../config/enums'
+import { getConditionalValues } from '../../config/conditionals'
 
 export const Form = ({
     section,
@@ -33,8 +35,6 @@ export const Form = ({
 
         setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
-        // check if section is complete
-
         return setsectionData(newData)
     }
 
@@ -49,6 +49,63 @@ export const Form = ({
             { opacity: 1, scale: 1, duration: 0.5 }
         )
     }, [section])
+
+    const renderInputData = (i: InputT) => {
+        switch (i.type) {
+            case InputType.table:
+                return (
+                    <>
+                        <p className="text-[0.6rem] font-thin uppercase">
+                            {i.title}
+                        </p>
+                        <Table
+                            key={i.title}
+                            data={i}
+                            updateData={(e: any) => idempotentUpdateValue(e)}
+                        />
+                    </>
+                )
+            case InputType.select:
+                return (
+                    <>
+                        <p className="text-[0.6rem] font-thin uppercase">
+                            {i.title}
+                        </p>
+                        <Select
+                            key={i.title}
+                            data={i}
+                            updateData={(e: any) => idempotentUpdateValue(e)}
+                        />
+                    </>
+                )
+            case InputType.textarea:
+                return (
+                    <>
+                        <p className="text-[0.6rem] font-thin uppercase">
+                            {i.title}
+                        </p>
+                        <TextEditor
+                            key={i.title}
+                            data={i}
+                            updateData={(e: any) => idempotentUpdateValue(e)}
+                        />
+                    </>
+                )
+            default:
+                return (
+                    <>
+                        <p className="text-[0.6rem] font-thin uppercase">
+                            {i.title}
+                        </p>
+                        <Input
+                            key={i.title}
+                            input={i}
+                            updateData={(e: any) => idempotentUpdateValue(e)}
+                        />
+                    </>
+                )
+        }
+    }
 
     return (
         <div id="container" className="w-full opacity-0 ">
@@ -78,38 +135,35 @@ export const Form = ({
                           })
                         : null}
                 </div>
-                <div className="mx-6 mt-5  max-w-[1120px]">
-                    {section.data.map((i: InputT) => (
-                        <div key={i.title} className="m-3 p-1 ">
-                            {i.type === 'table' ? (
-                                <Table
-                                    data={i}
-                                    updateData={(e: any) =>
-                                        idempotentUpdateValue(e)
-                                    }
-                                />
-                            ) : i.type === 'select' ? (
-                                <Select
-                                    data={i}
-                                    updateData={(e: any) =>
-                                        idempotentUpdateValue(e)
-                                    }
-                                />
-                            ) : i.type === 'textarea' ? (
-                                <TextEditor
-                                    data={i}
-                                    updateData={(e: any) =>
-                                        idempotentUpdateValue(e)
-                                    }
-                                />
-                            ) : (
-                                <Input
-                                    input={i}
-                                    updateData={(e: any) =>
-                                        idempotentUpdateValue(e)
-                                    }
-                                />
-                            )}
+                <div className="mx-6 mt-5 max-w-[1120px]">
+                    {sectionData.map((i: InputT) => (
+                        <div key={i.title} className="m-3 p-1">
+                            {renderInputData(i)}
+
+                            {(i.conditional || i.conditionalValues) && i.value
+                                ? getConditionalValues(
+                                      i.title,
+                                      i.value,
+                                      i.conditionalValues
+                                  ).map((x: InputT) => {
+                                      return (
+                                          <div key={x.title} className="my-4">
+                                              {renderInputData(x)}
+                                          </div>
+                                      )
+                                  })
+                                : null}
+                            {/* {i.conditionalValues && i.value
+                                ? i.conditionalValues
+                                      .filter(
+                                          (z: InputT) => z.parent === i.value
+                                      )
+                                      .map((x: InputT) => (
+                                          <div key={x.title} className="my-4">
+                                              {renderInputData(getConditionalValues(x))}
+                                          </div>
+                                      ))
+                                : null} */}
                         </div>
                     ))}
                 </div>

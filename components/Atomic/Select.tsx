@@ -23,6 +23,9 @@ export default function Select({
             type: data.type,
             title: data.title,
             options: data.options,
+            conditionalValues: data.conditionalValues,
+            conditional: data.conditional,
+            parent: data.parent,
             value: selectedValue,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps

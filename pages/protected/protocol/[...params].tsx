@@ -23,6 +23,7 @@ export default function ProtocolPage({
     useEffect(() => {
         setTimeout(() => {
             setSavedEvent(false)
+            console.log(section)
         }, 3000)
     }, [savedEvent])
 

@@ -4,7 +4,9 @@ export interface Input {
     type: InputType
     title: string
     options?: any
-    condition?: any
+    conditionalValues?: Input[]
+    conditional?: boolean
+    parent?: string
     value: any
 }
 

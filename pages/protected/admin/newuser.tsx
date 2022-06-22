@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { Button } from '../../../components/Atomic/Button'
 import ListBox from '../../../components/Atomic/Listbox'
 import { useNotifications } from '@mantine/notifications'
-import { Check } from 'tabler-icons-react'
+import { Check, X } from 'tabler-icons-react'
 
 function NewUser() {
     const router = useRouter()
     const [newUser, setNewUser] = useState({ role: 'new-user' })
-
+    const notifications = useNotifications()
     const CreateNewUser = async () => {
         console.log(newUser)
         const res = await fetch(`/api/auth/signup`, {
@@ -20,24 +20,33 @@ function NewUser() {
             },
             body: JSON.stringify(newUser),
         })
-        if (res.status === 201) router.push('/protected/admin/userlist')
-    }
-
-    const notifications = useNotifications()
-    const showNotification = () => (
-        <div className="text-5xl">
-            {notifications.showNotification({
+        if (res.status === 201) {
+            notifications.showNotification({
                 title: 'Usuario creado',
-                message: 'Nuevo usuario creado correctamente',
-                color: 'teal',
+                message: 'El usuario fue creado correctamente',
+                color: 'success',
                 icon: <Check />,
                 radius: 0,
                 style: {
                     marginBottom: '.8rem',
                 },
-            })}
-        </div>
-    )
+            })
+            setTimeout(() => {
+                router.push('/protected/admin/userlist')
+            }, 2000)
+        } else if (res.status === 422) {
+            notifications.showNotification({
+                title: 'Usuario existente',
+                message: 'El usuario ya existe',
+                color: 'red',
+                icon: <X />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })
+        }
+    }
 
     return (
         <div>
@@ -96,7 +105,6 @@ function NewUser() {
                 />
                 {/* Ignoro el primero param */}
                 <Button type="submit"> Crear Nuevo Usuario</Button>
-                <Button onClick={showNotification}>Toast</Button>
             </form>
         </div>
     )
