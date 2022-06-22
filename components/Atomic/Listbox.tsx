@@ -6,7 +6,15 @@ function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
 }
 
-const roles = ['new-user', 'external']
+const roles = [
+    'new-user',
+    'Investigador',
+    'Evaluador Interno',
+    'Evaluador Externo',
+    'Metodólogo',
+    'Secretario de Investigación',
+    'admin',
+]
 
 const ListBox = ({
     user,

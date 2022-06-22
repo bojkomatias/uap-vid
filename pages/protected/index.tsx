@@ -27,7 +27,15 @@ export default function Page() {
             ),
             url: '/protocol/p',
             action: () => createNewProtocol(),
-            roles: ['new-user', 'admin'],
+            roles: [
+                'new-user',
+                'Investigador',
+                'Evaluador Interno',
+                'Evaluador Externo',
+                'Metodólogo',
+                'Secretario de Investigación',
+                'admin',
+            ],
         },
         {
             title: 'Lista base de datos evaluadores',
@@ -121,7 +129,15 @@ export default function Page() {
                 </svg>
             ),
             url: '/protected/projects',
-            roles: ['new-user', 'admin'],
+            roles: [
+                'new-user',
+                'Investigador',
+                'Evaluador Interno',
+                'Evaluador Externo',
+                'Metodólogo',
+                'Secretario de Investigación',
+                'admin',
+            ],
         },
         {
             title: 'Crear nuevo usuario',
