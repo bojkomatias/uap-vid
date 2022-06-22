@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import ItemView from '../../components/Atomic/ProtocolItemView'
 import { GetServerSideProps } from 'next'
-import { Protocol } from '../../config/types'
+import { Input, Protocol, Section } from '../../config/types'
 
 export default function projects({ protocols }: any) {
-    console.log(protocols)
-
     return (
         <div className="transition-all duration-200">
             <div className="-translate-y-12 text-4xl font-bold text-primary">
@@ -32,7 +30,12 @@ export default function projects({ protocols }: any) {
 export const getServerSideProps: GetServerSideProps = async () => {
     const string = `${process.env.NEXTURL}/api/protocol/`
     const data = await fetch(string).then((res) => res.json())
+    const protocols = data
+        .map((p: Protocol) => {
+            return p.data[0].data.every((x: Input) => x.value) ? p : null
+        })
+        .filter(Boolean)
     return {
-        props: { protocols: data },
+        props: { protocols: protocols },
     }
 }

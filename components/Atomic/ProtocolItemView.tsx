@@ -1,11 +1,15 @@
 import React, { useState, PropsWithChildren } from 'react'
 import { Section } from '../../config/types'
 
-export default function faq({
+export default function Faq({
     dateOfCreation,
     identification,
     _id,
-}: PropsWithChildren<{ identification: Section; _id: any }>) {
+}: PropsWithChildren<{
+    dateOfCreation: string
+    identification: Section
+    _id: any
+}>) {
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
     const trueStyle =
@@ -29,7 +33,7 @@ export default function faq({
                         }
                     >
                         <div>
-                            <p>{identification?.data[0].value} </p>{' '}
+                            <p>{identification?.data[0]?.value} </p>{' '}
                             <p
                                 className={
                                     show
@@ -37,7 +41,7 @@ export default function faq({
                                         : 'ml-1 text-sm font-normal transition-all duration-500'
                                 }
                             >
-                                Facultad: {identification?.data[5].value}
+                                Facultad: {identification?.data[5]?.value}
                             </p>
                         </div>
                         <div>
@@ -71,13 +75,13 @@ export default function faq({
                                 <div className="ml-4 w-[70%] text-sm">
                                     Carrera:{' '}
                                     <span className="underline">
-                                        {identification?.data[1].value}
+                                        {identification?.data[1]?.value}
                                     </span>{' '}
                                     <br />
                                     Modalidad:{' '}
                                     <span className="underline">
                                         {' '}
-                                        {identification?.data[4].value}{' '}
+                                        {identification?.data[4]?.value}{' '}
                                     </span>
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">

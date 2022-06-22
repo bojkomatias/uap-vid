@@ -6,7 +6,6 @@ const assignments = c.map((c) => c.assignment).flat()
 
 export const ProtocolMetadata: Protocol = {
     createdAt: '',
-
     data: [
         {
             // 1. Identificacion del Proyecto
@@ -499,7 +498,6 @@ export const ProtocolMetadata: Protocol = {
                     ],
                     value: null,
                 },
-                
             ],
         },
     ],
