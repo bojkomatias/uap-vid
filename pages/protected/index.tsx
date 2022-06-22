@@ -10,7 +10,7 @@ export default function Page() {
 
     const content = [
         {
-            title: ' Postulación proyecto de investigación',
+            title: 'Postulación proyecto de investigación',
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ export default function Page() {
             roles: ['new-user', 'admin'],
         },
         {
-            title: ' Lista base de datos evaluadores',
+            title: 'Lista base de datos evaluadores',
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@ export default function Page() {
             roles: ['admin'],
         },
         {
-            title: ' Seguimiento de proyectos aprobados',
+            title: 'Seguimiento de proyectos aprobados',
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +85,7 @@ export default function Page() {
             roles: ['admin'],
         },
         {
-            title: ' Información de publicaciones científicas',
+            title: 'Información de publicaciones científicas',
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@ export default function Page() {
             roles: ['admin'],
         },
         {
-            title: ' Lista de proyectos de investigación',
+            title: 'Lista de proyectos de investigación',
             icon: (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -122,6 +122,52 @@ export default function Page() {
             ),
             url: '/protected/projects',
             roles: ['new-user', 'admin'],
+        },
+        {
+            title: 'Crear nuevo usuario',
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+            ),
+            url: '/protected/admin/newuser',
+            roles: ['admin'],
+        },
+        {
+            title: 'Lista de usuarios',
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            ),
+            url: '/protected/admin/userlist',
+            roles: ['admin'],
         },
     ]
     const router = useRouter()
@@ -150,8 +196,8 @@ export default function Page() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
-            <div className="flex h-full -translate-y-12 items-center justify-around">
-                <div className="my-auto flex min-h-[70vh] cursor-pointer flex-col justify-center text-center font-bold text-primary">
+            <div className="flex h-full  -translate-y-12 items-center justify-around">
+                <div className="my-auto flex min-h-[70vh] w-1/3 cursor-pointer flex-col justify-center text-center font-bold text-primary ">
                     {content.map((item) =>
                         item.roles.includes(session?.user?.role) ? (
                             item.action ? (

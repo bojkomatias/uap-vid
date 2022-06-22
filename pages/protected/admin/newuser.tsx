@@ -53,12 +53,15 @@ function NewUser() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Crear nuevo usuario
             </div>
+            <p className="mx-auto mb-3 w-1/2 pt-24 text-xl font-bold text-primary">
+                Nuevo usuario
+            </p>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
                     CreateNewUser()
                 }}
-                className="mx-auto flex w-1/2 flex-col items-center gap-10 pt-24"
+                className="mx-auto flex w-1/2 flex-col items-center gap-10 "
             >
                 <input
                     required
@@ -104,7 +107,17 @@ function NewUser() {
                     UpdateRoleForUser={(_: any, e: any) => console.log(e)}
                 />
                 {/* Ignoro el primero param */}
+<<<<<<< HEAD
                 <Button type="submit"> Crear Nuevo Usuario</Button>
+=======
+                <button
+                    className=" bg-base-100 p-4 font-bold uppercase text-primary transition-all duration-200 hover:scale-105 hover:bg-primary hover:text-white"
+                    type="submit"
+                >
+                    {' '}
+                    Crear Nuevo Usuario
+                </button>
+>>>>>>> 9ad4f2eec2dd0dd1a534b219f634bbae875044f8
             </form>
         </div>
     )

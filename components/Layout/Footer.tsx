@@ -6,7 +6,7 @@ export default function Footer() {
             <div className="flex gap-3">
                 <div>© COPYRIGHT 2022</div>
                 <a href="https://uap.edu.ar/">
-                    <p className="transition-all duration-200 hover:scale-105 hover:font-bold">
+                    <p className="transition-all duration-500 hover:scale-105 hover:font-bold">
                         {' '}
                         UNIVERSIDAD ADVENTISTA DEL PLATA
                     </p>
@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="mt-2 flex gap-1">
                 <div className="font-thin">WebApp desarrollada por </div>
                 <a href="/">
-                    <p className="font-thin transition-all duration-200 hover:ml-1 hover:rotate-[35deg] hover:scale-125 hover:font-bold">
+                    <p className="font-thin transition-all duration-200 hover:ml-1 hover:rotate-[7deg] hover:scale-125 hover:font-bold">
                         TPC
                     </p>
                 </a>

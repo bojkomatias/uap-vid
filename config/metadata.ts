@@ -5,6 +5,8 @@ const careers = c.map((c) => c.career)
 const assignments = c.map((c) => c.assignment).flat()
 
 export const ProtocolMetadata: Protocol = {
+    createdAt: '',
+
     data: [
         {
             // 1. Identificacion del Proyecto
@@ -355,7 +357,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             sectionId: 9,
-            name: 'lista bibliografica preeliminar',
+            name: 'lista bibliográfica preeliminar',
             data: [
                 {
                     type: InputType.table,
@@ -383,7 +385,7 @@ export const ProtocolMetadata: Protocol = {
         },
         {
             sectionId: 10,
-            name: 'curricullum del director',
+            name: 'curriculum del director',
             data: [
                 {
                     type: InputType.text,
