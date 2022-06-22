@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next'
 import { Input, Protocol, Section } from '../../config/types'
 
 export default function projects({ protocols }: any) {
+    console.log(protocols)
     return (
         <div className="transition-all duration-200">
             <div className="-translate-y-12 text-4xl font-bold text-primary">
@@ -15,7 +16,7 @@ export default function projects({ protocols }: any) {
                         {/* Se busca del protocolo solo la primera seccion, que tiene los datos de identirficacion */}
                         {item.data && item.data[0] ? (
                             <ItemView
-                                dateOfCreation={item.createdAt}
+                                dateOfCreation={item.updatedAt}
                                 identification={item.data[0]}
                                 _id={item._id}
                             ></ItemView>

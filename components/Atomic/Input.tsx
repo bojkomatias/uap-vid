@@ -13,11 +13,7 @@ const Input = ({
             defaultValue={input.value}
             required
             onChange={async (e) =>
-                updateData({
-                    title: input.title,
-                    type: input.type,
-                    value: e.target.value,
-                })
+                updateData({ ...input, value: e.target.value })
             }
             className="input"
         />

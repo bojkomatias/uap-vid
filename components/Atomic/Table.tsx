@@ -18,12 +18,7 @@ export default function Table({
     })
 
     useEffect(() => {
-        updateData({
-            type: data.type,
-            title: data.title,
-            options: data.options,
-            value: table.values.data,
-        })
+        updateData({ ...data, value: table.values.data })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [table.values])
 

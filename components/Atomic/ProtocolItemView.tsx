@@ -6,7 +6,7 @@ export default function Faq({
     identification,
     _id,
 }: PropsWithChildren<{
-    dateOfCreation: string
+    dateOfCreation: Date
     identification: Section
     _id: any
 }>) {
@@ -20,8 +20,6 @@ export default function Faq({
         ' p-2 border-base-200 transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
 
     const [show, setShow] = useState(false)
-
-    console.log(identification)
 
     return (
         <div>

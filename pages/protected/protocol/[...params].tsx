@@ -29,10 +29,11 @@ export default function ProtocolPage({
     }, [savedEvent])
 
     const updateSection = async (section: Section) => {
-        console.log('Guardando en la DB', section)
         let timeout
         clearTimeout(timeout)
         timeout = setTimeout(async () => {
+            console.log('Guardando en la DB', section)
+
             const res = await fetch(
                 `/api/section/${protocolId}/${section?.sectionId}`,
                 {

@@ -28,8 +28,10 @@ export const Form = ({
         if (index !== -1) {
             newData.splice(index, 1, e)
             if (
-                sectionData[index].conditional ||
-                sectionData[index].conditionalValues
+                ((e.conditional || e.conditionalValues) &&
+                    sectionData[index + 1] &&
+                    !sectionData[index + 1].parent) ||
+                !sectionData[index + 1]
             ) {
                 newData.splice(
                     index + 1,
@@ -40,35 +42,29 @@ export const Form = ({
                         e.conditionalValues
                     )
                 )
-            }
+            } else if (e.conditional || e.conditionalValues)
+                newData.splice(
+                    index + 1,
+                    newData.filter((a) => a.parent).length,
+                    ...getConditionalValues(
+                        e.title,
+                        e.value,
+                        e.conditionalValues
+                    )
+                )
         }
-        console.log('new', newData)
-        // const resData = newData.reduce((a, c) => {
-        //     ;(c.conditional || c.conditionalValues) && c.value
-        //         ? a.push(
-        //               c,
-        //               ...getConditionalValues(
-        //                   c.title,
-        //                   c.value,
-        //                   c.conditionalValues
-        //               )
-        //           )
-        //         : a.push(c)
-        //     return a
-        // }, [] as InputT[])
 
         setSectionEdited({ ...sectionEdited, data: newData })
         updateSection(sectionEdited)
-
-        return setsectionData(newData)
-    }
-
-    useEffect(() => {
         const complete = sectionData.filter((e) => e.value === null)
         setSectionComplete(false)
         console.log('is COMPLETE?', complete.length === 0)
         if (complete.length === 0) setSectionComplete(true)
 
+        return setsectionData(newData)
+    }
+
+    useEffect(() => {
         setsectionData(section.data)
 
         gsap.fromTo(
@@ -118,6 +114,7 @@ export const Form = ({
     return (
         <div id="container" className="w-full opacity-0 ">
             <form
+                autoComplete="off"
                 onSubmit={(e) => {
                     e.preventDefault()
                     console.log(sectionData)
@@ -157,32 +154,6 @@ export const Form = ({
                                 {i.title}
                             </p>
                             {renderInputData(i)}
-
-                            {/* {(i.conditional || i.conditionalValues) && i.value
-                                ? getConditionalValues(
-                                      i.title,
-                                      i.value,
-                                      i.conditionalValues
-                                  ).map((x: InputT) => {
-                                      return (
-                                          <div key={x.title} className="my-4">
-                                              <p
-                                                  className={`text-[0.6rem] font-thin uppercase transition duration-500  ${
-                                                      x.value
-                                                          ? 'opacity-100'
-                                                          : 'translate-y-1 opacity-0'
-                                                  }`}
-                                              >
-                                                  {x.title}
-                                              </p>
-                                              <pre>
-                                                  {JSON.stringify(x, null, 2)}
-                                              </pre>
-                                              {renderInputData(x)}
-                                          </div>
-                                      )
-                                  })
-                                : null} */}
                         </div>
                     ))}
                 </div>

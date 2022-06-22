@@ -8,10 +8,8 @@ const TextEditor = ({
 }: PropsWithChildren<{ data: Input; updateData: Function }>) => {
     const [value, onChange] = useState(data.value)
     useEffect(() => {
-        console.log('valeu', value)
         updateData({
-            type: data.type,
-            title: data.title,
+            ...data,
             value: value,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps

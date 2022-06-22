@@ -20,5 +20,6 @@ export interface Section {
 export interface Protocol {
     _id?: string
     data: Section[]
-    createdAt: string
+    createdAt: Date
+    updatedAt: Date
 }

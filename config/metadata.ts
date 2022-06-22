@@ -2,10 +2,10 @@ import { InputType } from './enums'
 import { Protocol } from './types'
 import c from '././careers.json'
 const careers = c.map((c) => c.career)
-const assignments = c.map((c) => c.assignment).flat()
 
 export const ProtocolMetadata: Protocol = {
-    createdAt: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     data: [
         {
             // 1. Identificacion del Proyecto

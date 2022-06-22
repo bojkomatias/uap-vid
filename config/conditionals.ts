@@ -16,6 +16,7 @@ const filterMateria = (value: string) => {
             type: InputType.select,
             title: 'materia',
             options: assignments,
+            parent: 'carrera',
             value: null,
         },
     ] as Input[]
