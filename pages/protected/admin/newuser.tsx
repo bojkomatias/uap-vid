@@ -107,9 +107,6 @@ function NewUser() {
                     UpdateRoleForUser={(_: any, e: any) => console.log(e)}
                 />
                 {/* Ignoro el primero param */}
-<<<<<<< HEAD
-                <Button type="submit"> Crear Nuevo Usuario</Button>
-=======
                 <button
                     className=" bg-base-100 p-4 font-bold uppercase text-primary transition-all duration-200 hover:scale-105 hover:bg-primary hover:text-white"
                     type="submit"
@@ -117,7 +114,6 @@ function NewUser() {
                     {' '}
                     Crear Nuevo Usuario
                 </button>
->>>>>>> 9ad4f2eec2dd0dd1a534b219f634bbae875044f8
             </form>
         </div>
     )
