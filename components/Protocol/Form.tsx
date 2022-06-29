@@ -58,7 +58,6 @@ export const Form = ({
         updateSection(sectionEdited)
         const complete = sectionData.filter((e) => e.value === null)
         setSectionComplete(false)
-        console.log('is COMPLETE?', complete.length === 0)
         if (complete.length === 0) setSectionComplete(true)
 
         return setsectionData(newData)

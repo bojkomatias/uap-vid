@@ -62,20 +62,7 @@ export const ProtocolMetadata: Protocol = {
                     ],
                     value: [{ role: 'Director', name: '', hours: '' }],
                 },
-                {
-                    type: InputType.select,
-                    title: 'modalidad del proyecto',
-                    options: [
-                        'Proyecto regular de investigación (PRI)',
-                        'Proyecto de investigación con becados (PIB)',
-                        'Proyecto de investigación desde las cátedras (PIC)',
-                        'Proyecto de investigación institucional (PII)',
-                        'Proyecto de investigación interfacultades (PIIF)',
-                        'Proyecto I + D + i (PIDi)',
-                        'Proyecto Tesis Posgrado (PTP)',
-                    ],
-                    value: null,
-                },
+
                 {
                     type: InputType.select,
                     title: 'entre patrocinante',
@@ -100,48 +87,110 @@ export const ProtocolMetadata: Protocol = {
             data: [
                 {
                     type: InputType.select,
-                    title: 'escala temporal',
+                    title: 'modalidad del proyecto',
                     options: [
-                        '12 meses',
-                        '24 meses',
-                        '36 meses',
-                        '48 meses',
-                        '60 meses',
+                        'Proyecto regular de investigación (PRI)',
+                        'Proyecto de investigación con becados (PIB)',
+                        'Proyecto de investigación desde las cátedras (PIC)',
+                        'Proyecto de investigación institucional (PII)',
+                        'Proyecto de investigación interfacultades (PIIF)',
+                        'Proyecto I + D + i (PIDi)',
+                        'Proyecto Tesis Posgrado (PTP)',
+                    ],
+                    conditionalValues: [
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto de investigación desde las cátedras (PIC)',
+                            title: 'escala temporal',
+                            options: ['6 meses', '12 meses', '24 meses'],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto regular de investigación (PRI)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto de investigación con becados (PIB)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto de investigación institucional (PII)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto de investigación interfacultades (PIIF)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto I + D + i (PIDi)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
+                        {
+                            type: InputType.select,
+                            parent: 'Proyecto Tesis Posgrado (PTP)',
+                            title: 'escala temporal',
+                            options: [
+                                '12 meses',
+                                '24 meses',
+                                '36 meses',
+                                '48 meses',
+                                '60 meses',
+                            ],
+                            value: null,
+                        },
                     ],
                     value: null,
                 },
             ],
         },
+
         {
             sectionId: 3,
-            name: 'cronograma de tareas',
-            data: [
-                {
-                    type: InputType.table,
-                    title: 'cronograma',
-                    options: [
-                        {
-                            name: 'task',
-                            header: 'Tarea',
-                            type: InputType.text,
-                        },
-                        {
-                            name: 'date',
-                            header: 'Fecha',
-                            type: InputType.text,
-                        },
-                        {
-                            name: 'duration',
-                            header: 'Duración',
-                            type: InputType.text,
-                        },
-                    ],
-                    value: [{ task: '', date: '', duration: '' }],
-                },
-            ],
-        },
-        {
-            sectionId: 4,
             name: 'presupuesto de gastos directos',
             description: 2,
             data: [
@@ -181,7 +230,7 @@ export const ProtocolMetadata: Protocol = {
         },
 
         {
-            sectionId: 5,
+            sectionId: 4,
             name: 'descripción del proyecto',
             data: [
                 {
@@ -251,7 +300,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            sectionId: 6,
+            sectionId: 5,
             name: 'introducción del proyecto',
             data: [
                 {
@@ -277,7 +326,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            sectionId: 7,
+            sectionId: 6,
             name: 'método',
             data: [
                 {
@@ -343,7 +392,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            sectionId: 8,
+            sectionId: 7,
             name: 'publicación cientifica',
             data: [
                 {
@@ -364,7 +413,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            sectionId: 9,
+            sectionId: 8,
             name: 'lista bibliográfica preeliminar',
             data: [
                 {
@@ -392,7 +441,7 @@ export const ProtocolMetadata: Protocol = {
             ],
         },
         {
-            sectionId: 10,
+            sectionId: 9,
             name: 'curriculum del director',
             data: [
                 {

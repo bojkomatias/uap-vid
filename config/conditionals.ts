@@ -22,6 +22,41 @@ const filterMateria = (value: string) => {
     ] as Input[]
 }
 
+const createSemesterTable = (value: string) => {
+    if (!value) {
+        return [] as Input[]
+    }
+    const semesterTable = []
+    const quantity = Number(value.substring(0, 2)) / 6 // 1 per semester
+    for (let index = 0; index < quantity; index++) {
+        semesterTable.push({
+            type: InputType.table,
+            parent: 'escala temporal',
+            title: `cronograma ${index + 1}° semestre`,
+            options: [
+                {
+                    name: 'task',
+                    header: 'Tarea',
+                    type: InputType.text,
+                },
+                {
+                    name: 'date',
+                    header: 'Fecha',
+                    type: InputType.text,
+                },
+                {
+                    name: 'duration',
+                    header: 'Duración',
+                    type: InputType.text,
+                },
+            ],
+            value: [{ task: '', date: '', duration: '' }],
+        })
+    }
+
+    return semesterTable as Input[]
+}
+
 const getConditionalValues = (
     title: string,
     value: any,
@@ -38,6 +73,12 @@ const getConditionalValues = (
             return (
                 conditionalData?.filter((x: Input) => x.parent === value) || []
             )
+        case 'modalidad del proyecto':
+            return (
+                conditionalData?.filter((x: Input) => x.parent === value) || []
+            )
+        case 'escala temporal':
+            return createSemesterTable(value)
         default:
             return []
     }
