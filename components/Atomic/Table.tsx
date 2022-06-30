@@ -41,6 +41,16 @@ export default function Table({
                                 </option>
                             ))}
                         </select>
+                    ) : h.type === InputType.date ? (
+                        <input
+                            type="date"
+                            {...table.getListInputProps(
+                                'data',
+                                index,
+                                headers[i].name
+                            )}
+                            className="input"
+                        />
                     ) : (
                         <input
                             type="text"

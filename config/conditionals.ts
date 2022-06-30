@@ -40,17 +40,17 @@ const createSemesterTable = (value: string) => {
                     type: InputType.text,
                 },
                 {
-                    name: 'date',
-                    header: 'Fecha',
-                    type: InputType.text,
+                    name: 'from',
+                    header: 'Desde',
+                    type: InputType.date,
                 },
                 {
-                    name: 'duration',
-                    header: 'Duración',
-                    type: InputType.text,
+                    name: 'to',
+                    header: 'Hasta',
+                    type: InputType.date,
                 },
             ],
-            value: [{ task: '', date: '', duration: '' }],
+            value: [{ task: '', from: '', to: '' }],
         })
     }
 

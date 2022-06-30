@@ -195,18 +195,19 @@ export const ProtocolMetadata: Protocol = {
             description: 2,
             data: [
                 {
-                    type: InputType.textarea,
-                    title: 'Gastos directos',
-                    value: null,
-                },
-                {
                     type: InputType.table,
-                    title: 'insumos de laboratorio',
+                    title: 'presupuestos de gastos',
                     options: [
                         {
                             name: 'type',
                             header: 'Tipo',
-                            type: InputType.text,
+                            options: [
+                                'Insumos de laboratorio',
+                                'Libros',
+                                'Fotocopias, materiales de impresión, papelería',
+                                'Viajes',
+                            ],
+                            type: InputType.select,
                         },
                         {
                             name: 'detail',
@@ -221,7 +222,15 @@ export const ProtocolMetadata: Protocol = {
                         {
                             name: 'year',
                             header: 'Año',
-                            type: InputType.text,
+                            options: [
+                                '2022',
+                                '2023',
+                                '2024',
+                                '2025',
+                                '2026',
+                                '2027',
+                            ],
+                            type: InputType.select,
                         },
                     ],
                     value: [{ type: '', detail: '', amount: '', year: '' }],

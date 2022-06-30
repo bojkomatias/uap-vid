@@ -4,4 +4,6 @@ export enum InputType {
     textarea = 'textarea',
     table = 'table',
     select = 'select',
+    date = 'date',
+    year = 'year',
 }
