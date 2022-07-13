@@ -1,16 +1,13 @@
-import { getSession } from 'next-auth/react'
+import { getToken } from 'next-auth/jwt'
+
+const secret = process.env.NEXTAUTH_SECRET
+
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 
-export async function middleware(req: NextRequest, ev: NextFetchEvent) {
-    const requestForNextAuth = {
-        headers: {
-            cookie: req.headers.get('cookie'),
-        },
-    }
+export async function middleware(req: any, ev: NextFetchEvent) {
+    const token = await getToken({ req, secret })
 
-    const session = await getSession({ req: requestForNextAuth })
-
-    if (session) {
+    if (token) {
         return NextResponse.next()
     } else {
         // the user is not logged in, redirect to the sign-in page

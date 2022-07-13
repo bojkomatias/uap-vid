@@ -21,6 +21,6 @@
         "**/*.tsx",
         "pages/index.tsx",
         "config/exhibit.js"
-    ],
+, "pages/protected/admin/middleware.js"    ],
     "exclude": ["node_modules"]
 }
