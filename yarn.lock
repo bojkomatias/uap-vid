@@ -3617,9 +3617,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.3.4":
-  version: 4.5.0
-  resolution: "next-auth@npm:4.5.0"
+"next-auth@npm:4.10.1":
+  version: 4.10.1
+  resolution: "next-auth@npm:4.10.1"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@panva/hkdf": ^1.0.1
@@ -3637,7 +3637,7 @@ __metadata:
   peerDependenciesMeta:
     nodemailer:
       optional: true
-  checksum: b27a3337d0e89571d27c782661ef3abcfab1344885290c92e253efd22af4acad4a6a676db74466ea5fe57cfc012407a4cb4a660069a208c1ca6bc47cf172a1c8
+  checksum: 3f09fcac0058b5a74b4a8895f9162a559bb884ad2ac88939213b9ee5b5ac14a7dfd43b8540a0d20fd5f023eb14a6acc16d382d43c36e78ba05c4fef1146a25d3
   languageName: node
   linkType: hard
 
@@ -4645,7 +4645,7 @@ next@latest:
     lint-staged: ">=10"
     mongodb: ^4.6.0
     next: latest
-    next-auth: ^4.3.4
+    next-auth: 4.10.1
     postcss: ^8.4.5
     prettier: ^2.5.1
     prettier-plugin-tailwindcss: ^0.1.1
