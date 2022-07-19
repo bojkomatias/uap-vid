@@ -7,7 +7,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 export default NextAuth({
     session: {
-        jwt: true,
+        strategy: 'jwt',
     },
     providers: [
         AzureADProvider({
@@ -58,6 +58,7 @@ export default NextAuth({
     ],
     callbacks: {
         signIn: async ({ user }) => {
+            console.log('signIN**********')
             const users = await getCollections(CollectionName.Users)
             const userExist = await users.findOne({ email: user.email })
             const updateObject =
@@ -79,12 +80,14 @@ export default NextAuth({
             return true
         },
         jwt: ({ token, user }) => {
+            console.log('jwt*************')
             if (user) {
                 token.user = user
             }
             return token
         },
         session: async ({ session, token }) => {
+            console.log('session*************')
             if (token) {
                 const users = await getCollections(CollectionName.Users)
                 const user = await users.findOne({ email: token.user.email })
