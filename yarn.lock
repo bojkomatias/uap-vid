@@ -3137,9 +3137,9 @@ __metadata:
   linkType: hard
 
 "jose@npm:^4.1.4, jose@npm:^4.3.7":
-  version: 4.8.1
-  resolution: "jose@npm:4.8.1"
-  checksum: c3e239ccbb07863c28250aedea3e734e4a3b26abc1cbf6acf333381db5ef31e5d1eeced791299076f13b24f41b4b463a7a1e4eaa0079ae0febf9bfd60acb555a
+  version: 4.8.3
+  resolution: "jose@npm:4.8.3"
+  checksum: a4a03d329d3611696d94a81df06e7fe160cef987da032ecc9e0a9d1e5e751b5101d1657eed16ead5f1905c9c2009d48820538412af4e5257f205a8754dd09d31
   languageName: node
   linkType: hard
 
@@ -3617,9 +3617,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.3.4":
-  version: 4.5.0
-  resolution: "next-auth@npm:4.5.0"
+"next-auth@npm:^4.10.1":
+  version: 4.10.1
+  resolution: "next-auth@npm:4.10.1"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@panva/hkdf": ^1.0.1
@@ -3637,7 +3637,7 @@ __metadata:
   peerDependenciesMeta:
     nodemailer:
       optional: true
-  checksum: b27a3337d0e89571d27c782661ef3abcfab1344885290c92e253efd22af4acad4a6a676db74466ea5fe57cfc012407a4cb4a660069a208c1ca6bc47cf172a1c8
+  checksum: 3f09fcac0058b5a74b4a8895f9162a559bb884ad2ac88939213b9ee5b5ac14a7dfd43b8540a0d20fd5f023eb14a6acc16d382d43c36e78ba05c4fef1146a25d3
   languageName: node
   linkType: hard
 
@@ -3927,14 +3927,14 @@ next@latest:
   linkType: hard
 
 "openid-client@npm:^5.1.0":
-  version: 5.1.6
-  resolution: "openid-client@npm:5.1.6"
+  version: 5.1.8
+  resolution: "openid-client@npm:5.1.8"
   dependencies:
     jose: ^4.1.4
     lru-cache: ^6.0.0
     object-hash: ^2.0.1
     oidc-token-hash: ^5.0.1
-  checksum: 652a44a829305a60bbb581aefa3bcb1aa24af7e9dd34148a20cece52b2fdd3113eabdd3e0415bc0e488d09b53a39960c257b19acecb86adb654e17f9ab5135c0
+  checksum: e6fe2c7d7699280ec47ed18433367e6ea57969f6e1a5aa74be03ebf6011b801179c88fc42dd90dad4ed8df8529f3f56756670a2c0b8f9ccae5149036e9152bff
   languageName: node
   linkType: hard
 
@@ -4191,20 +4191,20 @@ next@latest:
   linkType: hard
 
 "preact-render-to-string@npm:^5.1.19":
-  version: 5.2.0
-  resolution: "preact-render-to-string@npm:5.2.0"
+  version: 5.2.1
+  resolution: "preact-render-to-string@npm:5.2.1"
   dependencies:
     pretty-format: ^3.8.0
   peerDependencies:
     preact: ">=10"
-  checksum: aae92b67da07c062eee682fc17081b174ce25201dd985497cb02cc3fe5892fc4264a5e967ff32d6ca747d0e40490a0c0c19eef32bea743fd8ea7c23d2e886886
+  checksum: 5702638656a5a471a3698e8535e08ff0fca98317a578b2527158026fda28a681c008cebcabdbacd76209dabd2728a90da9793bef778549d28f5d060854cc7f7a
   languageName: node
   linkType: hard
 
 "preact@npm:^10.6.3":
-  version: 10.8.0
-  resolution: "preact@npm:10.8.0"
-  checksum: f9bb56f5eebf26ca28c6efbd6a31cf89224358c3cc5d273813f02794dea9605db4b449e15af9d9c4f804c48d3cf4522f990114850e51b9e17185199e174d2c2b
+  version: 10.10.0
+  resolution: "preact@npm:10.10.0"
+  checksum: ec34f0e7a8677080debb5e7035a749d30a23694a68389e6f577e051e91a1e1014913c56845a615d1f9a4f2cd0321c46faaded4d4a0457c755d637a3a811fd69e
   languageName: node
   linkType: hard
 
@@ -4645,7 +4645,7 @@ next@latest:
     lint-staged: ">=10"
     mongodb: ^4.6.0
     next: latest
-    next-auth: ^4.3.4
+    next-auth: ^4.10.1
     postcss: ^8.4.5
     prettier: ^2.5.1
     prettier-plugin-tailwindcss: ^0.1.1
