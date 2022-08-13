@@ -28,12 +28,10 @@ export default NextAuth({
             },
             async authorize(credentials) {
                 const users = await getCollections(CollectionName.Users)
-
                 //Find user with the email
                 const result = await users.findOne({
                     email: credentials.email,
                 })
-
                 //NextAuth maneja el error
                 if (!result) {
                     throw new Error('No user found with thar email')
@@ -61,22 +59,25 @@ export default NextAuth({
             console.log('signIN**********')
             const users = await getCollections(CollectionName.Users)
             const userExist = await users.findOne({ email: user.email })
+            console.log('userExist', userExist)
             const updateObject =
                 userExist && userExist.role
                     ? { lastLogin: new Date() }
                     : { role: 'new-user', lastLogin: new Date() }
 
-            console.log(updateObject)
+            console.log('actualizamos', updateObject)
 
             if (userExist) {
                 await users.updateOne(
                     { email: user.email },
                     { $set: updateObject }
                 )
+                console.log('update')
             } else {
                 await users.insertOne({ ...user, ...updateObject })
+                console.log('insert')
             }
-
+            console.log('casi casi')
             return true
         },
         jwt: ({ token, user }) => {

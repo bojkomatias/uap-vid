@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -31,15 +32,6 @@ function SignIn() {
 
             <form
                 className="my-auto flex flex-col"
-                onSubmit={(e: any) => {
-                    e.preventDefault()
-                    console.log(process.env.NEXTAUTH_URL)
-                    signIn('credentials', {
-                        email: email,
-                        password: password,
-                        redirect: false,
-                    })
-                }}
             >
                 <div className="mx-6">
                     {' '}
@@ -59,6 +51,15 @@ function SignIn() {
 
                 <div className="mx-6 mt-4 mb-10 flex flex-col">
                     <button
+                        onClick={(e: any) => {
+                            e.preventDefault()
+                            console.log('se esta ejecutando esto nieri', process.env.NEXTAUTH_URL)
+                            signIn('credentials', {
+                                email: email,
+                                password: password,
+                                redirect: false,
+                            })
+                        }}
                         className="mb-2 border border-base-200 p-6 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
                         type="submit"
                     >
@@ -66,7 +67,11 @@ function SignIn() {
                     </button>
                     <button
                         className="flex items-center justify-center  border border-base-200 text-primary transition-all duration-200 hover:border hover:border-primary"
-                        onClick={() => signIn('azure-ad')}
+                        onClick={(e: any) => {
+                            e.preventDefault()
+                            console.log('se esta ejecutando aca', process.env.NEXTAUTH_URL)
+                            signIn('azure-ad')
+                        }}
                     >
                         <div>Iniciar sesión con</div>
                         <img
