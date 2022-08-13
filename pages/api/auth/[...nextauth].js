@@ -97,9 +97,9 @@ export default NextAuth({
             return session
         },
     },
-    secret: 'test',
+    secret: process.env.NEXTAUTH_SECRET,
     jwt: {
-        secret: 'test',
+        secret: process.env.NEXTAUTH_SECRET,
         encryption: true,
     },
 })
