@@ -27,7 +27,6 @@ export default NextAuth({
                 password: { label: 'Contraseña', type: 'password' },
             },
             async authorize(credentials) {
-                console.log('env variables', process.env)
                 const users = await getCollections(CollectionName.Users)
                 //Find user with the email
                 const result = await users.findOne({
@@ -97,5 +96,4 @@ export default NextAuth({
         secret: process.env.NEXTAUTH_SECRET,
         encryption: true,
     },
-    debug: true,
 })
