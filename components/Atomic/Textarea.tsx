@@ -1,12 +1,13 @@
-import React, { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import { useProtocolContext } from '../../config/createContext'
 
-const Input = ({
+const Textarea = ({
     path,
     x,
     label,
 }: PropsWithChildren<{ path: string; x: string; label: string }>) => {
     const form = useProtocolContext()
+
     return (
         <div className="m-3 p-1">
             <label
@@ -15,7 +16,7 @@ const Input = ({
             >
                 {label}
             </label>
-            <input
+            <textarea
                 {...form.getInputProps(path + x)}
                 className="input"
                 placeholder={label}
@@ -24,4 +25,4 @@ const Input = ({
     )
 }
 
-export default Input
+export default Textarea

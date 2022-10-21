@@ -1,53 +1,86 @@
-import { useEffect, useState } from 'react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { GetServerSideProps } from 'next'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Button } from '../../../components/Atomic/Button'
-import { Section } from '../../../config/types'
-import Stepper from '../../../components/Protocol/Stepper'
-import { Form } from '../../../components/Protocol/Form'
+import {
+    Protocol,
+    ProtocolProvider,
+    useProtocol,
+} from '../../../config/createContext'
 
-export default function ProtocolPage({
-    section,
-    protocolId,
-    protocolLength,
-}: {
-    section: Section
-    protocolId: number
-    protocolLength: number
-}) {
+import Identification from '../../../components/Sections/Identification'
+import Duration from '../../../components/Sections/Duration'
+import DirectBudget from '../../../components/Sections/DirectBudget'
+import Description from '../../../components/Sections/Description'
+import Introduction from '../../../components/Sections/Introduction'
+import Method from '../../../components/Sections/Method'
+import Publication from '../../../components/Sections/Publication'
+import Bibliography from '../../../components/Sections/Bibliography'
+import { GetServerSideProps } from 'next'
+import { Button } from '../../../components/Atomic/Button'
+import {
+    ChevronDoubleLeftIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+} from '@heroicons/react/solid'
+
+const sectionMapper = [
+    <Identification key="0" id="0" />,
+    <Duration key="1" id="1" />,
+    <DirectBudget key="2" id="2" />,
+    <Description key="3" id="3" />,
+    <Introduction key="4" id="4" />,
+    <Method key="5" id="5" />,
+    <Publication key="6" id="6" />,
+    <Bibliography key="7" id="7" />,
+]
+
+export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
-    const [isSectionComplete, setSectionComplete] = useState()
-    const refreshData = () => {
-        router.replace(router.asPath)
-    }
+    const [currentVisible, setVisible] = useState<any>('0')
+
+    const form = useProtocol({
+        initialValues: protocol,
+    })
+
     useEffect(() => {
-        setTimeout(() => {
-            setSavedEvent(false)
-        }, 3000)
-    }, [savedEvent])
+        const warningText =
+            'La pagina tiene cambios sin guardar, desea continuar de todos modos?'
+        const handleWindowClose = (e: BeforeUnloadEvent) => {
+            if (form.values == protocol) return
+            e.preventDefault()
+            return (e.returnValue = warningText)
+        }
+        const handleBrowseAway = () => {
+            if (form.values == protocol) return
+            if (window.confirm(warningText)) return
+            router.events.emit('routeChangeError')
+            throw 'routeChange aborted.'
+        }
+        window.addEventListener('beforeunload', handleWindowClose)
+        router.events.on('routeChangeStart', handleBrowseAway)
+        return () => {
+            window.removeEventListener('beforeunload', handleWindowClose)
+            router.events.off('routeChangeStart', handleBrowseAway)
+        }
+    }, [form.values])
 
-    const updateSection = async (section: Section) => {
-        let timeout
-        clearTimeout(timeout)
-        timeout = setTimeout(async () => {
-            console.log('Guardando en la DB', section)
-
-            const res = await fetch(
-                `/api/section/${protocolId}/${section?.sectionId}`,
-                {
-                    method: 'PUT',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(section),
-                }
-            )
+    const updateProtocol = async (protocol: Protocol) => {
+        const { status } = await fetch(`/api/protocol/${protocol._id}`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(protocol),
+        })
+        if (status === 200) {
             setSavedEvent(true)
-        }, 5000)
+            setTimeout(() => {
+                setSavedEvent(false)
+            }, 3000)
+        }
     }
+
     return (
         <>
             <div className="-translate-y-12 text-4xl font-bold text-primary">
@@ -62,57 +95,79 @@ export default function ProtocolPage({
                     Se han guardado los datos automáticamente en la base de
                     datos
                 </span>
-            </div>{' '}
-            <div className="flex h-full -translate-y-8 flex-col">
-                <Stepper
-                    protocolLength={protocolLength}
-                    currentSection={section?.sectionId}
-                />
+            </div>
+            <div className="flex min-h-[80vh] w-full flex-col">
+                <div className="-mt-2 mb-6 flex h-6 w-full justify-evenly">
+                    {sectionMapper.map(({ key }) => (
+                        <button
+                            key={key}
+                            className={`h-3 w-3 cursor-pointer rounded-full bg-primary-100 transition-all duration-200 ${
+                                currentVisible == key
+                                    ? 'h-4 w-4 bg-primary'
+                                    : Number(currentVisible) > Number(key)
+                                    ? 'h-3 w-3 bg-primary/80'
+                                    : ''
+                            }`}
+                            onClick={() => setVisible(key)}
+                        ></button>
+                    ))}
+                </div>
+                <div className="flex-1">
+                    <ProtocolProvider form={form}>
+                        {/* Lit todos los fields */}
+                        {sectionMapper.map((section) =>
+                            section.key == currentVisible ? section : null
+                        )}
+                    </ProtocolProvider>
+                </div>
 
-                <div className="flex min-h-[70vh] w-full items-start justify-between px-8 pb-8">
+                <div className="mt-12 mb-8 flex w-full justify-between px-10 ">
                     <Button
-                        disabled={section?.sectionId === 1}
-                        onClick={() => {
-                            router.push(
-                                `/protected/protocol/${protocolId}/${
-                                    section?.sectionId - 1
-                                }`
+                        disabled={currentVisible === '0'}
+                        onClick={() =>
+                            setVisible((prev: string) =>
+                                String(Number(prev) - 1)
                             )
-                        }}
-                        className="h-8 w-8"
+                        }
                     >
                         <ChevronLeftIcon className="h-6 w-6" />
                     </Button>
-                    <Form
-                        section={section}
-                        updateSection={updateSection}
-                        setSectionComplete={setSectionComplete}
-                    />
 
                     <Button
-                        disabled={!isSectionComplete}
+                        onClick={() => updateProtocol(form.values)}
+                        className=""
+                    >
+                        Guardar
+                    </Button>
+                    <Button
+                        disabled={currentVisible === '7'}
                         onClick={() =>
-                            router.push(
-                                `/protected/protocol/${protocolId}/${
-                                    section?.sectionId + 1
-                                }`
+                            setVisible((prev: string) =>
+                                String(Number(prev) + 1)
                             )
                         }
                     >
                         <ChevronRightIcon className="h-6 w-6" />
                     </Button>
                 </div>
+                <pre>
+                    {JSON.stringify(
+                        form.values.sections[Number(currentVisible)].data,
+                        null,
+                        2
+                    )}
+                </pre>
             </div>
         </>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const [protocolId, sectionId] = ctx.params?.params as string[]
-    const string = `${process.env.NEXTURL}/api/section/${protocolId}/${sectionId}`
+    const [protocolId] = ctx.params?.params as string[]
+    const string = `${process.env.NEXTURL}/api/protocol/${protocolId}`
     const data = await fetch(string).then((res) => res.json())
 
     return {
-        props: { ...data, protocolId },
+        props: { protocol: data },
     }
 }

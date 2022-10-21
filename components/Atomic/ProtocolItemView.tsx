@@ -1,13 +1,13 @@
 import React, { useState, PropsWithChildren } from 'react'
-import { Section } from '../../config/types'
+import { Input, Section } from '../../config/createContext'
 
-export default function Faq({
+export default function ItemView({
     dateOfCreation,
     identification,
     _id,
 }: PropsWithChildren<{
     dateOfCreation: Date
-    identification: Section
+    identification: Input
     _id: any
 }>) {
     const falseStyle =
@@ -33,7 +33,7 @@ export default function Faq({
                         }
                     >
                         <div>
-                            <p>{identification?.data[0]?.value} </p>{' '}
+                            <p>{identification.title} </p>{' '}
                             <p
                                 className={
                                     show
@@ -41,7 +41,7 @@ export default function Faq({
                                         : 'ml-1 text-sm font-normal transition-all duration-500'
                                 }
                             >
-                                Facultad: {identification?.data[5]?.value}
+                                Facultad: {identification.career}
                             </p>
                         </div>
                         <div>
@@ -75,18 +75,18 @@ export default function Faq({
                                 <div className="ml-4 w-[70%] text-sm">
                                     Carrera:{' '}
                                     <span className="underline">
-                                        {identification?.data[1]?.value}
+                                        {identification.career}
                                     </span>{' '}
                                     <br />
                                     Modalidad:{' '}
                                     <span className="underline">
                                         {' '}
-                                        {identification?.data[4]?.value}{' '}
+                                        {/* {identification.modality}{' '} */}
                                     </span>
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">
                                     <a
-                                        href={`/protected/protocol/${_id}/1`}
+                                        href={`/protected/protocol/${_id}`}
                                         className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 "
                                     >
                                         Ver todos los detalles
