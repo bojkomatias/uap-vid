@@ -10,11 +10,10 @@ export default async function handler(
     const { id } = req.query
     if (req.method === 'GET') {
         const collection = await getCollection(CollectionName.Protocols)
-        console.log(collection)
         const data = await collection.findOne({
             _id: new ObjectId(id as string),
         })
-        console.log('from API', data)
+
         if (!data) {
             res.status(404).end()
             return
