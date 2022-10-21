@@ -1,8 +1,10 @@
 import { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../config/createContext'
-import Input from '../Atomic/Input'
+
 import Select from '../Atomic/Select'
 import { motion } from 'framer-motion'
+
+import Textarea from '../Atomic/Textarea'
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 
@@ -28,11 +30,7 @@ export default function Publication({ id }: PropsWithChildren<{ id: string }>) {
                     options={results}
                     label="Resultado de la investigación"
                 />
-                <Input
-                    path={path}
-                    x="plan"
-                    label="Plan para publicación de la investigación"
-                />
+                <Textarea path={path} x="plan" label="Plan" />
             </div>
         </motion.div>
     )

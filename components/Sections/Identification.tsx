@@ -8,11 +8,13 @@ import Table from '../Atomic/Table'
 import { motion } from 'framer-motion'
 
 const careers = full.map((x) => x.career)
+// conditional
 const assignments = (v: any) =>
     full
         .filter((x) => x.career === v)
         .map((x) => x.assignment)
         .flat()
+
 const sponsors = [
     'Facultad de Ciencias Económicas y de la Administración (FACEA)',
     'Facultad de Ciencias de la Salud (FCS)',
@@ -83,13 +85,16 @@ export default function Identification({
                     x="career"
                     options={careers}
                     label="carrera"
+                    conditionalCleanup={() =>
+                        (form.values.sections[Number(id)].data.assignment = '')
+                    }
                 />
                 <Select
                     path={path}
                     x="assignment"
                     label="materia"
                     options={assignments(
-                        form.values.sections[Number(id)].data.carrera
+                        form.values.sections[Number(id)].data.career
                     )}
                 />
                 <Table

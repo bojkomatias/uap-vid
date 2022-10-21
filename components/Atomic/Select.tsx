@@ -1,8 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Combobox } from '@headlessui/react'
-import { InputType } from '../../config/enums'
-import { Input as InputT } from '../../config/types'
 import { useProtocolContext } from '../../config/createContext'
 
 function classNames(...classes: any) {
@@ -14,11 +12,13 @@ export default function Select({
     x,
     label,
     options,
+    conditionalCleanup = () => null,
 }: PropsWithChildren<{
     path: string
     x: string
     label: string
     options: any
+    conditionalCleanup?: Function
 }>) {
     const form = useProtocolContext()
     const [query, setQuery] = useState('')
@@ -43,7 +43,10 @@ export default function Select({
                     <Combobox.Input
                         className="input"
                         placeholder={label}
-                        onChange={(e) => setQuery(e.target.value)}
+                        onChange={(e) => {
+                            setQuery(e.target.value)
+                            conditionalCleanup()
+                        }}
                     />
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                         <SelectorIcon

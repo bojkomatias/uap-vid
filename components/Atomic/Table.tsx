@@ -1,12 +1,9 @@
 import { TrashIcon, PlusIcon } from '@heroicons/react/outline'
-
-import { Fragment, PropsWithChildren, useEffect } from 'react'
-import { InputType } from '../../config/enums'
-import { Input as InputT } from '../../config/types'
+import { Fragment, PropsWithChildren } from 'react'
 import Input from './Input'
-import gsap from 'gsap'
 import { useProtocolContext } from '../../config/createContext'
 import Select from './Select'
+import { Button } from './Button'
 
 export default function Table({
     path,
@@ -26,9 +23,9 @@ export default function Table({
     const form = useProtocolContext()
 
     const fields = toMap.map((_: any, index: any) => (
-        <div key={index} className="flex w-full gap-3">
+        <div key={index} className="flex w-full justify-around">
             {headers.map((h: any, i: number) => (
-                <Fragment key={i}>
+                <div className="flex-grow" key={i}>
                     {h.options ? (
                         <Select
                             options={h.options}
@@ -43,42 +40,38 @@ export default function Table({
                             label={h.label}
                         />
                     )}
-                </Fragment>
+                </div>
             ))}
 
             <TrashIcon
                 onClick={() => form.removeListItem(path + x, index)}
-                className="h-6 flex-grow cursor-pointer self-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
+                className="mr-3 h-6 flex-shrink cursor-pointer self-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
             />
         </div>
     ))
 
     return (
-        <div className="p-4">
-            {fields.length > 0 ? (
-                <div className=" text-xs font-thin uppercase text-base-600">
-                    {label}
-                </div>
-            ) : (
-                <div className="text-sm text-primary">
-                    La lista esta vacía...
-                </div>
-            )}
+        <div className="p-2">
+            <div className="text-center text-xs font-thin uppercase text-base-600">
+                {fields.length > 0 ? (
+                    label
+                ) : (
+                    <span className="mx-auto ml-24 text-primary">
+                        La lista esta vacía ...
+                    </span>
+                )}
+            </div>
 
             {fields}
-            <a
+            <Button
                 onClick={() =>
                     form.insertListItem(path + x, insertedItemFormat)
                 }
-                className="cursor-pointer"
+                className="mx-auto my-2 w-1/3 cursor-pointer justify-center gap-2 text-xs"
             >
-                <div className="group mx-4 mt-3 flex items-center justify-center gap-2 bg-base-100 py-2 transition-all duration-200 hover:bg-primary">
-                    <p className="my-auto text-sm font-extrabold text-primary transition-all duration-200  group-hover:text-white">
-                        Añadir otra fila
-                    </p>
-                    <PlusIcon className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />
-                </div>
-            </a>
+                <p> Añadir otra fila </p>
+                <PlusIcon className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />
+            </Button>
         </div>
     )
 }

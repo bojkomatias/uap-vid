@@ -34,7 +34,15 @@ export const initialProtocolValues = {
                 sponsor: '',
             },
         },
-        { id: 1, name: 'duración', data: { modality: '', duration: '' } },
+        {
+            id: 1,
+            name: 'duración',
+            data: {
+                modality: '',
+                duration: '',
+                chronogram: [],
+            },
+        },
         {
             id: 2,
             name: 'presupuesto de gastos directos',
@@ -77,6 +85,14 @@ export const initialProtocolValues = {
             data: {
                 type: '',
                 // conditionals
+                detail: '',
+                design: '',
+                participants: '',
+                place: '',
+                instruments: '',
+                procedures: '',
+                analysis: '',
+                considerations: '',
             },
         },
         {
