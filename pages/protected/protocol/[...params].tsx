@@ -150,13 +150,6 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
                         <ChevronRightIcon className="h-6 w-6" />
                     </Button>
                 </div>
-                <pre>
-                    {JSON.stringify(
-                        form.values.sections[Number(currentVisible)].data,
-                        null,
-                        2
-                    )}
-                </pre>
             </div>
         </>
     )
