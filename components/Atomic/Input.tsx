@@ -1,22 +1,27 @@
 import React, { PropsWithChildren } from 'react'
-import { Input } from '../../config/types'
+import { useProtocolContext } from '../../config/createContext'
 
 const Input = ({
-    input,
-    updateData,
-}: PropsWithChildren<{ input: Input; updateData: Function }>) => {
+    path,
+    x,
+    label,
+}: PropsWithChildren<{ path: string; x: string; label: string }>) => {
+    const form = useProtocolContext()
     return (
-        <input
-            placeholder={input.title}
-            type={input.type}
-            name={input.title}
-            defaultValue={input.value}
-            required
-            onChange={async (e) =>
-                updateData({ ...input, value: e.target.value })
-            }
-            className="input"
-        />
+        <div className="m-3 p-1">
+            <label
+                className={`text-[0.6rem] font-thin uppercase 
+                            text-base-700/80`}
+            >
+                {label}
+            </label>
+            <input
+                required
+                {...form.getInputProps(path + x)}
+                className="input"
+                placeholder={label}
+            />
+        </div>
     )
 }
 
