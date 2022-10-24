@@ -1,108 +1,80 @@
 import { TrashIcon, PlusIcon } from '@heroicons/react/outline'
-import { useForm, formList } from '@mantine/form'
-import { Fragment, PropsWithChildren, useEffect } from 'react'
-import { InputType } from '../../config/enums'
-import { Input as InputT } from '../../config/types'
+import { Fragment, PropsWithChildren } from 'react'
 import Input from './Input'
-import gsap from 'gsap'
+import { useProtocolContext } from '../../config/createContext'
+import Select from './Select'
+import { Button } from './Button'
 
 export default function Table({
-    data,
-    updateData,
-}: PropsWithChildren<{ data: InputT; updateData: Function }>) {
-    const headers = data.options.map((option: any) => option)
-    const table = useForm({
-        initialValues: {
-            data: formList<any>(data.value),
-        },
-    })
+    path,
+    x,
+    label,
+    headers,
+    insertedItemFormat,
+    toMap,
+}: PropsWithChildren<{
+    path: string
+    x: string
+    label: string
+    headers: { x: string; label: string; options?: string[] }[]
+    insertedItemFormat: any
+    toMap: any
+}>) {
+    const form = useProtocolContext()
 
-    useEffect(() => {
-        updateData({ ...data, value: table.values.data })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [table.values])
-
-    const fields = table.values.data.map((_, index) => (
-        <div key={index} className="my-2 flex w-full gap-3 ">
+    const fields = toMap.map((_: any, index: any) => (
+        <div key={index} className="flex w-full items-start justify-around ">
             {headers.map((h: any, i: number) => (
-                <Fragment key={i}>
-                    {h.type === InputType.select ? (
-                        <select
-                            className="input"
-                            {...table.getListInputProps(
-                                'data',
-                                index,
-                                headers[i].name
-                            )}
-                        >
-                            {h.options.map((option: any, index: number) => (
-                                <option key={index} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                    ) : h.type === InputType.date ? (
-                        <input
-                            type="date"
-                            {...table.getListInputProps(
-                                'data',
-                                index,
-                                headers[i].name
-                            )}
-                            className="input"
+                <div className="flex-grow" key={i}>
+                    {h.options ? (
+                        <Select
+                            options={h.options}
+                            path={`${path}${x}.${index}.`}
+                            x={h.x}
+                            label={h.label}
                         />
                     ) : (
-                        <input
-                            type="text"
-                            {...table.getListInputProps(
-                                'data',
-                                index,
-                                headers[i].name
-                            )}
-                            className="input"
+                        <Input
+                            path={`${path}${x}.${index}.`}
+                            x={h.x}
+                            label={h.label}
                         />
                     )}
-                </Fragment>
+                </div>
             ))}
 
             <TrashIcon
-                onClick={() => table.removeListItem('data', index)}
-                className="my-auto w-24 flex-grow cursor-pointer items-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
+                onClick={() => form.removeListItem(path + x, index)}
+                className="mr-3 h-6 flex-shrink cursor-pointer self-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
             />
         </div>
     ))
 
     return (
-        <div>
-            {fields.length > 0 ? (
-                <div className="flex justify-evenly capitalize ">
-                    {headers.map((header: any, index: any) => (
-                        <span
-                            key={index}
-                            className="text-md font-extrabold text-primary xl:w-[256px]"
-                        >
-                            {header.header}
+        <div className="p-2">
+            <div className="text-center text-xs font-thin uppercase text-base-600">
+                {fields.length > 0 ? (
+                    label
+                ) : (
+                    <div className="flex flex-col gap-2">
+                        <div>{label}</div>
+                        <span className="mx-auto text-primary transition-all duration-150">
+                            La lista esta vacía ...
                         </span>
-                    ))}
-                </div>
-            ) : (
-                <div className="text-sm font-extrabold text-primary">
-                    La lista esta vacia...
-                </div>
-            )}
+                    </div>
+                )}
+            </div>
 
             {fields}
-            <a
-                onClick={() => table.addListItem('data', data.value[0])}
-                className="cursor-pointer"
+            <Button
+                onClick={() =>
+                    form.insertListItem(path + x, insertedItemFormat)
+                }
+                className="mx-auto my-2 w-1/3 cursor-pointer justify-center gap-2 text-xs"
             >
-                <div className="group mt-5 flex items-center justify-center gap-2 bg-base-100 py-2 transition-all duration-200 hover:bg-primary">
-                    <p className="my-auto text-sm font-extrabold text-primary transition-all duration-200  group-hover:text-white">
-                        Añadir otra fila
-                    </p>
-                    <PlusIcon className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />
-                </div>
-            </a>
+                <p> Añadir otra fila </p>
+                <PlusIcon className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />
+            </Button>
         </div>
     )
 }

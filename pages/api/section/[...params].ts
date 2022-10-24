@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import { Protocol, Section } from '../../../config/types'
+import { Protocol, Section } from '../../../config/createContext'
 import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
 
 export default async function handler(
@@ -23,42 +23,42 @@ export default async function handler(
         })
     }
 
-    //Section number is to high or too low
-    const protocolHasntSection = !protocol.data.some(
-        (x) => x.sectionId === sectionId
-    )
-    if (protocolHasntSection || sectionId <= 0) {
-        return res.status(404).json({
-            protocolId,
-            sectionId,
-            message: `We found the protocol: ${protocolId}, but just have ${protocol.data.length} sections.`,
-            protocol,
-        })
-    }
+    // //Section number is to high or too low
+    // const protocolHasntSection = !protocol.data.some(
+    //     (x) => x.sectionId === sectionId
+    // )
+    // if (protocolHasntSection || sectionId <= 0) {
+    //     return res.status(404).json({
+    //         protocolId,
+    //         sectionId,
+    //         message: `We found the protocol: ${protocolId}, but just have ${protocol.data.length} sections.`,
+    //         protocol,
+    //     })
+    // }
 
-    try {
-        if (req.method === 'GET') {
-            res.status(200).json({
-                protocolLength: protocol.data.length,
-                section: protocol?.data.find((x) => x.sectionId === sectionId),
-            })
-        }
+    // try {
+    //     if (req.method === 'GET') {
+    //         res.status(200).json({
+    //             protocolLength: protocol.data.length,
+    //             section: protocol?.data.find((x) => x.sectionId === sectionId),
+    //         })
+    //     }
 
-        if (req.method === 'PUT') {
-            const section = req.body
+    //     if (req.method === 'PUT') {
+    //         const section = req.body
 
-            const updated = await updateSection(protocolId, sectionId, section)
+    //         const updated = await updateSection(protocolId, sectionId, section)
 
-            if (updated.modifiedCount === 0) {
-                res.status(404).end()
-                return
-            }
-            return res.status(200).json({ sucess: true })
-        }
-    } catch (e) {
-        const error = e as Error
-        return res.status(500).json(e)
-    }
+    //         if (updated.modifiedCount === 0) {
+    //             res.status(404).end()
+    //             return
+    //         }
+    //         return res.status(200).json({ sucess: true })
+    //     }
+    // } catch (e) {
+    //     const error = e as Error
+    //     return res.status(500).json(e)
+    // }
 }
 
 const updateSection = async (
@@ -75,7 +75,7 @@ const updateSection = async (
 
     const result = await collection.updateOne(
         filter,
-        { $set: { 'data.$': section, updatedAt:Date.now() } },
+        { $set: { 'data.$': section, updatedAt: Date.now() } },
         {
             upsert: true,
         }

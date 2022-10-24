@@ -2,6 +2,7 @@
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { showNotification } from '@mantine/notifications'
 import { Button } from '../components/Atomic/Button'
 
 function SignIn() {
@@ -30,9 +31,7 @@ function SignIn() {
                 </div>
             </div>
 
-            <form
-                className="my-auto flex flex-col"
-            >
+            <form className="my-auto flex flex-col">
                 <div className="mx-6">
                     {' '}
                     <input
@@ -53,11 +52,26 @@ function SignIn() {
                     <button
                         onClick={(e: any) => {
                             e.preventDefault()
-                            console.log('se esta ejecutando esto nieri', process.env.NEXTAUTH_URL)
+                            console.log(
+                                'se esta ejecutando esto nieri',
+                                process.env.NEXTAUTH_URL
+                            )
+
                             signIn('credentials', {
                                 email: email,
                                 password: password,
                                 redirect: false,
+                            }).then(({ ok, error }) => {
+                                if (ok) {
+                                    console.log('inicio de sesión exitoso')
+                                } else {
+                                    showNotification({
+                                        title: 'No se pudo iniciar sesión',
+                                        message: 'Credenciales inválidas',
+                                        color: 'red',
+                                    })
+                                    console.log(error)
+                                }
                             })
                         }}
                         className="mb-2 border border-base-200 p-6 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
@@ -69,7 +83,10 @@ function SignIn() {
                         className="flex items-center justify-center  border border-base-200 text-primary transition-all duration-200 hover:border hover:border-primary"
                         onClick={(e: any) => {
                             e.preventDefault()
-                            console.log('se esta ejecutando aca', process.env.NEXTAUTH_URL)
+                            console.log(
+                                'se esta ejecutando aca',
+                                process.env.NEXTAUTH_URL
+                            )
                             signIn('azure-ad')
                         }}
                     >

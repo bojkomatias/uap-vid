@@ -9,20 +9,16 @@
 }
 
 .shadowInner {
-    -webkit-box-shadow: inset 5px 5px 11px -10px rgba(0, 0, 0, 0.38);
-    box-shadow: inset 5px 5px 11px -10px rgba(0, 0, 0, 0.38);
+    -webkit-box-shadow: inset 5px 5px 10px -10px rgba(0, 0, 0, 0.38);
+    box-shadow: inset 5px 5px 10px -10px rgba(0, 0, 0, 0.38);
 }
 
 @layer components {
     .input {
-        @apply shadowInner w-full self-start p-3 py-2 pl-3 pr-10 shadow-inner placeholder:text-xs placeholder:uppercase focus:outline-none;
+        @apply w-full self-start p-3 py-2 pl-3 pr-10 shadow-inner ring-1 ring-base-800/5 placeholder:text-xs placeholder:uppercase focus:outline-none;
     }
 }
 
 html {
     overflow-x: hidden;
 }
-
-/* .mantine-Text-root {
-    font-size: large;
-} */

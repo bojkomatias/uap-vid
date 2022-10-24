@@ -1,13 +1,13 @@
 import { Button } from '../../components/Atomic/Button'
 import { useRouter } from 'next/router'
-import { ProtocolMetadata } from '../../config/metadata'
 import { useSession } from 'next-auth/react'
+import { initialProtocolValues } from '../../config/createContext'
+import Modal from '../../components/Atomic/Modal'
+import { ClipboardPlus } from 'tabler-icons-react'
+import { useState } from 'react'
 
 export default function Page() {
     const { data: session } = useSession()
-
-    console.log(session)
-
     const content = [
         {
             title: 'Postulación proyecto de investigación',
@@ -26,7 +26,7 @@ export default function Page() {
                 </svg>
             ),
             url: '/protocol/p',
-            action: () => createNewProtocol(),
+            action: () => setShowNewProtocolModal(true),
             roles: [
                 'new-user',
                 'Investigador',
@@ -128,7 +128,7 @@ export default function Page() {
                     />
                 </svg>
             ),
-            url: '/protected/projects',
+            url: '/protected/protocol',
             roles: [
                 'new-user',
                 'Investigador',
@@ -187,11 +187,14 @@ export default function Page() {
         },
     ]
     const router = useRouter()
+    const [showNewProtocolModal, setShowNewProtocolModal] = useState(false)
     const redirectToProtocol = (id: string) => {
-        router.push(`/protected/protocol/${id}/1`)
+        router.push(`/protected/protocol/${id}`)
     }
-    const createNewProtocol = async () => {
-        const protocol = ProtocolMetadata
+    const createNewProtocol = async (title: string) => {
+        const protocol = initialProtocolValues
+        protocol.sections[0].data.title = title
+
         const res = await fetch('/api/protocol', {
             method: 'POST',
             mode: 'cors',
@@ -211,16 +214,16 @@ export default function Page() {
                 Inicio
             </div>
             <div className="mt-12 flex h-full -translate-y-12 items-center justify-around">
-                <div className="my-auto flex min-h-[70vh] w-1/3 cursor-pointer flex-col justify-center text-center font-bold text-primary ">
+                <div className="my-auto flex min-h-[70vh] w-1/2 cursor-pointer flex-col justify-center text-center font-bold text-primary ">
                     {content.map((item) =>
                         item.roles.includes(session?.user?.role) ? (
                             item.action ? (
-                                <a key={item.title} onClick={item.action}>
+                                <span key={item.title} onClick={item.action}>
                                     <div className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
                                         {item.icon}
                                         <p className="mx-auto"> {item.title}</p>
                                     </div>
-                                </a>
+                                </span>
                             ) : (
                                 <a key={item.title} href={item.url}>
                                     <div className=" mt-8 flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]">
@@ -232,6 +235,40 @@ export default function Page() {
                         ) : null
                     )}
                 </div>
+                <Modal
+                    open={showNewProtocolModal}
+                    icon={<ClipboardPlus className="h-6 w-6 text-primary" />}
+                    title="Crear nueva postulación"
+                >
+                    <form
+                        onSubmit={(e) => {
+                            if (showNewProtocolModal) {
+                                e.preventDefault()
+                                createNewProtocol(e.target[0].value)
+                            }
+                        }}
+                    >
+                        <input
+                            type="text"
+                            placeholder="Titulo"
+                            className="input"
+                        />
+                        <div className="mt-3 flex text-right">
+                            <Button
+                                className="my-2 bg-primary/90 text-xs font-semibold text-white"
+                                type="submit"
+                            >
+                                Crear
+                            </Button>
+                            <Button
+                                className=" my-2 ml-2 text-xs text-base-600 hover:bg-base-200 hover:text-primary"
+                                onClick={() => setShowNewProtocolModal(false)}
+                            >
+                                Cancelar
+                            </Button>
+                        </div>
+                    </form>
+                </Modal>
             </div>
         </>
     )
