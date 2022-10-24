@@ -21,12 +21,6 @@ export default function profile() {
                     </div>
                 </div>
             </div>
-            <button
-                className="mr-16 mb-10 self-end p-4 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
-                onClick={() => signOut()}
-            >
-                Cerrar sesión
-            </button>
         </>
     )
 }
