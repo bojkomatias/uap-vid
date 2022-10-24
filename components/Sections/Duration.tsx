@@ -86,7 +86,7 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
                     </div>
                 </div>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Select
                     path={path}
                     x="modality"

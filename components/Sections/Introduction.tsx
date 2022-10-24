@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../config/createContext'
 import Input from '../Atomic/Input'
 import { motion } from 'framer-motion'
-
+import { useForm } from '@mantine/hooks'
 
 export default function Introduction({
     id,
@@ -21,7 +21,7 @@ export default function Introduction({
                     {form.values.sections[Number(id)].name}
                 </span>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Input
                     path={path}
                     x="state"

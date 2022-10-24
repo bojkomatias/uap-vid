@@ -4,7 +4,6 @@ import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import { motion } from 'framer-motion'
 
-
 const disciplines = ['Ejemplo anexo A', 'Ética y responsabilidad social']
 const lines = [
     'Ejemplo anexo A',
@@ -53,7 +52,7 @@ export default function Description({ id }: PropsWithChildren<{ id: string }>) {
                     {form.values.sections[Number(id)].name}
                 </span>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Select
                     path={path}
                     x="discipline"

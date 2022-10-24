@@ -7,10 +7,10 @@ export default function profile() {
     return (
         <>
             <div className="grow">
-                <div className=" -translate-y-12 text-4xl font-bold text-primary">
+                <div className=" -translate-y-12 text-4xl font-bold text-primary ">
                     Perfil
                 </div>
-                <div className="flex h-full -translate-y-8 flex-col p-20 text-primary">
+                <div className="flex h-full -translate-y-8 flex-col p-20 text-primary ">
                     <div className="flex  flex-col">
                         <div className="text-3xl">
                             Email: {session?.user?.email}

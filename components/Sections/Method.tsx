@@ -40,7 +40,11 @@ const conditionalByType = (v: string, path: any) => {
     if (v === 'Investigaciones de tipo teóricas')
         return (
             <>
-                <Textarea path={path} x="detail" label="Detalle de metodología" />
+                <Textarea
+                    path={path}
+                    x="detail"
+                    label="Detalle de metodología"
+                />
             </>
         )
 }
@@ -60,7 +64,7 @@ export default function Method({ id }: PropsWithChildren<{ id: string }>) {
                     {form.values.sections[Number(id)].name}
                 </span>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Select
                     path={path}
                     x="type"

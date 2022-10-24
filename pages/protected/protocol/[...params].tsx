@@ -96,8 +96,8 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
                     datos
                 </span>
             </div>
-            <div className="flex min-h-[80vh] w-full flex-col">
-                <div className="-mt-2 mb-6 flex h-6 w-full justify-evenly">
+            <div className="mx-auto flex min-h-[80vh] w-full flex-col">
+                <div className="flex h-6 w-full items-center justify-center gap-16 p-5">
                     {sectionMapper.map(({ key }) => (
                         <button
                             key={key}

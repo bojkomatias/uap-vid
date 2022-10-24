@@ -23,7 +23,7 @@ export default function Publication({ id }: PropsWithChildren<{ id: string }>) {
                     {form.values.sections[Number(id)].name}
                 </span>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Select
                     path={path}
                     x="result"

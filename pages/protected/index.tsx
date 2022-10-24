@@ -242,8 +242,10 @@ export default function Page() {
                 >
                     <form
                         onSubmit={(e) => {
-                            e.preventDefault()
-                            createNewProtocol(e.target[0].value)
+                            if (showNewProtocolModal) {
+                                e.preventDefault()
+                                createNewProtocol(e.target[0].value)
+                            }
                         }}
                     >
                         <input
@@ -251,18 +253,18 @@ export default function Page() {
                             placeholder="Titulo"
                             className="input"
                         />
-                        <div className="mt-3 text-right">
+                        <div className="mt-3 flex text-right">
                             <Button
-                                className="mr-2 text-xs text-base-600 hover:bg-base-200 hover:text-primary"
-                                onClick={() => setShowNewProtocolModal(false)}
-                            >
-                                Cancelar
-                            </Button>
-                            <Button
-                                className="bg-primary/90 text-xs font-semibold text-white"
+                                className="my-2 bg-primary/90 text-xs font-semibold text-white"
                                 type="submit"
                             >
                                 Crear
+                            </Button>
+                            <Button
+                                className=" my-2 ml-2 text-xs text-base-600 hover:bg-base-200 hover:text-primary"
+                                onClick={() => setShowNewProtocolModal(false)}
+                            >
+                                Cancelar
                             </Button>
                         </div>
                     </form>

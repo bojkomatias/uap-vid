@@ -3,7 +3,6 @@ import { QuestionMark } from 'tabler-icons-react'
 import { useProtocolContext } from '../../config/createContext'
 import { motion } from 'framer-motion'
 
-
 import Table from '../Atomic/Table'
 
 export default function DirectBudget({
@@ -56,7 +55,7 @@ export default function DirectBudget({
                     </div>
                 </div>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Table
                     path={path}
                     x="expenses"

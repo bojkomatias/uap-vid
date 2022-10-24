@@ -23,7 +23,7 @@ export default function Table({
     const form = useProtocolContext()
 
     const fields = toMap.map((_: any, index: any) => (
-        <div key={index} className="flex w-full justify-around">
+        <div key={index} className="flex w-full items-start justify-around ">
             {headers.map((h: any, i: number) => (
                 <div className="flex-grow" key={i}>
                     {h.options ? (
@@ -56,9 +56,12 @@ export default function Table({
                 {fields.length > 0 ? (
                     label
                 ) : (
-                    <span className="mx-auto ml-24 text-primary">
-                        La lista esta vacía ...
-                    </span>
+                    <div className="flex flex-col gap-2">
+                        <div>{label}</div>
+                        <span className="mx-auto text-primary transition-all duration-150">
+                            La lista esta vacía ...
+                        </span>
+                    </div>
                 )}
             </div>
 

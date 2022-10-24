@@ -78,7 +78,7 @@ export default function Identification({
                     </div>
                 </div>
             </div>
-            <div className="mx-6 mt-5 max-w-[1120px]">
+            <div className="mx-auto mt-5 max-w-[1120px]">
                 <Input path={path} x="title" label="titulo" />
                 <Select
                     path={path}
