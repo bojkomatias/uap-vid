@@ -1,4 +1,5 @@
 import { createFormContext } from '@mantine/form'
+import { useForm } from '@mantine/form'
 
 export interface Input {
     [title: string]: any
@@ -27,8 +28,8 @@ export const initialProtocolValues = {
             id: 0,
             name: 'identificación',
             data: {
-                title: '',
-                career: '',
+                title: '1',
+                career: 'Hola',
                 assignment: '',
                 team: [{ role: '', name: '', hours: '' }],
                 sponsor: '',
@@ -119,6 +120,10 @@ export const validate = {
             title: (value: any, _: any, path: any) =>
                 path == 'sections.0.data.title' && value.length < 6
                     ? 'El titulo debe tener mínimo 6 caracteres'
+                    : null,
+            hours: (value: any, _: any, path: any) =>
+                path == 'sections.0.data.team.hours' && typeof value != Number
+                    ? 'Este campo debe contener un número'
                     : null,
         },
     },
