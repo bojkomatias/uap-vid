@@ -122,7 +122,7 @@ export const validate = {
                     ? 'El titulo debe tener mínimo 6 caracteres'
                     : null,
             hours: (value: any, _: any, path: any) =>
-                path == 'sections.0.data.team.hours' && typeof value != Number
+                path == 'sections.0.data.team.hours' && value.type != Number
                     ? 'Este campo debe contener un número'
                     : null,
         },
