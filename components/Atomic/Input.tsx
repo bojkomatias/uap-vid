@@ -24,6 +24,7 @@ const Input = ({
                 {...form.getInputProps(path + x)}
                 className="input"
                 placeholder={label}
+                autoComplete="off"
             />
             {form.errors[path + x] ? (
                 <p className="text-error-600 border-t-2 pt-1 pl-3 text-xs saturate-[80%]">

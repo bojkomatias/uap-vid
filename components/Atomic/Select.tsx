@@ -41,6 +41,7 @@ export default function Select({
             <Combobox as="div" {...form.getInputProps(path + x)}>
                 <div className="relative mt-1">
                     <Combobox.Input
+                        autoComplete="off"
                         className="input"
                         placeholder={label}
                         onChange={(e) => {
