@@ -1,8 +1,11 @@
 import ItemView from '../../../components/Atomic/ProtocolItemView'
 import { GetServerSideProps } from 'next'
 import { Protocol } from '../../../config/createContext'
+import { PropsWithChildren } from 'react'
 
-export default function projects({ protocols }: any) {
+export default function projects({
+    protocols,
+}: PropsWithChildren<{ protocols: Protocol[] }>) {
     console.log(protocols)
     return (
         <div className="transition-all duration-200">
@@ -31,7 +34,7 @@ export default function projects({ protocols }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const string = `${process.env.NEXTURL}/api/protocol/`
+    const string = `${process.env.NEXTURL}/api/protocol`
     const data = await fetch(string).then((res) => res.json())
     // const protocols = data
     //     .map((p: Protocol) => {

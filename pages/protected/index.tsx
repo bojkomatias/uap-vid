@@ -249,6 +249,7 @@ export default function Page() {
                         }}
                     >
                         <input
+                            required
                             type="text"
                             placeholder="Titulo"
                             className="input"

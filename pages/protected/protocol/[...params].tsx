@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
     Protocol,
     ProtocolProvider,
     useProtocol,
+    validate,
 } from '../../../config/createContext'
-
 import Identification from '../../../components/Sections/Identification'
 import Duration from '../../../components/Sections/Duration'
 import DirectBudget from '../../../components/Sections/DirectBudget'
@@ -16,11 +16,7 @@ import Publication from '../../../components/Sections/Publication'
 import Bibliography from '../../../components/Sections/Bibliography'
 import { GetServerSideProps } from 'next'
 import { Button } from '../../../components/Atomic/Button'
-import {
-    ChevronDoubleLeftIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-} from '@heroicons/react/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
 const sectionMapper = [
     <Identification key="0" id="0" />,
@@ -40,6 +36,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
 
     const form = useProtocol({
         initialValues: protocol,
+        validate: validate,
     })
 
     useEffect(() => {
@@ -138,6 +135,15 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
                         className=""
                     >
                         Guardar
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            form.validate()
+                            console.log(form.errors)
+                        }}
+                        className=""
+                    >
+                        Validar
                     </Button>
                     <Button
                         disabled={currentVisible === '7'}

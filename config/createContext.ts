@@ -112,3 +112,11 @@ export const initialProtocolValues = {
         },
     ],
 }
+
+export const validate = {
+    sections: {
+        data: {
+            title: (value: string) => console.log('Valiting,', value),
+        },
+    },
+}
