@@ -116,7 +116,10 @@ export const initialProtocolValues = {
 export const validate = {
     sections: {
         data: {
-            title: (value: string) => console.log('Valiting,', value),
+            title: (value: any, _: any, path: any) =>
+                path == 'sections.0.data.title' && value.length < 6
+                    ? 'El titulo debe tener mínimo 6 caracteres'
+                    : null,
         },
     },
 }
