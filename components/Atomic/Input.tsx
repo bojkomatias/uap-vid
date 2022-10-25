@@ -5,11 +5,13 @@ const Input = ({
     path,
     x,
     label,
+    icon = true,
 }: PropsWithChildren<{
     path: string
     x: string
     label: string
     error?: string
+    icon: boolean
 }>) => {
     const form = useProtocolContext()
     return (
@@ -22,12 +24,12 @@ const Input = ({
             </label>
             <input
                 {...form.getInputProps(path + x)}
-                className="input"
+                className={`input`}
                 placeholder={label}
                 autoComplete="off"
             />
             {form.errors[path + x] ? (
-                <p className="text-error-600 border-t-2 pt-1 pl-3 text-xs saturate-[80%]">
+                <p className=" pt-1 pl-3 text-xs text-secondary-600 saturate-[80%]">
                     *{form.errors[path + x]}
                 </p>
             ) : null}

@@ -1,8 +1,7 @@
 import { createFormContext } from '@mantine/form'
-import { useForm } from '@mantine/form'
 
 export interface Input {
-    [title: string]: any
+    [key: string]: any
 }
 
 export interface Section {
@@ -121,10 +120,27 @@ export const validate = {
                 path == 'sections.0.data.title' && value.length < 6
                     ? 'El titulo debe tener mínimo 6 caracteres'
                     : null,
-            hours: (value: any, _: any, path: any) =>
-                path == 'sections.0.data.team.hours' && value.type != Number
-                    ? 'Este campo debe contener un número'
+            career: (value: any, _: any, path: any) =>
+                path == 'sections.0.data.career' && value.length > 6
+                    ? 'El titulo debe tener mínimo 6 caracteres'
                     : null,
+            team: {
+                role: (value: any, _: any, path: any) =>
+                    path.match(/sections.0.data.team.[0-99].name/) &&
+                    value.length < 1
+                        ? 'Este campo no puede estar vacío'
+                        : null,
+                name: (value: any, _: any, path: any) =>
+                    path.match(/sections.0.data.team.[0-99].name/) &&
+                    value.length < 1
+                        ? 'Este campo no puede estar vacío'
+                        : null,
+                hours: (value: any, _: any, path: any) =>
+                    path.match(/sections.0.data.team.[0-99].hours/) &&
+                    value.match(/^[0-9]*$/)
+                        ? null
+                        : 'Este campo debe contener un número',
+            },
         },
     },
 }

@@ -40,25 +40,27 @@ export default function Select({
             </label>
             <Combobox as="div" {...form.getInputProps(path + x)}>
                 <div className="relative mt-1">
-                    <Combobox.Input
-                        autoComplete="off"
-                        className="input"
-                        placeholder={label}
-                        onChange={(e) => {
-                            setQuery(e.target.value)
-                            conditionalCleanup()
-                        }}
-                    />
-                    {form.errors[path + x] ? (
-                        <p className="text-error-600 border-t-2 pt-1 pl-3 text-xs saturate-[80%]">
-                            *{form.errors[path + x]}
-                        </p>
-                    ) : null}
-                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
-                        <SelectorIcon
-                            className="h-5 w-5 text-primary transition-all duration-200 hover:text-base-400"
-                            aria-hidden="true"
+                    <Combobox.Button className="w-full">
+                        <Combobox.Input
+                            autoComplete="off"
+                            className="input"
+                            placeholder={label}
+                            onChange={(e) => {
+                                setQuery(e.target.value)
+                                conditionalCleanup()
+                            }}
                         />
+                        {form.errors[path + x] ? (
+                            <p className="border-t-2 pt-1 pl-3 text-xs text-error-600 saturate-[80%]">
+                                *{form.errors[path + x]}
+                            </p>
+                        ) : null}
+                        <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
+                            <SelectorIcon
+                                className="h-5 w-5 text-primary transition-all duration-200 hover:text-base-400"
+                                aria-hidden="true"
+                            />
+                        </div>
                     </Combobox.Button>
 
                     {filteredValues?.length > 0 && (

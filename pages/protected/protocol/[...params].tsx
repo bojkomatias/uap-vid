@@ -17,6 +17,8 @@ import Bibliography from '../../../components/Sections/Bibliography'
 import { GetServerSideProps } from 'next'
 import { Button } from '../../../components/Atomic/Button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { Check, X } from 'tabler-icons-react'
+import { useNotifications } from '@mantine/notifications'
 
 const sectionMapper = [
     <Identification key="0" id="0" />,
@@ -33,10 +35,12 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
     const [currentVisible, setVisible] = useState<any>('0')
+    const notifications = useNotifications()
 
     const form = useProtocol({
         initialValues: protocol,
         validate: validate,
+        validateInputOnChange: true,
     })
 
     useEffect(() => {
@@ -62,7 +66,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     }, [form.values])
 
     const updateProtocol = async (protocol: Protocol) => {
-        const { status } = await fetch(`/api/protocol/${protocol._id}`, {
+        const res = await fetch(`/api/protocol/${protocol._id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
@@ -70,16 +74,26 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
             },
             body: JSON.stringify(protocol),
         })
-        if (status === 200) {
-            setSavedEvent(true)
-            setTimeout(() => {
-                setSavedEvent(false)
-            }, 3000)
+        console.log(res)
+        if (res.status === 200) {
+            notifications.showNotification({
+                title: 'Protocolo guardado',
+                message: 'El protocolo ha sido guardado con éxito',
+                color: 'teal',
+                icon: <Check />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })
         }
     }
 
     return (
         <>
+            <pre className="my-10 text-xs">
+                {JSON.stringify(form.errors, null, 2)}
+            </pre>
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación{' '}
                 <span
@@ -135,15 +149,6 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
                         className=""
                     >
                         Guardar
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            form.validate()
-                            console.log(form.errors)
-                        }}
-                        className=""
-                    >
-                        Validar
                     </Button>
                     <Button
                         disabled={currentVisible === '7'}
