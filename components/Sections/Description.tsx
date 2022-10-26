@@ -4,11 +4,58 @@ import Input from '../Atomic/Input'
 import Select from '../Atomic/Select'
 import { motion } from 'framer-motion'
 
-const disciplines = ['Ejemplo anexo A', 'Ética y responsabilidad social']
-const lines = [
-    'Ejemplo anexo A',
-    'Gestión de las organizaciones y responsabilidad social',
+const disciplines = [
+    'Ciencias Económicas y de la Administración',
+    'Ciencias de la Salud',
+    'Humanidades, Educación y Ciencias Sociales',
+    'Teología',
 ]
+const lines = (v: string) => {
+    if (v === 'Ciencias Económicas y de la Administración')
+        return [
+            'Ética y responsabilidad social de las organizaciones',
+            'Economía y desarrollo regional sustentable',
+            'Estudios organizacionales y management',
+            'Emprendimiento e innovación',
+            'Sistemas tributarios y actuación en la justicia',
+            'Contabilidad y auditoria',
+            'Sistemas de información',
+            'Robótica',
+            'Redes y sistemas operativos',
+            'Sistemas biomedical',
+            'Tecnología, sociedad e innovación',
+            'Informática industrial',
+        ]
+    if (v === 'Ciencias de la Salud')
+        return [
+            'Promoción de la salud',
+            'Restauración de la salud',
+            'Educación en ciencias de la salud',
+            'Bioética',
+        ]
+    if (v === 'Humanidades, Educación y Ciencias Sociales')
+        return [
+            'Psicología general',
+            'Psicología social',
+            'Psicología forense',
+            'Psicología clínica',
+            'Psicología laboral',
+            'Psicología educacional',
+            'Lengua inglesa',
+            'Educación física',
+            'Comunicación social',
+            'Filosofía',
+        ]
+    if (v === 'Teología')
+        return [
+            'Teología bíblica - Antiguo Testamento',
+            'Teología bíblica - Nuevo Testamento',
+            'Teología sistemática',
+            'Teología histórica',
+            'Teología pastoral',
+        ]
+}
+
 const fields = [
     'Ciencias exactas y naturales',
     'Ingeniería y tecnología',
@@ -58,12 +105,17 @@ export default function Description({ id }: PropsWithChildren<{ id: string }>) {
                     x="discipline"
                     label="disciplina general y área especifica"
                     options={disciplines}
+                    conditionalCleanup={() =>
+                        (form.values.sections[Number(id)].data.line = '')
+                    }
                 />
                 <Select
                     path={path}
                     x="line"
                     label="línea de investigación"
-                    options={lines}
+                    options={lines(
+                        form.values.sections[Number(id)].data.discipline
+                    )}
                 />
                 <Input path={path} x="words" label="palabras clave" />
                 <Select
