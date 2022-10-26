@@ -91,9 +91,6 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
 
     return (
         <>
-            <pre className="my-10 text-xs">
-                {JSON.stringify(form.errors, null, 2)}
-            </pre>
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Protocolo de investigación{' '}
                 <span
