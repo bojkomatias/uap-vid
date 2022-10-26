@@ -18,7 +18,7 @@ export default function Select({
     x: string
     label: string
     options: any
-    conditionalCleanup?: Function
+    conditionalCleanup?: any
 }>) {
     const form = useProtocolContext()
     const [query, setQuery] = useState('')
@@ -40,15 +40,15 @@ export default function Select({
             </label>
             <Combobox as="div" {...form.getInputProps(path + x)}>
                 <div className="relative">
-                    <Combobox.Button className="relative w-full">
+                    <Combobox.Button
+                        className="relative w-full"
+                        onClick={conditionalCleanup}
+                    >
                         <Combobox.Input
                             autoComplete="off"
                             className="input"
                             placeholder={label}
-                            onChange={(e) => {
-                                setQuery(e.target.value)
-                                conditionalCleanup()
-                            }}
+                            onChange={(e) => setQuery(e.target.value)}
                         />
 
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
