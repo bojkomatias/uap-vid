@@ -61,7 +61,7 @@ export default NextAuth({
             const updateObject =
                 userExist && userExist.role
                     ? { lastLogin: new Date() }
-                    : { role: 'new-user', lastLogin: new Date() }
+                    : { role: 'Investigador', lastLogin: new Date() }
 
             if (userExist) {
                 await users.updateOne(

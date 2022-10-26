@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
     Protocol,
     ProtocolProvider,
     useProtocol,
+    validate,
 } from '../../../config/createContext'
-
 import Identification from '../../../components/Sections/Identification'
 import Duration from '../../../components/Sections/Duration'
 import DirectBudget from '../../../components/Sections/DirectBudget'
@@ -16,11 +16,9 @@ import Publication from '../../../components/Sections/Publication'
 import Bibliography from '../../../components/Sections/Bibliography'
 import { GetServerSideProps } from 'next'
 import { Button } from '../../../components/Atomic/Button'
-import {
-    ChevronDoubleLeftIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
-} from '@heroicons/react/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { Check, X } from 'tabler-icons-react'
+import { useNotifications } from '@mantine/notifications'
 
 const sectionMapper = [
     <Identification key="0" id="0" />,
@@ -37,35 +35,42 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     const router = useRouter()
     const [savedEvent, setSavedEvent] = useState(false)
     const [currentVisible, setVisible] = useState<any>('0')
+    const notifications = useNotifications()
 
     const form = useProtocol({
         initialValues: protocol,
+        validate: validate,
+        validateInputOnChange: true,
     })
 
     useEffect(() => {
-        const warningText =
-            'La pagina tiene cambios sin guardar, desea continuar de todos modos?'
-        const handleWindowClose = (e: BeforeUnloadEvent) => {
-            if (form.values == protocol) return
-            e.preventDefault()
-            return (e.returnValue = warningText)
-        }
-        const handleBrowseAway = () => {
-            if (form.values == protocol) return
-            if (window.confirm(warningText)) return
-            router.events.emit('routeChangeError')
-            throw 'routeChange aborted.'
-        }
-        window.addEventListener('beforeunload', handleWindowClose)
-        router.events.on('routeChangeStart', handleBrowseAway)
-        return () => {
-            window.removeEventListener('beforeunload', handleWindowClose)
-            router.events.off('routeChangeStart', handleBrowseAway)
-        }
-    }, [form.values])
+        form.validate()
+    }, [])
+
+    // useEffect(() => {
+    //     const warningText =
+    //         'La pagina tiene cambios sin guardar, desea continuar de todos modos?'
+    //     const handleWindowClose = (e: BeforeUnloadEvent) => {
+    //         if (form.values == protocol) return
+    //         e.preventDefault()
+    //         return (e.returnValue = warningText)
+    //     }
+    //     const handleBrowseAway = () => {
+    //         if (form.values == protocol) return
+    //         if (window.confirm(warningText)) return
+    //         router.events.emit('routeChangeError')
+    //         throw 'routeChange aborted.'
+    //     }
+    //     window.addEventListener('beforeunload', handleWindowClose)
+    //     router.events.on('routeChangeStart', handleBrowseAway)
+    //     return () => {
+    //         window.removeEventListener('beforeunload', handleWindowClose)
+    //         router.events.off('routeChangeStart', handleBrowseAway)
+    //     }
+    // }, [form.values])
 
     const updateProtocol = async (protocol: Protocol) => {
-        const { status } = await fetch(`/api/protocol/${protocol._id}`, {
+        const res = await fetch(`/api/protocol/${protocol._id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
@@ -73,11 +78,18 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
             },
             body: JSON.stringify(protocol),
         })
-        if (status === 200) {
-            setSavedEvent(true)
-            setTimeout(() => {
-                setSavedEvent(false)
-            }, 3000)
+        console.log(res.json())
+        if (res.status === 200) {
+            notifications.showNotification({
+                title: 'Protocolo guardado',
+                message: 'El protocolo ha sido guardado con éxito',
+                color: 'teal',
+                icon: <Check />,
+                radius: 0,
+                style: {
+                    marginBottom: '.8rem',
+                },
+            })
         }
     }
 

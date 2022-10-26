@@ -5,6 +5,16 @@ import { motion } from 'framer-motion'
 
 import Table from '../Atomic/Table'
 
+const years = (v: string) => {
+    let yearQuantity = Number(v.substring(0, 2)) / 12
+    let currentYear = new Date().getFullYear()
+    let years: string[] = [String(currentYear)]
+    for (let i = 0; i < yearQuantity; i++) {
+        years.push(String(currentYear + i + 1))
+    }
+    return years
+}
+
 export default function DirectBudget({
     id,
 }: PropsWithChildren<{ id: string }>) {
@@ -83,14 +93,9 @@ export default function DirectBudget({
                         {
                             x: 'year',
                             label: 'año',
-                            options: [
-                                '2022',
-                                '2023',
-                                '2024',
-                                '2025',
-                                '2026',
-                                '2027',
-                            ],
+                            options: years(
+                                form.values.sections[1].data.duration
+                            ),
                         },
                     ]}
                 />

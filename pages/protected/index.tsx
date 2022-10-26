@@ -28,7 +28,6 @@ export default function Page() {
             url: '/protocol/p',
             action: () => setShowNewProtocolModal(true),
             roles: [
-                'new-user',
                 'Investigador',
                 'Evaluador Interno',
                 'Evaluador Externo',
@@ -130,7 +129,6 @@ export default function Page() {
             ),
             url: '/protected/protocol',
             roles: [
-                'new-user',
                 'Investigador',
                 'Evaluador Interno',
                 'Evaluador Externo',
@@ -249,6 +247,7 @@ export default function Page() {
                         }}
                     >
                         <input
+                            required
                             type="text"
                             placeholder="Titulo"
                             className="input"

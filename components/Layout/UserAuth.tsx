@@ -2,6 +2,7 @@ import { useSession, signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
+import { Button } from '../Atomic/Button'
 
 export default function UserAuth() {
     const { data: session } = useSession()
@@ -17,7 +18,7 @@ export default function UserAuth() {
             <>
                 Bienvenido <b>{session?.user?.email} </b>{' '}
                 <div
-                    className="relative transition-all duration-150 "
+                    className="relative cursor-pointer transition-all duration-150 "
                     onClick={() => setShowCombo(!showCombo)}
                 >
                     <svg
@@ -35,13 +36,13 @@ export default function UserAuth() {
                         />
                     </svg>
 
-                    {showCombo ? (
+                    {showCombo && (
                         <div
                             id="combo"
-                            className="absolute mx-auto mt-2 w-40 bg-white p-4 text-center opacity-0 shadow-md"
+                            className="absolute right-0 mt-2 w-40 bg-white p-4 text-center opacity-0 shadow-md"
                         >
                             <Link href="/protected/profile" passHref>
-                                <button className="mb-2 w-full p-2 text-sm font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white">
+                                <button className="mb-1 w-full p-2 text-sm font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white">
                                     Perfil
                                 </button>
                             </Link>
@@ -52,14 +53,10 @@ export default function UserAuth() {
                                 Cerrar sesión
                             </button>
                         </div>
-                    ) : null}
+                    )}
                 </div>
             </>
         )
     }
-    return (
-        <>
-            <button onClick={() => signIn()}>Iniciar sesión</button>
-        </>
-    )
+    return <></>
 }
