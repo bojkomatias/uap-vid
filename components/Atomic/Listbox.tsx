@@ -7,7 +7,6 @@ function classNames(...classes: any) {
 }
 
 const roles = [
-    'new-user',
     'Investigador',
     'Evaluador Interno',
     'Evaluador Externo',

@@ -44,26 +44,30 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     })
 
     useEffect(() => {
-        const warningText =
-            'La pagina tiene cambios sin guardar, desea continuar de todos modos?'
-        const handleWindowClose = (e: BeforeUnloadEvent) => {
-            if (form.values == protocol) return
-            e.preventDefault()
-            return (e.returnValue = warningText)
-        }
-        const handleBrowseAway = () => {
-            if (form.values == protocol) return
-            if (window.confirm(warningText)) return
-            router.events.emit('routeChangeError')
-            throw 'routeChange aborted.'
-        }
-        window.addEventListener('beforeunload', handleWindowClose)
-        router.events.on('routeChangeStart', handleBrowseAway)
-        return () => {
-            window.removeEventListener('beforeunload', handleWindowClose)
-            router.events.off('routeChangeStart', handleBrowseAway)
-        }
-    }, [form.values])
+        form.validate()
+    }, [])
+
+    // useEffect(() => {
+    //     const warningText =
+    //         'La pagina tiene cambios sin guardar, desea continuar de todos modos?'
+    //     const handleWindowClose = (e: BeforeUnloadEvent) => {
+    //         if (form.values == protocol) return
+    //         e.preventDefault()
+    //         return (e.returnValue = warningText)
+    //     }
+    //     const handleBrowseAway = () => {
+    //         if (form.values == protocol) return
+    //         if (window.confirm(warningText)) return
+    //         router.events.emit('routeChangeError')
+    //         throw 'routeChange aborted.'
+    //     }
+    //     window.addEventListener('beforeunload', handleWindowClose)
+    //     router.events.on('routeChangeStart', handleBrowseAway)
+    //     return () => {
+    //         window.removeEventListener('beforeunload', handleWindowClose)
+    //         router.events.off('routeChangeStart', handleBrowseAway)
+    //     }
+    // }, [form.values])
 
     const updateProtocol = async (protocol: Protocol) => {
         const res = await fetch(`/api/protocol/${protocol._id}`, {
@@ -74,7 +78,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
             },
             body: JSON.stringify(protocol),
         })
-        console.log(res)
+        console.log(res.json())
         if (res.status === 200) {
             notifications.showNotification({
                 title: 'Protocolo guardado',

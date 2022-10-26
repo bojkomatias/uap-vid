@@ -8,7 +8,7 @@ import { Check, X } from 'tabler-icons-react'
 
 function NewUser() {
     const router = useRouter()
-    const [newUser, setNewUser] = useState({ role: 'new-user' })
+    const [newUser, setNewUser] = useState({ role: 'Investigador' })
     const notifications = useNotifications()
     const CreateNewUser = async () => {
         console.log(newUser)
@@ -53,7 +53,7 @@ function NewUser() {
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Crear nuevo usuario
             </div>
-            <p className="mx-auto mb-3 w-1/2 pt-24 text-xl font-bold text-primary">
+            <p className="mx-auto mb-3 w-1/2 pt-12 text-xl font-bold text-primary">
                 Nuevo usuario
             </p>
             <form
@@ -61,7 +61,7 @@ function NewUser() {
                     e.preventDefault()
                     CreateNewUser()
                 }}
-                className="mx-auto flex w-1/2 flex-col items-center gap-10 "
+                className="mx-auto flex w-1/2 flex-col items-center gap-10 pb-12"
             >
                 <input
                     required
@@ -107,13 +107,7 @@ function NewUser() {
                     UpdateRoleForUser={(_: any, e: any) => console.log(e)}
                 />
                 {/* Ignoro el primero param */}
-                <button
-                    className=" bg-base-100 p-4 font-bold uppercase text-primary transition-all duration-200 hover:scale-105 hover:bg-primary hover:text-white"
-                    type="submit"
-                >
-                    {' '}
-                    Crear Nuevo Usuario
-                </button>
+                <Button type="submit"> Crear Nuevo Usuario</Button>
             </form>
         </div>
     )
