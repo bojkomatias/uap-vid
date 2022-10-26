@@ -58,9 +58,5 @@ export default function UserAuth() {
             </>
         )
     }
-    return (
-        <>
-            <Button onClick={() => signIn()}>Iniciar sesión</Button>
-        </>
-    )
+    return <></>
 }

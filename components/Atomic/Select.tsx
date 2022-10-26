@@ -33,14 +33,14 @@ export default function Select({
     return (
         <div className="m-3 p-1">
             <label
-                className={`text-[0.6rem] font-thin uppercase 
-                            text-base-700/80`}
+                className={`text-xs font-normal uppercase 
+                            text-base-700/60`}
             >
                 {label}
             </label>
             <Combobox as="div" {...form.getInputProps(path + x)}>
-                <div className="relative mt-1">
-                    <Combobox.Button className="w-full">
+                <div className="relative">
+                    <Combobox.Button className="relative w-full">
                         <Combobox.Input
                             autoComplete="off"
                             className="input"
@@ -50,11 +50,7 @@ export default function Select({
                                 conditionalCleanup()
                             }}
                         />
-                        {form.errors[path + x] ? (
-                            <p className="border-t-2 pt-1 pl-3 text-xs text-error-600 saturate-[80%]">
-                                *{form.errors[path + x]}
-                            </p>
-                        ) : null}
+
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                             <SelectorIcon
                                 className="h-5 w-5 text-primary transition-all duration-200 hover:text-base-400"
@@ -62,6 +58,11 @@ export default function Select({
                             />
                         </div>
                     </Combobox.Button>
+                    {form.errors[path + x] ? (
+                        <p className=" pt-1 pl-3 text-xs text-secondary-600 saturate-[80%]">
+                            *{form.errors[path + x]}
+                        </p>
+                    ) : null}
 
                     {filteredValues?.length > 0 && (
                         <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base text-primary ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">

@@ -45,7 +45,7 @@ export default function Table({
 
             <TrashIcon
                 onClick={() => form.removeListItem(path + x, index)}
-                className="mr-3 h-6 flex-shrink cursor-pointer self-center text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
+                className="mr-2 mt-12 h-6 w-6 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
             />
         </div>
     ))

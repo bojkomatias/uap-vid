@@ -1,5 +1,6 @@
 import React, { useState, PropsWithChildren } from 'react'
 import { Input, Section } from '../../config/createContext'
+import { Button } from './Button'
 
 export default function ItemView({
     dateOfCreation,
@@ -13,11 +14,11 @@ export default function ItemView({
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
     const trueStyle =
-        'opacity-1 transition-all duration-500 break-words max-h-72 transition-height duration-500 text-primary'
+        'opacity-1 transition-all duration-500 break-words max-h-72 transition-height duration-500 text-primary '
     const tStyle =
-        ' border border-primary p-2 transition-all duration-200 text-primary'
+        ' border border-primary p-5 transition-all duration-200 text-primary'
     const fStyle =
-        ' p-2 border-base-200 transition-all duration-200  border-base-200 border hover:border-primary  text-primary'
+        ' p-2 border-base-200 transition-all duration-200  border-base-200 border hover:border-primary hover:shadow-md text-primary '
 
     const [show, setShow] = useState(false)
 
@@ -41,7 +42,7 @@ export default function ItemView({
                                         : 'ml-1 text-sm font-normal transition-all duration-500'
                                 }
                             >
-                                Facultad: {identification.career}
+                                Facultad: {identification.sponsor}
                             </p>
                         </div>
                         <div>
@@ -71,26 +72,21 @@ export default function ItemView({
                                     'es-ar'
                                 )}
                             </div>
-                            <div className="items-end justify-between gap-1 md:flex">
+                            <div className="mt-1 items-start justify-between gap-1 md:flex">
                                 <div className="ml-4 w-[70%] text-sm">
                                     Carrera:{' '}
                                     <span className="underline">
                                         {identification.career}
                                     </span>{' '}
                                     <br />
-                                    Modalidad:{' '}
-                                    <span className="underline">
-                                        {' '}
-                                        {/* {identification.modality}{' '} */}
-                                    </span>
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">
-                                    <a
-                                        href={`/protected/protocol/${_id}`}
-                                        className="flex-grow-0 items-end bg-primary p-2 text-sm text-white transition-all duration-300 hover:bg-primary-200-700 "
-                                    >
-                                        Ver todos los detalles
-                                    </a>
+                                    <Button>
+                                        <a href={`/protected/protocol/${_id}`}>
+                                            {' '}
+                                            Ver todos los detalles
+                                        </a>
+                                    </Button>
                                 </div>
                             </div>
                         </div>

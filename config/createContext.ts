@@ -28,7 +28,7 @@ export const initialProtocolValues = {
             name: 'identificación',
             data: {
                 title: '1',
-                career: 'Hola',
+                career: '',
                 assignment: '',
                 team: [{ role: '', name: '', hours: '' }],
                 sponsor: '',
@@ -121,8 +121,8 @@ export const validate = {
                     ? 'El titulo debe tener mínimo 6 caracteres'
                     : null,
             career: (value: any, _: any, path: any) =>
-                path == 'sections.0.data.career' && value.length > 6
-                    ? 'El titulo debe tener mínimo 6 caracteres'
+                path == 'sections.0.data.career' && value.length < 1
+                    ? 'Este campo no debe estar vacío'
                     : null,
             team: {
                 role: (value: any, _: any, path: any) =>
@@ -140,6 +140,46 @@ export const validate = {
                     value.match(/^[0-9]*$/)
                         ? null
                         : 'Este campo debe contener un número',
+            },
+
+            expenses: {
+                type: (value: any, _: any, path: any) =>
+                    path.match(/sections.2.data.expenses.[0-99].type/) &&
+                    value.length < 1
+                        ? 'Este campo no debe estar vacío'
+                        : null,
+                detail: (value: any, _: any, path: any) =>
+                    path.match(/sections.2.data.expenses.[0-99].detail/) &&
+                    value.length < 1
+                        ? 'Este campo no debe estar vacío'
+                        : null,
+
+                amount: (value: any, _: any, path: any) =>
+                    path.match(/sections.2.data.expenses.[0-99].amount/) &&
+                    value.length < 1
+                        ? 'Este campo no debe estar vacío'
+                        : value.match(/^[0-9]*$/)
+                        ? null
+                        : 'Debe ser un número',
+            },
+
+            chart: {
+                author: (value: any, _: any, path: any) =>
+                    path.match(/sections.7.data.chart.[0-99].author/) &&
+                    value.length < 1
+                        ? 'Este campo no debe estar vacío'
+                        : null,
+                title: (value: any, _: any, path: any) =>
+                    path.match(/sections.7.data.chart.[0-99].title/) &&
+                    value.length < 1
+                        ? 'Este campo no debe estar vacío'
+                        : null,
+
+                year: (value: any, _: any, path: any) =>
+                    path.match(/sections.7.data.chart.[0-99].year/) &&
+                    value.match(/^[0-9]{4}$/)
+                        ? null
+                        : 'Debe ser un número de 4 dígitos (ej. 2010)',
             },
         },
     },

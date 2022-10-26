@@ -13,6 +13,7 @@ export default function projects({
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Lista de proyectos de investigación
             </div>
+
             <div className="mx-auto mb-20 flex max-w-[1280px] flex-col justify-center px-20 py-10">
                 {protocols.length > 0 ? (
                     protocols.map((protocol: Protocol) => (

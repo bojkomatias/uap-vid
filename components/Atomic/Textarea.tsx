@@ -11,8 +11,8 @@ const Textarea = ({
     return (
         <div className="m-3 p-1">
             <label
-                className={`text-[0.6rem] font-thin uppercase 
-                            text-base-700/80`}
+                className={`text-xs font-normal  uppercase 
+                            text-base-700/60`}
             >
                 {label}
             </label>
