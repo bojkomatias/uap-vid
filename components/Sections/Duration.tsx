@@ -117,6 +117,7 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
                             options: chron(
                                 form.values.sections[Number(id)].data.duration
                             ),
+                            class: 'flex-shrink',
                         },
                         { x: 'task', label: 'Tarea' },
                     ]}
