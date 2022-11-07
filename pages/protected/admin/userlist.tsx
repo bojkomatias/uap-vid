@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { Check, X } from 'tabler-icons-react'
 import ListBox from '../../../components/Atomic/Listbox'
 import { Button } from '../../../components/Atomic/Button'
+import Link from 'next/link'
 
 function UserList({ users }: any) {
     const router = useRouter()
@@ -93,11 +94,11 @@ function UserList({ users }: any) {
                 </div>
 
                 <div className="flex self-end">
-                    <Button>
-                        <a
-                            className="flex items-center"
-                            href="/protected/admin/newuser"
-                        >
+                    <Link
+                        className="flex items-center"
+                        href="/protected/admin/newuser"
+                    >
+                        <Button>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="20"
@@ -115,8 +116,8 @@ function UserList({ users }: any) {
                                 <line x1="23" y1="11" x2="17" y2="11"></line>
                             </svg>
                             <span className="ml-3"> Nuevo usuario</span>
-                        </a>
-                    </Button>
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </>

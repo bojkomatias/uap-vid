@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React, { useState, PropsWithChildren } from 'react'
 import { Input, Section } from '../../config/createContext'
 import { Button } from './Button'
@@ -81,12 +82,12 @@ export default function ItemView({
                                     <br />
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">
-                                    <Button>
-                                        <a href={`/protected/protocol/${_id}`}>
-                                            {' '}
-                                            Ver todos los detalles
-                                        </a>
-                                    </Button>
+                                    <Link
+                                        href={`/protected/protocol/${_id}`}
+                                        passHref
+                                    >
+                                        <Button> Ver todos los detalles</Button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

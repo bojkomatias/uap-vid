@@ -120,7 +120,8 @@ export default function Identification({
                                 'Becario CONICET',
                             ],
                         },
-                        { x: 'name', label: 'nombre' },
+                        { x: 'last_name', label: 'apellido' },
+                        { x: 'first_name', label: 'nombre' },
                         { x: 'hours', label: 'horas' },
                     ]}
                 />
