@@ -1,6 +1,12 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { useProtocolContext } from '../../config/createContext'
 
+function handleKeyDown(e: any) {
+    //Para hacer autoresize del textarea
+    e.target.style.height = 'inherit'
+    e.target.style.height = `${e.target.scrollHeight}px`
+}
+
 const Textarea = ({
     path,
     x,
@@ -18,6 +24,7 @@ const Textarea = ({
             </label>
             <textarea
                 {...form.getInputProps(path + x)}
+                onKeyDown={handleKeyDown}
                 className="input"
                 placeholder={label}
             />
