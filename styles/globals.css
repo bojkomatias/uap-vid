@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    html {
+        @apply overflow-x-hidden subpixel-antialiased;
+    }
+}
+
 .shadowCustom {
     -webkit-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
     -moz-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
@@ -17,8 +23,4 @@
     .input {
         @apply w-full self-start p-3 py-2 pl-3 pr-10 shadow-inner ring-1 ring-base-800/5 placeholder:text-xs placeholder:uppercase focus:outline-none;
     }
-}
-
-html {
-    overflow-x: hidden;
 }

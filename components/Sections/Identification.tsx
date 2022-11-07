@@ -121,7 +121,7 @@ export default function Identification({
                             ],
                         },
                         { x: 'last_name', label: 'apellido' },
-                        { x: 'first_name', label: 'nombre' },
+                        { x: 'name', label: 'nombre' },
                         { x: 'hours', label: 'horas' },
                     ]}
                 />

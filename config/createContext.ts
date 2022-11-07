@@ -30,7 +30,7 @@ export const initialProtocolValues = {
                 title: '1',
                 career: '',
                 assignment: '',
-                team: [{ role: '', last_name: '', first_name: '', hours: '' }],
+                team: [{ role: '', last_name: '', name: '', hours: '' }],
                 sponsor: '',
             },
         },
@@ -132,11 +132,11 @@ export const validate = {
                         : null,
                 last_name: (value: any, _: any, path: any) =>
                     path.match(/sections.0.data.team.[0-99].last_name/) &&
-                    value.length < 1
+                    value?.length < 1
                         ? 'Este campo no puede estar vacío'
                         : null,
-                first_name: (value: any, _: any, path: any) =>
-                    path.match(/sections.0.data.team.[0-99].first_name/) &&
+                name: (value: any, _: any, path: any) =>
+                    path.match(/sections.0.data.team.[0-99].name/) &&
                     value.length < 1
                         ? 'Este campo no puede estar vacío'
                         : null,

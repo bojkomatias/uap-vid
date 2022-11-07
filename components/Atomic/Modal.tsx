@@ -46,7 +46,7 @@ export default function Modal({
                                         <div className="mt-3 w-full text-center sm:mt-0 sm:ml-4 sm:text-left">
                                             <Dialog.Title
                                                 as="h3"
-                                                className="text-gray-900 mb-4 text-lg font-medium leading-6"
+                                                className="text-gray-900 mb-4 font-thin uppercase leading-6"
                                             >
                                                 {title}
                                             </Dialog.Title>
