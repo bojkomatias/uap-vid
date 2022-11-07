@@ -1,8 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../config/createContext'
-import Input from '../Atomic/Input'
+import Textarea from '../Atomic/Textarea'
 import { motion } from 'framer-motion'
-import { useForm } from '@mantine/hooks'
 
 export default function Introduction({
     id,
@@ -22,22 +21,22 @@ export default function Introduction({
                 </span>
             </div>
             <div className="mx-auto mt-5 max-w-[1120px]">
-                <Input
+                <Textarea
                     path={path}
                     x="state"
                     label="estado actual del tema y principales antecedentes en la literatura"
                 />
-                <Input
+                <Textarea
                     path={path}
                     x="justification"
                     label="Justificación científica, académico-institucional y social"
                 />
-                <Input
+                <Textarea
                     path={path}
                     x="problem"
                     label="Definición del problema"
                 />
-                <Input path={path} x="objectives" label="objetivos" />
+                <Textarea path={path} x="objectives" label="objetivos" />
             </div>
         </motion.div>
     )
