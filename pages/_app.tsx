@@ -4,8 +4,8 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
 import { SessionProvider } from 'next-auth/react'
-import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
+import { MantineProvider } from '@mantine/core'
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode
