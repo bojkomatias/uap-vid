@@ -16,7 +16,7 @@ export default function Table({
     path: string
     x: string
     label: string
-    headers: { x: string; label: string; options?: string[] }[]
+    headers: { x: string; label: string; options?: string[]; class?: string }[]
     insertedItemFormat: any
     toMap: any
 }>) {
@@ -25,7 +25,7 @@ export default function Table({
     const fields = toMap.map((_: any, index: any) => (
         <div key={index} className="flex w-full items-start justify-around ">
             {headers.map((h: any, i: number) => (
-                <div className="flex-grow" key={i}>
+                <div className={` ${h.class}`} key={i}>
                     {h.options ? (
                         <Select
                             options={h.options}
@@ -45,7 +45,9 @@ export default function Table({
 
             <TrashIcon
                 onClick={() => form.removeListItem(path + x, index)}
-                className="mr-2 mt-12 h-6 w-6 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90]"
+                className={`mr-2 mt-12 h-6 w-6 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90] ${
+                    index == 0 ? 'pointer-events-none invisible' : ''
+                }`}
             />
         </div>
     ))
