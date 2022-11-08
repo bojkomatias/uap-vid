@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
 import { SessionProvider } from 'next-auth/react'
-import { MantineProvider } from '@mantine/core'
+
 import { NotificationsProvider } from '@mantine/notifications'
 
 type NextPageWithLayout = NextPage & {
@@ -25,13 +25,11 @@ export default function MyApp({
     return getLayout(
         <>
             <SessionProvider session={session}>
-                <MantineProvider>
-                    <NotificationsProvider>
-                        <Layout>
-                            <Component {...pageProps} />
-                        </Layout>
-                    </NotificationsProvider>
-                </MantineProvider>
+                <NotificationsProvider>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </NotificationsProvider>
             </SessionProvider>
         </>
     )

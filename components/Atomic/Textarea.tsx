@@ -1,12 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { useProtocolContext } from '../../config/createContext'
-
-function handleKeyDown(e: any) {
-    //Para hacer autoresize del textarea
-
-    e.target.style.height = 'inherit'
-    e.target.style.height = `${e.target.scrollHeight}px`
-}
+import RichTextEditor from './RTE'
 
 const Textarea = ({
     path,
@@ -24,11 +18,18 @@ const Textarea = ({
                 >
                     {label}
                 </label>
-                <textarea
+                <RichTextEditor
                     {...form.getInputProps(path + x)}
-                    onKeyDown={handleKeyDown}
-                    className="input h-auto"
+                    className="input h-auto min-h-[10rem] p-0"
                     placeholder={label}
+                    sticky={false}
+                    radius={0}
+                    controls={[
+                        ['bold', 'italic', 'underline'],
+                        ['h1', 'h2', 'h3'],
+                        ['alignLeft', 'alignCenter', 'alignRight'],
+                        ['link'],
+                    ]}
                 />
             </div>
         </div>
