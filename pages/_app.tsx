@@ -4,7 +4,7 @@ import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import Layout from '../components/Layout'
 import { SessionProvider } from 'next-auth/react'
-
+'
 import { NotificationsProvider } from '@mantine/notifications'
 
 type NextPageWithLayout = NextPage & {
