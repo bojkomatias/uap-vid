@@ -25,7 +25,7 @@ export default function ItemView({
 
     return (
         <div>
-            <a className="cursor-pointer " onClick={() => setShow(!show)}>
+            <span className="cursor-pointer " onClick={() => setShow(!show)}>
                 <div className={show ? tStyle : fStyle}>
                     <div
                         className={
@@ -93,7 +93,7 @@ export default function ItemView({
                         </div>
                     </div>
                 </div>
-            </a>
+            </span>
         </div>
     )
 }
