@@ -70,7 +70,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     // }, [form.values])
 
     const updateProtocol = async (protocol: Protocol) => {
-        const res = await fetch(`/api/protocol/${protocol._id}`, {
+        const res = await fetch(`/api/protocol/${protocol.id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {

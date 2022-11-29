@@ -12,7 +12,7 @@ export interface Section {
 }
 
 export interface Protocol {
-    _id?: string
+    id?: string
     createdAt: Date
     updatedAt: Date
     sections: Section[]

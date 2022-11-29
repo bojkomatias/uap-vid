@@ -49,7 +49,7 @@ export default NextAuth({
                 }
                 return {
                     email: result.email,
-                    id: result._id,
+                    id: result.id,
                     role: result.role,
                 }
             },

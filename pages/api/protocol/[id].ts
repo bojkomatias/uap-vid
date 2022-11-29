@@ -18,10 +18,11 @@ export default async function handler(
 
     if (req.method === 'PUT') {
         const protocol = req.body
+        delete protocol.id
         const updated = await updateProtocolById(id as string, protocol)
-        if (updated) {
-            res.status(404).end()
-            return
+        
+        if (!updated) {
+            return res.status(404).end()
         }
         return res.status(200).json({ sucess: true })
     }
