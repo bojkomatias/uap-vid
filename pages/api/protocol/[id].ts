@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import {findUserById, updateUserById} from '../../../utils/bd/users'
+import {findProtocolById, updateProtocolById} from '../../../utils/bd/protocol'
 
 export default async function handler(
     req: NextApiRequest,
@@ -7,7 +7,7 @@ export default async function handler(
 ) {
     const { id } = req.query
     if (req.method === 'GET') {
-        const data = await findUserById(id as string)
+        const data = await findProtocolById(id as string)
 
         if (!data) {
             res.status(404).end()
@@ -18,7 +18,7 @@ export default async function handler(
 
     if (req.method === 'PUT') {
         const protocol = req.body
-        const updated = await updateUserById(id as string, protocol)
+        const updated = await updateProtocolById(id as string, protocol)
         if (updated) {
             res.status(404).end()
             return

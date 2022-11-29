@@ -14,6 +14,15 @@ const findUserById = async (id: string) => {
     return user
 }
 
+const findUserByEmail = async (email: string) => {
+    const user = await prisma.user.findUnique ({
+        where: {
+            email,
+        },
+    })
+    return user
+}
+
 const updateUserById = async (id: string, data: any) => {
     const user = await prisma.user.update({
         where: {
@@ -24,4 +33,21 @@ const updateUserById = async (id: string, data: any) => {
     return user
 }
 
-export {getAllUsers, findUserById, updateUserById}
+const updateUserByEmail = async (email: string, data: any) => {
+    const user = await prisma.user.update({
+        where: {
+            email,
+        },
+        data,
+    })
+    return user
+}
+
+const saveUser = async (data: any) => {
+    const user = await prisma.user.create({
+        data,
+    })
+    return user
+}
+
+export {getAllUsers, findUserById, findUserByEmail, updateUserById, updateUserByEmail, saveUser}
