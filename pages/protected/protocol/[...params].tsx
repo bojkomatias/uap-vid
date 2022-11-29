@@ -70,7 +70,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
     // }, [form.values])
 
     const updateProtocol = async (protocol: Protocol) => {
-        const res = await fetch(`/api/protocol/${protocol._id}`, {
+        const res = await fetch(`/api/protocol/${protocol.id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
@@ -78,7 +78,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
             },
             body: JSON.stringify(protocol),
         })
-        console.log(res.json())
+        // console.log(res.json())
         if (res.status === 200) {
             notifications.showNotification({
                 title: 'Protocolo guardado',

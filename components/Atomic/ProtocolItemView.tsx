@@ -6,11 +6,11 @@ import { Button } from './Button'
 export default function ItemView({
     dateOfCreation,
     identification,
-    _id,
+    id,
 }: PropsWithChildren<{
     dateOfCreation: Date
     identification: Input
-    _id: any
+    id: any
 }>) {
     const falseStyle =
         'opacity-0 transition-all duration-300 transition-height duration-500 break-words max-h-0 pointer-events-none text-primary'
@@ -25,7 +25,7 @@ export default function ItemView({
 
     return (
         <div>
-            <a className="cursor-pointer " onClick={() => setShow(!show)}>
+            <span className="cursor-pointer " onClick={() => setShow(!show)}>
                 <div className={show ? tStyle : fStyle}>
                     <div
                         className={
@@ -83,7 +83,7 @@ export default function ItemView({
                                 </div>
                                 <div className="mt-2 mr-5 mb-1">
                                     <Link
-                                        href={`/protected/protocol/${_id}`}
+                                        href={`/protected/protocol/${id}`}
                                         passHref
                                     >
                                         <Button> Ver todos los detalles</Button>
@@ -93,7 +93,7 @@ export default function ItemView({
                         </div>
                     </div>
                 </div>
-            </a>
+            </span>
         </div>
     )
 }

@@ -24,7 +24,7 @@ const ListBox = ({
             value={user.role}
             onChange={(e) => {
                 user.role = e
-                UpdateRoleForUser(user._id, e)
+                UpdateRoleForUser(user.id, e)
             }}
         >
             {({ open }) => (
