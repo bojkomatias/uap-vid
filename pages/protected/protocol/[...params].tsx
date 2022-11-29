@@ -78,7 +78,7 @@ export default function ProtocolPage({ protocol }: { protocol: Protocol }) {
             },
             body: JSON.stringify(protocol),
         })
-        console.log(res.json())
+        // console.log(res.json())
         if (res.status === 200) {
             notifications.showNotification({
                 title: 'Protocolo guardado',
