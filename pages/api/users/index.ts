@@ -8,9 +8,7 @@ export default async function handler(
 ) {
     if (req.method === 'GET') {
         const data = await getAllUsers()
-        console.log(data)
         
-
         if (!data) {
             res.status(404).end()
             return

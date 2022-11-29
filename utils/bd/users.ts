@@ -5,4 +5,23 @@ const getAllUsers = async () => {
     return users
 }
 
-export {getAllUsers}
+const findUserById = async (id: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+        },
+    })
+    return user
+}
+
+const updateUserById = async (id: string, data: any) => {
+    const user = await prisma.user.update({
+        where: {
+            id,
+        },
+        data,
+    })
+    return user
+}
+
+export {getAllUsers, findUserById, updateUserById}

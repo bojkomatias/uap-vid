@@ -35,7 +35,7 @@ function UserList({ users }: any) {
                     marginBottom: '.8rem',
                 },
             })
-        else if (res.status === 400)
+        else if (res.status === 400 || res.status === 500)
             notifications.showNotification({
                 title: 'Error',
                 message: 'Ocurrio un error al actualizar el rol del usuario',
@@ -97,6 +97,7 @@ function UserList({ users }: any) {
                     <Link
                         className="flex items-center"
                         href="/protected/admin/newuser"
+                        passHref
                     >
                         <Button>
                             <svg

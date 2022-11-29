@@ -1,7 +1,5 @@
-import { ObjectId } from 'mongodb'
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import { Protocol } from '../../../config/createContext'
-import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
+import {findUserById, updateUserById} from '../../../utils/bd/users'
 
 export default async function handler(
     req: NextApiRequest,
@@ -9,10 +7,7 @@ export default async function handler(
 ) {
     const { id } = req.query
     if (req.method === 'GET') {
-        const collection = await getCollection(CollectionName.Protocols)
-        const data = await collection.findOne({
-            _id: new ObjectId(id as string),
-        })
+        const data = await findUserById(id as string)
 
         if (!data) {
             res.status(404).end()
@@ -23,15 +18,8 @@ export default async function handler(
 
     if (req.method === 'PUT') {
         const protocol = req.body
-        const collection = await getCollection(CollectionName.Protocols)
-        const filter = { _id: new ObjectId(id as string) }
-        delete protocol._id
-        const updated = await collection.updateOne(
-            filter,
-            { $set: protocol },
-            { upsert: true }
-        )
-        if (updated.modifiedCount === 0) {
+        const updated = await updateUserById(id as string, protocol)
+        if (updated) {
             res.status(404).end()
             return
         }
