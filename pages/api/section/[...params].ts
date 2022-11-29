@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import { findById } from '../../../utils/bd/protocol'
+import { findProtocolById } from '../../../utils/bd/protocol'
 
 export default async function handler(
     req: NextApiRequest,
@@ -21,7 +21,6 @@ export default async function handler(
 }
 
 const getProtocolIfValid = async (protocolId: string) => {
-    const protocol = findById(protocolId)
-
+    const protocol = await findProtocolById(protocolId)
     return protocol
 }

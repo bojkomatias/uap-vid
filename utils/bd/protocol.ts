@@ -1,15 +1,16 @@
-import prisma from "../prismaClient"
+import {prisma} from '../bd'
 
-const findById = async (id: string) => {
-  return (await prisma).protocol.findUnique({
+
+const findProtocolById = async (id: string) => {
+  return await prisma.protocol.findUnique({
     where: {
       id,
     },
   })
 }
 
-const getAll = async () => {
-  return (await prisma).protocol.findMany()
+const getAllProtocols = async () => {
+  return await prisma.protocol.findMany()
 }
 
-export {findById, getAll}
+export {findProtocolById, getAllProtocols}

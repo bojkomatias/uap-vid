@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
 import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
-import { getAll } from '../../../utils/bd/protocol'
+import { getAllProtocols } from '../../../utils/bd/protocol'
 
 export default async function handler(
     req: NextApiRequest,
@@ -13,10 +13,7 @@ export default async function handler(
         return res.status(200).json(data)
     }
     if (req.method === 'GET') {
-        const data = await getAll()
-        console.log('**************************');
-        
-        console.log(data);
+        const data = await getAllProtocols()
         
         if (!data) {
             return res.status(404).end()

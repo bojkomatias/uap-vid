@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
-import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
+import {getAllUsers} from '../../../utils/bd/users'
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>
 ) {
     if (req.method === 'GET') {
-        const collection = await getCollection(CollectionName.Users)
-        const data = await collection.find({}).toArray()
+        const data = await getAllUsers()
+        console.log(data)
+        
 
         if (!data) {
             res.status(404).end()
