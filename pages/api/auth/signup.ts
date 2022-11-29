@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs'
 import { NextApiRequest, NextApiResponse } from 'next'
-import {findUserByEmail, saveUser} from '../../../utils/bd/users'
+import {findUserByEmail, saveUser} from '../../../repositories/users'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {

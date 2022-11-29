@@ -3,7 +3,7 @@ import {
     updateUserByEmail,
     saveUser,
     findUserByEmail,
-} from '../../../utils/bd/users'
+} from '../../../repositories/users'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth from 'next-auth'

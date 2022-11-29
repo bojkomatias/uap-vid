@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {getAllUsers} from '../../../utils/bd/users'
+import {getAllUsers} from '../../../repositories/users'
 
 export default async function handler(
     req: NextApiRequest,

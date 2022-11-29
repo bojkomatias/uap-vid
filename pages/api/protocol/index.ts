@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
 import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
-import { getAllProtocols } from '../../../utils/bd/protocol'
+import { getAllProtocols } from '../../../repositories/protocol'
 
 export default async function handler(
     req: NextApiRequest,

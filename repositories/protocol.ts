@@ -1,4 +1,4 @@
-import {prisma} from '../bd'
+import {prisma} from '../utils/bd'
 
 const findProtocolById = async (id: string) => {
   return await prisma.protocol.findUnique({

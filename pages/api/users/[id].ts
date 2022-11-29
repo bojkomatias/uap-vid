@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {updateUserById} from '../../../utils/bd/users'
+import {updateUserById} from '../../../repositories/users'
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<any>

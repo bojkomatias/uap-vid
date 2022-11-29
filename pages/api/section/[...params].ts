@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next/types'
-import { findProtocolById } from '../../../utils/bd/protocol'
+import { findProtocolById } from '../../../repositories/protocol'
 
 export default async function handler(
     req: NextApiRequest,
