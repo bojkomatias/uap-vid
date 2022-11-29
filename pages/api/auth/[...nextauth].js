@@ -1,10 +1,13 @@
-import NextAuth from 'next-auth'
-import AzureADProvider from 'next-auth/providers/azure-ad'
-import getCollections, { CollectionName } from '../../../utils/bd/getCollection'
-
-import CredentialsProvider from 'next-auth/providers/credentials'
-
 import { compare } from 'bcryptjs'
+import {
+    updateUserByEmail,
+    saveUser,
+    findUserByEmail,
+} from '../../../utils/bd/users'
+import AzureADProvider from 'next-auth/providers/azure-ad'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import NextAuth from 'next-auth'
+
 export default NextAuth({
     session: {
         strategy: 'jwt',
@@ -27,11 +30,9 @@ export default NextAuth({
                 password: { label: 'Contraseña', type: 'password' },
             },
             async authorize(credentials) {
-                const users = await getCollections(CollectionName.Users)
                 //Find user with the email
-                const result = await users.findOne({
-                    email: credentials.email,
-                })
+                const result = await findUserByEmail(credentials.email)
+
                 //NextAuth maneja el error
                 if (!result) {
                     throw new Error('No user found with thar email')
@@ -56,20 +57,16 @@ export default NextAuth({
     ],
     callbacks: {
         signIn: async ({ user }) => {
-            const users = await getCollections(CollectionName.Users)
-            const userExist = await users.findOne({ email: user.email })
+            const userExist = await findUserByEmail(user.email)
             const updateObject =
                 userExist && userExist.role
                     ? { lastLogin: new Date() }
                     : { role: 'Investigador', lastLogin: new Date() }
 
             if (userExist) {
-                await users.updateOne(
-                    { email: user.email },
-                    { $set: updateObject }
-                )
+                await updateUserByEmail(user.email, updateObject)
             } else {
-                await users.insertOne({ ...user, ...updateObject })
+                await saveUser({ ...user, ...updateObject })
             }
 
             return true
@@ -84,8 +81,7 @@ export default NextAuth({
         session: async ({ session, token }) => {
             console.log('session*************')
             if (token) {
-                const users = await getCollections(CollectionName.Users)
-                const user = await users.findOne({ email: token.user.email })
+                const user = await findUserByEmail(token.user.email)
                 session.user = user
             }
             return session

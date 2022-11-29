@@ -84,7 +84,7 @@ model reviews {
 
 model user {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String
+  email     String    @unique
   id_       String?   @map("id")
   image     String?
   lastLogin DateTime? @db.Date

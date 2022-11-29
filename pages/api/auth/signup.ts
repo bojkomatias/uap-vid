@@ -1,6 +1,6 @@
 import { hash } from 'bcryptjs'
 import { NextApiRequest, NextApiResponse } from 'next'
-import getCollection, { CollectionName } from '../../../utils/bd/getCollection'
+import {findUserByEmail, saveUser} from '../../../utils/bd/users'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -10,15 +10,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             res.status(422).json({ message: 'Invalid Data' })
             return
         }
-        const users = await getCollection(CollectionName.Users) //Check existing
-        const checkExisting = await users.findOne({ email: email })
+        //Check if user exists
+        const checkExisting = await findUserByEmail(email)
 
         if (checkExisting) {
             return res.status(422).json({ message: 'User already exists' })
         }
 
         //Hash password
-        const status = await users.insertOne({
+        const status = await saveUser({
             name,
             email,
             password: await hash(password, 12),
