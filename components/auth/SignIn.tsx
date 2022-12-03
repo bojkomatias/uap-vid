@@ -1,22 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
+'use client'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { showNotification } from '@mantine/notifications'
-import { Button } from '../components/Atomic/Button'
+import { Button } from '@elements/Button'
 
-function SignIn() {
-    const { data: session } = useSession()
-    const router = useRouter()
+export const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-    useEffect(() => {
-        if (session) {
-            console.log(session)
-            router.push('/protected')
-        }
-    }, [session])
 
     return (
         <div className="shadowCustom flex h-fit flex-col items-center justify-center">
@@ -26,7 +17,7 @@ function SignIn() {
                         className="h-[30%]
                         w-[30%] transition-all duration-200 md:h-[50%] md:w-[50%]"
                         src="/UAPazul.png"
-                    ></img>
+                    />
                     <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>
@@ -49,7 +40,7 @@ function SignIn() {
                 </div>
 
                 <div className="mx-6 mt-4 mb-10 flex flex-col">
-                    <button
+                    <Button
                         onClick={(e: any) => {
                             e.preventDefault()
                             console.log(
@@ -61,7 +52,7 @@ function SignIn() {
                                 email: email,
                                 password: password,
                                 redirect: false,
-                            }).then(({ ok, error }) => {
+                            }).then(({ ok, error }: any) => {
                                 if (ok) {
                                     console.log('inicio de sesión exitoso')
                                 } else {
@@ -74,13 +65,11 @@ function SignIn() {
                                 }
                             })
                         }}
-                        className="mb-2 border border-base-200 p-6 font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
                         type="submit"
                     >
                         Iniciar sesión
-                    </button>
-                    <button
-                        className="flex items-center justify-center  border border-base-200 text-primary transition-all duration-200 hover:border hover:border-primary"
+                    </Button>
+                    <Button
                         onClick={(e: any) => {
                             e.preventDefault()
                             console.log(
@@ -94,12 +83,11 @@ function SignIn() {
                         <img
                             className="ml-2 w-[15%]"
                             src="/microsoft-svgrepo-com.svg"
-                        ></img>
-                    </button>
+                            alt="Microsoft Logo"
+                        />
+                    </Button>
                 </div>
             </form>
         </div>
     )
 }
-
-export default SignIn

@@ -1,8 +1,8 @@
+'use client'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
-import { Button } from '../Atomic/Button'
 
 export default function UserAuth() {
     const { data: session } = useSession()
