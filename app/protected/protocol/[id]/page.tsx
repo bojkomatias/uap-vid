@@ -1,7 +1,6 @@
 import Heading from '@layout/Heading'
+import ProtocolForm from '@protocol/ProtocolForm'
 import { findProtocolById } from 'repositories/protocol'
-
-import Protocol from '../../../../components/protocol/Protocol'
 
 export default async function Page({
     params,
@@ -16,7 +15,7 @@ export default async function Page({
         return (
             <>
                 <Heading title={'Protocolo de investigación'} />
-                <Protocol protocol={protocol} />
+                <ProtocolForm protocol={protocol} />
             </>
         )
 }

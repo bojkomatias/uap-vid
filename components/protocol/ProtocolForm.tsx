@@ -32,7 +32,7 @@ const sectionMapper = [
     <Bibliography key="7" id="7" />,
 ]
 
-export default function Protocol({ protocol }: { protocol: protocol }) {
+export default function ProtocolForm({ protocol }: { protocol: protocol }) {
     const [currentVisible, setVisible] = useState<any>('0')
     const notifications = useNotifications()
 
