@@ -1,4 +1,4 @@
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 import ItemView from '@protocol/ItemView'
 import Link from 'next/link'
 import { getAllProtocols } from 'repositories/protocol'

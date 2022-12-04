@@ -1,6 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 
-export default function Footer() {
+export function Footer() {
     return (
         <footer className="my-auto flex h-[10vh] flex-col items-center justify-center bg-primary text-center text-xs text-white">
             <div className="flex gap-3">

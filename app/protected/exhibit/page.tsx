@@ -1,4 +1,4 @@
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 
 export default function Exhibit() {
     return (

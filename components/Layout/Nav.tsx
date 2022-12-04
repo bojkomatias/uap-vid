@@ -1,8 +1,6 @@
-/* This example requires Tailwind CSS v2.0+ */
-
 import { UserAuth } from '@auth/UserAuth'
 
-export default function Nav() {
+export function Nav() {
     return (
         <nav className="w-screen  bg-primary">
             <div className="mx-20 flex h-28 max-w-[1280px] items-center justify-between text-white 2xl:m-auto">

@@ -1,4 +1,4 @@
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 import { unstable_getServerSession } from 'next-auth'
 
 export default async function profile() {

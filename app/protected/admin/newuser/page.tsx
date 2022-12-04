@@ -1,5 +1,5 @@
 import UserForm from '@admin/UserForm'
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 
 export default function Page() {
     return (

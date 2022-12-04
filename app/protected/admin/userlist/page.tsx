@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@elements/Button'
 import { getAllUsers } from 'repositories/users'
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 import { RoleSelector } from '@admin/RoleSelector'
 import { UpdateRole } from '@admin/UpdateRole'
 

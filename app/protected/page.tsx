@@ -1,5 +1,5 @@
 import Navigation from '@auth/Navigation'
-import Heading from '@layout/Heading'
+import { Heading } from '@layout/Heading'
 
 export default async function Page() {
     return (
