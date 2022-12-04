@@ -18,7 +18,8 @@
         "paths": {
             "@elements/*": ["./components/elements/*"],
             "@layout/*": ["./components/layout/*"],
-            "@auth/*": ["./components/auth/*"]
+            "@auth/*": ["./components/auth/*"],
+            "@protocol/*": ["./components/protocol/*"]
         },
         "plugins": [
             {

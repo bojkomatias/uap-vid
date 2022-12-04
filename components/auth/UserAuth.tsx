@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 
-export default function UserAuth() {
+export const UserAuth = () => {
     const { data: session } = useSession()
 
     const [showCombo, setShowCombo] = useState(false)

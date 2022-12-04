@@ -6,19 +6,20 @@ import {
     useProtocol,
     validate,
 } from '../../../config/createContext'
-import Identification from '../../../components/Sections/Identification'
-import Duration from '../../../components/Sections/Duration'
-import DirectBudget from '../../../components/Sections/DirectBudget'
-import Description from '../../../components/Sections/Description'
-import Introduction from '../../../components/Sections/Introduction'
-import Method from '../../../components/Sections/Method'
-import Publication from '../../../components/Sections/Publication'
-import Bibliography from '../../../components/Sections/Bibliography'
+import Identification from '@protocol/Sections/Identification'
+import Duration from '@protocol/Sections/Duration'
+import DirectBudget from '@protocol/Sections/DirectBudget'
+import Description from '@protocol/Sections/Description'
+import Introduction from '@protocol/Sections/Introduction'
+import Method from '@protocol/Sections/Method'
+import Publication from '@protocol/Sections/Publication'
+import Bibliography from '@protocol/Sections/Bibliography'
 import { GetServerSideProps } from 'next'
-import { Button } from '../../../components/Atomic/Button'
+
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import { Check, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
+import { Button } from '@elements/Button'
 
 const sectionMapper = [
     <Identification key="0" id="0" />,

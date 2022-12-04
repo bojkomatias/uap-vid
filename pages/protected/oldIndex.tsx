@@ -1,10 +1,10 @@
-import { Button } from '../../components/Atomic/Button'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { initialProtocolValues } from '../../config/createContext'
-import Modal from '../../components/Atomic/Modal'
 import { ClipboardPlus } from 'tabler-icons-react'
 import { useState } from 'react'
+import Modal from '@elements/Modal'
+import { Button } from '@elements/Button'
 
 export default function Page() {
     const { data: session } = useSession()
@@ -207,7 +207,6 @@ export default function Page() {
 
     return (
         <>
-            {' '}
             <div className="-translate-y-12 text-4xl font-bold text-primary">
                 Inicio
             </div>
@@ -272,8 +271,3 @@ export default function Page() {
         </>
     )
 }
-
-// ! If need use for custom per page layout
-// Page.getLayout = function getLayout(page: ReactElement) {
-//     return <NestedLayout>{page}</NestedLayout>
-// }
