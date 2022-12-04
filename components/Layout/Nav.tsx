@@ -1,5 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
-import UserAuth from '../auth/UserAuth'
+
+import { UserAuth } from '@auth/UserAuth'
 
 export default function Nav() {
     return (
@@ -12,7 +13,7 @@ export default function Nav() {
                     </a>
                 </div>
                 <div className="flex items-center gap-2">
-                    {/* <UserAuth /> */}
+                    <UserAuth />
                 </div>
             </div>
         </nav>

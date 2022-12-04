@@ -1,58 +1,16 @@
-import { useNotifications } from '@mantine/notifications'
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import { Check, X } from 'tabler-icons-react'
-import ListBox from '../../../components/Atomic/Listbox'
-import { Button } from '../../../components/Atomic/Button'
 import Link from 'next/link'
+import { Button } from '@elements/Button'
+import { getAllUsers } from 'repositories/users'
+import Heading from '@layout/Heading'
+import { RoleSelector } from '@admin/RoleSelector'
+import { UpdateRole } from '@admin/UpdateRole'
 
-function UserList({ users }: any) {
-    const router = useRouter()
-    const notifications = useNotifications()
+export default async function UserList() {
+    const users = await getAllUsers()
 
-    const refreshData = () => {
-        router.replace(router.asPath)
-    }
-
-    const UpdateRoleForUser = async (id: any, newRole: string) => {
-        console.log(id, newRole)
-        const res = await fetch(`/api/users/${id}`, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ role: newRole }),
-        })
-        if (res.status === 200)
-            notifications.showNotification({
-                title: 'Rol modificado',
-                message: 'Se actualizo el rol del usuario correctamente',
-                color: 'teal',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
-            })
-        else if (res.status === 400 || res.status === 500)
-            notifications.showNotification({
-                title: 'Error',
-                message: 'Ocurrio un error al actualizar el rol del usuario',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
-            })
-        refreshData()
-    }
     return (
         <>
-            <div className="-translate-y-12 text-4xl font-bold text-primary">
-                Lista de usuarios
-            </div>
+            <Heading title="Lista de usuarios" />
             <div className="flex grow flex-col py-10 px-28 ">
                 <div className="flex h-2/3 grow  -translate-y-8 flex-col  text-primary">
                     <div className="grid grid-cols-3 items-center gap-6  text-2xl font-bold text-primary">
@@ -83,10 +41,7 @@ function UserList({ users }: any) {
                                 </div>
 
                                 <div className="w-full">
-                                    <ListBox
-                                        user={user}
-                                        UpdateRoleForUser={UpdateRoleForUser}
-                                    />
+                                    <UpdateRole user={user} />
                                 </div>
                             </div>
                         </div>
@@ -123,20 +78,4 @@ function UserList({ users }: any) {
             </div>
         </>
     )
-}
-
-export default UserList
-
-// You should use getServerSideProps when:
-// - Only if you need to pre-render a page whose data must be fetched at request time
-
-export const getServerSideProps: GetServerSideProps = async () => {
-    const string = `${process.env.NEXTURL}/api/users/`
-    const data = await fetch(string).then((res) => res.json())
-
-    return {
-        props: {
-            users: data,
-        },
-    }
 }

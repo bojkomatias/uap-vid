@@ -14,7 +14,7 @@ export default function RootLayout({
             <Providers>
                 <body>
                     <Nav />
-                    <main className="mx-auto my-12 min-h-[70vh] w-[500px] scale-[75%] opacity-100 transition-all duration-150 xl:scale-[85%] 2xl:my-24 2xl:scale-100">
+                    <main className="mx-auto min-h-[80vh] max-w-6xl p-12 pb-24">
                         {children}
                     </main>
                     <Footer />

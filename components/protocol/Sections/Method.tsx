@@ -1,8 +1,9 @@
+'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../config/createContext'
-import Select from '../Atomic/Select'
 import { motion } from 'framer-motion'
-import Textarea from '../Atomic/Textarea'
+import { useProtocolContext } from 'config/createContext'
+import Textarea from '@protocol/elements/Textarea'
+import Select from '@protocol/elements/Select'
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',

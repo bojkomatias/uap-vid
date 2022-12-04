@@ -1,4 +1,5 @@
-import { Fragment, PropsWithChildren, useState } from 'react'
+'use client'
+import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 
@@ -15,16 +16,20 @@ const roles = [
     'admin',
 ]
 
-const ListBox = ({
+//Callback used in UpdateRole
+export const RoleSelector = ({
     user,
-    UpdateRoleForUser,
-}: PropsWithChildren<{ user: any; UpdateRoleForUser: Function }>) => {
+    callback,
+}: {
+    user: any
+    callback?: Function
+}) => {
     return (
         <Listbox
             value={user.role}
             onChange={(e) => {
                 user.role = e
-                UpdateRoleForUser(user.id, e)
+                if (callback) callback(e)
             }}
         >
             {({ open }) => (
@@ -101,5 +106,3 @@ const ListBox = ({
         </Listbox>
     )
 }
-
-export default ListBox

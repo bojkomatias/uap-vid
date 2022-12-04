@@ -19,7 +19,8 @@
             "@elements/*": ["./components/elements/*"],
             "@layout/*": ["./components/layout/*"],
             "@auth/*": ["./components/auth/*"],
-            "@protocol/*": ["./components/protocol/*"]
+            "@protocol/*": ["./components/protocol/*"],
+            "@admin/*": ["./components/admin/*"]
         },
         "plugins": [
             {

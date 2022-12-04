@@ -1,9 +1,9 @@
+'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from '../../config/createContext'
+import { useProtocolContext } from 'config/createContext'
 import { motion } from 'framer-motion'
-
-import Table from '../Atomic/Table'
+import Table from '@protocol/elements/Table'
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12

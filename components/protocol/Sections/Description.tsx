@@ -1,8 +1,11 @@
+'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../config/createContext'
-import Input from '../Atomic/Input'
-import Select from '../Atomic/Select'
+import { useProtocolContext } from 'config/createContext'
+
+
 import { motion } from 'framer-motion'
+import Select from '@protocol/elements/Select'
+import Input from '@protocol/elements/Input'
 
 const disciplines = [
     'Ciencias Económicas y de la Administración',

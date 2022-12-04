@@ -1,10 +1,9 @@
+'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../config/createContext'
-
-import Select from '../Atomic/Select'
+import { useProtocolContext } from 'config/createContext'
 import { motion } from 'framer-motion'
-
-import Textarea from '../Atomic/Textarea'
+import Select from '@protocol/elements/Select'
+import Textarea from '@protocol/elements/Textarea'
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 

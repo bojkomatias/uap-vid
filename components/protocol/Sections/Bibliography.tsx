@@ -1,7 +1,9 @@
+'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../config/createContext'
-import Table from '../Atomic/Table'
+import { useProtocolContext } from 'config/createContext'
+
 import { motion } from 'framer-motion'
+import Table from '@protocol/elements/Table'
 
 export default function Bibliography({
     id,
@@ -20,7 +22,7 @@ export default function Bibliography({
                     {form.values.sections[Number(id)].name}
                 </span>
             </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <div>
                 <Table
                     path={path}
                     x="chart"

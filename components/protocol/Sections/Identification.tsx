@@ -1,11 +1,12 @@
+'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from '../../config/createContext'
-import Input from '../Atomic/Input'
-import Select from '../Atomic/Select'
-import full from '../../config/careers.json'
-import Table from '../Atomic/Table'
+import { useProtocolContext } from 'config/createContext'
+import full from 'config/careers.json'
 import { motion } from 'framer-motion'
+import Input from '@protocol/elements/Input'
+import Select from '@protocol/elements/Select'
+import Table from '@protocol/elements/Table'
 
 const careers = full.map((x) => x.career)
 // conditional
@@ -33,15 +34,14 @@ export default function Identification({
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="-translate-x-[6px] opacity-0"
         >
             <div className="flex grow items-center">
                 <span className="ml-10 text-xl font-bold uppercase text-primary">
                     {form.values.sections[Number(id)].name}
                 </span>
-
                 <div className="group relative hover:w-2/3">
                     <QuestionMark className="pointer-events-none ml-2 h-4 w-4 cursor-pointer text-primary transition-all duration-300 group-hover:scale-[1.4]" />
 
@@ -78,7 +78,7 @@ export default function Identification({
                     </div>
                 </div>
             </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <div className="mx-auto  max-w-6xl">
                 <Input path={path} x="title" label="titulo" />
                 <Select
                     path={path}

@@ -1,9 +1,10 @@
+'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from '../../config/createContext'
-import Select from '../Atomic/Select'
+import { useProtocolContext } from 'config/createContext'
 import { motion } from 'framer-motion'
-import Table from '../Atomic/Table'
+import Table from '@protocol/elements/Table'
+import Select from '@protocol/elements/Select'
 
 const modalities = [
     'Proyecto regular de investigación (PRI)',

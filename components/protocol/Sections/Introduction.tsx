@@ -1,7 +1,9 @@
+'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../config/createContext'
-import Textarea from '../Atomic/Textarea'
+import { useProtocolContext } from 'config/createContext'
+
 import { motion } from 'framer-motion'
+import Textarea from '@protocol/elements/Textarea'
 
 export default function Introduction({
     id,

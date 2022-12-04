@@ -1,9 +1,9 @@
 import { TrashIcon, PlusIcon } from '@heroicons/react/outline'
 import { Fragment, PropsWithChildren } from 'react'
 import Input from './Input'
-import { useProtocolContext } from '../../config/createContext'
+import { useProtocolContext } from '../../../config/createContext'
 import Select from './Select'
-import { Button } from './Button'
+import { Button } from '../../elements/Button'
 
 export default function Table({
     path,

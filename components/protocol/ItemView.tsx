@@ -1,14 +1,15 @@
+'use client'
 import Link from 'next/link'
-import React, { useState, PropsWithChildren } from 'react'
-import { Input, Section } from '../../config/createContext'
-import { Button } from './Button'
+import { useState, PropsWithChildren } from 'react'
+import { type Input } from 'config/createContext'
+import { Button } from '../elements/Button'
 
 export default function ItemView({
     dateOfCreation,
     identification,
     id,
 }: PropsWithChildren<{
-    dateOfCreation: Date
+    dateOfCreation: number
     identification: Input
     id: any
 }>) {

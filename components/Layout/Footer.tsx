@@ -2,7 +2,7 @@
 
 export default function Footer() {
     return (
-        <footer className=" my-auto flex h-[10vh] flex-col items-center justify-center bg-primary text-center text-xs text-white">
+        <footer className="my-auto flex h-[10vh] flex-col items-center justify-center bg-primary text-center text-xs text-white">
             <div className="flex gap-3">
                 <div>© COPYRIGHT 2022</div>
                 <a href="https://uap.edu.ar/">

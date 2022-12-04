@@ -1,7 +1,10 @@
 'use client'
 
-import { Session } from 'next-auth'
+import { Button } from '@elements/Button'
+import Modal from '@elements/Modal'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+import { ClipboardPlus } from 'tabler-icons-react'
 
 const content = [
     {
@@ -21,7 +24,7 @@ const content = [
             </svg>
         ),
         url: '/protocol/p',
-        // action: () => setShowNewProtocolModal(true),
+        // action: () => setShow(true),
         roles: [
             'Investigador',
             'Evaluador Interno',
@@ -181,7 +184,7 @@ const content = [
 ]
 
 export default function Navigation() {
-    const session = useSession()
+    const { data: session } = useSession()
     console.log(session)
     return (
         <div className="my-auto flex min-h-[70vh] w-1/2 cursor-pointer flex-col justify-center text-center font-bold text-primary ">
@@ -205,5 +208,46 @@ export default function Navigation() {
                 ) : null
             )}
         </div>
+    )
+}
+
+function NewProtocol() {
+    const [show, setShow] = useState(false)
+    return (
+        <Modal
+            open={show}
+            icon={<ClipboardPlus className="h-6 w-6 text-primary" />}
+            title="Crear nueva postulación"
+        >
+            <form
+                onSubmit={(e) => {
+                    if (show) {
+                        e.preventDefault()
+                        createNewProtocol(e.target[0].value)
+                    }
+                }}
+            >
+                <input
+                    required
+                    type="text"
+                    placeholder="Titulo"
+                    className="input"
+                />
+                <div className="mt-3 flex text-right">
+                    <Button
+                        className="my-2 bg-primary/90 text-xs font-semibold text-white"
+                        type="submit"
+                    >
+                        Crear
+                    </Button>
+                    <Button
+                        className=" my-2 ml-2 text-xs text-base-600 hover:bg-base-200 hover:text-primary"
+                        onClick={() => setShow(false)}
+                    >
+                        Cancelar
+                    </Button>
+                </div>
+            </form>
+        </Modal>
     )
 }

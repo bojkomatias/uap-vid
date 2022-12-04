@@ -1,21 +1,17 @@
-import ItemView from '../../../components/Atomic/ProtocolItemView'
-import { GetServerSideProps } from 'next'
-import { Protocol } from '../../../config/createContext'
-import { PropsWithChildren } from 'react'
-import { Button } from '../../../components/Atomic/Button'
+import Heading from '@layout/Heading'
+import ItemView from '@protocol/ItemView'
 import Link from 'next/link'
+import { getAllProtocols } from 'repositories/protocol'
 
-export default function projects({
-    protocols = [],
-}: PropsWithChildren<{ protocols: Protocol[]  }>) {
+// SSR Server Component, so no need to fetch from api endpoint
+export default async function Page() {
+    // Get protocol according to page and role
+    const protocols = await getAllProtocols()
     return (
         <div className="transition-all duration-200">
-            <div className="-translate-y-12 text-4xl font-bold text-primary">
-                Lista de proyectos de investigación
-            </div>
-
+            <Heading title="Lista de proyectos de investigación" />
             <div className="mx-auto mb-20 flex max-w-[1280px] flex-col justify-center px-20 py-10">
-                {protocols && (
+                {protocols &&
                     protocols.map((protocol) => (
                         <div key={protocol.id} className="mt-5">
                             {protocol?.sections[0].data && (
@@ -26,30 +22,17 @@ export default function projects({
                                 />
                             )}
                         </div>
-                    ))
+                    ))}
 
-                )} 
-                
                 {!protocols && (
                     <div className="mt-12 flex w-full flex-col items-center gap-12">
                         <p className="text-center font-thin uppercase text-primary">
                             No hay proyectos cargados ...
                         </p>
-                        <Link href="/protected" passHref>
-                            <Button>Volver</Button>
-                        </Link>
+                        <Link href="/protected">Volver</Link>
                     </div>
                 )}
             </div>
         </div>
     )
-}
-
-export const getServerSideProps = async () => {
-    const string = `${process.env.NEXTURL}/api/protocol`
-    const data : Protocol[] = await fetch(string).then((res) => res.json())
-    const protocols = data.filter((x)=>x.sections)
-    return {
-        props: { protocols },
-    }
 }

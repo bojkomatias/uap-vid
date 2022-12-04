@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Combobox } from '@headlessui/react'
-import { useProtocolContext } from '../../config/createContext'
+import { useProtocolContext } from '../../../config/createContext'
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
