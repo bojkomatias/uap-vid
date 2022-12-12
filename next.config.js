@@ -2,7 +2,7 @@
 module.exports = {
     reactStrictMode: true,
     output: 'standalone',
-    typescript: {
-        ignoreBuildErrors: true,
+    experimental: {
+        appDir: true,
     },
 }
