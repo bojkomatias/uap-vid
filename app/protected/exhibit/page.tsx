@@ -10,28 +10,28 @@ export default function Exhibit() {
                     className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]"
                     download
                 >
-                    Anexo A{' '}
+                    Anexo A
                 </a>
                 <a
                     href="/AnexoB.docx"
                     className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]"
                     download
                 >
-                    Anexo B{' '}
+                    Anexo B
                 </a>
                 <a
                     href="/AnexoC.docx"
                     className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]"
                     download
                 >
-                    Anexo C{' '}
+                    Anexo C
                 </a>
                 <a
                     href="/AnexoD.docx"
                     className="flex items-center bg-base-100 p-4 uppercase transition-all duration-200 hover:scale-[102%] hover:bg-primary hover:text-white active:scale-[99%]"
                     download
                 >
-                    Anexo D{' '}
+                    Anexo D
                 </a>
             </div>
         </>

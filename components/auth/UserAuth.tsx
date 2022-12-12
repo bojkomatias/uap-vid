@@ -48,7 +48,7 @@ export const UserAuth = () => {
                             </Link>
                             <button
                                 className="w-full p-2 text-sm font-bold text-primary transition-all duration-200 hover:bg-primary hover:text-white"
-                                onClick={() => signOut()}
+                                onClick={() => signOut({ callbackUrl: '/' })}
                             >
                                 Cerrar sesión
                             </button>
