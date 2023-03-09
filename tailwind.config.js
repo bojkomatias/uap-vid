@@ -1,14 +1,25 @@
+const colors = require('tailwindcss/colors')
 module.exports = {
     presets: [
         require('tailwindcss/defaultConfig'),
-        require('./presets/fonts'),
-        require('./presets/colors'),
+        // require('./presets/colors'),
     ],
     content: [
-        './app/**/*.{js,ts,jsx,tsx}',
-        './pages/**/*.{js,ts,jsx,tsx}',
-        './components/**/*.{js,ts,jsx,tsx}',
+        './src/**/*.{js,ts,jsx,tsx}',
     ],
+    theme: {
+        colors: {
+            current: 'currentColor',
+            base: colors.neutral,
+            primary: {
+                DEFAULT: '#003C71',
+            },
+            secondary: colors.gray,
+            white: colors.white,
+            black: colors.black,
+            error: colors.rose,
+        },
+    },
     plugins: [
         require('@tailwindcss/typography'),
         // ...

@@ -1,7 +1,17 @@
 import { Footer } from '@layout/Footer'
 import { Nav } from '@layout/Nav'
-import '../styles/globals.css'
+import './globals.css'
 import Providers from './providers'
+import { Open_Sans } from 'next/font/google'
+
+export const metadata = {
+    title: {
+        default: 'UAP - Investigación y Desarrollo',
+        template: '$ | VID',
+    },
+}
+
+const font = Open_Sans({ subsets: ['latin'] })
 
 export default function RootLayout({
     children,
@@ -9,10 +19,9 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html>
-            <head />
+        <html className={font.className}>
             <Providers>
-                <body>
+                <body className="subpixel-antialiased">
                     <Nav />
                     <main className="mx-auto min-h-[80vh] max-w-6xl p-12 pb-24">
                         {children}

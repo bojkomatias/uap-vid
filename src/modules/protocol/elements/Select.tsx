@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { Combobox } from '@headlessui/react'
 import { useProtocolContext } from '../../../config/createContext'
+import { Check, Selector } from 'tabler-icons-react'
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -52,7 +52,7 @@ export default function Select({
                         />
 
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
-                            <SelectorIcon
+                            <Selector
                                 className="h-5 w-5 text-primary transition-all duration-200 hover:text-base-400"
                                 aria-hidden="true"
                             />
@@ -99,8 +99,8 @@ export default function Select({
                                                             : 'text-indigo-600'
                                                     )}
                                                 >
-                                                    <CheckIcon
-                                                        className="h-5 w-5 text-primary"
+                                                    <Check
+                                                        className="h-4 w-4 text-primary ml-1"
                                                         aria-hidden="true"
                                                     />
                                                 </span>

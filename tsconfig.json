@@ -14,13 +14,13 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "paths": {
-            "@elements/*": ["./components/elements/*"],
-            "@layout/*": ["./components/layout/*"],
-            "@auth/*": ["./components/auth/*"],
-            "@protocol/*": ["./components/protocol/*"],
-            "@admin/*": ["./components/admin/*"]
+            "@elements/*": ["./modules/elements/*"],
+            "@layout/*": ["./modules/layout/*"],
+            "@auth/*": ["./modules/auth/*"],
+            "@protocol/*": ["./modules/protocol/*"],
+            "@admin/*": ["./modules/admin/*"]
         },
         "plugins": [
             {

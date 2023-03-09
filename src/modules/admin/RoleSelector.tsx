@@ -1,7 +1,7 @@
 'use client'
 import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { Check, Selector } from 'tabler-icons-react'
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -38,7 +38,7 @@ export const RoleSelector = ({
                         <Listbox.Button className="input w-full">
                             <span className="block truncate">{user.role}</span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-                                <SelectorIcon
+                                <Selector
                                     className="text-gray-400 h-5 w-5 text-primary"
                                     aria-hidden="true"
                                 />
@@ -88,7 +88,7 @@ export const RoleSelector = ({
                                                             'absolute inset-y-0 right-0 flex items-center pr-4'
                                                         )}
                                                     >
-                                                        <CheckIcon
+                                                        <Check
                                                             className="h-5 w-5 text-primary"
                                                             aria-hidden="true"
                                                         />

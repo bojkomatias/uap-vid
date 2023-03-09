@@ -14,8 +14,7 @@ import Introduction from './Sections/Introduction'
 import Method from './Sections/Method'
 import Publication from './Sections/Publication'
 import Bibliography from './Sections/Bibliography'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { Check, X } from 'tabler-icons-react'
+import { Check, X, ChevronLeft, ChevronRight } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import { protocol } from '@prisma/client'
@@ -97,7 +96,7 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
                         setVisible((prev: string) => String(Number(prev) - 1))
                     }
                 >
-                    <ChevronLeftIcon className="h-6 w-6" />
+                    <ChevronLeft className="h-6 w-6" />
                 </Button>
 
                 <Button
@@ -112,7 +111,7 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
                         setVisible((prev: string) => String(Number(prev) + 1))
                     }
                 >
-                    <ChevronRightIcon className="h-6 w-6" />
+                    <ChevronRight className="h-6 w-6" />
                 </Button>
             </div>
         </div>
