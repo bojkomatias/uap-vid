@@ -8,6 +8,9 @@ module.exports = {
         './src/**/*.{js,ts,jsx,tsx}',
     ],
     theme: {
+        fontFamily: {
+            sans: ['var(--font-sans)']
+        },
         colors: {
             current: 'currentColor',
             base: colors.neutral,

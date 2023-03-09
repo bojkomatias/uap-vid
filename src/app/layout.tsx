@@ -2,7 +2,7 @@ import { Footer } from '@layout/Footer'
 import { Nav } from '@layout/Nav'
 import './globals.css'
 import Providers from './providers'
-import { Open_Sans } from 'next/font/google'
+import { Roboto_Flex } from 'next/font/google'
 
 export const metadata = {
     title: {
@@ -11,7 +11,7 @@ export const metadata = {
     },
 }
 
-const font = Open_Sans({ subsets: ['latin'] })
+const font = Roboto_Flex({ subsets: ['latin'], variable: '--font-sans' })
 
 export default function RootLayout({
     children,
@@ -19,7 +19,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html className={font.className}>
+        <html className={`${font.variable} font-sans`}>
             <Providers>
                 <body className="subpixel-antialiased">
                     <Nav />
