@@ -1,4 +1,6 @@
 {
     "cSpell.language": "en,es",
-    "cSpell.words": ["CONICET"]
+    "cSpell.words": ["CONICET"],
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true
 }

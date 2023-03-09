@@ -13,14 +13,29 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "jsx": "preserve",
-        "incremental": true
+        "incremental": true,
+        "baseUrl": ".",
+        "paths": {
+            "@elements/*": ["./components/elements/*"],
+            "@layout/*": ["./components/layout/*"],
+            "@auth/*": ["./components/auth/*"],
+            "@protocol/*": ["./components/protocol/*"],
+            "@admin/*": ["./components/admin/*"]
+        },
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
     },
     "include": [
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
         "pages/index.tsx",
-        "config/exhibit.js"
-, "pages/protected/admin/middleware.js"    ],
+        "config/exhibit.js",
+        "pages/protected/admin/middleware.js",
+        ".next/types/**/*.ts"
+    ],
     "exclude": ["node_modules"]
 }

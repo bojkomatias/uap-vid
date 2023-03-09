@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type ProtocolSections {
+  data ProtocolSectionsData
+  id   Int
+  name String
+}
+
+type ProtocolSectionsData {
+  analysis       String?
+  assignment     String?
+  career         String?
+  chart          ProtocolSectionsDataChart[]
+  chronogram     ProtocolSectionsDataChronogram[]
+  considerations String?
+  design         String?
+  detail         String?
+  discipline     String?
+  duration       String?
+  expenses       ProtocolSectionsDataExpenses[]
+  field          String?
+  instruments    String?
+  justification  String?
+  line           String?
+  modality       String?
+  objective      String?
+  objectives     String?
+  objetives      String?
+  participants   String?
+  place          String?
+  plan           String?
+  problem        String?
+  procedures     String?
+  result         String?
+  sponsor        String?
+  state          String?
+  team           ProtocolSectionsDataTeam[]
+  title          String?
+  type           String?
+  words          String?
+}
+
+type ProtocolSectionsDataChart {
+  author String
+  title  String
+  year   String
+}
+
+type ProtocolSectionsDataChronogram {
+  semester String
+  task     String
+}
+
+type ProtocolSectionsDataExpenses {
+  amount String
+  detail String
+  type   String
+  year   String
+}
+
+type ProtocolSectionsDataTeam {
+  hours     String
+  last_name String
+  name      String
+  role      String
+}
+
+model protocol {
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt Float
+  sections  ProtocolSections[]
+}
+
+model reviews {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model user {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
+  id_       String?   @map("id")
+  image     String?
+  lastLogin DateTime? @db.Date
+  name      String?
+  password  String?
+  role      String
+}
