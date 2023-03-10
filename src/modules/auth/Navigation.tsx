@@ -2,7 +2,6 @@
 import { Fragment, ReactNode, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
-    ArrowRightCircle,
     ClipboardList,
     List,
     ListDetails,
