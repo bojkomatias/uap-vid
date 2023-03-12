@@ -19,6 +19,7 @@
         "@mantine/rte": "^4.2.4",
         "@prisma/client": "^4.6.1",
         "bcryptjs": "^2.4.3",
+        "clsx": "^1.2.1",
         "framer-motion": "^6.3.3",
         "gsap": "^3.10.4",
         "mongodb": "^4.6.0",
