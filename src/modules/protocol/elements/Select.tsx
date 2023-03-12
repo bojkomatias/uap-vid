@@ -59,7 +59,7 @@ export default function Select({
                         </div>
                     </Combobox.Button>
                     {form.errors[path + x] ? (
-                        <p className=" pt-1 pl-3 text-xs text-secondary-600 saturate-[80%]">
+                        <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
                             *{form.errors[path + x]}
                         </p>
                     ) : null}

@@ -17,7 +17,7 @@ module.exports = {
             primary: {
                 DEFAULT: '#003C71',
             },
-            secondary: colors.gray,
+            gray: colors.gray,
             white: colors.white,
             black: colors.black,
             error: colors.rose,
