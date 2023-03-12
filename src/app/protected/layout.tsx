@@ -11,5 +11,5 @@ export default async function Layout({
     const session = await getServerSession(NextAuth)
     if (!session) redirect('/')
 
-    return <Navigation>{children}</Navigation>
+    return children
 }

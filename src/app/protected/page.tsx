@@ -1,3 +1,4 @@
+import Navigation from '@auth/Navigation'
 import { Heading } from '@layout/Heading'
 import ItemView from '@protocol/ItemView'
 import NewProtocolButton from '@protocol/NewProtocolButton'
@@ -8,7 +9,7 @@ import { getAllProtocols } from 'repositories/protocol'
 export default async function Page() {
     const protocols = await getAllProtocols()
     return (
-        <div className="transition-all duration-200">
+        <Navigation>
             <Heading title="Lista de proyectos de investigación" />
             {/* //! Conditionally render if role allows it */}
             <NewProtocolButton />
@@ -35,6 +36,6 @@ export default async function Page() {
                     </div>
                 )}
             </div>
-        </div>
+        </Navigation>
     )
 }

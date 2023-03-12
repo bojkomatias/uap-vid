@@ -13,6 +13,7 @@ import {
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { Button } from '@elements/Button'
 
 const navigation = [
     {
@@ -123,33 +124,34 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                     </div>
                                 </Transition.Child>
                                 <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
-                                    <nav className="mt-10 space-y-1 px-2">
+                                    <nav className="mt-10 space-y-3 px-2">
                                         {navigation.map((item) =>
                                             item.roles.includes(
                                                 session?.user?.role!
                                             ) ? (
-                                                <a
+                                                <Link
                                                     key={item.name}
                                                     href={item.href}
                                                     className={classNames(
                                                         pathname === item.href
-                                                            ? 'bg-base-100 text-base-900'
-                                                            : 'text-base-600 hover:bg-base-50 hover:text-base-900',
-                                                        'group flex items-center rounded-md px-2 py-2 text-base font-medium'
+                                                            ? 'bg-primary text-white'
+                                                            : 'text-base-700 hover:bg-base-100 hover:text-black',
+                                                        'group flex items-center px-2 py-2 text-sm font-medium'
                                                     )}
+                                                    passHref
                                                 >
                                                     <item.icon
                                                         className={classNames(
                                                             pathname ===
                                                                 item.href
-                                                                ? 'text-base-500'
-                                                                : 'text-base-400 group-hover:text-base-500',
-                                                            'mr-4 h-6 w-6 flex-shrink-0'
+                                                                ? 'text-base-100'
+                                                                : 'text-base-700 group-hover:text-black',
+                                                            'mr-3 h-6 w-6 flex-shrink-0'
                                                         )}
                                                         aria-hidden="true"
                                                     />
                                                     {item.name}
-                                                </a>
+                                                </Link>
                                             ) : null
                                         )}
                                     </nav>
@@ -168,7 +170,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex min-h-0 flex-1 flex-col border-r border-base-200 bg-white">
                     <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-                        <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
+                        <nav className="mt-10 flex-1 space-y-3 bg-white px-2">
                             {navigation.map((item) =>
                                 item.roles.includes(session?.user?.role!) ? (
                                     <Link
@@ -177,7 +179,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                         className={classNames(
                                             pathname === item.href
                                                 ? 'bg-primary text-white'
-                                                : 'text-base-500 hover:bg-base-100 hover:text-primary',
+                                                : 'text-base-700 hover:bg-base-100 hover:text-black',
                                             'group flex items-center px-2 py-2 text-sm font-medium'
                                         )}
                                         passHref
@@ -186,7 +188,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                             className={classNames(
                                                 pathname === item.href
                                                     ? 'text-base-100'
-                                                    : 'text-base-500 group-hover:text-black',
+                                                    : 'text-base-700 group-hover:text-black',
                                                 'mr-3 h-6 w-6 flex-shrink-0'
                                             )}
                                             aria-hidden="true"
@@ -200,15 +202,11 @@ export default function Navigation({ children }: { children: ReactNode }) {
                 </div>
             </div>
             <div className="flex flex-1 flex-col lg:pl-64">
-                <div className="sticky top-0 z-10 bg-white pl-1 pt-1 sm:pl-3 sm:pt-3 lg:hidden">
-                    <button
-                        type="button"
-                        className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-base-500 hover:text-base-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                        onClick={() => setSidebarOpen(true)}
-                    >
+                <div className="sticky -mt-10 -ml-12  z-10 sm:pl-3 sm:pt-3 lg:hidden">
+                    <Button onClick={() => setSidebarOpen(true)}>
                         <span className="sr-only">Open sidebar</span>
                         <Menu2 className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </Button>
                 </div>
                 <main className="flex-1">
                     <div className="px-4 sm:px-6 lg:px-8">{children}</div>
