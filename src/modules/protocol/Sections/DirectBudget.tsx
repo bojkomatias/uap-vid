@@ -4,6 +4,7 @@ import { QuestionMark } from 'tabler-icons-react'
 import { useProtocolContext } from 'config/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
+import InfoTooltip from '@protocol/elements/InfoTooltip'
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12
@@ -28,43 +29,11 @@ export default function DirectBudget({
             className="opacity-0"
         >
             <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
+                <span className="ml-10 text-xl font-bold uppercase text-primary">
                     {form.values.sections[Number(id)].name}
                 </span>
-                <div className="group relative hover:w-2/3">
-                    <QuestionMark className="pointer-events-none ml-2 h-4 w-4 cursor-pointer text-primary transition-all duration-300 group-hover:scale-[1.4]" />
-
-                    <div className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg transition-all duration-200 group-hover:block prose-p:pl-6">
-                        Debe detallar todos los insumos y sus costos. Aquellos
-                        insumos que fueren adquiridos a través del presupuesto
-                        asignado por la UAP, una vez concluido el proyecto,
-                        deberán ser entregados en la VID para que esta defina el
-                        destino que se les dará.
-                        <p>
-                            Recuerde que, al solicitar reintegros por gastos
-                            directos de investigación, se aprobarán solo
-                            aquellos que figuren en el presupuesto que presente
-                            en este protocolo, por lo que se solicita que
-                            detalle de manera exhaustiva los rubros que
-                            considere pertinentes, por ejemplo: insumos de
-                            laboratorio, libros, fotocopias, materiales de
-                            impresión, correo postal, artículos de librería,
-                            papelería, viajes, test, traducciones, publicación,
-                            etc.
-                        </p>{' '}
-                        <p>
-                            Para tener derecho al reembolso de cualquier otro
-                            gasto que no esté contemplado dentro del presupuesto
-                            original, deberá presentar la solicitud al
-                            secretario de investigación de la unidad académica
-                            para que este gestione la autorización de la
-                            Vicerrectoría de Investigación y Desarrollo. Si el
-                            investigador efectuara el gasto sin contar con dicha
-                            autorización, no podrá exigir su reembolso.
-                        </p>
-                    </div>
-                </div>
             </div>
+            <Info />
             <div className="mx-auto mt-5 max-w-[1120px]">
                 <Table
                     path={path}
@@ -103,3 +72,29 @@ export default function DirectBudget({
         </motion.div>
     )
 }
+
+const Info = () => (
+    <InfoTooltip>
+        Debe detallar todos los insumos y sus costos. Aquellos insumos que
+        fueren adquiridos a través del presupuesto asignado por la UAP, una vez
+        concluido el proyecto, deberán ser entregados en la VID para que esta
+        defina el destino que se les dará.
+        <p>
+            Recuerde que, al solicitar reintegros por gastos directos de
+            investigación, se aprobarán solo aquellos que figuren en el
+            presupuesto que presente en este protocolo, por lo que se solicita
+            que detalle de manera exhaustiva los rubros que considere
+            pertinentes, por ejemplo: insumos de laboratorio, libros,
+            fotocopias, materiales de impresión, correo postal, artículos de
+            librería, papelería, viajes, test, traducciones, publicación, etc.
+        </p>{' '}
+        <p>
+            Para tener derecho al reembolso de cualquier otro gasto que no esté
+            contemplado dentro del presupuesto original, deberá presentar la
+            solicitud al secretario de investigación de la unidad académica para
+            que este gestione la autorización de la Vicerrectoría de
+            Investigación y Desarrollo. Si el investigador efectuara el gasto
+            sin contar con dicha autorización, no podrá exigir su reembolso.
+        </p>
+    </InfoTooltip>
+)

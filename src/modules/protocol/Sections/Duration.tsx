@@ -5,6 +5,7 @@ import { useProtocolContext } from 'config/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
 import Select from '@protocol/elements/Select'
+import InfoTooltip from '@protocol/elements/InfoTooltip'
 
 const modalities = [
     'Proyecto regular de investigación (PRI)',
@@ -75,18 +76,8 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
                     {form.values.sections[Number(id)].name}
                 </span>
-                <div className="group relative hover:w-2/3">
-                    <QuestionMark className="pointer-events-none ml-2 h-4 w-4 cursor-pointer text-primary transition-all duration-300 group-hover:scale-[1.4]" />
-
-                    <div className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg transition-all duration-200 group-hover:block prose-p:pl-6">
-                        {' '}
-                        La duración de 60 meses solo será aplicable a proyectos
-                        vinculados con programas doctorales.
-                        <br />
-                        Agregue todas las tareas que correspondan por semestre.
-                    </div>
-                </div>
             </div>
+            <Info />
             <div className="mx-auto mt-5 max-w-[1120px]">
                 <Select
                     path={path}
@@ -126,3 +117,12 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
         </motion.div>
     )
 }
+
+const Info = () => (
+    <InfoTooltip>
+        La duración de 60 meses solo será aplicable a proyectos vinculados con
+        programas doctorales.
+        <br />
+        Agregue todas las tareas que correspondan por semestre.
+    </InfoTooltip>
+)
