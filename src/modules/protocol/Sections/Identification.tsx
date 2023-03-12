@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import Input from '@protocol/elements/Input'
 import Select from '@protocol/elements/Select'
 import Table from '@protocol/elements/Table'
+import InfoTooltip from '@protocol/elements/InfoTooltip'
 
 const careers = full.map((x) => x.career)
 // conditional
@@ -42,43 +43,9 @@ export default function Identification({
                 <span className="ml-10 text-xl font-bold uppercase text-primary">
                     {form.values.sections[Number(id)].name}
                 </span>
-                <div className="group relative hover:w-2/3">
-                    <QuestionMark className="pointer-events-none ml-2 h-4 w-4 cursor-pointer text-primary transition-all duration-300 group-hover:scale-[1.4]" />
-
-                    <div className="prose prose-sm prose-zinc absolute top-5 left-5 z-10 hidden bg-base-200 p-3 shadow-lg transition-all duration-200 group-hover:block prose-p:pl-6">
-                        <p>
-                            <b>Codirector:</b> En el caso de un proyecto tesis
-                            de posgrado, agregar el nombre del director o
-                            consejero.
-                        </p>
-                        <p>
-                            {' '}
-                            <b>Investigadores externos UAP:</b> Colaboradores
-                            adhonorem{' '}
-                        </p>
-                        <p>
-                            {' '}
-                            <b>Técnico y Profesionales:</b> Después de que el
-                            proyecto sea aprobado y asignados los técnicos y los
-                            profesionales becados, deberá adjuntar un archivo
-                            para justificar la participación y detallar
-                            exhaustivamente las actividades que llevará a cabo
-                            cada uno, junto con: Conocimientos previos
-                            requeridos. Datos personales: apellido y nombre,
-                            tipo y número de documento, dirección de correo
-                            electrónico y dirección postal. Estudios: cantidad
-                            de asignaturas regularizadas y aprobadas de la
-                            carrera en curso o título de las carreras de grado o
-                            posgrado terminadas. Cursos realizados. Becas
-                            obtenidas anteriormente. Idiomas: con qué idiomas
-                            puede trabajar y con qué nivel en cada caso. Carta
-                            escrita por el postulante en la que fundamente la
-                            solicitud de la beca.
-                        </p>
-                    </div>
-                </div>
             </div>
-            <div className="mx-auto  max-w-6xl">
+            <Info />
+            <div className="mx-auto max-w-6xl">
                 <Input path={path} x="title" label="titulo" />
                 <Select
                     path={path}
@@ -135,3 +102,31 @@ export default function Identification({
         </motion.div>
     )
 }
+
+const Info = () => (
+    <InfoTooltip>
+        <p>
+            <b>Codirector:</b> En el caso de un proyecto tesis de posgrado,
+            agregar el nombre del director o consejero.
+        </p>
+        <p>
+            {' '}
+            <b>Investigadores externos UAP:</b> Colaboradores adhonorem{' '}
+        </p>
+        <p>
+            {' '}
+            <b>Técnico y Profesionales:</b> Después de que el proyecto sea
+            aprobado y asignados los técnicos y los profesionales becados,
+            deberá adjuntar un archivo para justificar la participación y
+            detallar exhaustivamente las actividades que llevará a cabo cada
+            uno, junto con: Conocimientos previos requeridos. Datos personales:
+            apellido y nombre, tipo y número de documento, dirección de correo
+            electrónico y dirección postal. Estudios: cantidad de asignaturas
+            regularizadas y aprobadas de la carrera en curso o título de las
+            carreras de grado o posgrado terminadas. Cursos realizados. Becas
+            obtenidas anteriormente. Idiomas: con qué idiomas puede trabajar y
+            con qué nivel en cada caso. Carta escrita por el postulante en la
+            que fundamente la solicitud de la beca.
+        </p>
+    </InfoTooltip>
+)
