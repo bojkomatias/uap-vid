@@ -23,7 +23,7 @@ export default function RootLayout({
             <Providers>
                 <body className="subpixel-antialiased">
                     <Nav />
-                    <main className="mx-auto min-h-[80vh] max-w-6xl p-12 pb-24">
+                    <main className="min-h-[90vh] relative p-12 pb-24">
                         {children}
                     </main>
                     <Footer />
