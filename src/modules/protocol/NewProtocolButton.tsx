@@ -34,12 +34,12 @@ export default function NewProtocolButton() {
 
     return (
         <div className="flex flex-row-reverse">
-            <Button onClick={() => setShow(true)}>
-                <FilePlus className="h-6 w-6 mr-3" /> Nueva Postulación
+            <Button intent="primary" onClick={() => setShow(true)}>
+                <FilePlus className="h-6 mr-3" /> Nueva Postulación
             </Button>
             <Modal
                 open={show}
-                icon={<ClipboardPlus className="h-6 w-6 text-primary" />}
+                icon={<ClipboardPlus className="h-6 text-primary" />}
                 title="Crear nueva postulación"
             >
                 <input

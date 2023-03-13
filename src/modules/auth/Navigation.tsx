@@ -82,7 +82,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-base-600 bg-opacity-75" />
+                        <div className="fixed inset-0 bg-black/50" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 z-40 flex">
@@ -136,7 +136,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                         pathname === item.href
                                                             ? 'bg-primary text-white'
                                                             : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                        'group flex items-center px-2 py-2 text-sm font-medium'
+                                                        'group flex items-center px-4 py-3 text-sm font-medium rounded'
                                                     )}
                                                     passHref
                                                 >
@@ -146,7 +146,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                                 item.href
                                                                 ? 'text-base-100'
                                                                 : 'text-base-700 group-hover:text-black',
-                                                            'mr-3 h-6 w-6 flex-shrink-0'
+                                                            'mr-3 h-5 flex-shrink-0'
                                                         )}
                                                         aria-hidden="true"
                                                     />
@@ -180,7 +180,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                             pathname === item.href
                                                 ? 'bg-primary text-white'
                                                 : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                            'group flex items-center px-2 py-2 text-sm font-medium'
+                                            'group flex items-center px-4 rounded py-3 text-sm font-medium'
                                         )}
                                         passHref
                                     >
@@ -189,7 +189,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                 pathname === item.href
                                                     ? 'text-base-100'
                                                     : 'text-base-700 group-hover:text-black',
-                                                'mr-3 h-6 w-6 flex-shrink-0'
+                                                'mr-3 h-5 flex-shrink-0'
                                             )}
                                             aria-hidden="true"
                                         />
@@ -203,7 +203,10 @@ export default function Navigation({ children }: { children: ReactNode }) {
             </div>
             <div className="flex flex-1 flex-col lg:pl-64">
                 <div className="sticky -mt-10 -ml-12  z-10 sm:pl-3 sm:pt-3 lg:hidden">
-                    <Button onClick={() => setSidebarOpen(true)}>
+                    <Button
+                        intent="secondary"
+                        onClick={() => setSidebarOpen(true)}
+                    >
                         <span className="sr-only">Open sidebar</span>
                         <Menu2 className="h-6 w-6" aria-hidden="true" />
                     </Button>

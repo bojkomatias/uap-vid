@@ -22,6 +22,9 @@ module.exports = {
             black: colors.black,
             error: colors.rose,
         },
+        extend: {
+            borderRadius: { DEFAULT: '0.5rem' }
+        }
     },
     plugins: [
         require('@tailwindcss/typography'),
