@@ -91,27 +91,29 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
 
             <div className="mt-12 mb-8 flex w-full justify-between px-10 ">
                 <Button
+                    intent="secondary"
                     disabled={currentVisible === '0'}
                     onClick={() =>
                         setVisible((prev: string) => String(Number(prev) - 1))
                     }
                 >
-                    <ChevronLeft className="h-6 w-6" />
+                    <ChevronLeft className="h-5" />
                 </Button>
 
                 <Button
                     onClick={() => updateProtocol(form.values)}
-                    className=""
+                    intent="secondary"
                 >
                     Guardar
                 </Button>
                 <Button
+                    intent="secondary"
                     disabled={currentVisible === '7'}
                     onClick={() =>
                         setVisible((prev: string) => String(Number(prev) + 1))
                     }
                 >
-                    <ChevronRight className="h-6 w-6" />
+                    <ChevronRight className="h-5" />
                 </Button>
             </div>
         </div>

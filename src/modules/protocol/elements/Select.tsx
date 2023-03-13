@@ -65,17 +65,17 @@ export default function Select({
                     ) : null}
 
                     {filteredValues?.length > 0 && (
-                        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base text-primary ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                             {filteredValues.map((value: any, index: any) => (
                                 <Combobox.Option
                                     key={index}
                                     value={value}
                                     className={({ active }) =>
                                         classNames(
-                                            'relative cursor-default select-none py-2 pl-8 pr-4 text-primary',
+                                            'relative cursor-default select-none py-2 pl-8 pr-4',
                                             active
-                                                ? 'bg-indigo-600 text-primary'
-                                                : 'text-base-400'
+                                                ? 'bg-gray-100'
+                                                : 'text-base-600'
                                         )
                                     }
                                 >
@@ -84,7 +84,8 @@ export default function Select({
                                             <span
                                                 className={classNames(
                                                     'block truncate',
-                                                    selected && 'font-semibold'
+                                                    selected &&
+                                                        'font-semibold text-primary'
                                                 )}
                                             >
                                                 {value}

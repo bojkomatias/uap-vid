@@ -45,7 +45,7 @@ export default function Table({
 
             <Trash
                 onClick={() => form.removeListItem(path + x, index)}
-                className={`mr-2 mt-12 h-6 w-6 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90] ${
+                className={`mr-2 mt-12 h-5 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90] ${
                     index == 0 ? 'pointer-events-none invisible' : ''
                 }`}
             />
@@ -72,10 +72,11 @@ export default function Table({
                 onClick={() =>
                     form.insertListItem(path + x, insertedItemFormat)
                 }
+                intent="secondary"
                 className="mx-auto my-2 w-1/3 cursor-pointer justify-center gap-2 text-xs"
             >
                 <p> Añadir otra fila </p>
-                <Plus className="h-5 w-5 cursor-pointer text-primary transition-all duration-200 group-hover:text-white" />
+                <Plus className="h-5" />
             </Button>
         </div>
     )
