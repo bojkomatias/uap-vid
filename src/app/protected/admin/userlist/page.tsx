@@ -2,75 +2,95 @@ import Link from 'next/link'
 import { Button } from '@elements/Button'
 import { getAllUsers } from 'repositories/users'
 import { Heading } from '@layout/Heading'
-import { RoleSelector } from '@admin/RoleSelector'
 import { UpdateRole } from '@admin/UpdateRole'
 import Navigation from '@auth/Navigation'
+import { UserPlus } from 'tabler-icons-react'
 
 export default async function UserList() {
     const users = await getAllUsers()
 
     return (
         <Navigation>
-            <Heading title="Lista de usuarios" />
-            <div className="flex flex-row-reverse">
-                <Link href="/protected/admin/newuser" passHref>
-                    <Button>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="8.5" cy="7" r="4"></circle>
-                            <line x1="20" y1="8" x2="20" y2="14"></line>
-                            <line x1="23" y1="11" x2="17" y2="11"></line>
-                        </svg>
-                        <span className="ml-3"> Nuevo usuario</span>
-                    </Button>
-                </Link>
-            </div>
-            <div className="flex grow flex-col py-10">
-                <div className="flex h-2/3 grow -translate-y-8 flex-col text-primary">
-                    <div className="grid grid-cols-3 items-center gap-6 text-xl font-bold text-primary">
-                        <p>Email</p>
-                        <p>Último inicio de sesión</p>
-                        <p className="translate-x-28">Rol</p>
-                    </div>
-                    {users.map((user: any) => (
-                        <div key={user.email} className=" py-2 text-primary">
-                            <div className="grid grid-cols-3 items-center gap-6">
-                                <p>{user.email}</p>
-                                <div className="flex gap-3">
-                                    {' '}
-                                    <p>
-                                        {user.lastLogin
-                                            ? new Date(
-                                                  user.lastLogin
-                                              ).toLocaleDateString('es-ar')
-                                            : '--'}
-                                    </p>
-                                    <p>
-                                        {user.lastLogin
-                                            ? new Date(
-                                                  user.lastLogin
-                                              ).toLocaleTimeString('es-ar')
-                                            : '--'}
-                                    </p>
-                                </div>
-
-                                <div className="w-full">
-                                    <UpdateRole user={user} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+            <div className="sm:flex sm:items-center">
+                <div className="sm:flex-auto">
+                    <Heading title="Lista de usuarios" />
                 </div>
+                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                    <Link href={'/protected/admin/newuser'} passHref>
+                        <Button>
+                            <UserPlus className="h-6" />
+                            <span className="ml-3"> Nuevo usuario</span>
+                        </Button>
+                    </Link>
+                </div>
+            </div>
+            <div className="-mx-4 mt-8 sm:-mx-0">
+                <table className="min-w-full divide-y divide-gray-300">
+                    <thead>
+                        <tr>
+                            <th
+                                scope="col"
+                                className="py-3.5 pl-4 pr-3 text-left text-gray-900 sm:pl-0"
+                            >
+                                Nombre
+                            </th>
+                            <th
+                                scope="col"
+                                className="hidden px-3 py-3.5 text-left text-gray-900 sm:table-cell"
+                            >
+                                Email
+                            </th>
+                            <th
+                                scope="col"
+                                className="px-3 py-3.5 text-center text-gray-900 max-w-md"
+                            >
+                                Rol
+                            </th>
+                            <th
+                                scope="col"
+                                className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                            >
+                                <span className="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                        {users.map((user) => (
+                            <tr key={user.email}>
+                                <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                                    {user.name}
+                                    <dl className="font-normal lg:hidden">
+                                        <dt className="sr-only sm:hidden">
+                                            Email
+                                        </dt>
+                                        <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                            {user.email}
+                                        </dd>
+                                    </dl>
+                                </td>
+                                <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                                    {user.email}
+                                </td>
+                                <td className="px-3 py-4 text-sm text-gray-500 max-w-[8rem]">
+                                    <UpdateRole
+                                        user={JSON.parse(JSON.stringify(user))}
+                                    />
+                                </td>
+                                <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                    <a
+                                        href="#"
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                    >
+                                        Edit
+                                        <span className="sr-only">
+                                            , {user.name}
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </Navigation>
     )

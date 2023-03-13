@@ -54,50 +54,69 @@ export default function UserForm() {
                 e.preventDefault()
                 CreateNewUser()
             }}
-            className="mx-auto flex w-1/2 flex-col items-center gap-10 pb-12"
+            className="lg:grid lg:grid-cols-2 place-items-stretch"
         >
-            <input
-                required
-                className="input"
-                type="text"
-                name="name"
-                placeholder="John Doe"
-                onChange={(e) =>
-                    setNewUser({
-                        ...newUser,
-                        [e.target.name]: e.target.value,
-                    })
-                }
-            />{' '}
-            <input
-                required
-                className="input"
-                type="email"
-                name="email"
-                placeholder="ejemplo@uap.edu.ar"
-                onChange={(e) =>
-                    setNewUser({
-                        ...newUser,
-                        [e.target.name]: e.target.value,
-                    })
-                }
-            />
-            <input
-                required
-                className="input"
-                type="password"
-                name="password"
-                placeholder="****"
-                onChange={(e) =>
-                    setNewUser({
-                        ...newUser,
-                        [e.target.name]: e.target.value,
-                    })
-                }
-            />
-            <RoleSelector user={newUser} />
+            <div className="m-3 p-1">
+                <label className="label">Nombre</label>
+                <input
+                    required
+                    className="input"
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />
+            </div>
+            <div className="m-3 p-1">
+                <label className="label">Email</label>
+                <input
+                    required
+                    className="input"
+                    type="email"
+                    name="email"
+                    placeholder="ejemplo@uap.edu.ar"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />
+            </div>
+            <div className="m-3 p-1">
+                <label className="label">Contraseña</label>
+                <input
+                    required
+                    className="input"
+                    type="password"
+                    name="password"
+                    placeholder="****"
+                    onChange={(e) =>
+                        setNewUser({
+                            ...newUser,
+                            [e.target.name]: e.target.value,
+                        })
+                    }
+                />
+            </div>
+            <div className="m-3 p-1">
+                <label className="label">Rol</label>
+                <RoleSelector user={newUser} />
+            </div>
             {/* Ignoro el primero param */}
-            <Button type="submit"> Crear Nuevo Usuario</Button>
+
+            <Button
+                type="submit"
+                className="lg:place-self-end lg:col-start-2 lg:col-end-3 m-4 float-right"
+            >
+                {' '}
+                Crear Nuevo Usuario
+            </Button>
         </form>
     )
 }
