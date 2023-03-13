@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply overflow-x-hidden subpixel-antialiased;
+    }
+    * {
+        @apply rounded-sm;
+    }
+}
+
+.shadowCustom {
+    -webkit-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
+}
+
+@layer components {
+    .input {
+        @apply w-full self-start p-3 py-2 pl-3 pr-10 shadow-inner focus:shadow-none focus:ring-[2px] border border-base-800/20 placeholder:text-xs placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2;
+    }
+}
