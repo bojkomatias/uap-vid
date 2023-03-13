@@ -29,11 +29,11 @@ export const UserAuth = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none space-y-1">
+                        <Menu.Items className="overflow-hidden rounded absolute right-0 z-10 mt-2 w-48 origin-top-right bg-white py-1 shadow-lg ring-1 ring-gray-300 focus:outline-none space-y-1">
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
-                                        href="protected/profile"
+                                        href={'/protected/profile'}
                                         className={clsx(
                                             active ? 'bg-gray-100 ' : '',
                                             'block px-6 py-2 text-sm text-gray-700 w-full text-left font-medium'
