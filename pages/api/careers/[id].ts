@@ -8,7 +8,6 @@ export default async function handler(
 ) {
     if (req.method === 'GET') {
         const { career } = req.query
-
         return res.status(404).end({ message: 'Invalid data' })
     }
 }
