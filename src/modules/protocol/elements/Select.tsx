@@ -33,8 +33,7 @@ export default function Select({
     return (
         <div className="m-3 p-1">
             <label
-                className={`text-xs font-normal uppercase 
-                            text-base-700/60`}
+                className="label"
             >
                 {label}
             </label>
