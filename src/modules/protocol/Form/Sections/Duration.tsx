@@ -72,7 +72,7 @@ export default function Duration() {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Duracion
+                    Duración
                 </span>
             </div>
             <Info />
