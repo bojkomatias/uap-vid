@@ -37,7 +37,7 @@ export default function Identification() {
         >
             <div className="flex grow items-center">
                 <span className="ml-10 text-xl font-bold uppercase text-primary">
-                    Identificacion
+                    Identificación
                 </span>
             </div>
             <Info />

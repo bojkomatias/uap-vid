@@ -10,7 +10,7 @@ export const initialProtocolValues: Protocol = {
         identification: {
             assignment: '',
             career: '',
-            sponsor: '',
+            sponsor: [''],
             team: [],
             title: '',
         },
@@ -37,6 +37,14 @@ export const initialProtocolValues: Protocol = {
             state: '',
         },
         methodology: {
+            design: '',
+            procedures: '',
+            detail: '',
+            participants: '',
+            place: '',
+            analysis: '',
+            instruments: '',
+            considerations: '',
             type: '',
         },
         publication: {

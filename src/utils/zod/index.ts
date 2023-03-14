@@ -54,6 +54,8 @@ export const SectionsSchema = z.object({
     publication: z.lazy(() => PublicationSchema),
 })
 
+export type Sections = z.infer<typeof SectionsSchema>
+
 /////////////////////////////////////////
 // PROTOCOL SECTIONS BIBLIOGRAPHY SCHEMA
 /////////////////////////////////////////
@@ -166,7 +168,7 @@ export const DurationSchema = z.object({
 export const IdentificationSchema = z.object({
     assignment: z.string(),
     career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    sponsor: z.string(),
+    sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
     team: z
         .lazy(() =>
@@ -220,14 +222,14 @@ export const IntroductionSchema = z.object({
 /////////////////////////////////////////
 
 export const MethodologySchema = z.object({
-    analysis: z.string().optional(),
-    considerations: z.string().optional(),
-    design: z.string().optional(),
-    instruments: z.string().optional(),
-    participants: z.string().optional(),
-    place: z.string().optional(),
-    procedures: z.string().optional(),
-    detail: z.string().optional(),
+    analysis: z.string(),
+    considerations: z.string(),
+    design: z.string(),
+    instruments: z.string(),
+    participants: z.string(),
+    place: z.string(),
+    procedures: z.string(),
+    detail: z.string(),
     type: z.string(),
 })
 

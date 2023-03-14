@@ -1,10 +1,8 @@
 'use client'
-import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Textarea from '@protocol/elements/Textarea'
 
 export default function Introduction() {
-    const form = useProtocolContext()
     const path = 'sections.introduction.'
 
     return (
