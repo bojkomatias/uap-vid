@@ -1,6 +1,23 @@
 generator client {
   provider = "prisma-client-js"
 }
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "./zod" // default is ./generated/zod
+  useMultipleFiles                 = true 
+  createInputTypes                 = false // default is true
+  createModelTypes                 = true // default is true
+  addInputTypeValidation           = false // default is true
+  addIncludeType                   = false // default is true
+  addSelectType                    = false // default is true
+  validateWhereUniqueInput         = true // default is false
+  createOptionalDefaultValuesTypes = false // default is false
+  createRelationValuesTypes        = false // default is false
+  createPartialTypes               = false // default is false
+  useDefaultValidators             = false // default is true
+  coerceDate                       = false // default is true
+  writeNullishInModelTypes         = false // default is false
+}
 
 datasource db {
   provider = "mongodb"
@@ -8,74 +25,99 @@ datasource db {
 }
 
 type ProtocolSections {
-  data ProtocolSectionsData
-  id   Int
-  name String
+  bibliography   ProtocolSectionsBibliography
+  budget         ProtocolSectionsBudget
+  description    ProtocolSectionsDescription
+  duration       ProtocolSectionsDuration
+  identification ProtocolSectionsIdentification
+  introduction   ProtocolSectionsIntroduction
+  methodology    ProtocolSectionsMethodology
+  publication    ProtocolSectionsPublication
 }
 
-type ProtocolSectionsData {
-  analysis       String?
-  assignment     String?
-  career         String?
-  chart          ProtocolSectionsDataChart[]
-  chronogram     ProtocolSectionsDataChronogram[]
-  considerations String?
-  design         String?
-  detail         String?
-  discipline     String?
-  duration       String?
-  expenses       ProtocolSectionsDataExpenses[]
-  field          String?
-  instruments    String?
-  justification  String?
-  line           String?
-  modality       String?
-  objective      String?
-  objectives     String?
-  objetives      String?
-  participants   String?
-  place          String?
-  plan           String?
-  problem        String?
-  procedures     String?
-  result         String?
-  sponsor        String?
-  state          String?
-  team           ProtocolSectionsDataTeam[]
-  title          String?
-  type           String?
-  words          String?
+type ProtocolSectionsBibliography {
+  chart ProtocolSectionsBibliographyChart[]
 }
 
-type ProtocolSectionsDataChart {
+type ProtocolSectionsBibliographyChart {
   author String
   title  String
   year   String
 }
 
-type ProtocolSectionsDataChronogram {
-  semester String
-  task     String
+type ProtocolSectionsBudget {
+  expenses ProtocolSectionsBudgetExpenses[]
 }
 
-type ProtocolSectionsDataExpenses {
+type ProtocolSectionsBudgetExpenses {
   amount String
   detail String
   type   String
   year   String
 }
 
-type ProtocolSectionsDataTeam {
+type ProtocolSectionsDescription {
+  discipline String
+  field      String
+  line       String
+  objective  String
+  type       String
+  words      String
+}
+
+type ProtocolSectionsDuration {
+  chronogram ProtocolSectionsDurationChronogram[]
+  duration   String
+  modality   String
+}
+
+type ProtocolSectionsDurationChronogram {
+  semester String
+  task     String
+}
+
+type ProtocolSectionsIdentification {
+  assignment String
+  career     String
+  sponsor    String
+  team       ProtocolSectionsIdentificationTeam[]
+  title      String
+}
+
+type ProtocolSectionsIdentificationTeam {
   hours     String
   last_name String
   name      String
   role      String
 }
 
+type ProtocolSectionsIntroduction {
+  justification String
+  objectives    String
+  problem       String
+  state         String
+}
+
+type ProtocolSectionsMethodology {
+  analysis       String
+  considerations String
+  design         String
+  instruments    String
+  participants   String
+  place          String
+  procedures     String
+  type           String
+}
+
+type ProtocolSectionsPublication {
+  plan   String
+  result String
+}
+
 model protocol {
-  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
   createdAt Float
-  sections  ProtocolSections[]
+  sections  ProtocolSections
 }
 
 model reviews {
@@ -84,7 +126,7 @@ model reviews {
 
 model user {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
+  email     String
   id_       String?   @map("id")
   image     String?
   lastLogin DateTime? @db.Date

@@ -1,5 +1,5 @@
 import { Heading } from '@layout/Heading'
-import ProtocolForm from '@protocol/ProtocolForm'
+import ProtocolForm from '@protocol/Form'
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: any) {

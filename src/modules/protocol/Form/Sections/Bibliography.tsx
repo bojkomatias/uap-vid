@@ -1,15 +1,13 @@
 'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
 
-export default function Bibliography({
-    id,
-}: PropsWithChildren<{ id: string }>) {
+export default function Bibliography() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.bibliography.'
 
     return (
         <motion.div
@@ -19,7 +17,7 @@ export default function Bibliography({
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Bibliografía
                 </span>
             </div>
             <div>
@@ -27,7 +25,7 @@ export default function Bibliography({
                     path={path}
                     x="chart"
                     label="cuadro bibliográfico"
-                    toMap={form.values.sections[Number(id)].data.chart}
+                    toMap={form.values.sections.bibliography.chart}
                     insertedItemFormat={{ author: '', title: '', year: '' }}
                     headers={[
                         {

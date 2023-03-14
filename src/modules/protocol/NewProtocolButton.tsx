@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/Button'
 import Modal from '@elements/Modal'
-import { initialProtocolValues } from 'config/createContext'
+import { initialProtocolValues } from 'utils/createContext'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { ClipboardPlus, FilePlus } from 'tabler-icons-react'

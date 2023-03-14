@@ -1,7 +1,7 @@
 'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
 import Select from '@protocol/elements/Select'
@@ -62,9 +62,9 @@ const chron = (v: string) => {
         ]
 }
 
-export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
+export default function Duration() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.duration.'
 
     return (
         <motion.div
@@ -74,7 +74,7 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Duracion
                 </span>
             </div>
             <Info />
@@ -85,29 +85,27 @@ export default function Duration({ id }: PropsWithChildren<{ id: string }>) {
                     label="modalidad"
                     options={modalities}
                     conditionalCleanup={() =>
-                        (form.values.sections[Number(id)].data.modality = '')
+                        (form.values.sections.duration.modality = '')
                     }
                 />
                 <Select
                     path={path}
                     x="duration"
                     label="duración"
-                    options={duration(
-                        form.values.sections[Number(id)].data.modality
-                    )}
+                    options={duration(form.values.sections.duration.modality)}
                 />
                 <Table
                     path={path}
                     x="chronogram"
                     label="cronograma de tareas"
-                    toMap={form.values.sections[Number(id)].data.chronogram}
+                    toMap={form.values.sections.duration.chronogram}
                     insertedItemFormat={{ semester: '', task: '' }}
                     headers={[
                         {
                             x: 'semester',
                             label: 'Semestre',
                             options: chron(
-                                form.values.sections[Number(id)].data.duration
+                                form.values.sections.duration.duration
                             ),
                         },
                         { x: 'task', label: 'Tarea', class: 'flex-grow' },

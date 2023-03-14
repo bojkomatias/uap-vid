@@ -1,7 +1,7 @@
 'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
 import Input from '@protocol/elements/Input'
@@ -27,11 +27,9 @@ const sponsors = [
     'Escuela de graduados (EG)',
 ]
 
-export default function Identification({
-    id,
-}: PropsWithChildren<{ id: string }>) {
+export default function Identification() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.identification.'
 
     return (
         <motion.div
@@ -41,7 +39,7 @@ export default function Identification({
         >
             <div className="flex grow items-center">
                 <span className="ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Identificacion
                 </span>
             </div>
             <Info />
@@ -53,7 +51,7 @@ export default function Identification({
                     options={careers}
                     label="carrera"
                     conditionalCleanup={() =>
-                        (form.values.sections[Number(id)].data.assignment = '')
+                        (form.values.sections.identification.assignment = '')
                     }
                 />
                 <Select
@@ -61,14 +59,14 @@ export default function Identification({
                     x="assignment"
                     label="materia"
                     options={assignments(
-                        form.values.sections[Number(id)].data.career
+                        form.values.sections.identification.career
                     )}
                 />
                 <Table
                     path={path}
                     x="team"
                     label="miembros de equipo"
-                    toMap={form.values.sections[Number(id)].data.team}
+                    toMap={form.values.sections.identification.team}
                     insertedItemFormat={{ role: '', name: '', hours: '' }}
                     headers={[
                         {

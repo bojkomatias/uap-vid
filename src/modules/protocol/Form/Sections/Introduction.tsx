@@ -1,15 +1,13 @@
 'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 
 import { motion } from 'framer-motion'
 import Textarea from '@protocol/elements/Textarea'
 
-export default function Introduction({
-    id,
-}: PropsWithChildren<{ id: string }>) {
+export default function Introduction() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.introduction.'
 
     return (
         <motion.div
@@ -19,7 +17,7 @@ export default function Introduction({
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Introducción al proyecto
                 </span>
             </div>
             <div className="mx-auto mt-5 max-w-[1120px]">

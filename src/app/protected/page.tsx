@@ -17,10 +17,12 @@ export default async function Page() {
                 {protocols &&
                     protocols.map((protocol) => (
                         <div key={protocol.id} className="mt-5">
-                            {protocol?.sections[0].data && (
+                            {protocol?.sections && (
                                 <ItemView
                                     dateOfCreation={protocol.createdAt}
-                                    identification={protocol.sections[0].data}
+                                    identification={
+                                        protocol.sections.identification
+                                    }
                                     id={protocol.id}
                                 />
                             )}

@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState, PropsWithChildren } from 'react'
-import { type Input } from 'config/createContext'
+
 import { Button } from '../elements/Button'
 
 export default function ItemView({
@@ -10,7 +10,7 @@ export default function ItemView({
     id,
 }: PropsWithChildren<{
     dateOfCreation: number
-    identification: Input
+    identification: any
     id: any
 }>) {
     const falseStyle =

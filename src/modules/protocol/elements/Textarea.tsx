@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from 'react'
-import { useProtocolContext } from '../../../config/createContext'
+import { useProtocolContext } from '../../../utils/createContext'
 import RichTextEditor from '../../elements/RTE'
 
 const Textarea = ({

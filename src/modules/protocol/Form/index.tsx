@@ -1,11 +1,5 @@
 'use client'
-
-import {
-    Protocol,
-    ProtocolProvider,
-    useProtocol,
-    validate,
-} from 'config/createContext'
+import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import Identification from './Sections/Identification'
 import Duration from './Sections/Duration'
 import DirectBudget from './Sections/DirectBudget'
@@ -19,29 +13,31 @@ import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import { protocol } from '@prisma/client'
 import { useState } from 'react'
+import { zodResolver } from '@mantine/form'
+import protocolSchema from 'utils/zod/protocolSchema'
 
-const sectionMapper = [
-    <Identification key="0" id="0" />,
-    <Duration key="1" id="1" />,
-    <DirectBudget key="2" id="2" />,
-    <Description key="3" id="3" />,
-    <Introduction key="4" id="4" />,
-    <Method key="5" id="5" />,
-    <Publication key="6" id="6" />,
-    <Bibliography key="7" id="7" />,
-]
+const sectionMapper: { [key: number]: JSX.Element } = {
+    0: <Identification />,
+    1: <Duration />,
+    2: <DirectBudget />,
+    3: <Description />,
+    4: <Introduction />,
+    5: <Method />,
+    6: <Publication />,
+    7: <Bibliography />,
+}
 
 export default function ProtocolForm({ protocol }: { protocol: protocol }) {
-    const [currentVisible, setVisible] = useState<any>('0')
+    const [currentVisible, setVisible] = useState<number>(0)
     const notifications = useNotifications()
 
     const form = useProtocol({
         initialValues: protocol,
-        validate: validate,
+        validate: zodResolver(protocolSchema),
         validateInputOnChange: true,
     })
 
-    const updateProtocol = async (protocol: Protocol) => {
+    const updateProtocol = async (protocol: protocol) => {
         const res = await fetch(`/api/protocol/${protocol.id}`, {
             method: 'PUT',
             mode: 'cors',
@@ -67,7 +63,7 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
     return (
         <div className="mx-auto flex w-full flex-col">
             <div className="flex h-6 w-full items-center justify-center gap-16 p-5">
-                {sectionMapper.map(({ key }) => (
+                {/* {sectionMapper.map(({ key }) => (
                     <button
                         key={key}
                         className={`h-3 w-3 cursor-pointer rounded-full bg-primary-100 transition-all duration-200 ${
@@ -79,39 +75,33 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
                         }`}
                         onClick={() => setVisible(key)}
                     ></button>
-                ))}
+                ))} */}
             </div>
             <div className="flex-1">
                 <ProtocolProvider form={form}>
-                    {sectionMapper.map((section) =>
-                        section.key == currentVisible ? section : null
-                    )}
+                    {sectionMapper[currentVisible]}
                 </ProtocolProvider>
             </div>
 
             <div className="mt-12 mb-8 flex w-full justify-between px-10 ">
                 <Button
                     intent="secondary"
-                    disabled={currentVisible === '0'}
-                    onClick={() =>
-                        setVisible((prev: string) => String(Number(prev) - 1))
-                    }
+                    disabled={currentVisible === 0}
+                    onClick={() => setVisible((prev) => prev - 1)}
                 >
                     <ChevronLeft className="h-5" />
                 </Button>
 
                 <Button
-                    onClick={() => updateProtocol(form.values)}
+                    onClick={() => console.log(form.errors)}
                     intent="secondary"
                 >
                     Guardar
                 </Button>
                 <Button
                     intent="secondary"
-                    disabled={currentVisible === '7'}
-                    onClick={() =>
-                        setVisible((prev: string) => String(Number(prev) + 1))
-                    }
+                    disabled={currentVisible === 7}
+                    onClick={() => setVisible((prev) => prev + 1)}
                 >
                     <ChevronRight className="h-5" />
                 </Button>

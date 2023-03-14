@@ -1,7 +1,7 @@
 'use client'
 import { PropsWithChildren } from 'react'
 import { QuestionMark } from 'tabler-icons-react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
 import InfoTooltip from '@protocol/elements/InfoTooltip'
@@ -16,11 +16,9 @@ const years = (v: string) => {
     return years
 }
 
-export default function DirectBudget({
-    id,
-}: PropsWithChildren<{ id: string }>) {
+export default function DirectBudget() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.budget.'
 
     return (
         <motion.div
@@ -30,7 +28,7 @@ export default function DirectBudget({
         >
             <div className="flex grow items-center">
                 <span className="ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Presupuesto de gastos directos
                 </span>
             </div>
             <Info />
@@ -39,7 +37,7 @@ export default function DirectBudget({
                     path={path}
                     x="expenses"
                     label="gastos"
-                    toMap={form.values.sections[Number(id)].data.expenses}
+                    toMap={form.values.sections.budget.expenses}
                     insertedItemFormat={{
                         type: '',
                         detail: '',
@@ -63,7 +61,7 @@ export default function DirectBudget({
                             x: 'year',
                             label: 'año',
                             options: years(
-                                form.values.sections[1].data.duration
+                                form.values.sections.duration.duration
                             ),
                         },
                     ]}
