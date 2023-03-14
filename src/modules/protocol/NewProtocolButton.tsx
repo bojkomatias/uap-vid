@@ -14,7 +14,7 @@ export default function NewProtocolButton() {
     const createNewProtocol = useCallback(
         async (title: string) => {
             const protocol = initialProtocolValues
-            protocol.sections[0].data.title = title
+            protocol.sections.identification.title = title
 
             const res = await fetch('/api/protocol', {
                 method: 'POST',

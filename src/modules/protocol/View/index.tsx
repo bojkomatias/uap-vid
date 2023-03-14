@@ -2,7 +2,7 @@ import { protocol } from '@prisma/client'
 import { Paperclip } from 'tabler-icons-react'
 
 export default function View({ protocol }: { protocol: protocol }) {
-    const data = protocol.sections[0].data
+    const data = protocol.sections.identification
     return (
         <div className="px-4">
             <div className="px-4 py-5 sm:px-6">

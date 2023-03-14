@@ -14,7 +14,7 @@ export default async function Page({ params }: any) {
                         <span>
                             Protocolo:{' '}
                             <span className="font-light">
-                                {protocol.sections[0].data.title}
+                                {protocol.sections.identification.title}
                             </span>
                         </span>
                     }
