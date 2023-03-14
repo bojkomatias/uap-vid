@@ -32,11 +32,7 @@ export default function Select({
 
     return (
         <div className="m-3 p-1">
-            <label
-                className="label"
-            >
-                {label}
-            </label>
+            <label className="label">{label}</label>
             <Combobox as="div" {...form.getInputProps(path + x)}>
                 <div className="relative">
                     <Combobox.Button

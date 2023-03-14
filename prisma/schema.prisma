@@ -25,7 +25,7 @@ type ProtocolSectionsBibliography {
 type ProtocolSectionsBibliographyChart {
   author String
   title  String
-  year   String
+  year   Int
 }
 
 type ProtocolSectionsBudget {
@@ -33,7 +33,7 @@ type ProtocolSectionsBudget {
 }
 
 type ProtocolSectionsBudgetExpenses {
-  amount String
+  amount Float
   detail String
   type   String
   year   String
@@ -62,13 +62,14 @@ type ProtocolSectionsDurationChronogram {
 type ProtocolSectionsIdentification {
   assignment String
   career     String
-  sponsor    String
+  /// Multiple data types found: String: 66.7%, Array(String): 33.3% out of 3 sampled entries
+  sponsor    String[]
   team       ProtocolSectionsIdentificationTeam[]
   title      String
 }
 
 type ProtocolSectionsIdentificationTeam {
-  hours     String
+  hours     Float
   last_name String
   name      String
   role      String
@@ -85,6 +86,7 @@ type ProtocolSectionsMethodology {
   analysis       String
   considerations String
   design         String
+  detail         String
   instruments    String
   participants   String
   place          String
@@ -117,23 +119,3 @@ model user {
   password  String?
   role      String
 }
-
-
-// ! Leave commented unless you need to re-generate... and adapt (hand-made)
-// generator zod {
-//   provider                         = "zod-prisma-types"
-//   output                           = "./zod"
-//   useMultipleFiles                 = false 
-//   createInputTypes                 = false
-//   createModelTypes                 = true
-//   addInputTypeValidation           = false 
-//   addIncludeType                   = true
-//   addSelectType                    = true 
-//   validateWhereUniqueInput         = true
-//   createOptionalDefaultValuesTypes = false
-//   createRelationValuesTypes        = true 
-//   createPartialTypes               = false 
-//   useDefaultValidators             = false 
-//   coerceDate                       = true
-//   writeNullishInModelTypes         = false 
-// }

@@ -9,10 +9,12 @@ import { z } from 'zod'
 /////////////////////////////////////////
 
 export const ProtocolSchema = z.object({
-    id: z.string(),
-    createdAt: z.coerce.date(),
+    id: z.string().optional(),
+    createdAt: z.coerce.date().optional(),
     sections: z.lazy(() => SectionsSchema),
 })
+// .optional() to export type to create a Form (from new object, has no assigned Id yet)
+export type Protocol = z.infer<typeof ProtocolSchema>
 
 /////////////////////////////////////////
 // REVIEWS SCHEMA
@@ -52,6 +54,8 @@ export const SectionsSchema = z.object({
     publication: z.lazy(() => PublicationSchema),
 })
 
+export type Sections = z.infer<typeof SectionsSchema>
+
 /////////////////////////////////////////
 // PROTOCOL SECTIONS BIBLIOGRAPHY SCHEMA
 /////////////////////////////////////////
@@ -60,9 +64,28 @@ export const BibliographySchema = z.object({
     chart: z
         .lazy(() =>
             z.object({
-                author: z.string(),
-                title: z.string(),
-                year: z.string(),
+                author: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vació' }),
+                title: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vació' }),
+                year: z.preprocess(
+                    (a) => {
+                        if (typeof a === 'string') {
+                            return parseInt(a, 10)
+                        } else if (typeof a === 'number') {
+                            return a
+                        }
+                    },
+                    z
+                        .number({
+                            invalid_type_error: 'Este campo debe ser numérico',
+                        })
+                        .max(new Date().getFullYear(), {
+                            message: 'No puede ser mayor al año actual',
+                        })
+                ),
             })
         )
         .array(),
@@ -76,10 +99,29 @@ export const BudgetSchema = z.object({
     expenses: z
         .lazy(() =>
             z.object({
-                amount: z.string(),
-                detail: z.string(),
-                type: z.string(),
-                year: z.string(),
+                amount: z.preprocess(
+                    (a) => {
+                        if (typeof a === 'string') {
+                            return parseInt(a, 10)
+                        } else if (typeof a === 'number') {
+                            return a
+                        }
+                    },
+                    z
+                        .number({
+                            invalid_type_error: 'Este campo debe ser numérico',
+                        })
+                        .positive({ message: 'Debe ser mayor que cero' })
+                ),
+                detail: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
+                type: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
+                year: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
             })
         )
         .array(),
@@ -108,8 +150,12 @@ export const DurationSchema = z.object({
     chronogram: z
         .lazy(() =>
             z.object({
-                semester: z.string(),
-                task: z.string(),
+                semester: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
+                task: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
             })
         )
         .array(),
@@ -121,16 +167,40 @@ export const DurationSchema = z.object({
 
 export const IdentificationSchema = z.object({
     assignment: z.string(),
-    career: z.string(),
-    sponsor: z.string(),
-    title: z.string(),
+    career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    sponsor: z.string().array(),
+    title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
     team: z
         .lazy(() =>
             z.object({
-                hours: z.string(),
-                last_name: z.string(),
-                name: z.string(),
-                role: z.string(),
+                hours: z.preprocess(
+                    (a) => {
+                        if (typeof a === 'string') {
+                            return parseInt(a, 10)
+                        } else if (typeof a === 'number') {
+                            return a
+                        }
+                    },
+                    z
+                        .number({
+                            invalid_type_error: 'Este campo debe ser numérico',
+                        })
+                        .min(1, {
+                            message: 'Las horas asignadas no pueden ser cero',
+                        })
+                        .max(400, {
+                            message: 'No se pueden asignar tantas horas',
+                        })
+                ),
+                last_name: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
+                name: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
+                role: z
+                    .string()
+                    .min(1, { message: 'El campo no puede estar vacío' }),
             })
         )
         .array(),
@@ -159,6 +229,7 @@ export const MethodologySchema = z.object({
     participants: z.string(),
     place: z.string(),
     procedures: z.string(),
+    detail: z.string(),
     type: z.string(),
 })
 

@@ -11,19 +11,19 @@ export default async function UserList() {
 
     return (
         <Navigation>
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <Heading title="Lista de usuarios" />
-                </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <Link href={'/protected/admin/newuser'} passHref>
-                        <Button>
-                            <UserPlus className="h-6" />
-                            <span className="ml-3"> Nuevo usuario</span>
-                        </Button>
-                    </Link>
-                </div>
-            </div>
+            <Heading title="Lista de usuarios" />
+
+            <Link
+                href={'/protected/admin/newuser'}
+                passHref
+                className="flex flex-row-reverse"
+            >
+                <Button>
+                    <UserPlus className="h-6" />
+                    <span className="ml-3"> Nuevo usuario</span>
+                </Button>
+            </Link>
+
             <div className="-mx-4 mt-8 sm:-mx-0">
                 <table className="min-w-full divide-y divide-gray-300">
                     <thead>
