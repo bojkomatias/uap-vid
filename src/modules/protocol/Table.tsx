@@ -1,5 +1,5 @@
 import React from 'react'
-import NewitemButton from './NewitemButton'
+import NewProtocolButton from './NewProtocolButton'
 import { Heading } from '@layout/Heading'
 import Link from 'next/link'
 
@@ -19,7 +19,7 @@ export default function Table({ items, title, description }: TableProps) {
                     <p className="mt-2 text-sm text-gray-700">{description}</p>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <NewitemButton />
+                    <NewProtocolButton />
                 </div>
             </div>
             <div className="-mx-4 mt-8 sm:-mx-0">

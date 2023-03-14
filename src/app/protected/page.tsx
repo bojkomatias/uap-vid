@@ -15,7 +15,7 @@ export default async function Page() {
 
             <div className="mx-auto mb-20 flex flex-col justify-center">
                 <Table
-                    protocols={protocols}
+                    items={protocols}
                     title="Listado de proyectos de investigación"
                     description="Lista de todos los protocolos cargados en el sistema, haz click en 'ver' para más detalles."
                 ></Table>
