@@ -82,13 +82,14 @@ type ProtocolSectionsIntroduction {
 }
 
 type ProtocolSectionsMethodology {
-  analysis       String
-  considerations String
-  design         String
-  instruments    String
-  participants   String
-  place          String
-  procedures     String
+  analysis       String?
+  considerations String?
+  design         String?
+  instruments    String?
+  participants   String?
+  place          String?
+  procedures     String?
+  detail         String?
   type           String
 }
 
