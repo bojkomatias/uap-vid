@@ -56,7 +56,7 @@ export default function Table({ items }: { items: protocol[] }) {
                             </td>
                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                 <Link
-                                    href={`/protected/item/${item.id}`}
+                                    href={`/protected/protocol/${item.id}`}
                                     passHref
                                     className="transition-all duration-150 hover:text-black/60"
                                 >
