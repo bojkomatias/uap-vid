@@ -1,5 +1,4 @@
-import { protocol } from '@prisma/client'
-import { Paperclip } from 'tabler-icons-react'
+import type { protocol } from '@prisma/client'
 
 export default function View({ protocol }: { protocol: protocol }) {
     const data = protocol.sections.identification

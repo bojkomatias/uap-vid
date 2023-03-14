@@ -9,7 +9,7 @@ export default function ItemView({
     identification,
     id,
 }: PropsWithChildren<{
-    dateOfCreation: number
+    dateOfCreation: Date
     identification: any
     id: any
 }>) {
