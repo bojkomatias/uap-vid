@@ -1,6 +1,4 @@
 'use client'
-import { PropsWithChildren } from 'react'
-import { QuestionMark } from 'tabler-icons-react'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'

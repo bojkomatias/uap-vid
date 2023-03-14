@@ -11,10 +11,10 @@ import Bibliography from './Sections/Bibliography'
 import { Check, X, ChevronLeft, ChevronRight } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { protocol } from '@prisma/client'
+import type { protocol } from '@prisma/client'
 import { useState } from 'react'
 import { zodResolver } from '@mantine/form'
-import protocolSchema from 'utils/zod/protocolSchema'
+import { ProtocolSchema } from '@utils/zod'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <Identification />,
@@ -33,7 +33,7 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
 
     const form = useProtocol({
         initialValues: protocol,
-        validate: zodResolver(protocolSchema),
+        validate: zodResolver(ProtocolSchema),
         validateInputOnChange: true,
     })
 
@@ -63,19 +63,19 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
     return (
         <div className="mx-auto flex w-full flex-col">
             <div className="flex h-6 w-full items-center justify-center gap-16 p-5">
-                {/* {sectionMapper.map(({ key }) => (
+                {Object.keys(sectionMapper).map((key: string) => (
                     <button
                         key={key}
                         className={`h-3 w-3 cursor-pointer rounded-full bg-primary-100 transition-all duration-200 ${
-                            currentVisible == key
+                            currentVisible == Number(key)
                                 ? 'h-4 w-4 bg-primary'
                                 : Number(currentVisible) > Number(key)
                                 ? 'h-3 w-3 bg-primary/80'
                                 : ''
                         }`}
-                        onClick={() => setVisible(key)}
+                        onClick={() => setVisible(Number(key))}
                     ></button>
-                ))} */}
+                ))}
             </div>
             <div className="flex-1">
                 <ProtocolProvider form={form}>

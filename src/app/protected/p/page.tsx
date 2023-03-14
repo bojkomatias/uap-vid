@@ -1,10 +1,9 @@
-import { protocol } from '@prisma/client'
+import type { protocol } from '@prisma/client'
 import ProtocolForm from '@protocol/Form'
-import React from 'react'
 
 const protocol: protocol = {
     id: 'seaseas',
-    createdAt: 123,
+    createdAt: new Date(),
     sections: {
         identification: {
             assignment: 'Redes y telecomunicaciones III',

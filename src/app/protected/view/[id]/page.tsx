@@ -1,6 +1,5 @@
 import { Heading } from '@layout/Heading'
 import View from '@protocol/View'
-
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: any) {

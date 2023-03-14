@@ -1,5 +1,4 @@
 'use client'
-import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 import { useProtocolContext } from 'utils/createContext'
 import Textarea from '@protocol/elements/Textarea'

@@ -1,10 +1,10 @@
 import { createFormContext } from '@mantine/form'
-import { protocol } from './zod/protocolSchema'
+import { protocol, ProtocolSections } from '@prisma/client'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
     createFormContext<protocol>()
 
-export const initialProtocolValues = {
+export const initialProtocolValues: { sections: ProtocolSections } = {
     sections: {
         identification: {
             assignment: '',
