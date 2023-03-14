@@ -1,7 +1,6 @@
 'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from 'config/createContext'
-
+import { useProtocolContext } from 'utils/createContext'
 
 import { motion } from 'framer-motion'
 import Select from '@protocol/elements/Select'
@@ -87,9 +86,9 @@ const type = [
     'Desarrollo experimental',
 ]
 
-export default function Description({ id }: PropsWithChildren<{ id: string }>) {
+export default function Description() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.description.'
 
     return (
         <motion.div
@@ -99,7 +98,7 @@ export default function Description({ id }: PropsWithChildren<{ id: string }>) {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Descripción del proyecto
                 </span>
             </div>
             <div className="mx-auto mt-5 max-w-[1120px]">
@@ -109,16 +108,14 @@ export default function Description({ id }: PropsWithChildren<{ id: string }>) {
                     label="disciplina general y área especifica"
                     options={disciplines}
                     conditionalCleanup={() =>
-                        (form.values.sections[Number(id)].data.line = '')
+                        (form.values.sections.description.line = '')
                     }
                 />
                 <Select
                     path={path}
                     x="line"
                     label="línea de investigación"
-                    options={lines(
-                        form.values.sections[Number(id)].data.discipline
-                    )}
+                    options={lines(form.values.sections.description.discipline)}
                 />
                 <Input path={path} x="words" label="palabras clave" />
                 <Select

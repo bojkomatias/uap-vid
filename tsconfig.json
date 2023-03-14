@@ -20,7 +20,8 @@
             "@layout/*": ["./modules/layout/*"],
             "@auth/*": ["./modules/auth/*"],
             "@protocol/*": ["./modules/protocol/*"],
-            "@admin/*": ["./modules/admin/*"]
+            "@admin/*": ["./modules/admin/*"],
+            "@utils/*": ["./utils/*"]
         },
         "plugins": [
             {

@@ -1,7 +1,7 @@
 'use client'
 import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 import Textarea from '@protocol/elements/Textarea'
 import Select from '@protocol/elements/Select'
 
@@ -53,9 +53,9 @@ const conditionalByType = (v: string, path: any) => {
         )
 }
 
-export default function Method({ id }: PropsWithChildren<{ id: string }>) {
+export default function Method() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.methodology.'
 
     return (
         <motion.div
@@ -65,7 +65,7 @@ export default function Method({ id }: PropsWithChildren<{ id: string }>) {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Metodología
                 </span>
             </div>
             <div className="mx-auto mt-5 max-w-[1120px]">
@@ -75,10 +75,7 @@ export default function Method({ id }: PropsWithChildren<{ id: string }>) {
                     options={types}
                     label="tipo de investigación"
                 />
-                {conditionalByType(
-                    form.values.sections[Number(id)].data.type,
-                    path
-                )}
+                {conditionalByType(form.values.sections.methodology.type, path)}
             </div>
         </motion.div>
     )

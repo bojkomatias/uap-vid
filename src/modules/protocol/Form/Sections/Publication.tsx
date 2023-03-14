@@ -1,15 +1,15 @@
 'use client'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from 'config/createContext'
+import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Select from '@protocol/elements/Select'
 import Textarea from '@protocol/elements/Textarea'
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 
-export default function Publication({ id }: PropsWithChildren<{ id: string }>) {
+export default function Publication() {
     const form = useProtocolContext()
-    const path = 'sections.' + id + '.data.'
+    const path = 'sections.publication.'
 
     return (
         <motion.div
@@ -19,7 +19,7 @@ export default function Publication({ id }: PropsWithChildren<{ id: string }>) {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    {form.values.sections[Number(id)].name}
+                    Publicación
                 </span>
             </div>
             <div className="mx-auto mt-5 max-w-[1120px]">
