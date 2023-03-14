@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
 
 export const Heading = ({ title }: { title: string | ReactNode }) => (
-    <div className="mb-8 text-4xl font-bold text-primary">{title}</div>
+    <div className="mb-2 text-3xl font-bold text-black/70">{title}</div>
 )
