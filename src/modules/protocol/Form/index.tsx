@@ -93,7 +93,7 @@ export default function ProtocolForm({ protocol }: { protocol: protocol }) {
                 </Button>
 
                 <Button
-                    onClick={() => console.log(form.errors)}
+                    onClick={() => updateProtocol(form.values)}
                     intent="secondary"
                 >
                     Guardar

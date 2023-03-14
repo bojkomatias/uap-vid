@@ -92,10 +92,11 @@ const BibliographySchema = z.object({
                 .min(1, { message: 'Este campo no debe estar vacío' }),
             year: z.string(),
         })
-        .array(),
+        .array()
+        .default([{ title: '', author: '', year: '' }]),
 })
 
-const SectionsSchema = z.object({
+export const SectionsSchema = z.object({
     identification: IdentificationSchema,
     duration: DurationSchema,
     budget: BudgetSchema,
@@ -105,6 +106,8 @@ const SectionsSchema = z.object({
     publication: PublicationSchema,
     bibliography: BibliographySchema,
 })
+
+export type sections = z.infer<typeof SectionsSchema>
 
 export const protocolSchema = z.object({
     id: z.string(),

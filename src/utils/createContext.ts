@@ -1,97 +1,102 @@
 import { createFormContext } from '@mantine/form'
-import { protocol } from 'utils/zod/protocolSchema'
+import { protocol } from './zod/protocolSchema'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
     createFormContext<protocol>()
 
 export const initialProtocolValues = {
-    sections: [
-        {
-            id: 0,
-            name: 'identificación',
-            data: {
-                title: '1',
-                career: '',
-                assignment: '',
-                team: [{ role: '', last_name: '', name: '', hours: '' }],
-                sponsor: '',
-            },
+    sections: {
+        identification: {
+            assignment: '',
+            career: '',
+            sponsor: '',
+            team: [
+                {
+                    hours: '',
+                    last_name: '',
+                    name: '',
+                    role: '',
+                },
+                {
+                    hours: '',
+                    last_name: '',
+                    name: '',
+                    role: '',
+                },
+                {
+                    hours: '',
+                    last_name: '',
+                    name: '',
+                    role: '',
+                },
+            ],
+            title: '',
         },
-        {
-            id: 1,
-            name: 'duración',
-            data: {
-                modality: '',
-                duration: '',
-                chronogram: [{ semester: '', task: '' }],
-            },
+        duration: {
+            chronogram: [
+                { semester: '', task: '' },
+                { semester: '', task: '' },
+            ],
+            duration: '',
+            modality: '',
         },
-        {
-            id: 2,
-            name: 'presupuesto de gastos directos',
-            data: {
-                expenses: [
-                    {
-                        type: '',
-                        detail: '',
-                        amount: '',
-                        year: '',
-                    },
-                ],
-            },
+        budget: {
+            expenses: [
+                {
+                    amount: '',
+                    detail: '',
+                    type: '',
+                    year: '',
+                },
+                {
+                    amount: '',
+                    detail: '',
+                    type: '',
+                    year: '',
+                },
+            ],
         },
-        {
-            id: 3,
-            name: 'descripción del proyecto',
-            data: {
-                discipline: '',
-                line: '',
-                words: '',
-                field: '',
-                objective: '',
-                type: '',
-            },
+        description: {
+            discipline: '',
+            field: '',
+            line: '',
+            objective: '',
+            type: '',
+            words: '',
         },
-        {
-            id: 4,
-            name: 'introducción del proyecto',
-            data: {
-                state: '',
-                justification: '',
-                problem: '',
-                objetives: '',
-            },
+        introduction: {
+            justification: '',
+            objectives: '',
+            problem: '',
+            state: '',
         },
-        {
-            id: 5,
-            name: 'método',
-            data: {
-                type: '',
-                // conditionals
-                detail: '',
-                design: '',
-                participants: '',
-                place: '',
-                instruments: '',
-                procedures: '',
-                analysis: '',
-                considerations: '',
-            },
+        methodology: {
+            analysis: '',
+            considerations: '',
+            design: '',
+            instruments: '',
+            participants: '',
+            place: '',
+            procedures: '',
+            type: '',
         },
-        {
-            id: 6,
-            name: 'publicación científica',
-            data: {
-                result: '',
-                plan: '',
-            },
+        publication: {
+            plan: '',
+            result: '',
         },
-        {
-            id: 7,
-            name: 'lista bibliográfica preliminar ',
-            data: {
-                chart: [{ author: '', title: '', year: '' }],
-            },
+        bibliography: {
+            chart: [
+                {
+                    author: '',
+                    title: '',
+                    year: '',
+                },
+                {
+                    author: '',
+                    title: '',
+                    year: '',
+                },
+            ],
         },
-    ],
+    },
 }
