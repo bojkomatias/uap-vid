@@ -55,10 +55,7 @@ export default function DirectBudget() {
                         {
                             x: 'amount',
                             label: 'monto',
-                            prefix: (
-                                <CurrencyDollar className="h-4 text-gray-400" />
-                            ),
-                            type: 'number',
+                            currency: true,
                         },
                         {
                             x: 'year',

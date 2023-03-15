@@ -4,6 +4,7 @@ import { useProtocolContext } from '../../../utils/createContext'
 import Select from './Select'
 import { Button } from '../../elements/Button'
 import { Plus, Trash } from 'tabler-icons-react'
+import CurrencyInput from './CurrencyInput'
 
 export default function List({
     path,
@@ -19,8 +20,7 @@ export default function List({
         label: string
         options?: string[]
         class?: string
-        prefix?: JSX.Element
-        type?: 'text' | 'number'
+        currency?: boolean
     }[]
     insertedItemFormat: any
     toMap: any
@@ -40,12 +40,15 @@ export default function List({
                             path={path + `.${index}.` + h.x}
                             label={h.label}
                         />
+                    ) : h.currency ? (
+                        <CurrencyInput
+                            path={path + `.${index}.` + h.x}
+                            label={h.label}
+                        />
                     ) : (
                         <Input
                             path={path + `.${index}.` + h.x}
                             label={h.label}
-                            prefix={h.prefix}
-                            type={h.type}
                         />
                     )}
                 </div>

@@ -11,7 +11,6 @@ export default function MultipleSelect({
     options,
 }: PropsWithChildren<{
     path: string
-
     label: string
     options: string[]
 }>) {
