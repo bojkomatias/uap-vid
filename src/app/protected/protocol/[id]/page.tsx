@@ -8,7 +8,16 @@ export default async function Page({ params }: any) {
     if (protocol)
         return (
             <>
-                <Heading title={'Protocolo de investigación'} />
+                <Heading
+                    title={
+                        <span>
+                            Protocolo:{' '}
+                            <span className="font-light">
+                                {protocol.sections.identification.title}
+                            </span>
+                        </span>
+                    }
+                />
                 <ProtocolForm protocol={protocol} />
             </>
         )

@@ -22,7 +22,6 @@
         "bcryptjs": "^2.4.3",
         "clsx": "^1.2.1",
         "framer-motion": "^6.3.3",
-        "gsap": "^3.10.4",
         "mongodb": "^4.6.0",
         "next": "latest",
         "next-auth": "^4.10.1",

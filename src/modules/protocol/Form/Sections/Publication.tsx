@@ -1,6 +1,4 @@
 'use client'
-import { PropsWithChildren } from 'react'
-import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Select from '@protocol/elements/Select'
 import Textarea from '@protocol/elements/Textarea'
@@ -8,7 +6,6 @@ import Textarea from '@protocol/elements/Textarea'
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 
 export default function Publication() {
-    const form = useProtocolContext()
     const path = 'sections.publication.'
 
     return (

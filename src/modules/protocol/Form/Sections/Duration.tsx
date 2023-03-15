@@ -1,6 +1,4 @@
 'use client'
-import { PropsWithChildren } from 'react'
-import { QuestionMark } from 'tabler-icons-react'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import Table from '@protocol/elements/Table'
@@ -74,7 +72,7 @@ export default function Duration() {
         >
             <div className="flex grow items-center">
                 <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Duracion
+                    Duración
                 </span>
             </div>
             <Info />

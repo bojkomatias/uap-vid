@@ -7,7 +7,7 @@ import {
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth, { NextAuthOptions, User } from 'next-auth'
-import { user } from '@prisma/client'
+import type { user } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
     session: {

@@ -11,38 +11,38 @@ export default async function UserList() {
 
     return (
         <Navigation>
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <Heading title="Lista de usuarios" />
-                </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <Link href={'/protected/admin/newuser'} passHref>
-                        <Button>
-                            <UserPlus className="h-6" />
-                            <span className="ml-3"> Nuevo usuario</span>
-                        </Button>
-                    </Link>
-                </div>
-            </div>
+            <Heading title="Lista de usuarios" />
+
+            <Link
+                href={'/protected/admin/newuser'}
+                passHref
+                className="flex flex-row-reverse"
+            >
+                <Button>
+                    <UserPlus className="h-6" />
+                    <span className="ml-3"> Nuevo usuario</span>
+                </Button>
+            </Link>
+
             <div className="-mx-4 mt-8 sm:-mx-0">
                 <table className="min-w-full divide-y divide-gray-300">
                     <thead>
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-sm text-left text-gray-900 sm:pl-0"
                             >
                                 Nombre
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-left text-gray-900 sm:table-cell"
+                                className="hidden px-3 py-3.5 text-sm text-left text-gray-900 sm:table-cell"
                             >
                                 Email
                             </th>
                             <th
                                 scope="col"
-                                className="px-3 py-3.5 text-center text-gray-900 max-w-md"
+                                className="px-3 py-3.5 text-sm text-center text-gray-900 max-w-md"
                             >
                                 Rol
                             </th>

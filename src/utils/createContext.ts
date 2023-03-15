@@ -1,60 +1,26 @@
+'use client'
 import { createFormContext } from '@mantine/form'
-import { protocol } from './zod/protocolSchema'
+import { Protocol } from './zod'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
-    createFormContext<protocol>()
+    createFormContext<Protocol>()
 
-export const initialProtocolValues = {
+export const initialProtocolValues: Protocol = {
     sections: {
         identification: {
             assignment: '',
             career: '',
             sponsor: '',
-            team: [
-                {
-                    hours: '',
-                    last_name: '',
-                    name: '',
-                    role: '',
-                },
-                {
-                    hours: '',
-                    last_name: '',
-                    name: '',
-                    role: '',
-                },
-                {
-                    hours: '',
-                    last_name: '',
-                    name: '',
-                    role: '',
-                },
-            ],
+            team: [],
             title: '',
         },
         duration: {
-            chronogram: [
-                { semester: '', task: '' },
-                { semester: '', task: '' },
-            ],
+            chronogram: [],
             duration: '',
             modality: '',
         },
         budget: {
-            expenses: [
-                {
-                    amount: '',
-                    detail: '',
-                    type: '',
-                    year: '',
-                },
-                {
-                    amount: '',
-                    detail: '',
-                    type: '',
-                    year: '',
-                },
-            ],
+            expenses: [],
         },
         description: {
             discipline: '',
@@ -71,13 +37,14 @@ export const initialProtocolValues = {
             state: '',
         },
         methodology: {
-            analysis: '',
-            considerations: '',
             design: '',
-            instruments: '',
+            procedures: '',
+            detail: '',
             participants: '',
             place: '',
-            procedures: '',
+            analysis: '',
+            instruments: '',
+            considerations: '',
             type: '',
         },
         publication: {
@@ -85,18 +52,7 @@ export const initialProtocolValues = {
             result: '',
         },
         bibliography: {
-            chart: [
-                {
-                    author: '',
-                    title: '',
-                    year: '',
-                },
-                {
-                    author: '',
-                    title: '',
-                    year: '',
-                },
-            ],
+            chart: [],
         },
     },
 }
