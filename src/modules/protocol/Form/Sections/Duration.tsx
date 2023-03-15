@@ -76,8 +76,7 @@ export default function Duration() {
             <Info />
             <>
                 <Select
-                    path={path}
-                    x="modality"
+                    path={path + 'modality'}
                     label="modalidad"
                     options={modalities}
                     conditionalCleanup={() =>
@@ -85,14 +84,12 @@ export default function Duration() {
                     }
                 />
                 <Select
-                    path={path}
-                    x="duration"
+                    path={path + 'duration'}
                     label="duración"
                     options={duration(form.values.sections.duration.modality)}
                 />
                 <List
-                    path={path}
-                    x="chronogram"
+                    path={path + 'chronogram'}
                     label="cronograma de tareas"
                     toMap={form.values.sections.duration.chronogram}
                     insertedItemFormat={{ semester: '', task: '' }}

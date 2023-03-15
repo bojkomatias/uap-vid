@@ -17,21 +17,18 @@ export default function Introduction() {
             <span />
             <>
                 <Textarea
-                    path={path}
-                    x="state"
+                    path={path + 'state'}
                     label="estado actual del tema y principales antecedentes en la literatura"
                 />
                 <Textarea
-                    path={path}
-                    x="justification"
+                    path={path + 'justification'}
                     label="Justificación científica, académico-institucional y social"
                 />
                 <Textarea
-                    path={path}
-                    x="problem"
+                    path={path + 'problem'}
                     label="Definición del problema"
                 />
-                <Textarea path={path} x="objectives" label="objetivos" />
+                <Textarea path={path + 'objectives'} label="objetivos" />
             </>
         </motion.div>
     )

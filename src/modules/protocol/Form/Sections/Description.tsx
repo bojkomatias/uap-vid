@@ -100,8 +100,7 @@ export default function Description() {
             <span />
             <>
                 <Select
-                    path={path}
-                    x="discipline"
+                    path={path + 'discipline'}
                     label="disciplina general y área especifica"
                     options={disciplines}
                     conditionalCleanup={() =>
@@ -109,27 +108,23 @@ export default function Description() {
                     }
                 />
                 <Select
-                    path={path}
-                    x="line"
+                    path={path + 'line'}
                     label="línea de investigación"
                     options={lines(form.values.sections.description.discipline)}
                 />
-                <Input path={path} x="words" label="palabras clave" />
+                <Input path={path + 'words'} label="palabras clave" />
                 <Select
-                    path={path}
-                    x="field"
+                    path={path + 'field'}
                     options={fields}
                     label="campo de aplicación"
                 />
                 <Select
-                    path={path}
-                    x="objective"
+                    path={path + 'objective'}
                     label="objetivo socioeconómico"
                     options={objective}
                 />
                 <Select
-                    path={path}
-                    x="type"
+                    path={path + 'type'}
                     label="tipo de investigación"
                     options={type}
                 />

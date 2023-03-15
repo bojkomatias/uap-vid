@@ -6,13 +6,11 @@ import clsx from 'clsx'
 
 export default function Select({
     path,
-    x,
     label,
     options,
     conditionalCleanup = () => null,
 }: PropsWithChildren<{
     path: string
-    x: string
     label: string
     options: any
     conditionalCleanup?: any
@@ -30,7 +28,7 @@ export default function Select({
     return (
         <div>
             <label className="label">{label}</label>
-            <Combobox as="div" {...form.getInputProps(path + x)}>
+            <Combobox as="div" {...form.getInputProps(path)}>
                 <div className="relative">
                     <Combobox.Button
                         className="relative w-full"
@@ -47,12 +45,12 @@ export default function Select({
                             <X
                                 className={clsx(
                                     'h-5 w-5 p-1 rounded-full hover:scale-110 active:scale-95 hover:bg-gray-100 hover:stroke-2 text-gray-400 transition-all duration-200 hover:text-gray-700',
-                                    form.getInputProps(path + x).value === ''
+                                    form.getInputProps(path).value === ''
                                         ? 'hidden'
                                         : ''
                                 )}
                                 onClick={(e) => {
-                                    form.setFieldValue(path + x, '')
+                                    form.setFieldValue(path, '')
                                     e.stopPropagation()
                                 }}
                                 aria-hidden="true"
@@ -63,9 +61,9 @@ export default function Select({
                             />
                         </div>
                     </Combobox.Button>
-                    {form.errors[path + x] ? (
+                    {form.getInputProps(path).error ? (
                         <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
-                            *{form.errors[path + x]}
+                            *{form.getInputProps(path).error}
                         </p>
                     ) : null}
 

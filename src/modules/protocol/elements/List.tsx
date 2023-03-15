@@ -4,25 +4,30 @@ import { useProtocolContext } from '../../../utils/createContext'
 import Select from './Select'
 import { Button } from '../../elements/Button'
 import { Plus, Trash } from 'tabler-icons-react'
+import CurrencyInput from './CurrencyInput'
 
 export default function List({
     path,
-    x,
     label,
     headers,
     insertedItemFormat,
     toMap,
 }: PropsWithChildren<{
     path: string
-    x: string
     label: string
-    headers: { x: string; label: string; options?: string[]; class?: string }[]
+    headers: {
+        x: string
+        label: string
+        options?: string[]
+        class?: string
+        currency?: boolean
+    }[]
     insertedItemFormat: any
     toMap: any
 }>) {
     const form = useProtocolContext()
 
-    const fields = toMap.map((_: any, index: any) => (
+    const fields = toMap.map((_: any, index: number) => (
         <div
             key={index}
             className="flex w-full items-start justify-around gap-2"
@@ -32,14 +37,17 @@ export default function List({
                     {h.options ? (
                         <Select
                             options={h.options}
-                            path={`${path}${x}.${index}.`}
-                            x={h.x}
+                            path={path + `.${index}.` + h.x}
+                            label={h.label}
+                        />
+                    ) : h.currency ? (
+                        <CurrencyInput
+                            path={path + `.${index}.` + h.x}
                             label={h.label}
                         />
                     ) : (
                         <Input
-                            path={`${path}${x}.${index}.`}
-                            x={h.x}
+                            path={path + `.${index}.` + h.x}
                             label={h.label}
                         />
                     )}
@@ -47,7 +55,7 @@ export default function List({
             ))}
 
             <Trash
-                onClick={() => form.removeListItem(path + x, index)}
+                onClick={() => form.removeListItem(path, index)}
                 className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
                     index == 0 ? 'pointer-events-none invisible' : ''
                 }`}
@@ -67,7 +75,7 @@ export default function List({
                 {fields}
                 <Button
                     onClick={() =>
-                        form.insertListItem(path + x, insertedItemFormat)
+                        form.insertListItem(path, insertedItemFormat)
                     }
                     intent="secondary"
                     className="mx-auto max-w-xs w-full"
