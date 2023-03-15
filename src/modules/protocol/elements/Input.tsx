@@ -13,12 +13,8 @@ const Input = ({
 }>) => {
     const form = useProtocolContext()
     return (
-        <div className="m-3 p-1">
-            <label
-                className="label"
-            >
-                {label}
-            </label>
+        <div>
+            <label className="label">{label}</label>
             <input
                 {...form.getInputProps(path + x)}
                 className={`input`}

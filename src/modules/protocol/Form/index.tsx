@@ -17,14 +17,14 @@ import { Protocol, ProtocolSchema } from '@utils/zod'
 import { protocol } from '@prisma/client'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
-    0: <Identification />,
-    1: <Duration />,
-    2: <DirectBudget />,
-    3: <Description />,
-    4: <Introduction />,
-    5: <Method />,
-    6: <Publication />,
-    7: <Bibliography />,
+    0: <Identification key="Identification" />,
+    1: <Duration key="Duration" />,
+    2: <DirectBudget key="Identification" />,
+    3: <Description key="Identification" />,
+    4: <Introduction key="Identification" />,
+    5: <Method key="Identification" />,
+    6: <Publication key="Identification" />,
+    7: <Bibliography key="Identification" />,
 }
 
 export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
@@ -95,27 +95,28 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                     (values) => upsertProtocol(values),
                     (errors) => console.log(errors)
                 )}
-                className="mx-auto flex w-full flex-col"
+                className="mx-auto flex max-w-7xl flex-col"
             >
-                <div className="flex h-6 w-full items-center justify-center gap-16 p-5">
-                    {Object.keys(sectionMapper).map((key: string) => (
+                <div className="flex h-3 py-8 w-full items-center justify-center gap-6 sm:gap-12 md:gap-16 lg:gap-20">
+                    {Object.entries(sectionMapper).map(([key, value]) => (
                         <button
                             type="button"
                             key={key}
-                            className={`h-3 w-3 cursor-pointer rounded-full bg-primary-100 transition-all duration-200 ${
+                            className={`cursor-pointer rounded-full bg-primary-100 transition duration-200 ${
                                 currentVisible == Number(key)
-                                    ? 'h-4 w-4 bg-primary'
+                                    ? 'h-3 w-3 bg-primary'
                                     : Number(currentVisible) > Number(key)
-                                    ? 'h-3 w-3 bg-primary/80'
-                                    : 'border'
+                                    ? 'h-2 w-2 bg-gray-400'
+                                    : 'border h-2 w-2'
                             }`}
                             onClick={() => setVisible(Number(key))}
                         ></button>
                     ))}
                 </div>
+
                 <div className="flex-1">{sectionMapper[currentVisible]}</div>
 
-                <div className="mt-12 mb-8 flex w-full justify-between px-10 ">
+                <div className="mt-12 mb-8 flex w-full justify-between">
                     <Button
                         type="button"
                         intent="secondary"

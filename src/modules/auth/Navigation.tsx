@@ -14,6 +14,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@elements/Button'
+import clsx from 'clsx'
 
 const navigation = [
     {
@@ -55,10 +56,6 @@ const navigation = [
         roles: ['admin'],
     },
 ]
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
 
 export default function Navigation({ children }: { children: ReactNode }) {
     const { data: session } = useSession()
@@ -117,13 +114,13 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                 Close sidebar
                                             </span>
                                             <X
-                                                className="h-6 w-6 text-white"
+                                                className="h-5 text-white"
                                                 aria-hidden="true"
                                             />
                                         </button>
                                     </div>
                                 </Transition.Child>
-                                <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
+                                <div className="flex-1 overflow-y-auto pt-5 pb-4">
                                     <nav className="mt-10 space-y-3 px-2">
                                         {navigation.map((item) =>
                                             item.roles.includes(
@@ -132,7 +129,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                 <Link
                                                     key={item.name}
                                                     href={item.href}
-                                                    className={classNames(
+                                                    className={clsx(
                                                         pathname === item.href
                                                             ? 'bg-primary text-white'
                                                             : 'text-base-700 hover:bg-base-100 hover:text-black',
@@ -141,7 +138,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                     passHref
                                                 >
                                                     <item.icon
-                                                        className={classNames(
+                                                        className={clsx(
                                                             pathname ===
                                                                 item.href
                                                                 ? 'text-base-100'
@@ -176,7 +173,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                     <Link
                                         key={item.name}
                                         href={item.href}
-                                        className={classNames(
+                                        className={clsx(
                                             pathname === item.href
                                                 ? 'bg-primary text-white'
                                                 : 'text-base-700 hover:bg-base-100 hover:text-black',
@@ -185,7 +182,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                         passHref
                                     >
                                         <item.icon
-                                            className={classNames(
+                                            className={clsx(
                                                 pathname === item.href
                                                     ? 'text-base-100'
                                                     : 'text-base-700 group-hover:text-black',
@@ -208,7 +205,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>
-                        <Menu2 className="h-6 w-6" aria-hidden="true" />
+                        <Menu2 className="h-5 " aria-hidden="true" />
                     </Button>
                 </div>
                 <main className="flex-1">

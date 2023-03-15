@@ -19,7 +19,7 @@ export default async function UserList() {
                 className="flex flex-row-reverse"
             >
                 <Button>
-                    <UserPlus className="h-6" />
+                    <UserPlus className="h-5" />
                     <span className="ml-3"> Nuevo usuario</span>
                 </Button>
             </Link>

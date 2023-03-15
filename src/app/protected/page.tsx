@@ -24,7 +24,7 @@ export default async function Page() {
                 className="flex flex-row-reverse"
             >
                 <Button intent="primary">
-                    <FilePlus className="h-6 mr-3" /> Nueva Postulación
+                    <FilePlus className="h-5 mr-3" /> Nueva Postulación
                 </Button>
             </Link>
 

@@ -10,7 +10,7 @@ export const initialProtocolValues: Protocol = {
         identification: {
             assignment: '',
             career: '',
-            sponsor: '',
+            sponsor: [],
             team: [],
             title: '',
         },

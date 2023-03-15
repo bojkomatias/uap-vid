@@ -1,22 +1,21 @@
 'use client'
 import { motion } from 'framer-motion'
 import Textarea from '@protocol/elements/Textarea'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 export default function Introduction() {
     const path = 'sections.introduction.'
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Introducción al proyecto
-                </span>
-            </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <SectionTitle title="Introducción al proyecto" />
+            <span />
+            <>
                 <Textarea
                     path={path}
                     x="state"
@@ -33,7 +32,7 @@ export default function Introduction() {
                     label="Definición del problema"
                 />
                 <Textarea path={path} x="objectives" label="objetivos" />
-            </div>
+            </>
         </motion.div>
     )
 }
