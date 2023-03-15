@@ -17,7 +17,7 @@ export default function MultipleSelect({
     options: string[]
 }>) {
     const form = useProtocolContext()
-    const [selected, setSelected] = useState<string[]>(
+    const [selected, setSelected] = useState<any[]>(
         form.values.sections.identification.sponsor
     )
 
