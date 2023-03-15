@@ -20,12 +20,11 @@ export default function Publication() {
             <span />
             <>
                 <Select
-                    path={path}
-                    x="result"
+                    path={path + 'result'}
                     options={results}
                     label="Resultado de la investigación"
                 />
-                <Textarea path={path} x="plan" label="Plan" />
+                <Textarea path={path + 'plan'} label="Plan" />
             </>
         </motion.div>
     )

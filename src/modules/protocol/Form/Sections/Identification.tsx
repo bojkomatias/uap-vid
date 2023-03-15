@@ -41,10 +41,9 @@ export default function Identification() {
             <SectionTitle title="Identificación" />
             <Info />
             <>
-                <Input path={path} x="title" label="titulo" />
+                <Input path={path + 'title'} label="titulo" />
                 <Select
-                    path={path}
-                    x="career"
+                    path={path + 'career'}
                     options={careers}
                     label="carrera"
                     conditionalCleanup={() =>
@@ -52,16 +51,14 @@ export default function Identification() {
                     }
                 />
                 <Select
-                    path={path}
-                    x="assignment"
+                    path={path + 'assignment'}
                     label="materia"
                     options={assignments(
                         form.values.sections.identification.career
                     )}
                 />
                 <List
-                    path={path}
-                    x="team"
+                    path={path + 'team'}
                     label="miembros de equipo"
                     toMap={form.values.sections.identification.team}
                     insertedItemFormat={{ role: '', name: '', hours: '' }}
@@ -96,8 +93,7 @@ export default function Identification() {
                     ]}
                 />
                 <MultipleSelect
-                    path={path}
-                    x="sponsor"
+                    path={path + 'sponsor'}
                     label="ente patrocinante"
                     options={sponsors}
                 />

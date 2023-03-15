@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import List from '@protocol/elements/List'
 import InfoTooltip from '@protocol/elements/InfoTooltip'
 import SectionTitle from '@protocol/elements/SectionTitle'
+import { Currency, CurrencyDollar } from 'tabler-icons-react'
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12
@@ -30,8 +31,7 @@ export default function DirectBudget() {
             <Info />
             <>
                 <List
-                    path={path}
-                    x="expenses"
+                    path={path + 'expenses'}
                     label="gastos"
                     toMap={form.values.sections.budget.expenses}
                     insertedItemFormat={{
@@ -52,7 +52,14 @@ export default function DirectBudget() {
                             ],
                         },
                         { x: 'detail', label: 'detalle', class: 'flex-grow' },
-                        { x: 'amount', label: 'monto' },
+                        {
+                            x: 'amount',
+                            label: 'monto',
+                            prefix: (
+                                <CurrencyDollar className="h-4 text-gray-400" />
+                            ),
+                            type: 'number',
+                        },
                         {
                             x: 'year',
                             label: 'año',

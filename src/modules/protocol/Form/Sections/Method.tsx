@@ -17,26 +17,22 @@ const conditionalByType = (v: string, path: any) => {
         return (
             <>
                 <Textarea
-                    path={path}
-                    x="design"
+                    path={path + 'design'}
                     label="Diseño y tipo de investigación"
                 />
-                <Textarea path={path} x="participants" label="Participantes" />
-                <Textarea path={path} x="place" label="Lugar de desarrollo" />
+                <Textarea path={path + 'participants'} label="Participantes" />
+                <Textarea path={path + 'place'} label="Lugar de desarrollo" />
                 <Textarea
-                    path={path}
-                    x="instruments"
+                    path={path + 'instruments'}
                     label="Instrumentos para recolección de datos"
                 />
                 <Textarea
-                    path={path}
-                    x="procedures"
+                    path={path + 'procedures'}
                     label="Procedimientos para recolección de datos"
                 />
-                <Textarea path={path} x="analysis" label="Análisis de datos" />
+                <Textarea path={path + 'analysis'} label="Análisis de datos" />
                 <Textarea
-                    path={path}
-                    x="considerations"
+                    path={path + 'considerations'}
                     label="Consideraciones"
                 />
             </>
@@ -45,8 +41,7 @@ const conditionalByType = (v: string, path: any) => {
         return (
             <>
                 <Textarea
-                    path={path}
-                    x="detail"
+                    path={path + 'detail'}
                     label="Detalle de metodología"
                 />
             </>
@@ -68,8 +63,7 @@ export default function Method() {
             <span />
             <>
                 <Select
-                    path={path}
-                    x="type"
+                    path={path + 'type'}
                     options={types}
                     label="tipo de investigación"
                 />

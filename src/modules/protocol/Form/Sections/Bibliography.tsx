@@ -19,8 +19,7 @@ export default function Bibliography() {
             <span />
             <>
                 <List
-                    path={path}
-                    x="chart"
+                    path={path + 'chart'}
                     label="cuadro bibliográfico"
                     toMap={form.values.sections.bibliography.chart}
                     insertedItemFormat={{ author: '', title: '', year: '' }}
