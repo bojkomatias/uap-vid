@@ -1,8 +1,8 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
-
 import { motion } from 'framer-motion'
-import Table from '@protocol/elements/Table'
+import List from '@protocol/elements/List'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 export default function Bibliography() {
     const form = useProtocolContext()
@@ -10,17 +10,15 @@ export default function Bibliography() {
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Bibliografía
-                </span>
-            </div>
-            <div>
-                <Table
+            <SectionTitle title="Bibliografía" />
+            <span />
+            <>
+                <List
                     path={path}
                     x="chart"
                     label="cuadro bibliográfico"
@@ -31,11 +29,11 @@ export default function Bibliography() {
                             x: 'author',
                             label: 'autor',
                         },
-                        { x: 'title', label: 'titulo' },
+                        { x: 'title', label: 'titulo', class: 'flex-grow' },
                         { x: 'year', label: 'año' },
                     ]}
                 />
-            </div>
+            </>
         </motion.div>
     )
 }

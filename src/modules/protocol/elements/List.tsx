@@ -5,7 +5,7 @@ import Select from './Select'
 import { Button } from '../../elements/Button'
 import { Plus, Trash } from 'tabler-icons-react'
 
-export default function Table({
+export default function List({
     path,
     x,
     label,
@@ -23,7 +23,10 @@ export default function Table({
     const form = useProtocolContext()
 
     const fields = toMap.map((_: any, index: any) => (
-        <div key={index} className="flex w-full items-start justify-around ">
+        <div
+            key={index}
+            className="flex w-full items-start justify-around gap-2"
+        >
             {headers.map((h: any, i: number) => (
                 <div className={` ${h.class}`} key={i}>
                     {h.options ? (
@@ -45,7 +48,7 @@ export default function Table({
 
             <Trash
                 onClick={() => form.removeListItem(path + x, index)}
-                className={`mr-2 mt-12 h-5 flex-shrink cursor-pointer self-start text-primary transition-all duration-200 hover:text-base-400 active:scale-[0.90] ${
+                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
                     index == 0 ? 'pointer-events-none invisible' : ''
                 }`}
             />
@@ -53,31 +56,26 @@ export default function Table({
     ))
 
     return (
-        <div className="p-2">
-            <div className="text-center text-xs font-thin uppercase text-base-600">
-                {fields.length > 0 ? (
-                    label
-                ) : (
-                    <div className="flex flex-col gap-2">
-                        <div>{label}</div>
-                        <span className="mx-auto text-primary transition-all duration-150">
-                            La lista esta vacía ...
-                        </span>
+        <div>
+            <div className="label text-center">{label}</div>
+            <div className="px-4 pb-2 pt-6 space-y-3 border rounded-xl">
+                {fields.length === 0 ? (
+                    <div className="text-primary label text-center">
+                        La lista esta vacía ...
                     </div>
-                )}
+                ) : null}
+                {fields}
+                <Button
+                    onClick={() =>
+                        form.insertListItem(path + x, insertedItemFormat)
+                    }
+                    intent="secondary"
+                    className="mx-auto max-w-xs w-full"
+                >
+                    <p> Añadir otra fila </p>
+                    <Plus className="h-5" />
+                </Button>
             </div>
-
-            {fields}
-            <Button
-                onClick={() =>
-                    form.insertListItem(path + x, insertedItemFormat)
-                }
-                intent="secondary"
-                className="mx-auto my-2 w-1/3 cursor-pointer justify-center gap-2 text-xs"
-            >
-                <p> Añadir otra fila </p>
-                <Plus className="h-5" />
-            </Button>
         </div>
     )
 }

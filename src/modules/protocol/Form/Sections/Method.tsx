@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { useProtocolContext } from 'utils/createContext'
 import Textarea from '@protocol/elements/Textarea'
 import Select from '@protocol/elements/Select'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
@@ -58,16 +59,14 @@ export default function Method() {
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Metodología
-                </span>
-            </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <SectionTitle title="Metodología" />
+            <span />
+            <>
                 <Select
                     path={path}
                     x="type"
@@ -75,7 +74,7 @@ export default function Method() {
                     label="tipo de investigación"
                 />
                 {conditionalByType(form.values.sections.methodology.type, path)}
-            </div>
+            </>
         </motion.div>
     )
 }

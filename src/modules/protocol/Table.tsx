@@ -46,7 +46,11 @@ export default function Table({ items }: { items: protocol[] }) {
                                 {item.sections.identification.title}
                             </td>
                             <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                                {item.sections.identification.sponsor}
+                                {item.sections.identification.sponsor.length < 2
+                                    ? item.sections.identification.sponsor
+                                    : item.sections.identification.sponsor
+                                          .map((e: string) => e.split('-')[1])
+                                          .join(' - ')}
                             </td>
                             <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
                                 {item.sections.identification.career}

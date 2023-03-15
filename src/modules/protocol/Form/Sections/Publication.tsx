@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import Select from '@protocol/elements/Select'
 import Textarea from '@protocol/elements/Textarea'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 
@@ -10,16 +11,14 @@ export default function Publication() {
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Publicación
-                </span>
-            </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <SectionTitle title="Publicación" />
+            <span />
+            <>
                 <Select
                     path={path}
                     x="result"
@@ -27,7 +26,7 @@ export default function Publication() {
                     label="Resultado de la investigación"
                 />
                 <Textarea path={path} x="plan" label="Plan" />
-            </div>
+            </>
         </motion.div>
     )
 }

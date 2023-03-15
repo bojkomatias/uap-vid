@@ -1,9 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
-
 import { motion } from 'framer-motion'
 import Select from '@protocol/elements/Select'
 import Input from '@protocol/elements/Input'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 const disciplines = [
     'Ciencias Económicas y de la Administración',
@@ -91,16 +91,14 @@ export default function Description() {
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className=" ml-10 text-xl font-bold uppercase text-primary">
-                    Descripción del proyecto
-                </span>
-            </div>
-            <div className="mx-auto mt-5 max-w-[1120px]">
+            <SectionTitle title="Descripción del proyecto" />
+            <span />
+            <>
                 <Select
                     path={path}
                     x="discipline"
@@ -135,7 +133,7 @@ export default function Description() {
                     label="tipo de investigación"
                     options={type}
                 />
-            </div>
+            </>
         </motion.div>
     )
 }

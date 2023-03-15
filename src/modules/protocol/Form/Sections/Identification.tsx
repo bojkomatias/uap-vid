@@ -4,8 +4,10 @@ import full from 'config/careers.json'
 import { motion } from 'framer-motion'
 import Input from '@protocol/elements/Input'
 import Select from '@protocol/elements/Select'
-import Table from '@protocol/elements/Table'
+import List from '@protocol/elements/List'
 import InfoTooltip from '@protocol/elements/InfoTooltip'
+import MultipleSelect from '@protocol/elements/MultipleSelect'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 const careers = full.map((x) => x.career)
 // conditional
@@ -16,13 +18,13 @@ const assignments = (v: any) =>
         .flat()
 
 const sponsors = [
-    'Facultad de Ciencias Económicas y de la Administración (FACEA)',
-    'Facultad de Ciencias de la Salud (FCS)',
-    'Facultad de Humanidades, Educación y Ciencias Sociales (FHECIS)',
-    'Facultad de Teología (FT)',
-    'Consejo Nacional de Investigaciones Científicas y Técnicas (CONICET)',
-    'Centro de investigación o departamento',
-    'Escuela de graduados (EG)',
+    'Facultad de Ciencias Económicas y de la Administración - FACEA',
+    'Facultad de Ciencias de la Salud - FCS',
+    'Facultad de Humanidades, Educación y Ciencias Sociales - FHECIS',
+    'Facultad de Teología - FT',
+    'Consejo Nacional de Investigaciones Científicas y Técnicas - CONICET',
+    'Centro Interdisciplinario de Investigaciones en Ciencias de la Salud y del Comportamiento - CIICSAC',
+    'Escuela de Graduados - EG',
 ]
 
 export default function Identification() {
@@ -31,17 +33,14 @@ export default function Identification() {
 
     return (
         <motion.div
+            initial={{ opacity: 0, x: -5 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="-translate-x-[6px] opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className="ml-10 text-xl font-bold uppercase text-primary">
-                    Identificación
-                </span>
-            </div>
+            <SectionTitle title="Identificación" />
             <Info />
-            <div className="mx-auto max-w-6xl">
+            <>
                 <Input path={path} x="title" label="titulo" />
                 <Select
                     path={path}
@@ -60,7 +59,7 @@ export default function Identification() {
                         form.values.sections.identification.career
                     )}
                 />
-                <Table
+                <List
                     path={path}
                     x="team"
                     label="miembros de equipo"
@@ -83,18 +82,26 @@ export default function Identification() {
                                 'Becario CONICET',
                             ],
                         },
-                        { x: 'last_name', label: 'apellido' },
-                        { x: 'name', label: 'nombre' },
-                        { x: 'hours', label: 'horas' },
+                        {
+                            x: 'last_name',
+                            label: 'apellido',
+                            class: 'flex-grow',
+                        },
+                        { x: 'name', label: 'nombre', class: 'flex-grow' },
+                        {
+                            x: 'hours',
+                            label: 'horas',
+                            class: 'flex-shrink w-32 text-right',
+                        },
                     ]}
                 />
-                <Select
+                <MultipleSelect
                     path={path}
                     x="sponsor"
                     label="ente patrocinante"
                     options={sponsors}
                 />
-            </div>
+            </>
         </motion.div>
     )
 }

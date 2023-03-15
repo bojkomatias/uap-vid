@@ -36,7 +36,7 @@ export const RoleSelector = ({
                             <span className="">{user.role}</span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                 <Selector
-                                    className="text-gray-600 h-5 w-5"
+                                    className="text-gray-600 h-5 "
                                     aria-hidden="true"
                                 />
                             </span>
@@ -49,7 +49,7 @@ export const RoleSelector = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="absolute z-10 mt-1 max-h-50 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                 {roles.map((role) => (
                                     <Listbox.Option
                                         key={role}
@@ -84,7 +84,7 @@ export const RoleSelector = ({
                                                         )}
                                                     >
                                                         <Check
-                                                            className="h-5 w-5 text-primary"
+                                                            className="h-5  text-primary"
                                                             aria-hidden="true"
                                                         />
                                                     </span>

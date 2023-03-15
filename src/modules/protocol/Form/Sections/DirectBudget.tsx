@@ -1,8 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Table from '@protocol/elements/Table'
+import List from '@protocol/elements/List'
 import InfoTooltip from '@protocol/elements/InfoTooltip'
+import SectionTitle from '@protocol/elements/SectionTitle'
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12
@@ -20,18 +21,15 @@ export default function DirectBudget() {
 
     return (
         <motion.div
-            animate={{ opacity: 1, x: 6 }}
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="opacity-0"
+            className="space-y-3"
         >
-            <div className="flex grow items-center">
-                <span className="ml-10 text-xl font-bold uppercase text-primary">
-                    Presupuesto de gastos directos
-                </span>
-            </div>
+            <SectionTitle title="Presupuesto de gastos directos" />
             <Info />
-            <div className="mx-auto mt-5 max-w-[1120px]">
-                <Table
+            <>
+                <List
                     path={path}
                     x="expenses"
                     label="gastos"
@@ -53,7 +51,7 @@ export default function DirectBudget() {
                                 'Viajes',
                             ],
                         },
-                        { x: 'detail', label: 'detalle' },
+                        { x: 'detail', label: 'detalle', class: 'flex-grow' },
                         { x: 'amount', label: 'monto' },
                         {
                             x: 'year',
@@ -64,7 +62,7 @@ export default function DirectBudget() {
                         },
                     ]}
                 />
-            </div>
+            </>
         </motion.div>
     )
 }
