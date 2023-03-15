@@ -7,13 +7,6 @@
         @apply overflow-x-hidden subpixel-antialiased;
     }
 }
-
-.shadowCustom {
-    -webkit-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
-    -moz-box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
-    box-shadow: 3px 7px 58px 10px rgba(0, 0, 0, 0.08);
-}
-
 @layer components {
     .input {
         @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;

@@ -45,7 +45,12 @@ export default function Select({
 
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md focus:outline-none pr-2">
                             <X
-                                className="h-5 w-5 p-1 rounded-full hover:scale-110 active:scale-95 hover:bg-gray-100 hover:stroke-2 text-gray-400 transition-all duration-200 hover:text-gray-700"
+                                className={clsx(
+                                    'h-5 w-5 p-1 rounded-full hover:scale-110 active:scale-95 hover:bg-gray-100 hover:stroke-2 text-gray-400 transition-all duration-200 hover:text-gray-700',
+                                    form.getInputProps(path + x).value === ''
+                                        ? 'hidden'
+                                        : ''
+                                )}
                                 onClick={(e) => {
                                     form.setFieldValue(path + x, '')
                                     e.stopPropagation()

@@ -18,7 +18,7 @@ export default function MultipleSelect({
 }>) {
     const form = useProtocolContext()
     const [selected, setSelected] = useState<any[]>(
-        form.values.sections.identification.sponsor
+        form.getInputProps(path + x).value
     )
 
     useEffect(() => {
@@ -44,7 +44,13 @@ export default function MultipleSelect({
 
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                             <X
-                                className="h-5 p-1 rounded-full hover:scale-110 active:scale-95 hover:bg-gray-100 hover:stroke-2 text-gray-400 transition-all duration-200 hover:text-gray-700 mr-1"
+                                className={clsx(
+                                    'h-5 w-5 p-1 rounded-full hover:scale-110 active:scale-95 hover:bg-gray-100 hover:stroke-2 text-gray-400 transition-all duration-200 hover:text-gray-700 mr-1',
+                                    form.getInputProps(path + x).value
+                                        .length === 0
+                                        ? 'hidden'
+                                        : ''
+                                )}
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     setSelected([])
