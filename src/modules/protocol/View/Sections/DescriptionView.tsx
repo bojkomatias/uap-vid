@@ -2,10 +2,10 @@ import { ProtocolSectionsDescription } from '@prisma/client'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import React from 'react'
 import SectionLayout from './SectionLayout'
-interface DescriptionSectionProps {
+interface DescriptionViewProps {
    data: ProtocolSectionsDescription
 }
-const DescriptionSection = ({data}:DescriptionSectionProps) => {
+const DescriptionView = ({data}:DescriptionViewProps) => {
    const shortData = [
       {
          title: 'Campo',
@@ -39,4 +39,4 @@ const DescriptionSection = ({data}:DescriptionSectionProps) => {
   )
 }
 
-export default DescriptionSection
+export default DescriptionView
