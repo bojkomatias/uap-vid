@@ -21,16 +21,16 @@ const DurationView = ({ data }: DurationViewProps) => {
     const tableData = {
         title: 'Cronograma',
         values: data.chronogram.reduce((newVal: any, item) => {
-            newVal.push({
-                left: {
+            newVal.push([
+                {
                     up: 'Semestre',
                     down: item.semester,
                 },
-                right: {
+                {
                     up: 'Tarea',
                     down: item.task,
                 },
-            })
+            ])
             return newVal
         }, []),
     }

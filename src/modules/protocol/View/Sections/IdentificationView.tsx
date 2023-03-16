@@ -31,16 +31,16 @@ export default function IdentificationView({ data }: IdentificationProps) {
     const tableData = {
         title: 'Equipo',
         values: data.team.reduce((newVal:any, person) => {
-            newVal.push({
-                left: {
+            newVal.push([
+                {
                     up: `${person.last_name}, ${person.name}`,
                     down: person.role,
                 },
-                right: {
+                {
                     up: "Horas",
                     down: person.hours,
                 },
-            })
+            ])
             return newVal
         },[])
     }
