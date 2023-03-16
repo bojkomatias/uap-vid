@@ -62,7 +62,6 @@ type ProtocolSectionsDurationChronogram {
 type ProtocolSectionsIdentification {
   assignment String
   career     String
-  /// Multiple data types found: String: 66.7%, Array(String): 33.3% out of 3 sampled entries
   sponsor    String[]
   team       ProtocolSectionsIdentificationTeam[]
   title      String
