@@ -1,13 +1,12 @@
 import { ProtocolSectionsBudget } from '@prisma/client'
 import TableData from '@protocol/elements/TableData/TableData'
-import React from 'react'
 import SectionLayout from './SectionLayout'
 
-interface BudgetSectionProps {
+interface BudgetViewProps {
     data: ProtocolSectionsBudget
 }
 
-const BudgetSection = ({ data }: BudgetSectionProps) => {
+const BudgetView = ({ data }: BudgetViewProps) => {
     const tableData = {
         title: 'Presupuesto de gastos directos',
         values: data.expenses.reduce((newVal: any, item) => {
@@ -23,7 +22,7 @@ const BudgetSection = ({ data }: BudgetSectionProps) => {
                 },
                 {
                     up: 'Año',
-                    down: item.detail,
+                    down: item.year,
                     inverted: true,
                 },
             ])
@@ -41,4 +40,4 @@ const BudgetSection = ({ data }: BudgetSectionProps) => {
     )
 }
 
-export default BudgetSection
+export default BudgetView

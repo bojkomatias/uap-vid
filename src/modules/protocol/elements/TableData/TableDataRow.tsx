@@ -5,17 +5,26 @@ interface TableDataRowProps {
         up: string
         down: string
         inverted?: boolean
-        columnWidth?: string
     }[]
 }
 
 const TableDataRow = ({ data }: TableDataRowProps) => {
     return (
         <div
-            className={`relative grid grid-cols-${data.length} grid-flow-col place-items-start justify-between py-4 px-4`}
+            className={clsx(
+                'relative space-y-2 sm:space-y-0 sm:grid place-items-center py-4 px-4',
+                {
+                    'grid-cols-2': data.length == 2,
+                    'grid-cols-3': data.length == 3,
+                    'grid-cols-4': data.length == 4,
+                }
+            )}
         >
             {data.map((item, index) => (
-                <div className="last:place-self-start" key={index}>
+                <div
+                    key={index}
+                    className="first:place-self-start last:place-self-end last:text-right"
+                >
                     <p
                         className={clsx(
                             { 'font-medium text-gray-900': !item.inverted },
