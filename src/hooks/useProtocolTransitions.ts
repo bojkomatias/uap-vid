@@ -8,7 +8,7 @@ const PUBLISH = (currentProtocolState: string) => {
    //validate if the protocol is on draft state & have all the mandatory fields. Also check if the role is researcher
    //If not, return an error
    //If yes, change the state to methodological_evaluation - not_assigned
-   // Machine.send({ type: "PUBLISH" })
+   // Machine.send({ type: "PUBLISH" }).
 }
 
 const ASSIGN_METODOLOGIST = () => {
