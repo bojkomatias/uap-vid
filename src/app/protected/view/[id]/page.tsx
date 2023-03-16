@@ -2,7 +2,7 @@ import { Heading } from '@layout/Heading'
 import View from '@protocol/View'
 import { findProtocolById } from 'repositories/protocol'
 
-export default async function Page({ params }: any) {
+export default async function Page({ params }: { params: { id: string } }) {
     const protocol = await findProtocolById(params.id)
 
     if (protocol)
@@ -26,7 +26,7 @@ export default async function Page({ params }: any) {
                         <span className="mx-8 text-lg font-semibold">
                             Comments
                         </span>
-                        <div className="border-2 border-dashed h-screen m-12 rounded-xl" />
+                        <div className="m-12 h-screen rounded-xl border-2 border-dashed" />
                     </aside>
                 </div>
             </>
