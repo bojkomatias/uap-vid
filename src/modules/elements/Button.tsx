@@ -32,7 +32,7 @@ export const Button = ({
             className={clsx(
                 className,
                 styles[intent],
-                'uppercase rounded group flex items-center font-semibold text-sm justify-center px-4 py-3 active:scale-[98%] hover:shadow shadow-primary/30 disabled:pointer-events-none disabled:text-base-200 disabled:saturate-0 disabled:opacity-75 focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200 ease-out'
+                'group flex items-center justify-center rounded-md px-4 py-3 text-sm font-semibold uppercase shadow-primary/30 transition duration-200 ease-out hover:shadow focus:ring-2 focus:ring-primary focus:ring-offset-2 active:scale-[98%] disabled:pointer-events-none disabled:text-base-200 disabled:opacity-75 disabled:saturate-0'
             )}
         >
             {children}

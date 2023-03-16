@@ -2,7 +2,7 @@ import Navigation from '@auth/Navigation'
 import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
 
-import Table from '@protocol/Table'
+import Table from '@protocol/elements/Table'
 import Link from 'next/link'
 import { getAllProtocols } from 'repositories/protocol'
 import { FilePlus } from 'tabler-icons-react'
@@ -13,7 +13,7 @@ export default async function Page() {
     return (
         <Navigation>
             <Heading title="Lista de proyectos de investigación" />
-            <p className="mt-2 text-sm text-gray-700">
+            <p className="mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.
             </p>
@@ -21,10 +21,10 @@ export default async function Page() {
             <Link
                 href={'/protected/protocol/new'}
                 passHref
-                className="flex flex-row-reverse"
+                className="mt-4 flex"
             >
                 <Button intent="primary">
-                    <FilePlus className="h-5 mr-3" /> Nueva Postulación
+                    <FilePlus className="mr-3 h-5" /> Nueva Postulación
                 </Button>
             </Link>
 

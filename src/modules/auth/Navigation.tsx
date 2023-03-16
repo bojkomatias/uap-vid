@@ -105,7 +105,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                     <div className="absolute top-0 right-0 -mr-12 pt-2">
                                         <button
                                             type="button"
-                                            className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                            className="ml-1 mt-3 flex h-10 w-10 items-center justify-center rounded-md transition-all duration-150 hover:ring-gray-300  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 active:scale-95"
                                             onClick={() =>
                                                 setSidebarOpen(false)
                                             }
@@ -114,14 +114,14 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                 Close sidebar
                                             </span>
                                             <X
-                                                className="h-5 text-white"
+                                                className="h-5 text-white transition-all duration-150 hover:text-gray-300"
                                                 aria-hidden="true"
                                             />
                                         </button>
                                     </div>
                                 </Transition.Child>
-                                <div className="flex-1 overflow-y-auto pt-5 pb-4">
-                                    <nav className="mt-10 space-y-3 px-2">
+                                <div className="flex-1 overflow-y-auto pb-4">
+                                    <nav className="mt-5 space-y-3 px-2">
                                         {navigation.map((item) =>
                                             item.roles.includes(
                                                 session?.user?.role!
@@ -133,7 +133,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                         pathname === item.href
                                                             ? 'bg-primary text-white'
                                                             : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                        'group flex items-center px-4 py-3 text-sm font-medium rounded'
+                                                        'group flex items-center rounded px-4 py-3 text-sm font-medium'
                                                     )}
                                                     passHref
                                                 >
@@ -163,11 +163,11 @@ export default function Navigation({ children }: { children: ReactNode }) {
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:absolute lg:inset-0 lg:flex lg:w-64 lg:flex-col">
+            <div className=" hidden lg:absolute lg:inset-0 lg:flex lg:w-64 lg:flex-col">
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex min-h-0 flex-1 flex-col border-r border-base-200 bg-white">
-                    <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-                        <nav className="mt-10 flex-1 space-y-3 bg-white px-2">
+                    <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+                        <nav className="mt-5 flex-1 space-y-3 bg-white px-2">
                             {navigation.map((item) =>
                                 item.roles.includes(session?.user?.role!) ? (
                                     <Link
@@ -177,7 +177,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                             pathname === item.href
                                                 ? 'bg-primary text-white'
                                                 : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                            'group flex items-center px-4 rounded py-3 text-sm font-medium'
+                                            'group flex items-center rounded-md px-4 py-3 text-sm font-medium'
                                         )}
                                         passHref
                                     >
@@ -199,9 +199,9 @@ export default function Navigation({ children }: { children: ReactNode }) {
                 </div>
             </div>
             <div className="flex flex-1 flex-col lg:pl-64">
-                <div className="sticky -mt-10 -ml-12  z-10 sm:pl-3 sm:pt-3 lg:hidden">
+                <div className="sticky z-10 -mt-12 mb-2 -ml-12 sm:pl-3 sm:pt-3 lg:hidden">
                     <Button
-                        intent="secondary"
+                        intent="primary"
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>

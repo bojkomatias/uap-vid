@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export const Nav = () => (
     <nav className="w-screen  bg-primary">
-        <div className="mx-2 sm:mx-6 md:mx-12 lg:mx-16 flex h-[10vh] max-w-7xl items-center justify-between text-white 2xl:mx-auto">
+        <div className="mx-2 flex h-[10vh] max-w-7xl items-center justify-between text-white sm:mx-6 md:mx-12 lg:mx-16 2xl:mx-auto">
             <div className="text-center text-[10px] uppercase tracking-wider">
                 <a href="/protected/">
                     <Image
