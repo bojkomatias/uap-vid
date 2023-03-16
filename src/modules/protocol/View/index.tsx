@@ -1,5 +1,6 @@
 import type { protocol } from '@prisma/client'
 import IdentificationView from '@protocol/View/Sections/IdentificationView'
+import BudgetSection from './Sections/BudgetSection'
 import DurationView from './Sections/DurationView'
 
 export default function View({ protocol }: { protocol: protocol }) {
@@ -9,6 +10,7 @@ export default function View({ protocol }: { protocol: protocol }) {
             
             <IdentificationView data={protocol.sections.identification} />
             <DurationView data={protocol.sections.duration} />
+            <BudgetSection data={protocol.sections.budget} />
             <pre className="text-[0.5rem]">
                 {JSON.stringify(protocol, null, 2)}
             </pre>
