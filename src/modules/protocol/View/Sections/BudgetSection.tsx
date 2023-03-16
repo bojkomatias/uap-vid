@@ -9,7 +9,7 @@ interface BudgetSectionProps {
 
 const BudgetSection = ({ data }: BudgetSectionProps) => {
     const tableData = {
-        title: 'Presupuesto',
+        title: 'Presupuesto de gastos directos',
         values: data.expenses.reduce((newVal: any, item) => {
             newVal.push({
                 left: {
