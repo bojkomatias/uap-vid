@@ -99,17 +99,12 @@ type ProtocolSectionsPublication {
 }
 
 
-type Comments {
-  methodologic String[] //String array por si un metodólogo comenta múltiples veces.
-  scientific_internal String
-  scientific_external String
-}
 
 model protocol {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime         @db.Date
   sections  ProtocolSections
-  comments  Comments
+
 }
 
 model reviews {
