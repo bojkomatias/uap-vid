@@ -59,7 +59,7 @@ type ProtocolSectionsBibliography {
 type ProtocolSectionsBibliographyChart {
   author String
   title  String
-  year   BigInt
+  year   Int
 }
 
 type ProtocolSectionsBudget {

@@ -8,9 +8,30 @@ const createComment = async (id: string, data: ProtocolReviewsComments) => {
         },
         data: {
             reviews: {
-                update: {
-                    methodologic: {
-                        update: { comments: { set: [data] } },
+                upsert: {
+                    set: {
+                        methodologic: {
+                            reviewer: '',
+                            veredict: '',
+                            comments: [
+                                {
+                                    data: 'upsertee? set?',
+                                    date: new Date(),
+                                },
+                            ],
+                        },
+                    },
+                    update: {
+                        methodologic: {
+                            update: {
+                                comments: {
+                                    push: {
+                                        date: new Date(),
+                                        data: 'updatee?',
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
