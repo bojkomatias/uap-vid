@@ -10,14 +10,10 @@ export default async function UserList() {
     const users = await getAllUsers()
 
     return (
-        <Navigation>
+        <>
             <Heading title="Lista de usuarios" />
 
-            <Link
-                href={'/protected/admin/newuser'}
-                passHref
-                className="flex flex-row-reverse"
-            >
+            <Link href={'/protected/admin/newuser'} passHref className="flex">
                 <Button>
                     <UserPlus className="h-5" />
                     <span className="ml-3"> Nuevo usuario</span>
@@ -30,19 +26,19 @@ export default async function UserList() {
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-sm text-left text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-0"
                             >
                                 Nombre
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-sm text-left text-gray-900 sm:table-cell"
+                                className="hidden px-3 py-3.5 text-left text-sm text-gray-900 sm:table-cell"
                             >
                                 Email
                             </th>
                             <th
                                 scope="col"
-                                className="px-3 py-3.5 text-sm text-center text-gray-900 max-w-md"
+                                className="max-w-md px-3 py-3.5 text-center text-sm text-gray-900"
                             >
                                 Rol
                             </th>
@@ -71,7 +67,7 @@ export default async function UserList() {
                                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                                     {user.email}
                                 </td>
-                                <td className="px-3 py-4 text-sm text-gray-500 max-w-[8rem]">
+                                <td className="max-w-[8rem] px-3 py-4 text-sm text-gray-500">
                                     <UpdateRole
                                         user={JSON.parse(JSON.stringify(user))}
                                     />
@@ -92,6 +88,6 @@ export default async function UserList() {
                     </tbody>
                 </table>
             </div>
-        </Navigation>
+        </>
     )
 }

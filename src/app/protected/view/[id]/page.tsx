@@ -1,7 +1,6 @@
 import { Heading } from '@layout/Heading'
 import View from '@protocol/View'
 import { findProtocolById } from 'repositories/protocol'
-import Comment from '@protocol/elements/Comment'
 
 export default async function Page({ params }: { params: { id: string } }) {
     const protocol = await findProtocolById(params.id)
@@ -24,17 +23,17 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <View protocol={protocol} />
                     </main>
                     <button></button>
-                    <Comment />
+                    <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
+                        <span className="mx-8 text-lg font-semibold">
+                            Comments
+                        </span>
+                        <div className="m-12 h-screen rounded-xl border-2 border-dashed" />
+                    </aside>
                 </div>
             </>
         )
 }
 
 {
-    /* <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
-                        <span className="mx-8 text-lg font-semibold">
-                            Comments
-                        </span>
-                        <div className="m-12 h-screen rounded-xl border-2 border-dashed" />
-                    </aside> */
+    /*  */
 }

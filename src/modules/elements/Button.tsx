@@ -6,6 +6,8 @@ const styles = {
         'text-primary outline-none hover:bg-primary hover:text-white hover:scale-[102%] bg-base-100',
     secondary:
         'text-xs ring-1 ring-inset focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700',
+    terciary:
+        'text-primary outline-none hover:bg-primary hover:text-white bg-base-100',
 }
 
 interface Props
@@ -13,7 +15,7 @@ interface Props
         ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
     > {
-    intent?: 'primary' | 'secondary'
+    intent?: 'primary' | 'secondary' | 'terciary'
     className?: string
     type?: 'button' | 'reset' | 'submit'
     children: ReactNode

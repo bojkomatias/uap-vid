@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@elements/Button'
 import clsx from 'clsx'
+import BackButton from '@elements/BackButton'
 
 const navigation = [
     {
@@ -168,6 +169,7 @@ export default function Navigation({ children }: { children: ReactNode }) {
                 <div className="flex min-h-0 flex-1 flex-col border-r border-base-200 bg-white">
                     <div className="flex flex-1 flex-col overflow-y-auto pb-4">
                         <nav className="mt-5 flex-1 space-y-3 bg-white px-2">
+                            <BackButton class_name="justify-self-end"></BackButton>
                             {navigation.map((item) =>
                                 item.roles.includes(session?.user?.role!) ? (
                                     <Link

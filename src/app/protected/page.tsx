@@ -11,7 +11,7 @@ import { FilePlus } from 'tabler-icons-react'
 export default async function Page() {
     const protocols = await getAllProtocols()
     return (
-        <Navigation>
+        <>
             <Heading title="Lista de proyectos de investigación" />
             <p className="mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
@@ -31,6 +31,6 @@ export default async function Page() {
             <div className="mx-auto mb-20 flex flex-col justify-center">
                 <Table items={protocols} />
             </div>
-        </Navigation>
+        </>
     )
 }

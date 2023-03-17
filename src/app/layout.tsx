@@ -3,6 +3,7 @@ import { Nav } from '@layout/Nav'
 import './globals.css'
 import Providers from './providers'
 import { Roboto_Flex } from 'next/font/google'
+import Navigation from '@auth/Navigation'
 
 export const metadata = {
     title: {
@@ -24,7 +25,7 @@ export default function RootLayout({
                 <body className="subpixel-antialiased">
                     <Nav />
                     <main className="relative min-h-[90vh] p-12">
-                        {children}
+                        <Navigation>{children}</Navigation>
                     </main>
                     <Footer />
                 </body>
