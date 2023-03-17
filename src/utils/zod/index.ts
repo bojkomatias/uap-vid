@@ -1,6 +1,42 @@
 import { z } from 'zod'
 
 /////////////////////////////////////////
+// ENUMS
+/////////////////////////////////////////
+
+export const RoleSchema = z.enum([
+    'RESEARCHER',
+    'SECRETARY',
+    'METHODOLOGIST',
+    'EVALUATOR',
+    'ADMIN',
+])
+
+export type RoleType = `${z.infer<typeof RoleSchema>}`
+
+export const StateSchema = z.enum([
+    'NOT_CREATED',
+    'DRAFT',
+    'METHOD',
+    'SCIENTIFIC',
+    'ACCEPTED',
+    'ONGOING',
+])
+
+export type StateType = `${z.infer<typeof StateSchema>}`
+
+export const ActionSchema = z.enum([
+    'CREATE',
+    'VIEW',
+    'EDIT',
+    'PUBLISH',
+    'COMMENT',
+    'ACCEPT',
+])
+
+export type ActionType = `${z.infer<typeof ActionSchema>}`
+
+/////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
 
@@ -11,6 +47,7 @@ import { z } from 'zod'
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
+    state: StateSchema,
     sections: z.lazy(() => SectionsSchema),
 })
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -36,7 +73,7 @@ export const UserSchema = z.object({
     lastLogin: z.coerce.date().nullable(),
     name: z.string().nullable(),
     password: z.string().nullable(),
-    role: z.string(),
+    role: RoleSchema,
 })
 
 /////////////////////////////////////////

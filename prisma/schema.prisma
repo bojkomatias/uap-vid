@@ -101,6 +101,7 @@ type ProtocolSectionsPublication {
 model protocol {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime         @db.Date
+  state     State            @default(DRAFT)
   sections  ProtocolSections
 }
 
@@ -116,5 +117,22 @@ model user {
   lastLogin DateTime? @db.Date
   name      String?
   password  String?
-  role      String
+  role      Role @default(RESEARCHER)
 }
+
+enum Role {
+  RESEARCHER
+  SECRETARY
+  METHODOLOGIST
+  EVALUATOR
+  ADMIN
+}
+
+enum State {
+  DRAFT
+  METHOD
+  SCIENTIFIC
+  ACCEPTED
+  ONGOING
+}
+
