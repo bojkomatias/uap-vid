@@ -1,7 +1,7 @@
 import Navigation from '@auth/Navigation'
 import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
-
+import ActionButton from '@protocol/ActionButton'
 import Table from '@protocol/elements/Table'
 import Link from 'next/link'
 import { getAllProtocols } from 'repositories/protocol'
@@ -18,15 +18,15 @@ export default async function Page() {
                 en &apos;ver&apos; para más detalles.
             </p>
 
-            <Link
-                href={'/protected/protocol/new'}
-                passHref
-                className="mt-4 flex"
-            >
-                <Button intent="primary">
-                    <FilePlus className="mr-3 h-5" /> Nueva Postulación
-                </Button>
-            </Link>
+            <ActionButton role={'ADMIN'} state={'NOT_CREATED'} />
+
+            <div className="flex flex-row-reverse">
+                <Link href={'/protected/protocol/new'} passHref>
+                    <Button intent="primary">
+                        <FilePlus className="mr-3 h-5" /> Nueva Postulación
+                    </Button>
+                </Link>
+            </div>
 
             <div className="mx-auto mb-20 flex flex-col justify-center">
                 <Table items={protocols} />
