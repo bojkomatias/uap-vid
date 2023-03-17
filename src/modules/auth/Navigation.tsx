@@ -15,46 +15,40 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@elements/Button'
 import clsx from 'clsx'
+import { ActionSchema, RoleSchema } from '@utils/zod'
+import { canAccess, canExecute } from '@utils/scopes'
 
 const navigation = [
     {
         name: 'Proyectos de investigación',
         icon: List,
         href: '/protected',
-        roles: [
-            'Investigador',
-            'Evaluador Interno',
-            'Evaluador Externo',
-            'Metodólogo',
-            'Secretario de Investigación',
-            'admin',
-        ],
+        scope: ActionSchema.enum.LIST,
     },
-    {
-        name: 'Lista base de datos evaluadores',
-        icon: ClipboardList,
-        href: '#',
-        roles: ['admin'],
-    },
-    {
-        name: 'Seguimiento de proyectos aprobados',
-        icon: ListDetails,
-        href: '#',
-        roles: ['admin'],
-    },
-    {
-        name: 'Información de publicaciones científicas',
-        icon: ReportSearch,
-        href: '#',
-        roles: ['admin'],
-    },
-
-    {
-        name: 'Lista de usuarios',
-        icon: Users,
-        href: '/protected/admin/userlist',
-        roles: ['admin'],
-    },
+    // {
+    //     name: 'Lista base de datos evaluadores',
+    //     icon: ClipboardList,
+    //     href: '#',
+    //     roles: [RoleSchema.enum.ADMIN],
+    // },
+    // {
+    //     name: 'Seguimiento de proyectos aprobados',
+    //     icon: ListDetails,
+    //     href: '#',
+    //     roles: [RoleSchema.enum.ADMIN],
+    // },
+    // {
+    //     name: 'Información de publicaciones científicas',
+    //     icon: ReportSearch,
+    //     href: '#',
+    //     roles: [RoleSchema.enum.ADMIN],
+    // },
+    // {
+    //     name: 'Lista de usuarios',
+    //     icon: Users,
+    //     href: '/protected/admin/userlist',
+    //     roles: [RoleSchema.enum.ADMIN],
+    // },
 ]
 
 export default function Navigation({ children }: { children: ReactNode }) {
@@ -122,34 +116,34 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                 </Transition.Child>
                                 <div className="flex-1 overflow-y-auto pt-5 pb-4">
                                     <nav className="mt-10 space-y-3 px-2">
-                                        {navigation.map((item) =>
-                                            item.roles.includes(
-                                                session?.user?.role!
-                                            ) ? (
-                                                <Link
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className={clsx(
-                                                        pathname === item.href
-                                                            ? 'bg-primary text-white'
-                                                            : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                        'group flex items-center px-4 py-3 text-sm font-medium rounded'
-                                                    )}
-                                                    passHref
-                                                >
-                                                    <item.icon
+                                        {navigation.map(
+                                            (item) =>
+                                                canAccess('LIST', 'ADMIN') ?? (
+                                                    <Link
+                                                        key={item.name}
+                                                        href={item.href}
                                                         className={clsx(
                                                             pathname ===
                                                                 item.href
-                                                                ? 'text-base-100'
-                                                                : 'text-base-700 group-hover:text-black',
-                                                            'mr-3 h-5 flex-shrink-0'
+                                                                ? 'bg-primary text-white'
+                                                                : 'text-base-700 hover:bg-base-100 hover:text-black',
+                                                            'group flex items-center px-4 py-3 text-sm font-medium rounded'
                                                         )}
-                                                        aria-hidden="true"
-                                                    />
-                                                    {item.name}
-                                                </Link>
-                                            ) : null
+                                                        passHref
+                                                    >
+                                                        <item.icon
+                                                            className={clsx(
+                                                                pathname ===
+                                                                    item.href
+                                                                    ? 'text-base-100'
+                                                                    : 'text-base-700 group-hover:text-black',
+                                                                'mr-3 h-5 flex-shrink-0'
+                                                            )}
+                                                            aria-hidden="true"
+                                                        />
+                                                        {item.name}
+                                                    </Link>
+                                                )
                                         )}
                                     </nav>
                                 </div>
@@ -168,31 +162,32 @@ export default function Navigation({ children }: { children: ReactNode }) {
                 <div className="flex min-h-0 flex-1 flex-col border-r border-base-200 bg-white">
                     <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
                         <nav className="mt-10 flex-1 space-y-3 bg-white px-2">
-                            {navigation.map((item) =>
-                                item.roles.includes(session?.user?.role!) ? (
-                                    <Link
-                                        key={item.name}
-                                        href={item.href}
-                                        className={clsx(
-                                            pathname === item.href
-                                                ? 'bg-primary text-white'
-                                                : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                            'group flex items-center px-4 rounded py-3 text-sm font-medium'
-                                        )}
-                                        passHref
-                                    >
-                                        <item.icon
+                            {navigation.map(
+                                (item) =>
+                                    canAccess('LIST', 'ADMIN') ?? (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
                                             className={clsx(
                                                 pathname === item.href
-                                                    ? 'text-base-100'
-                                                    : 'text-base-700 group-hover:text-black',
-                                                'mr-3 h-5 flex-shrink-0'
+                                                    ? 'bg-primary text-white'
+                                                    : 'text-base-700 hover:bg-base-100 hover:text-black',
+                                                'group flex items-center px-4 rounded py-3 text-sm font-medium'
                                             )}
-                                            aria-hidden="true"
-                                        />
-                                        {item.name}
-                                    </Link>
-                                ) : null
+                                            passHref
+                                        >
+                                            <item.icon
+                                                className={clsx(
+                                                    pathname === item.href
+                                                        ? 'text-base-100'
+                                                        : 'text-base-700 group-hover:text-black',
+                                                    'mr-3 h-5 flex-shrink-0'
+                                                )}
+                                                aria-hidden="true"
+                                            />
+                                            {item.name}
+                                        </Link>
+                                    )
                             )}
                         </nav>
                     </div>

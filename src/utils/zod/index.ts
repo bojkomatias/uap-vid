@@ -27,6 +27,7 @@ export type StateType = `${z.infer<typeof StateSchema>}`
 
 export const ActionSchema = z.enum([
     'CREATE',
+    'LIST',
     'VIEW',
     'EDIT',
     'PUBLISH',
