@@ -58,9 +58,29 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 // REVIEWS SCHEMA
 /////////////////////////////////////////
 
-export const ReviewsSchema = z.object({
-    id: z.string(),
+const CommentSchema = z.object({
+    date: z.coerce.date().optional(),
+    data: z.string(),
 })
+
+const ReviewSchema = z.object({
+    veredict: z.string(),
+    reviewer: z.string(),
+    comments: CommentSchema.array(),
+})
+
+const ScientificReviewSchema = z.object({
+    internal: ReviewSchema,
+    external: ReviewSchema,
+})
+
+export const ReviewsSchema = z.object({
+    methodologic: ReviewSchema,
+    scientific: ScientificReviewSchema,
+})
+
+export type Reviews = z.infer<typeof ReviewsSchema>
+export type Review = z.infer<typeof ReviewSchema>
 
 /////////////////////////////////////////
 // USER SCHEMA

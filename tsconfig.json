@@ -21,7 +21,8 @@
             "@auth/*": ["./modules/auth/*"],
             "@protocol/*": ["./modules/protocol/*"],
             "@admin/*": ["./modules/admin/*"],
-            "@utils/*": ["./utils/*"]
+            "@utils/*": ["./utils/*"],
+            "@review/*": ["./modules/review/*"]
         },
         "plugins": [
             {
@@ -36,7 +37,8 @@
         "pages/index.tsx",
         "config/exhibit.js",
         "pages/protected/admin/middleware.js",
-        ".next/types/**/*.ts"
+        ".next/types/**/*.ts",
+        "src/modules/review/form/index"
     ],
     "exclude": ["node_modules"]
 }

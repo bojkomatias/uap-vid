@@ -15,12 +15,8 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@elements/Button'
 import clsx from 'clsx'
-<<<<<<< HEAD
-import BackButton from '@elements/BackButton'
-=======
 import { ActionSchema, RoleSchema } from '@utils/zod'
 import { canAccess, canExecute } from '@utils/scopes'
->>>>>>> origin/pq-87-add-state-and-role-enums
 
 const navigation = [
     {
@@ -118,26 +114,6 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                         </button>
                                     </div>
                                 </Transition.Child>
-<<<<<<< HEAD
-                                <div className="flex-1 overflow-y-auto pb-4">
-                                    <nav className="mt-5 space-y-3 px-2">
-                                        {navigation.map((item) =>
-                                            item.roles.includes(
-                                                session?.user?.role!
-                                            ) ? (
-                                                <Link
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    className={clsx(
-                                                        pathname === item.href
-                                                            ? 'bg-primary text-white'
-                                                            : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                        'group flex items-center rounded px-4 py-3 text-sm font-medium'
-                                                    )}
-                                                    passHref
-                                                >
-                                                    <item.icon
-=======
                                 <div className="flex-1 overflow-y-auto pt-5 pb-4">
                                     <nav className="mt-10 space-y-3 px-2">
                                         {navigation.map(
@@ -146,13 +122,12 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                                     <Link
                                                         key={item.name}
                                                         href={item.href}
->>>>>>> origin/pq-87-add-state-and-role-enums
                                                         className={clsx(
                                                             pathname ===
                                                                 item.href
                                                                 ? 'bg-primary text-white'
                                                                 : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                            'group flex items-center px-4 py-3 text-sm font-medium rounded'
+                                                            'group flex items-center rounded px-4 py-3 text-sm font-medium'
                                                         )}
                                                         passHref
                                                     >
@@ -185,25 +160,6 @@ export default function Navigation({ children }: { children: ReactNode }) {
             <div className=" hidden lg:absolute lg:inset-0 lg:flex lg:w-64 lg:flex-col">
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex min-h-0 flex-1 flex-col border-r border-base-200 bg-white">
-<<<<<<< HEAD
-                    <div className="flex flex-1 flex-col overflow-y-auto pb-4">
-                        <nav className="mt-5 flex-1 space-y-3 bg-white px-2">
-                            <BackButton class_name="justify-self-end"></BackButton>
-                            {navigation.map((item) =>
-                                item.roles.includes(session?.user?.role!) ? (
-                                    <Link
-                                        key={item.name}
-                                        href={item.href}
-                                        className={clsx(
-                                            pathname === item.href
-                                                ? 'bg-primary text-white'
-                                                : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                            'group flex items-center rounded-md px-4 py-3 text-sm font-medium'
-                                        )}
-                                        passHref
-                                    >
-                                        <item.icon
-=======
                     <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
                         <nav className="mt-10 flex-1 space-y-3 bg-white px-2">
                             {navigation.map(
@@ -212,12 +168,11 @@ export default function Navigation({ children }: { children: ReactNode }) {
                                         <Link
                                             key={item.name}
                                             href={item.href}
->>>>>>> origin/pq-87-add-state-and-role-enums
                                             className={clsx(
                                                 pathname === item.href
                                                     ? 'bg-primary text-white'
                                                     : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                'group flex items-center px-4 rounded py-3 text-sm font-medium'
+                                                'group flex items-center rounded px-4 py-3 text-sm font-medium'
                                             )}
                                             passHref
                                         >
