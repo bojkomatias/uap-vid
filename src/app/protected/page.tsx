@@ -1,7 +1,8 @@
 import Navigation from '@auth/Navigation'
 import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
-import Table from '@protocol/Table'
+import Table from '@protocol/elements/Table'
+
 import Link from 'next/link'
 import { getAllProtocols } from 'repositories/protocol'
 import { FilePlus } from 'tabler-icons-react'

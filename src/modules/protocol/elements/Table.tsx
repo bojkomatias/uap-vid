@@ -1,7 +1,8 @@
 import { protocol } from '@prisma/client'
 import Link from 'next/link'
 
-export default function Table({ items }: { items: protocol[] }) {
+export default function Table({ items }: { items: protocol[] | null }) {
+    if (!items) return <div>NO ITEMS</div>
     return (
         <div className="-mx-4 mt-8 sm:-mx-0">
             <table className="min-w-full divide-y divide-gray-300">
