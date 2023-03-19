@@ -1,8 +1,12 @@
 import { Heading } from '@layout/Heading'
+import PublishButton from '@protocol/elements/action-buttons/Publish'
 import View from '@protocol/View'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: { params: { id: string } }) {
+    const session = await getServerSession(authOptions)
     const protocol = await findProtocolById(params.id)
 
     if (protocol)
@@ -20,6 +24,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                 />
                 <div className="flex h-full">
                     <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none">
+                        <PublishButton
+                            role={session?.user?.role!}
+                            state={protocol.state}
+                        />
                         <View protocol={protocol} />
                     </main>
                     <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">

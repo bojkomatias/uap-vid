@@ -1,10 +1,10 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/List'
-import Select from '@protocol/elements/Select'
-import InfoTooltip from '@protocol/elements/InfoTooltip'
-import SectionTitle from '@protocol/elements/SectionTitle'
+import List from '@protocol/elements/form/List'
+import Select from '@protocol/elements/form/Select'
+import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
 
 const modalities = [
     'Proyecto regular de investigación (PRI)',

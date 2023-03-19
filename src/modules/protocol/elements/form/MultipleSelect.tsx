@@ -1,9 +1,9 @@
 'use client'
 import { PropsWithChildren, useEffect, useState } from 'react'
 import { Combobox } from '@headlessui/react'
-import { useProtocolContext } from '../../../utils/createContext'
 import { Check, Selector, X } from 'tabler-icons-react'
 import clsx from 'clsx'
+import { useProtocolContext } from '@utils/createContext'
 
 export default function MultipleSelect({
     path,

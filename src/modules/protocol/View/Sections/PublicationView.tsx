@@ -1,7 +1,6 @@
 import { ProtocolSectionsPublication } from '@prisma/client'
-import RichViewer from '@protocol/elements/RichViewer'
+import RichViewer from '@protocol/elements/form/RTEViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import React from 'react'
 import SectionLayout from './SectionLayout'
 
 interface PublicationViewProps {
@@ -11,9 +10,9 @@ interface PublicationViewProps {
 const PublicationView = ({ data }: PublicationViewProps) => {
     const shortData = [
         {
-            title: "Resultado de la investigación",
+            title: 'Resultado de la investigación',
             value: data.result,
-        }
+        },
     ]
     return (
         <SectionLayout

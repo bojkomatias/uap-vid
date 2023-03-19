@@ -7,6 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type ProtocolReviews {
+  methodologic ProtocolReviewsMethodologic
+  scientific   ProtocolReviewsScientific?
+}
+
+type ProtocolReviewsMethodologic {
+  comments ProtocolReviewsComments[]
+  reviewer String                    @db.ObjectId
+  veredict String
+}
+
+type ProtocolReviewsComments {
+  data String
+  date DateTime @db.Date
+}
+
+type ProtocolReviewsScientific {
+  external ProtocolReviewsScientificExternal
+  internal ProtocolReviewsScientificInternal
+}
+
+type ProtocolReviewsScientificExternal {
+  comments ProtocolReviewsComments[]
+  reviewer String                    @db.ObjectId
+  veredict String
+}
+
+type ProtocolReviewsScientificInternal {
+  comments ProtocolReviewsComments[]
+  reviewer String                    @db.ObjectId
+  veredict String
+}
+
 type ProtocolSections {
   bibliography   ProtocolSectionsBibliography
   budget         ProtocolSectionsBudget
@@ -99,22 +132,36 @@ type ProtocolSectionsPublication {
 }
 
 model protocol {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime         @db.Date
-  sections  ProtocolSections
-}
-
-model reviews {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime         @db.Date
+  researcher String           @db.ObjectId
+  state      State            @default(DRAFT)
+  reviews    ProtocolReviews?
+  sections   ProtocolSections
 }
 
 model user {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  id_       String?   @map("id")
-  image     String?
-  lastLogin DateTime? @db.Date
-  name      String?
-  password  String?
-  role      String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  lastLogin DateTime @db.Date
+  name      String
+  password  String
+  role      Role     @default(RESEARCHER)
+}
+
+enum Role {
+  RESEARCHER
+  SECRETARY
+  METHODOLOGIST
+  EVALUATOR
+  ADMIN
+}
+
+enum State {
+  NOT_CREATED
+  DRAFT
+  METHOD
+  SCIENTIFIC
+  ACCEPTED
+  ONGOING
 }

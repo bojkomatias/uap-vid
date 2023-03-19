@@ -11,7 +11,7 @@ const findUserById = async (id: string) => {
             id,
         },
     })
-    return user
+return user
 }
 
 const findUserByEmail = async (email: string) => {

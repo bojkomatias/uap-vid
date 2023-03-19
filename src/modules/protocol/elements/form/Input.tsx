@@ -1,5 +1,5 @@
+import { useProtocolContext } from '@utils/createContext'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../../utils/createContext'
 
 const Input = ({
     path,

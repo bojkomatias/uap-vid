@@ -10,6 +10,7 @@ export default async function UserList() {
     const users = await getAllUsers()
 
     return (
+        // @ts-expect-error async ServerComponent
         <Navigation>
             <Heading title="Lista de usuarios" />
 
