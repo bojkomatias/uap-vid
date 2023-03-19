@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none">
                         <View protocol={protocol} />
                     </main>
-                    <button></button>
+
                     <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
                         <span className="mx-8 text-lg font-semibold">
                             Comments
@@ -32,8 +32,4 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
             </>
         )
-}
-
-{
-    /*  */
 }
