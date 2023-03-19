@@ -15,11 +15,9 @@ export const createComment = async (
         },
         data: {
             reviews: {
-                update: {
-                    methodologic: {
-                        update: {
-                            comments: { set: [{ date: new Date(), data: '' }] },
-                        },
+                methodologic: {
+                    update: {
+                        comments: { set: [{ date: new Date(), data: '' }] },
                     },
                 },
             },
