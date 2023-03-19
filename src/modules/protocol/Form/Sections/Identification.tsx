@@ -2,12 +2,12 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/Input'
-import Select from '@protocol/elements/Select'
-import List from '@protocol/elements/List'
-import InfoTooltip from '@protocol/elements/InfoTooltip'
-import MultipleSelect from '@protocol/elements/MultipleSelect'
-import SectionTitle from '@protocol/elements/SectionTitle'
+import Input from '@protocol/elements/form/Input'
+import Select from '@protocol/elements/form/Select'
+import List from '@protocol/elements/form/List'
+import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import MultipleSelect from '@protocol/elements/form/MultipleSelect'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
 
 const careers = full.map((x) => x.career)
 // conditional

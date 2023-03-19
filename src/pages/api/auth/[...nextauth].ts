@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
             const updateObject =
                 userExist && userExist.role
                     ? { lastLogin: new Date() }
-                    : { role: 'Investigador', lastLogin: new Date() }
+                    : { role: 'RESEARCHER', lastLogin: new Date() }
 
             if (userExist) {
                 await updateUserByEmail(user.email!, updateObject)

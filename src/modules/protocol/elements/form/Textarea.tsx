@@ -1,6 +1,5 @@
-import { PropsWithChildren, useEffect, useState } from 'react'
-import { useProtocolContext } from '../../../utils/createContext'
-import RichTextEditor from '../../elements/RTE'
+import RichTextEditor from '@elements/RTE'
+import { useProtocolContext } from '@utils/createContext'
 
 const Textarea = ({ path, label }: { path: string; label: string }) => {
     const form = useProtocolContext()

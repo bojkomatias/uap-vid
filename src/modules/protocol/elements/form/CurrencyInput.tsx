@@ -1,7 +1,5 @@
-import clsx from 'clsx'
-import React, { PropsWithChildren } from 'react'
-import { CurrencyDollar } from 'tabler-icons-react'
-import { useProtocolContext } from '../../../utils/createContext'
+import { PropsWithChildren } from 'react'
+import { useProtocolContext } from '../../../../utils/createContext'
 
 const CurrencyInput = ({
     path,

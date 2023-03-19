@@ -1,8 +1,8 @@
 'use client'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
+import Select from '@protocol/elements/form/Select'
+import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/Select'
-import Textarea from '@protocol/elements/Textarea'
-import SectionTitle from '@protocol/elements/SectionTitle'
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 

@@ -1,6 +1,47 @@
 import { z } from 'zod'
 
 /////////////////////////////////////////
+// ENUMS
+/////////////////////////////////////////
+
+const RoleSchema = z.enum([
+    'RESEARCHER',
+    'SECRETARY',
+    'METHODOLOGIST',
+    'EVALUATOR',
+    'ADMIN',
+])
+export const ROLE = RoleSchema.Enum
+export type RoleType = `${z.infer<typeof RoleSchema>}`
+
+const StateSchema = z.enum([
+    'NOT_CREATED',
+    'DRAFT',
+    'METHOD',
+    'SCIENTIFIC',
+    'ACCEPTED',
+    'ONGOING',
+])
+export const STATE = StateSchema.Enum
+export type StateType = `${z.infer<typeof StateSchema>}`
+
+// Schema for Transitions between protocols
+const ActionSchema = z.enum([
+    'CREATE',
+    'VIEW',
+    'EDIT',
+    'PUBLISH',
+    'COMMENT',
+    'ACCEPT',
+])
+export const ACTION = ActionSchema.Enum
+export type ActionType = `${z.infer<typeof ActionSchema>}`
+
+const AccessSchema = z.enum(['PROTOCOLS', 'USERS'])
+export const ACCESS = AccessSchema.Enum
+export type AccessType = `${z.infer<typeof AccessSchema>}`
+
+/////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
 
@@ -11,6 +52,8 @@ import { z } from 'zod'
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
+    state: StateSchema.optional(),
+    researcher: z.string().optional(),
     sections: z.lazy(() => SectionsSchema),
 })
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -36,7 +79,7 @@ export const UserSchema = z.object({
     lastLogin: z.coerce.date().nullable(),
     name: z.string().nullable(),
     password: z.string().nullable(),
-    role: z.string(),
+    role: RoleSchema,
 })
 
 /////////////////////////////////////////

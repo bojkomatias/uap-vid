@@ -1,10 +1,10 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/List'
-import InfoTooltip from '@protocol/elements/InfoTooltip'
-import SectionTitle from '@protocol/elements/SectionTitle'
-import { Currency, CurrencyDollar } from 'tabler-icons-react'
+import List from '@protocol/elements/form/List'
+import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
+
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12

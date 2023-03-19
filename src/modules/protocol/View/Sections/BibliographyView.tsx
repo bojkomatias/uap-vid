@@ -1,6 +1,5 @@
 import { ProtocolSectionsBibliography } from '@prisma/client'
 import TableData from '@protocol/elements/TableData/TableData'
-import React from 'react'
 import SectionLayout from './SectionLayout'
 
 interface BibliographyViewProps {
