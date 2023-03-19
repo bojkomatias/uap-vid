@@ -9,15 +9,29 @@ export const createComment = async (
     comment: ProtocolReviewsComments,
     id: string
 ) => {
+    console.log('HOLA ID', id)
     const review = await prisma.protocol.update({
         where: {
             id,
         },
         data: {
             reviews: {
-                methodologic: {
+                upsert: {
+                    set: {
+                        methodologic: {
+                            reviewer: '62cf537849c524d1908a7af2',
+                            veredict: '',
+                            comments: [comment],
+                        },
+                    },
                     update: {
-                        comments: { set: [{ date: new Date(), data: '' }] },
+                        methodologic: {
+                            update: {
+                                comments: {
+                                    push: comment,
+                                },
+                            },
+                        },
                     },
                 },
             },

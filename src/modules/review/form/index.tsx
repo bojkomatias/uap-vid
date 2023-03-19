@@ -8,24 +8,20 @@ import { useCallback } from 'react'
 export default function ReviewForm() {
     const path = usePathname()
     const protocolId = path?.split('/')[3]
-    const form = useForm({ initialValues: { data: '', date: new Date() } })
-    const createComment = useCallback(
-        async (comment: ProtocolReviewsComments) => {
-            const res = await fetch(`/api/reviews/${protocolId}`, {
-                method: 'PUT',
-                body: JSON.stringify(comment),
-            })
-            console.log(res)
-        },
-        []
-    )
+    const form = useForm({ initialValues: { data: '' } })
+    const createComment = useCallback(async (comment: string) => {
+        const res = await fetch(`/api/reviews/${protocolId}`, {
+            method: 'PUT',
+            body: JSON.stringify(comment),
+        })
+        console.log(res)
+    }, [])
 
     return (
         <div>
             <form
                 onSubmit={form.onSubmit((values) => {
-                    form.setFieldValue('date', new Date())
-                    createComment(values)
+                    createComment(values.data)
                 })}
             >
                 <label className="label">{protocolId}</label>
