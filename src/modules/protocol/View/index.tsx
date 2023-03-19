@@ -19,10 +19,6 @@ export default function View({ protocol }: { protocol: protocol }) {
             <MethodologyView data={protocol.sections.methodology} />
             <PublicationView data={protocol.sections.publication} />
             <BibliographyView data={protocol.sections.bibliography} />
-
-            <pre className="text-[0.5rem]">
-                {JSON.stringify(protocol, null, 2)}
-            </pre>
         </div>
     )
 }

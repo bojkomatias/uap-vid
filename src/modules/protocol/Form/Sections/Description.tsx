@@ -1,9 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/Select'
-import Input from '@protocol/elements/Input'
-import SectionTitle from '@protocol/elements/SectionTitle'
+import Select from '@protocol/elements/form/Select'
+import Input from '@protocol/elements/form/Input'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
 
 const disciplines = [
     'Ciencias Económicas y de la Administración',

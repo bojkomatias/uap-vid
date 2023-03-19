@@ -1,7 +1,6 @@
 import Navigation from '@auth/Navigation'
 import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
-import ActionButton from '@protocol/ActionButton'
 import Table from '@protocol/Table'
 import Link from 'next/link'
 import { getAllProtocols } from 'repositories/protocol'
@@ -11,14 +10,13 @@ import { FilePlus } from 'tabler-icons-react'
 export default async function Page() {
     const protocols = await getAllProtocols()
     return (
+        // @ts-expect-error async ServerComponent
         <Navigation>
             <Heading title="Lista de proyectos de investigación" />
             <p className="mt-2 text-sm text-gray-700">
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.
             </p>
-
-            <ActionButton role={'ADMIN'} state={'NOT_CREATED'} />
 
             <div className="flex flex-row-reverse">
                 <Link href={'/protected/protocol/new'} passHref>

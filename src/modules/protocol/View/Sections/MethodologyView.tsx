@@ -1,5 +1,5 @@
 import { ProtocolSectionsMethodology } from '@prisma/client'
-import RichViewer from '@protocol/elements/RichViewer'
+import RTEViewer from '@protocol/elements/form/RTEViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 
@@ -24,31 +24,31 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             {data.type ===
                 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales' && (
                 <>
-                    <RichViewer
+                    <RTEViewer
                         title="Diseño y tipo de investigación"
                         content={data.design}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Participantes"
                         content={data.participants}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Lugar de desarrollo"
                         content={data.place}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Instrumentos para recolección de datos"
                         content={data.instruments}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Procedimientos para recolección de datos"
                         content={data.procedures}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Análisis de datos"
                         content={data.analysis}
                     />
-                    <RichViewer
+                    <RTEViewer
                         title="Consideraciones"
                         content={data.considerations}
                     />
@@ -56,7 +56,7 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             )}
 
             {data.type === 'Investigaciones de tipo teóricas' && (
-                <RichViewer
+                <RTEViewer
                     title="Detalle de la metodología"
                     content={data.detail}
                 />

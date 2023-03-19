@@ -1,7 +1,6 @@
 import { ProtocolSectionsDuration } from '@prisma/client'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import TableData from '@protocol/elements/TableData/TableData'
-import React from 'react'
 import SectionLayout from './SectionLayout'
 
 interface DurationViewProps {
