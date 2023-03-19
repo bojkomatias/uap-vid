@@ -9,28 +9,23 @@ import { findProtocolById } from 'repositories/protocol'
 export default async function Page({ params }: any) {
     const protocol = await findProtocolById(params.id)
     const session = await getServerSession(authOptions)
+    if (!protocol) redirect('/protected')
+    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+        redirect('/protected')
 
-    if (
-        !protocol ||
-        !session?.user ||
-        canExecute('EDIT', session?.user.role!, protocol?.state)
-    )
-        redirect('/')
-
-    if (protocol)
-        return (
-            <>
-                <Heading
-                    title={
-                        <span>
-                            Protocolo:{' '}
-                            <span className="font-light">
-                                {protocol.sections.identification.title}
-                            </span>
+    return (
+        <>
+            <Heading
+                title={
+                    <span>
+                        Protocolo:{' '}
+                        <span className="font-light">
+                            {protocol.sections.identification.title}
                         </span>
-                    }
-                />
-                <ProtocolForm protocol={protocol} />
-            </>
-        )
+                    </span>
+                }
+            />
+            <ProtocolForm protocol={protocol} />
+        </>
+    )
 }

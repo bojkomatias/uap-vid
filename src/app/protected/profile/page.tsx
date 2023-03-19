@@ -10,7 +10,7 @@ export default async function Page() {
         // @ts-expect-error async ServerComponent
         <Navigation>
             <Heading title="Perfil" />
-            <Profile />
+            <Profile user={session?.user!} />
         </Navigation>
     )
 }
