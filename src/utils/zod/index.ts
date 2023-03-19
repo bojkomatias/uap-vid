@@ -48,7 +48,6 @@ export type ActionType = `${z.infer<typeof ActionSchema>}`
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
-    state: StateSchema,
     sections: z.lazy(() => SectionsSchema),
 })
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)

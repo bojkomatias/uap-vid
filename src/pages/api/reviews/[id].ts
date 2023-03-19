@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { createComment } from '../../../repositories/reviews'
+import { createComment } from '../../../repositories/review'
 
 export default async function handler(
     req: NextApiRequest,
