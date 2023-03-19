@@ -1,6 +1,5 @@
 import { useRouter } from 'next/navigation'
 import { Button } from './Button'
-import { ArrowBadgeLeft } from 'tabler-icons-react'
 import { ArrowBackUp } from 'tabler-icons-react'
 
 export default function BackButton({ class_name }: { class_name: string }) {
