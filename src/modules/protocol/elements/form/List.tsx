@@ -68,9 +68,9 @@ export default function List({
     return (
         <div>
             <div className="label text-center">{label}</div>
-            <div className="px-4 pb-2 pt-6 space-y-3 border rounded-xl">
+            <div className="space-y-3 rounded-xl border px-4 pb-2 pt-6">
                 {fields.length === 0 ? (
-                    <div className="text-primary label text-center">
+                    <div className="label text-center text-primary">
                         La lista esta vacía ...
                     </div>
                 ) : null}
@@ -80,7 +80,7 @@ export default function List({
                         form.insertListItem(path, insertedItemFormat)
                     }
                     intent="secondary"
-                    className="mx-auto max-w-xs w-full"
+                    className="mx-auto w-full max-w-xs"
                 >
                     <p> Añadir otra fila </p>
                     <Plus className="h-5" />

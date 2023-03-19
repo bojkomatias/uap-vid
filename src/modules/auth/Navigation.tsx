@@ -4,6 +4,7 @@ import MobileNavigation from './elements/MobileBar'
 import Sidebar from './elements/Sidebar'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import clsx from 'clsx'
+import BackButton from '@elements/BackButton'
 
 export default async function Navigation({
     children,

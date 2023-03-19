@@ -1,7 +1,8 @@
 import { protocol } from '@prisma/client'
 import Link from 'next/link'
 
-export default function Table({ items }: { items: protocol[] }) {
+export default function Table({ items }: { items: protocol[] | null }) {
+    if (!items) return <div>NO ITEMS</div>
     return (
         <div className="-mx-4 mt-8 sm:-mx-0">
             <table className="min-w-full divide-y divide-gray-300">
@@ -61,6 +62,15 @@ export default function Table({ items }: { items: protocol[] }) {
                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                 <Link
                                     href={`/protected/protocol/${item.id}`}
+                                    passHref
+                                    className="transition-all duration-150 hover:text-black/60"
+                                >
+                                    Editar
+                                </Link>
+                            </td>
+                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                <Link
+                                    href={`/protected/view/${item.id}`}
                                     passHref
                                     className="transition-all duration-150 hover:text-black/60"
                                 >
