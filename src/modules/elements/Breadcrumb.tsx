@@ -13,14 +13,9 @@ const newLinkMap: any = {
 
 export const Breadcrumb = ({ className }: { className: string }) => {
     const pathname = usePathname()
-
-    if (!pathname) {
-        /**This if is because typescript says that pathname is possibly null */
-        return null
-    }
     const breadcrumbs = useMemo(
         function generateBreadcrumbs() {
-            const asPathNestedRoutes = pathname
+            const asPathNestedRoutes = pathname!
                 .split('/')
                 .filter((v) => v.length > 0)
 
