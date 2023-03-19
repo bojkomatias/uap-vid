@@ -1,9 +1,9 @@
 'use client'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
+import Select from '@protocol/elements/form/Select'
+import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
 import { useProtocolContext } from 'utils/createContext'
-import Textarea from '@protocol/elements/Textarea'
-import Select from '@protocol/elements/Select'
-import SectionTitle from '@protocol/elements/SectionTitle'
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import List from '@protocol/elements/form/List'
 import InfoTooltip from '@protocol/elements/form/InfoTooltip'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
-import { Currency, CurrencyDollar } from 'tabler-icons-react'
+
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12
