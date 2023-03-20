@@ -3,6 +3,11 @@ import { Nav } from '@layout/Nav'
 import './globals.css'
 import Providers from './providers'
 import { Roboto_Flex } from 'next/font/google'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { redirect } from 'next/navigation'
+import { Breadcrumb } from '@elements/Breadcrumb'
+import Navigation from '@auth/Navigation'
 
 export const metadata = {
     title: {
@@ -13,18 +18,25 @@ export const metadata = {
 
 const font = Roboto_Flex({ subsets: ['latin'], variable: '--font-sans' })
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const session = await getServerSession()
+
     return (
         <html className={`${font.variable} font-sans`}>
             <Providers>
                 <body className="subpixel-antialiased">
                     <Nav />
-                    <main className="relative min-h-[90vh] px-12 py-6">
-                        {children}
+                    <main className="relative min-h-[90vh] px-12 max-w-[90rem] mx-auto">
+                        {!session ? (
+                            children
+                        ) : (
+                            // @ts-expect-error
+                            <Navigation>{children}</Navigation>
+                        )}
                     </main>
                     <Footer />
                 </body>

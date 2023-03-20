@@ -12,7 +12,9 @@ export const UserAuth = () => {
     if (session) {
         return (
             <>
-                Bienvenido <b>{session?.user?.email} </b>{' '}
+                <p className="hidden lg:block">
+                    Bienvenido <b>{session?.user?.email} </b>
+                </p>
                 <Menu as="div" className="relative ml-1">
                     <div>
                         <Menu.Button className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-primary">
@@ -33,7 +35,7 @@ export const UserAuth = () => {
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
-                                        href={'/protected/profile'}
+                                        href={'/profile'}
                                         className={clsx(
                                             active ? 'bg-gray-100 ' : '',
                                             'block px-6 py-2 text-sm text-gray-700 w-full text-left font-medium'

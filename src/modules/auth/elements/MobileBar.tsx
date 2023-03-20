@@ -15,7 +15,7 @@ export default function MobileNavigation({ user }: { user: user }) {
     const pathname = usePathname()
     return (
         <>
-            <div className="sticky -mt-10 -ml-12  z-10 sm:pl-3 sm:pt-3 lg:hidden">
+            <div className="absolute top-6 right-4 z-10 lg:hidden">
                 <Button intent="secondary" onClick={() => setSidebarOpen(true)}>
                     <span className="sr-only">Open sidebar</span>
                     <Menu2 className="h-5 " aria-hidden="true" />

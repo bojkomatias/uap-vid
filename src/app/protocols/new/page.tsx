@@ -10,11 +10,12 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 export default async function Page() {
     const session = await getServerSession(authOptions)
     if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
-        redirect('/protected')
+        redirect('/protocols')
     return (
         <>
             <Heading title={'Nuevo protocolo de investigación'} />
             <ProtocolForm
+                currentSection={0}
                 protocol={{
                     state: 'DRAFT',
                     researcher: session?.user?.id!,

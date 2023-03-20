@@ -7,9 +7,7 @@ import { Home } from 'tabler-icons-react'
 
 const newLinkMap: any = {
     users: 'Lista de usuarios',
-    protected: 'Inicio',
-    view: 'Vista del protocolo',
-    protocol: 'Panel de edición del protocolo',
+    protocols: 'Lista de protocolos',
 }
 
 export const Breadcrumb = () => {
@@ -26,7 +24,12 @@ export const Breadcrumb = () => {
                     .join('/')}`
                 return {
                     href,
-                    name: subpath.replace(subpath, newLinkMap[subpath]),
+                    name: subpath.replace(
+                        subpath,
+                        newLinkMap[subpath]
+                            ? newLinkMap[subpath]
+                            : 'Vista de protocolo'
+                    ),
                 }
             })
 
@@ -36,12 +39,12 @@ export const Breadcrumb = () => {
     )
 
     return (
-        <nav className="mb-6 flex mt-6" aria-label="Breadcrumb">
-            <ol role="list" className="flex rounded-md bg-white px-4">
-                {pathname === '/protected' ? null : (
+        <nav className="flex absolute -top-8 left-0" aria-label="Breadcrumb">
+            <ol role="list" className="flex rounded-md bg-white">
+                {pathname !== '/protocols' ? (
                     <li className="flex items-center">
                         <Link
-                            href="/protected"
+                            href="/"
                             className="text-gray-500 hover:text-primary"
                             passHref
                         >
@@ -49,7 +52,7 @@ export const Breadcrumb = () => {
                             <span className="sr-only">Home</span>
                         </Link>
                     </li>
-                )}
+                ) : null}
 
                 {breadcrumbs.slice(0, -1).map((page, idx) => (
                     <li key={page.name} className="flex">
