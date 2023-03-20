@@ -24,7 +24,10 @@ export default function Publication() {
                     options={results}
                     label="Producción científica esperada"
                 />
-                <Textarea path={path + 'plan'} label="Titulo del libro o revista" />
+                <Textarea
+                    path={path + 'title'}
+                    label="Titulo del libro o revista"
+                />
             </>
         </motion.div>
     )

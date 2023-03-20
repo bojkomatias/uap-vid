@@ -1,15 +1,9 @@
 import { protocol } from '@prisma/client'
-import { canExecute } from '@utils/scopes'
-import { RoleType, stateTranslate } from '@utils/zod'
+
+import { stateTranslate } from '@utils/zod'
 import Link from 'next/link'
 
-export default function Table({
-    items,
-    role,
-}: {
-    items: protocol[] | null
-    role: RoleType
-}) {
+export default function Table({ items }: { items: protocol[] | null }) {
     if (!items) return <EmptyState />
     return (
         <div className="-mx-4 mt-8 sm:-mx-0">

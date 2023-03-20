@@ -140,7 +140,7 @@ export default function Description() {
 }
 
 const FieldInfo = () => (
-    <InfoTooltip className="bottom-4">
+    <InfoTooltip className="fixed bottom-4">
         <p>
             <b>Ciencias exactas y naturales:</b> astronomía; ciencias
             espaciales; bacteriología; biología; bioquímica; biofísica;
@@ -202,7 +202,7 @@ const FieldInfo = () => (
 )
 
 const ObjectiveInfo = () => (
-    <InfoTooltip className="bottom-4">
+    <InfoTooltip className="fixed bottom-4">
         <p>
             <b>Exploración y explotación de la tierra:</b> abarca la I+D cuyos
             objetivos estén relacionados con la exploración de la corteza y la
@@ -269,7 +269,7 @@ const ObjectiveInfo = () => (
     </InfoTooltip>
 )
 const TypeInfo = () => (
-    <InfoTooltip className="bottom-4">
+    <InfoTooltip className="fixed bottom-4">
         <p>
             <b> Investigación básica:</b> consiste en trabajos experimentales o
             teóricos que se emprenden con el objetivo de obtener nuevos

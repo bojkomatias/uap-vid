@@ -26,7 +26,7 @@ export default async function Page() {
             </div>
 
             <div className="mx-auto mb-20 flex flex-col justify-center">
-                <Table items={protocols} role={session?.user?.role!} />
+                <Table items={protocols} />
             </div>
         </>
     )

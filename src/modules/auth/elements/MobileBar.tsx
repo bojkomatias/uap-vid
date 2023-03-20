@@ -79,39 +79,33 @@ export default function MobileNavigation({ user }: { user: user }) {
                                 </Transition.Child>
                                 <div className="flex-1 overflow-y-auto pt-5 pb-4">
                                     <nav className="mt-10 space-y-3 px-2">
-                                        {navigation.map((item) => (
-                                            <>
-                                                {canAccess(
-                                                    item.scope,
-                                                    user.role
-                                                ) ? (
-                                                    <Link
-                                                        key={item.name}
-                                                        href={item.href}
+                                        {navigation.map((item) =>
+                                            canAccess(item.scope, user.role) ? (
+                                                <Link
+                                                    key={item.name}
+                                                    href={item.href}
+                                                    className={clsx(
+                                                        pathname === item.href
+                                                            ? 'bg-primary text-white'
+                                                            : 'text-base-700 hover:bg-base-100 hover:text-black',
+                                                        'group flex items-center px-4 py-3 text-sm font-medium rounded'
+                                                    )}
+                                                    passHref
+                                                >
+                                                    <item.icon
                                                         className={clsx(
                                                             pathname ===
                                                                 item.href
-                                                                ? 'bg-primary text-white'
-                                                                : 'text-base-700 hover:bg-base-100 hover:text-black',
-                                                            'group flex items-center px-4 py-3 text-sm font-medium rounded'
+                                                                ? 'text-base-100'
+                                                                : 'text-base-700 group-hover:text-black',
+                                                            'mr-3 h-5 flex-shrink-0'
                                                         )}
-                                                        passHref
-                                                    >
-                                                        <item.icon
-                                                            className={clsx(
-                                                                pathname ===
-                                                                    item.href
-                                                                    ? 'text-base-100'
-                                                                    : 'text-base-700 group-hover:text-black',
-                                                                'mr-3 h-5 flex-shrink-0'
-                                                            )}
-                                                            aria-hidden="true"
-                                                        />
-                                                        {item.name}
-                                                    </Link>
-                                                ) : null}
-                                            </>
-                                        ))}
+                                                        aria-hidden="true"
+                                                    />
+                                                    {item.name}
+                                                </Link>
+                                            ) : null
+                                        )}
                                     </nav>
                                 </div>
                             </Dialog.Panel>
