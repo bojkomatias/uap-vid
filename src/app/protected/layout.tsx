@@ -15,7 +15,7 @@ export default async function Layout({
     return (
         // @ts-expect-error async server component
         <Navigation>
-            <Breadcrumb className="mb-6"></Breadcrumb>
+            <Breadcrumb />
             {children}
         </Navigation>
     )
