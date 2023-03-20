@@ -10,11 +10,7 @@ const publishProtocol = async () => {
 }
 
 export default function PublishButton(props: ActionButtonTypes) {
-    return (
-        <div className="gap-4 flex justify-end mr-4">
-            {canExecute(ACTION.PUBLISH, props.role, props.state) ? (
-                <Button intent={'primary'}>Publicar</Button>
-            ) : null}
-        </div>
-    )
+    if (canExecute(ACTION.PUBLISH, props.role, props.state))
+        return <Button intent={'primary'}>Publicar</Button>
+    return <></>
 }

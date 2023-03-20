@@ -22,9 +22,17 @@ const StateSchema = z.enum([
     'ACCEPTED',
     'ONGOING',
 ])
+
 export const STATE = StateSchema.Enum
 export type StateType = `${z.infer<typeof StateSchema>}`
-
+export const stateTranslate = {
+    [STATE.NOT_CREATED]: null,
+    [STATE.DRAFT]: 'Borrador',
+    [STATE.METHOD]: 'En evaluación metodológica',
+    [STATE.SCIENTIFIC]: 'En evaluación científica',
+    [STATE.ACCEPTED]: 'Aceptado',
+    [STATE.ONGOING]: 'Aprobado y en curso',
+}
 // Schema for Transitions between protocols
 const ActionSchema = z.enum([
     'CREATE',
@@ -52,8 +60,8 @@ export type AccessType = `${z.infer<typeof AccessSchema>}`
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
-    state: StateSchema.optional(),
-    researcher: z.string().optional(),
+    state: StateSchema,
+    researcher: z.string(),
     sections: z.lazy(() => SectionsSchema),
 })
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)

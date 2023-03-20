@@ -1,6 +1,7 @@
 import { Heading } from '@layout/Heading'
 import ProtocolForm from '@protocol/Form'
-import { initialProtocolValues } from '@utils/createContext'
+import { initialSectionValues } from '@utils/createContext'
+
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -13,7 +14,13 @@ export default async function Page() {
     return (
         <>
             <Heading title={'Nuevo protocolo de investigación'} />
-            <ProtocolForm protocol={initialProtocolValues} />
+            <ProtocolForm
+                protocol={{
+                    state: 'DRAFT',
+                    researcher: session?.user?.id!,
+                    sections: initialSectionValues,
+                }}
+            />
         </>
     )
 }
