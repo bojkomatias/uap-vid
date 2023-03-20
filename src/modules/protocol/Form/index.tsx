@@ -15,6 +15,7 @@ import { useCallback, useState } from 'react'
 import { zodResolver } from '@mantine/form'
 import { Protocol, ProtocolSchema } from '@utils/zod'
 import { protocol } from '@prisma/client'
+import { usePathname, useRouter } from 'next/navigation'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <Identification key="Identification" />,
@@ -27,10 +28,18 @@ const sectionMapper: { [key: number]: JSX.Element } = {
     7: <Bibliography key="Identification" />,
 }
 
-export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
-    const [currentVisible, setVisible] = useState<number>(0)
+export default function ProtocolForm({
+    protocol,
+    currentSection,
+}: {
+    protocol: Protocol
+    currentSection: number
+}) {
+    const router = useRouter()
+    const path = usePathname()
+    console.log(path?.slice(-1))
+    const [currentVisible, setVisible] = useState<number>(currentSection)
     const notifications = useNotifications()
-
     const form = useProtocol({
         initialValues: protocol,
         validate: zodResolver(ProtocolSchema),

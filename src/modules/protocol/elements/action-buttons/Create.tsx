@@ -10,7 +10,7 @@ type ActionButtonTypes = { role: RoleType }
 export default function CreateButton(props: ActionButtonTypes) {
     if (canExecute(ACTION.CREATE, props.role, 'NOT_CREATED'))
         return (
-            <Link href={'/protected/protocol/new'} passHref>
+            <Link href={'/protocols/new'} passHref>
                 <Button intent={'terciary'}>
                     <FilePlus className="mr-3 h-5" /> Nueva Postulación
                 </Button>

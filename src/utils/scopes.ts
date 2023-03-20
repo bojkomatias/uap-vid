@@ -52,6 +52,7 @@ export function canExecute(
     role: RoleType,
     state: StateType
 ) {
+    if (!action || !role || !state) return false
     if (
         ROLE_SCOPE[role].some((a) => a === action) &&
         STATE_SCOPE[state].some((a) => a === action)
@@ -62,6 +63,7 @@ export function canExecute(
 
 // * Use when multiple protocols are involved so you can't pin point state (eg. Access to table, or to columns)
 export function canAccess(access: AccessType, role: RoleType) {
+    if (!access || !role) return false
     if (ROLE_SCOPE[role].some((a) => a === access)) return true
     return false
 }

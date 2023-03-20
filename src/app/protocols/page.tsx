@@ -1,13 +1,9 @@
-import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
-
-import Link from 'next/link'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { getAllProtocols } from 'repositories/protocol'
-import { FilePlus } from 'tabler-icons-react'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page() {

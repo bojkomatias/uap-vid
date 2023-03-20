@@ -11,7 +11,7 @@ export const navigation = [
     {
         name: 'Proyectos de investigación',
         icon: List,
-        href: '/protected',
+        href: '/protocols',
         scope: ACCESS.PROTOCOLS,
     },
     {
@@ -35,7 +35,7 @@ export const navigation = [
     {
         name: 'Lista de usuarios',
         icon: Users,
-        href: '/protected/users',
+        href: '/users',
         scope: ACCESS.USERS,
     },
 ]
