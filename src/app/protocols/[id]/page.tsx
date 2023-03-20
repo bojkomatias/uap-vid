@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             />
             <div className="flex h-full">
                 <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none">
-                    <div className="flex flex-row-reverse items-center mr-3 gap-2">
+                    <div className="flex flex-row-reverse items-center mr-3 gap-2 mt-1">
                         <PublishButton
                             role={session?.user?.role!}
                             protocol={protocol}

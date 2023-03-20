@@ -6,7 +6,11 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
-export default async function Page({ params }: any) {
+export default async function Page({
+    params,
+}: {
+    params: { id: string; section: string }
+}) {
     const protocol = await findProtocolById(params.id)
     const session = await getServerSession(authOptions)
     if (!protocol) redirect('/protocols')
@@ -25,7 +29,10 @@ export default async function Page({ params }: any) {
                     </span>
                 }
             />
-            <ProtocolForm protocol={protocol} />
+            <ProtocolForm
+                protocol={protocol}
+                currentSection={Number(params.section) ?? 0}
+            />
         </>
     )
 }

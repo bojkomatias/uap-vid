@@ -15,6 +15,7 @@ export default async function Page() {
         <>
             <Heading title={'Nuevo protocolo de investigación'} />
             <ProtocolForm
+                currentSection={0}
                 protocol={{
                     state: 'DRAFT',
                     researcher: session?.user?.id!,

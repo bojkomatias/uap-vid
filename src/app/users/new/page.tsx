@@ -10,10 +10,9 @@ export default async function Page() {
     const session = await getServerSession(authOptions)
     if (!canAccess('USERS', session?.user?.role!)) redirect('/')
     return (
-        // @ts-expect-error async ServerComponent
-        <Navigation>
+        <>
             <Heading title="Crear nuevo usuario" />
             <UserForm />
-        </Navigation>
+        </>
     )
 }
