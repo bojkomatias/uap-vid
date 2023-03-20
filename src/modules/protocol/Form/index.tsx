@@ -34,7 +34,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
     const form = useProtocol({
         initialValues: protocol,
         validate: zodResolver(ProtocolSchema),
-        validateInputOnChange: true,
+        validateInputOnBlur: true,
     })
 
     const upsertProtocol = useCallback(async (protocol: Protocol) => {
@@ -91,10 +91,13 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
     return (
         <ProtocolProvider form={form}>
             <form
-                onSubmit={form.onSubmit(
-                    (values) => upsertProtocol(values),
-                    (errors) => console.log(errors)
-                )}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    // Enforce validity only on first section to Save
+                    if (!form.isValid('sections.identification'))
+                        return console.log(form.errors)
+                    upsertProtocol(form.values)
+                }}
                 className="mx-auto flex max-w-7xl flex-col"
             >
                 <div className="flex h-3 py-8 w-full items-center justify-center gap-6 sm:gap-12 md:gap-16 lg:gap-20">
@@ -126,9 +129,11 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                         <ChevronLeft className="h-5" />
                     </Button>
 
-                    <Button type="submit" intent="secondary">
-                        Guardar
-                    </Button>
+                    <div className="flex gap-2">
+                        <Button type="submit" intent="secondary">
+                            Guardar
+                        </Button>
+                    </div>
                     <Button
                         type="button"
                         intent="secondary"

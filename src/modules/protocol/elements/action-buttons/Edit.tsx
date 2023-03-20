@@ -9,9 +9,9 @@ type ActionButtonTypes = { role: RoleType; state: StateType; id: string }
 export default function EditButton(props: ActionButtonTypes) {
     if (canExecute(ACTION.EDIT, props.role, props.state))
         return (
-            <Button intent={'secondary'}>
-                <Link href={`/protected/protocol/${props.id}`}>Editar</Link>
-            </Button>
+            <Link href={`/protected/protocol/${props.id}`} passHref>
+                <Button intent={'secondary'}>Editar</Button>
+            </Link>
         )
     return <></>
 }

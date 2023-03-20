@@ -65,6 +65,7 @@ export const ProtocolSchema = z.object({
     reviews: z.lazy(() => ReviewsSchema).optional(),
     sections: z.lazy(() => SectionsSchema),
 })
+
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
 export type Protocol = z.infer<typeof ProtocolSchema>
 
@@ -73,7 +74,7 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 /////////////////////////////////////////
 
 export const ReviewsSchema = z.object({
-    id: z.string(),
+    id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
 
 /////////////////////////////////////////
@@ -81,8 +82,8 @@ export const ReviewsSchema = z.object({
 /////////////////////////////////////////
 
 export const UserSchema = z.object({
-    id: z.string(),
-    email: z.string(),
+    id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    email: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     id_: z.string().nullable(),
     image: z.string().nullable(),
     lastLogin: z.coerce.date().nullable(),
@@ -184,12 +185,22 @@ export const BudgetSchema = z.object({
 /////////////////////////////////////////
 
 export const DescriptionSchema = z.object({
-    discipline: z.string(),
-    field: z.string(),
-    line: z.string(),
-    objective: z.string(),
-    type: z.string(),
-    words: z.string(),
+    discipline: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    field: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    line: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    technical: z
+        .string()
+        .min(500, {
+            message:
+                'El resumen técnico debe contener entre 150 - 250 palabras',
+        })
+        .max(1000, {
+            message:
+                'El resumen técnico debe contener entre 150 - 250 palabras',
+        }),
+    objective: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    words: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
 
 /////////////////////////////////////////
@@ -197,8 +208,8 @@ export const DescriptionSchema = z.object({
 /////////////////////////////////////////
 
 export const DurationSchema = z.object({
-    duration: z.string(),
-    modality: z.string(),
+    duration: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    modality: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     chronogram: z
         .lazy(() =>
             z.object({
@@ -218,7 +229,7 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-    assignment: z.string(),
+    assignment: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
@@ -263,10 +274,12 @@ export const IdentificationSchema = z.object({
 /////////////////////////////////////////
 
 export const IntroductionSchema = z.object({
-    justification: z.string(),
-    objectives: z.string(),
-    problem: z.string(),
-    state: z.string(),
+    justification: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' }),
+    objectives: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    problem: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    state: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
 
 /////////////////////////////////////////
@@ -274,15 +287,21 @@ export const IntroductionSchema = z.object({
 /////////////////////////////////////////
 
 export const MethodologySchema = z.object({
-    analysis: z.string(),
-    considerations: z.string(),
-    design: z.string(),
-    instruments: z.string(),
-    participants: z.string(),
-    place: z.string(),
-    procedures: z.string(),
-    detail: z.string(),
-    type: z.string(),
+    analysis: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    considerations: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' }),
+    design: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    instruments: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' }),
+    participants: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' }),
+    place: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    procedures: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
 
 /////////////////////////////////////////
@@ -290,6 +309,6 @@ export const MethodologySchema = z.object({
 /////////////////////////////////////////
 
 export const PublicationSchema = z.object({
-    plan: z.string(),
-    result: z.string(),
+    title: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    result: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })

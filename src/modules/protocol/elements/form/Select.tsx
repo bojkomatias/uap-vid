@@ -36,7 +36,7 @@ export default function Select({
                     >
                         <Combobox.Input
                             autoComplete="off"
-                            className="input"
+                            className="input form-input"
                             placeholder={label}
                             onChange={(e) => setQuery(e.target.value)}
                         />

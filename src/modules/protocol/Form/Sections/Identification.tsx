@@ -39,7 +39,6 @@ export default function Identification() {
             className="space-y-3"
         >
             <SectionTitle title="Identificación" />
-            <Info />
             <>
                 <Input path={path + 'title'} label="titulo" />
                 <Select
@@ -50,6 +49,7 @@ export default function Identification() {
                         (form.values.sections.identification.assignment = '')
                     }
                 />
+                <AssignmentInfo />
                 <Select
                     path={path + 'assignment'}
                     label="materia"
@@ -57,6 +57,7 @@ export default function Identification() {
                         form.values.sections.identification.career
                     )}
                 />
+                <TeamInfo />
                 <List
                     path={path + 'team'}
                     label="miembros de equipo"
@@ -102,7 +103,7 @@ export default function Identification() {
     )
 }
 
-const Info = () => (
+const TeamInfo = () => (
     <InfoTooltip>
         <p>
             <b>Codirector:</b> En el caso de un proyecto tesis de posgrado,
@@ -126,6 +127,15 @@ const Info = () => (
             obtenidas anteriormente. Idiomas: con qué idiomas puede trabajar y
             con qué nivel en cada caso. Carta escrita por el postulante en la
             que fundamente la solicitud de la beca.
+        </p>
+    </InfoTooltip>
+)
+
+const AssignmentInfo = () => (
+    <InfoTooltip>
+        <p>
+            <b>Materia:</b> La materia debe estar relacionada al a
+            investigación, sino, dejar en blanco.
         </p>
     </InfoTooltip>
 )
