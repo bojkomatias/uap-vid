@@ -1,5 +1,3 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {
     ROLE,
     RoleType,
@@ -14,6 +12,7 @@ import {
 // This component is meant to export helper functionalities in a centralized matter when we come to roles or states.
 // Atomic SRP Components that operate with one of these actions, should be guarded by this functions.
 // Check if role its allowed
+
 const ROLE_SCOPE = {
     [ROLE.RESEARCHER]: [
         ACCESS.PROTOCOLS,
@@ -40,7 +39,7 @@ const ROLE_SCOPE = {
 // Check if state allows the action
 const STATE_SCOPE = {
     [STATE.NOT_CREATED]: [ACTION.CREATE],
-    [STATE.DRAFT]: [ACTION.PUBLISH, ACTION.EDIT],
+    [STATE.DRAFT]: [ACTION.PUBLISH, ACTION.EDIT, ACTION.VIEW],
     [STATE.METHOD]: [ACTION.COMMENT, ACTION.VIEW],
     [STATE.SCIENTIFIC]: [ACTION.COMMENT, ACTION.VIEW, ACTION.ACCEPT],
     [STATE.ACCEPTED]: [ACTION.VIEW],

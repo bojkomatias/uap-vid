@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Home } from 'tabler-icons-react'
 
 const newLinkMap: any = {
+    users: 'Lista de usuarios',
     protected: 'Inicio',
     view: 'Vista del protocolo',
     protocol: 'Panel de edición del protocolo',

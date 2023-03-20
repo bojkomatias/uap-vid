@@ -35,7 +35,7 @@ export const navigation = [
     {
         name: 'Lista de usuarios',
         icon: Users,
-        href: '/protected/admin/userlist',
+        href: '/protected/users',
         scope: ACCESS.USERS,
     },
 ]

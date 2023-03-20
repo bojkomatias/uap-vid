@@ -1,4 +1,5 @@
 import { Heading } from '@layout/Heading'
+import EditButton from '@protocol/elements/action-buttons/Edit'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
 import View from '@protocol/View'
 import { canExecute } from '@utils/scopes'
@@ -11,7 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions)
     const protocol = await findProtocolById(params.id)
     if (!protocol) redirect('/protected')
-    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+    if (!canExecute('VIEW', session?.user?.role!, protocol?.state!))
         redirect('/protected')
 
     return (
@@ -28,10 +29,17 @@ export default async function Page({ params }: { params: { id: string } }) {
             />
             <div className="flex h-full">
                 <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none">
-                    <PublishButton
-                        role={session?.user?.role!}
-                        state={protocol.state}
-                    />
+                    <div className="flex flex-row-reverse items-center mr-3 gap-2">
+                        <PublishButton
+                            role={session?.user?.role!}
+                            protocol={protocol}
+                        />
+                        <EditButton
+                            role={session?.user?.role!}
+                            state={protocol.state}
+                            id={protocol.id}
+                        />
+                    </div>
                     <View protocol={protocol} />
                 </main>
                 <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">

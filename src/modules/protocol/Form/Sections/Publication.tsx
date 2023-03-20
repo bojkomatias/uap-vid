@@ -16,15 +16,18 @@ export default function Publication() {
             transition={{ duration: 0.7 }}
             className="space-y-3"
         >
-            <SectionTitle title="Publicación" />
+            <SectionTitle title="Publicación científica" />
             <span />
             <>
                 <Select
                     path={path + 'result'}
                     options={results}
-                    label="Resultado de la investigación"
+                    label="Producción científica esperada"
                 />
-                <Textarea path={path + 'plan'} label="Plan" />
+                <Textarea
+                    path={path + 'title'}
+                    label="Titulo del libro o revista"
+                />
             </>
         </motion.div>
     )

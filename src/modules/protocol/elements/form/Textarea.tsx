@@ -20,6 +20,11 @@ const Textarea = ({ path, label }: { path: string; label: string }) => {
                     ['link'],
                 ]}
             />
+            {form.getInputProps(path).error ? (
+                <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
+                    *{form.getInputProps(path).error}
+                </p>
+            ) : null}
         </div>
     )
 }

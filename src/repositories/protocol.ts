@@ -52,4 +52,19 @@ const getAllProtocols = async () => {
     }
 }
 
+const protocolByResearcher = (researcherId: string) => {
+    try {
+        return prisma.protocol.findMany({
+            where: {
+                researcher: {
+                    equals: researcherId,
+                },
+            },
+        })
+    }
+    catch (e) {
+        console.log(e)
+        return null
+    }
+}
 export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols }

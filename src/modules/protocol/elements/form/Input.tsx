@@ -15,7 +15,7 @@ const Input = ({
             <label className="label">{label}</label>
             <input
                 {...form.getInputProps(path)}
-                className="input"
+                className="input form-input"
                 placeholder={label}
                 autoComplete="off"
             />
