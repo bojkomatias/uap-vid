@@ -1,5 +1,6 @@
 import { Button } from '@elements/Button'
 import { Heading } from '@layout/Heading'
+import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
 
@@ -21,11 +22,7 @@ export default async function Page() {
             </p>
 
             <div className="flex justify-end">
-                <Link href={'/protected/protocol/new'} passHref>
-                    <Button intent="primary">
-                        <FilePlus className="mr-3 h-5" /> Nueva Postulación
-                    </Button>
-                </Link>
+                <CreateButton role={session?.user?.role!} />
             </div>
 
             <div className="mx-auto mb-20 flex flex-col justify-center">

@@ -6,7 +6,7 @@ import {
 } from '../../../repositories/users'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import NextAuth, { NextAuthOptions, User } from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import type { user } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
@@ -71,14 +71,12 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: ({ token, user }) => {
-            console.log('JWT ****', user)
             if (user) {
                 token.user = user
             }
             return token
         },
         session: async ({ session, token }) => {
-            console.log('SESSION ****', token.user)
             if (token) {
                 session.user = token.user as user
             }

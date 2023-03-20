@@ -77,17 +77,6 @@ export default function Table({
                                 {new Date(item.createdAt).toLocaleString()}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                {canExecute('EDIT', role, item.state) ? (
-                                    <Link
-                                        href={`/protected/protocol/${item.id}`}
-                                        passHref
-                                        className="transition-all duration-150 hover:text-black/60"
-                                    >
-                                        Editar
-                                    </Link>
-                                ) : null}
-                            </td>
-                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                 <Link
                                     href={`/protected/view/${item.id}`}
                                     passHref

@@ -3,7 +3,6 @@ import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from '@mantine/notifications'
 import { RoleSelector } from './RoleSelector'
-import { useEffect, useState } from 'react'
 
 // Wrapper around Role Selector, to trigger save on role change (Used for UserList)
 export const UpdateRole = ({ user }: { user: any }) => {
@@ -11,7 +10,6 @@ export const UpdateRole = ({ user }: { user: any }) => {
     const notifications = useNotifications()
 
     const UpdateRoleForUser = async (newRole: string) => {
-        console.log(user.id, newRole)
         const res = await fetch(`/api/users/${user.id}`, {
             method: 'PUT',
             mode: 'cors',
