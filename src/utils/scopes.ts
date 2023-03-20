@@ -12,6 +12,7 @@ import {
 // This component is meant to export helper functionalities in a centralized matter when we come to roles or states.
 // Atomic SRP Components that operate with one of these actions, should be guarded by this functions.
 // Check if role its allowed
+
 const ROLE_SCOPE = {
     [ROLE.RESEARCHER]: [
         ACCESS.PROTOCOLS,
