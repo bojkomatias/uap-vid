@@ -62,6 +62,7 @@ export const ProtocolSchema = z.object({
     createdAt: z.coerce.date().optional(),
     state: StateSchema,
     researcher: z.string(),
+    reviews: z.lazy(() => ReviewsSchema).optional(),
     sections: z.lazy(() => SectionsSchema),
 })
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
