@@ -58,8 +58,8 @@ export type AccessType = `${z.infer<typeof AccessSchema>}`
 /////////////////////////////////////////
 
 export const ProtocolSchema = z.object({
-    id: z.string(),
-    createdAt: z.coerce.date(),
+    id: z.string().optional(),
+    createdAt: z.coerce.date().optional(),
     state: StateSchema,
     researcher: z.string(),
     sections: z.lazy(() => SectionsSchema),
