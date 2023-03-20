@@ -106,4 +106,4 @@ const getAllProtocols = async () => {
 //     }
 
 // }
-export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols, getProtocolByRol, updateProtocolStateById }
+export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols, updateProtocolStateById }

@@ -133,6 +133,17 @@ type ProtocolReviewsComments {
   date DateTime @db.Date
 }
 
+enum ReviewType {
+  METHOD
+  SCIENTIFIC
+}
+
+enum ReviewVeredict {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
 enum Role {
   RESEARCHER
   SECRETARY
@@ -148,15 +159,4 @@ enum State {
   SCIENTIFIC
   ACCEPTED
   ONGOING
-}
-
-enum ReviewType {
-  METHOD
-  SCIENTIFIC
-}
-
-enum ReviewVeredict {
-  APPROVED
-  REJECTED
-  PENDING
 }

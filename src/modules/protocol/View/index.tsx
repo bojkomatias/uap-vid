@@ -1,4 +1,4 @@
-import type { protocol } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import IdentificationView from '@protocol/View/Sections/IdentificationView'
 import BibliographyView from './Sections/BibliographyView'
 import BudgetView from './Sections/BudgetView'
@@ -8,7 +8,7 @@ import IntroductionView from './Sections/IntroductionView'
 import MethodologyView from './Sections/MethodologyView'
 import PublicationView from './Sections/PublicationView'
 
-export default function View({ protocol }: { protocol: protocol }) {
+export default function View({ protocol }: { protocol: Protocol }) {
     return (
         <div className="px-4">
             <IdentificationView data={protocol.sections.identification} />
