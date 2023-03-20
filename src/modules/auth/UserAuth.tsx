@@ -33,7 +33,7 @@ export const UserAuth = () => {
                             <Menu.Item>
                                 {({ active }) => (
                                     <Link
-                                        href={'/protected/profile'}
+                                        href={'/profile'}
                                         className={clsx(
                                             active ? 'bg-gray-100 ' : '',
                                             'block px-6 py-2 text-sm text-gray-700 w-full text-left font-medium'

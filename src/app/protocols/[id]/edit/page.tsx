@@ -9,9 +9,9 @@ import { findProtocolById } from 'repositories/protocol'
 export default async function Page({ params }: any) {
     const protocol = await findProtocolById(params.id)
     const session = await getServerSession(authOptions)
-    if (!protocol) redirect('/protected')
+    if (!protocol) redirect('/protocols')
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
-        redirect('/protected')
+        redirect('/protocols')
 
     return (
         <>
