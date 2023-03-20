@@ -7,7 +7,7 @@ const styles = {
     secondary:
         'text-xs ring-1 ring-inset focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700',
     terciary:
-        'text-primary outline-none hover:bg-primary hover:text-white bg-base-100',
+        'text-xs ring-1  focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700 active:bg-primary active:text-white',
 }
 
 interface Props

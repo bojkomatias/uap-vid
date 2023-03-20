@@ -1,6 +1,7 @@
 import { Heading } from '@layout/Heading'
 import View from '@protocol/View'
 import ReviewForm from '@review/form'
+import ReadComment from '@review/form/ReadComment'
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -24,8 +25,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                         <View protocol={protocol} />
                     </main>
 
-                    <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
+                    <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 px-4 xl:flex xl:flex-col">
                         <ReviewForm />
+                        <ReadComment
+                            comments={protocol.reviews?.methodologic.comments}
+                        />
                     </aside>
                 </div>
             </>

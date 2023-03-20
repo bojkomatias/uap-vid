@@ -57,7 +57,7 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 // REVIEWS SCHEMA
 /////////////////////////////////////////
 
-const CommentSchema = z.object({
+export const CommentSchema = z.object({
     date: z.coerce.date().optional(),
     data: z.string(),
 })
