@@ -8,13 +8,13 @@ import { FilePlus } from 'tabler-icons-react'
 type ActionButtonTypes = { role: RoleType }
 
 export default function CreateButton(props: ActionButtonTypes) {
-    if (canExecute(ACTION.EDIT, props.role, 'NOT_CREATED'))
+    if (canExecute(ACTION.CREATE, props.role, 'NOT_CREATED'))
         return (
-            <Button intent={'secondary'}>
-                <Link href={'/protected/protocol/new'} passHref>
+            <Link href={'/protected/protocol/new'} passHref>
+                <Button intent={'terciary'}>
                     <FilePlus className="mr-3 h-5" /> Nueva Postulación
-                </Link>
-            </Button>
+                </Button>
+            </Link>
         )
     return <></>
 }

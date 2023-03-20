@@ -186,6 +186,16 @@ export const DescriptionSchema = z.object({
     discipline: z.string(),
     field: z.string(),
     line: z.string(),
+    technical: z
+        .string()
+        .min(500, {
+            message:
+                'El resumen técnico debe contener entre 150 - 250 palabras',
+        })
+        .max(1000, {
+            message:
+                'El resumen técnico debe contener entre 150 - 250 palabras',
+        }),
     objective: z.string(),
     type: z.string(),
     words: z.string(),
@@ -289,6 +299,6 @@ export const MethodologySchema = z.object({
 /////////////////////////////////////////
 
 export const PublicationSchema = z.object({
-    plan: z.string(),
+    title: z.string(),
     result: z.string(),
 })

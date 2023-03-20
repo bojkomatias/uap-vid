@@ -25,6 +25,7 @@ export const initialSectionValues: Sections = {
         discipline: '',
         field: '',
         line: '',
+        technical: '',
         objective: '',
         type: '',
         words: '',
@@ -47,7 +48,7 @@ export const initialSectionValues: Sections = {
         type: '',
     },
     publication: {
-        plan: '',
+        title: '',
         result: '',
     },
     bibliography: {

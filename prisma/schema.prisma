@@ -76,6 +76,7 @@ type ProtocolSectionsDescription {
   discipline String
   field      String
   line       String
+  technical  String
   objective  String
   type       String
   words      String
@@ -127,7 +128,7 @@ type ProtocolSectionsMethodology {
 }
 
 type ProtocolSectionsPublication {
-  plan   String
+  title  String
   result String
 }
 
