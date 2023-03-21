@@ -11,34 +11,27 @@ import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
 import { Protocol, ProtocolSchema } from '@utils/zod'
 import { protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
+import clsx from 'clsx'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
-    0: <Identification key="Identification" />,
-    1: <Duration key="Duration" />,
-    2: <DirectBudget key="Identification" />,
-    3: <Description key="Identification" />,
-    4: <Introduction key="Identification" />,
-    5: <Method key="Identification" />,
-    6: <Publication key="Identification" />,
-    7: <Bibliography key="Identification" />,
+    0: <Identification key="Identificación" />,
+    1: <Duration key="Duración" />,
+    2: <DirectBudget key="Presupuesto" />,
+    3: <Description key="Descripción" />,
+    4: <Introduction key="Introducción" />,
+    5: <Method key="Método" />,
+    6: <Publication key="Publicación" />,
+    7: <Bibliography key="Bibliografía" />,
 }
 
-export default function ProtocolForm({
-    protocol,
-    currentSection,
-}: {
-    protocol: Protocol
-    currentSection: number
-}) {
+export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
     const router = useRouter()
     const path = usePathname()
-    console.log(path?.slice(-1))
-    const [currentVisible, setVisible] = useState<number>(currentSection)
     const notifications = useNotifications()
     const form = useProtocol({
         initialValues: protocol,
@@ -97,6 +90,10 @@ export default function ProtocolForm({
         }
     }, [])
 
+    const currentVisible = Number(path?.split('/')[3])
+    const pushTo = (int: number) =>
+        router.push('/protocols/' + path?.split('/')[2] + '/' + int.toString())
+
     return (
         <ProtocolProvider form={form}>
             <form
@@ -109,21 +106,26 @@ export default function ProtocolForm({
                 }}
                 className="mx-auto flex max-w-7xl flex-col"
             >
-                <div className="flex h-3 py-8 w-full items-center justify-center gap-6 sm:gap-12 md:gap-16 lg:gap-20">
-                    {Object.entries(sectionMapper).map(([key, value]) => (
-                        <button
-                            type="button"
-                            key={key}
-                            className={`cursor-pointer rounded-full bg-primary-100 transition duration-200 ${
-                                currentVisible == Number(key)
-                                    ? 'h-3 w-3 bg-primary'
-                                    : Number(currentVisible) > Number(key)
-                                    ? 'h-2 w-2 bg-gray-400'
-                                    : 'border h-2 w-2'
-                            }`}
-                            onClick={() => setVisible(Number(key))}
-                        ></button>
-                    ))}
+                <div className="w-full overflow-x-auto relative">
+                    <div className="flex gap-1 items-center md:gap-3 w-fit py-4 mx-auto px-1">
+                        {Object.entries(sectionMapper).map(([key, value]) => (
+                            <button
+                                type="button"
+                                key={key}
+                                className={clsx(
+                                    'cursor-pointer uppercase rounded px-3 py-1 hover:ring-1 hover:ring-offset-1 hover:ring-primary',
+                                    currentVisible == Number(key)
+                                        ? 'text-white bg-primary font-bold text-xs'
+                                        : // : Number(currentVisible) > Number(key)
+                                          // ? 'h-2 w-2 bg-gray-400'
+                                          'font-light bg-gray-100 text-gray-500 hover:text-black text-[0.6rem]'
+                                )}
+                                onClick={() => pushTo(Number(key))}
+                            >
+                                {value.key}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="flex-1">{sectionMapper[currentVisible]}</div>
@@ -133,7 +135,7 @@ export default function ProtocolForm({
                         type="button"
                         intent="secondary"
                         disabled={currentVisible === 0}
-                        onClick={() => setVisible((prev) => prev - 1)}
+                        onClick={() => pushTo(currentVisible - 1)}
                     >
                         <ChevronLeft className="h-5" />
                     </Button>
@@ -147,7 +149,7 @@ export default function ProtocolForm({
                         type="button"
                         intent="secondary"
                         disabled={currentVisible === 7}
-                        onClick={() => setVisible((prev) => prev + 1)}
+                        onClick={() => pushTo(currentVisible + 1)}
                     >
                         <ChevronRight className="h-5" />
                     </Button>

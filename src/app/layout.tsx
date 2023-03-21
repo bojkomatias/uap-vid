@@ -30,12 +30,15 @@ export default async function RootLayout({
             <Providers>
                 <body className="subpixel-antialiased">
                     <Nav />
-                    <main className="relative min-h-[90vh] px-12 max-w-[90rem] mx-auto">
+                    <main className="relative min-h-[90vh]">
                         {!session ? (
                             children
                         ) : (
                             // @ts-expect-error
-                            <Navigation>{children}</Navigation>
+                            <Navigation>
+                                <Breadcrumb />
+                                {children}
+                            </Navigation>
                         )}
                     </main>
                     <Footer />

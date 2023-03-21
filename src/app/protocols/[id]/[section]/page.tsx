@@ -29,10 +29,7 @@ export default async function Page({
                     </span>
                 }
             />
-            <ProtocolForm
-                protocol={protocol}
-                currentSection={Number(params.section) ?? 0}
-            />
+            <ProtocolForm protocol={protocol} />
         </>
     )
 }
