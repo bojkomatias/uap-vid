@@ -1,5 +1,5 @@
 import { ProtocolSectionsIntroduction } from '@prisma/client'
-import RTEViewer from '@protocol/elements/form/RTEViewer'
+import RTEViewer from '@protocol/elements/RTEViewer'
 import SectionLayout from './SectionLayout'
 
 interface IntroductionViewProps {

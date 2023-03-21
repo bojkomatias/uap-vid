@@ -1,5 +1,5 @@
 import { ProtocolSectionsMethodology } from '@prisma/client'
-import RTEViewer from '@protocol/elements/form/RTEViewer'
+import RTEViewer from '@protocol/elements/RTEViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 
