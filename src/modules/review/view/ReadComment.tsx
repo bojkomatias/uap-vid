@@ -21,7 +21,7 @@ export default function ReadComment({
     }
 
     return (
-        <div className="flow-root relative z-0">
+        <div className="flow-root absolute overflow-auto">
             <ul role="list">
                 {comments?.reverse().map((comment, commentIdx) => (
                     <li key={commentIdx}>
