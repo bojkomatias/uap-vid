@@ -59,7 +59,9 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 
 export const CommentSchema = z.object({
     date: z.coerce.date().optional(),
-    data: z.string(),
+    data: z.string().min(15, {
+        message: 'El comentario debe contener al menos 15 caracteres.',
+    }),
 })
 
 const ReviewSchema = z.object({

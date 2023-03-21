@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/Button'
-import { useForm } from '@mantine/hooks'
+import { useForm } from '@mantine/form'
 import { ProtocolReviewsComments } from '@prisma/client'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -11,7 +11,10 @@ import { CommentSchema } from '@utils/zod'
 export default function ReviewForm() {
     const path = usePathname()
     const protocolId = path?.split('/')[3]
-    const form = useForm({ initialValues: { data: '' } })
+    const form = useForm({
+        initialValues: { data: '' },
+        validate: zodResolver(CommentSchema),
+    })
 
     const createComment = useCallback(async (comment: string) => {
         const res = await fetch(`/api/reviews/${protocolId}`, {
