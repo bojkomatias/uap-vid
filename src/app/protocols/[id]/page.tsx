@@ -2,6 +2,8 @@ import { Heading } from '@layout/Heading'
 import EditButton from '@protocol/elements/action-buttons/Edit'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
 import View from '@protocol/View'
+import ReviewForm from '@review/form'
+import ReadComment from '@review/form/ReadComment'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -41,10 +43,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <View protocol={protocol} />
+                   
                 </main>
-                <aside className="relative hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
-                    <span className="mx-8 text-lg font-semibold">Comments</span>
-                    <div className="m-12 h-screen rounded-xl border-2 border-dashed" />
+                <aside className="relative p-5 hidden w-96 flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col">
+                <ReviewForm></ReviewForm>
+                    <ReadComment comments={protocol.reviews?.methodologic.comments}></ReadComment>
                 </aside>
             </div>
         </>

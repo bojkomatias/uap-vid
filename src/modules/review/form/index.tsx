@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { ProtocolReviewsComments } from '@prisma/client'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import { useCallback } from 'react'
@@ -10,10 +9,12 @@ import { CommentSchema } from '@utils/zod'
 
 export default function ReviewForm() {
     const path = usePathname()
-    const protocolId = path?.split('/')[3]
+    const protocolId = path?.split('/')[2]
+    console.log(protocolId)
     const form = useForm({
         initialValues: { data: '' },
         validate: zodResolver(CommentSchema),
+        validateInputOnBlur: true
     })
 
     const createComment = useCallback(async (comment: string) => {
@@ -29,6 +30,7 @@ export default function ReviewForm() {
             <form
                 onSubmit={form.onSubmit((values) => {
                     createComment(values.data)
+                    
                 })}
             >
                 <label className="label">{protocolId}</label>
@@ -37,6 +39,11 @@ export default function ReviewForm() {
                     className="input text-sm transition-all duration-150"
                     {...form.getInputProps('data')}
                 />
+                <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
+               
+                {form.errors.data  ? `* ${form.errors.data} ` : null}
+                </p>
+                
                 <Button
                     type="submit"
                     className="my-2 ml-auto"
@@ -45,6 +52,7 @@ export default function ReviewForm() {
                     Comentar
                 </Button>
             </form>
+            
         </div>
     )
 }
