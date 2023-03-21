@@ -9,7 +9,7 @@
 }
 @layer components {
     .input {
-        @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;
+        @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border border-gray-300 placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;
     }
     .label {
         @apply text-xs font-normal uppercase text-gray-500 pointer-events-none select-none p-1;

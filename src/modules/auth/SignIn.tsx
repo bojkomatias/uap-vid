@@ -58,8 +58,7 @@ export const SignIn = () => {
                                 message: 'Credenciales inválidas',
                                 color: 'red',
                             })
-
-                        router.push('/protected')
+                        router.push('/protocols')
                     }}
                     type="submit"
                 >
@@ -68,7 +67,7 @@ export const SignIn = () => {
                 <Button
                     onClick={(e: any) => {
                         e.preventDefault()
-                        signIn('azure-ad', { callbackUrl: '/protected' })
+                        signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
                 >
                     <span>Iniciar sesión con</span>

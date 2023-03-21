@@ -1,7 +1,7 @@
 'use client'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
+import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
-import Textarea from '@protocol/elements/Textarea'
-import SectionTitle from '@protocol/elements/SectionTitle'
 
 export default function Introduction() {
     const path = 'sections.introduction.'

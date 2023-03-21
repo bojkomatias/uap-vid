@@ -36,9 +36,7 @@
         "**/*.tsx",
         "pages/index.tsx",
         "config/exhibit.js",
-        "pages/protected/admin/middleware.js",
-        ".next/types/**/*.ts",
-        "src/modules/review/form/index"
+        ".next/types/**/*.ts"
     ],
     "exclude": ["node_modules"]
 }

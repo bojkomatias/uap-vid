@@ -14,7 +14,7 @@ type ProtocolReviews {
 
 type ProtocolReviewsItem {
   comments ProtocolReviewsComments[]
-  reviewer String                                @db.ObjectId
+  reviewer String                    @db.ObjectId
   veredict String
 }
 
@@ -26,6 +26,18 @@ type ProtocolReviewsComments {
 type ProtocolReviewsScientific {
   external ProtocolReviewsItem
   internal ProtocolReviewsItem
+}
+
+type ProtocolReviewsScientificExternal {
+  comments ProtocolReviewsComments[]
+  reviewer String                    @db.ObjectId
+  veredict String
+}
+
+type ProtocolReviewsScientificInternal {
+  comments ProtocolReviewsComments[]
+  reviewer String                    @db.ObjectId
+  veredict String
 }
 
 type ProtocolSections {
@@ -64,6 +76,7 @@ type ProtocolSectionsDescription {
   discipline String
   field      String
   line       String
+  technical  String
   objective  String
   type       String
   words      String
@@ -115,25 +128,43 @@ type ProtocolSectionsMethodology {
 }
 
 type ProtocolSectionsPublication {
-  plan   String
+  title  String
   result String
 }
 
 
 
 model protocol {
-  id           String           @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt    DateTime         @db.Date
-  investigator String           @db.ObjectId 
-  reviews      ProtocolReviews?
-  sections     ProtocolSections
+  id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime         @db.Date
+  researcher String           @db.ObjectId
+  state      State            @default(DRAFT)
+  reviews    ProtocolReviews?
+  sections   ProtocolSections
 }
 
 model user {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String
+  email     String   @unique
   lastLogin DateTime @db.Date
   name      String
   password  String
-  role      String
+  role      Role     @default(RESEARCHER)
+}
+
+enum Role {
+  RESEARCHER
+  SECRETARY
+  METHODOLOGIST
+  EVALUATOR
+  ADMIN
+}
+
+enum State {
+  NOT_CREATED
+  DRAFT
+  METHOD
+  SCIENTIFIC
+  ACCEPTED
+  ONGOING
 }

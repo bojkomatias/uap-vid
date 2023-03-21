@@ -1,5 +1,5 @@
+import { useProtocolContext } from '@utils/createContext'
 import { PropsWithChildren } from 'react'
-import { useProtocolContext } from '../../../utils/createContext'
 
 const Input = ({
     path,
@@ -15,7 +15,7 @@ const Input = ({
             <label className="label">{label}</label>
             <input
                 {...form.getInputProps(path)}
-                className="input"
+                className="input form-input"
                 placeholder={label}
                 autoComplete="off"
             />

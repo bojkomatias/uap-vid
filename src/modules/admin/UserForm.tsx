@@ -32,7 +32,7 @@ export default function UserForm() {
                 },
             })
             setTimeout(() => {
-                router.push('/protected/admin/userlist')
+                router.push('/users')
             }, 2000)
         } else if (res.status === 422) {
             notifications.showNotification({

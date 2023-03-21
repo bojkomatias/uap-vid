@@ -5,20 +5,28 @@ import { Heading } from '@layout/Heading'
 import { UpdateRole } from '@admin/UpdateRole'
 import Navigation from '@auth/Navigation'
 import { UserPlus } from 'tabler-icons-react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { canAccess } from '@utils/scopes'
+import { redirect } from 'next/navigation'
 
 export default async function UserList() {
+    const session = await getServerSession(authOptions)
+    if (!canAccess('USERS', session?.user?.role!)) redirect('/')
     const users = await getAllUsers()
 
     return (
         <>
             <Heading title="Lista de usuarios" />
 
-            <Link href={'/protected/admin/newuser'} passHref className="flex">
-                <Button>
-                    <UserPlus className="h-5" />
-                    <span className="ml-3"> Nuevo usuario</span>
-                </Button>
-            </Link>
+            <div className="flex flex-row-reverse">
+                <Link href={'/users/new'} passHref>
+                    <Button>
+                        <UserPlus className="h-5" />
+                        <span className="ml-3"> Nuevo usuario</span>
+                    </Button>
+                </Link>
+            </div>
 
             <div className="-mx-4 mt-8 sm:-mx-0">
                 <table className="min-w-full divide-y divide-gray-300">
@@ -51,7 +59,7 @@ export default async function UserList() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                        {users.map((user) => (
+                        {users?.map((user) => (
                             <tr key={user.email}>
                                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
                                     {user.name}
