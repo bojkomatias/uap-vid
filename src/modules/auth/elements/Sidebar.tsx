@@ -21,7 +21,7 @@ export default function Sidebar({ user }: { user: user }) {
                                     href={item.href}
                                     className={clsx(
                                         {
-                                            'ring-2 ring-primary/80 bg-gray-200 ring-offset-1 hover:ring-offset-2':
+                                            'ring-2 ring-primary/80 bg-gray-100 ring-offset-1 hover:ring-offset-2':
                                                 pathname?.includes(item.href),
 
                                             'bg-primary text-white':
