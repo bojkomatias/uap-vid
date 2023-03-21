@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/Button'
-import { RoleSelector } from '@admin/RoleSelector'
+
 import { ROLE } from '@utils/zod'
+import { RoleSelector } from './RoleSelector'
 
 export default function UserForm() {
     const router = useRouter()
