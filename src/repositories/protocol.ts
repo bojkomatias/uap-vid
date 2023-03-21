@@ -1,5 +1,6 @@
 import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
+import { Protocol } from '@prisma/client'
 
 const findProtocolById = async (id: string) => {
     try {
@@ -14,7 +15,7 @@ const findProtocolById = async (id: string) => {
     }
 }
 
-const updateProtocolById = async (id: string, data: any) => {
+const updateProtocolById = async (id: string, data: Protocol) => {
     try {
         const protocol = await prisma.protocol.update({
             where: {
@@ -48,7 +49,7 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
     }
 }
 
-const createProtocol = async (data: any) => {
+const createProtocol = async (data: Protocol) => {
     try {
         const protocol = await prisma.protocol.create({
             data,
