@@ -72,39 +72,42 @@ const getAllProtocols = async () => {
     }
 }
 
-// const getProtocolByRol = (role: RoleType, id: string) => {
-//     if (!id) return null
+const getProtocolByRol = async (role: RoleType, id: string) => {
+    if (!id) return null
 
-//     const query = {
-//         [ROLE.RESEARCHER]: prisma.protocol.findMany({
-//             where: {
-//                 researcher: id
-//             }
-//         }),
-//         [ROLE.METHODOLOGIST]: prisma.protocol.findMany({
-//             where: {
+    const query = {
+        [ROLE.RESEARCHER]: prisma.protocol.findMany({
+            where: {
+                researcher: id
+            }
+        }),
+        [ROLE.METHODOLOGIST]: prisma.protocolReview.findMany({
+            include: {
+                protocol: true
+            },
+            where: {
+                reviewerId: id
+            },
 
-//             }
-//         }),
-//         [ROLE.EVALUATOR]: prisma.protocol.findMany({
-//             where: {
-//                 reviews: {
-//                     some: {
+        }),
+        [ROLE.EVALUATOR]: prisma.protocolReview.findMany({
+            include: {
+                protocol: true
+            },
+            where: {
+                reviewerId: id
+            },
+        })
+    }
 
-//                     }
-//                 }
-//             }
-//         })
-//     }
+    try {
+        if (ROLE.ADMIN === role || ROLE.SECRETARY === role) return prisma.protocol.findMany()
+        return await query[role]
+    }
+    catch (e) {
+        console.log(e)
+        return null
+    }
 
-//     try {
-//         if (ROLE.ADMIN === role || ROLE.SECRETARY === role) return prisma.protocol.findMany()
-//         return query[role]
-//     }
-//     catch (e) {
-//         console.log(e)
-//         return null
-//     }
-
-// }
-export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols, updateProtocolStateById }
+}
+export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols, updateProtocolStateById, getProtocolByRol }
