@@ -11,7 +11,7 @@ import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { zodResolver } from '@mantine/form'
 import { Protocol, ProtocolSchema } from '@utils/zod'
 import { protocol } from '@prisma/client'
@@ -38,6 +38,15 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
         validate: zodResolver(ProtocolSchema),
         validateInputOnBlur: true,
     })
+    useEffect(() => {
+        // Validate if not existing path goes to section 0
+        if (
+            !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
+                path?.split('/')[3]!
+            )
+        )
+            router.push('/protocols/' + path?.split('/')[2] + '/0')
+    }, [path])
 
     const upsertProtocol = useCallback(async (protocol: Protocol) => {
         // flow for protocols that don't have ID
