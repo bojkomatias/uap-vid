@@ -66,7 +66,7 @@ export default function ReadComment({
                                         </div>
                                         <div className="mt-2 text-sm text-gray-700">
                                             <RTEViewer
-                                                title={'Pendiente'}
+                                                title={'Veredicto?'}
                                                 content={comment.data}
                                             />
                                         </div>
