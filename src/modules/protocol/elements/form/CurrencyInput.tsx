@@ -20,13 +20,15 @@ const CurrencyInput = ({
                 <span className="text-sm text-gray-400">ARS</span>
             </div>
             <input
-                value={form.getInputProps(path).value}
+                value={form
+                    .getInputProps(path)
+                    .value.toString()
+                    .replace(/\D/g, '')
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                 onChange={(e) =>
                     form.setFieldValue(
                         path,
-                        e.target.value
-                            .replace(/\D/g, '')
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                        parseInt(e.target.value.replace(/\./g, ''))
                     )
                 }
                 className="input pl-6"
