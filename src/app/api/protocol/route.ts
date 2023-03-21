@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
    })
 
    if (!created) {
-      return NextResponse.error() //This return a 0 status code I don't get it
+      return new Response('We cannot create the protocol', { status: 500 })
    }
 
    return NextResponse.json(created)

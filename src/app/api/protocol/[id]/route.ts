@@ -8,7 +8,7 @@ export async function PUT(request: NextRequest, { params }: any) { //I cannot fi
    if (protocol) delete protocol.id
    const updated = await updateProtocolById(id, protocol)
    if (!updated) {
-      return NextResponse.error() //How we can add a custom message?
+      return new Response("We cannot update the protocol", { status: 500 })
    }
    return NextResponse.json({ sucess: true })
 }
