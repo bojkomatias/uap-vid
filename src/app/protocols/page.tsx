@@ -12,7 +12,7 @@ export default async function Page() {
     return (
         <>
             <Heading title="Lista de proyectos de investigación" />
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="ml-4 mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.
             </p>
