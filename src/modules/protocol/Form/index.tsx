@@ -116,7 +116,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                 className="mx-auto flex max-w-7xl flex-col"
             >
                 <div className="w-full overflow-x-auto relative">
-                    <div className="flex gap-1 items-center md:gap-3 w-fit py-4 mx-auto px-1">
+                    <div className="flex gap-1 items-center md:gap-3 w-fit py-6 mx-auto px-1">
                         {Object.entries(sectionMapper).map(([key, value]) => (
                             <button
                                 type="button"
