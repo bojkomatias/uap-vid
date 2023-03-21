@@ -1,7 +1,5 @@
 'use client'
-
 import { user } from '@prisma/client'
-import { useSession } from 'next-auth/react'
 
 export default function Profile({ user }: { user: user }) {
     return (

@@ -2,13 +2,12 @@ import Link from 'next/link'
 import { Button } from '@elements/Button'
 import { getAllUsers } from 'repositories/users'
 import { Heading } from '@layout/Heading'
-import { UpdateRole } from '@admin/UpdateRole'
-import Navigation from '@auth/Navigation'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
+import { UpdateRole } from '@user/UpdateRole'
 
 export default async function UserList() {
     const session = await getServerSession(authOptions)
@@ -19,7 +18,6 @@ export default async function UserList() {
     return (
         <>
             <Heading title="Lista de usuarios" />
-
             <div className="flex flex-row-reverse">
                 <Link href={'/users/new'} passHref>
                     <Button>

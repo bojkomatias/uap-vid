@@ -1,5 +1,5 @@
 import Navigation from '@auth/Navigation'
-import Profile from '@auth/ProfileView'
+import Profile from 'modules/user/ProfileView'
 import { Breadcrumb } from '@elements/Breadcrumb'
 import { Heading } from '@layout/Heading'
 import { getServerSession } from 'next-auth'
