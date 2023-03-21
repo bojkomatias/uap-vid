@@ -123,22 +123,14 @@ export const BibliographySchema = z.object({
                 title: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vació' }),
-                year: z.preprocess(
-                    (a) => {
-                        if (typeof a === 'string') {
-                            return parseInt(a, 10)
-                        } else if (typeof a === 'number') {
-                            return a
-                        }
-                    },
-                    z
-                        .number({
-                            invalid_type_error: 'Este campo debe ser numérico',
-                        })
-                        .max(new Date().getFullYear(), {
-                            message: 'No puede ser mayor al año actual',
-                        })
-                ),
+                year: z
+                    .number({
+                        invalid_type_error: 'Este campo debe ser numérico',
+                    })
+                    .max(new Date().getFullYear(), {
+                        message: 'No puede ser mayor al año actual',
+                    })
+                ,
             })
         )
         .array(),
@@ -152,20 +144,12 @@ export const BudgetSchema = z.object({
     expenses: z
         .lazy(() =>
             z.object({
-                amount: z.preprocess(
-                    (a) => {
-                        if (typeof a === 'string') {
-                            return parseInt(a, 10)
-                        } else if (typeof a === 'number') {
-                            return a
-                        }
-                    },
-                    z
-                        .number({
-                            invalid_type_error: 'Este campo debe ser numérico',
-                        })
-                        .positive({ message: 'Debe ser mayor que cero' })
-                ),
+                amount: z
+                    .number({
+                        invalid_type_error: 'Este campo debe ser numérico',
+                    })
+                    .positive({ message: 'Debe ser mayor que cero' })
+                ,
                 detail: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
@@ -236,25 +220,16 @@ export const IdentificationSchema = z.object({
     team: z
         .lazy(() =>
             z.object({
-                hours: z.preprocess(
-                    (a) => {
-                        if (typeof a === 'string') {
-                            return parseInt(a, 10)
-                        } else if (typeof a === 'number') {
-                            return a
-                        }
-                    },
-                    z
-                        .number({
-                            invalid_type_error: 'Este campo debe ser numérico',
-                        })
-                        .min(1, {
-                            message: 'Las horas asignadas no pueden ser cero',
-                        })
-                        .max(400, {
-                            message: 'No se pueden asignar tantas horas',
-                        })
-                ),
+                hours: z.number({
+                    invalid_type_error: 'Este campo debe ser numérico',
+                })
+                    .min(1, {
+                        message: 'Las horas asignadas no pueden ser cero',
+                    })
+                    .max(400, {
+                        message: 'No se pueden asignar tantas horas',
+                    })
+                ,
                 last_name: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
