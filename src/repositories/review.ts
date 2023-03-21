@@ -1,8 +1,16 @@
-import { protocol, ProtocolReviewsComments } from '@prisma/client'
+import {
+    protocol,
+    ProtocolReviews,
+    ProtocolReviewsComments,
+} from '@prisma/client'
 import { prisma } from '../utils/bd'
 
-const createComment = async (id: string, data: ProtocolReviewsComments) => {
-    const protocol = await prisma.protocol.update({
+export const createComment = async (
+    comment: ProtocolReviewsComments,
+    id: string
+) => {
+    console.log('HOLA ID', id)
+    const review = await prisma.protocol.update({
         where: {
             id,
         },
@@ -11,24 +19,16 @@ const createComment = async (id: string, data: ProtocolReviewsComments) => {
                 upsert: {
                     set: {
                         methodologic: {
-                            reviewer: '',
+                            reviewer: '62cf537849c524d1908a7af2',
                             veredict: '',
-                            comments: [
-                                {
-                                    data: 'upsertee? set?',
-                                    date: new Date(),
-                                },
-                            ],
+                            comments: [comment],
                         },
                     },
                     update: {
                         methodologic: {
                             update: {
                                 comments: {
-                                    push: {
-                                        date: new Date(),
-                                        data: 'updatee?',
-                                    },
+                                    push: comment,
                                 },
                             },
                         },
@@ -37,7 +37,5 @@ const createComment = async (id: string, data: ProtocolReviewsComments) => {
             },
         },
     })
-    return protocol
+    return review
 }
-
-export { createComment }
