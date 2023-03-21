@@ -29,7 +29,15 @@ export default async function Page({
                     </span>
                 }
             />
-            <ProtocolForm protocol={protocol} />
+            <ProtocolForm
+                protocol={{
+                    id: protocol.id,
+                    createdAt: protocol.createdAt,
+                    researcher: protocol.researcher,
+                    state: protocol.state,
+                    sections: protocol.sections,
+                }}
+            />
         </>
     )
 }

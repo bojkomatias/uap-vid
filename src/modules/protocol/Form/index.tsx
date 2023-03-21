@@ -13,10 +13,9 @@ import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import { useCallback, useEffect, useState } from 'react'
 import { zodResolver } from '@mantine/form'
-import { Protocol, ProtocolSchema } from '@utils/zod'
-import { protocol } from '@prisma/client'
+import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
+import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
-import clsx from 'clsx'
 import { SegmentedControl } from '@mantine/core'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
@@ -30,15 +29,29 @@ const sectionMapper: { [key: number]: JSX.Element } = {
     7: <Bibliography />,
 }
 
-export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
+export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const router = useRouter()
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
+
     const form = useProtocol({
         initialValues: protocol,
         validate: zodResolver(ProtocolSchema),
         validateInputOnBlur: true,
+        transformValues: (values) => ({
+            ...values,
+            sections: {
+                ...values.sections,
+                identification: {
+                    ...values.sections.identification,
+                    team: values.sections.identification.team.map((member) => ({
+                        ...member,
+                        hours: Number(member.hours),
+                    })),
+                },
+            },
+        }),
     })
     useEffect(() => {
         // Validate if not existing path goes to section 0
@@ -50,7 +63,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
             router.push('/protocols/' + path?.split('/')[2] + '/0')
     }, [path])
 
-    const upsertProtocol = useCallback(async (protocol: Protocol) => {
+    const upsertProtocol = useCallback(async (protocol: ProtocolZod) => {
         // flow for protocols that don't have ID
         if (!protocol.id) {
             const res = await fetch(`/api/protocol`, {
@@ -61,7 +74,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                 },
                 body: JSON.stringify(protocol),
             })
-            const { id, createdAt }: protocol = await res.json()
+            const { id, createdAt }: Protocol = await res.json()
             form.setValues({ id, createdAt })
 
             if (res.status === 200) {

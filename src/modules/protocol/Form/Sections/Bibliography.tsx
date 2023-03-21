@@ -29,7 +29,7 @@ export default function Bibliography() {
                             label: 'autor',
                         },
                         { x: 'title', label: 'titulo', class: 'flex-grow' },
-                        { x: 'year', label: 'año' },
+                        { x: 'year', label: 'año', number: true },
                     ]}
                 />
             </>

@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { navigation } from './navigation'
-import { user } from '@prisma/client'
+import { User } from '@prisma/client'
 
-export default function Sidebar({ user }: { user: user }) {
+export default function Sidebar({ user }: { user: User }) {
     const pathname = usePathname()
     return (
         <div className="hidden lg:absolute lg:inset-0 lg:flex lg:w-64 lg:flex-col">

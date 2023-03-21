@@ -44,12 +44,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                         />
                     </div>
                     <View protocol={protocol} />
-                   
                 </main>
                 <aside className="relative px-5 hidden w-96  flex-shrink-0 overflow-y-auto border-l border-gray-200 xl:flex xl:flex-col z-50">
-              
-                <ReviewForm userRole={session?.user?.role!} protocol={protocol}></ReviewForm>
-                    <ReadComment comments={protocol.reviews?.methodologic.comments}></ReadComment>
+                    <ReviewForm
+                        userRole={session?.user?.role!}
+                        protocol={protocol}
+                    ></ReviewForm>
+                    <ReadComment
+                        comments={protocol.reviews[0].comments}
+                    ></ReadComment>
                 </aside>
             </div>
         </>

@@ -3,7 +3,7 @@ import {
     updateUserByEmail,
     saveUser,
     findUserByEmail,
-} from '../../../repositories/users'
+} from '../../../../repositories/users'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth, { NextAuthOptions } from 'next-auth'
@@ -89,4 +89,6 @@ export const authOptions: NextAuthOptions = {
     },
 }
 
-export default NextAuth(authOptions)
+const handler = NextAuth(authOptions)
+export default handler
+// export default { handler as GET, handler as POST }
