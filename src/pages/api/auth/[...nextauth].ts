@@ -7,7 +7,7 @@ import {
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import NextAuth, { NextAuthOptions } from 'next-auth'
-import type { user } from '@prisma/client'
+import type { User } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -78,7 +78,7 @@ export const authOptions: NextAuthOptions = {
         },
         session: async ({ session, token }) => {
             if (token) {
-                session.user = token.user as user
+                session.user = token.user as User
             }
             return session
         },
