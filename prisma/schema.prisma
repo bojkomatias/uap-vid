@@ -8,11 +8,11 @@ datasource db {
 }
 
 type ProtocolReviews {
-  methodologic ProtocolReviewsMethodologic
+  methodologic ProtocolReviewsItem
   scientific   ProtocolReviewsScientific?
 }
 
-type ProtocolReviewsMethodologic {
+type ProtocolReviewsItem {
   comments ProtocolReviewsComments[]
   reviewer String                    @db.ObjectId
   veredict String
@@ -20,12 +20,12 @@ type ProtocolReviewsMethodologic {
 
 type ProtocolReviewsComments {
   data String
-  date DateTime @db.Date
+  date DateTime @default(now())
 }
 
 type ProtocolReviewsScientific {
-  external ProtocolReviewsScientificExternal
-  internal ProtocolReviewsScientificInternal
+  external ProtocolReviewsItem
+  internal ProtocolReviewsItem
 }
 
 type ProtocolReviewsScientificExternal {
@@ -131,6 +131,8 @@ type ProtocolSectionsPublication {
   title  String
   result String
 }
+
+
 
 model protocol {
   id         String           @id @default(auto()) @map("_id") @db.ObjectId

@@ -12,6 +12,8 @@ export const SignIn = () => {
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
 
+    console.log(email, password)
+
     return (
         <div className="shadowCustom mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">

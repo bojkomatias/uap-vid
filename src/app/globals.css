@@ -15,3 +15,26 @@
         @apply text-xs font-normal uppercase text-gray-500 pointer-events-none select-none p-1;
     }
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #003c71 #e5e5e5;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #e5e5e5;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #003c71;
+    border-radius: 0px;
+    border: 0px none #ffffff;
+  }
+

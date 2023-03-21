@@ -21,7 +21,8 @@
             "@auth/*": ["./modules/auth/*"],
             "@protocol/*": ["./modules/protocol/*"],
             "@admin/*": ["./modules/admin/*"],
-            "@utils/*": ["./utils/*"]
+            "@utils/*": ["./utils/*"],
+            "@review/*": ["./modules/review/*"]
         },
         "plugins": [
             {
