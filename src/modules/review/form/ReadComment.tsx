@@ -3,15 +3,31 @@ import React from 'react'
 import { MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
 
+
+
+
 export default function ReadComment({
     comments,
 }: {
     comments?: ProtocolReviewsComments[]
 }) {
+   
+    function getDuration(millis: number){
+        let minutes = Math.floor(millis / 60000);
+        let hours = Math.round(minutes / 60);
+        let days = Math.round(hours / 24);
+      
+        return (
+          (days && {value: days, unit: 'día/s'}) ||
+          (hours && {value: hours, unit: 'hora/s'}) ||
+          {value: minutes, unit: 'minuto/s'}
+        )
+      };
+
     return (
-        <div className="flow-root">
-            <ul role="list" className="-mb-8">
-                {comments?.map((comment, commentIdx) => (
+        <div className="flow-root relative z-0">
+            <ul role="list" >
+                {comments?.reverse().map((comment, commentIdx) => (
                     <li key={commentIdx}>
                         <div className="relative pb-8">
                             {commentIdx !== comments.length - 1 ? (
@@ -44,10 +60,8 @@ export default function ReadComment({
                                                 Un metodólogo
                                             </div>
                                             <p className="mt-0.5 text-xs text-gray-500">
-                                                Comentó el{' '}
-                                                {comment.date.toLocaleDateString()}{' '}
-                                                a las{' '}
-                                                {comment.date.toLocaleTimeString()}
+                                               Comentó hace { getDuration(new Date().getTime() - new Date(comment.date).getTime()).value} { getDuration(new Date().getTime() - new Date(comment.date).getTime()).unit}
+                                              
                                             </p>
                                         </div>
                                         <div className="mt-2 text-sm text-gray-700">

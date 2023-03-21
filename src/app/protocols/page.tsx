@@ -21,7 +21,7 @@ export default async function Page() {
                 <CreateButton role={session?.user?.role!} />
             </div>
 
-            <div className="mx-auto mb-20 flex flex-col justify-center">
+            <div className="mx-auto mb-24 flex flex-col justify-center">
                 <Table items={protocols} />
             </div>
         </>
