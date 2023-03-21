@@ -39,7 +39,7 @@ export const Breadcrumb = () => {
     )
 
     return (
-        <nav className="flex absolute -top-8 left-0" aria-label="Breadcrumb">
+        <nav className="flex absolute top-8 left-10" aria-label="Breadcrumb">
             <ol role="list" className="flex rounded-md bg-white">
                 {pathname !== '/protocols' ? (
                     <li className="flex items-center">

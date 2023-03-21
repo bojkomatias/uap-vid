@@ -1,6 +1,5 @@
-import UserForm from '@admin/UserForm'
-import Navigation from '@auth/Navigation'
 import { Heading } from '@layout/Heading'
+import UserForm from '@user/UserForm'
 import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'

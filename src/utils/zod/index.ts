@@ -13,6 +13,14 @@ const RoleSchema = z.enum([
 ])
 export const ROLE = RoleSchema.Enum
 export type RoleType = `${z.infer<typeof RoleSchema>}`
+export const roleTranslate = {
+    [ROLE.RESEARCHER]: 'Investigador',
+    [ROLE.EVALUATOR]: 'Evaluador Interno',
+    [ROLE.EVALUATOR]: 'Evaluador Externo',
+    [ROLE.METHODOLOGIST]: 'Metodólogo',
+    [ROLE.SECRETARY]: 'Secretario de Investigación',
+    [ROLE.ADMIN]: 'Administrador',
+}
 
 const StateSchema = z.enum([
     'NOT_CREATED',
@@ -73,9 +81,30 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 // REVIEWS SCHEMA
 /////////////////////////////////////////
 
+export const CommentSchema = z.object({
+    date: z.coerce.date().optional(),
+    data: z.string().min(15, {
+        message: 'El comentario debe contener al menos 15 caracteres.',
+    }),
+})
+
+const ReviewSchema = z.object({
+    veredict: z.string(),
+    reviewer: z.string(),
+    comments: CommentSchema.array(),
+})
+
+const ScientificReviewSchema = z.object({
+    internal: ReviewSchema,
+    external: ReviewSchema,
+})
+
 export const ReviewsSchema = z.object({
     id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
+
+export type Reviews = z.infer<typeof ReviewsSchema>
+export type Review = z.infer<typeof ReviewSchema>
 
 /////////////////////////////////////////
 // USER SCHEMA

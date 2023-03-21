@@ -62,7 +62,12 @@ export default function Identification() {
                     path={path + 'team'}
                     label="miembros de equipo"
                     toMap={form.values.sections.identification.team}
-                    insertedItemFormat={{ role: '', name: '', hours: '' }}
+                    insertedItemFormat={{
+                        role: '',
+                        last_name: '',
+                        name: '',
+                        hours: 0,
+                    }}
                     headers={[
                         {
                             x: 'role',

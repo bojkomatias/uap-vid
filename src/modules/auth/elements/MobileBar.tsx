@@ -15,8 +15,8 @@ export default function MobileNavigation({ user }: { user: User }) {
     const pathname = usePathname()
     return (
         <>
-            <div className="absolute top-6 right-4 z-10 lg:hidden">
-                <Button intent="secondary" onClick={() => setSidebarOpen(true)}>
+            <div className="absolute top-4 right-2 z-20 lg:hidden">
+                <Button intent="terciary" onClick={() => setSidebarOpen(true)}>
                     <span className="sr-only">Open sidebar</span>
                     <Menu2 className="h-5 " aria-hidden="true" />
                 </Button>
@@ -85,19 +85,33 @@ export default function MobileNavigation({ user }: { user: User }) {
                                                     key={item.name}
                                                     href={item.href}
                                                     className={clsx(
-                                                        pathname === item.href
-                                                            ? 'bg-primary text-white'
-                                                            : 'text-base-700 hover:bg-base-100 hover:text-black',
+                                                        {
+                                                            'ring-2 ring-primary/80 bg-gray-200 ring-offset-1 hover:ring-offset-2':
+                                                                pathname?.includes(
+                                                                    item.href
+                                                                ),
+
+                                                            'bg-primary text-white':
+                                                                pathname ===
+                                                                item.href,
+                                                        },
+                                                        'text-base-700 hover:bg-gray-100 hover:text-black',
                                                         'group flex items-center px-4 py-3 text-sm font-medium rounded'
                                                     )}
                                                     passHref
                                                 >
                                                     <item.icon
                                                         className={clsx(
-                                                            pathname ===
-                                                                item.href
-                                                                ? 'text-base-100'
-                                                                : 'text-base-700 group-hover:text-black',
+                                                            {
+                                                                'text-primary stroke-2':
+                                                                    pathname?.includes(
+                                                                        item.href
+                                                                    ),
+                                                                'text-white':
+                                                                    pathname ===
+                                                                    item.href,
+                                                            },
+                                                            'text-base-700 group-hover:text-black',
                                                             'mr-3 h-5 flex-shrink-0'
                                                         )}
                                                         aria-hidden="true"

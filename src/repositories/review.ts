@@ -38,5 +38,3 @@ const createComment = async (id: string, data: ProtocolReviewsComments) => {
     // })
     return true
 }
-
-export { createComment }
