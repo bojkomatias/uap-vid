@@ -11,40 +11,44 @@ import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { zodResolver } from '@mantine/form'
 import { Protocol, ProtocolSchema } from '@utils/zod'
 import { protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
+import clsx from 'clsx'
+import { SegmentedControl } from '@mantine/core'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
-    0: <Identification key="Identification" />,
-    1: <Duration key="Duration" />,
-    2: <DirectBudget key="Identification" />,
-    3: <Description key="Identification" />,
-    4: <Introduction key="Identification" />,
-    5: <Method key="Identification" />,
-    6: <Publication key="Identification" />,
-    7: <Bibliography key="Identification" />,
+    0: <Identification />,
+    1: <Duration />,
+    2: <DirectBudget />,
+    3: <Description />,
+    4: <Introduction />,
+    5: <Method />,
+    6: <Publication />,
+    7: <Bibliography />,
 }
 
-export default function ProtocolForm({
-    protocol,
-    currentSection,
-}: {
-    protocol: Protocol
-    currentSection: number
-}) {
+export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
     const router = useRouter()
     const path = usePathname()
-    console.log(path?.slice(-1))
-    const [currentVisible, setVisible] = useState<number>(currentSection)
+    const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
     const form = useProtocol({
         initialValues: protocol,
         validate: zodResolver(ProtocolSchema),
         validateInputOnBlur: true,
     })
+    useEffect(() => {
+        // Validate if not existing path goes to section 0
+        if (
+            !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
+                path?.split('/')[3]!
+            )
+        )
+            router.push('/protocols/' + path?.split('/')[2] + '/0')
+    }, [path])
 
     const upsertProtocol = useCallback(async (protocol: Protocol) => {
         // flow for protocols that don't have ID
@@ -109,31 +113,41 @@ export default function ProtocolForm({
                 }}
                 className="mx-auto flex max-w-7xl flex-col"
             >
-                <div className="flex h-3 py-8 w-full items-center justify-center gap-6 sm:gap-12 md:gap-16 lg:gap-20">
-                    {Object.entries(sectionMapper).map(([key, value]) => (
-                        <button
-                            type="button"
-                            key={key}
-                            className={`cursor-pointer rounded-full bg-primary-100 transition duration-200 ${
-                                currentVisible == Number(key)
-                                    ? 'h-3 w-3 bg-primary'
-                                    : Number(currentVisible) > Number(key)
-                                    ? 'h-2 w-2 bg-gray-400'
-                                    : 'border h-2 w-2'
-                            }`}
-                            onClick={() => setVisible(Number(key))}
-                        ></button>
-                    ))}
+                <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
+                    <SegmentedControl
+                        value={section}
+                        onChange={setSection}
+                        data={[
+                            { label: 'Identificación', value: '0' },
+                            { label: 'Duración', value: '1' },
+                            { label: 'Presupuesto', value: '2' },
+                            { label: 'Descripción', value: '3' },
+                            { label: 'Introducción', value: '4' },
+                            { label: 'Metodología', value: '5' },
+                            { label: 'Publicación', value: '6' },
+                            { label: 'Bibliografía', value: '7' },
+                        ]}
+                        classNames={{
+                            root: 'bg-gray-50 border rounded',
+                            label: 'uppercase text-xs px-2 py-1 font-light',
+                            active: 'bg-primary',
+                            labelActive:
+                                'text-white hover:text-white font-semibold',
+                        }}
+                        transitionDuration={300}
+                    />
                 </div>
 
-                <div className="flex-1">{sectionMapper[currentVisible]}</div>
+                <div className="flex-1">{sectionMapper[Number(section)]}</div>
 
                 <div className="mt-12 mb-8 flex w-full justify-between">
                     <Button
                         type="button"
                         intent="secondary"
-                        disabled={currentVisible === 0}
-                        onClick={() => setVisible((prev) => prev - 1)}
+                        disabled={section === '0'}
+                        onClick={() =>
+                            setSection((p) => (Number(p) - 1).toString())
+                        }
                     >
                         <ChevronLeft className="h-5" />
                     </Button>
@@ -146,8 +160,10 @@ export default function ProtocolForm({
                     <Button
                         type="button"
                         intent="secondary"
-                        disabled={currentVisible === 7}
-                        onClick={() => setVisible((prev) => prev + 1)}
+                        disabled={section === '7'}
+                        onClick={() =>
+                            setSection((p) => (Number(p) + 1).toString())
+                        }
                     >
                         <ChevronRight className="h-5" />
                     </Button>

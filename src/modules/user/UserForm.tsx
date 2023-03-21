@@ -3,13 +3,14 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
-
 import { Button } from '@elements/Button'
-import { RoleSelector } from '@admin/RoleSelector'
+
+import { ROLE } from '@utils/zod'
+import { RoleSelector } from './RoleSelector'
 
 export default function UserForm() {
     const router = useRouter()
-    const [newUser, setNewUser] = useState({ role: 'Investigador' })
+    const [newUser, setNewUser] = useState({ role: ROLE.RESEARCHER })
     const notifications = useNotifications()
     const CreateNewUser = async () => {
         const res = await fetch(`/api/auth/signup`, {

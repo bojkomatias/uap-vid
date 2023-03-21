@@ -1,5 +1,5 @@
 import { ProtocolSectionsPublication } from '@prisma/client'
-import RichViewer from '@protocol/elements/form/RTEViewer'
+import RichViewer from '@protocol/elements/RTEViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 

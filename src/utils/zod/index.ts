@@ -13,6 +13,14 @@ const RoleSchema = z.enum([
 ])
 export const ROLE = RoleSchema.Enum
 export type RoleType = `${z.infer<typeof RoleSchema>}`
+export const roleTranslate = {
+    [ROLE.RESEARCHER]: 'Investigador',
+    [ROLE.EVALUATOR]: 'Evaluador Interno',
+    [ROLE.EVALUATOR]: 'Evaluador Externo',
+    [ROLE.METHODOLOGIST]: 'Metodólogo',
+    [ROLE.SECRETARY]: 'Secretario de Investigación',
+    [ROLE.ADMIN]: 'Administrador',
+}
 
 const StateSchema = z.enum([
     'NOT_CREATED',

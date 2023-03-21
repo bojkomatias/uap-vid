@@ -3,16 +3,7 @@ import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
 import clsx from 'clsx'
-import { ROLE } from '@utils/zod'
-
-const rolesDictionary = {
-    [ROLE.RESEARCHER]: 'Investigador',
-    [ROLE.EVALUATOR]: 'Evaluador Interno',
-    [ROLE.EVALUATOR]: 'Evaluador Externo',
-    [ROLE.METHODOLOGIST]: 'Metodólogo',
-    [ROLE.SECRETARY]: 'Secretario de Investigación',
-    [ROLE.ADMIN]: 'Administrador',
-}
+import { roleTranslate } from '@utils/zod'
 
 //Callback used in UpdateRole
 export const RoleSelector = ({
@@ -36,8 +27,8 @@ export const RoleSelector = ({
                         <Listbox.Button className="input text-left">
                             <span className="">
                                 {
-                                    rolesDictionary[
-                                        user.role as keyof typeof rolesDictionary
+                                    roleTranslate[
+                                        user.role as keyof typeof roleTranslate
                                     ]
                                 }
                             </span>
@@ -57,7 +48,7 @@ export const RoleSelector = ({
                             leaveTo="opacity-0"
                         >
                             <Listbox.Options className="absolute z-10 mt-1 max-h-50 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {Object.entries(rolesDictionary).map(
+                                {Object.entries(roleTranslate).map(
                                     ([key, role]) => (
                                         <Listbox.Option
                                             key={key}

@@ -1,25 +1,41 @@
 'use client'
-import { useSession, signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserCircle } from 'tabler-icons-react'
 import clsx from 'clsx'
+import { roleTranslate } from '@utils/zod'
+import Image from 'next/image'
 
 export const UserAuth = () => {
     const { data: session } = useSession()
-
-    if (session) {
+    if (session?.user) {
         return (
             <>
-                <p className="hidden lg:block">
-                    Bienvenido <b>{session?.user?.email} </b>
-                </p>
+                <span className="hidden lg:flex flex-col items-end">
+                    <span className="font-semibold text-sm">
+                        {session.user.email}
+                    </span>
+                    <span className="italic text-xs">
+                        {roleTranslate[session.user.role]}
+                    </span>
+                </span>
                 <Menu as="div" className="relative ml-1">
                     <div>
                         <Menu.Button className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-primary">
                             <span className="sr-only">Open user menu</span>
-                            <UserCircle className="h-8 w-8 stroke-[1.5px]" />
+                            {session.user.image ? (
+                                <Image
+                                    src={session.user.image}
+                                    className="h-10 w-10 rounded-full overflow-hidden"
+                                    alt="Image de usuario"
+                                    width={100}
+                                    height={100}
+                                />
+                            ) : (
+                                <UserCircle className="h-10 w-10 stroke-[1.5px]" />
+                            )}
                         </Menu.Button>
                     </div>
                     <Transition
