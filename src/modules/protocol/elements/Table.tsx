@@ -6,8 +6,8 @@ import Link from 'next/link'
 export default function Table({ items }: { items: protocol[] | null }) {
     if (!items) return <EmptyState />
     return (
-        <div className="-mx-4 mt-8 sm:-mx-0">
-            <table className="min-w-full divide-y divide-gray-300">
+        <div className="max-w-7xl mx-auto">
+            <table className="min-w-full divide-y divide-gray-300 -mx-4 mt-8 sm:-mx-0">
                 <thead>
                     <tr>
                         <th

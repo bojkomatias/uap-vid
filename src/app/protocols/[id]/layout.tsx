@@ -44,8 +44,8 @@ async function Layout({
                     id={protocol.id}
                 />
             </div>
-            <div className="flex h-full">
-                {children}
+            <div className="flex w-full">
+                <div className="max-w-7xl mx-auto">{children}</div>
                 <ReviewWrapper protocol={protocol} user={session?.user!} />
             </div>
         </>

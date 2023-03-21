@@ -111,7 +111,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                         return console.log(form.errors)
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto flex max-w-7xl flex-col"
+                className="mx-auto max-w-7xl w-screen px-4"
             >
                 <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
                     <SegmentedControl
@@ -138,7 +138,7 @@ export default function ProtocolForm({ protocol }: { protocol: Protocol }) {
                     />
                 </div>
 
-                <div className="flex-1">{sectionMapper[Number(section)]}</div>
+                {sectionMapper[Number(section)]}
 
                 <div className="mt-12 mb-8 flex w-full justify-between">
                     <Button

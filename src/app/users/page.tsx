@@ -27,8 +27,8 @@ export default async function UserList() {
                 </Link>
             </div>
 
-            <div className="-mx-4 mt-8 sm:-mx-0">
-                <table className="min-w-full divide-y divide-gray-300">
+            <div className="mx-auto max-w-7xl">
+                <table className="min-w-full divide-y divide-gray-300 -mx-4 mt-8 sm:-mx-0">
                     <thead>
                         <tr>
                             <th
@@ -74,7 +74,7 @@ export default async function UserList() {
                                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                                     {user.email}
                                 </td>
-                                <td className="max-w-[8rem] px-3 py-4 text-sm text-gray-500">
+                                <td className="max-w-[8rem] px-3 py-2 text-sm text-gray-500">
                                     <UpdateRole
                                         user={JSON.parse(JSON.stringify(user))}
                                     />
