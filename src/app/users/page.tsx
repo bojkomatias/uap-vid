@@ -12,7 +12,8 @@ import { redirect } from 'next/navigation'
 
 export default async function UserList() {
     const session = await getServerSession(authOptions)
-    if (!canAccess('USERS', session?.user?.role!)) redirect('/')
+    if (!session) return redirect('/login')
+    if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
     const users = await getAllUsers()
 
     return (

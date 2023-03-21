@@ -2,12 +2,14 @@ import { Heading } from '@layout/Heading'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { getAllProtocols } from 'repositories/protocol'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page() {
     const session = await getServerSession(authOptions)
+    if (!session) return redirect('/login')
     const protocols = await getAllProtocols()
     return (
         <>
