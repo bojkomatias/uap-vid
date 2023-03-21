@@ -8,15 +8,14 @@ const RoleSchema = z.enum([
     'RESEARCHER',
     'SECRETARY',
     'METHODOLOGIST',
-    'EVALUATOR',
+    'SCIENTIST',
     'ADMIN',
 ])
 export const ROLE = RoleSchema.Enum
 export type RoleType = `${z.infer<typeof RoleSchema>}`
 export const roleTranslate = {
     [ROLE.RESEARCHER]: 'Investigador',
-    [ROLE.EVALUATOR]: 'Evaluador Interno',
-    [ROLE.EVALUATOR]: 'Evaluador Externo',
+    [ROLE.SCIENTIST]: 'Evaluador',
     [ROLE.METHODOLOGIST]: 'Metodólogo',
     [ROLE.SECRETARY]: 'Secretario de Investigación',
     [ROLE.ADMIN]: 'Administrador',
@@ -25,10 +24,11 @@ export const roleTranslate = {
 const StateSchema = z.enum([
     'NOT_CREATED',
     'DRAFT',
-    'METHOD',
-    'SCIENTIFIC',
+    'PUBLISHED',
+    'METHODOLOGICAL_EVALUATION',
+    'SCIENTIFIC_EVALUATION',
     'ACCEPTED',
-    'ONGOING',
+    'ON_GOING',
 ])
 
 export const STATE = StateSchema.Enum
@@ -36,10 +36,11 @@ export type StateType = `${z.infer<typeof StateSchema>}`
 export const stateTranslate = {
     [STATE.NOT_CREATED]: null,
     [STATE.DRAFT]: 'Borrador',
-    [STATE.METHOD]: 'En evaluación metodológica',
-    [STATE.SCIENTIFIC]: 'En evaluación científica',
+    [STATE.PUBLISHED]: 'Publicado',
+    [STATE.METHODOLOGICAL_EVALUATION]: 'En evaluación metodológica',
+    [STATE.SCIENTIFIC_EVALUATION]: 'En evaluación científica',
     [STATE.ACCEPTED]: 'Aceptado',
-    [STATE.ONGOING]: 'Aprobado y en curso',
+    [STATE.ON_GOING]: 'Aprobado y en curso',
 }
 // Schema for Transitions between protocols
 const ActionSchema = z.enum([
@@ -158,8 +159,7 @@ export const BibliographySchema = z.object({
                     })
                     .max(new Date().getFullYear(), {
                         message: 'No puede ser mayor al año actual',
-                    })
-                ,
+                    }),
             })
         )
         .array(),
@@ -177,8 +177,7 @@ export const BudgetSchema = z.object({
                     .number({
                         invalid_type_error: 'Este campo debe ser numérico',
                     })
-                    .positive({ message: 'Debe ser mayor que cero' })
-                ,
+                    .positive({ message: 'Debe ser mayor que cero' }),
                 detail: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
@@ -249,16 +248,16 @@ export const IdentificationSchema = z.object({
     team: z
         .lazy(() =>
             z.object({
-                hours: z.number({
-                    invalid_type_error: 'Este campo debe ser numérico',
-                })
+                hours: z
+                    .number({
+                        invalid_type_error: 'Este campo debe ser numérico',
+                    })
                     .min(1, {
                         message: 'Las horas asignadas no pueden ser cero',
                     })
                     .max(400, {
                         message: 'No se pueden asignar tantas horas',
-                    })
-                ,
+                    }),
                 last_name: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),

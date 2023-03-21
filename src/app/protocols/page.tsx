@@ -4,13 +4,15 @@ import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { getAllProtocols } from 'repositories/protocol'
+import { getAllProtocols, getProtocolByRol } from 'repositories/protocol'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page() {
     const session = await getServerSession(authOptions)
     if (!session) return redirect('/login')
-    const protocols = await getAllProtocols()
+    const protocols = session.user
+        ? await getProtocolByRol(session.user.role, session.user.id)
+        : []
     return (
         <>
             <Heading title="Lista de proyectos de investigación" />
