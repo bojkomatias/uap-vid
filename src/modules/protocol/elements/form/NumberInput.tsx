@@ -11,7 +11,7 @@ const NumberInput = ({
     const form = useProtocolContext()
 
     return (
-        <div>
+        <div className="max-w-[8rem]">
             <label className="label">{label}</label>
             <input
                 value={form.getInputProps(path).value}
@@ -19,7 +19,7 @@ const NumberInput = ({
                 onChange={(e) =>
                     form.setFieldValue(path, Number(e.target.value))
                 }
-                className="input pl-6"
+                className="input text-right placeholder:text-left"
                 placeholder={label}
                 autoComplete="off"
             />

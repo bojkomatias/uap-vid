@@ -66,7 +66,7 @@ export default function Identification() {
                         role: '',
                         last_name: '',
                         name: '',
-                        hours: 0,
+                        hours: '',
                     }}
                     headers={[
                         {

@@ -1,10 +1,14 @@
 import React from 'react'
 interface SectionLayoutProps {
     title: string
-    description: string,
+    description: string
     children: React.ReactNode
 }
-const SectionLayout = ({ title, description, children } : SectionLayoutProps) => {
+const SectionLayout = ({
+    title,
+    description,
+    children,
+}: SectionLayoutProps) => {
     return (
         <>
             <div className="px-4 py-5 sm:px-6">

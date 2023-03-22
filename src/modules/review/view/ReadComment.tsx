@@ -1,4 +1,4 @@
-import { ProtocolReviewsComments } from '@prisma/client'
+import { ReviewsComments } from '@prisma/client'
 import { MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
 import RTEViewer from '@protocol/elements/RTEViewer'
@@ -6,7 +6,7 @@ import RTEViewer from '@protocol/elements/RTEViewer'
 export default function ReadComment({
     comments,
 }: {
-    comments?: ProtocolReviewsComments[]
+    comments?: ReviewsComments[]
 }) {
     function getDuration(millis: number) {
         let minutes = Math.floor(millis / 60000)

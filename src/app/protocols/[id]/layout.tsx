@@ -22,6 +22,7 @@ async function Layout({
     if (!canExecute('VIEW', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
+    //* PROPONGO QUE TODOS LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
     return (
         <>
             <Heading
@@ -46,7 +47,7 @@ async function Layout({
                 />
             </div>
             <div className="flex w-full">
-                <div className="max-w-7xl mx-auto">{children}</div>
+                <div className="max-w-7xl mx-auto w-full">{children}</div>
                 <ReviewWrapper protocol={protocol} user={session?.user!} />
             </div>
         </>
