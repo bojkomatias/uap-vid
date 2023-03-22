@@ -17,27 +17,5 @@ export default async function Page({
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
-    return (
-        <>
-            <Heading
-                title={
-                    <span>
-                        Protocolo:{' '}
-                        <span className="font-light">
-                            {protocol.sections.identification.title}
-                        </span>
-                    </span>
-                }
-            />
-            <ProtocolForm
-                protocol={{
-                    id: protocol.id,
-                    createdAt: protocol.createdAt,
-                    researcher: protocol.researcher,
-                    state: protocol.state,
-                    sections: protocol.sections,
-                }}
-            />
-        </>
-    )
+    return <ProtocolForm protocol={protocol} />
 }

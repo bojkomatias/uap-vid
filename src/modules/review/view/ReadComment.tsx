@@ -1,32 +1,28 @@
 import { ProtocolReviewsComments } from '@prisma/client'
-import React from 'react'
 import { MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
-
-
-
+import RTEViewer from '@protocol/elements/RTEViewer'
 
 export default function ReadComment({
     comments,
 }: {
     comments?: ProtocolReviewsComments[]
 }) {
-   
-    function getDuration(millis: number){
-        let minutes = Math.floor(millis / 60000);
-        let hours = Math.round(minutes / 60);
-        let days = Math.round(hours / 24);
-      
+    function getDuration(millis: number) {
+        let minutes = Math.floor(millis / 60000)
+        let hours = Math.round(minutes / 60)
+        let days = Math.round(hours / 24)
+
         return (
-          (days && {value: days, unit: 'día/s'}) ||
-          (hours && {value: hours, unit: 'hora/s'}) ||
-          {value: minutes, unit: 'minuto/s'}
+            'Comentó hace ' + (days && days + (days > 1 ? ' días' : ' día')) ||
+            (hours && hours + (hours > 1 ? '  horas' : ' hora')) ||
+            minutes + (minutes > 1 ? '  minutos' : ' minuto')
         )
-      };
+    }
 
     return (
-        <div className="flow-root relative z-0">
-            <ul role="list" >
+        <div className="flow-root absolute overflow-auto">
+            <ul role="list">
                 {comments?.reverse().map((comment, commentIdx) => (
                     <li key={commentIdx}>
                         <div className="relative pb-8">
@@ -60,12 +56,19 @@ export default function ReadComment({
                                                 Un metodólogo
                                             </div>
                                             <p className="mt-0.5 text-xs text-gray-500">
-                                               Comentó hace { getDuration(new Date().getTime() - new Date(comment.date).getTime()).value} { getDuration(new Date().getTime() - new Date(comment.date).getTime()).unit}
-                                              
+                                                {getDuration(
+                                                    new Date().getTime() -
+                                                        new Date(
+                                                            comment.date
+                                                        ).getTime()
+                                                )}
                                             </p>
                                         </div>
                                         <div className="mt-2 text-sm text-gray-700">
-                                            <p>{comment.data}</p>
+                                            <RTEViewer
+                                                title={'Veredicto?'}
+                                                content={comment.data}
+                                            />
                                         </div>
                                     </div>
                                 </>

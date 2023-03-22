@@ -2,24 +2,24 @@
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
 import { usePathname } from 'next/navigation'
-import React from 'react'
 import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
 import { CommentSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
-import { Protocol, Role } from '@prisma/client'
+import { Protocol, User } from '@prisma/client'
 import CommentButton from '@review/action-buttons/comment'
 import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 
 export default function ReviewForm({
-    userRole,
+    reviewer,
     protocol,
 }: {
-    userRole: Role
+    reviewer: User
     protocol: Protocol
+
 }) {
     const path = usePathname()
     const protocolId = path?.split('/')[2]
@@ -68,9 +68,9 @@ export default function ReviewForm({
 
     return (
         <>
-            {' '}
             <CommentButton
-                role={userRole}
+                role={reviewer.role}
+
                 protocol={protocol}
                 commentState={comment}
                 action={() => {

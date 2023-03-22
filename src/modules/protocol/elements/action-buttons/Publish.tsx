@@ -16,13 +16,13 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         () => ProtocolSchema.safeParse(protocol).success,
         [protocol]
     )
-    if (!protocol.id || !isValid)
+    if (!protocol.id || !canExecute(ACTION.PUBLISH, role, protocol.state))
+        return <></>
+    if (!isValid)
         return (
             <Button intent={'primary'} disabled>
                 Publicar
             </Button>
         )
-    if (canExecute(ACTION.PUBLISH, role, protocol.state))
-        return <Button intent={'primary'}>Publicar</Button>
-    return <></>
+    return <Button intent={'primary'}>Publicar</Button>
 }
