@@ -16,15 +16,5 @@ export default async function Page({
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
-    return (
-        <ProtocolForm
-            protocol={{
-                id: protocol.id,
-                createdAt: protocol.createdAt,
-                researcher: protocol.researcher,
-                state: protocol.state,
-                sections: protocol.sections,
-            }}
-        />
-    )
+    return <ProtocolForm protocol={protocol} />
 }

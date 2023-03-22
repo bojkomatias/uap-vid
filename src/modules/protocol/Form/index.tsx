@@ -38,20 +38,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const form = useProtocol({
         initialValues: protocol,
         validate: zodResolver(ProtocolSchema),
-        validateInputOnBlur: true,
-        transformValues: (values) => ({
-            ...values,
-            sections: {
-                ...values.sections,
-                identification: {
-                    ...values.sections.identification,
-                    team: values.sections.identification.team.map((member) => ({
-                        ...member,
-                        hours: Number(member.hours),
-                    })),
-                },
-            },
-        }),
+        validateInputOnChange: true,
     })
     useEffect(() => {
         // Validate if not existing path goes to section 0

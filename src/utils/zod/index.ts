@@ -63,6 +63,17 @@ export type AccessType = `${z.infer<typeof AccessSchema>}`
 /////////////////////////////////////////
 
 /////////////////////////////////////////
+// CONVOCATORY SCHEMA
+/////////////////////////////////////////
+
+export const ConvocatorySchema = z.object({
+    id: z.string().optional(),
+    name: z.string(),
+    from: z.coerce.date(),
+    to: z.coerce.date(),
+})
+export type Convocatory = z.infer<typeof ConvocatorySchema>
+/////////////////////////////////////////
 // PROTOCOL SCHEMA
 /////////////////////////////////////////
 
@@ -71,8 +82,8 @@ export const ProtocolSchema = z.object({
     createdAt: z.coerce.date().optional(),
     state: StateSchema,
     researcher: z.string(),
-    reviews: z.lazy(() => ReviewsSchema).optional(),
     sections: z.lazy(() => SectionsSchema),
+    convocatoryId: z.string(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -93,11 +104,6 @@ const ReviewSchema = z.object({
     veredict: z.string(),
     reviewer: z.string(),
     comments: CommentSchema.array(),
-})
-
-const ScientificReviewSchema = z.object({
-    internal: ReviewSchema,
-    external: ReviewSchema,
 })
 
 export const ReviewsSchema = z.object({
@@ -253,7 +259,7 @@ export const IdentificationSchema = z.object({
                         invalid_type_error: 'Este campo debe ser numérico',
                     })
                     .min(1, {
-                        message: 'Las horas asignadas no pueden ser cero',
+                        message: 'Debe ser un numero positivo',
                     })
                     .max(400, {
                         message: 'No se pueden asignar tantas horas',

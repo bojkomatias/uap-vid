@@ -23,7 +23,8 @@
             "@utils/*": ["./utils/*"],
             "@repositories/*": ["./repositories/*"],
             "@user/*": ["./modules/user/*"],
-            "@review/*": ["./modules/review/*"]
+            "@review/*": ["./modules/review/*"],
+            "@convocatory/*": ["./modules/convocatory/*"]
         },
         "plugins": [
             {

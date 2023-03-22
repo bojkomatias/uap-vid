@@ -1,7 +1,7 @@
-import { ProtocolReviewsComments } from '@prisma/client'
+import { ReviewsComments } from '@prisma/client'
 import { prisma } from '../utils/bd'
 
-export const createComment = async (id: string, data: ProtocolReviewsComments) => {
+export const createComment = async (id: string, data: ReviewsComments) => {
     // const protocol = await prisma.protocol.update({
     //     where: {
     //         id,
