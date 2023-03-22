@@ -2,12 +2,12 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/Input'
-import Select from '@protocol/elements/Select'
-import List from '@protocol/elements/List'
-import InfoTooltip from '@protocol/elements/InfoTooltip'
-import MultipleSelect from '@protocol/elements/MultipleSelect'
-import SectionTitle from '@protocol/elements/SectionTitle'
+import Input from '@protocol/elements/form/Input'
+import Select from '@protocol/elements/form/Select'
+import List from '@protocol/elements/form/List'
+import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import MultipleSelect from '@protocol/elements/form/MultipleSelect'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
 
 const careers = full.map((x) => x.career)
 // conditional
@@ -39,7 +39,6 @@ export default function Identification() {
             className="space-y-3"
         >
             <SectionTitle title="Identificación" />
-            <Info />
             <>
                 <Input path={path + 'title'} label="titulo" />
                 <Select
@@ -50,6 +49,7 @@ export default function Identification() {
                         (form.values.sections.identification.assignment = '')
                     }
                 />
+                <AssignmentInfo />
                 <Select
                     path={path + 'assignment'}
                     label="materia"
@@ -57,11 +57,17 @@ export default function Identification() {
                         form.values.sections.identification.career
                     )}
                 />
+                <TeamInfo />
                 <List
                     path={path + 'team'}
                     label="miembros de equipo"
                     toMap={form.values.sections.identification.team}
-                    insertedItemFormat={{ role: '', name: '', hours: '' }}
+                    insertedItemFormat={{
+                        role: '',
+                        last_name: '',
+                        name: '',
+                        hours: 0,
+                    }}
                     headers={[
                         {
                             x: 'role',
@@ -89,6 +95,7 @@ export default function Identification() {
                             x: 'hours',
                             label: 'horas',
                             class: 'flex-shrink w-32 text-right',
+                            number: true,
                         },
                     ]}
                 />
@@ -102,7 +109,7 @@ export default function Identification() {
     )
 }
 
-const Info = () => (
+const TeamInfo = () => (
     <InfoTooltip>
         <p>
             <b>Codirector:</b> En el caso de un proyecto tesis de posgrado,
@@ -126,6 +133,15 @@ const Info = () => (
             obtenidas anteriormente. Idiomas: con qué idiomas puede trabajar y
             con qué nivel en cada caso. Carta escrita por el postulante en la
             que fundamente la solicitud de la beca.
+        </p>
+    </InfoTooltip>
+)
+
+const AssignmentInfo = () => (
+    <InfoTooltip>
+        <p>
+            <b>Materia:</b> La materia debe estar relacionada al a
+            investigación, sino, dejar en blanco.
         </p>
     </InfoTooltip>
 )

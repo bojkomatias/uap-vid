@@ -6,12 +6,39 @@
     html {
         @apply overflow-x-hidden subpixel-antialiased;
     }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
 @layer components {
     .input {
-        @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;
+        @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border border-gray-300 placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;
     }
     .label {
         @apply text-xs font-normal uppercase text-gray-500 pointer-events-none select-none p-1;
     }
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #003c71 #e5e5e5;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #e5e5e5;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #003c71;
+    border-radius: 3px;
+    border: 0px none #ffffff;
 }

@@ -6,8 +6,8 @@ import {
 } from '../../../repositories/users'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import NextAuth, { NextAuthOptions, User } from 'next-auth'
-import type { user } from '@prisma/client'
+import NextAuth, { NextAuthOptions } from 'next-auth'
+import type { User } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
             const updateObject =
                 userExist && userExist.role
                     ? { lastLogin: new Date() }
-                    : { role: 'Investigador', lastLogin: new Date() }
+                    : { role: 'RESEARCHER', lastLogin: new Date() }
 
             if (userExist) {
                 await updateUserByEmail(user.email!, updateObject)
@@ -71,16 +71,14 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: ({ token, user }) => {
-            console.log('JWT ****', user)
             if (user) {
                 token.user = user
             }
             return token
         },
         session: async ({ session, token }) => {
-            console.log('SESSION ****', token.user)
             if (token) {
-                session.user = token.user as user
+                session.user = token.user as User
             }
             return session
         },

@@ -1,9 +1,10 @@
 'use client'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
+import Select from '@protocol/elements/form/Select'
+import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { useProtocolContext } from 'utils/createContext'
-import Textarea from '@protocol/elements/Textarea'
-import Select from '@protocol/elements/Select'
-import SectionTitle from '@protocol/elements/SectionTitle'
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
@@ -22,19 +23,8 @@ const conditionalByType = (v: string, path: any) => {
                 />
                 <Textarea path={path + 'participants'} label="Participantes" />
                 <Textarea path={path + 'place'} label="Lugar de desarrollo" />
-                <Textarea
-                    path={path + 'instruments'}
-                    label="Instrumentos para recolección de datos"
-                />
-                <Textarea
-                    path={path + 'procedures'}
-                    label="Procedimientos para recolección de datos"
-                />
                 <Textarea path={path + 'analysis'} label="Análisis de datos" />
-                <Textarea
-                    path={path + 'considerations'}
-                    label="Consideraciones"
-                />
+                <ConditionalIfRecollection path={path} />
             </>
         )
     if (v === 'Investigaciones de tipo teóricas')
@@ -70,5 +60,48 @@ export default function Method() {
                 {conditionalByType(form.values.sections.methodology.type, path)}
             </>
         </motion.div>
+    )
+}
+
+const ConditionalIfRecollection = ({ path }: { path: string }) => {
+    const [checked, setChecked] = useState(false)
+
+    return (
+        <>
+            <div className="flex h-6 mt-6 items-center ml-2">
+                <input
+                    id="recollection"
+                    name="recollection"
+                    type="checkbox"
+                    className="h-4 w-4 rounded-md border-gray-300 text-primary focus:ring-primary"
+                    onChange={() => setChecked((prev) => !prev)}
+                />
+                <div className="ml-3 mt-0.5 text-sm leading-6">
+                    <label
+                        htmlFor="recollection"
+                        className="label pointer-events-auto"
+                    >
+                        Proyecto con procedimientos en humanos, animales o en
+                        base de datos.
+                    </label>
+                </div>
+            </div>
+            {checked ? (
+                <>
+                    <Textarea
+                        path={path + 'procedures'}
+                        label="Procedimientos para recolección de datos"
+                    />
+                    <Textarea
+                        path={path + 'instruments'}
+                        label="Instrumentos para recolección de datos"
+                    />
+                    <Textarea
+                        path={path + 'considerations'}
+                        label="Consideraciones éticas"
+                    />
+                </>
+            ) : null}
+        </>
     )
 }

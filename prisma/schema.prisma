@@ -43,6 +43,7 @@ type ProtocolSectionsDescription {
   discipline String
   field      String
   line       String
+  technical  String
   objective  String
   type       String
   words      String
@@ -62,7 +63,6 @@ type ProtocolSectionsDurationChronogram {
 type ProtocolSectionsIdentification {
   assignment String
   career     String
-  /// Multiple data types found: String: 66.7%, Array(String): 33.3% out of 3 sampled entries
   sponsor    String[]
   team       ProtocolSectionsIdentificationTeam[]
   title      String
@@ -95,27 +95,71 @@ type ProtocolSectionsMethodology {
 }
 
 type ProtocolSectionsPublication {
-  plan   String
+  title  String
   result String
 }
 
-model protocol {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime         @db.Date
-  sections  ProtocolSections
+model Protocol {
+  id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime         @db.Date
+  researcher String           @db.ObjectId
+  state      State            @default(DRAFT)
+  reviews    ProtocolReview[]
+  sections   ProtocolSections
 }
 
-model reviews {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+model User {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  email          String           @unique
+  lastLogin      DateTime         @db.Date
+  name           String
+  password       String
+  role           Role             @default(RESEARCHER)
+  ProtocolReview ProtocolReview[]
 }
 
-model user {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  email     String    @unique
-  id_       String?   @map("id")
-  image     String?
-  lastLogin DateTime? @db.Date
-  name      String?
-  password  String?
-  role      String
+model ProtocolReview {
+  id         String                    @id @default(auto()) @map("_id") @db.ObjectId
+  type       ReviewType
+  comments   ProtocolReviewsComments[]
+  reviewerId String                    @db.ObjectId
+  reviewer   User                      @relation(fields: [reviewerId], references: [id])
+  veredict   ReviewVeredict            @default(PENDING)
+  protocolId String                    @db.ObjectId
+  protocol   Protocol                  @relation(fields: [protocolId], references: [id])
+}
+
+type ProtocolReviewsComments {
+  data String
+  date DateTime @db.Date
+}
+
+enum ReviewType {
+  METHODOLOGICAL
+  SCIENTIFIC_INTERNAL
+  SCIENTIFIC_EXTERNAL
+}
+
+enum ReviewVeredict {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
+enum Role {
+  RESEARCHER
+  SECRETARY
+  METHODOLOGIST
+  SCIENTIST
+  ADMIN
+}
+
+enum State {
+  NOT_CREATED
+  DRAFT
+  PUBLISHED
+  METHODOLOGICAL_EVALUATION
+  SCIENTIFIC_EVALUATION
+  ACCEPTED
+  ON_GOING
 }

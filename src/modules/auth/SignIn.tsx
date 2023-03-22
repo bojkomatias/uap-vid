@@ -1,8 +1,8 @@
 'use client'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { showNotification, useNotifications } from '@mantine/notifications'
+import { useState } from 'react'
+import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import Image from 'next/image'
 
@@ -11,6 +11,8 @@ export const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
+
+    console.log(email, password)
 
     return (
         <div className="shadowCustom mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
@@ -56,7 +58,7 @@ export const SignIn = () => {
                                 message: 'Credenciales inválidas',
                                 color: 'red',
                             })
-                        router.push('/protected')
+                        router.push('/protocols')
                     }}
                     type="submit"
                 >
@@ -65,7 +67,7 @@ export const SignIn = () => {
                 <Button
                     onClick={(e: any) => {
                         e.preventDefault()
-                        signIn('azure-ad', { callbackUrl: '/protected' })
+                        signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
                 >
                     <span>Iniciar sesión con</span>

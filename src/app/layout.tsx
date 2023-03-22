@@ -13,7 +13,7 @@ export const metadata = {
 
 const font = Roboto_Flex({ subsets: ['latin'], variable: '--font-sans' })
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode
@@ -23,9 +23,7 @@ export default function RootLayout({
             <Providers>
                 <body className="subpixel-antialiased">
                     <Nav />
-                    <main className="min-h-[90vh] relative p-12 pb-24">
-                        {children}
-                    </main>
+                    <main className="relative min-h-[90vh]">{children}</main>
                     <Footer />
                 </body>
             </Providers>

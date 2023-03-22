@@ -1,10 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/List'
-import InfoTooltip from '@protocol/elements/InfoTooltip'
-import SectionTitle from '@protocol/elements/SectionTitle'
-import { Currency, CurrencyDollar } from 'tabler-icons-react'
+import List from '@protocol/elements/form/List'
+import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import SectionTitle from '@protocol/elements/form/SectionTitle'
 
 const years = (v: string) => {
     let yearQuantity = Number(v.substring(0, 2)) / 12
@@ -28,8 +27,8 @@ export default function DirectBudget() {
             className="space-y-3"
         >
             <SectionTitle title="Presupuesto de gastos directos" />
-            <Info />
             <>
+                <Info />
                 <List
                     path={path + 'expenses'}
                     label="gastos"
@@ -45,7 +44,7 @@ export default function DirectBudget() {
                             x: 'type',
                             label: 'tipo',
                             options: [
-                                'Insumos de laboratorio',
+                                'Insumos',
                                 'Libros',
                                 'Fotocopias, materiales de impresión, papelería',
                                 'Viajes',
