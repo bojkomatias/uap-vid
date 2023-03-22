@@ -1,7 +1,7 @@
 'use client'
-import { user } from '@prisma/client'
+import { User } from '@prisma/client'
 
-export default function Profile({ user }: { user: user }) {
+export default function Profile({ user }: { user: User }) {
     return (
         <div className="space-y-6 p-20">
             <div className="space-x-3 text-3xl">

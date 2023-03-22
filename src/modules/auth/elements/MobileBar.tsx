@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { Button } from '@elements/Button'
 import clsx from 'clsx'
 import { canAccess } from '@utils/scopes'
-import { user } from '@prisma/client'
+import { User } from '@prisma/client'
 import { navigation } from './navigation'
 
-export default function MobileNavigation({ user }: { user: user }) {
+export default function MobileNavigation({ user }: { user: User }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const pathname = usePathname()
     return (

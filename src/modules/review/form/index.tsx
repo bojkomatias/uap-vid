@@ -8,7 +8,7 @@ import { CommentSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
-import { protocol, Role, user } from '@prisma/client'
+import { Protocol, User } from '@prisma/client'
 import CommentButton from '@review/action-buttons/comment'
 import { useState } from 'react'
 import { Transition } from '@headlessui/react'
@@ -17,8 +17,9 @@ export default function ReviewForm({
     reviewer,
     protocol,
 }: {
-    reviewer: user
-    protocol: protocol
+    reviewer: User
+    protocol: Protocol
+
 }) {
     const path = usePathname()
     const protocolId = path?.split('/')[2]
@@ -69,6 +70,7 @@ export default function ReviewForm({
         <>
             <CommentButton
                 role={reviewer.role}
+
                 protocol={protocol}
                 commentState={comment}
                 action={() => {

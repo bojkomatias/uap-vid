@@ -1,9 +1,9 @@
-import { protocol } from '@prisma/client'
+import { Protocol } from '@prisma/client'
 
 import { stateTranslate } from '@utils/zod'
 import Link from 'next/link'
 
-export default function Table({ items }: { items: protocol[] | null }) {
+export default function Table({ items }: { items: Protocol[] | null }) {
     if (!items) return <EmptyState />
     return (
         <div className="max-w-7xl mx-auto">

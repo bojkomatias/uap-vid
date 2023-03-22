@@ -1,19 +1,24 @@
 import { prisma } from '../utils/bd'
+import { ROLE, RoleType, StateType } from '@utils/zod'
+import { Protocol } from '@prisma/client'
 
 const findProtocolById = async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
+            include: {
+                reviews: true,
+            },
             where: {
                 id,
             },
         })
     } catch (e) {
         console.log(e)
-        return null 
+        return null
     }
 }
 
-const updateProtocolById = async (id: string, data: any) => {
+const updateProtocolById = async (id: string, data: Protocol) => {
     try {
         const protocol = await prisma.protocol.update({
             where: {
@@ -22,21 +27,36 @@ const updateProtocolById = async (id: string, data: any) => {
             data,
         })
         return protocol
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         return null
     }
 }
 
-const createProtocol = async (data: any) => {
+const updateProtocolStateById = async (id: string, state: StateType) => {
+    try {
+        const protocol = await prisma.protocol.update({
+            where: {
+                id,
+            },
+            data: {
+                state: state,
+            },
+        })
+        return protocol
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}
+
+const createProtocol = async (data: Protocol) => {
     try {
         const protocol = await prisma.protocol.create({
             data,
         })
         return protocol
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         return null
     }
@@ -45,26 +65,59 @@ const createProtocol = async (data: any) => {
 const getAllProtocols = async () => {
     try {
         return await prisma.protocol.findMany()
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e)
         return null
     }
 }
 
-const protocolByResearcher = (researcherId: string) => {
-    try {
-        return prisma.protocol.findMany({
+const getProtocolByRol = async (role: RoleType, id: string) => {
+    if (!id) return null
+
+    const query = {
+        [ROLE.RESEARCHER]: prisma.protocol.findMany({
             where: {
-                researcher: {
-                    equals: researcherId,
-                },
+                researcher: id,
             },
-        })
+        }),
+        [ROLE.METHODOLOGIST]: prisma.protocolReview
+            .findMany({
+                select: {
+                    protocol: true,
+                },
+                where: {
+                    reviewerId: id,
+                    type: 'METHOD',
+                },
+            })
+            .then((result) => result.map((item) => item.protocol)),
+        [ROLE.SCIENTIST]: prisma.protocolReview
+            .findMany({
+                select: {
+                    protocol: true,
+                },
+                where: {
+                    reviewerId: id,
+                    type: 'SCIENTIFIC',
+                },
+            })
+            .then((result) => result.map((item) => item.protocol)),
     }
-    catch (e) {
+
+    try {
+        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+            return prisma.protocol.findMany()
+        return await query[role]
+    } catch (e) {
         console.log(e)
         return null
     }
 }
-export { findProtocolById, updateProtocolById, createProtocol, getAllProtocols }
+export {
+    findProtocolById,
+    updateProtocolById,
+    createProtocol,
+    getAllProtocols,
+    updateProtocolStateById,
+    getProtocolByRol,
+}

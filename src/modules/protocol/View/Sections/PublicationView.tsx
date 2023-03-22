@@ -20,7 +20,7 @@ const PublicationView = ({ data }: PublicationViewProps) => {
             description="Que se publicará al finalizar el proyecto"
         >
             <ShortDataList data={shortData} />
-            <RichViewer title="Plan" content={data.title!} />
+            <RichViewer title="Titulo de publicación" content={data.title} />
         </SectionLayout>
     )
 }

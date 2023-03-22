@@ -1,11 +1,11 @@
 'use client'
 import { Button } from '@elements/Button'
-import { protocol } from '@prisma/client'
+import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION, ProtocolSchema, RoleType, StateType } from '@utils/zod'
 import { useMemo } from 'react'
 
-type ActionButtonTypes = { role: RoleType; protocol: protocol }
+type ActionButtonTypes = { role: RoleType; protocol: Protocol }
 
 const publishProtocol = async () => {
     const res = await fetch(``)

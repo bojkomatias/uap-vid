@@ -95,6 +95,7 @@ export default function Identification() {
                             x: 'hours',
                             label: 'horas',
                             class: 'flex-shrink w-32 text-right',
+                            number: true,
                         },
                     ]}
                 />

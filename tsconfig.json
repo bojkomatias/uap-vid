@@ -20,10 +20,10 @@
             "@layout/*": ["./modules/layout/*"],
             "@auth/*": ["./modules/auth/*"],
             "@protocol/*": ["./modules/protocol/*"],
-            "@user/*": ["./modules/user/*"],
             "@utils/*": ["./utils/*"],
+            "@repositories/*": ["./repositories/*"],
+            "@user/*": ["./modules/user/*"],
             "@review/*": ["./modules/review/*"]
-
         },
         "plugins": [
             {

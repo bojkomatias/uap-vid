@@ -1,8 +1,8 @@
 'use client'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { showNotification, useNotifications } from '@mantine/notifications'
+import { useState } from 'react'
+import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import Image from 'next/image'
 
