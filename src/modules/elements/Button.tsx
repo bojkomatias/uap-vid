@@ -5,9 +5,9 @@ const styles = {
     primary:
         'text-primary outline-none hover:bg-primary hover:text-white hover:scale-[102%] bg-base-100',
     secondary:
-        'text-xs ring-1 focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700',
+        'text-xs ring-1 bg-white focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700',
     terciary:
-        'text-xs ring-1  focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700 active:bg-primary active:text-white',
+        'text-xs ring-1 focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700 active:bg-primary active:text-white',
 }
 
 interface Props

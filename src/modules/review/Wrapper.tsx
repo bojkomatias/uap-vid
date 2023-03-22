@@ -14,9 +14,12 @@ export default function ReviewWrapper({
 
     if (protocol.reviews.length === 0) return <></>
     return (
-        <aside className="relative px-5 max-w-md w-full flex-shrink-0 overflow-y-auto border-l border-gray-200">
-            <ReviewForm reviewer={user} protocolState={protocol.state} />
-            <ReadComment comments={protocol.reviews[0].comments} />
+        // No tocar margenes o paddings aca!
+        <aside className="relative max-w-md w-full border-l border-gray-200 -mr-4 sm:-mr-6 2xl:-mr-24">
+            <div className="sticky top-4 max-h-screen overflow-auto">
+                <ReviewForm reviewer={user} protocolState={protocol.state} />
+                <ReadComment comments={protocol.reviews[0].comments} />
+            </div>
         </aside>
     )
 }
