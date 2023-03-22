@@ -87,7 +87,7 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
                 },
                 where: {
                     reviewerId: id,
-                    type: 'METHOD',
+                    type: 'METHODOLOGICAL',
                 },
             })
             .then((result) => result.map((item) => item.protocol)),
@@ -98,7 +98,7 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
                 },
                 where: {
                     reviewerId: id,
-                    type: 'SCIENTIFIC',
+                    type: 'SCIENTIFIC_EXTERNAL',
                 },
             })
             .then((result) => result.map((item) => item.protocol)),

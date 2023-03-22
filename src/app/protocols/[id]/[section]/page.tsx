@@ -1,4 +1,3 @@
-import { Heading } from '@layout/Heading'
 import ProtocolForm from '@protocol/Form'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
@@ -17,5 +16,15 @@ export default async function Page({
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
-    return <ProtocolForm protocol={protocol} />
+    return (
+        <ProtocolForm
+            protocol={{
+                id: protocol.id,
+                createdAt: protocol.createdAt,
+                researcher: protocol.researcher,
+                state: protocol.state,
+                sections: protocol.sections,
+            }}
+        />
+    )
 }

@@ -21,6 +21,7 @@ async function Layout({
     if (!protocol) redirect('/protocols')
     if (!canExecute('VIEW', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
+
     return (
         <>
             <Heading

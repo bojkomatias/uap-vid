@@ -1,19 +1,20 @@
 'use client'
 import { Button } from '@elements/Button'
-import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
-import { ACTION, RoleType } from '@utils/zod'
+import { ACTION, RoleType, StateType } from '@utils/zod'
 
 type ActionButtonTypes = {
     role: RoleType
-    protocol: Protocol
+    protocolId: string
+    protocolState: StateType
     commentState: Boolean
     action: Function
 }
 
 export default function CommentButton({
     role,
-    protocol,
+    protocolId,
+    protocolState,
     commentState,
     action,
 }: ActionButtonTypes) {
@@ -22,7 +23,7 @@ export default function CommentButton({
     //         action()
     //     }} className='w-full my-2' intent={'primary'}>{commentState ? "Cerrar" : "Crear comentario"}</Button>
 
-    if (canExecute(ACTION.COMMENT, role, protocol.state))
+    if (canExecute(ACTION.COMMENT, role, protocolState))
         return (
             <Button className="w-full" intent={'primary'}>
                 Crear comentario
