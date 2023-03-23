@@ -37,14 +37,6 @@ export const initialSectionValues: Sections = {
         state: '',
     },
     methodology: {
-        design: '',
-        procedures: '',
-        detail: '',
-        participants: '',
-        place: '',
-        analysis: '',
-        instruments: '',
-        considerations: '',
         type: '',
     },
     publication: {
