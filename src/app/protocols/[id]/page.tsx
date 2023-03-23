@@ -8,11 +8,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions)
-    const protocol = await findProtocolById(params.id)
-    if (!protocol) redirect('/protocols')
-    if (!canExecute('VIEW', session?.user?.role!, protocol?.state!))
-        redirect('/protocols')
+    const protocol = await findProtocolById(params.id, false)
 
-    return <View protocol={protocol} />
+    return <View protocol={protocol!} />
 }

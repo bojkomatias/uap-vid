@@ -15,10 +15,14 @@ export default function MobileNavigation({ user }: { user: User }) {
     const pathname = usePathname()
     return (
         <>
-            <div className="absolute top-4 right-2 z-20 lg:hidden">
-                <Button intent="terciary" onClick={() => setSidebarOpen(true)}>
+            <div className="fixed top-7 right-2 z-20 lg:hidden">
+                <Button
+                    intent="secondary"
+                    onClick={() => setSidebarOpen(true)}
+                    className="px-2"
+                >
                     <span className="sr-only">Open sidebar</span>
-                    <Menu2 className="h-5 " aria-hidden="true" />
+                    <Menu2 className="h-4 " aria-hidden="true" />
                 </Button>
             </div>
             <Transition.Root show={sidebarOpen} as={Fragment}>

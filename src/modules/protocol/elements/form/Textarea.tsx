@@ -10,7 +10,7 @@ const Textarea = ({ path, label }: { path: string; label: string }) => {
             <RichTextEditor
                 {...form.getInputProps(path)}
                 className="input h-auto min-h-[10rem] pt-0 border-gray-200"
-                placeholder={label}
+                placeholder=""
                 sticky={false}
                 radius={0}
                 controls={[

@@ -2,15 +2,15 @@ import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
 import { Protocol, State } from '@prisma/client'
 
-const findProtocolById = async (id: string) => {
+const findProtocolById = async (id: string, withReviews: boolean) => {
     try {
         return await prisma.protocol.findUnique({
             include: {
-                reviews: true,
+                reviews: withReviews,
             },
             where: {
                 id,
-            },
+            }
         })
     } catch (e) {
         console.log(e)
@@ -80,7 +80,7 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
                 researcher: id,
             },
         }),
-        [ROLE.METHODOLOGIST]: prisma.protocolReview
+        [ROLE.METHODOLOGIST]: prisma.review
             .findMany({
                 select: {
                     protocol: true,
@@ -91,7 +91,7 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
                 },
             })
             .then((result) => result.map((item) => item.protocol)),
-        [ROLE.SCIENTIST]: prisma.protocolReview
+        [ROLE.SCIENTIST]: prisma.review
             .findMany({
                 select: {
                     protocol: true,

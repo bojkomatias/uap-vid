@@ -55,7 +55,7 @@ export default function UserForm() {
                 e.preventDefault()
                 CreateNewUser()
             }}
-            className="lg:grid lg:grid-cols-2 place-items-stretch"
+            className="lg:grid lg:grid-cols-2 max-w-7xl mx-auto place-items-stretch"
         >
             <div className="m-3 p-1">
                 <label className="label">Nombre</label>

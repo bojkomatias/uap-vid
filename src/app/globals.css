@@ -6,8 +6,8 @@
     html {
         @apply overflow-x-hidden subpixel-antialiased;
     }
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
@@ -25,7 +25,7 @@
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #003c71 #e5e5e5;
+    scrollbar-color: #a3a3a380 #ffffff00;
 }
 
 /* Chrome, Edge, and Safari */
@@ -34,11 +34,11 @@
 }
 
 *::-webkit-scrollbar-track {
-    background: #e5e5e5;
+    background: #ffffff00;
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #003c71;
-    border-radius: 3px;
-    border: 0px none #ffffff;
+    background-color: #a3a3a380;
+    border-radius: 6px;
+    border: 0px none #ffffff00;
 }
