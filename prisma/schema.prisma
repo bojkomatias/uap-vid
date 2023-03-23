@@ -32,7 +32,8 @@ model User {
   email     String    @unique
   lastLogin DateTime? @db.Date
   name      String
-  password  String
+  password  String?
+  image     String?
   role      Role      @default(RESEARCHER)
   Review    Review[]
 }
