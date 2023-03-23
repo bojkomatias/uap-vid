@@ -1,6 +1,6 @@
 import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
-import { Protocol } from '@prisma/client'
+import { Protocol, State } from '@prisma/client'
 
 const findProtocolById = async (id: string, withReviews: boolean) => {
     try {
@@ -113,6 +113,24 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
         return null
     }
 }
+
+const publishProtocol = async (id: string) => {
+    try {
+        const protocol = await prisma.protocol.update({
+            where: {
+                id: id
+            },
+            data: {
+                state: State.PUBLISHED
+            }
+        })
+        return protocol
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}
+
 export {
     findProtocolById,
     updateProtocolById,
@@ -120,4 +138,5 @@ export {
     getAllProtocols,
     updateProtocolStateById,
     getProtocolByRol,
+    publishProtocol
 }
