@@ -297,23 +297,30 @@ export const IntroductionSchema = z.object({
 // PROTOCOL SECTIONS METHODOLOGY SCHEMA
 /////////////////////////////////////////
 
-export const MethodologySchema = z.object({
-    analysis: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    considerations: z
-        .string()
-        .min(1, { message: 'El campo no puede estar vacío' }),
-    design: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    instruments: z
-        .string()
-        .min(1, { message: 'El campo no puede estar vacío' }),
-    participants: z
-        .string()
-        .min(1, { message: 'El campo no puede estar vacío' }),
-    place: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    procedures: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-}).deepPartial()
+
+export const MethodologySchema = z
+    .object({
+        analysis: z
+            .string()
+            .min(1, { message: 'El campo no puede estar vacío' }),
+        considerations: z
+            .string()
+            .min(1, { message: 'El campo no puede estar vacío' }),
+        design: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        instruments: z
+            .string()
+            .min(1, { message: 'El campo no puede estar vacío' }),
+        participants: z
+            .string()
+            .min(1, { message: 'El campo no puede estar vacío' }),
+        place: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        procedures: z
+            .string()
+            .min(1, { message: 'El campo no puede estar vacío' }),
+        detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    })
+    .deepPartial()
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS PUBLICATION SCHEMA

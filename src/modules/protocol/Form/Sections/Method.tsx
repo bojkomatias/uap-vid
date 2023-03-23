@@ -57,7 +57,10 @@ export default function Method() {
                     options={types}
                     label="tipo de investigación"
                 />
-                {conditionalByType(form.values.sections.methodology.type, path)}
+                {conditionalByType(
+                    form.values.sections.methodology.type!,
+                    path
+                )}
             </>
         </motion.div>
     )
