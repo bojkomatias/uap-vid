@@ -17,7 +17,7 @@ async function Layout({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
-    const protocol = await findProtocolById(params.id)
+    const protocol = await findProtocolById(params.id, true)
     if (!protocol) redirect('/protocols')
 
     //* PROPONGO QUE LA MAYORÍA LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS

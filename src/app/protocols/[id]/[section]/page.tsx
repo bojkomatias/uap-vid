@@ -10,7 +10,7 @@ export default async function Page({
 }: {
     params: { id: string; section: string }
 }) {
-    const protocol = await findProtocolById(params.id)
+    const protocol = await findProtocolById(params.id, false)
     const session = await getServerSession(authOptions)
     if (!protocol) redirect('/protocols')
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))

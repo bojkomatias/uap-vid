@@ -8,7 +8,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const protocol = await findProtocolById(params.id)
+    const protocol = await findProtocolById(params.id, false)
 
     return <View protocol={protocol!} />
 }

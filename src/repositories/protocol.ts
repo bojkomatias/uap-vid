@@ -2,15 +2,15 @@ import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
 import { Protocol } from '@prisma/client'
 
-const findProtocolById = async (id: string) => {
+const findProtocolById = async (id: string, withReviews: boolean) => {
     try {
         return await prisma.protocol.findUnique({
             include: {
-                reviews: true,
+                reviews: withReviews,
             },
             where: {
                 id,
-            },
+            }
         })
     } catch (e) {
         console.log(e)
