@@ -1,6 +1,6 @@
 import { Heading } from '@layout/Heading'
 import ReviewWrapper from '@review/Container'
-import { canExecute } from '@utils/scopes'
+import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
@@ -19,10 +19,8 @@ async function Layout({
     const session = await getServerSession(authOptions)
     const protocol = await findProtocolById(params.id)
     if (!protocol) redirect('/protocols')
-    if (!canExecute('VIEW', session?.user?.role!, protocol?.state!))
-        redirect('/protocols')
 
-    //* PROPONGO QUE TODOS LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
+    //* PROPONGO QUE LA MAYORÍA LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
     return (
         <>
             <Heading
