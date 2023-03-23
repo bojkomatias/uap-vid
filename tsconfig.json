@@ -14,13 +14,17 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "paths": {
-            "@elements/*": ["./components/elements/*"],
-            "@layout/*": ["./components/layout/*"],
-            "@auth/*": ["./components/auth/*"],
-            "@protocol/*": ["./components/protocol/*"],
-            "@admin/*": ["./components/admin/*"]
+            "@elements/*": ["./modules/elements/*"],
+            "@layout/*": ["./modules/layout/*"],
+            "@auth/*": ["./modules/auth/*"],
+            "@protocol/*": ["./modules/protocol/*"],
+            "@utils/*": ["./utils/*"],
+            "@repositories/*": ["./repositories/*"],
+            "@user/*": ["./modules/user/*"],
+            "@review/*": ["./modules/review/*"],
+            "@convocatory/*": ["./modules/convocatory/*"]
         },
         "plugins": [
             {
@@ -34,7 +38,6 @@
         "**/*.tsx",
         "pages/index.tsx",
         "config/exhibit.js",
-        "pages/protected/admin/middleware.js",
         ".next/types/**/*.ts"
     ],
     "exclude": ["node_modules"]
