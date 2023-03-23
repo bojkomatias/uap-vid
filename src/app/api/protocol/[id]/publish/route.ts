@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { publishProtocol } from '@repositories/protocol'
 
-export async function POST(
+export async function PUT(
    request: NextRequest,
    { params }: { params: { id: string } }
 ) {

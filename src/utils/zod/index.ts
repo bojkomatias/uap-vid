@@ -313,7 +313,7 @@ export const MethodologySchema = z.object({
     procedures: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-})
+}).deepPartial()
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS PUBLICATION SCHEMA
