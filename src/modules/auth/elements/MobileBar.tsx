@@ -16,7 +16,11 @@ export default function MobileNavigation({ user }: { user: User }) {
     return (
         <>
             <div className="fixed top-7 right-2 z-20 lg:hidden">
-                <Button intent="secondary" onClick={() => setSidebarOpen(true)}>
+                <Button
+                    intent="secondary"
+                    onClick={() => setSidebarOpen(true)}
+                    className="px-2"
+                >
                     <span className="sr-only">Open sidebar</span>
                     <Menu2 className="h-4 " aria-hidden="true" />
                 </Button>

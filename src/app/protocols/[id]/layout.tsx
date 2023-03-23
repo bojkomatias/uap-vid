@@ -1,5 +1,5 @@
 import { Heading } from '@layout/Heading'
-import ReviewWrapper from '@review/Wrapper'
+import ReviewWrapper from '@review/Container'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
