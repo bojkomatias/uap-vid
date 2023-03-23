@@ -9,9 +9,9 @@ import { User } from '@prisma/client'
 export default function Sidebar({ user }: { user: User }) {
     const pathname = usePathname()
     return (
-        <div className="hidden lg:absolute lg:inset-0 lg:flex lg:w-64 lg:flex-col">
+        <div className="hidden lg:sticky lg:h-screen lg:inset-0 lg:flex lg:w-64 lg:flex-col">
             {/* Sidebar component, swap this element with another sidebar if you like */}
-            <div className="flex min-h-0 flex-1 flex-col border-r bg-gray-50/20">
+            <div className="flex min-h-0 flex-1 flex-col border-r bg-base-50">
                 <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
                     <nav className="flex-1 space-y-3 px-2">
                         {navigation.map((item) =>

@@ -16,10 +16,10 @@ export default async function Navigation({
     return (
         <>
             {hasNavigation ? (
-                <>
+                <div className="absolute inset-y-0">
                     <MobileNavigation user={session?.user!} />
                     <Sidebar user={session?.user!} />
-                </>
+                </div>
             ) : null}
             <div
                 className={clsx(
