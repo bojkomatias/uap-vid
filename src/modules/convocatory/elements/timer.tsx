@@ -32,10 +32,10 @@ export function Timer({
     const remainingSeconds = differenceInSeconds % 60
 
     return (
-        <div className="float-right flex flex-col scale-75">
+        <div className="float-right flex flex-col scale-90">
             <span className="label">{label}</span>
             <div className="flex flex-col md:flex-row items-center">
-                <div className="grid grid-cols-4 gap-1 place-items-stretch w-fit flex-shrink-0 opacity-80 font-light scale-90 md:scale-100">
+                <div className="grid grid-cols-4 gap-1 place-items-stretch w-fit flex-shrink-0 opacity-80 font-light">
                     <div className="text-center bg-gray-400/10 rounded-lg">
                         <div className="mt-1  font-bold">
                             {differenceInDays}

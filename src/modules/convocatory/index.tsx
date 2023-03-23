@@ -9,10 +9,10 @@ export default function CurrentConvocatory({
     return (
         <div>
             <Timer label="Convocatoria termina:" dateString={convocatory.to} />
-            <Timer
+            {/* <Timer
                 label="Convocatoria comienza:"
                 dateString={convocatory.from}
-            />
+            /> */}
         </div>
     )
 }
