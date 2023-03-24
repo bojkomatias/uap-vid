@@ -24,16 +24,15 @@ const Tiptap = ({
         extensions: [StarterKit],
         editorProps: {
             attributes: {
-                class: 'pt-8 input min-h-[10rem] focus:outline-0',
+                class: 'pt-4 input min-h-[10rem] focus:outline-0',
             },
         },
         content: value,
     })
 
     return (
-        <div className="relative prose max-w-none">
+        <div className="relative prose max-w-none prose-lead:leading-4">
             <MenuBar editor={editor} />
-
             <EditorContent
                 value={value}
                 onBlur={() => onChange(editor?.getHTML()!)}
