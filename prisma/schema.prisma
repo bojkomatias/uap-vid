@@ -125,13 +125,13 @@ type ProtocolSectionsIntroduction {
 }
 
 type ProtocolSectionsMethodology {
-  analysis        String
-  design          String
-  detail          String
-  participants    String
-  place           String
+  analysis        String?
+  design          String?
+  detail          String?
+  participants    String?
+  place           String?
   type            String
-  humanAnimalOrDb Boolean
+  humanAnimalOrDb Boolean?
   procedures      String?
   instruments     String?
   considerations  String?
