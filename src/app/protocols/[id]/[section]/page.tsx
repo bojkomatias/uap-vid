@@ -1,3 +1,4 @@
+import { Heading } from '@layout/Heading'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
 import { STATE } from '@utils/zod'

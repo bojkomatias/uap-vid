@@ -20,7 +20,6 @@ async function Layout({
     if (params.id === 'new') {
         if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
             redirect('/protocols')
-
         return (
             <>
                 <Heading title={'Nuevo protocolo'} />
