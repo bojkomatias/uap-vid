@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit'
 
 interface TipTapViewerProps {
     title: string
-    content: string
+    content: string | null
 }
 const TipTapViewer = ({ title, content }: TipTapViewerProps) => {
     const editor = useEditor({
