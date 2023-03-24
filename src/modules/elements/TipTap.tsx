@@ -1,4 +1,5 @@
 'use client'
+import TextAlign from '@tiptap/extension-text-align'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import clsx from 'clsx'
@@ -12,22 +13,34 @@ import {
     List,
     ListNumbers,
     Separator,
+    AlignLeft,
+    AlignRight,
+    AlignCenter,
+    AlignJustified,
 } from 'tabler-icons-react'
 const Tiptap = ({
     value,
+    editable,
     onChange,
 }: {
     value: string
+    editable?: boolean
     onChange: (a: string) => void
 }) => {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+            }),
+        ],
         editorProps: {
             attributes: {
                 class: 'pt-4 input min-h-[10rem] focus:outline-0',
             },
         },
         content: value,
+        editable: editable,
     })
 
     return (
@@ -48,7 +61,8 @@ const MenuBar = ({ editor }: any) => {
     }
 
     return (
-        <div className="absolute inset-x-1 rounded-t top-0.5 h-8 border-b z-10">
+        <div className="absolute inset-x-1 rounded-t top-0.5 h-8 border-b z-10 pb-8">
+            {/* Mark text */}
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -75,6 +89,7 @@ const MenuBar = ({ editor }: any) => {
             >
                 <Italic className="h-5" />
             </button>
+            {/* Headings */}
             <button
                 type="button"
                 onClick={() =>
@@ -117,6 +132,7 @@ const MenuBar = ({ editor }: any) => {
             >
                 <H3 className="h-5" />
             </button>
+            {/* List */}
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -141,7 +157,60 @@ const MenuBar = ({ editor }: any) => {
             >
                 <ListNumbers className="h-5" />
             </button>
-
+            {/* alignments */}
+            <button
+                onClick={() =>
+                    editor.chain().focus().setTextAlign('left').run()
+                }
+                className={clsx(
+                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    editor.isActive({ textAlign: 'left' })
+                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        : 'text-gray-500'
+                )}
+            >
+                <AlignLeft className="h-5" />
+            </button>
+            <button
+                onClick={() =>
+                    editor.chain().focus().setTextAlign('center').run()
+                }
+                className={clsx(
+                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    editor.isActive({ textAlign: 'center' })
+                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        : 'text-gray-500'
+                )}
+            >
+                <AlignCenter className="h-5" />
+            </button>
+            <button
+                onClick={() =>
+                    editor.chain().focus().setTextAlign('right').run()
+                }
+                className={clsx(
+                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    editor.isActive({ textAlign: 'right' })
+                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        : 'text-gray-500'
+                )}
+            >
+                <AlignRight className="h-5" />
+            </button>
+            <button
+                onClick={() =>
+                    editor.chain().focus().setTextAlign('justify').run()
+                }
+                className={clsx(
+                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    editor.isActive({ textAlign: 'justify' })
+                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        : 'text-gray-500'
+                )}
+            >
+                <AlignJustified className="h-5" />
+            </button>
+            {/* divider */}
             <button
                 type="button"
                 className="hover:bg-gray-100 hover:text-gray-800 text-gray-500 rounded-md px-2 py-1 h-fit my-0.5"
@@ -149,7 +218,7 @@ const MenuBar = ({ editor }: any) => {
             >
                 <Separator className="h-5" />
             </button>
-
+            {/* undo */}
             <button
                 type="button"
                 className="hover:bg-gray-100 hover:text-gray-800 text-gray-500 rounded-md px-2 py-1 h-fit my-0.5"

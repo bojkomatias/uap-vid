@@ -3,7 +3,6 @@ import SectionTitle from '@protocol/elements/form/SectionTitle'
 import Select from '@protocol/elements/form/Select'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
 import { useProtocolContext } from 'utils/createContext'
 const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
 
@@ -68,7 +67,7 @@ export default function Method() {
 }
 
 const ConditionalIfRecollection = ({ path }: { path: string }) => {
-    const [checked, setChecked] = useState(false)
+    const form = useProtocolContext()
 
     return (
         <>
@@ -78,7 +77,9 @@ const ConditionalIfRecollection = ({ path }: { path: string }) => {
                     name="recollection"
                     type="checkbox"
                     className="h-4 w-4 rounded-md border-gray-300 text-primary focus:ring-primary"
-                    onChange={() => setChecked((prev) => !prev)}
+                    {...form.getInputProps(path + 'humanAnimalOrDb', {
+                        type: 'checkbox',
+                    })}
                 />
                 <div className="ml-3 mt-0.5 text-sm leading-6">
                     <label
@@ -90,7 +91,7 @@ const ConditionalIfRecollection = ({ path }: { path: string }) => {
                     </label>
                 </div>
             </div>
-            {checked ? (
+            {form.getInputProps(path + 'humanAnimalOrDb').value ? (
                 <>
                     <Textarea
                         path={path + 'procedures'}
