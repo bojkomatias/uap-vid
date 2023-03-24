@@ -1,6 +1,6 @@
 import { Heading } from '@layout/Heading'
 import ReviewWrapper from '@review/Container'
-import { canAccess, canExecute } from '@utils/scopes'
+import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
@@ -30,6 +30,8 @@ async function Layout({
     }
     const protocol = await findProtocolById(params.id, true)
     if (!protocol) redirect('/protocols')
+    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+        redirect('/protocols')
 
     return (
         <>

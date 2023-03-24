@@ -1,5 +1,5 @@
 import Navigation from '@auth/Navigation'
-import CurrentConvocatory from '@convocatory/index'
+import { CurrentConvocatory } from '@convocatory/index'
 import { Breadcrumb } from '@elements/Breadcrumb'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { ReactNode } from 'react'
@@ -12,7 +12,10 @@ export default async function layout({ children }: { children: ReactNode }) {
         <Navigation>
             <Breadcrumb />
             {convocatory ? (
-                <CurrentConvocatory convocatory={convocatory} />
+                <CurrentConvocatory
+                    label="La convocatoria termina:"
+                    convocatory={convocatory}
+                />
             ) : null}
             {children}
         </Navigation>
