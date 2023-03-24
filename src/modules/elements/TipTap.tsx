@@ -49,7 +49,7 @@ const MenuBar = ({ editor }: any) => {
     }
 
     return (
-        <div className="absolute inset-x-1 rounded-t top-0.5 h-8 border-b">
+        <div className="absolute inset-x-1 rounded-t top-0.5 h-8 border-b z-10">
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}

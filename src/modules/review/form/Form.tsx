@@ -18,7 +18,7 @@ export default function ReviewForm({ reviewer }: { reviewer: User }) {
     const protocolId = path?.split('/')[2]
     const router = useRouter()
     const form = useForm({
-        initialValues: { data: '<i>Observación relevante</i>' },
+        initialValues: { data: '' },
         validate: zodResolver(CommentSchema),
         validateInputOnChange: true,
     })
