@@ -1,6 +1,6 @@
 import { Heading } from '@layout/Heading'
 import ReviewWrapper from '@review/Container'
-import { canAccess, canExecute } from '@utils/scopes'
+import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
@@ -17,10 +17,21 @@ async function Layout({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
+    if (params.id === 'new') {
+        if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
+            redirect('/protocols')
+        return (
+            <>
+                <Heading title={'Nuevo protocolo'} />
+                <div className="max-w-7xl mx-auto w-full">{children}</div>
+            </>
+        )
+    }
     const protocol = await findProtocolById(params.id, true)
     if (!protocol) redirect('/protocols')
+    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+        redirect('/protocols')
 
-    //* PROPONGO QUE LA MAYORÍA LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
     return (
         <>
             <Heading

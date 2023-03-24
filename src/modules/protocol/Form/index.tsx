@@ -62,8 +62,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 },
                 body: JSON.stringify(protocol),
             })
-            const { id, createdAt }: Protocol = await res.json()
-            form.setValues({ id, createdAt })
+            const { id }: Protocol = await res.json()
 
             if (res.status === 200) {
                 notifications.showNotification({
@@ -77,7 +76,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     },
                 })
             }
-            return
+            return router.push(`/protocols/${id}/${section}`)
         }
         const res = await fetch(`/api/protocol/${protocol.id}`, {
             method: 'PUT',
@@ -109,7 +108,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     e.preventDefault()
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification'))
-                        return console.log(form.errors)
+                        return form.validate()
                     upsertProtocol(form.values)
                 }}
                 className="mx-auto w-full max-w-7xl px-4"
