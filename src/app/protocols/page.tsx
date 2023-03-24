@@ -4,7 +4,7 @@ import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { getAllProtocols, getProtocolByRol } from 'repositories/protocol'
+import { getProtocolByRol } from 'repositories/protocol'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page() {
