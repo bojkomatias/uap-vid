@@ -17,6 +17,7 @@ import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
 import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { SegmentedControl } from '@mantine/core'
+import { motion } from 'framer-motion'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <Identification />,
@@ -111,9 +112,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         return console.log(form.errors)
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto max-w-7xl w-full px-4"
+                className="mx-auto w-full max-w-7xl px-4"
             >
-                <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="my-6  w-full py-2 lg:mx-auto lg:w-fit"
+                >
                     <SegmentedControl
                         value={section}
                         onChange={setSection}
@@ -135,7 +141,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         color="blue"
                         transitionDuration={300}
                     />
-                </div>
+                </motion.div>
 
                 {sectionMapper[Number(section)]}
 

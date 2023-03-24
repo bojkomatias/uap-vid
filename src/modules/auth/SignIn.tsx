@@ -7,13 +7,15 @@ import { Button } from '@elements/Button'
 import Image from 'next/image'
 
 export const SignIn = () => {
+    const [loading, setLoading] = useState(false)
+    const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
     const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
 
     return (
-        <div className="shadowCustom mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
+        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                     <Image
@@ -44,38 +46,52 @@ export const SignIn = () => {
 
                 <Button
                     onClick={async () => {
+                        setLoading(true)
                         const res = await signIn('credentials', {
                             email: email,
                             password: password,
                             redirect: false,
                         })
 
-                        if (res?.status !== 200)
+                        if (res?.status !== 200) {
+                            setLoading(false)
                             return notifications.showNotification({
                                 title: 'No se pudo iniciar sesión',
                                 message: 'Credenciales inválidas',
                                 color: 'red',
                             })
+                        }
                         router.push('/protocols')
                     }}
                     type="submit"
                 >
-                    Iniciar sesión
+                    {loading ? (
+                        <span className="loader-primary h-5 w-5"></span>
+                    ) : (
+                        'Iniciar sesión'
+                    )}
                 </Button>
                 <Button
                     onClick={(e: any) => {
+                        setLoadingMicrosoft(true)
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
                 >
-                    <span>Iniciar sesión con</span>
-                    <Image
-                        className="-my-6 ml-2"
-                        src="/microsoft-svgrepo-com.svg"
-                        alt="Microsoft Logo"
-                        width={70}
-                        height={20}
-                    />
+                    {loadingMicrosoft ? (
+                        <span className="loader-primary h-5 w-5"></span>
+                    ) : (
+                        <>
+                            <span>Iniciar sesión con</span>
+                            <Image
+                                className="-my-6 ml-2"
+                                src="/microsoft-svgrepo-com.svg"
+                                alt="Microsoft Logo"
+                                width={70}
+                                height={20}
+                            />
+                        </>
+                    )}
                 </Button>
             </div>
         </div>
