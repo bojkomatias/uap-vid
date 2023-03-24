@@ -17,10 +17,20 @@ async function Layout({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
+    if (params.id === 'new') {
+        if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
+            redirect('/protocols')
+
+        return (
+            <>
+                <Heading title={'Nuevo protocolo'} />
+                <div className="max-w-7xl mx-auto w-full">{children}</div>
+            </>
+        )
+    }
     const protocol = await findProtocolById(params.id, true)
     if (!protocol) redirect('/protocols')
 
-    //* PROPONGO QUE LA MAYORÍA LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
     return (
         <>
             <Heading

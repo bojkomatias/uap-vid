@@ -108,7 +108,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     e.preventDefault()
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification'))
-                        return console.log(form.errors)
+                        return form.validate()
                     upsertProtocol(form.values)
                 }}
                 className="mx-auto max-w-7xl w-full px-4"
