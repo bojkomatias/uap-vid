@@ -111,7 +111,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         return console.log(form.errors)
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto max-w-7xl w-screen px-4"
+                className="mx-auto max-w-7xl w-full px-4"
             >
                 <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
                     <SegmentedControl
@@ -130,10 +130,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         classNames={{
                             root: 'bg-gray-50 border rounded',
                             label: 'uppercase text-xs px-2 py-1 font-light',
-                            active: 'bg-primary',
-                            labelActive:
-                                'text-white hover:text-white font-semibold',
+                            indicator: 'bg-primary font-semibold',
                         }}
+                        color="blue"
                         transitionDuration={300}
                     />
                 </div>

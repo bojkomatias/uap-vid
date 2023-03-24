@@ -319,6 +319,7 @@ export const MethodologySchema = z
             .min(1, { message: 'El campo no puede estar vacío' }),
         detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
         type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        humanAnimalOrDb: z.boolean(),
     })
     .deepPartial()
 

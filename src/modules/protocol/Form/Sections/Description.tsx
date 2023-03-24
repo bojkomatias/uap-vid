@@ -5,7 +5,8 @@ import Select from '@protocol/elements/form/Select'
 import Input from '@protocol/elements/form/Input'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
 import InfoTooltip from '@protocol/elements/form/InfoTooltip'
-import Textarea from '@protocol/elements/form/Textarea'
+import dynamic from 'next/dynamic'
+const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
 
 const disciplines = [
     'Ciencias Económicas y de la Administración',

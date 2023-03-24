@@ -1,9 +1,11 @@
-import ProtocolForm from '@protocol/Form'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
+import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
+
+const ProtocolForm = dynamic(() => import('@protocol/Form'))
 
 export default async function Page({
     params,

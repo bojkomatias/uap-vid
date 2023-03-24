@@ -1,5 +1,5 @@
 import { ProtocolSectionsIntroduction } from '@prisma/client'
-import RTEViewer from '@protocol/elements/RTEViewer'
+import TipTapViewer from '@protocol/elements/TipTapViewer'
 import SectionLayout from './SectionLayout'
 
 interface IntroductionViewProps {
@@ -12,10 +12,10 @@ const IntroductionView = ({ data }: IntroductionViewProps) => {
             title="Introducción"
             description="Introducción al proyecto"
         >
-            <RTEViewer title="Problemática" content={data.problem} />
-            <RTEViewer title="Estado" content={data.state} />
-            <RTEViewer title="Objetivos" content={data.objectives} />
-            <RTEViewer title="Justificación" content={data.justification} />
+            <TipTapViewer title="Problemática" content={data.problem} />
+            <TipTapViewer title="Estado" content={data.state} />
+            <TipTapViewer title="Objetivos" content={data.objectives} />
+            <TipTapViewer title="Justificación" content={data.justification} />
         </SectionLayout>
     )
 }
