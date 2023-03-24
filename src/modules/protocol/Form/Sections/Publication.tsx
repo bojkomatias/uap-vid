@@ -1,8 +1,9 @@
 'use client'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
 import Select from '@protocol/elements/form/Select'
-import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
+const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
 

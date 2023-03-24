@@ -1,7 +1,7 @@
 import { ReviewsComments } from '@prisma/client'
 import { MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
-import RTEViewer from '@protocol/elements/RTEViewer'
+import TipTapViewer from '@protocol/elements/TipTapViewer'
 import { Heading } from '@layout/Heading'
 
 export default function ReviewComment({
@@ -41,7 +41,10 @@ export default function ReviewComment({
                             </p>
 
                             <div className="mt-2 text-sm text-gray-700">
-                                <RTEViewer title={''} content={comment.data} />
+                                <TipTapViewer
+                                    title={''}
+                                    content={comment.data}
+                                />
                             </div>
                         </div>
                     </div>

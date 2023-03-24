@@ -1,5 +1,6 @@
-import RichTextEditor from '@elements/RTE'
 import { useProtocolContext } from '@utils/createContext'
+import dynamic from 'next/dynamic'
+const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 const Textarea = ({ path, label }: { path: string; label: string }) => {
     const form = useProtocolContext()
@@ -7,19 +8,7 @@ const Textarea = ({ path, label }: { path: string; label: string }) => {
     return (
         <div>
             <label className="label">{label}</label>
-            <RichTextEditor
-                {...form.getInputProps(path)}
-                className="input h-auto min-h-[10rem] pt-0 border-gray-200"
-                placeholder=""
-                sticky={false}
-                radius={0}
-                controls={[
-                    ['bold', 'italic', 'underline'],
-                    ['h1', 'h2', 'h3'],
-                    ['alignLeft', 'alignCenter', 'alignRight'],
-                    ['link'],
-                ]}
-            />
+            <Tiptap {...form.getInputProps(path)} />
             {form.getInputProps(path).error ? (
                 <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
                     *{form.getInputProps(path).error}
