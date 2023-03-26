@@ -11,6 +11,5 @@ export default async function ReviewCreation({
 }) {
     const review = await getProtocolReviewByReviewer(id, userId)
     if (!review) return <></>
-    console.log(review)
     return <ReviewForm review={review} />
 }
