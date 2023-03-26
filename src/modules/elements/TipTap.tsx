@@ -18,15 +18,13 @@ import {
     AlignCenter,
     AlignJustified,
 } from 'tabler-icons-react'
-const Tiptap = ({
-    value,
-    editable,
-    onChange,
-}: {
+
+export interface TipTapProps {
     value: string
     editable?: boolean
     onChange: () => void
-}) => {
+}
+const Tiptap = ({ value, editable, onChange }: TipTapProps) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
