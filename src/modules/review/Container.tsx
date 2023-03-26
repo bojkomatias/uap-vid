@@ -21,10 +21,10 @@ export default function Reviews({
                     <ReviewCreation id={protocol.id} userId={user.id} />
                 ) : null}
 
-                {canAccess(ACCESS.REVIEWS, user.role) ? (
+                {/* {canAccess(ACCESS.REVIEWS, user.role) ? (
                     // @ts-expect-error
                     <ReviewsView id={protocol.id} />
-                ) : null}
+                ) : null} */}
             </div>
         </aside>
     )
