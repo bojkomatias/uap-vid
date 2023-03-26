@@ -1,18 +1,17 @@
-import { Review, User } from '@prisma/client'
-import { canAccess } from '@utils/scopes'
-import { ACCESS } from '@utils/zod'
-import ReviewComment from './Comment'
+import { getReviewsByProtocol } from '@repositories/review'
+import ReviewItem from './ReviewItem'
 
-// Why is the access here? Because its making a difference between 'COMMENT' action and 'REVIEWS' access, the second one allows read all... The first one should only allow read/write of own comments/reviews
-
-export default function ReviewView({
-    user,
-    reviews,
-}: {
-    user: User
-    reviews: Review[]
-}) {
-    if (!canAccess(ACCESS.REVIEWS, user.role)) return <></>
+export default async function ReviewsView({ id }: { id: string }) {
+    const reviews = await getReviewsByProtocol(id)
     if (reviews.length === 0) return <></>
-    return <ReviewComment comments={reviews[0].comments} />
+    return (
+        <ul role="list" className="px-4 space-y-3 w-[27rem]">
+            <h3 className="text-lg font-semibold leading-6 text-gray-900">
+                Revisiones
+            </h3>
+            {reviews.map((r, i) => (
+                <ReviewItem key={i} review={r} />
+            ))}
+        </ul>
+    )
 }

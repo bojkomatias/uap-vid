@@ -60,6 +60,16 @@ const AccessSchema = z.enum(['PROTOCOLS', 'USERS', 'REVIEWS', 'CONVOCATORIES'])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
 
+const ReviewTypeSchema = z.enum([
+    'METHODOLOGICAL',
+    'SCIENTIFIC_INTERNAL',
+    'SCIENTIFIC_EXTERNAL',
+])
+export const REVIEW_TYPE = ReviewTypeSchema.Enum
+
+const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
+export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
+
 /////////////////////////////////////////
 // MODELS
 /////////////////////////////////////////
@@ -95,24 +105,17 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 // REVIEWS SCHEMA
 /////////////////////////////////////////
 
-export const CommentSchema = z.object({
-    date: z.coerce.date().optional(),
-    data: z.string().min(15, {
-        message: 'El comentario debe contener al menos 15 caracteres.',
-    }),
+export const ReviewSchema = z.object({
+    id: z.string().optional(),
+    type: ReviewTypeSchema,
+    verdict: ReviewVerdictSchema,
+    createdAt: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+    data: z.string(),
+    protocolId: z.string(),
+    reviewerId: z.string(),
 })
 
-const ReviewSchema = z.object({
-    veredict: z.string(),
-    reviewer: z.string(),
-    comments: CommentSchema.array(),
-})
-
-export const ReviewsSchema = z.object({
-    id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-})
-
-export type Reviews = z.infer<typeof ReviewsSchema>
 export type Review = z.infer<typeof ReviewSchema>
 
 /////////////////////////////////////////
