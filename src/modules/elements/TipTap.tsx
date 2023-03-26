@@ -25,7 +25,7 @@ const Tiptap = ({
 }: {
     value: string
     editable?: boolean
-    onChange: (a: string) => void
+    onChange: () => void
 }) => {
     const editor = useEditor({
         extensions: [

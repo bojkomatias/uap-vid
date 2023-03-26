@@ -54,7 +54,7 @@ export const Breadcrumb = () => {
                     </li>
                 ) : null}
 
-                {breadcrumbs.slice(0, -1).map((page, idx) => (
+                {breadcrumbs.slice(0, -1).map((page) => (
                     <li key={page.name} className="flex">
                         {page.name == 'Inicio' ? null : (
                             <div className="flex items-center">

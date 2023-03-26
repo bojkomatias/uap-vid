@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/Button'
 import { canExecute } from '@utils/scopes'
-import { ACTION, RoleType, StateType } from '@utils/zod'
+import { ACTION, RoleType } from '@utils/zod'
 import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 

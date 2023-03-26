@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { Combobox } from '@headlessui/react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import clsx from 'clsx'
