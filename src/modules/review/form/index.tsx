@@ -9,9 +9,13 @@ import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Review } from '@prisma/client'
-const Tiptap = dynamic(() => import('@elements/TipTap'))
+import { TipTapProps } from '@elements/TipTap'
+const Tiptap = dynamic<TipTapProps>(() => import('@elements/TipTap'))
 
-export default function ReviewForm({ review }: { review: Review }) {
+export interface ReviewFormProps {
+    review: Review
+}
+export default function ReviewForm({ review }: ReviewFormProps) {
     const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
