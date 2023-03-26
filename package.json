@@ -22,6 +22,7 @@
         "@tiptap/pm": "2.0.0-beta.220",
         "@tiptap/react": "2.0.0-beta.220",
         "@tiptap/starter-kit": "2.0.0-beta.220",
+        "@types/react-dom": "^18.0.11",
         "bcryptjs": "^2.4.3",
         "clsx": "^1.2.1",
         "framer-motion": "^6.3.3",

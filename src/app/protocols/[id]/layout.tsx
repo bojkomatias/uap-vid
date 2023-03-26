@@ -55,6 +55,7 @@ async function Layout({
             </div>
             <div className="flex w-full">
                 <div className="max-w-7xl mx-auto w-full">{children}</div>
+                {/* @ts-expect-error Server Component */}
                 <Reviews protocol={protocol} user={session?.user!} />
             </div>
         </>
