@@ -61,10 +61,10 @@ export default function ReviewForm({ review }: { review: Review }) {
     return (
         <form
             className="p-2 w-[27rem]"
-            onSubmit={form.onSubmit((values) => {
-                // createComment(values.data)
-                console.log(values)
-            })}
+            onSubmit={form.onSubmit(
+                (values) => console.log(values),
+                (errors) => console.log(errors)
+            )}
         >
             <label className="label">Comentario</label>
             <Tiptap {...form.getInputProps('data')} />
@@ -73,25 +73,27 @@ export default function ReviewForm({ review }: { review: Review }) {
                     *{form.getInputProps('data').error}
                 </p>
             ) : null}
-            <RadioGroup {...form.getInputProps('veredict')}>
+
+            <RadioGroup
+                {...form.getInputProps('verdict')}
+                defaultValue="PENDING"
+            >
                 <RadioGroup.Label className="label">Veredicto</RadioGroup.Label>
-                <div className="-space-y-px rounded">
+                <div className="-space-y-px">
                     {verdicts.map((verdict, index) => (
                         <RadioGroup.Option
                             key={verdict.id}
-                            value={verdict}
+                            value={verdict.id}
                             className={({ checked }) =>
                                 clsx(
-                                    index === 0
-                                        ? 'rounded-tl-md rounded-tr-md'
-                                        : '',
+                                    index === 0 ? 'rounded-tl rounded-tr' : '',
                                     index === verdicts.length - 1
-                                        ? 'rounded-bl-md rounded-br-md'
+                                        ? 'rounded-bl rounded-br'
                                         : '',
                                     checked
-                                        ? 'z-10 border-gray-300 bg-gray-50'
+                                        ? 'z-10 border-primary/30 bg-gray-50'
                                         : 'border-gray-200',
-                                    'relative flex cursor-pointer border p-4 focus:outline-none'
+                                    'relative flex items-baseline cursor-pointer border px-5 py-2.5 focus:outline-none'
                                 )
                             }
                         >
@@ -103,9 +105,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                                                 ? 'bg-primary border-transparent'
                                                 : 'bg-white border-gray-300',
                                             active
-                                                ? 'ring-2 ring-primary ring-offset-2 ring-primary-600'
+                                                ? 'ring-2 ring-primary ring-offset-1'
                                                 : '',
-                                            'mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
+                                            'h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
                                         )}
                                         aria-hidden="true"
                                     >
@@ -116,9 +118,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             as="span"
                                             className={clsx(
                                                 checked
-                                                    ? 'text-gray-900'
-                                                    : 'text-gray-700',
-                                                'block text-sm font-medium'
+                                                    ? 'text-gray-900 font-medium'
+                                                    : 'text-gray-700 font-regular',
+                                                'block text-sm'
                                             )}
                                         >
                                             {verdict.name}
@@ -127,9 +129,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             as="span"
                                             className={clsx(
                                                 checked
-                                                    ? 'text-primary-700'
+                                                    ? 'text-gray-700'
                                                     : 'text-gray-500',
-                                                'block text-sm'
+                                                'block text-xs'
                                             )}
                                         >
                                             {verdict.description}

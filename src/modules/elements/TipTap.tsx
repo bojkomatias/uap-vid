@@ -44,7 +44,7 @@ const Tiptap = ({
     })
 
     return (
-        <div className="relative prose max-w-none prose-lead:leading-4">
+        <div className="relative prose max-w-none leading-3">
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
