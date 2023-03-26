@@ -3,11 +3,12 @@ import { Button } from '@elements/Button'
 import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION, ProtocolSchema, RoleType } from '@utils/zod'
+import type { Protocol as ProtocolZod } from '@utils/zod'
 import { useMemo } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 
-type ActionButtonTypes = { role: RoleType; protocol: Protocol }
+type ActionButtonTypes = { role: RoleType; protocol: Protocol | ProtocolZod }
 
 export default function PublishButton({ role, protocol }: ActionButtonTypes) {
     const notification = useNotifications()

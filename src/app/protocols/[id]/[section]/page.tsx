@@ -1,3 +1,4 @@
+import PublishButton from '@protocol/elements/action-buttons/Publish'
 import ProtocolForm from '@protocol/Form'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
@@ -24,11 +25,21 @@ export default async function Page({
                   researcher: session?.user?.id!,
                   sections: initialSectionValues,
               }
-            : await findProtocolById(params.id, false)
+            : await findProtocolById(params.id)
 
     if (!protocol) redirect('/protocols')
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
-    return <ProtocolForm protocol={protocol} />
+    return (
+        <>
+            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
+                <PublishButton
+                    role={session?.user?.role!}
+                    protocol={protocol}
+                />
+            </div>
+            <ProtocolForm protocol={protocol} />
+        </>
+    )
 }

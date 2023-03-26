@@ -22,7 +22,7 @@ import {
 export interface TipTapProps {
     value: string
     editable?: boolean
-    onChange: () => void
+    onChange: (p: any) => void
 }
 const Tiptap = ({ value, editable, onChange }: TipTapProps) => {
     const editor = useEditor({

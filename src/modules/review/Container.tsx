@@ -40,7 +40,7 @@ export default async function Reviews({
                     <ReviewCreation review={review} />
                 ) : null}
 
-                {canAccess(ACCESS.REVIEWS, user.role) && reviews ? (
+                {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (
                     <ul role="list" className="px-4 space-y-3 w-[27rem]">
                         <h3 className="text-lg font-semibold leading-6 text-gray-900">
                             Revisiones
