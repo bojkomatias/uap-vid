@@ -1,5 +1,4 @@
 import { Heading } from '@layout/Heading'
-import ReviewWrapper from '@review/Container'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
@@ -8,6 +7,7 @@ import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
 import EditButton from '@protocol/elements/action-buttons/Edit'
+import Reviews from '@review/Container'
 
 async function Layout({
     params,
@@ -29,8 +29,6 @@ async function Layout({
     }
     const protocol = await findProtocolById(params.id, true)
     if (!protocol) redirect('/protocols')
-    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
-        redirect('/protocols')
 
     return (
         <>
@@ -57,7 +55,7 @@ async function Layout({
             </div>
             <div className="flex w-full">
                 <div className="max-w-7xl mx-auto w-full">{children}</div>
-                <ReviewWrapper protocol={protocol} user={session?.user!} />
+                <Reviews protocol={protocol} user={session?.user!} />
             </div>
         </>
     )
