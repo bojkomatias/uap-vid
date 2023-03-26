@@ -23,7 +23,7 @@ export default function ReviewForm({ review }: { review: Review }) {
     const addReview = useCallback(async () => {
         const res = await fetch(`/api/review/${review.id}`, {
             method: 'PUT',
-            body: JSON.stringify({ updatedReview }),
+            body: JSON.stringify({ ...updatedReview }),
         })
         if (res.status == 200) {
             notifications.showNotification({
@@ -54,19 +54,19 @@ export default function ReviewForm({ review }: { review: Review }) {
     }, [])
 
     const updatedReview = useMemo(() => {
-        return { ...review, data: form.values.data }
+        const { id, ...review } = form.values
+        return { ...review }
     }, [form.values.data, review])
 
     return (
         <form
             className="p-2 w-[27rem]"
-            onSubmit={form.onSubmit((values) => {
-                // addReview(values.data)
-                console.log(updatedReview)
+            onSubmit={form.onSubmit(() => {
+                addReview()
             })}
         >
             <label className="label">Comentario</label>
-            <Tiptap {...form.getInputProps('data')} /> */}
+            <Tiptap {...form.getInputProps('data')} />
             {form.getInputProps('data').error ? (
                 <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
                     *{form.getInputProps('data').error}
@@ -76,7 +76,6 @@ export default function ReviewForm({ review }: { review: Review }) {
             <Button type="submit" className="mt-2 ml-auto" intent="terciary">
                 Comentar
             </Button>
-            <div>{updatedReview}</div>
         </form>
     )
 }
