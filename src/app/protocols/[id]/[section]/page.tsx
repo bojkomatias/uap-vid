@@ -1,6 +1,7 @@
 import { Heading } from '@layout/Heading'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
+import { canExecute } from '@utils/scopes'
 import { STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'
@@ -29,6 +30,8 @@ export default async function Page({
             : await findProtocolById(params.id, false)
 
     if (!protocol) redirect('/protocols')
+    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+        redirect('/protocols')
 
     return <ProtocolForm protocol={protocol} />
 }

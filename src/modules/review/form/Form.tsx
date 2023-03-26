@@ -4,36 +4,34 @@ import { useForm } from '@mantine/form'
 import { usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
-import { CommentSchema, StateType } from '@utils/zod'
+import {  ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
-import { User } from '@prisma/client'
-import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Review } from '@prisma/client'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
-export default function ReviewForm({ reviewer }: { reviewer: User }) {
+export default function ReviewForm({ review }: { review: Review }) {
     const path = usePathname()
     const protocolId = path?.split('/')[2]
     const router = useRouter()
-    const form = useForm({
-        initialValues: { data: '' },
-        validate: zodResolver(CommentSchema),
+    const form = useForm<Review>({
+        initialValues: review,
+        validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
     const notifications = useNotifications()
-    const [comment, setComment] = useState(true)
 
-    const createComment = useCallback(async (comment: string) => {
+    const addReview = useCallback(async (comment: string) => {
         const res = await fetch(`/api/reviews/${protocolId}`, {
             method: 'PUT',
             body: JSON.stringify(comment),
         })
         if (res.status == 200) {
             notifications.showNotification({
-                title: 'Comentario publicado',
-                message: 'Tu comentario fue correctamente publicado.',
+                title: 'Revision publicada',
+                message: 'Tu revision fue correctamente publicada.',
                 color: 'teal',
                 icon: <Check />,
                 radius: 0,
@@ -46,7 +44,7 @@ export default function ReviewForm({ reviewer }: { reviewer: User }) {
         } else {
             notifications.showNotification({
                 title: 'Ocurrió un error',
-                message: 'Hubo un problema al publicar tu comentario.',
+                message: 'Hubo un problema al publicar tu revision.',
                 color: 'red',
                 icon: <X />,
                 radius: 0,
