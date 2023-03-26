@@ -34,7 +34,7 @@ export default function List({
     const fields = toMap.map((_: any, index: number) => (
         <div
             key={index}
-            id={`team-member-row-${index}`}
+            id={`row-${index}`}
             className="flex w-full items-start justify-around gap-2"
         >
             {headers.map((h: any, i: number) => (
@@ -89,15 +89,8 @@ export default function List({
                         /* Esto es una chanchada, habría que mejorarlo*/
                         setTimeout(() => {
                             document
-                                .getElementById(
-                                    `team-member-row-${fields.length}`
-                                )
-                                ?.getElementsByTagName('div')[0]
-                                .getElementsByTagName('div')[0]
-                                .getElementsByTagName('div')[0]
-                                .getElementsByTagName('div')[0]
-                                .getElementsByTagName('button')[0]
-                                .getElementsByTagName('input')[0]
+                                .getElementById(`row-${fields.length}`)
+                                ?.getElementsByTagName('input')[0]
                                 .focus()
                         }, 10)
                     }}
