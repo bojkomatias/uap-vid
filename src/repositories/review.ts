@@ -15,7 +15,7 @@ export const getProtocolReviewByReviewer = async (
     console.log('***********************************************');
     console.log('protocolId: ', protocolId);
     console.log('reviewerId: ', reviewerId);
-    
+
     const review = await prisma.review.findFirst({
         where: {
             protocolId: protocolId,
@@ -27,10 +27,10 @@ export const getProtocolReviewByReviewer = async (
     return review
 }
 
-export const createReview = async (id: string, data: Review) => {
+export const createReview = async (reviewId: string, data: Review) => {
     const review = await prisma.review.update({
         where: {
-            id,
+            id: reviewId,
         },
         data,
     })
