@@ -4,11 +4,12 @@ import { useForm } from '@mantine/form'
 import { usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
-import { Review, ReviewSchema } from '@utils/zod'
+import {  ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { Review } from '@prisma/client'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {

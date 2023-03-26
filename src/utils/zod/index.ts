@@ -116,8 +116,6 @@ export const ReviewSchema = z.object({
     reviewerId: z.string(),
 })
 
-export type Review = z.infer<typeof ReviewSchema>
-
 /////////////////////////////////////////
 // USER SCHEMA
 /////////////////////////////////////////
