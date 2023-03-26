@@ -61,33 +61,35 @@ const MenuBar = ({ editor }: any) => {
     }
 
     return (
-        <div className="absolute inset-x-1 rounded-t top-0.5 h-8 border-b z-10 pb-8">
+        <div className="absolute inset-x-0 rounded-t top-0 border border-gray-300 gap-0.5 z-10 flex bg-gray-50 px-0.5 ">
             {/* Mark text */}
             <button
                 type="button"
-                onClick={() => editor.chain().focus().toggleBold().run()}
+                onClick={(e) => {
+                    editor.chain().focus().toggleBold().run()
+                }}
                 disabled={!editor.can().chain().focus().toggleBold().run()}
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('bold')
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <Bold className="h-5" />
+                <Bold className="h-4 w-5" />
             </button>
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 disabled={!editor.can().chain().focus().toggleItalic().run()}
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('italic')
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <Italic className="h-5" />
+                <Italic className="h-4 w-5" />
             </button>
             {/* Headings */}
             <button
@@ -96,13 +98,13 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 2 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('heading', { level: 2 })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <H1 className="h-5" />
+                <H1 className="h-4 w-5" />
             </button>
             <button
                 type="button"
@@ -110,13 +112,13 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 3 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('heading', { level: 3 })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <H2 className="h-5" />
+                <H2 className="h-4 w-5" />
             </button>
             <button
                 type="button"
@@ -124,108 +126,112 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 4 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('heading', { level: 4 })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <H3 className="h-5" />
+                <H3 className="h-4 w-5" />
             </button>
             {/* List */}
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('bulletList')
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <List className="h-5" />
+                <List className="h-4 w-5" />
             </button>
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive('orderedList')
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <ListNumbers className="h-5" />
+                <ListNumbers className="h-4 w-5" />
             </button>
             {/* alignments */}
             <button
+                type="button"
                 onClick={() =>
                     editor.chain().focus().setTextAlign('left').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive({ textAlign: 'left' })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <AlignLeft className="h-5" />
+                <AlignLeft className="h-4 w-5" />
             </button>
             <button
+                type="button"
                 onClick={() =>
                     editor.chain().focus().setTextAlign('center').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive({ textAlign: 'center' })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <AlignCenter className="h-5" />
+                <AlignCenter className="h-4 w-5" />
             </button>
             <button
+                type="button"
                 onClick={() =>
                     editor.chain().focus().setTextAlign('right').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive({ textAlign: 'right' })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <AlignRight className="h-5" />
+                <AlignRight className="h-4 w-5" />
             </button>
             <button
+                type="button"
                 onClick={() =>
                     editor.chain().focus().setTextAlign('justify').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-100 hover:text-gray-800 rounded-md px-2 py-1 h-fit my-0.5 mr-4',
+                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
                     editor.isActive({ textAlign: 'justify' })
-                        ? 'ring-1 ring-gray-300 ring-offset-1 ring-inset hover:ring-offset-0 text-gray-700'
+                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
                         : 'text-gray-500'
                 )}
             >
-                <AlignJustified className="h-5" />
+                <AlignJustified className="h-4 w-5" />
             </button>
             {/* divider */}
             <button
                 type="button"
-                className="hover:bg-gray-100 hover:text-gray-800 text-gray-500 rounded-md px-2 py-1 h-fit my-0.5"
+                className="hover:bg-gray-200 hover:text-gray-800 text-gray-500 rounded-md p-1 h-fit my-px"
                 onClick={() => editor.chain().focus().setHorizontalRule().run()}
             >
-                <Separator className="h-5" />
+                <Separator className="h-4 w-5" />
             </button>
             {/* undo */}
             <button
                 type="button"
-                className="hover:bg-gray-100 hover:text-gray-800 text-gray-500 rounded-md px-2 py-1 h-fit my-0.5"
+                className="hover:bg-gray-200 hover:text-gray-800 text-gray-500 rounded-md p-1 h-fit my-px"
                 onClick={() => editor.chain().focus().undo().run()}
                 disabled={!editor.can().chain().focus().undo().run()}
             >
-                <ArrowBackUp className="h-5" />
+                <ArrowBackUp className="h-4 w-5" />
             </button>
         </div>
     )
