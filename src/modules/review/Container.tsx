@@ -8,6 +8,7 @@ import ReviewItem from '@review/view/ReviewItem'
 import dynamic from 'next/dynamic'
 
 const ReviewCreation = dynamic(() => import('@review/form'))
+const ReviewAssignment = dynamic(() => import('@review/assign'))
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function Reviews({
@@ -24,6 +25,10 @@ export default async function Reviews({
         // No tocar margenes o paddings aca!
         <aside className="relative max-w-md border-l border-gray-200 bg-white mt-1 -mr-4 sm:-mr-6 2xl:-mr-24">
             <div className="sticky top-4 max-h-screen overflow-auto bg-white">
+                {canExceute(ACTION.ASSIGN_TO_METHODOLOGIST, user.role, protocol.state) &&
+                    <ReviewAssignment protocol={protocol} />
+                }
+
                 {canExecute(ACTION.COMMENT, user.role, protocol.state) &&
                 review ? (
                     <ReviewCreation review={review} />

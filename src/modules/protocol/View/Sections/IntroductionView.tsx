@@ -2,7 +2,7 @@ import { ProtocolSectionsIntroduction } from '@prisma/client'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
 import SectionLayout from './SectionLayout'
 
-interface IntroductionViewProps {
+export interface IntroductionViewProps {
     data: ProtocolSectionsIntroduction
 }
 

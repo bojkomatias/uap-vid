@@ -2,7 +2,7 @@ import { ProtocolSectionsIdentification } from '@prisma/client'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import TableData from '@protocol/elements/TableData/TableData'
 import SectionLayout from './SectionLayout'
-interface IdentificationProps {
+export interface IdentificationProps {
     data: ProtocolSectionsIdentification
 }
 export default function IdentificationView({ data }: IdentificationProps) {
@@ -30,19 +30,19 @@ export default function IdentificationView({ data }: IdentificationProps) {
     ]
     const tableData = {
         title: 'Equipo',
-        values: data.team.reduce((newVal:any, person) => {
+        values: data.team.reduce((newVal: any, person) => {
             newVal.push([
                 {
                     up: `${person.last_name}, ${person.name}`,
                     down: person.role,
                 },
                 {
-                    up: "Horas",
+                    up: 'Horas',
                     down: person.hours,
                 },
             ])
             return newVal
-        },[])
+        }, []),
     }
     return (
         <>
@@ -57,7 +57,6 @@ export default function IdentificationView({ data }: IdentificationProps) {
                     <TableData data={tableData} />
                 </>
             </SectionLayout>
-            
         </>
     )
 }

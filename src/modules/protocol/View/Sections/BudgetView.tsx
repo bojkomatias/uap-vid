@@ -2,7 +2,7 @@ import { ProtocolSectionsBudget } from '@prisma/client'
 import TableData from '@protocol/elements/TableData/TableData'
 import SectionLayout from './SectionLayout'
 
-interface BudgetViewProps {
+export interface BudgetViewProps {
     data: ProtocolSectionsBudget
 }
 

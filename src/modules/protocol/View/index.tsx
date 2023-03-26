@@ -1,25 +1,34 @@
 import type { Protocol, Role } from '@prisma/client'
+import { BibliographyViewProps } from '@protocol/View/Sections/BibliographyView'
+import { BudgetViewProps } from '@protocol/View/Sections/BudgetView'
+import { DescriptionViewProps } from '@protocol/View/Sections/DescriptionView'
+import { IdentificationProps } from '@protocol/View/Sections/IdentificationView'
+import { IntroductionViewProps } from '@protocol/View/Sections/IntroductionView'
+import { MethodologyViewProps } from '@protocol/View/Sections/MethodologyView'
+import { PublicationViewProps } from '@protocol/View/Sections/PublicationView'
 import dynamic from 'next/dynamic'
-const IdentificationView = dynamic(
+const IdentificationView = dynamic<IdentificationProps>(
     () => import('@protocol/View/Sections/IdentificationView')
 )
-const BibliographyView = dynamic(
+const BibliographyView = dynamic<BibliographyViewProps>(
     () => import('@protocol/View/Sections/BibliographyView')
 )
-const DescriptionView = dynamic(
+const DescriptionView = dynamic<DescriptionViewProps>(
     () => import('@protocol/View/Sections/DescriptionView')
 )
-const BudgetView = dynamic(() => import('@protocol/View/Sections/BudgetView'))
+const BudgetView = dynamic<BudgetViewProps>(
+    () => import('@protocol/View/Sections/BudgetView')
+)
 const DurationView = dynamic(
     () => import('@protocol/View/Sections/DurationView')
 )
-const IntroductionView = dynamic(
+const IntroductionView = dynamic<IntroductionViewProps>(
     () => import('@protocol/View/Sections/IntroductionView')
 )
-const MethodologyView = dynamic(
+const MethodologyView = dynamic<MethodologyViewProps>(
     () => import('@protocol/View/Sections/MethodologyView')
 )
-const PublicationView = dynamic(
+const PublicationView = dynamic<PublicationViewProps>(
     () => import('@protocol/View/Sections/PublicationView')
 )
 

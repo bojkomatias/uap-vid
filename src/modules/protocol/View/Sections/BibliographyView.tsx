@@ -2,7 +2,7 @@ import { ProtocolSectionsBibliography } from '@prisma/client'
 import TableData from '@protocol/elements/TableData/TableData'
 import SectionLayout from './SectionLayout'
 
-interface BibliographyViewProps {
+export interface BibliographyViewProps {
     data: ProtocolSectionsBibliography
 }
 

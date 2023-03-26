@@ -2,7 +2,7 @@ import { ProtocolSectionsDescription } from '@prisma/client'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
-interface DescriptionViewProps {
+export interface DescriptionViewProps {
     data: ProtocolSectionsDescription
 }
 const DescriptionView = ({ data }: DescriptionViewProps) => {

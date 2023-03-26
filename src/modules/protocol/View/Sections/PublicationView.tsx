@@ -3,7 +3,7 @@ import RichViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 
-interface PublicationViewProps {
+export interface PublicationViewProps {
     data: ProtocolSectionsPublication
 }
 

@@ -3,7 +3,7 @@ import TipTapViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 
-interface MethodologyViewProps {
+export interface MethodologyViewProps {
     data: ProtocolSectionsMethodology
 }
 
