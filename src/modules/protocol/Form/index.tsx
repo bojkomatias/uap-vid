@@ -35,12 +35,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
-
+    console.log(path?.split('/')[2])
     const form = useProtocol({
         initialValues:
-            localStorage.getItem('temp-protocol') === null
-                ? protocol
-                : JSON.parse(localStorage.getItem('temp-protocol') as string),
+            path?.split('/')[2] === 'new' &&
+            localStorage.getItem('temp-protocol')
+                ? JSON.parse(localStorage.getItem('temp-protocol')!)
+                : protocol,
         validate: zodResolver(ProtocolSchema),
         validateInputOnChange: true,
     })
@@ -108,15 +109,8 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     return (
         <ProtocolProvider form={form}>
             <form
-                onChange={() => {
-                    typeof window !== 'undefined'
-                        ? localStorage.setItem(
-                              'temp-protocol',
-                              JSON.stringify(form.values)
-                          )
-                        : null
-                }}
                 onBlur={() => {
+                    path?.split('/')[2] === 'new' &&
                     typeof window !== 'undefined'
                         ? localStorage.setItem(
                               'temp-protocol',
@@ -128,7 +122,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     e.preventDefault()
 
                     // Enforce validity only on first section to Save
-                    if (!form.isValid('sections.identification'))
+                    if (!form.isValid('sections.identification')) {
                         notifications.showNotification({
                             title: 'No se pudo guardar',
                             message:
@@ -140,7 +134,8 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                                 marginBottom: '.8rem',
                             },
                         })
-                    return form.validate()
+                        return form.validate()
+                    }
                     typeof window !== 'undefined'
                         ? localStorage.removeItem('temp-protocol')
                         : null
@@ -149,9 +144,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 className="mx-auto w-full max-w-7xl px-4"
             >
                 <motion.div
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
+                    transition={{ duration: 0.4, delay: 0.4 }}
                     className="my-6  w-full py-2 lg:mx-auto lg:w-fit"
                 >
                     <SegmentedControl
