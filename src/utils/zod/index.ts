@@ -93,6 +93,7 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 export const ReviewSchema = z.object({
     id: z.string().optional(),
     type: ReviewTypeSchema,
+    revised: z.boolean().default(false),
     verdict: ReviewVerdictSchema,
     createdAt: z.coerce.date().optional(),
     updatedAt: z.coerce.date().optional(),

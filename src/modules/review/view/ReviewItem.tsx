@@ -1,10 +1,16 @@
-import { Dots, MessageCircle } from 'tabler-icons-react'
-import Image from 'next/image'
+import { Dots } from 'tabler-icons-react'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
+import { Review, User } from '@prisma/client'
+import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
-import { Review } from '@prisma/client'
 
-export default function ReviewItem({ review }: { review: Review }) {
+export default function ReviewItem({
+    review,
+    user, // The user that is viewing the component
+}: {
+    review: Review
+    user: User
+}) {
     function getDuration(millis: number) {
         let minutes = Math.floor(millis / 60000)
         let hours = Math.round(minutes / 60)
@@ -20,16 +26,16 @@ export default function ReviewItem({ review }: { review: Review }) {
     return (
         <li>
             <div className="min-w-0 flex-1">
-                <div className="text-gray-500 bg-gray-50 border -mb-px px-2 pb-0.5 pt-1 rounded-t space-x-4 flex items-end justify-between">
-                    <div className="text-sm text-gray-700 font-light uppercase">
-                        {review.type}
+                <div className="-mb-px flex items-end justify-between space-x-4 rounded-t border bg-gray-50 px-2 py-1 text-gray-500">
+                    <div className="text-sm font-light text-gray-700">
+                        {ReviewTypesDictionary[review.type]}
                     </div>
-                    <div className="text-sm text-gray-600 font-light lowercase flex items-center gap-1">
-                        <div className="h-2 w-2 bg-primary rounded" />
-                        <span>{review.verdict}</span>
+                    <div className="flex items-center gap-1 text-sm font-light text-gray-600">
+                        <span>{ReviewVerdictsDictionary[review.verdict]}</span>
+                        <div className="h-2 w-2 rounded bg-primary" />
                     </div>
-                    <div className="hover:bg-gray-200 cursor-pointer rounded py-0.5 px-1">
-                        <Dots className="h-5 w-5" />
+                    <div className="cursor-pointer rounded py-0.5 px-1 hover:bg-gray-200">
+                        {review.revised}
                     </div>
                 </div>
                 <TipTapViewer
@@ -37,9 +43,9 @@ export default function ReviewItem({ review }: { review: Review }) {
                     content={review.data}
                     rounded={false}
                 />
-                <div className="flex justify-end bg-gray-50 border rounded-b text-xs px-3 py-0.5 -mt-px text-gray-600">
-                    <span>admin only-ref to user??</span>
-                    <span>
+                <div className="-mt-px flex justify-end gap-1 rounded-b border bg-gray-50 px-3 py-0.5 text-xs">
+                    <span className="font-semibold text-gray-700"></span>
+                    <span className="font-light text-gray-500">
                         {getDuration(
                             new Date().getTime() -
                                 new Date(review.createdAt).getTime()

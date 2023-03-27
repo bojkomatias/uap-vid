@@ -45,6 +45,7 @@ model Review {
   updatedAt  DateTime?
   type       ReviewType
   data       String
+  revised    Boolean       @default(false)
   verdict    ReviewVerdict @default(PENDING)
   reviewerId String        @db.ObjectId
   reviewer   User          @relation(fields: [reviewerId], references: [id])

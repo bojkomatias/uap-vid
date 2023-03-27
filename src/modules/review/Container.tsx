@@ -33,7 +33,7 @@ export default async function Reviews({
                             Revisiones
                         </h3>
                         {reviews.map((r, i) => (
-                            <ReviewItem key={i} review={r} />
+                            <ReviewItem key={i} review={r} user={user} />
                         ))}
                     </ul>
                 ) : null}
