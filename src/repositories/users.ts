@@ -1,8 +1,25 @@
+import { Role } from '@prisma/client'
 import { prisma } from '../utils/bd'
 
 const getAllUsers = async () => {
     try {
         const users = await prisma.user.findMany()
+        return users
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
+const getAllUsersWithoutResearchers = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                role: {
+                    not: Role.RESEARCHER
+                },
+            },
+        })
         return users
     } catch (error) {
         console.log(error)
@@ -82,6 +99,7 @@ const saveUser = async (data: any) => {
 
 export {
     getAllUsers,
+    getAllUsersWithoutResearchers,
     findUserById,
     findUserByEmail,
     updateUserById,
