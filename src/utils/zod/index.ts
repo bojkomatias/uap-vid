@@ -13,13 +13,6 @@ const RoleSchema = z.enum([
 ])
 export const ROLE = RoleSchema.Enum
 export type RoleType = `${z.infer<typeof RoleSchema>}`
-export const roleTranslate = {
-    [ROLE.RESEARCHER]: 'Investigador',
-    [ROLE.SCIENTIST]: 'Evaluador',
-    [ROLE.METHODOLOGIST]: 'Metodólogo',
-    [ROLE.SECRETARY]: 'Secretario de Investigación',
-    [ROLE.ADMIN]: 'Administrador',
-}
 
 const StateSchema = z.enum([
     'NOT_CREATED',
@@ -33,15 +26,7 @@ const StateSchema = z.enum([
 
 export const STATE = StateSchema.Enum
 export type StateType = `${z.infer<typeof StateSchema>}`
-export const stateTranslate = {
-    [STATE.NOT_CREATED]: null,
-    [STATE.DRAFT]: 'Borrador',
-    [STATE.PUBLISHED]: 'Publicado',
-    [STATE.METHODOLOGICAL_EVALUATION]: 'En evaluación metodológica',
-    [STATE.SCIENTIFIC_EVALUATION]: 'En evaluación científica',
-    [STATE.ACCEPTED]: 'Aceptado',
-    [STATE.ON_GOING]: 'Aprobado y en curso',
-}
+
 // Schema for Transitions between protocols
 const ActionSchema = z.enum([
     'CREATE',

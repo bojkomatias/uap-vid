@@ -1,22 +1,20 @@
 import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
 import { Protocol, State } from '@prisma/client'
+import { cache } from 'react'
 
-const findProtocolById = async (id: string, withReviews: boolean) => {
+const findProtocolById = cache(async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
-            include: {
-                reviews: withReviews,
-            },
             where: {
                 id,
-            }
+            },
         })
     } catch (e) {
         console.log(e)
         return null
     }
-}
+})
 
 const updateProtocolById = async (id: string, data: Protocol) => {
     try {
@@ -62,16 +60,16 @@ const createProtocol = async (data: Protocol) => {
     }
 }
 
-const getAllProtocols = async () => {
+const getAllProtocols = cache(async () => {
     try {
         return await prisma.protocol.findMany()
     } catch (e) {
         console.log(e)
         return null
     }
-}
+})
 
-const getProtocolByRol = async (role: RoleType, id: string) => {
+const getProtocolByRol = cache(async (role: RoleType, id: string) => {
     if (!id) return null
 
     const query = {
@@ -112,17 +110,17 @@ const getProtocolByRol = async (role: RoleType, id: string) => {
         console.log(e)
         return null
     }
-}
+})
 
 const publishProtocol = async (id: string) => {
     try {
         const protocol = await prisma.protocol.update({
             where: {
-                id: id
+                id: id,
             },
             data: {
-                state: State.PUBLISHED
-            }
+                state: State.PUBLISHED,
+            },
         })
         return protocol
     } catch (e) {
@@ -138,5 +136,5 @@ export {
     getAllProtocols,
     updateProtocolStateById,
     getProtocolByRol,
-    publishProtocol
+    publishProtocol,
 }
