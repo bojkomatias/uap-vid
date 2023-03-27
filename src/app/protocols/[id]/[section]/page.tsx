@@ -1,4 +1,5 @@
 import { Heading } from '@layout/Heading'
+import PublishButton from '@protocol/elements/action-buttons/Publish'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
@@ -33,5 +34,15 @@ export default async function Page({
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
         redirect('/protocols')
 
-    return <ProtocolForm protocol={protocol} />
+    return (
+        <>
+            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
+                <PublishButton
+                    role={session?.user?.role!}
+                    protocol={protocol}
+                />
+            </div>
+            <ProtocolForm protocol={protocol} />
+        </>
+    )
 }

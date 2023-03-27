@@ -35,7 +35,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
-    console.log(path?.split('/')[2])
+
     const form = useProtocol({
         initialValues:
             path?.split('/')[2] === 'new' &&
@@ -147,7 +147,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="my-6  w-full py-2 lg:mx-auto lg:w-fit"
+                    className="my-6  w-full overflow-auto py-2 lg:mx-auto lg:w-fit"
                 >
                     <SegmentedControl
                         value={section}

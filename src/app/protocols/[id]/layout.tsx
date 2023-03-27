@@ -42,17 +42,7 @@ async function Layout({
                     </span>
                 }
             />
-            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
-                <PublishButton
-                    role={session?.user?.role!}
-                    protocol={protocol}
-                />
-                <EditButton
-                    role={session?.user?.role!}
-                    state={protocol.state}
-                    id={protocol.id}
-                />
-            </div>
+       
             <div className="flex w-full">
                 <div className="max-w-7xl mx-auto w-full">{children}</div>
                 {/* @ts-expect-error Server Component */}
