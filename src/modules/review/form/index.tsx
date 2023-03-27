@@ -1,7 +1,8 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { useCallback, useMemo } from 'react'
+import { usePathname } from 'next/navigation'
+import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
@@ -9,9 +10,13 @@ import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { Review } from '@prisma/client'
+import { RadioGroup } from '@headlessui/react'
+import clsx from 'clsx'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {
+    const path = usePathname()
+    const protocolId = path?.split('/')[2]
     const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
@@ -20,10 +25,10 @@ export default function ReviewForm({ review }: { review: Review }) {
     })
     const notifications = useNotifications()
 
-    const addReview = useCallback(async () => {
-        const res = await fetch(`/api/review/${review.id}`, {
+    const addReview = useCallback(async (comment: string) => {
+        const res = await fetch(`/api/reviews/${protocolId}`, {
             method: 'PUT',
-            body: JSON.stringify({ ...updatedReview }),
+            body: JSON.stringify(comment),
         })
         if (res.status == 200) {
             notifications.showNotification({
@@ -53,17 +58,13 @@ export default function ReviewForm({ review }: { review: Review }) {
         console.log(res)
     }, [])
 
-    const updatedReview = useMemo(() => {
-        const { id, ...review } = form.values
-        return { ...review }
-    }, [form.values.data, review])
-
     return (
         <form
             className="p-2 w-[27rem]"
-            onSubmit={form.onSubmit(() => {
-                addReview()
-            })}
+            onSubmit={form.onSubmit(
+                (values) => console.log(values),
+                (errors) => console.log(errors)
+            )}
         >
             <label className="label">Comentario</label>
             <Tiptap {...form.getInputProps('data')} />
@@ -73,9 +74,99 @@ export default function ReviewForm({ review }: { review: Review }) {
                 </p>
             ) : null}
 
+            <RadioGroup
+                {...form.getInputProps('verdict')}
+                defaultValue="PENDING"
+            >
+                <RadioGroup.Label className="label">Veredicto</RadioGroup.Label>
+                <div className="-space-y-px">
+                    {verdicts.map((verdict, index) => (
+                        <RadioGroup.Option
+                            key={verdict.id}
+                            value={verdict.id}
+                            className={({ checked }) =>
+                                clsx(
+                                    index === 0 ? 'rounded-tl rounded-tr' : '',
+                                    index === verdicts.length - 1
+                                        ? 'rounded-bl rounded-br'
+                                        : '',
+                                    checked
+                                        ? 'z-10 border-primary/30 bg-gray-50'
+                                        : 'border-gray-200',
+                                    'relative flex items-baseline cursor-pointer border px-5 py-2.5 focus:outline-none'
+                                )
+                            }
+                        >
+                            {({ active, checked }) => (
+                                <>
+                                    <span
+                                        className={clsx(
+                                            checked
+                                                ? 'bg-primary border-transparent'
+                                                : 'bg-white border-gray-300',
+                                            active
+                                                ? 'ring-2 ring-primary ring-offset-1'
+                                                : '',
+                                            'h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
+                                        )}
+                                        aria-hidden="true"
+                                    >
+                                        <span className="rounded-full bg-white w-1.5 h-1.5" />
+                                    </span>
+                                    <span className="ml-3 flex flex-col">
+                                        <RadioGroup.Label
+                                            as="span"
+                                            className={clsx(
+                                                checked
+                                                    ? 'text-gray-900 font-medium'
+                                                    : 'text-gray-700 font-regular',
+                                                'block text-sm'
+                                            )}
+                                        >
+                                            {verdict.name}
+                                        </RadioGroup.Label>
+                                        <RadioGroup.Description
+                                            as="span"
+                                            className={clsx(
+                                                checked
+                                                    ? 'text-gray-700'
+                                                    : 'text-gray-500',
+                                                'block text-xs'
+                                            )}
+                                        >
+                                            {verdict.description}
+                                        </RadioGroup.Description>
+                                    </span>
+                                </>
+                            )}
+                        </RadioGroup.Option>
+                    ))}
+                </div>
+            </RadioGroup>
+
             <Button type="submit" className="mt-2 ml-auto" intent="terciary">
                 Comentar
             </Button>
         </form>
     )
 }
+
+const verdicts = [
+    {
+        id: 'PENDING',
+        name: 'Pendiente',
+        description:
+            'No dar veredicto aun, solicitar cambios y volver a revisar.',
+    },
+    {
+        id: 'APPROVED',
+        name: 'Aprobado',
+        description:
+            'Aprobar el proyecto presentado, no requiriendo mas cambios',
+    },
+    {
+        id: 'REJECTED',
+        name: 'Rechazado',
+        description: 'Rechazar el proyecto por algún motivo especificado',
+    },
+]
