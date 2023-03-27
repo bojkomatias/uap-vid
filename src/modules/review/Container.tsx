@@ -21,8 +21,8 @@ export default async function Reviews({
     const reviews = await getReviewsByProtocol(protocol.id)
     return (
         // No tocar margenes o paddings aca!
-        <aside className="relative max-w-md border-l border-gray-200 bg-white mt-1 -mr-4 sm:-mr-6 2xl:-mr-24">
-            <div className="sticky top-4 px-4 max-h-screen w-[27rem] overflow-auto bg-white">
+        <aside className="relative mt-1 -mr-4 max-w-md border-l border-gray-200 bg-white sm:-mr-6 2xl:-mr-24">
+            <div className="sticky top-4 max-h-screen w-[27rem] overflow-auto bg-white px-4">
                 {/* @ts-expect-error Server Component */}
                 <ReviewAssign reviews={reviews} protocolId={protocol.id} />
 
@@ -31,8 +31,8 @@ export default async function Reviews({
                     <ReviewCreation review={review} />
                 ) : null}
 
-                {canAccess(ACCESS.REVIEWS, user.role) && reviews ? (
-                    <ul role="list" className="space-y-3 w-full">
+                {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (
+                    <ul role="list" className="space-y-3">
                         <h3 className="text-lg font-semibold leading-6 text-gray-900">
                             Revisiones
                         </h3>

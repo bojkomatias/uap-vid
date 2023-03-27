@@ -44,11 +44,13 @@ const Tiptap = ({
     })
 
     return (
-        <div className="relative prose max-w-none leading-3">
+        <div className="relative prose max-w-none">
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
-                onBlur={() => onChange(editor?.getHTML()!)}
+                onBlur={() =>
+                    onChange(editor?.getHTML().replace('<p></p>', '')!)
+                }
                 editor={editor}
             />
         </div>
