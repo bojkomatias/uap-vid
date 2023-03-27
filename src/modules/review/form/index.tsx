@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
 import { useCallback, useMemo } from 'react'
