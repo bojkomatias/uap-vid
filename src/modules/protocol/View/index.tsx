@@ -7,29 +7,35 @@ import { IntroductionViewProps } from '@protocol/View/Sections/IntroductionView'
 import { MethodologyViewProps } from '@protocol/View/Sections/MethodologyView'
 import { PublicationViewProps } from '@protocol/View/Sections/PublicationView'
 import dynamic from 'next/dynamic'
-const IdentificationView = dynamic<IdentificationProps>(
-    () => import('@protocol/View/Sections/IdentificationView')
+const IdentificationView = dynamic<IdentificationProps>(() =>
+    import('@protocol/View/Sections/IdentificationView').then(
+        (mod) => mod.default
+    )
 )
-const BibliographyView = dynamic<BibliographyViewProps>(
-    () => import('@protocol/View/Sections/BibliographyView')
+const BibliographyView = dynamic<BibliographyViewProps>(() =>
+    import('@protocol/View/Sections/BibliographyView').then(
+        (mod) => mod.default
+    )
 )
-const DescriptionView = dynamic<DescriptionViewProps>(
-    () => import('@protocol/View/Sections/DescriptionView')
+const DescriptionView = dynamic<DescriptionViewProps>(() =>
+    import('@protocol/View/Sections/DescriptionView').then((mod) => mod.default)
 )
-const BudgetView = dynamic<BudgetViewProps>(
-    () => import('@protocol/View/Sections/BudgetView')
+const BudgetView = dynamic<BudgetViewProps>(() =>
+    import('@protocol/View/Sections/BudgetView').then((mod) => mod.default)
 )
-const DurationView = dynamic(
-    () => import('@protocol/View/Sections/DurationView')
+const DurationView = dynamic(() =>
+    import('@protocol/View/Sections/DurationView').then((mod) => mod.default)
 )
-const IntroductionView = dynamic<IntroductionViewProps>(
-    () => import('@protocol/View/Sections/IntroductionView')
+const IntroductionView = dynamic<IntroductionViewProps>(() =>
+    import('@protocol/View/Sections/IntroductionView').then(
+        (mod) => mod.default
+    )
 )
-const MethodologyView = dynamic<MethodologyViewProps>(
-    () => import('@protocol/View/Sections/MethodologyView')
+const MethodologyView = dynamic<MethodologyViewProps>(() =>
+    import('@protocol/View/Sections/MethodologyView').then((mod) => mod.default)
 )
-const PublicationView = dynamic<PublicationViewProps>(
-    () => import('@protocol/View/Sections/PublicationView')
+const PublicationView = dynamic<PublicationViewProps>(() =>
+    import('@protocol/View/Sections/PublicationView').then((mod) => mod.default)
 )
 
 export default function View({

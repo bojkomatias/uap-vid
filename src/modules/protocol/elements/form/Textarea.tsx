@@ -1,7 +1,9 @@
 import { useProtocolContext } from '@utils/createContext'
 import { TipTapProps } from '@elements/TipTap'
 import dynamic from 'next/dynamic'
-const Tiptap = dynamic<TipTapProps>(() => import('@elements/TipTap'))
+const Tiptap = dynamic<TipTapProps>(() =>
+    import('@elements/TipTap').then((mod) => mod.default)
+)
 
 interface TextareaProps {
     path: string
