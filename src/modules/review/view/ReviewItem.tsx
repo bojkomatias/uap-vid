@@ -1,7 +1,7 @@
 import { Dots, MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
-import { Heading } from '@layout/Heading'
+import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import { Review } from '@prisma/client'
 
 export default function ReviewItem({ review }: { review: Review }) {
