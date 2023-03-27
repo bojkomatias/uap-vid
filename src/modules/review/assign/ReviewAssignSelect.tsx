@@ -10,6 +10,7 @@ interface ReviewAssignSelectProps {
     type: ReviewType
     users: User[]
     review: Review | null
+    enabled: boolean
     protocolId: string
 }
 
@@ -18,10 +19,12 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
+    enabled,
 }: ReviewAssignSelectProps) => {
     return (
         <Listbox
             value={review?.reviewerId ?? null}
+            disabled={!review || !enabled}
             onChange={(e) => {
                 console.log(e)
             }}
@@ -40,7 +43,7 @@ const ReviewAssignSelect = ({
                             </span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                 <Selector
-                                    className="text-gray-600 h-5 "
+                                    className="h-5 text-gray-600 "
                                     aria-hidden="true"
                                 />
                             </span>
@@ -53,7 +56,7 @@ const ReviewAssignSelect = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-50 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="max-h-50 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                 {users.map((user) => (
                                     <Listbox.Option
                                         key={user.id}

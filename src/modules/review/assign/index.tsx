@@ -1,4 +1,4 @@
-import { Review, ReviewType } from '@prisma/client'
+import { Review, ReviewType, ReviewVerdict, State } from '@prisma/client'
 import { getAllUsersWithoutResearchers } from '@repositories/users'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './ReviewAssignSelect'
@@ -6,14 +6,22 @@ import ReviewAssignSelect from './ReviewAssignSelect'
 interface ReviewAssignProps {
     reviews: Review[]
     protocolId: string
+    protocolState: State
 }
-const ReviewAssign = async ({ reviews, protocolId }: ReviewAssignProps) => {
+const ReviewAssign = async ({
+    reviews,
+    protocolId,
+    protocolState,
+}: ReviewAssignProps) => {
     const users = await getAllUsersWithoutResearchers()
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
             users: users ?? [], //here we can filter users by role later
             protocolId: protocolId,
+            enabled:
+                protocolState === State.PUBLISHED ||
+                protocolState === State.METHODOLOGICAL_EVALUATION,
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.METHODOLOGICAL
@@ -23,6 +31,10 @@ const ReviewAssign = async ({ reviews, protocolId }: ReviewAssignProps) => {
             type: ReviewType.SCIENTIFIC_INTERNAL,
             users: users ?? [], //here we can filter users by role later
             protocolId: protocolId,
+            enabled:
+                protocolState === State.METHODOLOGICAL_EVALUATION &&
+                reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
+                    ?.verdict === ReviewVerdict.APPROVED,
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_INTERNAL
@@ -32,6 +44,7 @@ const ReviewAssign = async ({ reviews, protocolId }: ReviewAssignProps) => {
             type: ReviewType.SCIENTIFIC_EXTERNAL,
             users: users ?? [], //here we can filter users by role later
             protocolId: protocolId,
+            enabled: protocolState === State.METHODOLOGICAL_EVALUATION,
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_EXTERNAL
@@ -40,7 +53,7 @@ const ReviewAssign = async ({ reviews, protocolId }: ReviewAssignProps) => {
     ]
     return (
         <div className="mb-8">
-            <h3 className="text-lg mb-4 font-semibold leading-6 text-gray-900">
+            <h3 className="mb-4 text-lg font-semibold leading-6 text-gray-900">
                 Evaluadores asignados
             </h3>
             {reviewAssignSelectsData.map((data) => (
