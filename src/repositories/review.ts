@@ -24,7 +24,7 @@ export const getProtocolReviewByReviewer = cache(
     }
 )
 
-export const createReview = async (reviewId: string, data: Review) => {
+export const updateReview = async (reviewId: string, data: Review) => {
     const review = await prisma.review.update({
         where: {
             id: reviewId,
