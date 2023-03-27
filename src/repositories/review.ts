@@ -33,3 +33,15 @@ export const updateReview = async (reviewId: string, data: Review) => {
     })
     return review
 }
+
+export const markRevised = async (reviewId: string, revised: boolean) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            revised,
+        },
+    })
+    return review
+}

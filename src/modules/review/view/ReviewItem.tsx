@@ -1,8 +1,11 @@
+'use client'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
 import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
+import { useCallback, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function ReviewItem({
     review,
@@ -31,8 +34,10 @@ export default function ReviewItem({
                 </dt>
 
                 <div className="-mb-px flex items-center justify-between space-x-4 rounded-t border bg-gray-50 px-2 py-1 text-gray-500">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <span>Estado:</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-thin text-gray-600">
+                            Veredicto:
+                        </span>
                         <span
                             className={clsx(
                                 'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
@@ -68,21 +73,10 @@ export default function ReviewItem({
 
                     {review.verdict === ReviewVerdict.PENDING ? (
                         user.role === Role.RESEARCHER ? (
-                            <span>
-                                <input
-                                    id={`revised-${review.id}`}
-                                    name={`revised-${review.id}`}
-                                    type="checkbox"
-                                    className="mr-1 mb-0.5 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
-                                />
-
-                                <label
-                                    htmlFor={`revised-${review.id}`}
-                                    className="label pointer-events-auto"
-                                >
-                                    revisado
-                                </label>
-                            </span>
+                            <ReviseCheckbox
+                                id={review.id}
+                                revised={review.revised}
+                            />
                         ) : (
                             <label className="label pointer-events-auto">
                                 {review.revised ? 'revisado' : 'no revisado'}
@@ -90,8 +84,18 @@ export default function ReviewItem({
                         )
                     ) : null}
                 </div>
-
-                <TipTapViewer title="" content={review.data} rounded={false} />
+                <div
+                    className={clsx({
+                        hidden: review.revised,
+                        block: !review.revised,
+                    })}
+                >
+                    <TipTapViewer
+                        title=""
+                        content={review.data}
+                        rounded={false}
+                    />
+                </div>
 
                 <div className="-mt-px flex justify-end gap-1 rounded-b border bg-gray-50 px-3 py-0.5 text-xs">
                     <span className="font-semibold text-gray-700">
@@ -108,5 +112,43 @@ export default function ReviewItem({
                 </div>
             </div>
         </li>
+    )
+}
+
+const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter()
+    const updateRevised = useCallback(
+        async (revised: boolean) => {
+            await fetch(`/api/review/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(revised),
+            })
+            startTransition(() => {
+                router.refresh()
+            })
+        },
+        [id]
+    )
+
+    return (
+        <span>
+            <input
+                disabled={isPending}
+                id={`revised-${id}`}
+                name={`revised-${id}`}
+                type="checkbox"
+                defaultChecked={revised}
+                className="mr-1 mb-0.5 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                onChange={(e) => updateRevised(e.target.checked)}
+            />
+
+            <label
+                htmlFor={`revised-${id}`}
+                className="label pointer-events-auto"
+            >
+                revisado
+            </label>
+        </span>
     )
 }
