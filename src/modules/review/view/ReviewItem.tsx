@@ -1,7 +1,7 @@
 import { MessageCircle } from 'tabler-icons-react'
 import Image from 'next/image'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
-import { Heading } from '@layout/Heading'
+import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import { Review } from '@prisma/client'
 
 export default function ReviewItem({ review }: { review: Review }) {
@@ -23,8 +23,7 @@ export default function ReviewItem({ review }: { review: Review }) {
                 <div className="min-w-0 flex-1">
                     <p className="mt-0.5 text-xs text-gray-500">
                         <span className="text-sm text-gray-700 font-light uppercase">
-                            {/* TODO: Make better UI */}
-                            {review.type}
+                            {ReviewTypesDictionary[review.type]}
                         </span>
                         {getDuration(
                             new Date().getTime() -
