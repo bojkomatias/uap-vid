@@ -3,7 +3,7 @@ import { TipTapProps } from '@elements/TipTap'
 import dynamic from 'next/dynamic'
 const Tiptap = dynamic<TipTapProps>(() => import('@elements/TipTap'))
 
-export interface TextareaProps {
+interface TextareaProps {
     path: string
     label: string
 }

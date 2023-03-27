@@ -1,13 +1,9 @@
 'use client'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
 import Select from '@protocol/elements/form/Select'
+import Textarea from '@protocol/elements/form/Textarea'
 import { motion } from 'framer-motion'
-import dynamic from 'next/dynamic'
 import { useProtocolContext } from 'utils/createContext'
-import { TextareaProps } from '@protocol/elements/form/Textarea'
-const Textarea = dynamic<TextareaProps>(
-    () => import('@protocol/elements/form/Textarea')
-)
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
