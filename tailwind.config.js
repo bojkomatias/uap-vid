@@ -17,6 +17,8 @@ module.exports = {
             white: colors.white,
             black: colors.black,
             error: colors.rose,
+            success: colors.teal,
+            warning: colors.yellow
         },
         extend: {
             borderRadius: { DEFAULT: '0.5rem' },
