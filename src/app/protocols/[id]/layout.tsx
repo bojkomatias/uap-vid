@@ -27,7 +27,7 @@ async function Layout({
             </>
         )
     }
-    const protocol = await findProtocolById(params.id, true)
+    const protocol = await findProtocolById(params.id)
     if (!protocol) redirect('/protocols')
 
     return (

@@ -27,7 +27,7 @@ export default async function Page({
                   researcher: session?.user?.id!,
                   sections: initialSectionValues,
               }
-            : await findProtocolById(params.id, false)
+            : await findProtocolById(params.id)
 
     if (!protocol) redirect('/protocols')
     if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))

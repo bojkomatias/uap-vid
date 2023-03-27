@@ -12,18 +12,12 @@ export const getProtocolReviewByReviewer = async (
     protocolId: string,
     reviewerId: string
 ) => {
-    console.log('***********************************************');
-    console.log('protocolId: ', protocolId);
-    console.log('reviewerId: ', reviewerId);
-
     const review = await prisma.review.findFirst({
         where: {
             protocolId: protocolId,
             reviewerId: reviewerId,
         },
     })
-    console.log(review);
-
     return review
 }
 

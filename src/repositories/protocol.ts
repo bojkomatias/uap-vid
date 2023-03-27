@@ -2,15 +2,12 @@ import { prisma } from '../utils/bd'
 import { ROLE, RoleType, StateType } from '@utils/zod'
 import { Protocol, State } from '@prisma/client'
 
-const findProtocolById = async (id: string, withReviews: boolean) => {
+const findProtocolById = async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
-            include: {
-                reviews: withReviews,
-            },
             where: {
                 id,
-            }
+            },
         })
     } catch (e) {
         console.log(e)
@@ -118,11 +115,11 @@ const publishProtocol = async (id: string) => {
     try {
         const protocol = await prisma.protocol.update({
             where: {
-                id: id
+                id: id,
             },
             data: {
-                state: State.PUBLISHED
-            }
+                state: State.PUBLISHED,
+            },
         })
         return protocol
     } catch (e) {
@@ -138,5 +135,5 @@ export {
     getAllProtocols,
     updateProtocolStateById,
     getProtocolByRol,
-    publishProtocol
+    publishProtocol,
 }
