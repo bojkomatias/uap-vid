@@ -34,6 +34,7 @@ export default function List({
     const fields = toMap.map((_: any, index: number) => (
         <div
             key={index}
+            id={`row-${index}`}
             className="flex w-full items-start justify-around gap-2"
         >
             {headers.map((h: any, i: number) => (
@@ -83,9 +84,16 @@ export default function List({
                 ) : null}
                 {fields}
                 <Button
-                    onClick={() =>
+                    onClick={() => {
                         form.insertListItem(path, insertedItemFormat)
-                    }
+                        /* Esto es una chanchada, habría que mejorarlo*/
+                        setTimeout(() => {
+                            document
+                                .getElementById(`row-${fields.length}`)
+                                ?.getElementsByTagName('input')[0]
+                                .focus()
+                        }, 10)
+                    }}
                     intent="secondary"
                     className="mx-auto w-full max-w-xs"
                 >

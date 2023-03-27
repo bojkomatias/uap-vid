@@ -8,15 +8,16 @@ import Introduction from './Sections/Introduction'
 import Method from './Sections/Method'
 import Publication from './Sections/Publication'
 import Bibliography from './Sections/Bibliography'
-import { Check, ChevronLeft, ChevronRight } from 'tabler-icons-react'
+import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import { useCallback, useEffect, useState } from 'react'
-import { zodResolver } from '@mantine/form'
+import { UseFormReturnType, zodResolver } from '@mantine/form'
 import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
 import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { SegmentedControl } from '@mantine/core'
+import { motion } from 'framer-motion'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <Identification />,
@@ -36,10 +37,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const notifications = useNotifications()
 
     const form = useProtocol({
-        initialValues: protocol,
+        initialValues:
+            localStorage.getItem('temp-protocol') === null
+                ? protocol
+                : JSON.parse(localStorage.getItem('temp-protocol') as string),
         validate: zodResolver(ProtocolSchema),
         validateInputOnChange: true,
     })
+
     useEffect(() => {
         // Validate if not existing path goes to section 0
         if (
@@ -103,16 +108,52 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     return (
         <ProtocolProvider form={form}>
             <form
+                onChange={() => {
+                    typeof window !== 'undefined'
+                        ? localStorage.setItem(
+                              'temp-protocol',
+                              JSON.stringify(form.values)
+                          )
+                        : null
+                }}
+                onBlur={() => {
+                    typeof window !== 'undefined'
+                        ? localStorage.setItem(
+                              'temp-protocol',
+                              JSON.stringify(form.values)
+                          )
+                        : null
+                }}
                 onSubmit={(e) => {
                     e.preventDefault()
+
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification'))
-                        return form.validate()
+                        notifications.showNotification({
+                            title: 'No se pudo guardar',
+                            message:
+                                'Debes completar la sección "Identificación" para poder guardar un borrador',
+                            color: 'red',
+                            icon: <X />,
+                            radius: 0,
+                            style: {
+                                marginBottom: '.8rem',
+                            },
+                        })
+                    return form.validate()
+                    typeof window !== 'undefined'
+                        ? localStorage.removeItem('temp-protocol')
+                        : null
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto max-w-7xl w-full px-4"
+                className="mx-auto w-full max-w-7xl px-4"
             >
-                <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="my-6  w-full py-2 lg:mx-auto lg:w-fit"
+                >
                     <SegmentedControl
                         value={section}
                         onChange={setSection}
@@ -134,7 +175,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         color="blue"
                         transitionDuration={300}
                     />
-                </div>
+                </motion.div>
 
                 {sectionMapper[Number(section)]}
 
