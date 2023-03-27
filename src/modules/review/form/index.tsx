@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic'
 import { Review } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
+import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {
@@ -80,67 +81,79 @@ export default function ReviewForm({ review }: { review: Review }) {
             >
                 <RadioGroup.Label className="label">Veredicto</RadioGroup.Label>
                 <div className="-space-y-px">
-                    {verdicts.map((verdict, index) => (
-                        <RadioGroup.Option
-                            key={verdict.id}
-                            value={verdict.id}
-                            className={({ checked }) =>
-                                clsx(
-                                    index === 0 ? 'rounded-tl rounded-tr' : '',
-                                    index === verdicts.length - 1
-                                        ? 'rounded-bl rounded-br'
-                                        : '',
-                                    checked
-                                        ? 'z-10 border-primary/30 bg-gray-50'
-                                        : 'border-gray-200',
-                                    'relative flex items-baseline cursor-pointer border px-5 py-2.5 focus:outline-none'
-                                )
-                            }
-                        >
-                            {({ active, checked }) => (
-                                <>
-                                    <span
-                                        className={clsx(
-                                            checked
-                                                ? 'bg-primary border-transparent'
-                                                : 'bg-white border-gray-300',
-                                            active
-                                                ? 'ring-2 ring-primary ring-offset-1'
-                                                : '',
-                                            'h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
-                                        )}
-                                        aria-hidden="true"
-                                    >
-                                        <span className="rounded-full bg-white w-1.5 h-1.5" />
-                                    </span>
-                                    <span className="ml-3 flex flex-col">
-                                        <RadioGroup.Label
-                                            as="span"
+                    {Object.entries(ReviewVerdictsDictionary).map(
+                        ([id, name], index) => (
+                            <RadioGroup.Option
+                                key={id}
+                                value={id}
+                                className={({ checked }) =>
+                                    clsx(
+                                        index === 0
+                                            ? 'rounded-tl rounded-tr'
+                                            : '',
+                                        index ===
+                                            Object.keys(
+                                                ReviewVerdictsDictionary
+                                            ).length -
+                                                1
+                                            ? 'rounded-bl rounded-br'
+                                            : '',
+                                        checked
+                                            ? 'z-10 border-primary/30 bg-gray-50'
+                                            : 'border-gray-200',
+                                        'relative flex items-baseline cursor-pointer border px-5 py-2.5 focus:outline-none'
+                                    )
+                                }
+                            >
+                                {({ active, checked }) => (
+                                    <>
+                                        <span
                                             className={clsx(
                                                 checked
-                                                    ? 'text-gray-900 font-medium'
-                                                    : 'text-gray-700 font-regular',
-                                                'block text-sm'
+                                                    ? 'bg-primary border-transparent'
+                                                    : 'bg-white border-gray-300',
+                                                active
+                                                    ? 'ring-2 ring-primary ring-offset-1'
+                                                    : '',
+                                                'h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
                                             )}
+                                            aria-hidden="true"
                                         >
-                                            {verdict.name}
-                                        </RadioGroup.Label>
-                                        <RadioGroup.Description
-                                            as="span"
-                                            className={clsx(
-                                                checked
-                                                    ? 'text-gray-700'
-                                                    : 'text-gray-500',
-                                                'block text-xs'
-                                            )}
-                                        >
-                                            {verdict.description}
-                                        </RadioGroup.Description>
-                                    </span>
-                                </>
-                            )}
-                        </RadioGroup.Option>
-                    ))}
+                                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                                        </span>
+                                        <span className="ml-3 flex flex-col">
+                                            <RadioGroup.Label
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'text-gray-900 font-medium'
+                                                        : 'text-gray-700 font-regular',
+                                                    'block text-sm'
+                                                )}
+                                            >
+                                                {name}
+                                            </RadioGroup.Label>
+                                            <RadioGroup.Description
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'text-gray-700'
+                                                        : 'text-gray-500',
+                                                    'block text-xs'
+                                                )}
+                                            >
+                                                {id === 'PENDING'
+                                                    ? 'Enviar correcciones sin veredicto, esperar cambios para re-evaluar.'
+                                                    : id === 'APPROVED'
+                                                    ? 'Hacer devolución del proyecto como válido y apto para continuar el proceso.'
+                                                    : 'Marcar proyecto como rechazado.'}
+                                            </RadioGroup.Description>
+                                        </span>
+                                    </>
+                                )}
+                            </RadioGroup.Option>
+                        )
+                    )}
                 </div>
             </RadioGroup>
 
@@ -150,23 +163,3 @@ export default function ReviewForm({ review }: { review: Review }) {
         </form>
     )
 }
-
-const verdicts = [
-    {
-        id: 'PENDING',
-        name: 'Pendiente',
-        description:
-            'No dar veredicto aun, solicitar cambios y volver a revisar.',
-    },
-    {
-        id: 'APPROVED',
-        name: 'Aprobado',
-        description:
-            'Aprobar el proyecto presentado, no requiriendo mas cambios',
-    },
-    {
-        id: 'REJECTED',
-        name: 'Rechazado',
-        description: 'Rechazar el proyecto por algún motivo especificado',
-    },
-]
