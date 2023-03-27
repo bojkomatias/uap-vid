@@ -1,42 +1,12 @@
 import type { Protocol, Role } from '@prisma/client'
-import { BibliographyViewProps } from '@protocol/View/Sections/BibliographyView'
-import { BudgetViewProps } from '@protocol/View/Sections/BudgetView'
-import { DescriptionViewProps } from '@protocol/View/Sections/DescriptionView'
-import { IdentificationProps } from '@protocol/View/Sections/IdentificationView'
-import { IntroductionViewProps } from '@protocol/View/Sections/IntroductionView'
-import { MethodologyViewProps } from '@protocol/View/Sections/MethodologyView'
-import { PublicationViewProps } from '@protocol/View/Sections/PublicationView'
-import dynamic from 'next/dynamic'
-const IdentificationView = dynamic<IdentificationProps>(() =>
-    import('@protocol/View/Sections/IdentificationView').then(
-        (mod) => mod.default
-    )
-)
-const BibliographyView = dynamic<BibliographyViewProps>(() =>
-    import('@protocol/View/Sections/BibliographyView').then(
-        (mod) => mod.default
-    )
-)
-const DescriptionView = dynamic<DescriptionViewProps>(() =>
-    import('@protocol/View/Sections/DescriptionView').then((mod) => mod.default)
-)
-const BudgetView = dynamic<BudgetViewProps>(() =>
-    import('@protocol/View/Sections/BudgetView').then((mod) => mod.default)
-)
-const DurationView = dynamic(() =>
-    import('@protocol/View/Sections/DurationView').then((mod) => mod.default)
-)
-const IntroductionView = dynamic<IntroductionViewProps>(() =>
-    import('@protocol/View/Sections/IntroductionView').then(
-        (mod) => mod.default
-    )
-)
-const MethodologyView = dynamic<MethodologyViewProps>(() =>
-    import('@protocol/View/Sections/MethodologyView').then((mod) => mod.default)
-)
-const PublicationView = dynamic<PublicationViewProps>(() =>
-    import('@protocol/View/Sections/PublicationView').then((mod) => mod.default)
-)
+import BibliographyView from '@protocol/View/Sections/BibliographyView'
+import BudgetView from '@protocol/View/Sections/BudgetView'
+import DescriptionView from '@protocol/View/Sections/DescriptionView'
+import IdentificationView from '@protocol/View/Sections/IdentificationView'
+import IntroductionView from '@protocol/View/Sections/IntroductionView'
+import MethodologyView from '@protocol/View/Sections/MethodologyView'
+import PublicationView from '@protocol/View/Sections/PublicationView'
+import DurationView from '@protocol/View/Sections/DurationView'
 
 export default function View({
     protocol,

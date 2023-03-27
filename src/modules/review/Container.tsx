@@ -4,15 +4,7 @@ import { ACCESS, ACTION } from '@utils/zod'
 import { getProtocolReviewByReviewer } from '@repositories/review'
 import { getReviewsByProtocol } from '@repositories/review'
 import ReviewItem from '@review/view/ReviewItem'
-
-import dynamic from 'next/dynamic'
-import { ReviewFormProps } from '@review/form'
-// import { ReviewAssignmentProps } from '@review/assign'
-
-const ReviewCreation = dynamic<ReviewFormProps>(() => import('@review/form'))
-// const ReviewAssignment = dynamic<ReviewAssignmentProps>(
-//     () => import('@review/assign')
-// )
+import ReviewForm from './form'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function Reviews({
@@ -37,7 +29,7 @@ export default async function Reviews({
 
                 {canExecute(ACTION.COMMENT, user.role, protocol.state) &&
                 review ? (
-                    <ReviewCreation review={review} />
+                    <ReviewForm review={review} />
                 ) : null}
 
                 {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (

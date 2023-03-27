@@ -12,10 +12,7 @@ import { Review } from '@prisma/client'
 import { TipTapProps } from '@elements/TipTap'
 const Tiptap = dynamic<TipTapProps>(() => import('@elements/TipTap'))
 
-export interface ReviewFormProps {
-    review: Review
-}
-export default function ReviewForm({ review }: ReviewFormProps) {
+export default function ReviewForm({ review }: { review: Review }) {
     const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
