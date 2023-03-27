@@ -1,14 +1,15 @@
+import { cache } from 'react'
 import { prisma } from 'utils/bd'
 
-export const getAllConvocatories = async () => {
+export const getAllConvocatories = cache(async () => {
     try {
         return await prisma.convocatory.findMany()
     } catch (e) {
         console.log(e)
         return null
     }
-}
-export const getCurrentConvocatory = async () => {
+})
+export const getCurrentConvocatory = cache(async () => {
     try {
         return await prisma.convocatory.findFirst({
             where: {
@@ -21,4 +22,4 @@ export const getCurrentConvocatory = async () => {
         console.log(e)
         return null
     }
-}
+})

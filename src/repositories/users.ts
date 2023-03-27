@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 const getAllUsers = async () => {
@@ -10,7 +11,7 @@ const getAllUsers = async () => {
     }
 }
 
-const findUserById = async (id: string) => {
+const findUserById = cache(async (id: string) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -22,9 +23,9 @@ const findUserById = async (id: string) => {
         console.log(error)
         return null
     }
-}
+})
 
-const findUserByEmail = async (email: string) => {
+const findUserByEmail = cache(async (email: string) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -36,7 +37,7 @@ const findUserByEmail = async (email: string) => {
         console.log(error)
         return null
     }
-}
+})
 
 const updateUserById = async (id: string, data: any) => {
     try {
