@@ -5,9 +5,9 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserCircle } from 'tabler-icons-react'
 import clsx from 'clsx'
-import { roleTranslate } from '@utils/zod'
 import Image from 'next/image'
 import { useState } from 'react'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 export const UserAuth = () => {
     const [loading, setLoading] = useState(false)
@@ -20,7 +20,7 @@ export const UserAuth = () => {
                         {session.user.email}
                     </span>
                     <span className="text-xs italic">
-                        {roleTranslate[session.user.role]}
+                        {RolesDictionary[session.user.role]}
                     </span>
                 </span>
                 <Menu as="div" className="relative ml-1">

@@ -3,14 +3,15 @@ import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
 import clsx from 'clsx'
-import { roleTranslate } from '@utils/zod'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { Role, User } from '@prisma/client'
 
 //Callback used in UpdateRole
 export const RoleSelector = ({
     user,
     callback,
 }: {
-    user: any
+    user: User | { role: Role } // new User only should have pre-selected
     callback?: Function
 }) => {
     return (
@@ -26,15 +27,11 @@ export const RoleSelector = ({
                     <div className="relative mt-1 w-full">
                         <Listbox.Button className="input text-left">
                             <span className="">
-                                {
-                                    roleTranslate[
-                                        user.role as keyof typeof roleTranslate
-                                    ]
-                                }
+                                {RolesDictionary[user.role]}
                             </span>
                             <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                 <Selector
-                                    className="text-gray-600 h-5 "
+                                    className="h-5 text-gray-600 "
                                     aria-hidden="true"
                                 />
                             </span>
@@ -47,8 +44,8 @@ export const RoleSelector = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-50 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {Object.entries(roleTranslate).map(
+                            <Listbox.Options className="max-h-50 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                {Object.entries(RolesDictionary).map(
                                     ([key, role]) => (
                                         <Listbox.Option
                                             key={key}

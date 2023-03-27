@@ -1,13 +1,12 @@
 import { Protocol } from '@prisma/client'
-
-import { stateTranslate } from '@utils/zod'
+import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import Link from 'next/link'
 
 export default function Table({ items }: { items: Protocol[] | null }) {
     if (!items || items.length === 0) return <EmptyState />
     return (
-        <div className="max-w-7xl mx-auto">
-            <table className="min-w-full divide-y divide-gray-300 -mx-4 mt-8 sm:-mx-0">
+        <div className="mx-auto max-w-7xl">
+            <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                 <thead>
                     <tr>
                         <th
@@ -65,7 +64,7 @@ export default function Table({ items }: { items: Protocol[] | null }) {
                                 {item.sections.identification.career}
                             </td>
                             <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                                {stateTranslate[item.state]}
+                                {ProtocolStatesDictionary[item.state]}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 {new Date(item.createdAt).toLocaleString()}
@@ -89,7 +88,7 @@ export default function Table({ items }: { items: Protocol[] | null }) {
 
 function EmptyState() {
     return (
-        <div className="text-center mt-40">
+        <div className="mt-40 text-center">
             <h3 className="mt-2 text-lg font-semibold text-gray-900">
                 No se encontraron protocolos.
             </h3>
