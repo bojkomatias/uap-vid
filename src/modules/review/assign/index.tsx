@@ -32,9 +32,10 @@ const ReviewAssign = async ({
             users: users ?? [], //here we can filter users by role later
             protocolId: protocolId,
             enabled:
-                protocolState === State.METHODOLOGICAL_EVALUATION &&
-                reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.APPROVED,
+                (protocolState === State.METHODOLOGICAL_EVALUATION &&
+                    reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
+                        ?.verdict === ReviewVerdict.APPROVED) ||
+                protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_INTERNAL
@@ -44,7 +45,11 @@ const ReviewAssign = async ({
             type: ReviewType.SCIENTIFIC_EXTERNAL,
             users: users ?? [], //here we can filter users by role later
             protocolId: protocolId,
-            enabled: protocolState === State.METHODOLOGICAL_EVALUATION,
+            enabled:
+                (protocolState === State.METHODOLOGICAL_EVALUATION &&
+                    reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
+                        ?.verdict === ReviewVerdict.APPROVED) ||
+                protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_EXTERNAL

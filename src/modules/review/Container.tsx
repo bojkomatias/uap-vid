@@ -22,13 +22,25 @@ export default async function Reviews({
     return (
         // No tocar margenes o paddings aca!
         <aside className="relative mt-1 -mr-4 max-w-md border-l border-gray-200 bg-white sm:-mr-6 2xl:-mr-24">
-            <div className="sticky top-4 max-h-screen w-[27rem] overflow-auto bg-white px-4">
-                {/* @ts-expect-error Server Component */}
-                <ReviewAssign
-                    reviews={reviews}
-                    protocolId={protocol.id}
-                    protocolState={protocol.state}
-                />
+            <div className="sticky top-4 max-h-screen overflow-auto bg-white px-4">
+                {canExecute(
+                    ACTION.ASSIGN_TO_METHODOLOGIST,
+                    user.role,
+                    protocol.state
+                ) ||
+                canExecute(
+                    ACTION.ASSIGN_TO_SCIENTIFIC,
+                    user.role,
+                    protocol.state
+                ) ||
+                canExecute(ACTION.ACCEPT, user.role, protocol.state) ? (
+                    //  @ts-expect-error Server Component
+                    <ReviewAssign
+                        reviews={reviews}
+                        protocolId={protocol.id}
+                        protocolState={protocol.state}
+                    />
+                ) : null}
 
                 {canExecute(ACTION.COMMENT, user.role, protocol.state) &&
                 review ? (

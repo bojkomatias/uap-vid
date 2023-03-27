@@ -1,8 +1,10 @@
 'use client'
 import { Listbox, Transition } from '@headlessui/react'
+import { useNotifications } from '@mantine/notifications'
 import { Review, ReviewType, User } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
+import { useRouter } from 'next/navigation'
 import { Fragment } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
 
@@ -21,12 +23,40 @@ const ReviewAssignSelect = ({
     protocolId,
     enabled,
 }: ReviewAssignSelectProps) => {
+    const notification = useNotifications()
+    const router = useRouter()
+
+    const changeState = async (reviewerId: string) => {
+        const assigned = await fetch(`/api/protocol/${protocolId}/assign`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reviewerId: reviewerId,
+                type: type,
+            }),
+        })
+        if (assigned.ok) {
+            notification.showNotification({
+                title: 'Evaluador asignado',
+                message: 'El evaluador ha sido asignado con éxito',
+                color: 'green',
+            })
+            return router.refresh()
+        }
+        return notification.showNotification({
+            title: 'No hemos podido asignar el evaluador',
+            message: 'Lo lamentamos, ha ocurrido un error',
+            color: 'red',
+        })
+    }
     return (
         <Listbox
             value={review?.reviewerId ?? null}
-            disabled={!review || !enabled}
+            disabled={!enabled}
             onChange={(e) => {
-                console.log(e)
+                if (e !== null) changeState(e)
             }}
         >
             {({ open }) => (
