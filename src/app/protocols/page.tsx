@@ -10,9 +10,6 @@ import {
     getTotalRecordsProtocol,
 } from 'repositories/protocol'
 
-import { Button } from '@elements/Button'
-import Link from 'next/link'
-import clsx from 'clsx'
 import Pagination from '@elements/Pagination'
 
 // SSR Server Component, so no need to fetch from api endpoint
@@ -25,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         ? await getProtocolByRol(
               session.user.role,
               session.user.id,
-              Number(searchParams?.page)
+              Number(searchParams?.page) || 1
           )
         : []
 
@@ -43,7 +40,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
 
             <Table items={protocols} />
             <Pagination
-                pageParams={Number(searchParams.page)}
+                pageParams={Number(searchParams.page) || 1}
                 count={protocolCount}
                 href="/protocols"
             />
