@@ -37,7 +37,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
           )
         : []
 
-    /* This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be perfomed onto**/
+    /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be perfomed onto */
     const searchedProtocols = (): Protocol[] => {
         const results = fuzzysort.go(searchParams.search, protocols as any, {
             keys: [
