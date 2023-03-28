@@ -69,48 +69,66 @@ const getAllProtocols = cache(async () => {
     }
 })
 
-const getProtocolByRol = cache(async (role: RoleType, id: string) => {
-    if (!id) return null
-
-    const query = {
-        [ROLE.RESEARCHER]: prisma.protocol.findMany({
-            where: {
-                researcher: id,
-            },
-        }),
-        [ROLE.METHODOLOGIST]: prisma.review
-            .findMany({
-                select: {
-                    protocol: true,
-                },
-                where: {
-                    reviewerId: id,
-                    type: 'METHODOLOGICAL',
-                },
-            })
-            .then((result) => result.map((item) => item.protocol)),
-        [ROLE.SCIENTIST]: prisma.review
-            .findMany({
-                select: {
-                    protocol: true,
-                },
-                where: {
-                    reviewerId: id,
-                    type: 'SCIENTIFIC_EXTERNAL',
-                },
-            })
-            .then((result) => result.map((item) => item.protocol)),
-    }
-
-    try {
-        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
-            return prisma.protocol.findMany()
-        return await query[role]
-    } catch (e) {
-        console.log(e)
-        return null
-    }
+const getTotalRecordsProtocol = cache(async () => {
+    const protocolCount = await prisma.protocol.count()
+    return protocolCount
 })
+const shownRecords = 2
+const getProtocolByRol = cache(
+    async (role: RoleType, id: string, page: number) => {
+        if (!id) return null
+
+        const query = {
+            [ROLE.RESEARCHER]: prisma.protocol.findMany({
+                skip: shownRecords * (page - 1),
+                take: shownRecords,
+                where: {
+                    researcher: id,
+                },
+            }),
+            [ROLE.METHODOLOGIST]: prisma.review
+                .findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                    select: {
+                        protocol: true,
+                    },
+                    where: {
+                        reviewerId: id,
+                        type: 'METHODOLOGICAL',
+                    },
+                })
+                .then((result) => result.map((item) => item.protocol)),
+            [ROLE.SCIENTIST]: prisma.review
+                .findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                    select: {
+                        protocol: true,
+                    },
+                    where: {
+                        reviewerId: id,
+                        type: 'SCIENTIFIC_EXTERNAL',
+                    },
+                })
+                .then((result) => result.map((item) => item.protocol)),
+        }
+
+        try {
+            /* Cambié los returns a objetos acá para poder devolver dos resultados, los protocolos y el count del total de records de protocolos. No sé si sea el mejor en cuanto a perfomance pero me parece que el count no es tan costoso computacionalmente. Dejo el comentario acá para tenerlo en cuenta. */
+            if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+                return prisma.protocol.findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                })
+
+            return await query[role]
+        } catch (e) {
+            console.log(e)
+            return null
+        }
+    }
+)
 
 const publishProtocol = async (id: string) => {
     try {
@@ -136,5 +154,6 @@ export {
     getAllProtocols,
     updateProtocolStateById,
     getProtocolByRol,
+    getTotalRecordsProtocol,
     publishProtocol,
 }

@@ -1,18 +1,34 @@
 import { Heading } from '@layout/Heading'
+import { Protocol } from '@prisma/client'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { getProtocolByRol } from 'repositories/protocol'
+import {
+    getProtocolByRol,
+    getTotalRecordsProtocol,
+} from 'repositories/protocol'
+
+import { Button } from '@elements/Button'
+import Link from 'next/link'
+import clsx from 'clsx'
+import Pagination from '@elements/Pagination'
 
 // SSR Server Component, so no need to fetch from api endpoint
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: any }) {
     const session = await getServerSession(authOptions)
     if (!session) return redirect('/login')
+    const protocolCount = await getTotalRecordsProtocol()
+
     const protocols = session.user
-        ? await getProtocolByRol(session.user.role, session.user.id)
+        ? await getProtocolByRol(
+              session.user.role,
+              session.user.id,
+              Number(searchParams?.page)
+          )
         : []
+
     return (
         <>
             <Heading title="Lista de proyectos de investigación" />
@@ -26,6 +42,11 @@ export default async function Page() {
             </div>
 
             <Table items={protocols} />
+            <Pagination
+                pageParams={Number(searchParams.page)}
+                count={protocolCount}
+                href="/protocols"
+            />
         </>
     )
 }

@@ -28,7 +28,8 @@ export async function GET() {
     try {
         const protocols = await getProtocolByRol(
             ROLE.METHODOLOGIST,
-            '641a036ccccfe426a64175dc'
+            '641a036ccccfe426a64175dc',
+            1 //Número de página
         )
         console.log(protocols)
 
