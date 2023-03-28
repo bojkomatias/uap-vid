@@ -115,7 +115,6 @@ const getProtocolByRol = cache(
         }
 
         try {
-            /* Cambié los returns a objetos acá para poder devolver dos resultados, los protocolos y el count del total de records de protocolos. No sé si sea el mejor en cuanto a perfomance pero me parece que el count no es tan costoso computacionalmente. Dejo el comentario acá para tenerlo en cuenta. */
             if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
                 return prisma.protocol.findMany({
                     skip: shownRecords * (page - 1),
