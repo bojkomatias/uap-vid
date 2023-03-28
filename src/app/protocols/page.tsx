@@ -63,10 +63,11 @@ export default async function Page({
                 en &apos;ver&apos; para más detalles.
             </p>
 
-            <div className="mt-3 flex justify-between">
-                <SearchBar />
+            <div className="mt-3 flex justify-end">
                 <CreateButton role={session?.user?.role!} />
             </div>
+
+            <SearchBar />
 
             <Table
                 items={searchParams?.search ? searchedProtocols() : protocols}
@@ -76,7 +77,6 @@ export default async function Page({
                     pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount}
                     shownRecords={shownRecords}
-
                 />
             )}
         </>

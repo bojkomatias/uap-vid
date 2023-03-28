@@ -25,7 +25,10 @@ export const UserAuth = () => {
                 </span>
                 <Menu as="div" className="relative ml-1">
                     <div>
-                        <Menu.Button className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-primary">
+                        <Menu.Button
+                            disabled={loading}
+                            className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-primary"
+                        >
                             <span className="sr-only">Open user menu</span>
                             {session.user.image ? (
                                 loading ? (
@@ -82,7 +85,7 @@ export const UserAuth = () => {
                                         )}
                                         onClick={() => {
                                             setLoading(true)
-                                            signOut({ callbackUrl: '/' })
+                                            signOut({ callbackUrl: '/login' })
                                         }}
                                     >
                                         Cerrar sesión
