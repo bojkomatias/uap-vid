@@ -45,14 +45,15 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
                     <ReviewItem key={i} review={r} user={user} />
                 ))}
             </ul>
-            {user.role === Role.ADMIN || Role.SECRETARY ? (
+            {(user.role === Role.ADMIN || Role.SECRETARY) &&
+            reviewsNotInState.length > 0 ? (
                 <>
                     <button
                         onClick={() => setShowHistorical((prv) => !prv)}
                         className="mt-8 flex cursor-pointer items-center gap-3 focus:outline-0"
                     >
                         <span className="text-sm font-semibold leading-10 text-gray-700">
-                            Revisiones históricas{' '}
+                            Revisiones históricas
                         </span>
                         <ChevronRight
                             className={clsx('h-4 w-4 transition', {

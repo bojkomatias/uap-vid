@@ -29,7 +29,7 @@ const TipTapViewer = ({
         <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">{title}</dt>
             <dd
-                className={clsx('border px-4 max-w-none prose', {
+                className={clsx('prose max-w-none border px-4', {
                     rounded: rounded,
                 })}
             >

@@ -21,25 +21,25 @@ export default function Sidebar({ user }: { user: User }) {
                                     href={item.href}
                                     className={clsx(
                                         {
-                                            'bg-gray-100 ring-2 ring-primary/80 ring-offset-1 hover:ring-offset-2':
+                                            'bg-primary text-white ':
                                                 pathname?.includes(item.href),
 
-                                            'bg-primary text-white':
+                                            'ring-2 ring-primary ':
                                                 pathname === item.href,
                                         },
-                                        'text-base-700 hover:bg-gray-100 hover:text-black',
-                                        'group flex items-center rounded px-4 py-3 text-sm font-medium'
+                                        'text-base-700 ring-gray-300 ring-offset-2 hover:bg-gray-200 hover:text-black hover:ring-2 focus:outline-none focus:ring-2',
+                                        'group flex items-center rounded px-4 py-3 text-sm font-medium transition'
                                     )}
                                     passHref
                                 >
                                     <item.icon
                                         className={clsx(
                                             {
-                                                'stroke-2 text-primary':
+                                                'text-white':
                                                     pathname?.includes(
                                                         item.href
                                                     ),
-                                                'text-white':
+                                                'stroke-[3px]':
                                                     pathname === item.href,
                                             },
                                             'text-base-700 group-hover:text-black',
