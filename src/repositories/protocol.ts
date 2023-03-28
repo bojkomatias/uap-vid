@@ -108,7 +108,9 @@ const getProtocolByRol = cache(
                     },
                     where: {
                         reviewerId: id,
-                        type: 'SCIENTIFIC_EXTERNAL',
+                        type: {
+                            in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
+                        }
                     },
                 })
                 .then((result) => result.map((item) => item.protocol)),

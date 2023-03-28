@@ -8,7 +8,7 @@ import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { Review } from '@prisma/client'
+import { Review, ReviewVerdict } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -24,51 +24,57 @@ export default function ReviewForm({ review }: { review: Review }) {
     })
     const notifications = useNotifications()
 
-    const addReview = useCallback(async (comment: string) => {
-        const res = await fetch(`/api/reviews/${review.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(comment),
-        })
-        if (res.status == 200) {
-            notifications.showNotification({
-                title: 'Revisión publicada',
-                message: 'Tu revisión fue correctamente publicada.',
-                color: 'teal',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+    const addReview = useCallback(
+        async (data: string, verdict: ReviewVerdict) => {
+            const res = await fetch(`/api/review/${review.id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    data,
+                    verdict,
+                }),
             })
-            form.reset()
-            router.refresh()
-        } else {
-            notifications.showNotification({
-                title: 'Ocurrió un error',
-                message: 'Hubo un problema al publicar tu revisión.',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
-            })
-        }
-        console.log(res)
-    }, [])
+            console.log(res)
 
+            if (res.status == 200) {
+                notifications.showNotification({
+                    title: 'Revisión publicada',
+                    message: 'Tu revisión fue correctamente publicada.',
+                    color: 'teal',
+                    icon: <Check />,
+                    radius: 0,
+                    style: {
+                        marginBottom: '.8rem',
+                    },
+                })
+                form.reset()
+                router.refresh()
+            } else {
+                notifications.showNotification({
+                    title: 'Ocurrió un error',
+                    message: 'Hubo un problema al publicar tu revisión.',
+                    color: 'red',
+                    icon: <X />,
+                    radius: 0,
+                    style: {
+                        marginBottom: '.8rem',
+                    },
+                })
+            }
+        },
+        []
+    )
     return (
         <ItemContainer title="Realizar revisión">
             <form
-                onSubmit={form.onSubmit(
-                    (values) => console.log(values),
-                    (errors) => console.log(errors)
-                )}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    addReview(form.values.data, form.values.verdict)
+                }}
             >
                 <label className="label">Observación</label>
                 <Tiptap {...form.getInputProps('data')} />
                 {form.getInputProps('data').error ? (
-                    <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
+                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
                         *{form.getInputProps('data').error}
                     </p>
                 ) : null}
@@ -159,7 +165,7 @@ export default function ReviewForm({ review }: { review: Review }) {
 
                 <Button
                     type="submit"
-                    className="mt-2 ml-auto"
+                    className="ml-auto mt-2"
                     intent="secondary"
                 >
                     Comentar
