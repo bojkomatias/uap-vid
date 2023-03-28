@@ -7,7 +7,6 @@ export default function Table({ items }: { items: Protocol[] | null }) {
     if (!items || items.length === 0) return <EmptyState />
     return (
         <div className="mx-auto max-w-7xl">
-            <SearchBar />
             <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                 <thead>
                     <tr>
@@ -111,8 +110,10 @@ function EmptyState() {
                 No se encontraron protocolos.
             </h3>
             <p className="mt-5 text-sm font-light text-gray-600">
-                Modifique los parámetros de búsqueda. O si la convocatoria esta
-                abierta, comience por crear uno.
+                Modifique los parámetros de búsqueda. <br /> Si es evaluador,
+                consulte si algún protocolo le fue asignado.
+                <br /> Si es investigador fíjese si la convocatoria esta
+                abierta.
             </p>
         </div>
     )

@@ -67,6 +67,8 @@ export default async function Page({
                 <CreateButton role={session?.user?.role!} />
             </div>
 
+            <SearchBar />
+
             <Table
                 items={searchParams?.search ? searchedProtocols() : protocols}
             />

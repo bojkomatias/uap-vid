@@ -45,6 +45,7 @@ export const SignIn = () => {
                 />
 
                 <Button
+                    disabled={loading}
                     onClick={async () => {
                         setLoading(true)
                         const res = await signIn('credentials', {
@@ -72,6 +73,7 @@ export const SignIn = () => {
                     )}
                 </Button>
                 <Button
+                    disabled={loading}
                     onClick={(e: any) => {
                         setLoadingMicrosoft(true)
                         e.preventDefault()
