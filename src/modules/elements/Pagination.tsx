@@ -18,12 +18,13 @@ export default function Pagination({
             pageNumber.push(i)
         }
 
-        return pageNumber.map((page) => {
+        return pageNumber.map((page, idx) => {
             return (
                 /*
                 For some reason, I couldn't use the Button component here, the Link wouldn't work (didn't throw any error but didn't do anything also)
                 */
                 <Link
+                    key={idx}
                     className={clsx(
                         `rounded-md border border-primary/50 px-3 py-1 transition-all duration-75 hover:border-primary`,
                         Number(pageParams) === page && `bg-primary text-white`
