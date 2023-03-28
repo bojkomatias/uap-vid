@@ -38,6 +38,27 @@ export const assignReviewerToProtocol = async (
     return review
 }
 
+export const reassignReviewerToProtocol = async (
+    reviewId: string,
+    protocolId: string,
+    reviewerId: string,
+    type: ReviewType
+
+) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            protocolId,
+            reviewerId,
+            data: '',
+            type: type
+        },
+    })
+    return review
+}
+
 export const createReview = async (reviewId: string, data: Review) => {
     const review = await prisma.review.update({
         where: {

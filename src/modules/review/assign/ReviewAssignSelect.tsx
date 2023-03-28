@@ -31,6 +31,7 @@ const ReviewAssignSelect = ({
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                review: review ?? null,
                 reviewerId: reviewerId,
                 type: type,
             }),
