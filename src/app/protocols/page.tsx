@@ -21,7 +21,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
     if (!session) return redirect('/login')
     const protocolCount = await getTotalRecordsProtocol()
 
-    const shownRecords = 5
+    const shownRecords = 8
 
     const protocolsPaginated = session.user
         ? await getProtocolByRol(
