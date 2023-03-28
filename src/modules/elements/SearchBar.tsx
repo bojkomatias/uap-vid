@@ -1,34 +1,23 @@
 'use client'
 import { Button } from './Button'
-import { KeyboardEvent, SyntheticEvent, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function SearchBar() {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
 
-    function handleKeyPress(e: KeyboardEvent) {
-        if (e.key === 'Enter') {
-            if (searchQuery == '') {
-                router.push('/protocols')
-            } else {
-                router.push(`/protocols?search=${searchQuery}`)
-            }
-        }
-    }
-
-    console.log(searchQuery)
-
     return (
         <div className="mr-2 flex flex-grow items-center gap-2 rounded-md">
             <input
-                onKeyPress={(e) => {
-                    handleKeyPress(e as KeyboardEvent)
+                onKeyUpCapture={(e) => {
+                    if (e.key === 'Enter')
+                        router.push(`/protocols?search=${searchQuery}`)
                 }}
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
                     //If searchQuery is empty, goes back to the normal paginated page
-                    if (searchQuery.trim().length > 0) {
+                    if (e.target.value === '') {
                         router.push('/protocols')
                     }
                 }}
