@@ -25,6 +25,7 @@
         "bcryptjs": "^2.4.3",
         "clsx": "^1.2.1",
         "framer-motion": "^6.3.3",
+        "fuzzysort": "^2.0.4",
         "mongodb": "^4.6.0",
         "next": "latest",
         "next-auth": "^4.10.1",
