@@ -47,7 +47,7 @@ export default function Table({ items }: { items: Protocol[] | null }) {
                                     <dd className="truncate text-xs font-thin text-gray-500 lg:text-sm">
                                         {new Date(
                                             item.createdAt
-                                        ).toLocaleDateString()}
+                                        ).toLocaleString('es-AR')}
                                     </dd>
                                     <dd className="truncate text-gray-600 lg:hidden">
                                         {item.sections.identification.sponsor
