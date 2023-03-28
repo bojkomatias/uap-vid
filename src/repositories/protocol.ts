@@ -73,9 +73,9 @@ const getTotalRecordsProtocol = cache(async () => {
     const protocolCount = await prisma.protocol.count()
     return protocolCount
 })
-const shownRecords = 2
+
 const getProtocolByRol = cache(
-    async (role: RoleType, id: string, page: number) => {
+    async (role: RoleType, id: string, page: number, shownRecords: number) => {
         if (!id) return null
 
         const query = {
@@ -129,49 +129,53 @@ const getProtocolByRol = cache(
     }
 )
 
-const getProtocolWithoutPagination = async (role: RoleType, id: string) => {
-    if (!id) return null
 
-    const query = {
-        [ROLE.RESEARCHER]: prisma.protocol.findMany({
-            where: {
-                researcher: id,
-            },
-        }),
-        [ROLE.METHODOLOGIST]: prisma.review
-            .findMany({
-                select: {
-                    protocol: true,
-                },
+const getProtocolsWithoutPagination = cache(
+    async (role: RoleType, id: string) => {
+        if (!id) return null
+
+        const query = {
+            [ROLE.RESEARCHER]: prisma.protocol.findMany({
                 where: {
-                    reviewerId: id,
-                    type: 'METHODOLOGICAL',
+                    researcher: id,
                 },
-            })
-            .then((result) => result.map((item) => item.protocol)),
-        [ROLE.SCIENTIST]: prisma.review
-            .findMany({
-                select: {
-                    protocol: true,
-                },
-                where: {
-                    reviewerId: id,
-                    type: 'SCIENTIFIC_EXTERNAL',
-                },
-            })
-            .then((result) => result.map((item) => item.protocol)),
-    }
+            }),
+            [ROLE.METHODOLOGIST]: prisma.review
+                .findMany({
+                    select: {
+                        protocol: true,
+                    },
+                    where: {
+                        reviewerId: id,
+                        type: 'METHODOLOGICAL',
+                    },
+                })
+                .then((result) => result.map((item) => item.protocol)),
+            [ROLE.SCIENTIST]: prisma.review
+                .findMany({
+                    select: {
+                        protocol: true,
+                    },
+                    where: {
+                        reviewerId: id,
+                        type: 'SCIENTIFIC_EXTERNAL',
+                    },
+                })
+                .then((result) => result.map((item) => item.protocol)),
+        }
 
-    try {
-        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
-            return prisma.protocol.findMany()
+        try {
+            if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+                return prisma.protocol.findMany({})
 
-        return await query[role]
-    } catch (e) {
-        console.log(e)
-        return null
+            return await query[role]
+        } catch (e) {
+            console.log(e)
+            return null
+        }
     }
-}
+)
+
 
 const publishProtocol = async (id: string) => {
     try {
@@ -198,6 +202,6 @@ export {
     updateProtocolStateById,
     getProtocolByRol,
     getTotalRecordsProtocol,
-    getProtocolWithoutPagination,
+    getProtocolsWithoutPagination,
     publishProtocol,
 }
