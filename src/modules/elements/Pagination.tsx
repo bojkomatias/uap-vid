@@ -1,45 +1,41 @@
-import React from 'react'
+import { useCallback } from 'react'
 import Link from 'next/link'
-import clsx from 'clsx'
-/**Receives 4 arguments: the current page number (pageParams) and the total records count from the db (count), the amount of shown records on a single page (shownRecords), and the href to point to the desired url/route whatever you wanna call it.*/
+
+import { Button } from './Button'
+/**Receives 3 arguments: the current page number (pageParams) and the total records count from the db (count), the amount of shown records on a single page (shownRecords).*/
 export default function Pagination({
     pageParams,
     count,
     shownRecords,
-    href,
 }: {
     pageParams: number
     count: number
     shownRecords: number
-    href: string
 }) {
-    const pagination = () => {
-        let pageNumber = []
+    const pageNumber = useCallback(() => {
+        let pageArray: number[] = []
         for (let i = 1; i <= Math.ceil(count / shownRecords); i++) {
-            pageNumber.push(i)
+            pageArray.push(i)
         }
+        return pageArray
+    }, [count, shownRecords])
 
-        return pageNumber.map((page, idx) => {
-            return (
-                /*
-                For some reason, I couldn't use the Button component here, the Link wouldn't work (didn't throw any error but didn't do anything also)
-                */
-                <Link
-                    key={idx}
-                    className={clsx(
-                        `rounded-md border border-primary/50 px-3 py-1 transition-all duration-75 hover:border-primary`,
-                        Number(pageParams) === page && `bg-primary text-white`
-                    )}
-                    href={`${href}?page=${page}`}
-                >
-                    {page}
-                </Link>
-            )
-        })
-    }
     return (
-        <div className="absolute left-1/2 bottom-20 flex -translate-x-[50%] gap-2">
-            {pagination()}
+        <div className="mx-auto mt-12 flex w-fit gap-2">
+            {pageNumber().map((page: number) => (
+                <Link key={page} href={`/protocols?page=${page}`} passHref>
+                    <Button
+                        intent="terciary"
+                        className={
+                            Number(pageParams) === page
+                                ? 'bg-primary text-white'
+                                : ''
+                        }
+                    >
+                        {page}
+                    </Button>
+                </Link>
+            ))}
         </div>
     )
 }

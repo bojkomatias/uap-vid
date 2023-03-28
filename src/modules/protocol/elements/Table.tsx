@@ -93,8 +93,8 @@ function EmptyState() {
                 No se encontraron protocolos.
             </h3>
             <p className="mt-5 text-sm font-light text-gray-600">
-                Fíjese si la convocatoria esta abierta, y comience por crear
-                uno.
+                Modifique los parámetros de búsqueda. O si la convocatoria esta
+                abierta, comience por crear uno.
             </p>
         </div>
     )

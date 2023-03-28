@@ -76,7 +76,7 @@ export default async function Page({
                     pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount}
                     shownRecords={shownRecords}
-                    href="/protocols"
+
                 />
             )}
         </>
