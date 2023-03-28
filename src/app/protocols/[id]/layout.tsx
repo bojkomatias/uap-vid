@@ -5,9 +5,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
-import PublishButton from '@protocol/elements/action-buttons/Publish'
-import EditButton from '@protocol/elements/action-buttons/Edit'
-import Reviews from '@review/Container'
+import Reviews from '@review/index'
 
 async function Layout({
     params,
@@ -23,7 +21,7 @@ async function Layout({
         return (
             <>
                 <Heading title={'Nuevo protocolo'} />
-                <div className="max-w-7xl mx-auto w-full">{children}</div>
+                <div className="mx-auto w-full max-w-7xl">{children}</div>
             </>
         )
     }
@@ -42,9 +40,9 @@ async function Layout({
                     </span>
                 }
             />
-       
-            <div className="flex w-full">
-                <div className="max-w-7xl mx-auto w-full">{children}</div>
+
+            <div className="flex flex-col-reverse lg:flex-row">
+                <div className="mx-auto w-full max-w-7xl">{children}</div>
                 {/* @ts-expect-error Server Component */}
                 <Reviews protocol={protocol} user={session?.user!} />
             </div>

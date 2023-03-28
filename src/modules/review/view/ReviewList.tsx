@@ -1,5 +1,6 @@
 'use client'
 import { Review, ReviewType, Role, State, User } from '@prisma/client'
+import ItemContainer from '@review/ItemContainer'
 import clsx from 'clsx'
 import { useMemo, useState } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
@@ -38,23 +39,21 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
     )
 
     return (
-        <div className="w-[27rem] px-4">
-            <h3 className="text-lg font-semibold leading-10 text-gray-900">
-                Revisiones
-            </h3>
+        <ItemContainer title="Revisiones">
             <ul role="list" className="space-y-3">
                 {reviewsInState.map((r, i) => (
                     <ReviewItem key={i} review={r} user={user} />
                 ))}
             </ul>
-            {user.role === Role.ADMIN || Role.SECRETARY ? (
+            {(user.role === Role.ADMIN || Role.SECRETARY) &&
+            reviewsNotInState.length > 0 ? (
                 <>
                     <button
                         onClick={() => setShowHistorical((prv) => !prv)}
                         className="mt-8 flex cursor-pointer items-center gap-3 focus:outline-0"
                     >
                         <span className="text-sm font-semibold leading-10 text-gray-700">
-                            Revisiones históricas{' '}
+                            Revisiones históricas
                         </span>
                         <ChevronRight
                             className={clsx('h-4 w-4 transition', {
@@ -70,7 +69,7 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
                     </ul>
                 </>
             ) : null}
-        </div>
+        </ItemContainer>
     )
 }
 

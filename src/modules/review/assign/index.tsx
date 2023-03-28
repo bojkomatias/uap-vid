@@ -1,5 +1,6 @@
 import { Review, ReviewType, ReviewVerdict, State } from '@prisma/client'
 import { getAllUsersWithoutResearchers } from '@repositories/users'
+import ItemContainer from '@review/ItemContainer'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './ReviewAssignSelect'
 
@@ -57,19 +58,18 @@ const ReviewAssign = async ({
         },
     ]
     return (
-        <div className="p-2 w-96 h-96 mb-8">
-            <h3 className="mb-4 text-lg font-semibold leading-6 text-gray-900">
-                Evaluadores asignados
-            </h3>
+        <ItemContainer title="Evaluadores">
             {reviewAssignSelectsData
                 .filter((r) => r.enabled)
                 .map((data) => (
                     <div key={data.type} className="mb-4">
-                        <h2>{EvaluatorsByReviewType[data.type]}</h2>
+                        <label className="label">
+                            {EvaluatorsByReviewType[data.type]}
+                        </label>
                         <ReviewAssignSelect {...data} />
                     </div>
                 ))}
-        </div>
+        </ItemContainer>
     )
 }
 

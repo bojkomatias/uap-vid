@@ -36,7 +36,7 @@ const Tiptap = ({
         ],
         editorProps: {
             attributes: {
-                class: 'pt-4 input min-h-[10rem] focus:outline-0',
+                class: 'pt-4 input min-h-[10rem] focus:outline-0 bg-white',
             },
         },
         content: value,
@@ -44,7 +44,7 @@ const Tiptap = ({
     })
 
     return (
-        <div className="relative prose max-w-none">
+        <div className="prose relative max-w-none">
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
@@ -63,18 +63,18 @@ const MenuBar = ({ editor }: any) => {
     }
 
     return (
-        <div className="absolute inset-x-0 rounded-t top-0 border border-gray-300 gap-0.5 z-10 flex bg-gray-50 px-0.5 ">
+        <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border border-gray-300 bg-gray-100 px-0.5 ">
             {/* Mark text */}
             <button
                 type="button"
-                onClick={(e) => {
+                onClick={() => {
                     editor.chain().focus().toggleBold().run()
                 }}
                 disabled={!editor.can().chain().focus().toggleBold().run()}
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bold')
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -85,9 +85,9 @@ const MenuBar = ({ editor }: any) => {
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 disabled={!editor.can().chain().focus().toggleItalic().run()}
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('italic')
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -100,9 +100,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 2 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 2 })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -114,9 +114,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 3 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 3 })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -128,9 +128,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().toggleHeading({ level: 4 }).run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 4 })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -141,9 +141,9 @@ const MenuBar = ({ editor }: any) => {
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bulletList')
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -153,9 +153,9 @@ const MenuBar = ({ editor }: any) => {
                 type="button"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('orderedList')
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -168,9 +168,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().setTextAlign('left').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'left' })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -182,9 +182,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().setTextAlign('center').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'center' })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -196,9 +196,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().setTextAlign('right').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'right' })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -210,9 +210,9 @@ const MenuBar = ({ editor }: any) => {
                     editor.chain().focus().setTextAlign('justify').run()
                 }
                 className={clsx(
-                    'hover:bg-gray-200 hover:text-gray-800 rounded-md p-1 h-fit my-px',
+                    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'justify' })
-                        ? 'ring-1 ring-gray-300 ring-inset hover:ring-offset-0 text-gray-700 bg-white'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -221,7 +221,7 @@ const MenuBar = ({ editor }: any) => {
             {/* divider */}
             <button
                 type="button"
-                className="hover:bg-gray-200 hover:text-gray-800 text-gray-500 rounded-md p-1 h-fit my-px"
+                className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
                 onClick={() => editor.chain().focus().setHorizontalRule().run()}
             >
                 <Separator className="h-4 w-5" />
@@ -229,7 +229,7 @@ const MenuBar = ({ editor }: any) => {
             {/* undo */}
             <button
                 type="button"
-                className="hover:bg-gray-200 hover:text-gray-800 text-gray-500 rounded-md p-1 h-fit my-px"
+                className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
                 onClick={() => editor.chain().focus().undo().run()}
                 disabled={!editor.can().chain().focus().undo().run()}
             >

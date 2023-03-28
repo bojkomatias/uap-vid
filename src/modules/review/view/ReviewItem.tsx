@@ -32,83 +32,91 @@ export default function ReviewItem({
                 <dt className="text-sm font-medium text-gray-500">
                     {ReviewTypesDictionary[review.type]}
                 </dt>
-
-                <div className="-mb-px flex items-center justify-between space-x-4 rounded-t border bg-gray-50 px-2 py-1 text-gray-500">
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-thin text-gray-600">
-                            Veredicto:
-                        </span>
-                        <span
-                            className={clsx(
-                                'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
-                                {
-                                    'ring-1 ring-warning-500/50':
-                                        review.verdict ===
-                                        ReviewVerdict.PENDING,
-                                    'ring-1 ring-success-500/50':
-                                        review.verdict ===
-                                        ReviewVerdict.APPROVED,
-                                    'ring-1 ring-error-500/50':
-                                        review.verdict ===
-                                        ReviewVerdict.REJECTED,
-                                }
-                            )}
-                        >
-                            {ReviewVerdictsDictionary[review.verdict]}
-                            <div
-                                className={clsx('h-2 w-2 rounded', {
-                                    'bg-warning-500 ':
-                                        review.verdict ===
-                                        ReviewVerdict.PENDING,
-                                    'bg-success-600':
-                                        review.verdict ===
-                                        ReviewVerdict.APPROVED,
-                                    'bg-error-600':
-                                        review.verdict ===
-                                        ReviewVerdict.REJECTED,
-                                })}
-                            />
-                        </span>
-                    </div>
-
-                    {review.verdict === ReviewVerdict.PENDING ? (
-                        user.role === Role.RESEARCHER ? (
-                            <ReviseCheckbox
-                                id={review.id}
-                                revised={review.revised}
-                            />
-                        ) : (
-                            <label className="label pointer-events-auto">
-                                {review.revised ? 'revisado' : 'no revisado'}
-                            </label>
-                        )
-                    ) : null}
-                </div>
                 <div
-                    className={clsx({
-                        hidden: review.revised,
-                        block: !review.revised,
+                    className={clsx('rounded', {
+                        'bg-gray-50 opacity-70': review.revised,
+                        'bg-white opacity-100': !review.revised,
                     })}
                 >
-                    <TipTapViewer
-                        title=""
-                        content={review.data}
-                        rounded={false}
-                    />
-                </div>
+                    <div className="-mb-px flex items-center justify-between space-x-4 rounded-t border bg-gray-100 px-2 py-1 text-gray-500">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-thin text-gray-600">
+                                Veredicto:
+                            </span>
+                            <span
+                                className={clsx(
+                                    'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
+                                    {
+                                        'ring-1 ring-warning-500/50':
+                                            review.verdict ===
+                                            ReviewVerdict.PENDING,
+                                        'ring-1 ring-success-500/50':
+                                            review.verdict ===
+                                            ReviewVerdict.APPROVED,
+                                        'ring-1 ring-error-500/50':
+                                            review.verdict ===
+                                            ReviewVerdict.REJECTED,
+                                    }
+                                )}
+                            >
+                                {ReviewVerdictsDictionary[review.verdict]}
+                                <div
+                                    className={clsx('h-2 w-2 rounded', {
+                                        'bg-warning-500 ':
+                                            review.verdict ===
+                                            ReviewVerdict.PENDING,
+                                        'bg-success-600':
+                                            review.verdict ===
+                                            ReviewVerdict.APPROVED,
+                                        'bg-error-600':
+                                            review.verdict ===
+                                            ReviewVerdict.REJECTED,
+                                    })}
+                                />
+                            </span>
+                        </div>
 
-                <div className="-mt-px flex justify-end gap-1 rounded-b border bg-gray-50 px-3 py-0.5 text-xs">
-                    <span className="font-semibold text-gray-700">
-                        {user.role === Role.ADMIN || Role.SECRETARY
-                            ? review.reviewer.name
-                            : null}
-                    </span>
-                    <span className="font-light text-gray-500">
-                        {getDuration(
-                            new Date().getTime() -
-                                new Date(review.updatedAt).getTime()
-                        )}
-                    </span>
+                        {review.verdict === ReviewVerdict.PENDING ? (
+                            user.role === Role.RESEARCHER ? (
+                                <ReviseCheckbox
+                                    id={review.id}
+                                    revised={review.revised}
+                                />
+                            ) : (
+                                <label className="label pointer-events-auto">
+                                    {review.revised
+                                        ? 'revisado'
+                                        : 'no revisado'}
+                                </label>
+                            )
+                        ) : null}
+                    </div>
+                    <div
+                    // className={clsx({
+                    //     hidden: review.revised,
+                    //     block: !review.revised,
+                    // })}
+                    >
+                        <TipTapViewer
+                            title=""
+                            content={review.data}
+                            rounded={false}
+                        />
+                    </div>
+
+                    <div className="-mt-px flex justify-end gap-1 rounded-b border px-3 py-0.5 text-xs">
+                        <span className="font-semibold text-gray-700">
+                            {user.role === Role.ADMIN || Role.SECRETARY
+                                ? review.reviewer.name
+                                : null}
+                        </span>
+                        <span className="font-light text-gray-500">
+                            {getDuration(
+                                new Date().getTime() -
+                                    new Date(review.updatedAt).getTime()
+                            )}
+                        </span>
+                    </div>
                 </div>
             </div>
         </li>
