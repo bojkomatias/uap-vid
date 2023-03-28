@@ -35,6 +35,8 @@ const ROLE_SCOPE = {
         ACTION.ACCEPT,
         ACTION.PUBLISH,
         ACTION.COMMENT,
+        ACTION.ASSIGN_TO_METHODOLOGIST,
+        ACTION.ASSIGN_TO_SCIENTIFIC
     ],
 }
 
@@ -63,6 +65,20 @@ export function canExecute(
     if (
         ROLE_SCOPE[role].some((a) => a === action) &&
         STATE_SCOPE[state].some((a) => a === action)
+    )
+        return true
+    return false
+}
+
+export function canExecuteActions(
+    actions: ActionType[],
+    role: RoleType,
+    state: StateType
+) {
+    if (!actions.length || !role || !state) return false
+    if (
+        ROLE_SCOPE[role].some((a) => a === actions.find(x => x === a)) &&
+        STATE_SCOPE[state].some((a) => a === actions.find(x => x === a))
     )
         return true
     return false
