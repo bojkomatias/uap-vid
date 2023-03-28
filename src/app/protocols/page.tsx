@@ -1,5 +1,4 @@
 import { Heading } from '@layout/Heading'
-import { Protocol } from '@prisma/client'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
