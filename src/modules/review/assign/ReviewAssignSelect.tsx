@@ -12,7 +12,6 @@ interface ReviewAssignSelectProps {
     type: ReviewType
     users: User[]
     review: Review | null
-    enabled: boolean
     protocolId: string
 }
 
@@ -21,7 +20,6 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
-    enabled,
 }: ReviewAssignSelectProps) => {
     const notification = useNotifications()
     const router = useRouter()
@@ -54,7 +52,6 @@ const ReviewAssignSelect = ({
     return (
         <Listbox
             value={review?.reviewerId ?? null}
-            disabled={!enabled}
             onChange={(e) => {
                 if (e !== null) changeState(e)
             }}
