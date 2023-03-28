@@ -4,6 +4,9 @@ import { prisma } from '../utils/bd'
 
 export const getReviewsByProtocol = cache(async (protocolId: string) => {
     const reviews = await prisma.review.findMany({
+        include: {
+            reviewer: true,
+        },
         where: { protocolId },
     })
     return reviews
@@ -21,12 +24,24 @@ export const getProtocolReviewByReviewer = cache(
     }
 )
 
-export const createReview = async (reviewId: string, data: Review) => {
+export const updateReview = async (reviewId: string, data: Review) => {
     const review = await prisma.review.update({
         where: {
             id: reviewId,
         },
         data,
+    })
+    return review
+}
+
+export const markRevised = async (reviewId: string, revised: boolean) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            revised,
+        },
     })
     return review
 }

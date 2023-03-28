@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
@@ -16,8 +15,6 @@ import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictiona
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {
-    const path = usePathname()
-    const protocolId = path?.split('/')[2]
     const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
@@ -27,7 +24,7 @@ export default function ReviewForm({ review }: { review: Review }) {
     const notifications = useNotifications()
 
     const addReview = useCallback(async (comment: string) => {
-        const res = await fetch(`/api/reviews/${protocolId}`, {
+        const res = await fetch(`/api/reviews/${review.id}`, {
             method: 'PUT',
             body: JSON.stringify(comment),
         })

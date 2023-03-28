@@ -1,10 +1,19 @@
-import { Dots, MessageCircle } from 'tabler-icons-react'
-import Image from 'next/image'
+'use client'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
+import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
+import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
-import { Review } from '@prisma/client'
+import clsx from 'clsx'
+import { useCallback, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function ReviewItem({ review }: { review: Review }) {
+export default function ReviewItem({
+    review,
+    user, // The user that is viewing the component
+}: {
+    review: Review & { reviewer: User }
+    user: User
+}) {
     function getDuration(millis: number) {
         let minutes = Math.floor(millis / 60000)
         let hours = Math.round(minutes / 60)
@@ -20,33 +29,126 @@ export default function ReviewItem({ review }: { review: Review }) {
     return (
         <li>
             <div className="min-w-0 flex-1">
-                <div className="text-gray-500 bg-gray-50 border -mb-px px-2 pb-0.5 pt-1 rounded-t space-x-4 flex items-end justify-between">
-                    <div className="text-sm text-gray-700 font-light uppercase">
-                        {review.type}
+                <dt className="text-sm font-medium text-gray-500">
+                    {ReviewTypesDictionary[review.type]}
+                </dt>
+
+                <div className="-mb-px flex items-center justify-between space-x-4 rounded-t border bg-gray-50 px-2 py-1 text-gray-500">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-thin text-gray-600">
+                            Veredicto:
+                        </span>
+                        <span
+                            className={clsx(
+                                'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
+                                {
+                                    'ring-1 ring-warning-500/50':
+                                        review.verdict ===
+                                        ReviewVerdict.PENDING,
+                                    'ring-1 ring-success-500/50':
+                                        review.verdict ===
+                                        ReviewVerdict.APPROVED,
+                                    'ring-1 ring-error-500/50':
+                                        review.verdict ===
+                                        ReviewVerdict.REJECTED,
+                                }
+                            )}
+                        >
+                            {ReviewVerdictsDictionary[review.verdict]}
+                            <div
+                                className={clsx('h-2 w-2 rounded', {
+                                    'bg-warning-500 ':
+                                        review.verdict ===
+                                        ReviewVerdict.PENDING,
+                                    'bg-success-600':
+                                        review.verdict ===
+                                        ReviewVerdict.APPROVED,
+                                    'bg-error-600':
+                                        review.verdict ===
+                                        ReviewVerdict.REJECTED,
+                                })}
+                            />
+                        </span>
                     </div>
-                    <div className="text-sm text-gray-600 font-light lowercase flex items-center gap-1">
-                        <div className="h-2 w-2 bg-primary rounded" />
-                        <span>{review.verdict}</span>
-                    </div>
-                    <div className="hover:bg-gray-200 cursor-pointer rounded py-0.5 px-1">
-                        <Dots className="h-5 w-5" />
-                    </div>
+
+                    {review.verdict === ReviewVerdict.PENDING ? (
+                        user.role === Role.RESEARCHER ? (
+                            <ReviseCheckbox
+                                id={review.id}
+                                revised={review.revised}
+                            />
+                        ) : (
+                            <label className="label pointer-events-auto">
+                                {review.revised ? 'revisado' : 'no revisado'}
+                            </label>
+                        )
+                    ) : null}
                 </div>
-                <TipTapViewer
-                    title={''}
-                    content={review.data}
-                    rounded={false}
-                />
-                <div className="flex justify-end bg-gray-50 border rounded-b text-xs px-3 py-0.5 -mt-px text-gray-600">
-                    <span>admin only-ref to user??</span>
-                    <span>
+                <div
+                    className={clsx({
+                        hidden: review.revised,
+                        block: !review.revised,
+                    })}
+                >
+                    <TipTapViewer
+                        title=""
+                        content={review.data}
+                        rounded={false}
+                    />
+                </div>
+
+                <div className="-mt-px flex justify-end gap-1 rounded-b border bg-gray-50 px-3 py-0.5 text-xs">
+                    <span className="font-semibold text-gray-700">
+                        {user.role === Role.ADMIN || Role.SECRETARY
+                            ? review.reviewer.name
+                            : null}
+                    </span>
+                    <span className="font-light text-gray-500">
                         {getDuration(
                             new Date().getTime() -
-                                new Date(review.createdAt).getTime()
+                                new Date(review.updatedAt).getTime()
                         )}
                     </span>
                 </div>
             </div>
         </li>
+    )
+}
+
+const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
+    const [isPending, startTransition] = useTransition()
+    const router = useRouter()
+    const updateRevised = useCallback(
+        async (revised: boolean) => {
+            await fetch(`/api/review/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(revised),
+            })
+            startTransition(() => {
+                router.refresh()
+            })
+        },
+        [id]
+    )
+
+    return (
+        <span>
+            <input
+                disabled={isPending}
+                id={`revised-${id}`}
+                name={`revised-${id}`}
+                type="checkbox"
+                defaultChecked={revised}
+                className="mr-1 mb-0.5 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                onChange={(e) => updateRevised(e.target.checked)}
+            />
+
+            <label
+                htmlFor={`revised-${id}`}
+                className="label pointer-events-auto"
+            >
+                revisado
+            </label>
+        </span>
     )
 }
