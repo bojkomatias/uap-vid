@@ -1,6 +1,7 @@
 import EditButton from '@protocol/elements/action-buttons/Edit'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
 import View from '@protocol/View'
+import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
@@ -13,7 +14,12 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
+            <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
+                <div className="flex-1">
+                    <span className="rounded border bg-gray-50 px-2 py-0.5 text-sm font-semibold uppercase text-gray-600">
+                        {ProtocolStatesDictionary[protocol?.state!]}
+                    </span>
+                </div>
                 <PublishButton
                     role={session?.user?.role!}
                     protocol={protocol!}
