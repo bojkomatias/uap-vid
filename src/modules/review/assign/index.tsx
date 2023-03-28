@@ -1,4 +1,4 @@
-import { Review, ReviewType, ReviewVerdict, State } from '@prisma/client'
+import { Review, ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
 import { getAllUsersWithoutResearchers } from '@repositories/users'
 import ItemContainer from '@review/ItemContainer'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
@@ -18,7 +18,7 @@ const ReviewAssign = async ({
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
-            users: users ?? [], //here we can filter users by role later
+            users: users?.filter((u) => u.role === Role.METHODOLOGIST),
             protocolId: protocolId,
             enabled:
                 protocolState === State.PUBLISHED ||
@@ -30,7 +30,7 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_INTERNAL,
-            users: users ?? [], //here we can filter users by role later
+            users: users?.filter((u) => u.role === Role.SCIENTIST),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
@@ -44,7 +44,7 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_EXTERNAL,
-            users: users ?? [], //here we can filter users by role later
+            users: users?.filter((u) => u.role === Role.SCIENTIST),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&

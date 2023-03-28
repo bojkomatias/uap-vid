@@ -1,11 +1,11 @@
 'use client'
-import { Listbox, Transition } from '@headlessui/react'
+import { Combobox, Listbox, Transition } from '@headlessui/react'
 import { useNotifications } from '@mantine/notifications'
 import { Review, ReviewType, User } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
 
 interface ReviewAssignSelectProps {
@@ -25,6 +25,8 @@ const ReviewAssignSelect = ({
     const router = useRouter()
 
     const changeState = async (reviewerId: string) => {
+        // Validate if the same value, if it is don't update
+        if (review?.reviewerId === reviewerId) return
         const assigned = await fetch(`/api/protocol/${protocolId}/assign`, {
             method: 'PUT',
             headers: {
@@ -50,90 +52,104 @@ const ReviewAssignSelect = ({
             color: 'red',
         })
     }
+
+    const [query, setQuery] = useState('')
+
+    const filteredPeople =
+        query === ''
+            ? users
+            : users.filter((person) => {
+                  return person.name.toLowerCase().includes(query.toLowerCase())
+              })
+
     return (
-        <Listbox
+        <Combobox
+            as="div"
             value={review?.reviewerId ?? null}
             onChange={(e) => {
                 if (e !== null) changeState(e)
             }}
         >
-            {({ open }) => (
-                <>
-                    <div className="relative w-full bg-white">
-                        <Listbox.Button className="input text-left">
-                            <span className="">
-                                {users.find(
-                                    (user) => user.id === review?.reviewerId
-                                )?.name ??
-                                    `Seleccione un  ${EvaluatorsByReviewType[
-                                        type
-                                    ].toLocaleLowerCase()}`}
-                            </span>
-                            <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-                                <Selector
-                                    className="h-5 text-gray-600 "
-                                    aria-hidden="true"
-                                />
-                            </span>
-                        </Listbox.Button>
+            <div className="relative">
+                <Combobox.Button className="relative w-full">
+                    <Combobox.Input
+                        autoComplete="off"
+                        className="input form-input"
+                        placeholder={`Seleccione un  ${EvaluatorsByReviewType[
+                            type
+                        ].toLocaleLowerCase()}`}
+                        onChange={(e) => setQuery(e.target.value)}
+                        displayValue={() =>
+                            users.find((user) => user.id === review?.reviewerId)
+                                ?.name ?? ''
+                        }
+                    />
 
-                        <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Listbox.Options className="max-h-30 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {users.map((user) => (
-                                    <Listbox.Option
-                                        key={user.id}
-                                        className={({ active }) =>
-                                            clsx(
-                                                active ? 'bg-gray-100' : '',
-                                                'relative cursor-pointer select-none py-2 pl-3 pr-9 '
-                                            )
-                                        }
-                                        value={user.id}
-                                    >
-                                        {({ selected, active }) => (
-                                            <>
-                                                <span
-                                                    className={clsx(
-                                                        selected
-                                                            ? 'font-bold'
-                                                            : '',
-                                                        'block truncate'
-                                                    )}
-                                                >
-                                                    {user.name}
-                                                </span>
-
-                                                {selected ? (
-                                                    <span
-                                                        className={clsx(
-                                                            active
-                                                                ? 'text-primary'
-                                                                : 'text-primary',
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                        )}
-                                                    >
-                                                        <Check
-                                                            className="h-5  text-primary"
-                                                            aria-hidden="true"
-                                                        />
-                                                    </span>
-                                                ) : null}
-                                            </>
-                                        )}
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Transition>
+                    <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
+                        <Selector
+                            className="h-5 text-primary transition-all duration-200 hover:text-base-400"
+                            aria-hidden="true"
+                        />
                     </div>
-                </>
-            )}
-        </Listbox>
+                </Combobox.Button>
+
+                {filteredPeople.length > 0 && (
+                    <Combobox.Options className="z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
+                        {filteredPeople.map((value) => (
+                            <Combobox.Option
+                                key={value.id}
+                                value={value.id}
+                                className={({ active }) =>
+                                    clsx(
+                                        'relative cursor-default select-none py-2 pl-8 pr-4',
+                                        active ? 'bg-gray-100' : 'text-base-600'
+                                    )
+                                }
+                            >
+                                {({ active, selected }) => (
+                                    <>
+                                        <span className="block truncate">
+                                            <span
+                                                className={clsx(
+                                                    selected &&
+                                                        'font-semibold text-primary'
+                                                )}
+                                            >
+                                                {value.name}
+                                            </span>
+                                            <span
+                                                className={clsx(
+                                                    'ml-2 truncate text-gray-500',
+                                                    active
+                                                        ? 'text-indigo-200'
+                                                        : 'text-gray-500'
+                                                )}
+                                            >
+                                                {value.email}
+                                            </span>
+                                        </span>
+
+                                        {selected && (
+                                            <span
+                                                className={clsx(
+                                                    'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
+                                                    active ? 'text-white' : ''
+                                                )}
+                                            >
+                                                <Check
+                                                    className="ml-1 h-4 w-4 text-gray-500"
+                                                    aria-hidden="true"
+                                                />
+                                            </span>
+                                        )}
+                                    </>
+                                )}
+                            </Combobox.Option>
+                        ))}
+                    </Combobox.Options>
+                )}
+            </div>
+        </Combobox>
     )
 }
 
