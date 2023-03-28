@@ -129,6 +129,7 @@ const getProtocolByRol = cache(
     }
 )
 
+
 const getProtocolsWithoutPagination = cache(
     async (role: RoleType, id: string) => {
         if (!id) return null
@@ -174,6 +175,7 @@ const getProtocolsWithoutPagination = cache(
         }
     }
 )
+
 
 const publishProtocol = async (id: string) => {
     try {

@@ -42,9 +42,10 @@ model User {
 model Review {
   id         String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt  DateTime      @default(now())
-  updatedAt  DateTime?
+  updatedAt  DateTime      @default(now())
   type       ReviewType
   data       String
+  revised    Boolean       @default(false)
   verdict    ReviewVerdict @default(PENDING)
   reviewerId String        @db.ObjectId
   reviewer   User          @relation(fields: [reviewerId], references: [id])

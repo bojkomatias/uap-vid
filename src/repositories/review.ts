@@ -1,9 +1,12 @@
-import { Review } from '@prisma/client'
+import { Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 export const getReviewsByProtocol = cache(async (protocolId: string) => {
     const reviews = await prisma.review.findMany({
+        include: {
+            reviewer: true,
+        },
         where: { protocolId },
     })
     return reviews
@@ -21,12 +24,62 @@ export const getProtocolReviewByReviewer = cache(
     }
 )
 
-export const createReview = async (reviewId: string, data: Review) => {
+export const assignReviewerToProtocol = async (
+    protocolId: string,
+    reviewerId: string,
+    type: ReviewType
+
+) => {
+    const review = await prisma.review.create({
+        data: {
+            protocolId,
+            reviewerId,
+            data: '',
+            type: type
+        },
+    })
+    return review
+}
+
+export const reassignReviewerToProtocol = async (
+    reviewId: string,
+    protocolId: string,
+    reviewerId: string,
+    type: ReviewType
+
+) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            protocolId,
+            reviewerId,
+            data: '',
+            type: type
+        },
+    })
+    return review
+}
+
+export const updateReview = async (reviewId: string, data: Review) => {
     const review = await prisma.review.update({
         where: {
             id: reviewId,
         },
         data,
+    })
+    return review
+}
+
+export const markRevised = async (reviewId: string, revised: boolean) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            revised,
+        },
     })
     return review
 }

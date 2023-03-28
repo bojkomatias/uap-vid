@@ -15,7 +15,11 @@ import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
 
 // SSR Server Component, so no need to fetch from api endpoint
-export default async function Page({ searchParams }: { searchParams: any }) {
+export default async function Page({
+    searchParams,
+}: {
+    searchParams?: { [key: string]: string | string[] | undefined }
+}) {
     const session = await getServerSession(authOptions)
     if (!session) return redirect('/login')
     const protocolCount = await getTotalRecordsProtocol()
@@ -67,6 +71,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.
             </p>
+
 
             <div className="mt-3 flex justify-between">
                 <SearchBar />
