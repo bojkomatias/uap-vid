@@ -73,9 +73,9 @@ const getTotalRecordsProtocol = cache(async () => {
     const protocolCount = await prisma.protocol.count()
     return protocolCount
 })
-const shownRecords = 2
+
 const getProtocolByRol = cache(
-    async (role: RoleType, id: string, page: number) => {
+    async (role: RoleType, id: string, page: number, shownRecords: number) => {
         if (!id) return null
 
         const query = {

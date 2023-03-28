@@ -21,11 +21,14 @@ export default async function Page({ searchParams }: { searchParams: any }) {
     if (!session) return redirect('/login')
     const protocolCount = await getTotalRecordsProtocol()
 
+    const shownRecords = 5
+
     const protocolsPaginated = session.user
         ? await getProtocolByRol(
               session.user.role,
               session.user.id,
-              Number(searchParams?.page) || 1
+              Number(searchParams?.page) || 1,
+              shownRecords
           )
         : []
 
@@ -76,6 +79,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
                 <Pagination
                     pageParams={Number(searchParams.page) || 1}
                     count={protocolCount}
+                    shownRecords={shownRecords}
                     href="/protocols"
                 />
             )}
