@@ -20,7 +20,7 @@ export default function SearchBar() {
     console.log(searchQuery)
 
     return (
-        <div className="mr-2  flex flex-grow items-center gap-2 rounded-md">
+        <div className="mr-2 flex flex-grow items-center gap-2 rounded-md">
             <input
                 onKeyPress={(e) => {
                     handleKeyPress(e as KeyboardEvent)

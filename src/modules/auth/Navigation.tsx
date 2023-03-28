@@ -27,7 +27,7 @@ export default async function Navigation({
                     hasNavigation ? 'lg:pl-64' : ''
                 )}
             >
-                <main className="flex-1 pb-20 px-4 sm:px-6 relative max-w-[120rem] mx-auto w-full 2xl:px-24">
+                <main className="relative mx-auto min-h-[90vh] w-full max-w-[120rem] flex-1 px-4 pb-20 sm:px-6 2xl:px-24">
                     {children}
                 </main>
             </div>

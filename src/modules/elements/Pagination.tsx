@@ -37,7 +37,7 @@ export default function Pagination({
         })
     }
     return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="absolute left-1/2 bottom-20 flex -translate-x-[50%] gap-2">
             {pagination()}
         </div>
     )
