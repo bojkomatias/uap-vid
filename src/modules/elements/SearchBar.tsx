@@ -27,6 +27,10 @@ export default function SearchBar() {
                 }}
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
+                    //If searchQuery is empty, goes back to the normal paginated page
+                    if (searchQuery.trim().length > 0) {
+                        router.push('/protocols')
+                    }
                 }}
                 className="input"
                 placeholder="Buscar protocolo por título, facultad, carrera, estado, etc."

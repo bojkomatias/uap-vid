@@ -9,7 +9,6 @@ import {
     getProtocolByRol,
     getTotalRecordsProtocol,
 } from 'repositories/protocol'
-import { Button } from '@elements/Button'
 import Pagination from '@elements/Pagination'
 import SearchBar from '@elements/SearchBar'
 import fuzzysort from 'fuzzysort'
@@ -32,24 +31,30 @@ export default async function Page({ searchParams }: { searchParams: any }) {
           )
         : []
 
-    //Problema a resolver, traer resultados condicionalmente. Ahora mismo está trayendo tanto los protocolos paginados como todos los protocolos, solo que los muestra condicionalmente. Creo que se resuelve fácil pero para poder probar rápido la búsqueda estoy haciendo chanchadas.
-    const protocols = session.user
-        ? await getProtocolsWithoutPagination(
-              session.user.role,
-              session.user.id
-          )
-        : []
+    //En teoría, el getProtocolsWithoutPagination() solo debería ejecutarse cuando la url tenga el searchParams "search". Calculo que esto debería mejorar la performance del first load de la página.
+    const protocols =
+        typeof searchParams.search !== 'undefined'
+            ? session.user
+                ? await getProtocolsWithoutPagination(
+                      session.user.role,
+                      session.user.id
+                  )
+                : []
+            : []
 
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be perfomed onto */
     const searchedProtocols = (): Protocol[] => {
-        const results = fuzzysort.go(searchParams.search, protocols as any, {
-            keys: [
-                'sections.identification.title',
-                'sections.identification.career',
-                'sections.identification.assignment',
-                'sections.identification.sponsor',
-            ],
-        })
+        const results = fuzzysort.go(
+            searchParams.search,
+            protocols as Protocol[],
+            {
+                keys: [
+                    'sections.identification.title',
+                    'sections.identification.career',
+                    'sections.identification.assignment',
+                ],
+            }
+        )
         return results.map((result) => {
             return result.obj as Protocol
         })
