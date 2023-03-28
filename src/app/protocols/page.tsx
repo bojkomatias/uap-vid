@@ -18,38 +18,30 @@ import { Protocol } from '@prisma/client'
 export default async function Page({
     searchParams,
 }: {
-    searchParams?: { [key: string]: string | string[] | undefined }
+    searchParams?: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) return redirect('/login')
-    const protocolCount = await getTotalRecordsProtocol()
+    if (!session || !session.user) return redirect('/login')
 
+    const protocolCount = await getTotalRecordsProtocol()
     const shownRecords = 8
 
-    const protocolsPaginated = session.user
-        ? await getProtocolByRol(
+    // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
+    const protocols = searchParams?.search
+        ? await getProtocolsWithoutPagination(
+              session.user.role,
+              session.user.id
+          )
+        : await getProtocolByRol(
               session.user.role,
               session.user.id,
               Number(searchParams?.page) || 1,
               shownRecords
           )
-        : []
-
-    //En teoría, el getProtocolsWithoutPagination() solo debería ejecutarse cuando la url tenga el searchParams "search". Calculo que esto debería mejorar la performance del first load de la página.
-    const protocols =
-        typeof searchParams.search !== 'undefined'
-            ? session.user
-                ? await getProtocolsWithoutPagination(
-                      session.user.role,
-                      session.user.id
-                  )
-                : []
-            : []
-
-    /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be perfomed onto */
+    /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = (): Protocol[] => {
         const results = fuzzysort.go(
-            searchParams.search,
+            searchParams?.search!,
             protocols as Protocol[],
             {
                 keys: [
@@ -63,7 +55,6 @@ export default async function Page({
             return result.obj as Protocol
         })
     }
-
     return (
         <>
             <Heading title="Lista de proyectos de investigación" />
@@ -72,22 +63,17 @@ export default async function Page({
                 en &apos;ver&apos; para más detalles.
             </p>
 
-
             <div className="mt-3 flex justify-between">
                 <SearchBar />
                 <CreateButton role={session?.user?.role!} />
             </div>
 
             <Table
-                items={
-                    searchParams.search
-                        ? searchedProtocols()
-                        : protocolsPaginated
-                }
+                items={searchParams?.search ? searchedProtocols() : protocols}
             />
-            {searchParams.search ? null : (
+            {searchParams?.search ? null : (
                 <Pagination
-                    pageParams={Number(searchParams.page) || 1}
+                    pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount}
                     shownRecords={shownRecords}
                     href="/protocols"
