@@ -1,17 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
-/**Receives three arguments: the current page number (pageParams) and the total records count from the db (count) and the href to point to the desired url/route whatever you wanna call it.*/
+/**Receives 4 arguments: the current page number (pageParams) and the total records count from the db (count), the amount of shown records on a single page (shownRecords), and the href to point to the desired url/route whatever you wanna call it.*/
 export default function Pagination({
     pageParams,
     count,
+    shownRecords,
     href,
 }: {
     pageParams: number
     count: number
+    shownRecords: number
     href: string
 }) {
-    const shownRecords = 2
     const pagination = () => {
         let pageNumber = []
         for (let i = 1; i <= Math.ceil(count / shownRecords); i++) {
@@ -37,7 +38,7 @@ export default function Pagination({
         })
     }
     return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="absolute left-1/2 bottom-20 flex -translate-x-[50%] gap-2">
             {pagination()}
         </div>
     )
