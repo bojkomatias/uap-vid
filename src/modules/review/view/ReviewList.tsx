@@ -1,9 +1,8 @@
 'use client'
-import { Button } from '@elements/Button'
 import { Review, ReviewType, Role, State, User } from '@prisma/client'
 import clsx from 'clsx'
 import { useMemo, useState } from 'react'
-import { ChevronDown, ChevronRight } from 'tabler-icons-react'
+import { ChevronRight } from 'tabler-icons-react'
 import ReviewItem from './ReviewItem'
 
 type ReviewStateProps = {

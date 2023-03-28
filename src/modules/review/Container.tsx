@@ -6,7 +6,6 @@ import {
 import { canAccess, canExecute } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
 import ReviewCreation from './form'
-import ReviewItem from './view/ReviewItem'
 import ReviewList from './view/ReviewList'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
