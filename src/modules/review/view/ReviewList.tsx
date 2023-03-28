@@ -1,5 +1,6 @@
 'use client'
 import { Review, ReviewType, Role, State, User } from '@prisma/client'
+import ItemContainer from '@review/ItemContainer'
 import clsx from 'clsx'
 import { useMemo, useState } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
@@ -38,10 +39,7 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
     )
 
     return (
-        <div className="w-[27rem] px-4">
-            <h3 className="text-lg font-semibold leading-10 text-gray-900">
-                Revisiones
-            </h3>
+        <ItemContainer title="Revisiones">
             <ul role="list" className="space-y-3">
                 {reviewsInState.map((r, i) => (
                     <ReviewItem key={i} review={r} user={user} />
@@ -70,7 +68,7 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
                     </ul>
                 </>
             ) : null}
-        </div>
+        </ItemContainer>
     )
 }
 

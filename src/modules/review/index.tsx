@@ -9,7 +9,6 @@ import ReviewCreation from './form'
 import ReviewAssign from './assign'
 import ReviewList from './view/ReviewList'
 
-
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function Reviews({
     protocol,
@@ -22,8 +21,8 @@ export default async function Reviews({
     const reviews = await getReviewsByProtocol(protocol.id)
     return (
         // No tocar margenes o paddings aca!
-        <aside className="relative mt-1 -mr-4 max-w-md border-l border-gray-200 bg-white sm:-mr-6 2xl:-mr-24">
-            <div className="sticky top-4 max-h-screen overflow-auto bg-white px-4">
+        <aside className="relative">
+            <div className="sticky top-4 mb-4 space-y-3">
                 {canExecuteActions(
                     [
                         ACTION.ASSIGN_TO_METHODOLOGIST,

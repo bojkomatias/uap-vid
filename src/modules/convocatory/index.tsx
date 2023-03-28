@@ -10,7 +10,7 @@ export function CurrentConvocatory({
     label: string
     convocatory: Convocatory
 }) {
-    const date = useMemo(() => new Date(convocatory.to), [])
+    const date = useMemo(() => new Date(convocatory.to), [convocatory])
 
     const [today, setToday] = useState(new Date())
     useEffect(() => {
@@ -32,23 +32,23 @@ export function CurrentConvocatory({
     const remainingMinutes = differenceInMinutes % 60
 
     return (
-        <div className="float-right flex flex-col scale-90">
+        <div className="float-right flex scale-90 flex-col">
             <span className="label">{label}</span>
-            <div className="flex flex-col md:flex-row items-center">
-                <div className="grid grid-cols-4 gap-1 place-items-stretch w-fit flex-shrink-0 opacity-80 font-light">
-                    <div className="text-center bg-gray-400/10 rounded-lg">
+            <div className="flex flex-col items-center md:flex-row">
+                <div className="grid w-fit flex-shrink-0 grid-cols-4 place-items-stretch gap-1 font-light opacity-80">
+                    <div className="rounded-lg bg-gray-400/10 text-center">
                         <div className="mt-1  font-bold">
                             {differenceInDays}
                         </div>
                         <div className="text-[0.6rem] ">Días</div>
                     </div>
-                    <div className="text-center bg-gray-400/10 rounded-lg">
+                    <div className="rounded-lg bg-gray-400/10 text-center">
                         <div className="mt-1 font-normal ">
                             {remainingHours}
                         </div>
                         <div className="text-[0.6rem] ">Horas</div>
                     </div>
-                    <div className="text-center bg-gray-400/10 rounded-lg px-2">
+                    <div className="rounded-lg bg-gray-400/10 px-2 text-center">
                         <div className="mt-1  font-light">
                             {remainingMinutes}
                         </div>
