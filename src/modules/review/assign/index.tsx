@@ -15,10 +15,11 @@ const ReviewAssign = async ({
     protocolState,
 }: ReviewAssignProps) => {
     const users = await getAllUsersWithoutResearchers()
+    if (!users) return <></>
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
-            users: users?.filter((u) => u.role === Role.METHODOLOGIST),
+            users: users.filter((u) => u.role === Role.METHODOLOGIST),
             protocolId: protocolId,
             enabled:
                 protocolState === State.PUBLISHED ||
@@ -30,7 +31,7 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_INTERNAL,
-            users: users?.filter((u) => u.role === Role.SCIENTIST),
+            users: users.filter((u) => u.role === Role.SCIENTIST),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
@@ -44,7 +45,7 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_EXTERNAL,
-            users: users?.filter((u) => u.role === Role.SCIENTIST),
+            users: users.filter((u) => u.role === Role.SCIENTIST),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
