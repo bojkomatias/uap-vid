@@ -6,8 +6,9 @@ import {
 import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
 import ReviewCreation from './form'
-import ReviewItem from './view/ReviewItem'
 import ReviewAssign from './assign'
+import ReviewList from './view/ReviewList'
+
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function Reviews({
@@ -46,14 +47,11 @@ export default async function Reviews({
                 ) : null}
 
                 {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (
-                    <ul role="list" className="space-y-3">
-                        <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                            Revisiones
-                        </h3>
-                        {reviews.map((r, i) => (
-                            <ReviewItem key={i} review={r} />
-                        ))}
-                    </ul>
+                    <ReviewList
+                        reviews={reviews}
+                        user={user}
+                        state={protocol.state}
+                    />
                 ) : null}
             </div>
         </aside>

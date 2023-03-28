@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { usePathname } from 'next/navigation'
 import { useCallback } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
@@ -16,8 +15,6 @@ import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictiona
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {
-    const path = usePathname()
-    const protocolId = path?.split('/')[2]
     const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
@@ -27,14 +24,14 @@ export default function ReviewForm({ review }: { review: Review }) {
     const notifications = useNotifications()
 
     const addReview = useCallback(async (comment: string) => {
-        const res = await fetch(`/api/reviews/${protocolId}`, {
+        const res = await fetch(`/api/reviews/${review.id}`, {
             method: 'PUT',
             body: JSON.stringify(comment),
         })
         if (res.status == 200) {
             notifications.showNotification({
-                title: 'Revision publicada',
-                message: 'Tu revision fue correctamente publicada.',
+                title: 'Revisión publicada',
+                message: 'Tu revisión fue correctamente publicada.',
                 color: 'teal',
                 icon: <Check />,
                 radius: 0,
@@ -47,7 +44,7 @@ export default function ReviewForm({ review }: { review: Review }) {
         } else {
             notifications.showNotification({
                 title: 'Ocurrió un error',
-                message: 'Hubo un problema al publicar tu revision.',
+                message: 'Hubo un problema al publicar tu revisión.',
                 color: 'red',
                 icon: <X />,
                 radius: 0,
@@ -61,7 +58,7 @@ export default function ReviewForm({ review }: { review: Review }) {
 
     return (
         <form
-            className="p-2 w-[27rem]"
+            className="w-[27rem] p-2"
             onSubmit={form.onSubmit(
                 (values) => console.log(values),
                 (errors) => console.log(errors)
@@ -101,7 +98,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         checked
                                             ? 'z-10 border-primary/30 bg-gray-50'
                                             : 'border-gray-200',
-                                        'relative flex items-baseline cursor-pointer border px-5 py-2.5 focus:outline-none'
+                                        'relative flex cursor-pointer items-baseline border px-5 py-2.5 focus:outline-none'
                                     )
                                 }
                             >
@@ -110,24 +107,24 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         <span
                                             className={clsx(
                                                 checked
-                                                    ? 'bg-primary border-transparent'
-                                                    : 'bg-white border-gray-300',
+                                                    ? 'border-transparent bg-primary'
+                                                    : 'border-gray-300 bg-white',
                                                 active
                                                     ? 'ring-2 ring-primary ring-offset-1'
                                                     : '',
-                                                'h-4 w-4 shrink-0 cursor-pointer rounded-full border flex items-center justify-center'
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
                                             )}
                                             aria-hidden="true"
                                         >
-                                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                                            <span className="h-1.5 w-1.5 rounded-full bg-white" />
                                         </span>
                                         <span className="ml-3 flex flex-col">
                                             <RadioGroup.Label
                                                 as="span"
                                                 className={clsx(
                                                     checked
-                                                        ? 'text-gray-900 font-medium'
-                                                        : 'text-gray-700 font-regular',
+                                                        ? 'font-medium text-gray-900'
+                                                        : 'font-regular text-gray-700',
                                                     'block text-sm'
                                                 )}
                                             >
