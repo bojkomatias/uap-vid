@@ -33,7 +33,7 @@ export default function SearchBar() {
                     }
                 }}
                 className="input"
-                placeholder="Buscar protocolo por título, facultad, carrera, estado, etc."
+                placeholder="Buscar protocolo por título o carrera"
             />
             <Button
                 onClick={() => {
