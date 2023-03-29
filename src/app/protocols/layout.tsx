@@ -12,7 +12,11 @@ export default async function layout({ children }: { children: ReactNode }) {
                     label="La convocatoria termina:"
                     convocatory={convocatory}
                 />
-            ) : null}
+            ) : (
+                <span className="label float-right max-w-[10rem] scale-90 text-center text-xs">
+                    No existe una convocatoria activa
+                </span>
+            )}
             {children}
         </>
     )
