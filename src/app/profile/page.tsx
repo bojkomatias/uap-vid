@@ -8,13 +8,10 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!session) return redirect('/login')
     return (
-        // @ts-expect-error
-        <Navigation>
-            <Breadcrumb />
+        <>
             <Heading title="Perfil" />
             <Profile user={session?.user!} />
-        </Navigation>
+        </>
     )
 }

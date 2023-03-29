@@ -21,23 +21,24 @@ export default async function Page({
     searchParams?: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session || !session.user) return redirect('/login')
 
     const protocolCount = await getTotalRecordsProtocol()
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
-    const protocols = searchParams?.search
-        ? await getProtocolsWithoutPagination(
-              session.user.role,
-              session.user.id
-          )
-        : await getProtocolByRol(
-              session.user.role,
-              session.user.id,
-              Number(searchParams?.page) || 1,
-              shownRecords
-          )
+    const protocols = session?.user
+        ? searchParams?.search
+            ? await getProtocolsWithoutPagination(
+                  session.user.role,
+                  session.user.id
+              )
+            : await getProtocolByRol(
+                  session.user.role,
+                  session.user.id,
+                  Number(searchParams?.page) || 1,
+                  shownRecords
+              )
+        : null
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = (): Protocol[] => {
         const results = fuzzysort.go(

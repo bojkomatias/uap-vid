@@ -1,16 +1,18 @@
 import { ReactNode } from 'react'
-import { getServerSession } from 'next-auth'
+import { Session } from 'next-auth'
 import MobileNavigation from './elements/MobileBar'
 import Sidebar from './elements/Sidebar'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import clsx from 'clsx'
+import { redirect } from 'next/navigation'
 
-export default async function Navigation({
+export default function Navigation({
+    session,
     children,
 }: {
+    session: Session
     children: ReactNode
 }) {
-    const session = await getServerSession(authOptions)
+    if (!session) redirect('/')
     const hasNavigation =
         session?.user?.role === 'ADMIN' || session?.user?.role === 'SECRETARY'
     return (
