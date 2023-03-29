@@ -35,8 +35,8 @@ const ActionSchema = z.enum([
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
-    'ACCEPT',
-    'APPROVE',
+    'ACCEPT',                       //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+    'APPROVE',                      //This approval is made by the admin and approve the protocol and mark it as ON_GOING
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`

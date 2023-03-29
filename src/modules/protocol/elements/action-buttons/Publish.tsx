@@ -4,7 +4,7 @@ import type { Protocol } from '@prisma/client'
 import type { Protocol as ProtocolZod } from '@utils/zod'
 import { canExecute } from '@utils/scopes'
 import { ACTION, ProtocolSchema, RoleType } from '@utils/zod'
-import { useMemo } from 'react'
+import { useMemo, useTransition } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 
@@ -13,6 +13,7 @@ type ActionButtonTypes = { role: RoleType; protocol: Protocol | ProtocolZod }
 export default function PublishButton({ role, protocol }: ActionButtonTypes) {
     const notification = useNotifications()
     const router = useRouter()
+    const [isPending, startTransition] = useTransition()
 
     const publishProtocol = async () => {
         const published = await fetch(`/api/protocol/${protocol.id}/publish`, {
@@ -28,7 +29,7 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
                 message: 'El protocolo ha sido publicado con éxito',
                 color: 'green',
             })
-            return router.refresh()
+            return startTransition(() => router.refresh())
         }
         return notification.showNotification({
             title: 'No hemos podido publicar el protocolo',
@@ -49,7 +50,7 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         <Button
             onClick={publishProtocol}
             intent={'primary'}
-            disabled={!isValid}
+            disabled={!isValid || isPending}
         >
             Publicar
         </Button>

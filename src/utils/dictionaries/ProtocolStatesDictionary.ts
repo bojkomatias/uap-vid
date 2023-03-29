@@ -6,6 +6,6 @@ export default {
     [State.PUBLISHED]: 'Publicado',
     [State.METHODOLOGICAL_EVALUATION]: 'En evaluación metodológica',
     [State.SCIENTIFIC_EVALUATION]: 'En evaluación científica',
-    [State.ACCEPTED]: 'Aceptado',
+    [State.ACCEPTED]: 'Aceptado para evaluación en comisión',
     [State.ON_GOING]: 'Aprobado y en curso',
 } as const
