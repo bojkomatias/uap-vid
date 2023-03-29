@@ -22,7 +22,7 @@ const ReviewAssign = async ({
             users: users.filter((u) => u.role === Role.METHODOLOGIST),
             protocolId: protocolId,
             enabled:
-                protocolState === State.PUBLISHED ||
+                protocolState === State.APPROVED_TO_REVIEW ||
                 protocolState === State.METHODOLOGICAL_EVALUATION,
             review:
                 reviews.find(
