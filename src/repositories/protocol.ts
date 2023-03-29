@@ -176,6 +176,22 @@ const getProtocolsWithoutPagination = cache(
     }
 )
 
+const changeProtocolState = async (id: string, state: State) => {
+    try {
+        const protocol = await prisma.protocol.update({
+            where: {
+                id: id,
+            },
+            data: {
+                state: state,
+            },
+        })
+        return protocol
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}
 
 const publishProtocol = async (id: string) => {
     try {
@@ -204,4 +220,5 @@ export {
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
     publishProtocol,
+    changeProtocolState
 }
