@@ -8,7 +8,6 @@ import EditButton from '@protocol/elements/action-buttons/Edit'
 import AcceptButton from '@protocol/elements/action-buttons/Accept'
 import ApproveButton from '@protocol/elements/action-buttons/Approve'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
-import ApproveToReviewButton from '@protocol/elements/action-buttons/ApproveToReview'
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')
@@ -30,10 +29,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                     protocol={protocol!}
                 />
                 <AcceptButton
-                    role={session?.user?.role!}
-                    protocol={protocol!}
-                />
-                <ApproveToReviewButton
                     role={session?.user?.role!}
                     protocol={protocol!}
                 />

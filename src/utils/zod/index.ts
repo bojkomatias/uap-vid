@@ -18,7 +18,6 @@ const StateSchema = z.enum([
     'NOT_CREATED',
     'DRAFT',
     'PUBLISHED',
-    'APPROVED_TO_REVIEW',
     'METHODOLOGICAL_EVALUATION',
     'SCIENTIFIC_EVALUATION',
     'ACCEPTED',
@@ -33,7 +32,6 @@ const ActionSchema = z.enum([
     'CREATE',
     'EDIT',
     'PUBLISH',
-    'APPROVE_TO_REVIEW',            //This approval is made by the secretary and allows assign reviewers to the protocol
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
