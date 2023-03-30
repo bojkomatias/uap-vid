@@ -11,8 +11,10 @@ import { RoleSelector } from './RoleSelector'
 export default function UserForm() {
     const router = useRouter()
     const [newUser, setNewUser] = useState({ role: ROLE.RESEARCHER })
+    const [loading, setLoading] = useState(false)
     const notifications = useNotifications()
-    const CreateNewUser = async () => {
+    const createNewUser = async () => {
+        setLoading(true)
         const res = await fetch(`/api/auth/signup`, {
             method: 'POST',
             mode: 'cors',
@@ -32,9 +34,8 @@ export default function UserForm() {
                     marginBottom: '.8rem',
                 },
             })
-            setTimeout(() => {
-                router.push('/users')
-            }, 2000)
+            setLoading(false)
+            router.push('/users')
         } else if (res.status === 422) {
             notifications.showNotification({
                 title: 'Usuario existente',
@@ -46,6 +47,7 @@ export default function UserForm() {
                     marginBottom: '.8rem',
                 },
             })
+            setLoading(false)
         }
     }
 
@@ -53,12 +55,12 @@ export default function UserForm() {
         <form
             onSubmit={(e) => {
                 e.preventDefault()
-                CreateNewUser()
+                createNewUser()
             }}
-            className="lg:grid lg:grid-cols-2 max-w-7xl mx-auto place-items-stretch"
+            className="mx-auto max-w-7xl place-items-stretch lg:grid lg:grid-cols-2"
         >
             <div className="m-3 p-1">
-                <label className="label">Nombre</label>
+                <label className="label">Nombre Completo</label>
                 <input
                     required
                     className="input"
@@ -109,14 +111,15 @@ export default function UserForm() {
                 <label className="label">Rol</label>
                 <RoleSelector user={newUser} />
             </div>
-            {/* Ignoro el primero param */}
-
             <Button
                 type="submit"
-                className="lg:place-self-end lg:col-start-2 lg:col-end-3 m-4 float-right"
+                className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
             >
-                {' '}
-                Crear Nuevo Usuario
+                {loading ? (
+                    <span className="loader-primary h-5 w-5"></span>
+                ) : (
+                    'Crear Nuevo Usuario'
+                )}
             </Button>
         </form>
     )
