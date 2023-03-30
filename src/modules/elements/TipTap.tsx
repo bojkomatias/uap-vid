@@ -2,6 +2,7 @@
 import TextAlign from '@tiptap/extension-text-align'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+
 import clsx from 'clsx'
 import {
     ArrowBackUp,
@@ -29,7 +30,7 @@ const Tiptap = ({
 }) => {
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure(),
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),

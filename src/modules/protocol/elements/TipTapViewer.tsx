@@ -16,7 +16,7 @@ const TipTapViewer = ({
 }: TipTapViewerProps) => {
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure(),
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
