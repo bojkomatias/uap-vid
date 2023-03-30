@@ -1,11 +1,12 @@
 'use client'
-import TipTapViewer from '@protocol/elements/TipTapViewer'
 import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
+const TipTapViewer = dynamic(() => import('@protocol/elements/TipTapViewer'))
 
 export default function ReviewItem({
     review,
