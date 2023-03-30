@@ -14,16 +14,19 @@ const ProtocolForm = dynamic(() => import('@protocol/Form'))
 
 export default async function Page({
     params,
+    searchParams,
 }: {
     params: { id: string; section: string }
+    searchParams: { convocatory: string }
 }) {
     const session = await getServerSession(authOptions)
-    const convocatory = await getCurrentConvocatory()
+    if (!searchParams.convocatory && params.id === 'new')
+        return redirect('/protocols')
 
     const protocol =
         params.id === 'new'
             ? {
-                  convocatoryId: convocatory?.id!,
+                  convocatoryId: searchParams.convocatory,
                   state: STATE.DRAFT,
                   researcher: session?.user?.id!,
                   sections: initialSectionValues,
@@ -36,7 +39,7 @@ export default async function Page({
 
     return (
         <>
-            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
+            <div className="mr-3 mt-1 flex items-center justify-end gap-2">
                 <PublishButton
                     role={session?.user?.role!}
                     protocol={protocol}
