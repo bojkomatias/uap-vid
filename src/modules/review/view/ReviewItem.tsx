@@ -14,6 +14,7 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     user: User
 }) {
+    if (!review.data) return null
     function getDuration(millis: number) {
         let minutes = Math.floor(millis / 60000)
         let hours = Math.round(minutes / 60)
@@ -147,7 +148,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 name={`revised-${id}`}
                 type="checkbox"
                 defaultChecked={revised}
-                className="mr-1 mb-0.5 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
                 onChange={(e) => updateRevised(e.target.checked)}
             />
 
