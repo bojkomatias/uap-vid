@@ -1,14 +1,48 @@
-import EditButton from '@protocol/elements/action-buttons/Edit'
-import PublishButton from '@protocol/elements/action-buttons/Publish'
 import View from '@protocol/View'
-import { canExecute } from '@utils/scopes'
-import { getServerSession } from 'next-auth'
+import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import EditButton from '@protocol/elements/action-buttons/Edit'
+import AcceptButton from '@protocol/elements/action-buttons/Accept'
+import ApproveButton from '@protocol/elements/action-buttons/Approve'
+import PublishButton from '@protocol/elements/action-buttons/Publish'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const protocol = await findProtocolById(params.id, false)
-
-    return <View protocol={protocol!} />
+    if (params.id === 'new') return redirect('/protocols/new/0')
+    const session = await getServerSession(authOptions)
+    const protocol = await findProtocolById(params.id)
+    if (!protocol) {
+        return redirect('/protocols')
+    }
+    return (
+        <>
+            <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
+                <div className="flex-1">
+                    <span className="rounded border bg-gray-50 px-2 py-0.5 text-sm font-semibold uppercase text-gray-600">
+                        {ProtocolStatesDictionary[protocol?.state!]}
+                    </span>
+                </div>
+                <ApproveButton
+                    role={session?.user?.role!}
+                    protocol={protocol!}
+                />
+                <AcceptButton
+                    role={session?.user?.role!}
+                    protocol={protocol!}
+                />
+                <PublishButton
+                    role={session?.user?.role!}
+                    protocol={protocol!}
+                />
+                <EditButton
+                    role={session?.user?.role!}
+                    state={protocol?.state!}
+                    id={protocol?.id!}
+                />
+            </div>
+            <View protocol={protocol!} role={session?.user?.role!} />
+        </>
+    )
 }

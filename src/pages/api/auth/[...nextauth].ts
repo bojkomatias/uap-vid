@@ -66,13 +66,21 @@ export const authOptions: NextAuthOptions = {
             if (userExist) {
                 await updateUserByEmail(user.email!, updateObject)
             } else {
-                await saveUser({ ...user, ...updateObject })
+                await saveUser({
+                    ...{
+                        name: user.name,
+                        email: user.email,
+                        image: user.image,
+                    },
+                    ...updateObject,
+                })
             }
             return true
         },
-        jwt: ({ token, user }) => {
+        jwt: async ({ token, user }) => {
             if (user) {
-                token.user = user
+                const userFromDb = await findUserByEmail(user.email!)
+                token.user = userFromDb
             }
             return token
         },

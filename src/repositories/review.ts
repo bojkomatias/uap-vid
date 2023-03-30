@@ -1,41 +1,86 @@
-import { ReviewsComments } from '@prisma/client'
+import { Review, ReviewType } from '@prisma/client'
+import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
-export const createComment = async (id: string, data: ReviewsComments) => {
-    // const protocol = await prisma.protocol.update({
-    //     where: {
-    //         id,
-    //     },
-    //     data: {
-    //         reviews: {
-    //             upsert: {
-    //                 set: {
-    //                     methodologic: {
-    //                         reviewer: '',
-    //                         veredict: '',
-    //                         comments: [
-    //                             {
-    //                                 data: 'upsertee? set?',
-    //                                 date: new Date(),
-    //                             },
-    //                         ],
-    //                     },
-    //                 },
-    //                 update: {
-    //                     methodologic: {
-    //                         update: {
-    //                             comments: {
-    //                                 push: {
-    //                                     date: new Date(),
-    //                                     data: 'updatee?',
-    //                                 },
-    //                             },
-    //                         },
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-    return true
+export const getReviewsByProtocol = cache(async (protocolId: string) => {
+    const reviews = await prisma.review.findMany({
+        include: {
+            reviewer: true,
+        },
+        where: { protocolId },
+    })
+    return reviews
+})
+
+export const getProtocolReviewByReviewer = cache(
+    async (protocolId: string, reviewerId: string) => {
+        const review = await prisma.review.findFirst({
+            where: {
+                protocolId: protocolId,
+                reviewerId: reviewerId,
+            },
+        })
+        return review
+    }
+)
+
+export const assignReviewerToProtocol = async (
+    protocolId: string,
+    reviewerId: string,
+    type: ReviewType
+
+) => {
+    const review = await prisma.review.create({
+        data: {
+            protocolId,
+            reviewerId,
+            data: '',
+            type: type
+        },
+    })
+    return review
+}
+
+export const reassignReviewerToProtocol = async (
+    reviewId: string,
+    protocolId: string,
+    reviewerId: string,
+    type: ReviewType
+
+) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            protocolId,
+            reviewerId,
+            data: '',
+            type: type
+        },
+    })
+    return review
+}
+
+export const updateReview = async (reviewId: string, data: Review) => {
+    const { id, ...rest } = data
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: rest
+    })
+    return review
+}
+
+export const markRevised = async (reviewId: string, revised: boolean) => {
+    const review = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: {
+            revised,
+        },
+    })
+    return review
 }

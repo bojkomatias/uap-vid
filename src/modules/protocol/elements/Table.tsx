@@ -1,48 +1,37 @@
+import SearchBar from '@elements/SearchBar'
 import { Protocol } from '@prisma/client'
-
-import { stateTranslate } from '@utils/zod'
+import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import Link from 'next/link'
 
 export default function Table({ items }: { items: Protocol[] | null }) {
     if (!items || items.length === 0) return <EmptyState />
     return (
-        <div className="max-w-7xl mx-auto">
-            <table className="min-w-full divide-y divide-gray-300 -mx-4 mt-8 sm:-mx-0">
+        <div className="mx-auto max-w-7xl">
+            <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                 <thead>
                     <tr>
                         <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-1"
                         >
                             Título
                         </th>
                         <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
-                        >
-                            Facultad
-                        </th>
-                        <th
-                            scope="col"
                             className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
                         >
-                            Carrera
+                            Facultad / Carrera
                         </th>
+
                         <th
                             scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                            className="table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                         >
                             Estado
                         </th>
                         <th
                             scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                            Fecha de creación
-                        </th>
-                        <th
-                            scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                            className="relative py-3.5 pl-3 pr-4 sm:pr-1"
                         >
                             <span className="sr-only">Ver</span>
                         </th>
@@ -51,26 +40,53 @@ export default function Table({ items }: { items: Protocol[] | null }) {
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
                         <tr key={item.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
                                 {item.sections.identification.title}
-                            </td>
-                            <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                                {item.sections.identification.sponsor.length < 2
-                                    ? item.sections.identification.sponsor
-                                    : item.sections.identification.sponsor
-                                          .map((e: string) => e.split('-')[1])
-                                          .join(' - ')}
+                                <dl>
+                                    <dd className="truncate text-xs font-thin text-gray-500 lg:text-sm">
+                                        {new Date(
+                                            item.createdAt
+                                        ).toLocaleString('es-AR')}
+                                    </dd>
+                                    <dd className="truncate text-gray-600 lg:hidden">
+                                        {item.sections.identification.sponsor
+                                            .length < 2
+                                            ? item.sections.identification
+                                                  .sponsor
+                                            : item.sections.identification.sponsor
+                                                  .map(
+                                                      (e: string) =>
+                                                          e.split('-')[1]
+                                                  )
+                                                  .join(' - ')}
+                                    </dd>
+                                </dl>
                             </td>
                             <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                                {item.sections.identification.career}
+                                <dl>
+                                    <dd className="truncate text-gray-700">
+                                        {item.sections.identification.sponsor
+                                            .length < 2
+                                            ? item.sections.identification
+                                                  .sponsor
+                                            : item.sections.identification.sponsor
+                                                  .map(
+                                                      (e: string) =>
+                                                          e.split('-')[1]
+                                                  )
+                                                  .join(' - ')}
+                                    </dd>
+                                    <dd className="truncate font-thin text-gray-500">
+                                        {item.sections.identification.career}
+                                    </dd>
+                                </dl>
                             </td>
-                            <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                                {stateTranslate[item.state]}
+
+                            <td className="table-cell whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-600">
+                                {ProtocolStatesDictionary[item.state]}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                {new Date(item.createdAt).toLocaleString()}
-                            </td>
-                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-1">
                                 <Link
                                     href={`/protocols/${item.id}`}
                                     passHref
@@ -89,13 +105,15 @@ export default function Table({ items }: { items: Protocol[] | null }) {
 
 function EmptyState() {
     return (
-        <div className="text-center mt-40">
+        <div className="mt-40 text-center">
             <h3 className="mt-2 text-lg font-semibold text-gray-900">
                 No se encontraron protocolos.
             </h3>
             <p className="mt-5 text-sm font-light text-gray-600">
-                Fíjese si la convocatoria esta abierta, y comience por crear
-                uno.
+                Modifique los parámetros de búsqueda. <br /> Si es evaluador,
+                consulte si algún protocolo le fue asignado.
+                <br /> Si es investigador fíjese si la convocatoria esta
+                abierta.
             </p>
         </div>
     )

@@ -13,13 +13,6 @@ const RoleSchema = z.enum([
 ])
 export const ROLE = RoleSchema.Enum
 export type RoleType = `${z.infer<typeof RoleSchema>}`
-export const roleTranslate = {
-    [ROLE.RESEARCHER]: 'Investigador',
-    [ROLE.SCIENTIST]: 'Evaluador',
-    [ROLE.METHODOLOGIST]: 'Metodólogo',
-    [ROLE.SECRETARY]: 'Secretario de Investigación',
-    [ROLE.ADMIN]: 'Administrador',
-}
 
 const StateSchema = z.enum([
     'NOT_CREATED',
@@ -33,15 +26,7 @@ const StateSchema = z.enum([
 
 export const STATE = StateSchema.Enum
 export type StateType = `${z.infer<typeof StateSchema>}`
-export const stateTranslate = {
-    [STATE.NOT_CREATED]: null,
-    [STATE.DRAFT]: 'Borrador',
-    [STATE.PUBLISHED]: 'Publicado',
-    [STATE.METHODOLOGICAL_EVALUATION]: 'En evaluación metodológica',
-    [STATE.SCIENTIFIC_EVALUATION]: 'En evaluación científica',
-    [STATE.ACCEPTED]: 'Aceptado',
-    [STATE.ON_GOING]: 'Aprobado y en curso',
-}
+
 // Schema for Transitions between protocols
 const ActionSchema = z.enum([
     'CREATE',
@@ -50,8 +35,8 @@ const ActionSchema = z.enum([
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
-    'ACCEPT',
-    'APPROVE',
+    'ACCEPT',                       //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+    'APPROVE',                      //This approval is made by the admin and approve the protocol and mark it as ON_GOING
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -59,6 +44,16 @@ export type ActionType = `${z.infer<typeof ActionSchema>}`
 const AccessSchema = z.enum(['PROTOCOLS', 'USERS', 'REVIEWS', 'CONVOCATORIES'])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
+
+const ReviewTypeSchema = z.enum([
+    'METHODOLOGICAL',
+    'SCIENTIFIC_INTERNAL',
+    'SCIENTIFIC_EXTERNAL',
+])
+export const REVIEW_TYPE = ReviewTypeSchema.Enum
+
+const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
+export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
 
 /////////////////////////////////////////
 // MODELS
@@ -95,25 +90,17 @@ export type Protocol = z.infer<typeof ProtocolSchema>
 // REVIEWS SCHEMA
 /////////////////////////////////////////
 
-export const CommentSchema = z.object({
-    date: z.coerce.date().optional(),
-    data: z.string().min(15, {
-        message: 'El comentario debe contener al menos 15 caracteres.',
-    }),
+export const ReviewSchema = z.object({
+    id: z.string().optional(),
+    type: ReviewTypeSchema,
+    revised: z.boolean().default(false),
+    verdict: ReviewVerdictSchema,
+    createdAt: z.coerce.date().optional(),
+    updatedAt: z.coerce.date().optional(),
+    data: z.string(),
+    protocolId: z.string(),
+    reviewerId: z.string(),
 })
-
-const ReviewSchema = z.object({
-    veredict: z.string(),
-    reviewer: z.string(),
-    comments: CommentSchema.array(),
-})
-
-export const ReviewsSchema = z.object({
-    id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-})
-
-export type Reviews = z.infer<typeof ReviewsSchema>
-export type Review = z.infer<typeof ReviewSchema>
 
 /////////////////////////////////////////
 // USER SCHEMA
@@ -297,30 +284,42 @@ export const IntroductionSchema = z.object({
 // PROTOCOL SECTIONS METHODOLOGY SCHEMA
 /////////////////////////////////////////
 
-
-export const MethodologySchema = z
-    .object({
-        analysis: z
-            .string()
-            .min(1, { message: 'El campo no puede estar vacío' }),
-        considerations: z
-            .string()
-            .min(1, { message: 'El campo no puede estar vacío' }),
-        design: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-        instruments: z
-            .string()
-            .min(1, { message: 'El campo no puede estar vacío' }),
-        participants: z
-            .string()
-            .min(1, { message: 'El campo no puede estar vacío' }),
-        place: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-        procedures: z
-            .string()
-            .min(1, { message: 'El campo no puede estar vacío' }),
-        detail: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-        type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-    })
-    .deepPartial()
+export const MethodologySchema = z.object({
+    analysis: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    considerations: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    design: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    instruments: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    participants: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    place: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    procedures: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    detail: z
+        .string()
+        .min(1, { message: 'El campo no puede estar vacío' })
+        .nullable(),
+    type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    humanAnimalOrDb: z.boolean().nullable(),
+})
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS PUBLICATION SCHEMA

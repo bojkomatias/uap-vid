@@ -8,15 +8,16 @@ import Introduction from './Sections/Introduction'
 import Method from './Sections/Method'
 import Publication from './Sections/Publication'
 import Bibliography from './Sections/Bibliography'
-import { Check, ChevronLeft, ChevronRight } from 'tabler-icons-react'
+import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
 import { useCallback, useEffect, useState } from 'react'
-import { zodResolver } from '@mantine/form'
+import { UseFormReturnType, zodResolver } from '@mantine/form'
 import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
 import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { SegmentedControl } from '@mantine/core'
+import { motion } from 'framer-motion'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <Identification />,
@@ -36,10 +37,15 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const notifications = useNotifications()
 
     const form = useProtocol({
-        initialValues: protocol,
+        initialValues:
+            path?.split('/')[2] === 'new' &&
+            localStorage.getItem('temp-protocol')
+                ? JSON.parse(localStorage.getItem('temp-protocol')!)
+                : protocol,
         validate: zodResolver(ProtocolSchema),
         validateInputOnChange: true,
     })
+
     useEffect(() => {
         // Validate if not existing path goes to section 0
         if (
@@ -61,8 +67,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 },
                 body: JSON.stringify(protocol),
             })
-            const { id, createdAt }: Protocol = await res.json()
-            form.setValues({ id, createdAt })
+            const { id }: Protocol = await res.json()
 
             if (res.status === 200) {
                 notifications.showNotification({
@@ -76,7 +81,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     },
                 })
             }
-            return
+            return router.push(`/protocols/${id}/${section}`)
         }
         const res = await fetch(`/api/protocol/${protocol.id}`, {
             method: 'PUT',
@@ -104,16 +109,46 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     return (
         <ProtocolProvider form={form}>
             <form
+                onBlur={() => {
+                    path?.split('/')[2] === 'new' &&
+                    typeof window !== 'undefined'
+                        ? localStorage.setItem(
+                              'temp-protocol',
+                              JSON.stringify(form.values)
+                          )
+                        : null
+                }}
                 onSubmit={(e) => {
                     e.preventDefault()
+
                     // Enforce validity only on first section to Save
-                    if (!form.isValid('sections.identification'))
-                        return console.log(form.errors)
+                    if (!form.isValid('sections.identification')) {
+                        notifications.showNotification({
+                            title: 'No se pudo guardar',
+                            message:
+                                'Debes completar la sección "Identificación" para poder guardar un borrador',
+                            color: 'red',
+                            icon: <X />,
+                            radius: 0,
+                            style: {
+                                marginBottom: '.8rem',
+                            },
+                        })
+                        return form.validate()
+                    }
+                    typeof window !== 'undefined'
+                        ? localStorage.removeItem('temp-protocol')
+                        : null
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto max-w-7xl w-screen px-4"
+                className="mx-auto w-full max-w-7xl px-4"
             >
-                <div className="w-full overflow-x-auto my-6 py-2 lg:w-fit lg:mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: -7 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.4 }}
+                    className="my-6  w-full overflow-auto py-2 lg:mx-auto lg:w-fit"
+                >
                     <SegmentedControl
                         value={section}
                         onChange={setSection}
@@ -130,13 +165,12 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         classNames={{
                             root: 'bg-gray-50 border rounded',
                             label: 'uppercase text-xs px-2 py-1 font-light',
-                            active: 'bg-primary',
-                            labelActive:
-                                'text-white hover:text-white font-semibold',
+                            indicator: 'bg-primary font-semibold',
                         }}
+                        color="blue"
                         transitionDuration={300}
                     />
-                </div>
+                </motion.div>
 
                 {sectionMapper[Number(section)]}
 

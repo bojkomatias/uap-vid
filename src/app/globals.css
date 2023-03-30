@@ -14,10 +14,10 @@
 }
 @layer components {
     .input {
-        @apply w-full self-start p-3 py-2 pl-3 pr-4 focus:ring-[2px] border border-gray-300 placeholder:text-xs placeholder:text-gray-400/80 placeholder:uppercase focus:outline-none focus:ring-primary/80 focus:ring-offset-2 rounded;
+        @apply w-full self-start rounded border border-gray-300 p-3 py-2 pl-3 pr-4 placeholder:text-xs placeholder:uppercase placeholder:text-gray-400/80 focus:outline-none focus:ring-[2px] focus:ring-primary/80 focus:ring-offset-2;
     }
     .label {
-        @apply text-xs font-normal uppercase text-gray-500 pointer-events-none select-none p-1;
+        @apply pointer-events-none select-none p-1 text-xs font-normal uppercase text-gray-500;
     }
 }
 
@@ -31,6 +31,7 @@
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
     width: 6px;
+    height: 2px;
 }
 
 *::-webkit-scrollbar-track {
@@ -41,4 +42,31 @@
     background-color: #a3a3a380;
     border-radius: 6px;
     border: 0px none #ffffff00;
+}
+
+.loader {
+    border: 5px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+.loader-primary {
+    border: 5px solid #003c71;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

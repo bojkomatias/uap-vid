@@ -1,5 +1,5 @@
 import { ProtocolSectionsMethodology } from '@prisma/client'
-import RTEViewer from '@protocol/elements/RTEViewer'
+import TipTapViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
 import SectionLayout from './SectionLayout'
 
@@ -24,31 +24,31 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             {data.type ===
                 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales' && (
                 <>
-                    <RTEViewer
+                    <TipTapViewer
                         title="Diseño y tipo de investigación"
                         content={data.design}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Participantes"
                         content={data.participants}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Lugar de desarrollo"
                         content={data.place}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Instrumentos para recolección de datos"
                         content={data.instruments}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Procedimientos para recolección de datos"
                         content={data.procedures}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Análisis de datos"
                         content={data.analysis}
                     />
-                    <RTEViewer
+                    <TipTapViewer
                         title="Consideraciones"
                         content={data.considerations}
                     />
@@ -56,7 +56,7 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             )}
 
             {data.type === 'Investigaciones de tipo teóricas' && (
-                <RTEViewer
+                <TipTapViewer
                     title="Detalle de la metodología"
                     content={data.detail}
                 />

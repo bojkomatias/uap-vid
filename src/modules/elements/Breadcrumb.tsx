@@ -39,12 +39,15 @@ export const Breadcrumb = () => {
     )
 
     return (
-        <nav className="flex absolute top-8 left-10" aria-label="Breadcrumb">
+        <nav
+            className="absolute top-8 left-4 flex sm:left-6 2xl:left-10"
+            aria-label="Breadcrumb"
+        >
             <ol role="list" className="flex rounded-md bg-white">
                 {pathname !== '/protocols' ? (
                     <li className="flex items-center">
                         <Link
-                            href="/"
+                            href="/protocols"
                             className="text-gray-500 hover:text-primary"
                             passHref
                         >
@@ -58,7 +61,7 @@ export const Breadcrumb = () => {
                     <li key={page.name} className="flex">
                         {page.name == 'Inicio' ? null : (
                             <div className="flex items-center">
-                                <ChevronRight className="ml-2 text-gray-500 h-4" />
+                                <ChevronRight className="ml-2 h-4 text-gray-500" />
                                 <Link
                                     href={page.href}
                                     className="ml-4 text-sm font-medium text-gray-500 hover:text-primary"

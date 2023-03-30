@@ -1,3 +1,5 @@
+import { Role } from '@prisma/client'
+import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 const getAllUsers = async () => {
@@ -10,7 +12,23 @@ const getAllUsers = async () => {
     }
 }
 
-const findUserById = async (id: string) => {
+const getAllUsersWithoutResearchers = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                role: {
+                    not: Role.RESEARCHER
+                },
+            },
+        })
+        return users
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
+const findUserById = cache(async (id: string) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -22,9 +40,9 @@ const findUserById = async (id: string) => {
         console.log(error)
         return null
     }
-}
+})
 
-const findUserByEmail = async (email: string) => {
+const findUserByEmail = cache(async (email: string) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -36,7 +54,7 @@ const findUserByEmail = async (email: string) => {
         console.log(error)
         return null
     }
-}
+})
 
 const updateUserById = async (id: string, data: any) => {
     try {
@@ -82,6 +100,7 @@ const saveUser = async (data: any) => {
 
 export {
     getAllUsers,
+    getAllUsersWithoutResearchers,
     findUserById,
     findUserByEmail,
     updateUserById,

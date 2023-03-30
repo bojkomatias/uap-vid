@@ -20,20 +20,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(created)
 }
 
-// researcher ID: 641a036ccccfe426a64175de
-// reviewer Scientific ID: 641a036ccccfe426a64175dd
-// reviewer Method ID: 641a036ccccfe426a64175dc
-
-export async function GET() {
-    try {
-        const protocols = await getProtocolByRol(
-            ROLE.METHODOLOGIST,
-            '641a036ccccfe426a64175dc'
-        )
-        console.log(protocols)
-
-        return NextResponse.json(protocols)
-    } catch (e) {
-        return NextResponse.json(e, { status: 500 })
-    }
-}

@@ -1,13 +1,11 @@
 import { Heading } from '@layout/Heading'
-import ReviewWrapper from '@review/Container'
-import { canAccess, canExecute } from '@utils/scopes'
+import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
-import PublishButton from '@protocol/elements/action-buttons/Publish'
-import EditButton from '@protocol/elements/action-buttons/Edit'
+import Reviews from '@review/index'
 
 async function Layout({
     params,
@@ -17,10 +15,19 @@ async function Layout({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
-    const protocol = await findProtocolById(params.id, true)
+    if (params.id === 'new') {
+        if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
+            redirect('/protocols')
+        return (
+            <>
+                <Heading title={'Nuevo protocolo'} />
+                <div className="mx-auto w-full max-w-7xl">{children}</div>
+            </>
+        )
+    }
+    const protocol = await findProtocolById(params.id)
     if (!protocol) redirect('/protocols')
 
-    //* PROPONGO QUE LA MAYORÍA LOS BOTONES DE ACCIÓN DE LOS PROTOCOLOS ESTÉN ACA Y JUNTOS
     return (
         <>
             <Heading
@@ -33,20 +40,11 @@ async function Layout({
                     </span>
                 }
             />
-            <div className="justify-end flex items-center mr-3 gap-2 mt-1">
-                <PublishButton
-                    role={session?.user?.role!}
-                    protocol={protocol}
-                />
-                <EditButton
-                    role={session?.user?.role!}
-                    state={protocol.state}
-                    id={protocol.id}
-                />
-            </div>
-            <div className="flex w-full">
-                <div className="max-w-7xl mx-auto w-full">{children}</div>
-                <ReviewWrapper protocol={protocol} user={session?.user!} />
+
+            <div className="flex flex-col-reverse lg:flex-row">
+                <div className="mx-auto w-full max-w-7xl">{children}</div>
+                {/* @ts-expect-error Server Component */}
+                <Reviews protocol={protocol} user={session?.user!} />
             </div>
         </>
     )

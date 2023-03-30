@@ -37,6 +37,15 @@ export const initialSectionValues: Sections = {
         state: '',
     },
     methodology: {
+        considerations: null,
+        analysis: null,
+        detail: null,
+        instruments: null,
+        participants: null,
+        procedures: null,
+        design: null,
+        humanAnimalOrDb: null,
+        place: null,
         type: '',
     },
     publication: {

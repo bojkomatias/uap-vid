@@ -15,16 +15,14 @@ export default function MobileNavigation({ user }: { user: User }) {
     const pathname = usePathname()
     return (
         <>
-            <div className="fixed top-7 right-2 z-20 lg:hidden">
-                <Button
-                    intent="secondary"
-                    onClick={() => setSidebarOpen(true)}
-                    className="px-2"
-                >
-                    <span className="sr-only">Open sidebar</span>
-                    <Menu2 className="h-4 " aria-hidden="true" />
-                </Button>
-            </div>
+            <Button
+                intent="primary"
+                onClick={() => setSidebarOpen(true)}
+                className="absolute top-5 left-4 z-20 sm:left-6 lg:hidden"
+            >
+                <span className="sr-only">Open sidebar</span>
+                <Menu2 className="h-4 " aria-hidden="true" />
+            </Button>
             <Transition.Root show={sidebarOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -90,7 +88,7 @@ export default function MobileNavigation({ user }: { user: User }) {
                                                     href={item.href}
                                                     className={clsx(
                                                         {
-                                                            'ring-2 ring-primary/80 bg-gray-200 ring-offset-1 hover:ring-offset-2':
+                                                            'bg-gray-200 ring-2 ring-primary/80 ring-offset-1 hover:ring-offset-2':
                                                                 pathname?.includes(
                                                                     item.href
                                                                 ),
@@ -100,14 +98,14 @@ export default function MobileNavigation({ user }: { user: User }) {
                                                                 item.href,
                                                         },
                                                         'text-base-700 hover:bg-gray-100 hover:text-black',
-                                                        'group flex items-center px-4 py-3 text-sm font-medium rounded'
+                                                        'group flex items-center rounded px-4 py-3 text-sm font-medium'
                                                     )}
                                                     passHref
                                                 >
                                                     <item.icon
                                                         className={clsx(
                                                             {
-                                                                'text-primary stroke-2':
+                                                                'stroke-2 text-primary':
                                                                     pathname?.includes(
                                                                         item.href
                                                                     ),
