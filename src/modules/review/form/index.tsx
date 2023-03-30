@@ -1,26 +1,34 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { Review, ReviewVerdict } from '@prisma/client'
+import { Review, ReviewVerdict, User } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ItemContainer from '@review/ItemContainer'
+import ReviewItem from '@review/view/ReviewItem'
+import { SegmentedControl } from '@mantine/core'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
-export default function ReviewForm({ review }: { review: Review }) {
+export default function ReviewForm({
+    review,
+}: {
+    review: Review & { reviewer: User }
+}) {
+    const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
+    const [editing, setEditing] = useState('0')
     const notifications = useNotifications()
 
     const addReview = useCallback(
@@ -62,11 +70,36 @@ export default function ReviewForm({ review }: { review: Review }) {
     )
     return (
         <ItemContainer title="Realizar revisión">
+            <SegmentedControl
+                value={editing}
+                onChange={setEditing}
+                data={[
+                    { label: 'Vista previa', value: '0' },
+                    { label: 'Edición', value: '1' },
+                ]}
+                classNames={{
+                    root: 'bg-gray-50 border rounded',
+                    label: 'uppercase text-xs px-2 py-1 font-light',
+                    indicator: 'bg-primary font-semibold',
+                }}
+                color="blue"
+                fullWidth
+                transitionDuration={300}
+            />
+
+            <ul className={editing === '0' ? 'block' : 'hidden'}>
+                <ReviewItem
+                    review={{ ...form.values, reviewer: review.reviewer }}
+                    user={review.reviewer}
+                />
+            </ul>
+
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
                     addReview(form.values.data, form.values.verdict)
                 }}
+                className={editing === '1' ? 'block' : 'hidden'}
             >
                 <label className="label">Observación</label>
                 <Tiptap {...form.getInputProps('data')} />

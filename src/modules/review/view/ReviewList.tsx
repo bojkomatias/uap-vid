@@ -38,19 +38,22 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
         [reviews, state]
     )
 
+    if (!reviewsInState[0].data && !reviewsNotInState) return null
     return (
         <ItemContainer title="Revisiones">
-            <ul role="list" className="space-y-3">
-                {reviewsInState.map((r, i) => (
-                    <ReviewItem key={i} review={r} user={user} />
-                ))}
-            </ul>
+            {reviewsInState[0].data ? (
+                <ul role="list" className="space-y-3">
+                    {reviewsInState.map((r, i) => (
+                        <ReviewItem key={i} review={r} user={user} />
+                    ))}
+                </ul>
+            ) : null}
             {(user.role === Role.ADMIN || Role.SECRETARY) &&
             reviewsNotInState.length > 0 ? (
                 <>
                     <button
                         onClick={() => setShowHistorical((prv) => !prv)}
-                        className="mt-8 flex cursor-pointer items-center gap-3 focus:outline-0"
+                        className="flex cursor-pointer items-center gap-3 focus:outline-0"
                     >
                         <span className="text-sm font-semibold leading-10 text-gray-700">
                             Revisiones históricas
