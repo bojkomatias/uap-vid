@@ -16,7 +16,6 @@ import ItemContainer from '@review/ItemContainer'
 const Tiptap = dynamic(() => import('@elements/TipTap'))
 
 export default function ReviewForm({ review }: { review: Review }) {
-    const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
         validate: zodResolver(ReviewSchema),
@@ -46,8 +45,6 @@ export default function ReviewForm({ review }: { review: Review }) {
                         marginBottom: '.8rem',
                     },
                 })
-                form.reset()
-                router.refresh()
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',
