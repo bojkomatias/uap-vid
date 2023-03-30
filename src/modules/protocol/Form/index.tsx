@@ -11,7 +11,7 @@ import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect, useState, useTransition } from 'react'
 import { UseFormReturnType, zodResolver } from '@mantine/form'
 import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
 import { Protocol } from '@prisma/client'
@@ -35,6 +35,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
+    const [isPending, startTransition] = useTransition()
 
     const form = useProtocol({
         initialValues:
@@ -102,6 +103,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 style: {
                     marginBottom: '.8rem',
                 },
+            })
+            startTransition(() => {
+                router.refresh()
             })
         }
     }, [])
@@ -187,7 +191,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     </Button>
 
                     <div className="flex gap-2">
-                        <Button type="submit" intent="secondary">
+                        <Button type="submit" intent="secondary" disabled={isPending}>
                             Guardar
                         </Button>
                     </div>
