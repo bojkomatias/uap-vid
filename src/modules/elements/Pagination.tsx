@@ -22,20 +22,26 @@ export default function Pagination({
 
     return (
         <div className="mx-auto mt-12 flex w-fit gap-2">
-            {pageNumber().map((page: number) => (
-                <Link key={page} href={`/protocols?page=${page}`} passHref>
-                    <Button
-                        intent="terciary"
-                        className={
-                            Number(pageParams) === page
-                                ? 'bg-primary text-white'
-                                : ''
-                        }
-                    >
-                        {page}
-                    </Button>
-                </Link>
-            ))}
+            {Math.ceil(count / shownRecords) > 1
+                ? pageNumber().map((page: number) => (
+                      <Link
+                          key={page}
+                          href={`/protocols?page=${page}`}
+                          passHref
+                      >
+                          <Button
+                              intent="terciary"
+                              className={
+                                  Number(pageParams) === page
+                                      ? 'bg-primary text-white'
+                                      : ''
+                              }
+                          >
+                              {page}
+                          </Button>
+                      </Link>
+                  ))
+                : null}
         </div>
     )
 }
