@@ -30,7 +30,8 @@ const Tiptap = ({
 }) => {
     const editor = useEditor({
         extensions: [
-            StarterKit.configure(),
+            //@ts-ignore
+            StarterKit,
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
