@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/Button'
 import { useForm } from '@mantine/form'
-import { useCallback } from 'react'
+import { useCallback, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
@@ -22,6 +22,7 @@ export default function ReviewForm({ review }: { review: Review }) {
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
+    const [isPending, startTransition] = useTransition()
     const notifications = useNotifications()
 
     const addReview = useCallback(
@@ -46,8 +47,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         marginBottom: '.8rem',
                     },
                 })
-                form.reset()
-                router.refresh()
+                startTransition(() => router.refresh())
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',
@@ -167,6 +167,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                     type="submit"
                     className="ml-auto mt-2"
                     intent="secondary"
+                    disabled={isPending}
                 >
                     Comentar
                 </Button>
