@@ -14,7 +14,7 @@ export const metadata = {
         default: 'UAP - Investigación y Desarrollo',
         template: '$ | VID',
     },
-    icons: { icon: '/UAPazul.png' },
+    icons: { icon: '/favicon.ico' },
 }
 
 const font = Roboto_Flex({ subsets: ['latin'], variable: '--font-sans' })

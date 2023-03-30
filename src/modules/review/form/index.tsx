@@ -53,8 +53,6 @@ export default function ReviewForm({
                         marginBottom: '.8rem',
                     },
                 })
-                form.reset()
-                router.refresh()
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',
