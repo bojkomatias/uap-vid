@@ -15,7 +15,7 @@ export const SignIn = () => {
     const notifications = useNotifications()
 
     return (
-        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
+        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pb-12 pt-4">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                     <Image
@@ -51,7 +51,8 @@ export const SignIn = () => {
                         const res = await signIn('credentials', {
                             email: email,
                             password: password,
-                            redirect: false,
+                            redirect: true,
+                            callbackUrl: '/protocols',
                         })
 
                         if (res?.status !== 200) {
@@ -62,7 +63,6 @@ export const SignIn = () => {
                                 color: 'red',
                             })
                         }
-                        router.push('/protocols')
                     }}
                     type="submit"
                 >
@@ -77,7 +77,7 @@ export const SignIn = () => {
                     onClick={(e: any) => {
                         setLoadingMicrosoft(true)
                         e.preventDefault()
-                        signIn('azure-ad', { callbackUrl: '/protocols' })
+                        signIn('azure-ad', { callbackUrl: '/' })
                     }}
                 >
                     {loadingMicrosoft ? (

@@ -11,7 +11,7 @@ import { UpdateRole } from '@user/UpdateRole'
 
 export default async function UserList() {
     const session = await getServerSession(authOptions)
-    if (!session) return redirect('/login')
+
     if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
     const users = await getAllUsers()
 
@@ -28,7 +28,7 @@ export default async function UserList() {
             </div>
 
             <div className="mx-auto max-w-7xl">
-                <table className="min-w-full divide-y divide-gray-300 -mx-4 mt-8 sm:-mx-0">
+                <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                     <thead>
                         <tr>
                             <th
@@ -78,17 +78,6 @@ export default async function UserList() {
                                     <UpdateRole
                                         user={JSON.parse(JSON.stringify(user))}
                                     />
-                                </td>
-                                <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                    <a
-                                        href="#"
-                                        className="text-indigo-600 hover:text-indigo-900"
-                                    >
-                                        Edit
-                                        <span className="sr-only">
-                                            , {user.name}
-                                        </span>
-                                    </a>
                                 </td>
                             </tr>
                         ))}

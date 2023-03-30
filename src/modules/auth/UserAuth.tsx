@@ -85,7 +85,7 @@ export const UserAuth = () => {
                                         )}
                                         onClick={() => {
                                             setLoading(true)
-                                            signOut({ callbackUrl: '/login' })
+                                            signOut({ callbackUrl: '/' })
                                         }}
                                     >
                                         Cerrar sesión
