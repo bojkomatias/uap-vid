@@ -30,9 +30,7 @@ export default function ReviewItem({
     return (
         <li>
             <div className="min-w-0 flex-1">
-                <dt className="text-sm font-medium text-gray-500">
-                    {ReviewTypesDictionary[review.type]}
-                </dt>
+                <dt className="label">{ReviewTypesDictionary[review.type]}</dt>
                 <div
                     className={clsx('rounded', {
                         'bg-gray-50 opacity-70': review.revised,
