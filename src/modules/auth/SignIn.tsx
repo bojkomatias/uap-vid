@@ -51,8 +51,7 @@ export const SignIn = () => {
                         const res = await signIn('credentials', {
                             email: email,
                             password: password,
-                            redirect: true,
-                            callbackUrl: '/protocols',
+                            redirect: false,
                         })
                         if (res?.status !== 200) {
                             setLoading(false)
@@ -62,7 +61,6 @@ export const SignIn = () => {
                                 color: 'red',
                             })
                         }
-
                         setLoading(false)
                         return router.refresh()
                     }}
@@ -78,7 +76,7 @@ export const SignIn = () => {
                     onClick={(e: any) => {
                         setLoadingMicrosoft(true)
                         e.preventDefault()
-                        signIn('azure-ad', { callbackUrl: '/' })
+                        signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
                 >
                     {loadingMicrosoft ? (
