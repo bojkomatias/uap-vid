@@ -22,35 +22,41 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
                     ? r.type === ReviewType.SCIENTIFIC_EXTERNAL ||
                       r.type == ReviewType.SCIENTIFIC_INTERNAL
                     : null
-            ),
+            ) ?? null,
         [reviews, state]
     )
-    const reviewsNotInState = useMemo(
-        () =>
+    const reviewsNotInState = useMemo(() => {
+        if (state === State.ACCEPTED) return reviews
+        return (
             reviews.filter((r) =>
-                state === State.METHODOLOGICAL_EVALUATION
+                state === State.METHODOLOGICAL_EVALUATION || State.ACCEPTED
                     ? r.type !== ReviewType.METHODOLOGICAL
                     : state === State.SCIENTIFIC_EVALUATION
                     ? r.type !== ReviewType.SCIENTIFIC_EXTERNAL &&
                       r.type !== ReviewType.SCIENTIFIC_INTERNAL
                     : null
-            ),
-        [reviews, state]
-    )
+            ) ?? null
+        )
+    }, [reviews, state])
 
+    if (!reviewsNotInState && !reviewsInState) return null
+    if (reviewsInState.length > 0 && !reviewsInState.some((r) => r.data))
+        return null
     return (
         <ItemContainer title="Revisiones">
-            <ul role="list" className="space-y-3">
-                {reviewsInState.map((r, i) => (
-                    <ReviewItem key={i} review={r} user={user} />
-                ))}
-            </ul>
+            {reviewsInState.some((r) => r.data) ? (
+                <ul role="list" className="space-y-3">
+                    {reviewsInState.map((r, i) => (
+                        <ReviewItem key={i} review={r} user={user} />
+                    ))}
+                </ul>
+            ) : null}
             {(user.role === Role.ADMIN || Role.SECRETARY) &&
             reviewsNotInState.length > 0 ? (
                 <>
                     <button
                         onClick={() => setShowHistorical((prv) => !prv)}
-                        className="mt-8 flex cursor-pointer items-center gap-3 focus:outline-0"
+                        className="flex cursor-pointer items-center gap-3 focus:outline-0"
                     >
                         <span className="text-sm font-semibold leading-10 text-gray-700">
                             Revisiones históricas

@@ -6,12 +6,14 @@ import { cache } from 'react'
 const findProtocolById = cache(async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
+            include: {
+                reviews: true
+            },
             where: {
                 id,
             },
         })
     } catch (e) {
-        console.log(e)
         return null
     }
 })
@@ -26,7 +28,6 @@ const updateProtocolById = async (id: string, data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -43,7 +44,6 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -55,7 +55,6 @@ const createProtocol = async (data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -64,7 +63,6 @@ const getAllProtocols = cache(async () => {
     try {
         return await prisma.protocol.findMany()
     } catch (e) {
-        console.log(e)
         return null
     }
 })
@@ -157,7 +155,6 @@ const getProtocolByRol = cache(
 
             return await query[role]
         } catch (e) {
-            console.log(e)
             return null
         }
     }
@@ -203,7 +200,6 @@ const getProtocolsWithoutPagination = cache(
 
             return await query[role]
         } catch (e) {
-            console.log(e)
             return null
         }
     }
@@ -221,7 +217,6 @@ const changeProtocolState = async (id: string, state: State) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -238,7 +233,6 @@ const publishProtocol = async (id: string) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }

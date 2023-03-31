@@ -8,9 +8,7 @@ export async function PUT(
 ) {
 
     const data = await request.json()
-    console.log('params', data);
     const review = await updateReview(params.id, data)
-    console.log('review', review);
 
     return NextResponse.json(review)
 }

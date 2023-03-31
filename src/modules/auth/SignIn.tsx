@@ -7,15 +7,15 @@ import { Button } from '@elements/Button'
 import Image from 'next/image'
 
 export const SignIn = () => {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
-    const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
 
     return (
-        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pt-4 pb-12">
+        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pb-12 pt-4">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                     <Image
@@ -53,18 +53,17 @@ export const SignIn = () => {
                             password: password,
                             redirect: false,
                         })
-
                         if (res?.status !== 200) {
                             setLoading(false)
-                            return notifications.showNotification({
+                            notifications.showNotification({
                                 title: 'No se pudo iniciar sesión',
                                 message: 'Credenciales inválidas',
                                 color: 'red',
                             })
                         }
-                        router.push('/protocols')
+                        setLoading(false)
+                        return router.refresh()
                     }}
-                    type="submit"
                 >
                     {loading ? (
                         <span className="loader-primary h-5 w-5"></span>

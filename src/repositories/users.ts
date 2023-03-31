@@ -7,7 +7,6 @@ const getAllUsers = async () => {
         const users = await prisma.user.findMany()
         return users
     } catch (error) {
-        console.log(error)
         return null
     }
 }
@@ -23,7 +22,6 @@ const getAllUsersWithoutResearchers = async () => {
         })
         return users
     } catch (error) {
-        console.log(error)
         return null
     }
 }
@@ -37,7 +35,6 @@ const findUserById = cache(async (id: string) => {
         })
         return user
     } catch (error) {
-        console.log(error)
         return null
     }
 })
@@ -51,7 +48,6 @@ const findUserByEmail = cache(async (email: string) => {
         })
         return user
     } catch (error) {
-        console.log(error)
         return null
     }
 })
@@ -66,7 +62,6 @@ const updateUserById = async (id: string, data: any) => {
         })
         return user
     } catch (error) {
-        console.log(error)
         return null
     }
 }
@@ -81,7 +76,6 @@ const updateUserByEmail = async (email: string, data: any) => {
         })
         return user
     } catch (error) {
-        console.log(error)
         return null
     }
 }
@@ -93,7 +87,6 @@ const saveUser = async (data: any) => {
         })
         return user
     } catch (error) {
-        console.log(error)
         return null
     }
 }

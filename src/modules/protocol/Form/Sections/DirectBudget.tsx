@@ -36,7 +36,7 @@ export default function DirectBudget() {
                     insertedItemFormat={{
                         type: '',
                         detail: '',
-                        amount: '',
+                        amount: 0,
                         year: '',
                     }}
                     headers={[

@@ -2,7 +2,6 @@ import { Heading } from '@layout/Heading'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {
     getProtocolsWithoutPagination,
@@ -13,6 +12,9 @@ import Pagination from '@elements/Pagination'
 import SearchBar from '@elements/SearchBar'
 import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
+import { canExecute } from '@utils/scopes'
+import { ACTION } from '@utils/zod'
+import { redirect } from 'next/navigation'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -21,24 +23,32 @@ export default async function Page({
     searchParams?: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session || !session.user) return redirect('/login')
+
+    if (!session?.user) {
+        return redirect('/login')
+    }
 
     const protocolCount =
-        (await getTotalRecordsProtocol(session.user.role, session.user.id)) || 0
+        (await getTotalRecordsProtocol(
+            session?.user?.role,
+            session?.user?.id
+        )) || 0
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
-    const protocols = searchParams?.search
-        ? await getProtocolsWithoutPagination(
-              session.user.role,
-              session.user.id
-          )
-        : await getProtocolByRol(
-              session.user.role,
-              session.user.id,
-              Number(searchParams?.page) || 1,
-              shownRecords
-          )
+    const protocols = session?.user
+        ? searchParams?.search
+            ? await getProtocolsWithoutPagination(
+                  session.user.role,
+                  session.user.id
+              )
+            : await getProtocolByRol(
+                  session.user.role,
+                  session.user.id,
+                  Number(searchParams?.page) || 1,
+                  shownRecords
+              )
+        : null
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = (): Protocol[] => {
         const results = fuzzysort.go(
@@ -65,7 +75,14 @@ export default async function Page({
             </p>
 
             <div className="mt-3 flex justify-end">
-                <CreateButton role={session?.user?.role!} />
+                {canExecute(
+                    ACTION.CREATE,
+                    session?.user?.role!,
+                    'NOT_CREATED'
+                ) ? (
+                    // @ts-expect-error
+                    <CreateButton role={session?.user?.role!} />
+                ) : null}
             </div>
 
             <SearchBar />

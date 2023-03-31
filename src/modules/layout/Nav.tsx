@@ -1,5 +1,4 @@
 import { UserAuth } from '@auth/UserAuth'
-
 import Image from 'next/image'
 import Link from 'next/link'
 

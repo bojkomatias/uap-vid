@@ -11,8 +11,8 @@ import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/Button'
-import { useCallback, useEffect, useState } from 'react'
-import { UseFormReturnType, zodResolver } from '@mantine/form'
+import { useCallback, useEffect, useState, useTransition } from 'react'
+import { zodResolver } from '@mantine/form'
 import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
 import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
@@ -35,6 +35,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
     const notifications = useNotifications()
+    const [isPending, startTransition] = useTransition()
 
     const form = useProtocol({
         initialValues:
@@ -103,6 +104,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     marginBottom: '.8rem',
                 },
             })
+            startTransition(() => {
+                router.refresh()
+            })
         }
     }, [])
 
@@ -120,7 +124,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 }}
                 onSubmit={(e) => {
                     e.preventDefault()
-
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification')) {
                         notifications.showNotification({
@@ -141,13 +144,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         : null
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto w-full max-w-7xl px-4"
+                className="w-full px-4"
             >
                 <motion.div
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="my-6  w-full overflow-auto py-2 lg:mx-auto lg:w-fit"
+                    className="mx-auto my-6 w-fit max-w-full overflow-auto py-2"
                 >
                     <SegmentedControl
                         value={section}
@@ -174,7 +177,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
                 {sectionMapper[Number(section)]}
 
-                <div className="mt-12 mb-8 flex w-full justify-between">
+                <div className="mb-8 mt-12 flex w-full justify-between">
                     <Button
                         type="button"
                         intent="secondary"
@@ -187,7 +190,11 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     </Button>
 
                     <div className="flex gap-2">
-                        <Button type="submit" intent="secondary">
+                        <Button
+                            type="submit"
+                            intent="secondary"
+                            disabled={isPending}
+                        >
                             Guardar
                         </Button>
                     </div>
