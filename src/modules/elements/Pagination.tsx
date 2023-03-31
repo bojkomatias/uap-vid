@@ -30,7 +30,7 @@ export default function Pagination({
                           passHref
                       >
                           <Button
-                              intent="terciary"
+                              intent="tertiary"
                               className={
                                   Number(pageParams) === page
                                       ? 'bg-primary text-white'
