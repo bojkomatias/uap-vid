@@ -22,7 +22,7 @@ export default function Bibliography() {
                     path={path + 'chart'}
                     label="cuadro bibliográfico"
                     toMap={form.values.sections.bibliography.chart}
-                    insertedItemFormat={{ author: '', title: '', year: '' }}
+                    insertedItemFormat={{ author: '', title: '', year: 0 }}
                     headers={[
                         {
                             x: 'author',

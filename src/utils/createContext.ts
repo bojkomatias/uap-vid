@@ -19,7 +19,7 @@ export const initialSectionValues: Sections = {
         modality: '',
     },
     budget: {
-        expenses: [],
+        expenses: [{ type: '', detail: '', amount: 0, year: '' }],
     },
     description: {
         discipline: '',
@@ -53,6 +53,6 @@ export const initialSectionValues: Sections = {
         result: '',
     },
     bibliography: {
-        chart: [],
+        chart: [{ title: '', author: '', year: 0 }],
     },
 }
