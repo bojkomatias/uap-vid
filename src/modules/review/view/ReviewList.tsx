@@ -22,26 +22,29 @@ function ReviewList({ reviews, user, state }: ReviewStateProps) {
                     ? r.type === ReviewType.SCIENTIFIC_EXTERNAL ||
                       r.type == ReviewType.SCIENTIFIC_INTERNAL
                     : null
-            ),
+            ) ?? null,
         [reviews, state]
     )
-    const reviewsNotInState = useMemo(
-        () =>
+    const reviewsNotInState = useMemo(() => {
+        if (state === State.ACCEPTED) return reviews
+        return (
             reviews.filter((r) =>
-                state === State.METHODOLOGICAL_EVALUATION
+                state === State.METHODOLOGICAL_EVALUATION || State.ACCEPTED
                     ? r.type !== ReviewType.METHODOLOGICAL
                     : state === State.SCIENTIFIC_EVALUATION
                     ? r.type !== ReviewType.SCIENTIFIC_EXTERNAL &&
                       r.type !== ReviewType.SCIENTIFIC_INTERNAL
                     : null
-            ),
-        [reviews, state]
-    )
+            ) ?? null
+        )
+    }, [reviews, state])
 
-    if (!reviewsInState[0].data && !reviewsNotInState) return null
+    if (!reviewsNotInState && !reviewsInState) return null
+    if (reviewsInState.length > 0 && !reviewsInState.some((r) => r.data))
+        return null
     return (
         <ItemContainer title="Revisiones">
-            {reviewsInState[0].data ? (
+            {reviewsInState.some((r) => r.data) ? (
                 <ul role="list" className="space-y-3">
                     {reviewsInState.map((r, i) => (
                         <ReviewItem key={i} review={r} user={user} />

@@ -5,7 +5,6 @@ export const getAllConvocatories = cache(async () => {
     try {
         return await prisma.convocatory.findMany()
     } catch (e) {
-        console.log(e)
         return null
     }
 })
@@ -19,7 +18,6 @@ export const getCurrentConvocatory = cache(async () => {
             },
         })
     } catch (e) {
-        console.log(e)
         return null
     }
 })

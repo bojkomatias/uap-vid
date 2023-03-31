@@ -40,7 +40,6 @@ export default function ReviewForm({
                     verdict,
                 }),
             })
-            console.log(res)
 
             if (res.status == 200) {
                 notifications.showNotification({
