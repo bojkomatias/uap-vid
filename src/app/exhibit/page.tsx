@@ -1,10 +1,10 @@
-import { Button } from '@elements/Button'
-import { Heading } from '@layout/Heading'
+import { Button } from '@elements/button'
+import { PageHeading } from '@layout/page-heading'
 
 export default function Exhibit() {
     return (
         <>
-            <Heading title="Anexo" />
+            <PageHeading title="Anexo" />
             <div className="mx-48 flex flex-col gap-12">
                 <a
                     href="/AnexoA.docx"
