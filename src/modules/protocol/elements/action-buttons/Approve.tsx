@@ -3,7 +3,7 @@ import { Protocol, Role, State } from '@prisma/client'
 import { ACTION } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
 import { useTransition } from 'react'
 

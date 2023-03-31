@@ -6,7 +6,7 @@ import Select from './Select'
 import { Plus, Trash } from 'tabler-icons-react'
 import CurrencyInput from './CurrencyInput'
 import { useProtocolContext } from '@utils/createContext'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import NumberInput from './NumberInput'
 
 export default function List({

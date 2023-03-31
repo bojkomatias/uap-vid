@@ -1,4 +1,4 @@
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import MultipleButton from '@elements/multiple-button'
 import { Role } from '@prisma/client'
 import {

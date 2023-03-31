@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 
 import { ROLE } from '@utils/zod'
 import { RoleSelector } from './elements/role-selector'

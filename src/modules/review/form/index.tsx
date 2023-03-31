@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import { useForm } from '@mantine/form'
 import { useCallback, useState } from 'react'
 import { zodResolver } from '@mantine/form'

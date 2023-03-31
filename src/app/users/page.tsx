@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import { getAllUsers } from 'repositories/users'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'

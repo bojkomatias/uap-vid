@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/custom-button'
+import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
 import { ACTION, RoleType, StateType } from '@utils/zod'
 import Link from 'next/link'

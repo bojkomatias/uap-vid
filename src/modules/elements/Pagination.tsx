@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import Link from 'next/link'
 
-import { Button } from './custom-button'
+import { Button } from './button'
 /**Receives 3 arguments: the current page number (pageParams) and the total records count from the db (count), the amount of shown records on a single page (shownRecords).*/
 export default function Pagination({
     pageParams,
