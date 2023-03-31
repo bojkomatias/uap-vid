@@ -7,7 +7,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { SignIn } from '@auth/sign-in'
 import Navigation from '@auth/navigation'
-import { Breadcrumb } from '@elements/breadcrumb'
+import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export const metadata = {
     title: {
@@ -34,7 +34,7 @@ export default async function RootLayout({
                     <main className="relative min-h-[90vh]">
                         {session ? (
                             <Navigation session={session}>
-                                <Breadcrumb />
+                                <Breadcrumbs />
                                 {children}
                             </Navigation>
                         ) : (

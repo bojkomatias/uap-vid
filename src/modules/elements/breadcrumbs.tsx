@@ -10,7 +10,7 @@ const newLinkMap: any = {
     protocols: 'Lista de protocolos',
 }
 
-export const Breadcrumb = () => {
+export const Breadcrumbs = () => {
     const pathname = usePathname()
     const breadcrumbs = useMemo(
         function generateBreadcrumbs() {
@@ -40,7 +40,7 @@ export const Breadcrumb = () => {
 
     return (
         <nav
-            className="absolute top-8 left-4 flex sm:left-6 2xl:left-10"
+            className="absolute left-4 top-8 flex sm:left-6 2xl:left-10"
             aria-label="Breadcrumb"
         >
             <ol role="list" className="flex rounded-md bg-white">
