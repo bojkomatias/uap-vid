@@ -1,15 +1,15 @@
 import { Review, ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
 import { getAllUsersWithoutResearchers } from '@repositories/users'
-import ItemContainer from '@review/ItemContainer'
+import ItemContainer from '@review/elements/review-container'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
-import ReviewAssignSelect from './ReviewAssignSelect'
+import ReviewAssignSelect from './elements/review-assign-select'
 
 interface ReviewAssignProps {
     reviews: Review[]
     protocolId: string
     protocolState: State
 }
-const ReviewAssign = async ({
+const ReviewAssignation = async ({
     reviews,
     protocolId,
     protocolState,
@@ -85,4 +85,4 @@ const ReviewAssign = async ({
     )
 }
 
-export default ReviewAssign
+export default ReviewAssignation

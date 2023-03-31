@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export default function ItemContainer({
+export default function ReviewContainer({
     title,
     children,
 }: {

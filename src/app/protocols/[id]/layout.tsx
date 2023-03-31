@@ -5,7 +5,7 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
-import Reviews from '@review/index'
+import Reviews from '@review/reviews-template'
 
 async function Layout({
     params,

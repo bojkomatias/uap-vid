@@ -1,10 +1,10 @@
 'use client'
 import { Review, ReviewType, Role, State, User } from '@prisma/client'
-import ItemContainer from '@review/ItemContainer'
+import ItemContainer from '@review/elements/review-container'
 import clsx from 'clsx'
 import { useMemo, useState } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
-import ReviewItem from './ReviewItem'
+import ReviewItem from './review-item'
 
 type ReviewStateProps = {
     reviews: (Review & { reviewer: User })[]

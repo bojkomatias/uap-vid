@@ -12,8 +12,8 @@ import { Review, ReviewVerdict, User } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
-import ItemContainer from '@review/ItemContainer'
-import ReviewItem from '@review/view/ReviewItem'
+import ItemContainer from '@review/elements/review-container'
+import ReviewItem from '@review/elements/review-item'
 import { SegmentedControl } from '@mantine/core'
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 

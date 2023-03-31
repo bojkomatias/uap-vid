@@ -5,12 +5,12 @@ import {
 } from '@repositories/review'
 import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
-import ReviewCreation from './form'
-import ReviewAssign from './assign'
-import ReviewList from './view/ReviewList'
+import ReviewList from './elements/review-list'
+import ReviewAssignation from './review-assignation'
+import ReviewForm from './review-form'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
-export default async function Reviews({
+export default async function ReviewsTemplate({
     protocol,
     user,
 }: {
@@ -33,7 +33,7 @@ export default async function Reviews({
                     protocol.state
                 ) ? (
                     //  @ts-expect-error Server Component
-                    <ReviewAssign
+                    <ReviewAssignation
                         reviews={reviews}
                         protocolId={protocol.id}
                         protocolState={protocol.state}
@@ -42,7 +42,7 @@ export default async function Reviews({
 
                 {canExecute(ACTION.COMMENT, user.role, protocol.state) &&
                 review ? (
-                    <ReviewCreation review={review} />
+                    <ReviewForm review={review} />
                 ) : null}
 
                 {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (
