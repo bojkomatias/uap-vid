@@ -4,10 +4,10 @@ import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import EditButton from '@protocol/elements/action-buttons/Edit'
-import AcceptButton from '@protocol/elements/action-buttons/Accept'
-import ApproveButton from '@protocol/elements/action-buttons/Approve'
-import PublishButton from '@protocol/elements/action-buttons/Publish'
+import EditButton from '@protocol/elements/action-buttons/c-edir'
+import AcceptButton from '@protocol/elements/action-buttons/c-accept'
+import ApproveButton from '@protocol/elements/action-buttons/c-approve'
+import PublishButton from '@protocol/elements/action-buttons/c-publish'
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')

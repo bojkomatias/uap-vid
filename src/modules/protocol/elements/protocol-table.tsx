@@ -1,9 +1,8 @@
-import SearchBar from '@elements/search-bar'
 import { Protocol } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import Link from 'next/link'
 
-export default function Table({ items }: { items: Protocol[] | null }) {
+export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
     if (!items || items.length === 0) return <EmptyState />
     return (
         <div className="mx-auto max-w-7xl">

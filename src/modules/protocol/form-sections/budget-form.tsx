@@ -1,9 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/form/input-list'
-import InfoTooltip from '@protocol/elements/form/tooltip'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
+import List from '@protocol/elements/inputs/input-list'
+import InfoTooltip from '@protocol/elements/tooltip'
+import SectionTitle from '@protocol/elements/form-section-title'
 
 export function BudgetForm() {
     const form = useProtocolContext()

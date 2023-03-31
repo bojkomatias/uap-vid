@@ -4,16 +4,12 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import clsx from 'clsx'
 
-interface TipTapViewerProps {
+interface TextItemProps {
     title: string
     content: string | null
     rounded?: boolean
 }
-const TipTapViewer = ({
-    title,
-    content,
-    rounded = true,
-}: TipTapViewerProps) => {
+const TextItemView = ({ title, content, rounded = true }: TextItemProps) => {
     const editor = useEditor({
         extensions: [
             // @ts-ignore
@@ -39,4 +35,4 @@ const TipTapViewer = ({
         </div>
     )
 }
-export default TipTapViewer
+export default TextItemView

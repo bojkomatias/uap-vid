@@ -1,7 +1,8 @@
 import { ProtocolSectionsMethodology } from '@prisma/client'
-import TipTapViewer from '@protocol/elements/TipTapViewer'
-import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import SectionLayout from '../elements/section-viewer'
+import TipTapViewer from '@protocol/elements/text-item-view'
+
+import SectionViewer from '../elements/section-viewer'
+import ItemView from '@protocol/elements/item-view'
 
 interface MethodologyViewProps {
     data: ProtocolSectionsMethodology
@@ -15,11 +16,17 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
         },
     ]
     return (
-        <SectionLayout
+        <SectionViewer
             title="Metodología"
             description="Metodología del proyecto"
         >
-            <ShortDataList data={shortData} />
+            {shortData.map((item) => (
+                <ItemView
+                    key={item.title}
+                    title={item.title}
+                    value={item.value}
+                />
+            ))}
 
             {data.type ===
                 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales' && (
@@ -61,7 +68,7 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
                     content={data.detail}
                 />
             )}
-        </SectionLayout>
+        </SectionViewer>
     )
 }
 

@@ -1,8 +1,8 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
-import List from '@protocol/elements/form/input-list'
+import SectionTitle from '@protocol/elements/form-section-title'
+import List from '@protocol/elements/inputs/input-list'
 
 export function BibliographyForm() {
     const form = useProtocolContext()

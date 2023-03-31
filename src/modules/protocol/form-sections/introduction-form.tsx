@@ -1,8 +1,8 @@
 'use client'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
+import SectionTitle from '@protocol/elements/form-section-title'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function IntroductionForm() {
     const path = 'sections.introduction.'

@@ -3,7 +3,7 @@ interface ShortDataProps {
     title: string
     value: string
 }
-const ShortData = ({ title, value }: ShortDataProps) => {
+const ItemView = ({ title, value }: ShortDataProps) => {
     return (
         <div className="sm:col-span-1">
             <dt className="text-sm font-medium text-gray-500">{title}</dt>
@@ -12,4 +12,4 @@ const ShortData = ({ title, value }: ShortDataProps) => {
     )
 }
 
-export default ShortData
+export default ItemView

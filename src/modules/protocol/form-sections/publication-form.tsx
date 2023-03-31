@@ -1,9 +1,9 @@
 'use client'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
-import Select from '@protocol/elements/form/custom-select'
+import SectionTitle from '@protocol/elements/form-section-title'
+import Select from '@protocol/elements/inputs/select'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function PublicationForm() {
     const path = 'sections.publication.'

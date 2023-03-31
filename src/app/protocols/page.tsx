@@ -1,6 +1,6 @@
 import { PageHeading } from '@layout/page-heading'
-import CreateButton from '@protocol/elements/action-buttons/Create'
-import Table from '@protocol/elements/Table'
+import CreateButton from '@protocol/elements/action-buttons/c-create'
+import Table from '@protocol/elements/protocol-table'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {

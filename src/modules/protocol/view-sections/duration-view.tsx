@@ -1,7 +1,7 @@
 import { ProtocolSectionsDuration } from '@prisma/client'
-import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import TableData from '@protocol/elements/TableData/TableData'
-import SectionLayout from '../elements/section-viewer'
+import SectionViewer from '@protocol/elements/section-viewer'
+import ItemListView from '@protocol/elements/item-list-view'
+import ItemView from '@protocol/elements/item-view'
 
 interface DurationViewProps {
     data: ProtocolSectionsDuration
@@ -34,13 +34,19 @@ const DurationView = ({ data }: DurationViewProps) => {
         }, []),
     }
     return (
-        <SectionLayout
+        <SectionViewer
             title="Duración"
             description="Detalles de la duración del proyecto"
         >
-            <ShortDataList data={shortData} />
-            <TableData data={tableData} />
-        </SectionLayout>
+            {shortData.map((item) => (
+                <ItemView
+                    key={item.title}
+                    title={item.title}
+                    value={item.value}
+                />
+            ))}
+            <ItemListView data={tableData} />
+        </SectionViewer>
     )
 }
 

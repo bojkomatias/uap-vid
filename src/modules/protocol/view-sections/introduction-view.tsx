@@ -1,6 +1,6 @@
 import { ProtocolSectionsIntroduction } from '@prisma/client'
-import TipTapViewer from '@protocol/elements/TipTapViewer'
-import SectionLayout from '../elements/section-viewer'
+import TipTapViewer from '@protocol/elements/text-item-view'
+import SectionViewer from '../elements/section-viewer'
 
 interface IntroductionViewProps {
     data: ProtocolSectionsIntroduction
@@ -8,7 +8,7 @@ interface IntroductionViewProps {
 
 const IntroductionView = ({ data }: IntroductionViewProps) => {
     return (
-        <SectionLayout
+        <SectionViewer
             title="Introducción"
             description="Introducción al proyecto"
         >
@@ -16,7 +16,7 @@ const IntroductionView = ({ data }: IntroductionViewProps) => {
             <TipTapViewer title="Estado" content={data.state} />
             <TipTapViewer title="Objetivos" content={data.objectives} />
             <TipTapViewer title="Justificación" content={data.justification} />
-        </SectionLayout>
+        </SectionViewer>
     )
 }
 

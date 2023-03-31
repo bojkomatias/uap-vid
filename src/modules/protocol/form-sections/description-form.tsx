@@ -1,12 +1,12 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/form/custom-select'
-import Input from '@protocol/elements/form/custom-input'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
-import InfoTooltip from '@protocol/elements/form/tooltip'
+import Select from '@protocol/elements/inputs/select'
+import Input from '@protocol/elements/inputs/input'
+import SectionTitle from '@protocol/elements/form-section-title'
+import InfoTooltip from '@protocol/elements/tooltip'
 import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function DescriptionForm() {
     const form = useProtocolContext()

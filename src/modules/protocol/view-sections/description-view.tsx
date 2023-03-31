@@ -1,7 +1,7 @@
 import { ProtocolSectionsDescription } from '@prisma/client'
-import TipTapViewer from '@protocol/elements/TipTapViewer'
-import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import SectionLayout from '../elements/section-viewer'
+import TipTapViewer from '@protocol/elements/text-item-view'
+import SectionViewer from '../elements/section-viewer'
+import ItemView from '@protocol/elements/item-view'
 interface DescriptionViewProps {
     data: ProtocolSectionsDescription
 }
@@ -34,13 +34,19 @@ const DescriptionView = ({ data }: DescriptionViewProps) => {
     ]
 
     return (
-        <SectionLayout
+        <SectionViewer
             title="Descripción"
             description="Descripción del proyecto"
         >
-            <ShortDataList data={shortData} />
+            {shortData.map((item) => (
+                <ItemView
+                    key={item.title}
+                    title={item.title}
+                    value={item.value}
+                />
+            ))}
             <TipTapViewer title="Resumen Técnico" content={data.technical} />
-        </SectionLayout>
+        </SectionViewer>
     )
 }
 

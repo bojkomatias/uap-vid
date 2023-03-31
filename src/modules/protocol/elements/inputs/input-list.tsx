@@ -1,6 +1,6 @@
 import { Fragment, PropsWithChildren } from 'react'
-import Input from './custom-input'
-import Select from './custom-select'
+import Input from './input'
+import Select from './select'
 import { Plus, Trash } from 'tabler-icons-react'
 import CurrencyInput from './currency-input'
 import { useProtocolContext } from '@utils/createContext'

@@ -1,6 +1,6 @@
 import { ProtocolSectionsBibliography } from '@prisma/client'
-import TableData from '@protocol/elements/TableData/TableData'
-import SectionLayout from '../elements/section-viewer'
+import ItemListView from '@protocol/elements/item-list-view'
+import SectionViewer from '../elements/section-viewer'
 
 interface BibliographyViewProps {
     data: ProtocolSectionsBibliography
@@ -25,12 +25,12 @@ const BibliographyView = ({ data }: BibliographyViewProps) => {
     }
 
     return (
-        <SectionLayout
+        <SectionViewer
             title="Bibliografía"
             description="Recursos a ser utilizados en la investigación"
         >
-            <TableData data={tableData} />
-        </SectionLayout>
+            <ItemListView data={tableData} />
+        </SectionViewer>
     )
 }
 

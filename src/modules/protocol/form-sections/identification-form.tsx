@@ -2,12 +2,12 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/form/custom-input'
-import Select from '@protocol/elements/form/custom-select'
-import List from '@protocol/elements/form/input-list'
-import InfoTooltip from '@protocol/elements/form/tooltip'
-import MultipleSelect from '@protocol/elements/form/multiple-select'
-import SectionTitle from '@protocol/elements/form/SectionTitle'
+import Input from '@protocol/elements/inputs/input'
+import Select from '@protocol/elements/inputs/select'
+import List from '@protocol/elements/inputs/input-list'
+import InfoTooltip from '@protocol/elements/tooltip'
+import MultipleSelect from '@protocol/elements/inputs/multiple-select'
+import SectionTitle from '@protocol/elements/form-section-title'
 
 export function IdentificationForm() {
     const form = useProtocolContext()

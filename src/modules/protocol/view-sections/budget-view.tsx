@@ -1,6 +1,6 @@
 import { ProtocolSectionsBudget } from '@prisma/client'
-import TableData from '@protocol/elements/TableData/TableData'
-import SectionLayout from '../elements/section-viewer'
+import ItemListView from '@protocol/elements/item-list-view'
+import SectionViewer from '../elements/section-viewer'
 
 interface BudgetViewProps {
     data: ProtocolSectionsBudget
@@ -31,12 +31,12 @@ const BudgetView = ({ data }: BudgetViewProps) => {
     }
 
     return (
-        <SectionLayout
+        <SectionViewer
             title="Presupuesto"
             description="Detalles del presupuesto"
         >
-            <TableData data={tableData} />
-        </SectionLayout>
+            <ItemListView data={tableData} />
+        </SectionViewer>
     )
 }
 

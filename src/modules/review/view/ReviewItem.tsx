@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-const TipTapViewer = dynamic(() => import('@protocol/elements/TipTapViewer'))
+const TipTapViewer = dynamic(() => import('@protocol/elements/text-item-view'))
 
 export default function ReviewItem({
     review,
