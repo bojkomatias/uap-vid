@@ -1,4 +1,4 @@
-import { Heading } from '@layout/Heading'
+import { Heading } from '@layout/c-heading'
 import PublishButton from '@protocol/elements/action-buttons/Publish'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'

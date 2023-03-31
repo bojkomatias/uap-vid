@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
-import { Button } from '@elements/Button'
+import { Button } from '@elements/custom-button'
 import Image from 'next/image'
 
 export const SignIn = () => {

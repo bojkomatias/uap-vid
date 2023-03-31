@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/Button'
+import { Button } from '@elements/custom-button'
 import { useForm } from '@mantine/form'
 import { useCallback, useState } from 'react'
 import { zodResolver } from '@mantine/form'
@@ -15,7 +15,7 @@ import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictiona
 import ItemContainer from '@review/ItemContainer'
 import ReviewItem from '@review/view/ReviewItem'
 import { SegmentedControl } from '@mantine/core'
-const Tiptap = dynamic(() => import('@elements/TipTap'))
+const Tiptap = dynamic(() => import('@elements/tiptap'))
 
 export default function ReviewForm({
     review,

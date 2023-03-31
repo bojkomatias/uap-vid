@@ -1,4 +1,4 @@
-import { Heading } from '@layout/Heading'
+import { Heading } from '@layout/c-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'

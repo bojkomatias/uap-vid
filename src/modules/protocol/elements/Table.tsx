@@ -1,4 +1,4 @@
-import SearchBar from '@elements/SearchBar'
+import SearchBar from '@elements/search-bar'
 import { Protocol } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import Link from 'next/link'

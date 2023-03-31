@@ -1,4 +1,4 @@
-import { UserAuth } from '@auth/UserAuth'
+import { UserDropdown } from '@auth/user-dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,7 +20,7 @@ export const Nav = () => {
                     </Link>
                 </div>
                 <div className="flex items-center gap-2">
-                    <UserAuth />
+                    <UserDropdown />
                 </div>
             </div>
         </nav>

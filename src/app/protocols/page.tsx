@@ -1,4 +1,4 @@
-import { Heading } from '@layout/Heading'
+import { Heading } from '@layout/c-heading'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
@@ -8,8 +8,8 @@ import {
     getProtocolByRol,
     getTotalRecordsProtocol,
 } from 'repositories/protocol'
-import Pagination from '@elements/Pagination'
-import SearchBar from '@elements/SearchBar'
+import Pagination from '@elements/pagination'
+import SearchBar from '@elements/search-bar'
 import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'

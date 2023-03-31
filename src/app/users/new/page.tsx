@@ -1,5 +1,5 @@
-import { Heading } from '@layout/Heading'
-import UserForm from '@user/UserForm'
+import { Heading } from '@layout/c-heading'
+import UserForm from '@user/user-form'
 import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'

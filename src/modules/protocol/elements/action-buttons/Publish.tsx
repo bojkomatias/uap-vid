@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/Button'
+import { Button } from '@elements/custom-button'
 import type { Protocol } from '@prisma/client'
 import type { Protocol as ProtocolZod } from '@utils/zod'
 import { canExecute } from '@utils/scopes'

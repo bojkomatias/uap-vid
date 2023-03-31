@@ -1,13 +1,13 @@
-import { Footer } from '@layout/Footer'
-import { Nav } from '@layout/Nav'
+import { Footer } from '@layout/c-footer'
+import { Nav } from '@layout/c-nav'
 import './globals.css'
 import Providers from './providers'
 import { Catamaran } from 'next/font/google'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { SignIn } from '@auth/SignIn'
-import Navigation from '@auth/Navigation'
-import { Breadcrumb } from '@elements/Breadcrumb'
+import { SignIn } from '@auth/sign-in'
+import Navigation from '@auth/navigation'
+import { Breadcrumb } from '@elements/breadcrumb'
 
 export const metadata = {
     title: {

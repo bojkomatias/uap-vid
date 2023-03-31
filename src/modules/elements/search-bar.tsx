@@ -1,5 +1,5 @@
 'use client'
-import { Button } from './Button'
+import { Button } from './custom-button'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 

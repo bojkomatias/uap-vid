@@ -9,7 +9,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
-export const UserAuth = () => {
+export const UserDropdown = () => {
     const [loading, setLoading] = useState(false)
     const { data: session } = useSession()
     if (session?.user) {

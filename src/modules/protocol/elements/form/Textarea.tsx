@@ -1,6 +1,6 @@
 import { useProtocolContext } from '@utils/createContext'
 import dynamic from 'next/dynamic'
-const Tiptap = dynamic(() => import('@elements/TipTap'))
+const Tiptap = dynamic(() => import('@elements/tiptap'))
 
 const Textarea = ({ path, label }: { path: string; label: string }) => {
     const form = useProtocolContext()

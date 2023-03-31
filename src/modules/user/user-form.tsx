@@ -3,10 +3,10 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
-import { Button } from '@elements/Button'
+import { Button } from '@elements/custom-button'
 
 import { ROLE } from '@utils/zod'
-import { RoleSelector } from './RoleSelector'
+import { RoleSelector } from './role-selector'
 
 export default function UserForm() {
     const router = useRouter()

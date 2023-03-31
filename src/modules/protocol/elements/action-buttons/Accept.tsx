@@ -2,7 +2,7 @@
 import { Protocol, Review, ReviewVerdict, Role, State } from '@prisma/client'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
-import { Button } from '@elements/Button'
+import { Button } from '@elements/custom-button'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
 import { useTransition } from 'react'

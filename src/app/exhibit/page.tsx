@@ -1,5 +1,5 @@
-import { Button } from '@elements/Button'
-import { Heading } from '@layout/Heading'
+import { Button } from '@elements/custom-button'
+import { Heading } from '@layout/c-heading'
 
 export default function Exhibit() {
     return (
