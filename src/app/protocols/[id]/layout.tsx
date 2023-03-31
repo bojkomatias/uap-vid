@@ -1,4 +1,4 @@
-import { Heading } from '@layout/c-heading'
+import { PageHeading } from '@layout/page-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
@@ -20,7 +20,7 @@ async function Layout({
             redirect('/protocols')
         return (
             <>
-                <Heading title={'Nuevo protocolo'} />
+                <PageHeading title={'Nuevo protocolo'} />
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
             </>
         )
@@ -30,7 +30,7 @@ async function Layout({
 
     return (
         <>
-            <Heading
+            <PageHeading
                 title={
                     <span>
                         Protocolo:{' '}

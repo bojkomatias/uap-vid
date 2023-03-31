@@ -2,7 +2,7 @@ import { UserDropdown } from '@auth/user-dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const Nav = () => {
+export const Header = () => {
     return (
         <nav className="w-screen bg-primary">
             <div className="mx-6 flex h-24 max-w-7xl items-center justify-between text-white lg:mx-16 2xl:mx-auto">

@@ -1,10 +1,10 @@
 import { Button } from '@elements/custom-button'
-import { Heading } from '@layout/c-heading'
+import { PageHeading } from '@layout/page-heading'
 
 export default function Exhibit() {
     return (
         <>
-            <Heading title="Anexo" />
+            <PageHeading title="Anexo" />
             <div className="mx-48 flex flex-col gap-12">
                 <a
                     href="/AnexoA.docx"

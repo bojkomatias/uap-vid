@@ -6,7 +6,7 @@ import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/custom-button'
 
 import { ROLE } from '@utils/zod'
-import { RoleSelector } from './role-selector'
+import { RoleSelector } from './elements/role-selector'
 
 export default function UserForm() {
     const router = useRouter()

@@ -2,10 +2,10 @@
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from '@mantine/notifications'
-import { RoleSelector } from './role-selector'
+import { RoleSelector } from '../elements/role-selector'
 
 // Wrapper around Role Selector, to trigger save on role change (Used for UserList)
-export const UpdateRole = ({ user }: { user: any }) => {
+export const RoleUpdater = ({ user }: { user: any }) => {
     const router = useRouter()
     const notifications = useNotifications()
 

@@ -1,4 +1,4 @@
-import { Heading } from '@layout/c-heading'
+import { PageHeading } from '@layout/page-heading'
 import CreateButton from '@protocol/elements/action-buttons/Create'
 import Table from '@protocol/elements/Table'
 import { getServerSession } from 'next-auth'
@@ -59,7 +59,7 @@ export default async function Page({
     }
     return (
         <>
-            <Heading title="Lista de proyectos de investigación" />
+            <PageHeading title="Lista de proyectos de investigación" />
             <p className="mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.

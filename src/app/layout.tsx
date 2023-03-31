@@ -1,5 +1,5 @@
-import { Footer } from '@layout/c-footer'
-import { Nav } from '@layout/c-nav'
+import { Footer } from '@layout/footer'
+import { Header } from '@layout/header'
 import './globals.css'
 import Providers from './providers'
 import { Catamaran } from 'next/font/google'
@@ -30,7 +30,7 @@ export default async function RootLayout({
         <html className={`${font.variable} font-sans`}>
             <Providers>
                 <body className="subpixel-antialiased">
-                    <Nav />
+                    <Header />
                     <main className="relative min-h-[90vh]">
                         {session ? (
                             <Navigation session={session}>
