@@ -1,5 +1,5 @@
-import { Heading } from '@layout/Heading'
-import PublishButton from '@protocol/elements/action-buttons/Publish'
+import { PageHeading } from '@layout/page-heading'
+import PublishButton from '@protocol/elements/action-buttons/publish'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
-const ProtocolForm = dynamic(() => import('@protocol/Form'))
+const ProtocolForm = dynamic(() => import('@protocol/protocol-form-template'))
 
 export default async function Page({
     params,

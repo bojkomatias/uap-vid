@@ -1,5 +1,5 @@
-import { Heading } from '@layout/Heading'
-import UserForm from '@user/UserForm'
+import { PageHeading } from '@layout/page-heading'
+import UserForm from '@user/user-form'
 import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -10,7 +10,7 @@ export default async function Page() {
     if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
     return (
         <>
-            <Heading title="Crear nuevo usuario" />
+            <PageHeading title="Crear nuevo usuario" />
             <UserForm />
         </>
     )

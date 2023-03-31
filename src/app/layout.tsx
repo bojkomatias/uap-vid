@@ -1,13 +1,13 @@
-import { Footer } from '@layout/Footer'
-import { Nav } from '@layout/Nav'
+import { Footer } from '@layout/footer'
+import { Header } from '@layout/header'
 import './globals.css'
 import Providers from './providers'
 import { Catamaran } from 'next/font/google'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { SignIn } from '@auth/SignIn'
-import Navigation from '@auth/Navigation'
-import { Breadcrumb } from '@elements/Breadcrumb'
+import { SignIn } from '@auth/sign-in'
+import Navigation from '@auth/navigation'
+import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export const metadata = {
     title: {
@@ -30,11 +30,11 @@ export default async function RootLayout({
         <html className={`${font.variable} font-sans`}>
             <Providers>
                 <body className="subpixel-antialiased">
-                    <Nav />
+                    <Header />
                     <main className="relative min-h-[90vh]">
                         {session ? (
                             <Navigation session={session}>
-                                <Breadcrumb />
+                                <Breadcrumbs />
                                 {children}
                             </Navigation>
                         ) : (

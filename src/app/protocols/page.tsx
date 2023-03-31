@@ -1,6 +1,6 @@
-import { Heading } from '@layout/Heading'
-import CreateButton from '@protocol/elements/action-buttons/Create'
-import Table from '@protocol/elements/Table'
+import { PageHeading } from '@layout/page-heading'
+import CreateButton from '@protocol/elements/action-buttons/create'
+import Table from '@protocol/elements/protocol-table'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {
@@ -8,8 +8,8 @@ import {
     getProtocolByRol,
     getTotalRecordsProtocol,
 } from 'repositories/protocol'
-import Pagination from '@elements/Pagination'
-import SearchBar from '@elements/SearchBar'
+import Pagination from '@elements/pagination'
+import SearchBar from '@elements/search-bar'
 import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
@@ -59,7 +59,7 @@ export default async function Page({
     }
     return (
         <>
-            <Heading title="Lista de proyectos de investigación" />
+            <PageHeading title="Lista de proyectos de investigación" />
             <p className="mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
                 en &apos;ver&apos; para más detalles.

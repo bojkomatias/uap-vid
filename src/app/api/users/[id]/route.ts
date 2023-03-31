@@ -1,6 +1,6 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from 'next/server'
-import { updateUserById } from '@repositories/users'
+import { updateUserById } from '@repositories/user'
 
 export async function PUT(
     request: NextRequest,
