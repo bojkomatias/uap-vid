@@ -124,7 +124,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 }}
                 onSubmit={(e) => {
                     e.preventDefault()
-
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification')) {
                         notifications.showNotification({
@@ -145,13 +144,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         : null
                     upsertProtocol(form.values)
                 }}
-                className="mx-auto w-full max-w-7xl px-4"
+                className="w-full px-4"
             >
                 <motion.div
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="my-6  w-full overflow-auto py-2 lg:mx-auto lg:w-fit"
+                    className="mx-auto my-6 w-fit max-w-full overflow-auto py-2"
                 >
                     <SegmentedControl
                         value={section}
