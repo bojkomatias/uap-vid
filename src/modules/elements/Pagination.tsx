@@ -25,7 +25,7 @@ export default function Pagination({
             {pageNumber().map((page: number) => (
                 <Link key={page} href={`/protocols?page=${page}`} passHref>
                     <Button
-                        intent="terciary"
+                        intent="tertiary"
                         className={
                             Number(pageParams) === page
                                 ? 'bg-primary text-white'

@@ -1,5 +1,5 @@
 'use client'
-import { Fragment, ReactNode, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
 import clsx from 'clsx'
@@ -19,7 +19,7 @@ export default function MultipleButton({
                     <div className="inline-flex rounded-md shadow-sm">
                         <Link href={selected.href} passHref>
                             <Button
-                                intent={'terciary'}
+                                intent={'tertiary'}
                                 className="rounded-r-none"
                             >
                                 <FilePlus className="mr-3 h-5" /> Crear en{' '}
@@ -28,7 +28,7 @@ export default function MultipleButton({
                         </Link>
                         <Listbox.Button
                             as={Button}
-                            intent={'terciary'}
+                            intent={'tertiary'}
                             className="border-l-none ml-px rounded-l-none"
                             // className="inline-flex items-center rounded-l-none rounded-r-md bg-primary p-2 ring-primary ring-offset-2 ring-offset-white hover:bg-primary hover:ring-2 focus:outline-none focus:ring-2"
                         >

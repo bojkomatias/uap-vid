@@ -15,7 +15,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
         const currentConvocatory = await getCurrentConvocatory()
         if (!currentConvocatory)
             return (
-                <Button intent={'terciary'} disabled>
+                <Button intent={'tertiary'} disabled>
                     <FilePlus className="mr-3 h-5" /> Nueva Postulación
                 </Button>
             )
@@ -24,7 +24,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
                 href={`/protocols/new/0?convocatory=${currentConvocatory?.id}`}
                 passHref
             >
-                <Button intent={'terciary'}>
+                <Button intent={'tertiary'}>
                     <FilePlus className="mr-3 h-5" /> Nueva Postulación
                 </Button>
             </Link>
