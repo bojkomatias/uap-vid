@@ -2,7 +2,7 @@ import { Footer } from '@layout/Footer'
 import { Nav } from '@layout/Nav'
 import './globals.css'
 import Providers from './providers'
-import { Roboto_Flex } from 'next/font/google'
+import { Catamaran } from 'next/font/google'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { SignIn } from '@auth/SignIn'
@@ -17,7 +17,7 @@ export const metadata = {
     icons: { icon: '/favicon.ico' },
 }
 
-const font = Roboto_Flex({ subsets: ['latin'], variable: '--font-sans' })
+const font = Catamaran({ subsets: ['latin'], variable: '--font-sans' })
 
 export default async function RootLayout({
     children,
