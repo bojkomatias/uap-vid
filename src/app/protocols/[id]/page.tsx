@@ -1,4 +1,4 @@
-import View from '@protocol/View'
+import View from '@protocol/protocol-view-template'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'

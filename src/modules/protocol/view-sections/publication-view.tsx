@@ -1,7 +1,7 @@
 import { ProtocolSectionsPublication } from '@prisma/client'
 import RichViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import SectionLayout from './SectionLayout'
+import SectionLayout from '../elements/section-viewer'
 
 interface PublicationViewProps {
     data: ProtocolSectionsPublication

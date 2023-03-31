@@ -1,10 +1,58 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/form/List'
-import Select from '@protocol/elements/form/Select'
-import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import List from '@protocol/elements/form/input-list'
+import Select from '@protocol/elements/form/custom-select'
+import InfoTooltip from '@protocol/elements/form/tooltip'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
+
+export function DurationForm() {
+    const form = useProtocolContext()
+    const path = 'sections.duration.'
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            className="space-y-3"
+        >
+            <SectionTitle title="Duración" />
+            <Info />
+            <>
+                <Select
+                    path={path + 'modality'}
+                    label="modalidad"
+                    options={modalities}
+                    conditionalCleanup={() =>
+                        (form.values.sections.duration.modality = '')
+                    }
+                />
+                <Select
+                    path={path + 'duration'}
+                    label="duración"
+                    options={duration(form.values.sections.duration.modality)}
+                />
+                <List
+                    path={path + 'chronogram'}
+                    label="cronograma de tareas"
+                    toMap={form.values.sections.duration.chronogram}
+                    insertedItemFormat={{ semester: '', task: '' }}
+                    headers={[
+                        {
+                            x: 'semester',
+                            label: 'Semestre',
+                            options: chron(
+                                form.values.sections.duration.duration
+                            ),
+                        },
+                        { x: 'task', label: 'Tarea', class: 'flex-grow' },
+                    ]}
+                />
+            </>
+        </motion.div>
+    )
+}
 
 const modalities = [
     'Proyecto regular de investigación (PRI)',
@@ -59,54 +107,6 @@ const chron = (v: string) => {
             '9° semestre',
             '10° semestre',
         ]
-}
-
-export default function Duration() {
-    const form = useProtocolContext()
-    const path = 'sections.duration.'
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -5 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            className="space-y-3"
-        >
-            <SectionTitle title="Duración" />
-            <Info />
-            <>
-                <Select
-                    path={path + 'modality'}
-                    label="modalidad"
-                    options={modalities}
-                    conditionalCleanup={() =>
-                        (form.values.sections.duration.modality = '')
-                    }
-                />
-                <Select
-                    path={path + 'duration'}
-                    label="duración"
-                    options={duration(form.values.sections.duration.modality)}
-                />
-                <List
-                    path={path + 'chronogram'}
-                    label="cronograma de tareas"
-                    toMap={form.values.sections.duration.chronogram}
-                    insertedItemFormat={{ semester: '', task: '' }}
-                    headers={[
-                        {
-                            x: 'semester',
-                            label: 'Semestre',
-                            options: chron(
-                                form.values.sections.duration.duration
-                            ),
-                        },
-                        { x: 'task', label: 'Tarea', class: 'flex-grow' },
-                    ]}
-                />
-            </>
-        </motion.div>
-    )
 }
 
 const Info = () => (

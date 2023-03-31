@@ -1,10 +1,38 @@
 'use client'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
-import Select from '@protocol/elements/form/Select'
+import Select from '@protocol/elements/form/custom-select'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { useProtocolContext } from 'utils/createContext'
-const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
+
+export function MethodologyForm() {
+    const form = useProtocolContext()
+    const path = 'sections.methodology.'
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            className="space-y-3"
+        >
+            <SectionTitle title="Metodología" />
+            <span />
+            <>
+                <Select
+                    path={path + 'type'}
+                    options={types}
+                    label="tipo de investigación"
+                />
+                {conditionalByType(
+                    form.values.sections.methodology.type!,
+                    path
+                )}
+            </>
+        </motion.div>
+    )
+}
 
 const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
@@ -38,40 +66,12 @@ const conditionalByType = (v: string, path: any) => {
         )
 }
 
-export default function Method() {
-    const form = useProtocolContext()
-    const path = 'sections.methodology.'
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -5 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            className="space-y-3"
-        >
-            <SectionTitle title="Metodología" />
-            <span />
-            <>
-                <Select
-                    path={path + 'type'}
-                    options={types}
-                    label="tipo de investigación"
-                />
-                {conditionalByType(
-                    form.values.sections.methodology.type!,
-                    path
-                )}
-            </>
-        </motion.div>
-    )
-}
-
 const ConditionalIfRecollection = ({ path }: { path: string }) => {
     const form = useProtocolContext()
 
     return (
         <>
-            <div className="flex h-6 mt-6 items-center ml-2">
+            <div className="ml-2 mt-6 flex h-6 items-center">
                 <input
                     id="recollection"
                     name="recollection"

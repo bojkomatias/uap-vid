@@ -1,15 +1,13 @@
 import { Fragment, PropsWithChildren } from 'react'
-import Input from './Input'
-
-import Select from './Select'
-
+import Input from './custom-input'
+import Select from './custom-select'
 import { Plus, Trash } from 'tabler-icons-react'
-import CurrencyInput from './CurrencyInput'
+import CurrencyInput from './currency-input'
 import { useProtocolContext } from '@utils/createContext'
 import { Button } from '@elements/button'
-import NumberInput from './NumberInput'
+import NumberInput from './number-input'
 
-export default function List({
+export default function InputList({
     path,
     label,
     headers,

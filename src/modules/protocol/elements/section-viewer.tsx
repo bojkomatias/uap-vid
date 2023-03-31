@@ -4,7 +4,7 @@ interface SectionLayoutProps {
     description: string
     children: React.ReactNode
 }
-const SectionLayout = ({
+const SectionViewer = ({
     title,
     description,
     children,
@@ -28,4 +28,4 @@ const SectionLayout = ({
     )
 }
 
-export default SectionLayout
+export default SectionViewer

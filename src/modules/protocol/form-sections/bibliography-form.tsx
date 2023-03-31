@@ -2,9 +2,9 @@
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
-import List from '@protocol/elements/form/List'
+import List from '@protocol/elements/form/input-list'
 
-export default function Bibliography() {
+export function BibliographyForm() {
     const form = useProtocolContext()
     const path = 'sections.bibliography.'
 

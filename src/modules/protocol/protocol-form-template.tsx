@@ -1,13 +1,5 @@
 'use client'
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
-import Identification from './Sections/Identification'
-import Duration from './Sections/Duration'
-import DirectBudget from './Sections/DirectBudget'
-import Description from './Sections/Description'
-import Introduction from './Sections/Introduction'
-import Method from './Sections/Method'
-import Publication from './Sections/Publication'
-import Bibliography from './Sections/Bibliography'
 import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
@@ -18,16 +10,26 @@ import { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { SegmentedControl } from '@mantine/core'
 import { motion } from 'framer-motion'
+import {
+    IdentificationForm,
+    DurationForm,
+    BudgetForm,
+    DescriptionForm,
+    IntroductionForm,
+    MethodologyForm,
+    PublicationForm,
+    BibliographyForm,
+} from '@protocol/form-sections'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
-    0: <Identification />,
-    1: <Duration />,
-    2: <DirectBudget />,
-    3: <Description />,
-    4: <Introduction />,
-    5: <Method />,
-    6: <Publication />,
-    7: <Bibliography />,
+    0: <IdentificationForm />,
+    1: <DurationForm />,
+    2: <BudgetForm />,
+    3: <DescriptionForm />,
+    4: <IntroductionForm />,
+    5: <MethodologyForm />,
+    6: <PublicationForm />,
+    7: <BibliographyForm />,
 }
 
 export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {

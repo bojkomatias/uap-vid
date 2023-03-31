@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 
-const ProtocolForm = dynamic(() => import('@protocol/Form'))
+const ProtocolForm = dynamic(() => import('@protocol/protocol-form-template'))
 
 export default async function Page({
     params,

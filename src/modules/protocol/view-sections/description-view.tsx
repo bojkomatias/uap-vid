@@ -1,7 +1,7 @@
 import { ProtocolSectionsDescription } from '@prisma/client'
 import TipTapViewer from '@protocol/elements/TipTapViewer'
 import ShortDataList from '@protocol/elements/ShortData/ShortDataList'
-import SectionLayout from './SectionLayout'
+import SectionLayout from '../elements/section-viewer'
 interface DescriptionViewProps {
     data: ProtocolSectionsDescription
 }

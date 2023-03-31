@@ -2,32 +2,14 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/form/Input'
-import Select from '@protocol/elements/form/Select'
-import List from '@protocol/elements/form/List'
-import InfoTooltip from '@protocol/elements/form/InfoTooltip'
-import MultipleSelect from '@protocol/elements/form/MultipleSelect'
+import Input from '@protocol/elements/form/custom-input'
+import Select from '@protocol/elements/form/custom-select'
+import List from '@protocol/elements/form/input-list'
+import InfoTooltip from '@protocol/elements/form/tooltip'
+import MultipleSelect from '@protocol/elements/form/multiple-select'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
 
-const careers = full.map((x) => x.career)
-// conditional
-const assignments = (v: any) =>
-    full
-        .filter((x) => x.career === v)
-        .map((x) => x.assignment)
-        .flat()
-
-const sponsors = [
-    'Facultad de Ciencias Económicas y de la Administración - FACEA',
-    'Facultad de Ciencias de la Salud - FCS',
-    'Facultad de Humanidades, Educación y Ciencias Sociales - FHECIS',
-    'Facultad de Teología - FT',
-    'Consejo Nacional de Investigaciones Científicas y Técnicas - CONICET',
-    'Centro Interdisciplinario de Investigaciones en Ciencias de la Salud y del Comportamiento - CIICSAC',
-    'Escuela de Graduados - EG',
-]
-
-export default function Identification() {
+export function IdentificationForm() {
     const form = useProtocolContext()
     const path = 'sections.identification.'
 
@@ -145,3 +127,21 @@ const AssignmentInfo = () => (
         </p>
     </InfoTooltip>
 )
+
+const careers = full.map((x) => x.career)
+// conditional
+const assignments = (v: any) =>
+    full
+        .filter((x) => x.career === v)
+        .map((x) => x.assignment)
+        .flat()
+
+const sponsors = [
+    'Facultad de Ciencias Económicas y de la Administración - FACEA',
+    'Facultad de Ciencias de la Salud - FCS',
+    'Facultad de Humanidades, Educación y Ciencias Sociales - FHECIS',
+    'Facultad de Teología - FT',
+    'Consejo Nacional de Investigaciones Científicas y Técnicas - CONICET',
+    'Centro Interdisciplinario de Investigaciones en Ciencias de la Salud y del Comportamiento - CIICSAC',
+    'Escuela de Graduados - EG',
+]

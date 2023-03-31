@@ -1,26 +1,26 @@
 import type { Protocol, Role } from '@prisma/client'
 import dynamic from 'next/dynamic'
 const IdentificationView = dynamic(
-    () => import('@protocol/View/Sections/IdentificationView')
+    () => import('@protocol/view-sections/identification-view')
 )
 const BibliographyView = dynamic(
-    () => import('@protocol/View/Sections/BibliographyView')
+    () => import('@protocol/view-sections/bibliography-view')
 )
 const DescriptionView = dynamic(
-    () => import('@protocol/View/Sections/DescriptionView')
+    () => import('@protocol/view-sections/description-view')
 )
-const BudgetView = dynamic(() => import('@protocol/View/Sections/BudgetView'))
+const BudgetView = dynamic(() => import('@protocol/view-sections/budget-view'))
 const DurationView = dynamic(
-    () => import('@protocol/View/Sections/DurationView')
+    () => import('@protocol/view-sections/duration-view')
 )
 const IntroductionView = dynamic(
-    () => import('@protocol/View/Sections/IntroductionView')
+    () => import('@protocol/view-sections/introduction-view')
 )
 const MethodologyView = dynamic(
-    () => import('@protocol/View/Sections/MethodologyView')
+    () => import('@protocol/view-sections/methodology-view')
 )
 const PublicationView = dynamic(
-    () => import('@protocol/View/Sections/PublicationView')
+    () => import('@protocol/view-sections/publication-view')
 )
 
 export default function View({

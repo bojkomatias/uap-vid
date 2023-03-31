@@ -1,21 +1,11 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/form/List'
-import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import List from '@protocol/elements/form/input-list'
+import InfoTooltip from '@protocol/elements/form/tooltip'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
 
-const years = (v: string) => {
-    let yearQuantity = Number(v.substring(0, 2)) / 12
-    let currentYear = new Date().getFullYear()
-    let years: string[] = [String(currentYear)]
-    for (let i = 0; i < yearQuantity; i++) {
-        years.push(String(currentYear + i + 1))
-    }
-    return years
-}
-
-export default function DirectBudget() {
+export function BudgetForm() {
     const form = useProtocolContext()
     const path = 'sections.budget.'
 
@@ -95,3 +85,13 @@ const Info = () => (
         </p>
     </InfoTooltip>
 )
+
+const years = (v: string) => {
+    let yearQuantity = Number(v.substring(0, 2)) / 12
+    let currentYear = new Date().getFullYear()
+    let years: string[] = [String(currentYear)]
+    for (let i = 0; i < yearQuantity; i++) {
+        years.push(String(currentYear + i + 1))
+    }
+    return years
+}

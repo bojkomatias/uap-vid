@@ -1,94 +1,14 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/form/Select'
-import Input from '@protocol/elements/form/Input'
+import Select from '@protocol/elements/form/custom-select'
+import Input from '@protocol/elements/form/custom-input'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
-import InfoTooltip from '@protocol/elements/form/InfoTooltip'
+import InfoTooltip from '@protocol/elements/form/tooltip'
 import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
 
-const disciplines = [
-    'Ciencias Económicas y de la Administración',
-    'Ciencias de la Salud',
-    'Humanidades, Educación y Ciencias Sociales',
-    'Teología',
-]
-const lines = (v: string) => {
-    if (v === 'Ciencias Económicas y de la Administración')
-        return [
-            'Ética y responsabilidad social de las organizaciones',
-            'Economía y desarrollo regional sustentable',
-            'Estudios organizacionales y management',
-            'Emprendimiento e innovación',
-            'Sistemas tributarios y actuación en la justicia',
-            'Contabilidad y auditoria',
-            'Sistemas de información',
-            'Robótica',
-            'Redes y sistemas operativos',
-            'Sistemas biomedical',
-            'Tecnología, sociedad e innovación',
-            'Informática industrial',
-        ]
-    if (v === 'Ciencias de la Salud')
-        return [
-            'Promoción de la salud',
-            'Restauración de la salud',
-            'Educación en ciencias de la salud',
-            'Bioética',
-        ]
-    if (v === 'Humanidades, Educación y Ciencias Sociales')
-        return [
-            'Psicología general',
-            'Psicología social',
-            'Psicología forense',
-            'Psicología clínica',
-            'Psicología laboral',
-            'Psicología educacional',
-            'Lengua inglesa',
-            'Educación física',
-            'Comunicación social',
-            'Filosofía',
-        ]
-    if (v === 'Teología')
-        return [
-            'Teología bíblica - Antiguo Testamento',
-            'Teología bíblica - Nuevo Testamento',
-            'Teología sistemática',
-            'Teología histórica',
-            'Teología pastoral',
-        ]
-}
-
-const fields = [
-    'Ciencias exactas y naturales',
-    'Ingeniería y tecnología',
-    'Ciencias médicas',
-    'Ciencias agrícolas y veterinarias',
-    'Ciencias sociales',
-    'Humanidades y artes',
-]
-
-const objective = [
-    'Exploración y explotación de la tierra',
-    'Medio ambiente',
-    'Exploración y explotación de espacio',
-    'Transporte, telecomunicación y otras infraestructuras',
-    'Energía',
-    'Producción y tecnología industrial',
-    'Salud',
-    'Agricultura',
-    'Educación',
-    'Cultura, recreación, religión y medios de comunicación',
-    'Estructuras, procesos y sistemas políticos y sociales',
-]
-const type = [
-    'Investigación básica',
-    'Investigación aplicada',
-    'Desarrollo experimental',
-]
-
-export default function Description() {
+export function DescriptionForm() {
     const form = useProtocolContext()
     const path = 'sections.description.'
 
@@ -292,3 +212,83 @@ const TypeInfo = () => (
         </p>
     </InfoTooltip>
 )
+
+const disciplines = [
+    'Ciencias Económicas y de la Administración',
+    'Ciencias de la Salud',
+    'Humanidades, Educación y Ciencias Sociales',
+    'Teología',
+]
+const lines = (v: string) => {
+    if (v === 'Ciencias Económicas y de la Administración')
+        return [
+            'Ética y responsabilidad social de las organizaciones',
+            'Economía y desarrollo regional sustentable',
+            'Estudios organizacionales y management',
+            'Emprendimiento e innovación',
+            'Sistemas tributarios y actuación en la justicia',
+            'Contabilidad y auditoria',
+            'Sistemas de información',
+            'Robótica',
+            'Redes y sistemas operativos',
+            'Sistemas biomedical',
+            'Tecnología, sociedad e innovación',
+            'Informática industrial',
+        ]
+    if (v === 'Ciencias de la Salud')
+        return [
+            'Promoción de la salud',
+            'Restauración de la salud',
+            'Educación en ciencias de la salud',
+            'Bioética',
+        ]
+    if (v === 'Humanidades, Educación y Ciencias Sociales')
+        return [
+            'Psicología general',
+            'Psicología social',
+            'Psicología forense',
+            'Psicología clínica',
+            'Psicología laboral',
+            'Psicología educacional',
+            'Lengua inglesa',
+            'Educación física',
+            'Comunicación social',
+            'Filosofía',
+        ]
+    if (v === 'Teología')
+        return [
+            'Teología bíblica - Antiguo Testamento',
+            'Teología bíblica - Nuevo Testamento',
+            'Teología sistemática',
+            'Teología histórica',
+            'Teología pastoral',
+        ]
+}
+
+const fields = [
+    'Ciencias exactas y naturales',
+    'Ingeniería y tecnología',
+    'Ciencias médicas',
+    'Ciencias agrícolas y veterinarias',
+    'Ciencias sociales',
+    'Humanidades y artes',
+]
+
+const objective = [
+    'Exploración y explotación de la tierra',
+    'Medio ambiente',
+    'Exploración y explotación de espacio',
+    'Transporte, telecomunicación y otras infraestructuras',
+    'Energía',
+    'Producción y tecnología industrial',
+    'Salud',
+    'Agricultura',
+    'Educación',
+    'Cultura, recreación, religión y medios de comunicación',
+    'Estructuras, procesos y sistemas políticos y sociales',
+]
+const type = [
+    'Investigación básica',
+    'Investigación aplicada',
+    'Desarrollo experimental',
+]

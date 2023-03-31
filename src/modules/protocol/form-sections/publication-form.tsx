@@ -1,13 +1,11 @@
 'use client'
 import SectionTitle from '@protocol/elements/form/SectionTitle'
-import Select from '@protocol/elements/form/Select'
+import Select from '@protocol/elements/form/custom-select'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/form/Textarea'))
+const Textarea = dynamic(() => import('@protocol/elements/form/custom-textarea'))
 
-const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
-
-export default function Publication() {
+export function PublicationForm() {
     const path = 'sections.publication.'
 
     return (
@@ -33,3 +31,5 @@ export default function Publication() {
         </motion.div>
     )
 }
+
+const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
