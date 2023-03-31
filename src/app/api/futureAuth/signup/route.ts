@@ -1,7 +1,7 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextRequest, NextResponse } from 'next/server'
 import { hash } from 'bcryptjs'
-import { findUserByEmail, saveUser } from '../../../../repositories/users'
+import { findUserByEmail, saveUser } from '../../../../repositories/user'
 
 export async function POST(request: NextRequest) {
    const { name, email, password, role } = await request.json()

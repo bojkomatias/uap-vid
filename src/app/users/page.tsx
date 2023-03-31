@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@elements/button'
-import { getAllUsers } from 'repositories/users'
+import { getAllUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'

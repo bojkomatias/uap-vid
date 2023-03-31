@@ -1,5 +1,5 @@
 import { Review, ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
-import { getAllUsersWithoutResearchers } from '@repositories/users'
+import { getAllUsersWithoutResearchers } from '@repositories/user'
 import ItemContainer from '@review/elements/review-container'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
