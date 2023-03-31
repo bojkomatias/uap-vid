@@ -7,9 +7,9 @@ import { Button } from '@elements/Button'
 import Image from 'next/image'
 
 export const SignIn = () => {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
-    const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
@@ -54,17 +54,18 @@ export const SignIn = () => {
                             redirect: true,
                             callbackUrl: '/protocols',
                         })
-
                         if (res?.status !== 200) {
                             setLoading(false)
-                            return notifications.showNotification({
+                            notifications.showNotification({
                                 title: 'No se pudo iniciar sesión',
                                 message: 'Credenciales inválidas',
                                 color: 'red',
                             })
                         }
+
+                        setLoading(false)
+                        return router.refresh()
                     }}
-                    type="submit"
                 >
                     {loading ? (
                         <span className="loader-primary h-5 w-5"></span>

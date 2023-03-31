@@ -22,7 +22,12 @@ const ROLE_SCOPE = {
         ACTION.CREATE,
         ACTION.EDIT,
     ],
-    [ROLE.SECRETARY]: [ACCESS.PROTOCOLS, ACCESS.REVIEWS, ACTION.ACCEPT],
+    [ROLE.SECRETARY]: [
+        ACCESS.PROTOCOLS,
+        ACCESS.REVIEWS,
+        ACTION.ACCEPT,
+        ACTION.CREATE,
+    ],
     [ROLE.METHODOLOGIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
     [ROLE.SCIENTIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
     [ROLE.ADMIN]: [
@@ -37,7 +42,7 @@ const ROLE_SCOPE = {
         ACTION.COMMENT,
         ACTION.APPROVE,
         ACTION.ASSIGN_TO_METHODOLOGIST,
-        ACTION.ASSIGN_TO_SCIENTIFIC
+        ACTION.ASSIGN_TO_SCIENTIFIC,
     ],
 }
 
@@ -78,8 +83,8 @@ export function canExecuteActions(
 ) {
     if (!actions.length || !role || !state) return false
     if (
-        ROLE_SCOPE[role].some((a) => a === actions.find(x => x === a)) &&
-        STATE_SCOPE[state].some((a) => a === actions.find(x => x === a))
+        ROLE_SCOPE[role].some((a) => a === actions.find((x) => x === a)) &&
+        STATE_SCOPE[state].some((a) => a === actions.find((x) => x === a))
     )
         return true
     return false

@@ -16,6 +16,14 @@ const ReviewAssign = async ({
 }: ReviewAssignProps) => {
     const users = await getAllUsersWithoutResearchers()
     if (!users) return <></>
+
+    const assignedInternal = reviews.find(
+        (r) => r.type === 'SCIENTIFIC_INTERNAL'
+    )?.reviewerId
+    const assignedExternal = reviews.find(
+        (r) => r.type === 'SCIENTIFIC_EXTERNAL'
+    )?.reviewerId
+
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
@@ -31,7 +39,9 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_INTERNAL,
-            users: users.filter((u) => u.role === Role.SCIENTIST),
+            users: users.filter(
+                (u) => u.role === Role.SCIENTIST && assignedExternal !== u.id
+            ),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
@@ -45,7 +55,9 @@ const ReviewAssign = async ({
         },
         {
             type: ReviewType.SCIENTIFIC_EXTERNAL,
-            users: users.filter((u) => u.role === Role.SCIENTIST),
+            users: users.filter(
+                (u) => u.role === Role.SCIENTIST && assignedInternal !== u.id
+            ),
             protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
@@ -57,19 +69,18 @@ const ReviewAssign = async ({
                     (review) => review.type === ReviewType.SCIENTIFIC_EXTERNAL
                 ) ?? null,
         },
-    ]
+    ].filter((r) => r.enabled)
+
     return (
         <ItemContainer title="Evaluadores">
-            {reviewAssignSelectsData
-                .filter((r) => r.enabled)
-                .map((data) => (
-                    <div key={data.type} className="mb-4">
-                        <label className="label">
-                            {EvaluatorsByReviewType[data.type]}
-                        </label>
-                        <ReviewAssignSelect {...data} />
-                    </div>
-                ))}
+            {reviewAssignSelectsData.map((data) => (
+                <div key={data.type} className="mb-4">
+                    <label className="label">
+                        {EvaluatorsByReviewType[data.type]}
+                    </label>
+                    <ReviewAssignSelect {...data} />
+                </div>
+            ))}
         </ItemContainer>
     )
 }

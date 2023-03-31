@@ -15,6 +15,9 @@ export const getReviewsByProtocol = cache(async (protocolId: string) => {
 export const getProtocolReviewByReviewer = cache(
     async (protocolId: string, reviewerId: string) => {
         const review = await prisma.review.findFirst({
+            include: {
+                reviewer: true,
+            },
             where: {
                 protocolId: protocolId,
                 reviewerId: reviewerId,
@@ -28,14 +31,13 @@ export const assignReviewerToProtocol = async (
     protocolId: string,
     reviewerId: string,
     type: ReviewType
-
 ) => {
     const review = await prisma.review.create({
         data: {
             protocolId,
             reviewerId,
             data: '',
-            type: type
+            type: type,
         },
     })
     return review
@@ -46,7 +48,6 @@ export const reassignReviewerToProtocol = async (
     protocolId: string,
     reviewerId: string,
     type: ReviewType
-
 ) => {
     const review = await prisma.review.update({
         where: {
@@ -56,7 +57,7 @@ export const reassignReviewerToProtocol = async (
             protocolId,
             reviewerId,
             data: '',
-            type: type
+            type: type,
         },
     })
     return review
@@ -68,7 +69,7 @@ export const updateReview = async (reviewId: string, data: Review) => {
         where: {
             id: reviewId,
         },
-        data: rest
+        data: rest,
     })
     return review
 }

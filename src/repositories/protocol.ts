@@ -6,12 +6,14 @@ import { cache } from 'react'
 const findProtocolById = cache(async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
+            include: {
+                reviews: true
+            },
             where: {
                 id,
             },
         })
     } catch (e) {
-        console.log(e)
         return null
     }
 })
@@ -26,7 +28,6 @@ const updateProtocolById = async (id: string, data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -43,7 +44,6 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -55,7 +55,6 @@ const createProtocol = async (data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -64,14 +63,45 @@ const getAllProtocols = cache(async () => {
     try {
         return await prisma.protocol.findMany()
     } catch (e) {
-        console.log(e)
         return null
     }
 })
 
-const getTotalRecordsProtocol = cache(async () => {
-    const protocolCount = await prisma.protocol.count()
-    return protocolCount
+const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
+    if (!id) return null
+
+    const query = {
+        [ROLE.RESEARCHER]: prisma.protocol.count({
+            where: {
+                researcher: id,
+            },
+        }),
+        [ROLE.METHODOLOGIST]: prisma.review.count({
+            where: {
+                reviewerId: id,
+                type: 'METHODOLOGICAL',
+            },
+        }),
+
+        [ROLE.SCIENTIST]: prisma.review.count({
+            where: {
+                reviewerId: id,
+                type: {
+                    in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
+                },
+            },
+        }),
+    }
+
+    try {
+        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+            return prisma.protocol.count()
+
+        return await query[role]
+    } catch (e) {
+        console.log(e)
+        return null
+    }
 })
 
 const getProtocolByRol = cache(
@@ -110,7 +140,7 @@ const getProtocolByRol = cache(
                         reviewerId: id,
                         type: {
                             in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
-                        }
+                        },
                     },
                 })
                 .then((result) => result.map((item) => item.protocol)),
@@ -125,12 +155,10 @@ const getProtocolByRol = cache(
 
             return await query[role]
         } catch (e) {
-            console.log(e)
             return null
         }
     }
 )
-
 
 const getProtocolsWithoutPagination = cache(
     async (role: RoleType, id: string) => {
@@ -172,7 +200,6 @@ const getProtocolsWithoutPagination = cache(
 
             return await query[role]
         } catch (e) {
-            console.log(e)
             return null
         }
     }
@@ -190,7 +217,6 @@ const changeProtocolState = async (id: string, state: State) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -207,7 +233,6 @@ const publishProtocol = async (id: string) => {
         })
         return protocol
     } catch (e) {
-        console.log(e)
         return null
     }
 }
@@ -222,5 +247,5 @@ export {
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
     publishProtocol,
-    changeProtocolState
+    changeProtocolState,
 }

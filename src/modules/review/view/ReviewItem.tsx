@@ -1,11 +1,12 @@
 'use client'
-import TipTapViewer from '@protocol/elements/TipTapViewer'
 import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
+const TipTapViewer = dynamic(() => import('@protocol/elements/TipTapViewer'))
 
 export default function ReviewItem({
     review,
@@ -14,6 +15,7 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     user: User
 }) {
+    if (!review.data) return null
     function getDuration(millis: number) {
         let minutes = Math.floor(millis / 60000)
         let hours = Math.round(minutes / 60)
@@ -29,9 +31,7 @@ export default function ReviewItem({
     return (
         <li>
             <div className="min-w-0 flex-1">
-                <dt className="text-sm font-medium text-gray-500">
-                    {ReviewTypesDictionary[review.type]}
-                </dt>
+                <dt className="label">{ReviewTypesDictionary[review.type]}</dt>
                 <div
                     className={clsx('rounded', {
                         'bg-gray-50 opacity-70': review.revised,
@@ -147,7 +147,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 name={`revised-${id}`}
                 type="checkbox"
                 defaultChecked={revised}
-                className="mr-1 mb-0.5 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
                 onChange={(e) => updateRevised(e.target.checked)}
             />
 

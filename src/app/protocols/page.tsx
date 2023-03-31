@@ -12,6 +12,9 @@ import Pagination from '@elements/Pagination'
 import SearchBar from '@elements/SearchBar'
 import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
+import { canExecute } from '@utils/scopes'
+import { ACTION } from '@utils/zod'
+import { redirect } from 'next/navigation'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -21,7 +24,15 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
 
-    const protocolCount = await getTotalRecordsProtocol()
+    if (!session?.user) {
+        return redirect('/login')
+    }
+
+    const protocolCount =
+        (await getTotalRecordsProtocol(
+            session?.user?.role,
+            session?.user?.id
+        )) || 0
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
@@ -64,7 +75,14 @@ export default async function Page({
             </p>
 
             <div className="mt-3 flex justify-end">
-                <CreateButton role={session?.user?.role!} />
+                {canExecute(
+                    ACTION.CREATE,
+                    session?.user?.role!,
+                    'NOT_CREATED'
+                ) ? (
+                    // @ts-expect-error
+                    <CreateButton role={session?.user?.role!} />
+                ) : null}
             </div>
 
             <SearchBar />
