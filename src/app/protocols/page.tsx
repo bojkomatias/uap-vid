@@ -14,7 +14,6 @@ import fuzzysort from 'fuzzysort'
 import { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
-import { redirect } from 'next/navigation'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -24,15 +23,7 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user) {
-        return redirect('/login')
-    }
-
-    const protocolCount =
-        (await getTotalRecordsProtocol(
-            session?.user?.role,
-            session?.user?.id
-        )) || 0
+    const protocolCount = await getTotalRecordsProtocol()
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
@@ -93,7 +84,7 @@ export default async function Page({
             {searchParams?.search ? null : (
                 <Pagination
                     pageParams={Number(searchParams?.page) || 1}
-                    count={protocolCount}
+                    count={protocolCount!}
                     shownRecords={shownRecords}
                 />
             )}
