@@ -67,9 +67,41 @@ const getAllProtocols = cache(async () => {
     }
 })
 
-const getTotalRecordsProtocol = cache(async () => {
-    const protocolCount = await prisma.protocol.count()
-    return protocolCount
+const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
+    if (!id) return null
+
+    const query = {
+        [ROLE.RESEARCHER]: prisma.protocol.count({
+            where: {
+                researcher: id,
+            },
+        }),
+        [ROLE.METHODOLOGIST]: prisma.review.count({
+            where: {
+                reviewerId: id,
+                type: 'METHODOLOGICAL',
+            },
+        }),
+
+        [ROLE.SCIENTIST]: prisma.review.count({
+            where: {
+                reviewerId: id,
+                type: {
+                    in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
+                },
+            },
+        }),
+    }
+
+    try {
+        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+            return prisma.protocol.count()
+
+        return await query[role]
+    } catch (e) {
+        console.log(e)
+        return null
+    }
 })
 
 const getProtocolByRol = cache(
@@ -108,7 +140,7 @@ const getProtocolByRol = cache(
                         reviewerId: id,
                         type: {
                             in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
-                        }
+                        },
                     },
                 })
                 .then((result) => result.map((item) => item.protocol)),
@@ -127,7 +159,6 @@ const getProtocolByRol = cache(
         }
     }
 )
-
 
 const getProtocolsWithoutPagination = cache(
     async (role: RoleType, id: string) => {
@@ -216,5 +247,5 @@ export {
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
     publishProtocol,
-    changeProtocolState
+    changeProtocolState,
 }
