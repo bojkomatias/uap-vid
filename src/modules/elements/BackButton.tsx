@@ -12,7 +12,7 @@ export default function BackButton({ class_name }: { class_name: string }) {
     return (
         <Button
             className={`${class_name} group w-full`}
-            intent="terciary"
+            intent="tertiary"
             onClick={handleClick}
         >
             <ArrowBackUp className="mx-2 w-4 transition-all duration-150 group-hover:-translate-x-2"></ArrowBackUp>{' '}
