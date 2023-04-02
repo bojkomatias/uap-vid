@@ -1,13 +1,11 @@
 'use client'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import Image from 'next/image'
 
 export const SignIn = () => {
-    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
     const [email, setEmail] = useState('')
@@ -51,7 +49,8 @@ export const SignIn = () => {
                         const res = await signIn('credentials', {
                             email: email,
                             password: password,
-                            redirect: false,
+                            redirect: true,
+                            callbackUrl: '/protocols',
                         })
                         if (res?.status !== 200) {
                             setLoading(false)
@@ -62,7 +61,6 @@ export const SignIn = () => {
                             })
                         }
                         setLoading(false)
-                        return router.refresh()
                     }}
                 >
                     {loading ? (
