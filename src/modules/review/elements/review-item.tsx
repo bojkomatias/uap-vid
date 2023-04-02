@@ -5,8 +5,7 @@ import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import dynamic from 'next/dynamic'
-const TipTapViewer = dynamic(() => import('@protocol/elements/text-item-view'))
+import TextItemView from '@protocol/elements/text-item-view'
 
 export default function ReviewItem({
     review,
@@ -97,7 +96,7 @@ export default function ReviewItem({
                     //     block: !review.revised,
                     // })}
                     >
-                        <TipTapViewer
+                        <TextItemView
                             title=""
                             content={review.data}
                             rounded={false}

@@ -1,8 +1,7 @@
 import { ProtocolSectionsMethodology } from '@prisma/client'
-import TipTapViewer from '@protocol/elements/text-item-view'
-
 import SectionViewer from '../elements/section-viewer'
 import ItemView from '@protocol/elements/item-view'
+import TextItemView from '@protocol/elements/text-item-view'
 
 interface MethodologyViewProps {
     data: ProtocolSectionsMethodology
@@ -31,31 +30,31 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             {data.type ===
                 'Investigaciones cuantitativas, cualitativas, mixtas o experimentales' && (
                 <>
-                    <TipTapViewer
+                    <TextItemView
                         title="Diseño y tipo de investigación"
                         content={data.design}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Participantes"
                         content={data.participants}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Lugar de desarrollo"
                         content={data.place}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Instrumentos para recolección de datos"
                         content={data.instruments}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Procedimientos para recolección de datos"
                         content={data.procedures}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Análisis de datos"
                         content={data.analysis}
                     />
-                    <TipTapViewer
+                    <TextItemView
                         title="Consideraciones"
                         content={data.considerations}
                     />
@@ -63,7 +62,7 @@ const MethodologyView = ({ data }: MethodologyViewProps) => {
             )}
 
             {data.type === 'Investigaciones de tipo teóricas' && (
-                <TipTapViewer
+                <TextItemView
                     title="Detalle de la metodología"
                     content={data.detail}
                 />
