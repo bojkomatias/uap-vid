@@ -1,26 +1,23 @@
-import { Protocol, User } from '@prisma/client'
-import {
-    getProtocolReviewByReviewer,
-    getReviewsByProtocol,
-} from '@repositories/review'
+import { Role, State } from '@prisma/client'
 import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'
 import ReviewAssignation from './review-assignation'
-import ReviewForm from './review-form'
+import ReviewFormTemplate from './review-form-template'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function ReviewsTemplate({
-    protocol,
-    user,
+    id,
+    state,
+    userId,
+    userRole,
 }: {
-    protocol: Protocol
-    user: User
+    id: string
+    state: State
+    userId: string
+    userRole: Role
 }) {
-    const review = await getProtocolReviewByReviewer(protocol.id, user.id)
-    const reviews = await getReviewsByProtocol(protocol.id)
     return (
-        // No tocar margenes o paddings aca!
         <aside className="relative">
             <div className="sticky top-4 mb-4 space-y-3">
                 {canExecuteActions(
@@ -29,29 +26,22 @@ export default async function ReviewsTemplate({
                         ACTION.ASSIGN_TO_SCIENTIFIC,
                         ACTION.ACCEPT,
                     ],
-                    user.role,
-                    protocol.state
-                ) ? (
+                    userRole,
+                    state
+                ) && (
                     //  @ts-expect-error Server Component
-                    <ReviewAssignation
-                        reviews={reviews}
-                        protocolId={protocol.id}
-                        protocolState={protocol.state}
-                    />
-                ) : null}
+                    <ReviewAssignation protocolId={id} protocolState={state} />
+                )}
 
-                {canExecute(ACTION.COMMENT, user.role, protocol.state) &&
-                review ? (
-                    <ReviewForm review={review} />
-                ) : null}
+                {canExecute(ACTION.COMMENT, userRole, state) && (
+                    // @ts-expect-error
+                    <ReviewFormTemplate protocolId={id} userId={userId} />
+                )}
 
-                {canAccess(ACCESS.REVIEWS, user.role) && reviews.length > 0 ? (
-                    <ReviewList
-                        reviews={reviews}
-                        user={user}
-                        state={protocol.state}
-                    />
-                ) : null}
+                {canAccess(ACCESS.REVIEWS, userRole) && (
+                    // @ts-expect-error
+                    <ReviewList role={userRole} state={state} id={id} />
+                )}
             </div>
         </aside>
     )
