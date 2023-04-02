@@ -55,9 +55,8 @@ const AcceptButton = ({ role, protocol }: ActionButtonTypes) => {
         <Button
             onClick={acceptProtocol}
             intent={'primary'}
-            disabled={
-                protocol.state !== State.SCIENTIFIC_EVALUATION || isPending
-            }
+            disabled={protocol.state !== State.SCIENTIFIC_EVALUATION}
+            loading={isPending}
         >
             Aceptar para evaluación en comisión
         </Button>
