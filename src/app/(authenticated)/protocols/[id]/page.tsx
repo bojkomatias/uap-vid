@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     id={protocol?.id!}
                 />
             </div>
-            <View protocol={protocol!} role={session?.user?.role!} />
+            <View sections={protocol.sections} role={session?.user?.role!} />
         </>
     )
 }

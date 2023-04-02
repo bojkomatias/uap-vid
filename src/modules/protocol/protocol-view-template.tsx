@@ -1,4 +1,4 @@
-import type { Protocol, Role } from '@prisma/client'
+import type { Protocol, ProtocolSections, Role } from '@prisma/client'
 import dynamic from 'next/dynamic'
 const IdentificationView = dynamic(
     () => import('@protocol/view-sections/identification-view')
@@ -24,40 +24,40 @@ const PublicationView = dynamic(
 )
 
 export default function View({
-    protocol,
+    sections,
     role,
 }: {
-    protocol: Protocol
+    sections: ProtocolSections
     role: Role
 }) {
     if (role === 'METHODOLOGIST')
         return (
             <div className="px-4">
-                <IdentificationView data={protocol.sections.identification} />
-                <DurationView data={protocol.sections.duration} />
-                <DescriptionView data={protocol.sections.description} />
-                <MethodologyView data={protocol.sections.methodology} />
+                <IdentificationView data={sections.identification} />
+                <DurationView data={sections.duration} />
+                <DescriptionView data={sections.description} />
+                <MethodologyView data={sections.methodology} />
             </div>
         )
     if (role === 'SCIENTIST')
         return (
             <div className="px-4">
-                <DescriptionView data={protocol.sections.description} />
-                <IntroductionView data={protocol.sections.introduction} />
-                <PublicationView data={protocol.sections.publication} />
-                <BibliographyView data={protocol.sections.bibliography} />
+                <DescriptionView data={sections.description} />
+                <IntroductionView data={sections.introduction} />
+                <PublicationView data={sections.publication} />
+                <BibliographyView data={sections.bibliography} />
             </div>
         )
     return (
         <div className="px-4">
-            <IdentificationView data={protocol.sections.identification} />
-            <DurationView data={protocol.sections.duration} />
-            <BudgetView data={protocol.sections.budget} />
-            <DescriptionView data={protocol.sections.description} />
-            <IntroductionView data={protocol.sections.introduction} />
-            <MethodologyView data={protocol.sections.methodology} />
-            <PublicationView data={protocol.sections.publication} />
-            <BibliographyView data={protocol.sections.bibliography} />
+            <IdentificationView data={sections.identification} />
+            <DurationView data={sections.duration} />
+            <BudgetView data={sections.budget} />
+            <DescriptionView data={sections.description} />
+            <IntroductionView data={sections.introduction} />
+            <MethodologyView data={sections.methodology} />
+            <PublicationView data={sections.publication} />
+            <BibliographyView data={sections.bibliography} />
         </div>
     )
 }
