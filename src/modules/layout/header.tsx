@@ -1,4 +1,4 @@
-import { UserDropdown } from '@auth/user-dropdown'
+import { UserDropdown } from '@auth/elements/user-dropdown'
 import Image from 'next/image'
 import Link from 'next/link'
 
