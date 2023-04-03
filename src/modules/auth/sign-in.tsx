@@ -28,71 +28,67 @@ export const SignIn = () => {
                 </div>
             </div>
 
-            <div className=" flex w-full flex-col items-stretch gap-6 px-24">
+            <form
+                className="flex w-full flex-col items-stretch gap-6 px-24"
+                onSubmit={async (e) => {
+                    e.preventDefault()
+                    setLoading(true)
+                    const res = await signIn('credentials', {
+                        email: email,
+                        password: password,
+                        redirect: true,
+                        callbackUrl: '/protocols',
+                    })
+                    if (res && res.status !== 200) {
+                        setLoading(false)
+                        notifications.showNotification({
+                            title: 'No se pudo iniciar sesión',
+                            message: 'Credenciales inválidas',
+                            color: 'red',
+                        })
+                    }
+                    setLoading(false)
+                }}
+            >
                 <input
                     type="email"
                     className="input"
                     placeholder="Email"
+                    required
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
                     type="password"
                     className="input"
                     placeholder="Password"
+                    required
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <Button
-                    disabled={loading}
-                    onClick={async () => {
-                        setLoading(true)
-                        const res = await signIn('credentials', {
-                            email: email,
-                            password: password,
-                            redirect: true,
-                            callbackUrl: '/protocols',
-                        })
-                        if (res?.status !== 200) {
-                            setLoading(false)
-                            notifications.showNotification({
-                                title: 'No se pudo iniciar sesión',
-                                message: 'Credenciales inválidas',
-                                color: 'red',
-                            })
-                        }
-                        setLoading(false)
-                    }}
-                >
-                    {loading ? (
-                        <span className="loader-primary h-5 w-5"></span>
-                    ) : (
-                        'Iniciar sesión'
-                    )}
+                <Button type="submit" loading={loading}>
+                    Iniciar sesión
                 </Button>
                 <Button
-                    disabled={loading}
+                    type="button"
+                    loading={loadingMicrosoft}
                     onClick={(e: any) => {
                         setLoadingMicrosoft(true)
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
                 >
-                    {loadingMicrosoft ? (
-                        <span className="loader-primary h-5 w-5"></span>
-                    ) : (
-                        <>
-                            <span>Iniciar sesión con</span>
-                            <Image
-                                className="-my-6 ml-2"
-                                src="/microsoft-svgrepo-com.svg"
-                                alt="Microsoft Logo"
-                                width={70}
-                                height={20}
-                            />
-                        </>
-                    )}
+                    <>
+                        <span>Iniciar sesión con</span>
+                        <Image
+                            className="-my-6 ml-2"
+                            src="/microsoft-svgrepo-com.svg"
+                            alt="Microsoft Logo"
+                            width={70}
+                            height={20}
+                        />
+                    </>
                 </Button>
-            </div>
+            </form>
         </div>
     )
 }

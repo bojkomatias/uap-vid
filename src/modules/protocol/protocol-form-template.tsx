@@ -195,7 +195,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         <Button
                             type="submit"
                             intent="secondary"
-                            disabled={isPending}
+                            loading={isPending}
                         >
                             Guardar
                         </Button>

@@ -50,7 +50,8 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         <Button
             onClick={publishProtocol}
             intent={'primary'}
-            disabled={!isValid || isPending}
+            disabled={!isValid}
+            loading={isPending}
         >
             Publicar
         </Button>
