@@ -8,7 +8,9 @@ on:
 jobs:
     lint:
         runs-on: ubuntu-latest
-        workdir: ./uap-vid
+        defaults:
+            run:
+                working-directory: ./server/
         steps:
             - uses: actions/checkout@v3
             - uses: pnpm/action-setup@v2
@@ -29,7 +31,9 @@ jobs:
     build:
         needs: [lint]
         runs-on: ubuntu-latest
-        workdir: ./uap-vid
+        defaults:
+            run:
+                working-directory: ./server/
         steps:
             - uses: actions/checkout@v3
             - uses: pnpm/action-setup@v2
