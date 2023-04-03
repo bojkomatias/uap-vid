@@ -62,7 +62,12 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-            - run: pnpm build
+
+            - name: Prisma generate
+              run: npx prisma generate
+
+            - name: Build
+              run: pnpm build
     deploy:
         needs: [lint, build]
         runs-on: ubuntu-latest
