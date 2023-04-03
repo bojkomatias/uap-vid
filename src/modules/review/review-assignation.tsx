@@ -1,21 +1,21 @@
 import { Review, ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
+import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import ItemContainer from '@review/elements/review-container'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
 
 interface ReviewAssignProps {
-    reviews: Review[]
     protocolId: string
     protocolState: State
 }
 const ReviewAssignation = async ({
-    reviews,
     protocolId,
     protocolState,
 }: ReviewAssignProps) => {
+    const reviews = await getReviewsByProtocol(protocolId)
     const users = await getAllUsersWithoutResearchers()
-    if (!users) return <></>
+    if (!users) return null
 
     const assignedInternal = reviews.find(
         (r) => r.type === 'SCIENTIFIC_INTERNAL'

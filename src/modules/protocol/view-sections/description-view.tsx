@@ -1,7 +1,8 @@
 import { ProtocolSectionsDescription } from '@prisma/client'
-import TipTapViewer from '@protocol/elements/text-item-view'
+
 import SectionViewer from '../elements/section-viewer'
 import ItemView from '@protocol/elements/item-view'
+import TextItemView from '@protocol/elements/text-item-view'
 interface DescriptionViewProps {
     data: ProtocolSectionsDescription
 }
@@ -45,7 +46,7 @@ const DescriptionView = ({ data }: DescriptionViewProps) => {
                     value={item.value}
                 />
             ))}
-            <TipTapViewer title="Resumen Técnico" content={data.technical} />
+            <TextItemView title="Resumen Técnico" content={data.technical} />
         </SectionViewer>
     )
 }

@@ -5,15 +5,14 @@ import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import dynamic from 'next/dynamic'
-const TipTapViewer = dynamic(() => import('@protocol/elements/text-item-view'))
+import TextItemView from '@protocol/elements/text-item-view'
 
 export default function ReviewItem({
     review,
-    user, // The user that is viewing the component
+    role,
 }: {
     review: Review & { reviewer: User }
-    user: User
+    role: Role
 }) {
     if (!review.data) return null
     function getDuration(millis: number) {
@@ -77,7 +76,7 @@ export default function ReviewItem({
                         </div>
 
                         {review.verdict === ReviewVerdict.PENDING ? (
-                            user.role === Role.RESEARCHER ? (
+                            role === Role.RESEARCHER ? (
                                 <ReviseCheckbox
                                     id={review.id}
                                     revised={review.revised}
@@ -97,7 +96,7 @@ export default function ReviewItem({
                     //     block: !review.revised,
                     // })}
                     >
-                        <TipTapViewer
+                        <TextItemView
                             title=""
                             content={review.data}
                             rounded={false}
@@ -106,7 +105,7 @@ export default function ReviewItem({
 
                     <div className="-mt-px flex justify-end gap-1 rounded-b border px-3 py-0.5 text-xs">
                         <span className="font-semibold text-gray-700">
-                            {user.role === Role.ADMIN || Role.SECRETARY
+                            {role === Role.ADMIN || Role.SECRETARY
                                 ? review.reviewer.name
                                 : null}
                         </span>

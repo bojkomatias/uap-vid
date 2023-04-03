@@ -1,13 +1,8 @@
+import './globals.css'
 import { Footer } from '@layout/footer'
 import { Header } from '@layout/header'
-import './globals.css'
-import Providers from './providers'
 import { Catamaran } from 'next/font/google'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { SignIn } from '@auth/sign-in'
-import Navigation from '@auth/navigation'
-import { Breadcrumbs } from '@elements/breadcrumbs'
+import Providers from './providers'
 
 export const metadata = {
     title: {
@@ -24,23 +19,12 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode
 }) {
-    const session = await getServerSession(authOptions)
-
     return (
         <html className={`${font.variable} font-sans`}>
             <Providers>
                 <body className="subpixel-antialiased">
                     <Header />
-                    <main className="relative min-h-[90vh]">
-                        {session ? (
-                            <Navigation session={session}>
-                                <Breadcrumbs />
-                                {children}
-                            </Navigation>
-                        ) : (
-                            <SignIn />
-                        )}
-                    </main>
+                    <main className="relative min-h-[90vh]">{children}</main>
                     <Footer />
                 </body>
             </Providers>

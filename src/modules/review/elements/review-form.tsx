@@ -89,7 +89,7 @@ export default function ReviewForm({
             <ul className={editing === '0' ? 'block' : 'hidden'}>
                 <ReviewItem
                     review={{ ...form.values, reviewer: review.reviewer }}
-                    user={review.reviewer}
+                    role={review.reviewer.role}
                 />
             </ul>
 

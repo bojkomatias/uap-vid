@@ -44,7 +44,8 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
         <Button
             onClick={approveProtocol}
             intent={'primary'}
-            disabled={protocol.state !== State.ACCEPTED || isPending}
+            disabled={protocol.state !== State.ACCEPTED}
+            loading={isPending}
         >
             {/* No se que texto poner acá jepz */}
             Aprobar: En curso

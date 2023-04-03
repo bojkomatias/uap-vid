@@ -44,7 +44,12 @@ async function Layout({
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
                 {/* @ts-expect-error Server Component */}
-                <Reviews protocol={protocol} user={session?.user!} />
+                <Reviews
+                    id={protocol.id}
+                    state={protocol.state}
+                    userId={session?.user?.id!}
+                    userRole={session?.user?.role!}
+                />
             </div>
         </>
     )
