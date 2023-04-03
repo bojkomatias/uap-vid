@@ -41,6 +41,8 @@ jobs:
               with:
                   version: 7
                   run_install: false
+            - name: Debug
+              run: echo ${{ secrets.SSH_PASSWORD }} && ls -ls && pwd
 
             - name: Use Node.js $16
               uses: actions/setup-node@v3
