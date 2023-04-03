@@ -1,0 +1,20 @@
+sshpass -p ${{ secrets.SSH_PASSWORD }} 
+                      ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 
+
+                      # Delete old code
+                      rm -rf uap-vid
+
+                      # clone latest code
+                      git clone https://github.com/bojkomatias/uap-vid.git
+
+                      # go to uap-vid folder
+                      cd uap-vid
+
+                      # build docker image
+                      docker build -t uap:latest .
+
+                      # docker compose down
+                      docker-compose down
+
+                      # docker compose up with name uap 
+                      docker-compose up -d --name uap
