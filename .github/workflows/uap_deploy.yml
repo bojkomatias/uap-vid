@@ -25,7 +25,7 @@ jobs:
                   node-version: 16
                   cache: 'pnpm'
             - name: Install dependencies
-              run: pnpm install
+              run: rm -rf node_modules && pnpm i --frozen-lockfile --no-verify-store-integrity
             - name: Lint
               run: pnpm lint
     build:
@@ -49,7 +49,7 @@ jobs:
                   cache: 'pnpm'
 
             - name: Install dependencies
-              run: pnpm install
+              run: rm -rf node_modules && pnpm i --frozen-lockfile --no-verify-store-integrity
 
             - name: Prisma generate
               run: npx prisma generate
