@@ -8,9 +8,6 @@ on:
 jobs:
     lint:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [16]
         steps:
             - uses: actions/checkout@v3
             - uses: pnpm/action-setup@v2
@@ -19,20 +16,18 @@ jobs:
                   version: 7
                   run_install: false
 
-            - name: Use Node.js ${{ matrix.node-version }}
+            - name: Use Node.js 16
               uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }}
+                  node-version: 16
                   cache: 'pnpm'
             - name: Install dependencies
               run: pnpm install
-            - run: pnpm lint
+              run: pnpm lint
     build:
         needs: [lint]
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [16]
+
         steps:
             - uses: actions/checkout@v3
             - uses: pnpm/action-setup@v2
@@ -41,10 +36,10 @@ jobs:
                   version: 7
                   run_install: false
 
-            - name: Use Node.js ${{ matrix.node-version }}
+            - name: Use Node.js $16
               uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }}
+                  node-version: $16
                   cache: 'pnpm'
 
             - name: Install dependencies
