@@ -1,7 +1,10 @@
 import { ConvocatoryForm } from '@convocatory/convocatory-form'
 import { PageHeading } from '@layout/page-heading'
 import { Convocatory } from '@prisma/client'
-import { getCurrentConvocatory } from '@repositories/convocatory'
+import {
+    getConvocatoryById,
+    getCurrentConvocatory,
+} from '@repositories/convocatory'
 import { redirect } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -13,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   to: new Date(),
                   year: 2023,
               }
-            : await getCurrentConvocatory()
+            : await getConvocatoryById(params.id)
     if (!convocatory) return redirect('/convocatories')
 
     return (

@@ -4,7 +4,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import { useNotifications } from '@mantine/notifications'
 import { Convocatory, ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useTransition } from 'react'
 import { Check } from 'tabler-icons-react'
 
 export function ConvocatoryForm({
@@ -16,7 +16,7 @@ export function ConvocatoryForm({
 }) {
     const router = useRouter()
     const notifications = useNotifications()
-
+    const [isPending, startTransition] = useTransition()
     const form = useForm<Convocatory>({
         initialValues: convocatory,
         validate: zodResolver(ConvocatorySchema),
@@ -59,7 +59,7 @@ export function ConvocatoryForm({
 
             if (res.status === 200) {
                 notifications.showNotification({
-                    title: 'Convocatoria guardado',
+                    title: 'Convocatoria guardada',
                     message: 'La convocatoria ha sido guardado con éxito',
                     color: 'teal',
                     icon: <Check />,
@@ -68,7 +68,7 @@ export function ConvocatoryForm({
                         marginBottom: '.8rem',
                     },
                 })
-                router.push('/convocatories')
+                startTransition(() => router.refresh())
             }
         },
         [isNew, notifications, router]
@@ -77,7 +77,7 @@ export function ConvocatoryForm({
     return (
         <form
             onSubmit={form.onSubmit(
-                (values) => console.log(values),
+                (values) => upsertConvocatory(values),
                 (errors) => console.log(errors)
             )}
             className="mx-auto mt-24 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
@@ -96,7 +96,10 @@ export function ConvocatoryForm({
                 <input
                     className="input"
                     type="number"
-                    {...form.getInputProps('year')}
+                    value={form.getInputProps('year').value}
+                    onChange={(e) =>
+                        form.setFieldValue('year', Number(e.target.value))
+                    }
                 />
             </div>
             <div className="m-3 p-1">
@@ -117,6 +120,7 @@ export function ConvocatoryForm({
             </div>
             <Button
                 type="submit"
+                loading={isPending}
                 className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
             >
                 {isNew ? 'Crear convocatoria' : 'Actualizar convocatoria'}

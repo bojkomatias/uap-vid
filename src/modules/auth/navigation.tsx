@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
+import { CurrentConvocatory } from '@convocatory/timer'
+import { getCurrentConvocatory } from '@repositories/convocatory'
 
 export default async function Navigation({
     children,
@@ -13,6 +15,9 @@ export default async function Navigation({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) redirect('/')
+
+    const currentConvocatory = await getCurrentConvocatory()
+
     const hasNavigation =
         session?.user?.role === 'ADMIN' || session?.user?.role === 'SECRETARY'
     return (
@@ -23,6 +28,16 @@ export default async function Navigation({
                     <DesktopNavigation user={session?.user!} />
                 </div>
             ) : null}
+            {currentConvocatory ? (
+                <CurrentConvocatory
+                    label="La convocatoria termina:"
+                    convocatory={currentConvocatory}
+                />
+            ) : (
+                <span className="label absolute right-0 max-w-[10rem] scale-90 text-center text-xs">
+                    No existe una convocatoria activa
+                </span>
+            )}
             <div
                 className={clsx(
                     'flex flex-1 flex-col',

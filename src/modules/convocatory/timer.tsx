@@ -32,7 +32,7 @@ export function CurrentConvocatory({
     const remainingMinutes = differenceInMinutes % 60
 
     return (
-        <div className="float-right flex scale-90 flex-col">
+        <div className="absolute right-0 flex scale-90 flex-col">
             <span className="label">{label}</span>
             <div className="flex flex-col items-center md:flex-row">
                 <div className="grid w-fit flex-shrink-0 grid-cols-4 place-items-stretch gap-1 font-light opacity-80">
