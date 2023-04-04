@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { EmptyStateItem } from './empty-state-item'
 
 interface TextItemProps {
     title: string
@@ -18,7 +19,9 @@ const TextItemView = ({ title, content, rounded = true }: TextItemProps) => {
                 >
                     <div dangerouslySetInnerHTML={{ __html: content }} />
                 </dd>
-            ) : null}
+            ) : (
+                <EmptyStateItem />
+            )}
         </div>
     )
 }
