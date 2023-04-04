@@ -4,7 +4,7 @@ FROM node:16-alpine AS deps
 RUN apk update && apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@7.4.1 --activate 
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./ 
+COPY package.json ./ 
 RUN pnpm install
 COPY prisma ./prisma
 RUN pnpm prisma generate --schema=./prisma/schema.prisma
