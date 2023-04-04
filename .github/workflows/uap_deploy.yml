@@ -2,9 +2,9 @@ name: UAP Deploy
 on:
     workflow_dispatch:
     push:
-        branches: [main]
+        branches: [feature/pq-108-deploy-to-uap]
     pull_request:
-        branches: [main]
+        branches: [feature/pq-108-deploy-to-uap]
 jobs:
     lint:
         runs-on: ubuntu-latest
