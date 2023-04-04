@@ -21,8 +21,6 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 COPY . .
-# This will do the trick, use the corresponding env file for each environment.
-# COPY .env.production.template .env.production
 RUN pnpm build
 
 # Production image, copy all the files and run next
