@@ -1,4 +1,4 @@
-import { CurrentConvocatory } from '@convocatory/index'
+import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { ReactNode } from 'react'
 

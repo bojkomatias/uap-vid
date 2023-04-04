@@ -35,8 +35,8 @@ const ActionSchema = z.enum([
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
-    'ACCEPT',                       //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
-    'APPROVE',                      //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+    'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+    'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -68,6 +68,7 @@ export const ConvocatorySchema = z.object({
     name: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date(),
+    year: z.number(),
 })
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 /////////////////////////////////////////

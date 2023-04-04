@@ -8,6 +8,7 @@ import { Home } from 'tabler-icons-react'
 const newLinkMap: any = {
     users: 'Lista de usuarios',
     protocols: 'Lista de protocolos',
+    convocatories: 'Lista de convocatorias',
 }
 
 export const Breadcrumbs = () => {
