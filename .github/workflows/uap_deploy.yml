@@ -86,5 +86,6 @@ jobs:
                       rm -rf uap-vid
                       git clone https://github.com/bojkomatias/uap-vid.git
                       cd uap-vid
+                      git checkout feature/pq-108-deploy-to-uap
                       docker build -t uap:latest .
                       docker-compose up -d --name uap
