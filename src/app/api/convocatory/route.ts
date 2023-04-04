@@ -5,10 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
     const data = await request.json()
-    const created = await createConvocatory({
-        createdAt: new Date(),
-        ...data,
-    })
+    const created = await createConvocatory(data)
 
     if (!created) {
         return new Response('We cannot create the convocatory', { status: 500 })

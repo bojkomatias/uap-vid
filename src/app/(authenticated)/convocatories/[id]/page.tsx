@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   name: '',
                   from: new Date(),
                   to: new Date(),
-                  year: 2023,
+                  year: new Date().getFullYear(),
               }
             : await getConvocatoryById(params.id)
     if (!convocatory) return redirect('/convocatories')

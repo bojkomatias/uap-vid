@@ -65,6 +65,7 @@ export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
 
 export const ConvocatorySchema = z.object({
     id: z.string().optional(),
+    createdAt: z.coerce.date().optional(),
     name: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date(),
