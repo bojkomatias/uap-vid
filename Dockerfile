@@ -6,7 +6,8 @@ RUN corepack enable && corepack prepare pnpm@7.4.1 --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./ 
 RUN pnpm install
-RUN pnpm prisma generate
+COPY prisma ./prisma
+RUN pnpm prisma generate --schema=./prisma/schema.prisma
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
