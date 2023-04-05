@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import TextItemView from '@protocol/elements/text-item-view'
+import { relativeTimeFormatter } from '@utils/formatters'
 
 export default function ReviewItem({
     review,
@@ -21,9 +22,9 @@ export default function ReviewItem({
         let days = Math.round(hours / 24)
 
         return (
-            ' hace ' + (days && days + (days > 1 ? ' días' : ' día')) ||
-            (hours && hours + (hours > 1 ? '  horas' : ' hora')) ||
-            minutes + (minutes > 1 ? '  minutos' : ' minuto')
+            (days && relativeTimeFormatter.format(-days, 'day')) ||
+            (hours && relativeTimeFormatter.format(-hours, 'hour')) ||
+            (minutes && relativeTimeFormatter.format(-minutes, 'minute'))
         )
     }
 
@@ -135,7 +136,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 router.refresh()
             })
         },
-        [id]
+        [id, router]
     )
 
     return (
