@@ -6,7 +6,7 @@ import {
 } from '../../../../repositories/user'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth'
 import type { User } from '@prisma/client'
 
@@ -58,16 +58,21 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user }) => {
-            const userExist = await findUserByEmail(user.email!)
-            const updateObject =
-                userExist && userExist.role
-                    ? { lastLogin: new Date() }
-                    : { role: 'RESEARCHER', lastLogin: new Date() }
-
+            if (!user || !user.email || !user.name) return false
+            const userExist = await findUserByEmail(user.email)
             if (userExist) {
-                await updateUserByEmail(user.email!, updateObject)
+                await updateUserByEmail(user.email!, {
+                    ...userExist,
+                    lastLogin: new Date(),
+                })
             } else {
-                await saveUser({ ...user, ...updateObject })
+                await saveUser({
+                    name: user.name,
+                    email: user.email,
+                    image: user.image,
+                    role: 'RESEARCHER',
+                    lastLogin: new Date(),
+                })
             }
             return true
         },

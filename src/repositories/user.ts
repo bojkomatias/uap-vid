@@ -81,7 +81,13 @@ const updateUserByEmail = async (email: string, data: User) => {
     }
 }
 
-const saveUser = async (data: User) => {
+const saveUser = async (data: {
+    name: string
+    email: string
+    image?: string | null
+    role: Role
+    lastLogin: Date
+}) => {
     try {
         const user = await prisma.user.create({
             data,
