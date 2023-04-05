@@ -6,7 +6,6 @@ import { Convocatory, ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Check } from 'tabler-icons-react'
-import { useState } from 'react'
 import { DateInput } from '@mantine/dates'
 import 'dayjs/locale/es'
 
