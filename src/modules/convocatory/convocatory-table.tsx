@@ -1,4 +1,7 @@
-import { getAllConvocatories } from '@repositories/convocatory'
+import {
+    getAllConvocatories,
+    getCurrentConvocatory,
+} from '@repositories/convocatory'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
@@ -6,6 +9,7 @@ export async function ConvocatoryTable() {
     const convocatories = await getAllConvocatories()
     if (!convocatories || convocatories.length === 0)
         return <div className="mt-auto">No existen convocatorias</div>
+    const currentConvocatory = await getCurrentConvocatory()
     return (
         <div className="mx-auto max-w-7xl">
             <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
@@ -34,6 +38,12 @@ export async function ConvocatoryTable() {
                             className="hidden px-3 py-3.5 text-left text-sm text-gray-900 sm:table-cell"
                         >
                             Hasta
+                        </th>
+                        <th
+                            scope="col"
+                            className="max-w-md px-8 py-3.5 text-left text-sm text-gray-900"
+                        >
+                            Actual
                         </th>
                         <th
                             scope="col"
@@ -72,6 +82,14 @@ export async function ConvocatoryTable() {
                             </td>
                             <td className="hidden max-w-[8rem] px-3 py-2 text-sm text-gray-500 sm:table-cell">
                                 {dateFormatter.format(convocatory.to)}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500">
+                                {currentConvocatory &&
+                                currentConvocatory.id === convocatory.id ? (
+                                    <span className="rounded border bg-gray-50 px-3 py-px text-xs uppercase">
+                                        actual
+                                    </span>
+                                ) : null}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-1">
                                 <Link

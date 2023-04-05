@@ -82,7 +82,7 @@ export function ConvocatoryForm({
                 (values) => upsertConvocatory(values),
                 (errors) => console.log(errors)
             )}
-            className="mx-auto mt-24 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
+            className="mx-auto mt-8 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
             <div className="m-3 p-1">
                 <label className="label">Nombre</label>
@@ -123,9 +123,8 @@ export function ConvocatoryForm({
                     locale="es-AR"
                     label="Fecha desde"
                     placeholder="Desde"
-                    variant={'unstyled'}
                     classNames={{
-                        input: 'input text-base',
+                        input: 'input',
                         label: 'label',
                     }}
                     value={new Date(form.getInputProps('from').value)}
@@ -145,7 +144,6 @@ export function ConvocatoryForm({
                     locale="es-AR"
                     label="Fecha hasta"
                     placeholder="Hasta"
-                    variant={'unstyled'}
                     classNames={{
                         input: 'input',
                         label: 'label',
