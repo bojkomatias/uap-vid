@@ -42,7 +42,6 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         () => ProtocolSchema.safeParse(protocol).success,
         [protocol]
     )
-    console.log(ProtocolSchema.safeParse(protocol), !isValid)
 
     if (!protocol.id || !canExecute(ACTION.PUBLISH, role, protocol.state))
         return <></>

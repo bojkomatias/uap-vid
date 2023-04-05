@@ -57,25 +57,49 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             )
         )
             router.push('/protocols/' + path?.split('/')[2] + '/0')
-    }, [path])
+    }, [path, router])
 
-    const upsertProtocol = useCallback(async (protocol: ProtocolZod) => {
-        // flow for protocols that don't have ID
-        if (!protocol.id) {
-            const res = await fetch(`/api/protocol`, {
-                method: 'POST',
+    const upsertProtocol = useCallback(
+        async (protocol: ProtocolZod) => {
+            // flow for protocols that don't have ID
+            if (!protocol.id) {
+                const res = await fetch(`/api/protocol`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(protocol),
+                })
+                const { id }: Protocol = await res.json()
+
+                if (res.status === 200) {
+                    notifications.showNotification({
+                        title: 'Protocolo creado',
+                        message: 'El protocolo ha sido creado con éxito',
+                        color: 'teal',
+                        icon: <Check />,
+                        radius: 0,
+                        style: {
+                            marginBottom: '.8rem',
+                        },
+                    })
+                }
+                return router.push(`/protocols/${id}/${section}`)
+            }
+            const res = await fetch(`/api/protocol/${protocol.id}`, {
+                method: 'PUT',
                 mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(protocol),
             })
-            const { id }: Protocol = await res.json()
 
             if (res.status === 200) {
                 notifications.showNotification({
-                    title: 'Protocolo creado',
-                    message: 'El protocolo ha sido creado con éxito',
+                    title: 'Protocolo guardado',
+                    message: 'El protocolo ha sido guardado con éxito',
                     color: 'teal',
                     icon: <Check />,
                     radius: 0,
@@ -83,34 +107,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         marginBottom: '.8rem',
                     },
                 })
+                startTransition(() => {
+                    router.refresh()
+                })
             }
-            return router.push(`/protocols/${id}/${section}`)
-        }
-        const res = await fetch(`/api/protocol/${protocol.id}`, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(protocol),
-        })
-
-        if (res.status === 200) {
-            notifications.showNotification({
-                title: 'Protocolo guardado',
-                message: 'El protocolo ha sido guardado con éxito',
-                color: 'teal',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
-            })
-            startTransition(() => {
-                router.refresh()
-            })
-        }
-    }, [])
+        },
+        [notifications, router, section]
+    )
 
     return (
         <ProtocolProvider form={form}>
