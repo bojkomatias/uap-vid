@@ -33,8 +33,20 @@ export default async function CreateButton({ role }: { role: RoleType }) {
     if (role === Role.ADMIN || Role.SECRETARY) {
         const convocatories = await getAllConvocatories()
         if (!convocatories) return null
+        const current = await getCurrentConvocatory()
         return (
             <MultipleButton
+                defaultValue={
+                    current
+                        ? {
+                              title: current.name,
+                              href: `/protocols/new/0?convocatory=${current.id}`,
+                              description: `${current.from.toLocaleDateString(
+                                  'es-AR'
+                              )},  ${current.to.toLocaleDateString('es-AR')}`,
+                          }
+                        : null
+                }
                 options={convocatories.map((e) => ({
                     title: e.name,
                     href: `/protocols/new/0?convocatory=${e.id}`,

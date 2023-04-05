@@ -35,8 +35,8 @@ const ActionSchema = z.enum([
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
-    'ACCEPT',                       //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
-    'APPROVE',                      //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+    'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+    'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -63,12 +63,27 @@ export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
 // CONVOCATORY SCHEMA
 /////////////////////////////////////////
 
-export const ConvocatorySchema = z.object({
-    id: z.string().optional(),
-    name: z.string(),
-    from: z.coerce.date(),
-    to: z.coerce.date(),
-})
+export const ConvocatorySchema = z
+    .object({
+        id: z.string().optional(),
+        createdAt: z.coerce.date().optional(),
+        name: z.string(),
+        from: z.coerce.date().min(new Date(-1), {
+            message: 'La fecha no puede ser menor a la actual',
+        }),
+        to: z.coerce.date(),
+        year: z
+            .number({
+                invalid_type_error: 'Este campo debe ser numérico',
+            })
+            .min(new Date().getFullYear(), {
+                message: 'Debe ser igual o mayor al año actual',
+            }),
+    })
+    .refine((data) => data.to > data.from, {
+        message: 'No puede preceder a fecha desde',
+        path: ['to'],
+    })
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
