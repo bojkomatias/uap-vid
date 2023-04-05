@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { EmptyStateItem } from './empty-state-item'
 
 interface ItemListProps {
     data: {
@@ -14,13 +15,17 @@ const ItemListView = ({ data }: ItemListProps) => {
     return (
         <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">{data.title}</dt>
-            <dd className="mt-1 text-sm text-gray-900">
-                <div className="mt-2 flex flex-col divide-y rounded-lg border">
-                    {data.values.map((row, index) => (
-                        <ListRow data={row} key={index} />
-                    ))}
-                </div>
-            </dd>
+            {data.values.length > 0 ? (
+                <dd className="mt-1 text-sm text-gray-900">
+                    <div className="mt-2 flex flex-col divide-y rounded-lg border">
+                        {data.values.map((row, index) => (
+                            <ListRow data={row} key={index} />
+                        ))}
+                    </div>
+                </dd>
+            ) : (
+                <EmptyStateItem />
+            )}
         </div>
     )
 }

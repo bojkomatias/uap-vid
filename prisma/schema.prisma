@@ -9,6 +9,7 @@ datasource db {
 
 model Convocatory {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime   @default(now())
   from      DateTime   @db.Date
   to        DateTime   @db.Date
   year      Int

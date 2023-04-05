@@ -33,7 +33,7 @@ export const Button = ({
     return (
         <button
             {...buttonProps}
-            disabled={loading}
+            disabled={loading || buttonProps.disabled}
             type={type}
             className={clsx(
                 className,
