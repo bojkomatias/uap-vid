@@ -3,9 +3,10 @@ import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from '@mantine/notifications'
 import { RoleSelector } from '../elements/role-selector'
+import type { User } from '@prisma/client'
 
 // Wrapper around Role Selector, to trigger save on role change (Used for UserList)
-export const RoleUpdater = ({ user }: { user: any }) => {
+export const RoleUpdater = ({ user }: { user: User }) => {
     const router = useRouter()
     const notifications = useNotifications()
 

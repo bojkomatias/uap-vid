@@ -13,8 +13,8 @@ export default function Select({
 }: PropsWithChildren<{
     path: string
     label: string
-    options: any
-    conditionalCleanup?: any
+    options: string[]
+    conditionalCleanup?: () => void
 }>) {
     const form = useProtocolContext()
     const [query, setQuery] = useState('')
@@ -22,7 +22,7 @@ export default function Select({
     const filteredValues =
         query === ''
             ? options
-            : options?.filter((value: any) => {
+            : options?.filter((value: string) => {
                   return value.toLowerCase().includes(query.toLowerCase())
               })
 

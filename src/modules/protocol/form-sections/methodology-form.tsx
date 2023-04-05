@@ -38,7 +38,7 @@ const types = [
     'Investigaciones cuantitativas, cualitativas, mixtas o experimentales',
     'Investigaciones de tipo teóricas',
 ]
-const conditionalByType = (v: string, path: any) => {
+const conditionalByType = (v: string, path: string) => {
     if (
         v ===
         'Investigaciones cuantitativas, cualitativas, mixtas o experimentales'

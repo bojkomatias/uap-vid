@@ -40,21 +40,21 @@ export default async function Page({
                   shownRecords
               )
         : null
-    if (!protocols) return
+    console.log(protocols)
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
-    const searchedProtocols = (): Protocol[] => {
-        if (!searchParams) return protocols
-        const results = fuzzysort.go(searchParams.search, protocols, {
-            keys: [
-                'sections.identification.title',
-                'sections.identification.career',
-                'sections.identification.assignment',
-            ],
-        })
-        return results.map((result) => {
-            return result.obj as Protocol
-        })
-    }
+    const searchedProtocols = searchParams?.search
+        ? fuzzysort
+              .go(searchParams.search, protocols as Protocol[], {
+                  keys: [
+                      'sections.identification.title',
+                      'sections.identification.career',
+                      'sections.identification.assignment',
+                  ],
+              })
+              .map((result) => {
+                  return result.obj as Protocol
+              })
+        : protocols
 
     return (
         <>
@@ -65,15 +65,19 @@ export default async function Page({
             </p>
 
             <div className="mt-3 flex justify-end">
-                {canExecute(ACTION.CREATE, session.user.role, 'NOT_CREATED') ? (
+                {canExecute(
+                    ACTION.CREATE,
+                    session.user.role,
+                    'NOT_CREATED'
+                ) && (
                     // @ts-expect-error
                     <CreateButton role={session.user.role} />
-                ) : null}
+                )}
             </div>
 
             <SearchBar />
 
-            <Table items={searchedProtocols()} />
+            <Table items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
                     pageParams={Number(searchParams?.page) || 1}

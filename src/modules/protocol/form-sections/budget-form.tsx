@@ -1,9 +1,9 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/inputs/input-list'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
+import { InputList } from '@protocol/elements/inputs/input-list'
 
 export function BudgetForm() {
     const form = useProtocolContext()
@@ -19,10 +19,9 @@ export function BudgetForm() {
             <SectionTitle title="Presupuesto de gastos directos" />
             <>
                 <Info />
-                <List
+                <InputList
                     path={path + 'expenses'}
                     label="gastos"
-                    toMap={form.values.sections.budget.expenses}
                     insertedItemFormat={{
                         type: '',
                         detail: '',

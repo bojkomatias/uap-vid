@@ -1,4 +1,5 @@
 import type { ProtocolSectionsBibliography } from '@prisma/client'
+import type { ListRowValues } from '@protocol/elements/item-list-view'
 import ItemListView from '@protocol/elements/item-list-view'
 import SectionViewer from '../elements/section-viewer'
 
@@ -9,7 +10,7 @@ interface BibliographyViewProps {
 const BibliographyView = ({ data }: BibliographyViewProps) => {
     const tableData = {
         title: 'Fuentes de información',
-        values: data.chart.reduce((newVal: any, item) => {
+        values: data.chart.reduce((newVal: ListRowValues[], item) => {
             newVal.push([
                 {
                     up: item.title,
