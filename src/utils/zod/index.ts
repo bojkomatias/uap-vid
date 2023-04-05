@@ -63,14 +63,21 @@ export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
 // CONVOCATORY SCHEMA
 /////////////////////////////////////////
 
-export const ConvocatorySchema = z.object({
-    id: z.string().optional(),
-    createdAt: z.coerce.date().optional(),
-    name: z.string(),
-    from: z.coerce.date(),
-    to: z.coerce.date(),
-    year: z.number(),
-})
+export const ConvocatorySchema = z
+    .object({
+        id: z.string().optional(),
+        createdAt: z.coerce.date().optional(),
+        name: z.string(),
+        from: z.coerce.date().min(new Date(-1), {
+            message: 'La fecha no puede ser menor a la actual',
+        }),
+        to: z.coerce.date(),
+        year: z.number(),
+    })
+    .refine((data) => data.to > data.from, {
+        message: 'No puede preceder a fecha desde',
+        path: ['to'],
+    })
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
