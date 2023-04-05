@@ -1,4 +1,5 @@
 import { getAllConvocatories } from '@repositories/convocatory'
+import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
 export async function ConvocatoryTable() {
@@ -52,18 +53,14 @@ export async function ConvocatoryTable() {
                                         Desde:
                                     </dt>
                                     <dd className="mt-1 inline truncate ">
-                                        {new Date(
-                                            convocatory.from
-                                        ).toLocaleString('es-AR')}
+                                        {dateFormatter.format(convocatory.from)}
                                     </dd>
                                     <br />
                                     <dt className="mx-2 inline font-medium ">
                                         Hasta:
                                     </dt>
                                     <dd className="mt-1 inline truncate ">
-                                        {new Date(
-                                            convocatory.to
-                                        ).toLocaleString('es-AR')}
+                                        {dateFormatter.format(convocatory.to)}
                                     </dd>
                                 </dl>
                             </td>
@@ -71,14 +68,10 @@ export async function ConvocatoryTable() {
                                 {convocatory.year}
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                                {new Date(convocatory.from).toLocaleString(
-                                    'es-AR'
-                                )}
+                                {dateFormatter.format(convocatory.from)}
                             </td>
                             <td className="hidden max-w-[8rem] px-3 py-2 text-sm text-gray-500 sm:table-cell">
-                                {new Date(convocatory.to).toLocaleString(
-                                    'es-AR'
-                                )}
+                                {dateFormatter.format(convocatory.to)}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-1">
                                 <Link
