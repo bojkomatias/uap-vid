@@ -1,5 +1,5 @@
 import type { ProtocolSectionsIdentification } from '@prisma/client'
-import type { ListValues } from '@protocol/elements/item-list-view'
+import type { ListRowValues } from '@protocol/elements/item-list-view'
 import ItemListView from '@protocol/elements/item-list-view'
 import SectionViewer from '../elements/section-viewer'
 import ItemView from '@protocol/elements/item-view'
@@ -31,7 +31,7 @@ export default function IdentificationView({ data }: IdentificationProps) {
     ]
     const tableData = {
         title: 'Equipo',
-        values: data.team.reduce((newVal: ListValues, person) => {
+        values: data.team.reduce((newVal: ListRowValues[], person) => {
             newVal.push([
                 {
                     up: `${person.last_name}, ${person.name}`,

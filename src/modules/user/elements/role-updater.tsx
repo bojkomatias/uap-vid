@@ -12,7 +12,7 @@ export const RoleUpdater = ({ user }: { user: User }) => {
 
     const UpdateRoleForUser = async (newRole: string) => {
         const res = await fetch(`/api/users/${user.id}`, {
-            method: 'PUT',
+            method: 'PATCH',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',

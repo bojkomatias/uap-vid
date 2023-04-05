@@ -67,6 +67,20 @@ const updateUserById = async (id: string, data: User) => {
     }
 }
 
+const updateUserRoleById = async (id: string, role: Role) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: { role },
+        })
+        return user
+    } catch (error) {
+        return null
+    }
+}
+
 const updateUserByEmail = async (email: string, data: User) => {
     try {
         const user = await prisma.user.update({
@@ -85,8 +99,9 @@ const saveUser = async (data: {
     name: string
     email: string
     image?: string | null
+    password?: string
     role: Role
-    lastLogin: Date
+    lastLogin?: Date
 }) => {
     try {
         const user = await prisma.user.create({
@@ -104,6 +119,7 @@ export {
     findUserById,
     findUserByEmail,
     updateUserById,
+    updateUserRoleById,
     updateUserByEmail,
     saveUser,
 }
