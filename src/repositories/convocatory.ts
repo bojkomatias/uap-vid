@@ -17,14 +17,22 @@ export const getConvocatoryById = cache(async (id: string) => {
     }
 })
 
-// TODO: Make it actually match range from - to
 export const getCurrentConvocatory = cache(async () => {
     try {
         return await prisma.convocatory.findFirst({
             where: {
-                year: {
-                    equals: new Date().getFullYear(),
-                },
+                AND: [
+                    {
+                        from: {
+                            lte: new Date(),
+                        },
+                    },
+                    {
+                        to: {
+                            gt: new Date(),
+                        },
+                    },
+                ],
             },
         })
     } catch (e) {

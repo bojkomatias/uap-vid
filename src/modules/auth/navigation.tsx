@@ -29,15 +29,8 @@ export default async function Navigation({
                 </div>
             ) : null}
             {currentConvocatory ? (
-                <CurrentConvocatory
-                    label="La convocatoria termina:"
-                    convocatory={currentConvocatory}
-                />
-            ) : (
-                <span className="label absolute right-0 max-w-[10rem] scale-90 text-center text-xs">
-                    No existe una convocatoria activa
-                </span>
-            )}
+                <CurrentConvocatory convocatory={currentConvocatory} />
+            ) : null}
             <div
                 className={clsx(
                     'flex flex-1 flex-col',
