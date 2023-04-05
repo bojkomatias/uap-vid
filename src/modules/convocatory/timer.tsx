@@ -9,12 +9,12 @@ export function CurrentConvocatory({
     convocatory: Convocatory
 }) {
     const date = useMemo(() => new Date(convocatory.to), [convocatory])
-
     const [today, setToday] = useState(new Date())
     useEffect(() => {
-        setTimeout(() => {
+        let timeout = setTimeout(() => {
             setToday(new Date())
         }, 3600000)
+        return () => clearTimeout(timeout)
     }, [today])
 
     const differenceInMilliseconds = useMemo(
