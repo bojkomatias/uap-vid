@@ -2,7 +2,8 @@
 import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
 import { useNotifications } from '@mantine/notifications'
-import { Convocatory, ConvocatorySchema } from '@utils/zod'
+import type { Convocatory} from '@utils/zod';
+import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Check } from 'tabler-icons-react'

@@ -1,7 +1,8 @@
 'use client'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
-import { ACTION, RoleType, StateType } from '@utils/zod'
+import type { RoleType, StateType } from '@utils/zod';
+import { ACTION } from '@utils/zod'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

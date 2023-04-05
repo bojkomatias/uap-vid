@@ -6,7 +6,8 @@ import {
 } from '../../../repositories/user'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth';
+import NextAuth from 'next-auth'
 import type { User } from '@prisma/client'
 
 export const authOptions: NextAuthOptions = {

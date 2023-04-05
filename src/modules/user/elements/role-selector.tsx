@@ -4,7 +4,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
 import clsx from 'clsx'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import { Role, User } from '@prisma/client'
+import type { Role, User } from '@prisma/client'
 
 //Callback used in UpdateRole
 export const RoleSelector = ({

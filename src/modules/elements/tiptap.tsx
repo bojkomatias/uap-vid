@@ -1,8 +1,8 @@
 'use client'
 import TextAlign from '@tiptap/extension-text-align'
+import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-
 import clsx from 'clsx'
 import {
     ArrowBackUp,
@@ -44,22 +44,20 @@ const Tiptap = ({
         content: value,
         editable: editable,
     })
-
+    if (!editor) return <></>
     return (
         <div className="prose relative max-w-none">
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
-                onBlur={() =>
-                    onChange(editor?.getHTML().replace('<p></p>', '')!)
-                }
+                onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
         </div>
     )
 }
 
-const MenuBar = ({ editor }: any) => {
+const MenuBar = ({ editor }: { editor: Editor }) => {
     if (!editor) {
         return null
     }

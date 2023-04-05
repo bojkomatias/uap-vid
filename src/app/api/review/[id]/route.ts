@@ -1,14 +1,11 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
-import { NextRequest, NextResponse } from 'next/server'
+/* eslint-disable @next/next/no-server-import-in-page */
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { markRevised, updateReview } from '@repositories/review'
 
-export async function PUT(
-    request: NextRequest,
-    { params }: { params: { id: string } }
-) {
-
+export async function PUT(request: NextRequest) {
     const data = await request.json()
-    const review = await updateReview(params.id, data)
+    const review = await updateReview(data)
 
     return NextResponse.json(review)
 }

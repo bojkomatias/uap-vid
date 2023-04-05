@@ -1,5 +1,5 @@
 'use client'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import type { PropsWithChildren } from 'react'
 import { Combobox } from '@headlessui/react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import clsx from 'clsx'
@@ -60,7 +60,7 @@ export default function MultipleSelect({
                     ) : null}
 
                     <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
-                        {options.map((value: string, index: any) => (
+                        {options.map((value: string, index: number) => (
                             <Combobox.Option
                                 key={index}
                                 value={value}

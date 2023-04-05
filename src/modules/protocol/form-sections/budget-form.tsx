@@ -87,9 +87,9 @@ const Info = () => (
 )
 
 const years = (v: string) => {
-    let yearQuantity = Number(v.substring(0, 2)) / 12
-    let currentYear = new Date().getFullYear()
-    let years: string[] = [String(currentYear)]
+    const yearQuantity = Number(v.substring(0, 2)) / 12
+    const currentYear = new Date().getFullYear()
+    const years: string[] = [String(currentYear)]
     for (let i = 0; i < yearQuantity; i++) {
         years.push(String(currentYear + i + 1))
     }

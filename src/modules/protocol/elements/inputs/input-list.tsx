@@ -1,4 +1,4 @@
-import { Fragment, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import Input from './input'
 import Select from './select'
 import { Plus, Trash } from 'tabler-icons-react'

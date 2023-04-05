@@ -11,7 +11,7 @@ import {
 import Pagination from '@elements/pagination'
 import SearchBar from '@elements/search-bar'
 import fuzzysort from 'fuzzysort'
-import { Protocol } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
 
@@ -22,7 +22,7 @@ export default async function Page({
     searchParams?: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-
+    if (!session) return
     const protocolCount = await getTotalRecordsProtocol()
     const shownRecords = 8
 
@@ -40,23 +40,22 @@ export default async function Page({
                   shownRecords
               )
         : null
+    if (!protocols) return
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = (): Protocol[] => {
-        const results = fuzzysort.go(
-            searchParams?.search!,
-            protocols as Protocol[],
-            {
-                keys: [
-                    'sections.identification.title',
-                    'sections.identification.career',
-                    'sections.identification.assignment',
-                ],
-            }
-        )
+        if (!searchParams) return protocols
+        const results = fuzzysort.go(searchParams.search, protocols, {
+            keys: [
+                'sections.identification.title',
+                'sections.identification.career',
+                'sections.identification.assignment',
+            ],
+        })
         return results.map((result) => {
             return result.obj as Protocol
         })
     }
+
     return (
         <>
             <PageHeading title="Lista de proyectos de investigación" />
@@ -66,21 +65,15 @@ export default async function Page({
             </p>
 
             <div className="mt-3 flex justify-end">
-                {canExecute(
-                    ACTION.CREATE,
-                    session?.user?.role!,
-                    'NOT_CREATED'
-                ) ? (
+                {canExecute(ACTION.CREATE, session.user.role, 'NOT_CREATED') ? (
                     // @ts-expect-error
-                    <CreateButton role={session?.user?.role!} />
+                    <CreateButton role={session.user.role} />
                 ) : null}
             </div>
 
             <SearchBar />
 
-            <Table
-                items={searchParams?.search ? searchedProtocols() : protocols}
-            />
+            <Table items={searchedProtocols()} />
             {searchParams?.search ? null : (
                 <Pagination
                     pageParams={Number(searchParams?.page) || 1}

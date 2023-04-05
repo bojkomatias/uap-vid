@@ -1,7 +1,6 @@
 import { ReviewType, Role, State } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import ItemContainer from '@review/elements/review-container'
-import { useMemo } from 'react'
 import { HistoricalReviewList } from './historical-review-list'
 import ReviewItem from './review-item'
 

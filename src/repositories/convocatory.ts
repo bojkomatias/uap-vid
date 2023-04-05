@@ -1,4 +1,4 @@
-import { Convocatory } from '@prisma/client'
+import type { Convocatory } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 

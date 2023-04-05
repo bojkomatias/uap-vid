@@ -1,12 +1,13 @@
+import type {
+    RoleType,
+    StateType,
+    ActionType,
+    AccessType} from './zod';
 import {
     ROLE,
-    RoleType,
     STATE,
-    StateType,
     ACTION,
-    ActionType,
-    ACCESS,
-    AccessType,
+    ACCESS
 } from './zod'
 
 // This component is meant to export helper functionalities in a centralized matter when we come to roles or states.

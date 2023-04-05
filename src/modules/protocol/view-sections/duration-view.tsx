@@ -1,4 +1,4 @@
-import { ProtocolSectionsDuration } from '@prisma/client'
+import type { ProtocolSectionsDuration } from '@prisma/client'
 import SectionViewer from '@protocol/elements/section-viewer'
 import ItemListView from '@protocol/elements/item-list-view'
 import ItemView from '@protocol/elements/item-view'

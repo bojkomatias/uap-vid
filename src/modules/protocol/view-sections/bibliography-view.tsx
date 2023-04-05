@@ -1,4 +1,4 @@
-import { ProtocolSectionsBibliography } from '@prisma/client'
+import type { ProtocolSectionsBibliography } from '@prisma/client'
 import ItemListView from '@protocol/elements/item-list-view'
 import SectionViewer from '../elements/section-viewer'
 

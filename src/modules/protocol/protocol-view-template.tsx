@@ -1,4 +1,4 @@
-import type { Protocol, ProtocolSections, Role } from '@prisma/client'
+import type { ProtocolSections, Role } from '@prisma/client'
 import dynamic from 'next/dynamic'
 const IdentificationView = dynamic(
     () => import('@protocol/view-sections/identification-view')

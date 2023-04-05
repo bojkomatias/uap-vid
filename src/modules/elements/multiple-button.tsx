@@ -5,7 +5,6 @@ import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Button } from './button'
-import { Convocatory } from '@prisma/client'
 
 export default function MultipleButton({
     defaultValue,

@@ -11,8 +11,8 @@ import UserTable from '@user/user-table'
 
 export default async function UserList() {
     const session = await getServerSession(authOptions)
-
-    if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
+    if (!session) return
+    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     const users = await getAllUsers()
 
     return (

@@ -1,4 +1,4 @@
-import { Role, State } from '@prisma/client'
+import type { Role, State } from '@prisma/client'
 import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'

@@ -1,11 +1,11 @@
 'use client'
-import { Combobox, Listbox, Transition } from '@headlessui/react'
+import { Combobox } from '@headlessui/react'
 import { useNotifications } from '@mantine/notifications'
-import { Review, ReviewType, User } from '@prisma/client'
+import type { Review, ReviewType, User } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
 
 interface ReviewAssignSelectProps {

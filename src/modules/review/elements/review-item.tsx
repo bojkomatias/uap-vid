@@ -1,5 +1,6 @@
 'use client'
-import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
+import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
@@ -17,9 +18,9 @@ export default function ReviewItem({
 }) {
     if (!review.data) return null
     function getDuration(millis: number) {
-        let minutes = Math.floor(millis / 60000)
-        let hours = Math.round(minutes / 60)
-        let days = Math.round(hours / 24)
+        const minutes = Math.floor(millis / 60000)
+        const hours = Math.round(minutes / 60)
+        const days = Math.round(hours / 24)
 
         return (
             (days && relativeTimeFormatter.format(-days, 'day')) ||

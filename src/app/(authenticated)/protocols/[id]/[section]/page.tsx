@@ -1,6 +1,4 @@
-import { PageHeading } from '@layout/page-heading'
 import PublishButton from '@protocol/elements/action-buttons/publish'
-import { getCurrentConvocatory } from '@repositories/convocatory'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
 import { STATE } from '@utils/zod'
@@ -9,7 +7,6 @@ import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
-
 const ProtocolForm = dynamic(() => import('@protocol/protocol-form-template'))
 
 export default async function Page({
@@ -20,6 +17,7 @@ export default async function Page({
     searchParams: { convocatory: string }
 }) {
     const session = await getServerSession(authOptions)
+    if (!session) return
     if (!searchParams.convocatory && params.id === 'new')
         return redirect('/protocols')
 
@@ -28,22 +26,19 @@ export default async function Page({
             ? {
                   convocatoryId: searchParams.convocatory,
                   state: STATE.DRAFT,
-                  researcher: session?.user?.id!,
+                  researcher: session.user.id,
                   sections: initialSectionValues,
               }
             : await findProtocolById(params.id)
 
     if (!protocol) redirect('/protocols')
-    if (!canExecute('EDIT', session?.user?.role!, protocol?.state!))
+    if (!canExecute('EDIT', session.user.role, protocol.state))
         redirect('/protocols')
 
     return (
         <>
             <div className="mr-3 mt-1 flex items-center justify-end gap-2">
-                <PublishButton
-                    role={session?.user?.role!}
-                    protocol={protocol}
-                />
+                <PublishButton role={session.user.role} protocol={protocol} />
             </div>
             <ProtocolForm protocol={protocol} />
         </>
