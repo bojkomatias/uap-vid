@@ -58,16 +58,16 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user }) => {
-            if (!user || !user.email || !user.name) return false
+            if (!user || !user.email) return false
             const userExist = await findUserByEmail(user.email)
             if (userExist) {
-                await updateUserByEmail(user.email!, {
+                await updateUserByEmail(user.email, {
                     ...userExist,
                     lastLogin: new Date(),
                 })
             } else {
                 await saveUser({
-                    name: user.name,
+                    name: user.name ?? '',
                     email: user.email,
                     image: user.image,
                     role: 'RESEARCHER',
@@ -77,8 +77,8 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: async ({ token, user }) => {
-            if (user) {
-                const userFromDb = await findUserByEmail(user.email!)
+            if (user && user.email) {
+                const userFromDb = await findUserByEmail(user.email)
                 token.user = userFromDb
             }
             return token
