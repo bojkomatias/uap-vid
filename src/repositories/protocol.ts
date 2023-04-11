@@ -6,9 +6,6 @@ import { cache } from 'react'
 const findProtocolById = cache(async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
-            include: {
-                reviews: true,
-            },
             where: {
                 id,
             },
@@ -173,38 +170,6 @@ const getProtocolsWithoutPagination = cache(
     }
 )
 
-const changeProtocolState = async (id: string, state: State) => {
-    try {
-        const protocol = await prisma.protocol.update({
-            where: {
-                id: id,
-            },
-            data: {
-                state: state,
-            },
-        })
-        return protocol
-    } catch (e) {
-        return null
-    }
-}
-
-const publishProtocol = async (id: string) => {
-    try {
-        const protocol = await prisma.protocol.update({
-            where: {
-                id: id,
-            },
-            data: {
-                state: State.PUBLISHED,
-            },
-        })
-        return protocol
-    } catch (e) {
-        return null
-    }
-}
-
 export {
     findProtocolById,
     updateProtocolById,
@@ -214,6 +179,4 @@ export {
     getProtocolByRol,
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
-    publishProtocol,
-    changeProtocolState,
 }

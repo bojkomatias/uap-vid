@@ -1,24 +1,22 @@
 import clsx from 'clsx'
+import { EmptyStateItem } from './empty-state-item'
 
 interface TextItemProps {
     title: string
     content: string | null
-    rounded?: boolean
+    className?: string
 }
-const TextItemView = ({ title, content, rounded = true }: TextItemProps) => {
+const TextItemView = ({ title, content, className }: TextItemProps) => {
     return (
         <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">{title}</dt>
             {content ? (
-                <dd
-                    className={clsx(
-                        { rounded: rounded },
-                        'prose max-w-none border px-4'
-                    )}
-                >
+                <dd className={clsx(className, 'prose max-w-none text-sm')}>
                     <div dangerouslySetInnerHTML={{ __html: content }} />
                 </dd>
-            ) : null}
+            ) : (
+                <EmptyStateItem />
+            )}
         </div>
     )
 }

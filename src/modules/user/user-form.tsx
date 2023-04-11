@@ -57,7 +57,7 @@ export default function UserForm() {
                 e.preventDefault()
                 createNewUser()
             }}
-            className="mx-auto max-w-7xl place-items-stretch lg:grid lg:grid-cols-2"
+            className="mx-auto mt-28 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
             <div className="m-3 p-1">
                 <label className="label">Nombre Completo</label>

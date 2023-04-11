@@ -9,10 +9,11 @@ import { useTransition } from 'react'
 
 type ActionButtonTypes = {
     role: Role
-    protocol: Protocol & { reviews: Review[] }
+    protocol: Protocol
+    reviews: Review[]    
 }
 
-const AcceptButton = ({ role, protocol }: ActionButtonTypes) => {
+const AcceptButton = ({ role, protocol, reviews}: ActionButtonTypes) => {
     const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -20,8 +21,8 @@ const AcceptButton = ({ role, protocol }: ActionButtonTypes) => {
         !protocol.id ||
         !canExecute(ACTION.ACCEPT, role, protocol.state) ||
         protocol.state !== State.SCIENTIFIC_EVALUATION ||
-        protocol.reviews.length !== 3 ||
-        !protocol.reviews.every(
+        reviews.length !== 3 ||
+        reviews.every(
             (review) => review.verdict === ReviewVerdict.APPROVED
         )
     )
