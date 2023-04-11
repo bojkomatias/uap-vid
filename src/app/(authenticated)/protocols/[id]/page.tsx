@@ -1,3 +1,4 @@
+'use server'
 import View from '@protocol/protocol-view-template'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { redirect } from 'next/navigation'
@@ -8,7 +9,11 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
 import PublishButton from '@protocol/elements/action-buttons/publish'
+
+import { PDF } from 'modules/pdf'
+
 import { getReviewsByProtocol } from '@repositories/review'
+
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')
@@ -17,7 +22,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (!protocol) {
         return redirect('/protocols')
     }
+
     const reviews = await getReviewsByProtocol(protocol.id)
+
 
     return (
         <>
@@ -27,6 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         {ProtocolStatesDictionary[protocol?.state]}
                     </span>
                 </div>
+                <PDF protocol={protocol} />
                 <ApproveButton
                     role={session?.user?.role!}
                     protocol={protocol}

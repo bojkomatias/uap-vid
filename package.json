@@ -17,6 +17,7 @@
         "@mantine/hooks": "^6.0.4",
         "@mantine/notifications": "^4.2.10",
         "@prisma/client": "^4.6.1",
+        "@react-pdf/renderer": "^3.1.9",
         "@tabler/icons": "^2.11.0",
         "@tailwindcss/forms": "^0.5.3",
         "@tiptap/extension-text-align": "2.0.0-beta.220",
@@ -25,7 +26,11 @@
         "@tiptap/starter-kit": "2.0.0-beta.220",
         "bcryptjs": "^2.4.3",
         "clsx": "^1.2.1",
+
+        "encoding": "^0.1.13",
+
         "dayjs": "^1.11.7",
+
         "framer-motion": "^6.3.3",
         "fuzzysort": "^2.0.4",
         "mongodb": "^4.6.0",
