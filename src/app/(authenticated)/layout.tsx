@@ -10,6 +10,7 @@ export default async function RootLayout({
         // @ts-expect-error
         <Navigation>
             <Breadcrumbs />
+          
             {children}
         </Navigation>
     )
