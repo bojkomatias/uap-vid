@@ -57,6 +57,7 @@ export default async function Page({
             return result.obj as Protocol
         })
     }
+
     return (
         <>
             <PageHeading title="Lista de proyectos de investigación" />

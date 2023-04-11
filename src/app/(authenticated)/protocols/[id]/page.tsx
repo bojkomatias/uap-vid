@@ -1,3 +1,4 @@
+'use server'
 import View from '@protocol/protocol-view-template'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { redirect } from 'next/navigation'
@@ -8,6 +9,7 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
 import PublishButton from '@protocol/elements/action-buttons/publish'
+import { PDF } from 'modules/pdf'
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')
@@ -16,6 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     if (!protocol) {
         return redirect('/protocols')
     }
+
     return (
         <>
             <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
@@ -24,6 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         {ProtocolStatesDictionary[protocol?.state!]}
                     </span>
                 </div>
+                <PDF protocol={protocol} />
                 <ApproveButton
                     role={session?.user?.role!}
                     protocol={protocol!}

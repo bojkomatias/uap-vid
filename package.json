@@ -25,6 +25,7 @@
         "@tiptap/starter-kit": "2.0.0-beta.220",
         "bcryptjs": "^2.4.3",
         "clsx": "^1.2.1",
+        "encoding": "^0.1.13",
         "framer-motion": "^6.3.3",
         "fuzzysort": "^2.0.4",
         "mongodb": "^4.6.0",
