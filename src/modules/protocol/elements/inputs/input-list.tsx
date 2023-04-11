@@ -81,6 +81,11 @@ export default function InputList({
                     </div>
                 ) : null}
                 {fields}
+                {form.getInputProps(path).error ? (
+                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
+                        *{form.getInputProps(path).error}
+                    </p>
+                ) : null}
                 <Button
                     onClick={() => {
                         form.insertListItem(path, insertedItemFormat)

@@ -10,7 +10,15 @@ export const initialSectionValues: Sections = {
         assignment: '',
         career: '',
         sponsor: [],
-        team: [],
+        team: [
+            {
+                hours: 0,
+                last_name: "",
+                name: "",
+                role: "Director",
+            }
+        ]
+        ,
         title: '',
     },
     duration: {

@@ -41,7 +41,7 @@ export function IdentificationForm() {
                 />
                 <TeamInfo />
                 <List
-                    path={path + 'team'}
+                    path={`${path}team`}
                     label="miembros de equipo"
                     toMap={form.values.sections.identification.team}
                     insertedItemFormat={{
