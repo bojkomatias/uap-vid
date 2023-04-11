@@ -30,7 +30,7 @@
         "fuzzysort": "^2.0.4",
         "mongodb": "^4.6.0",
         "next": "latest",
-        "next-auth": "^4.10.1",
+        "next-auth": "^4.10.1", 
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "tabler-icons-react": "^1.50.0",

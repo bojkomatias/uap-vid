@@ -34,7 +34,7 @@ export function IdentificationForm() {
                 <AssignmentInfo />
                 <Select
                     path={path + 'assignment'}
-                    label="materia"
+                    label="materia (solo en caso de PIC)"
                     options={assignments(
                         form.values.sections.identification.career
                     )}
@@ -123,7 +123,8 @@ const AssignmentInfo = () => (
     <InfoTooltip>
         <p>
             <b>Materia:</b> La materia debe estar relacionada al a
-            investigación, sino, dejar en blanco.
+            investigación. Utilizar solo en proyectos PIC. De lo contrario,
+            dejar en blanco.
         </p>
     </InfoTooltip>
 )

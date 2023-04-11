@@ -251,7 +251,7 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-    assignment: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    assignment: z.string().min(1, { message: 'El campo no puede estar vacío' }).optional(),
     career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
