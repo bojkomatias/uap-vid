@@ -9,7 +9,11 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
 import PublishButton from '@protocol/elements/action-buttons/publish'
+
 import { PDF } from 'modules/pdf'
+
+import { getReviewsByProtocol } from '@repositories/review'
+
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')
@@ -19,31 +23,35 @@ export default async function Page({ params }: { params: { id: string } }) {
         return redirect('/protocols')
     }
 
+    const reviews = await getReviewsByProtocol(protocol.id)
+
+
     return (
         <>
             <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
                 <div className="flex-1">
                     <span className="rounded border bg-gray-50 px-2 py-0.5 text-sm font-semibold uppercase text-gray-600">
-                        {ProtocolStatesDictionary[protocol?.state!]}
+                        {ProtocolStatesDictionary[protocol?.state]}
                     </span>
                 </div>
                 <PDF protocol={protocol} />
                 <ApproveButton
                     role={session?.user?.role!}
-                    protocol={protocol!}
+                    protocol={protocol}
                 />
                 <AcceptButton
                     role={session?.user?.role!}
-                    protocol={protocol!}
+                    protocol={protocol}
+                    reviews={reviews}
                 />
                 <PublishButton
                     role={session?.user?.role!}
-                    protocol={protocol!}
+                    protocol={protocol}
                 />
                 <EditButton
                     role={session?.user?.role!}
                     state={protocol?.state!}
-                    id={protocol?.id!}
+                    id={protocol?.id}
                 />
             </div>
             <View sections={protocol.sections} role={session?.user?.role!} />

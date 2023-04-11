@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
+import { CurrentConvocatory } from '@convocatory/timer'
+import { getCurrentConvocatory } from '@repositories/convocatory'
 
 export default async function Navigation({
     children,
@@ -13,6 +15,9 @@ export default async function Navigation({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) redirect('/')
+
+    const currentConvocatory = await getCurrentConvocatory()
+
     const hasNavigation =
         session?.user?.role === 'ADMIN' || session?.user?.role === 'SECRETARY'
     return (
@@ -22,6 +27,9 @@ export default async function Navigation({
                     <MobileNavigation user={session?.user!} />
                     <DesktopNavigation user={session?.user!} />
                 </div>
+            ) : null}
+            {currentConvocatory ? (
+                <CurrentConvocatory convocatory={currentConvocatory} />
             ) : null}
             <div
                 className={clsx(

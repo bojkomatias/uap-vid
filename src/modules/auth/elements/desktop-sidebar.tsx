@@ -1,5 +1,6 @@
 'use client'
 import {
+    CalendarEvent,
     ClipboardList,
     List,
     ListDetails,
@@ -95,5 +96,11 @@ export const navigation = [
         icon: Users,
         href: '/users',
         scope: ACCESS.USERS,
+    },
+    {
+        name: 'Panel de convocatorias',
+        icon: CalendarEvent,
+        href: '/convocatories',
+        scope: ACCESS.CONVOCATORIES,
     },
 ]
