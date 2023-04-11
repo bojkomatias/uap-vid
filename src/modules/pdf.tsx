@@ -1,10 +1,8 @@
 'use client'
-import { useLayoutEffect, useState, useEffect } from 'react'
-import { Protocol, ProtocolSectionsIdentificationTeam } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import {
     Document,
     Page,
-    PDFViewer,
     View,
     Text,
     usePDF,
@@ -640,7 +638,7 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
 }
 
 export const PDF = ({ protocol }: { protocol: Protocol }) => {
-    const [instance, updateInstance] = usePDF({
+    const [instance] = usePDF({
         document: PDFDocument({ protocol }),
     })
 

@@ -14,7 +14,6 @@ import { PDF } from 'modules/pdf'
 
 import { getReviewsByProtocol } from '@repositories/review'
 
-
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')
     const session = await getServerSession(authOptions)
@@ -26,7 +25,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const reviews = await getReviewsByProtocol(protocol.id)
 
-
     return (
         <>
             <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
@@ -36,10 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </span>
                 </div>
                 <PDF protocol={protocol} />
-                <ApproveButton
-                    role={session?.user?.role!}
-                    protocol={protocol}
-                />
+                <ApproveButton role={session.user.role} protocol={protocol} />
                 <AcceptButton
                     role={session.user.role}
                     protocol={protocol}
