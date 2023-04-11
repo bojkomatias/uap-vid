@@ -1,3 +1,4 @@
+
 export async function GET() {
     return null
 }
@@ -11,7 +12,6 @@ export async function GET() {
 // import CredentialsProvider from 'next-auth/providers/credentials'
 // import NextAuth, { NextAuthOptions } from 'next-auth'
 // import type { User } from '@prisma/client'
-
 // export const authOptions: NextAuthOptions = {
 //     session: {
 //         strategy: 'jwt',
@@ -46,7 +46,6 @@ export async function GET() {
 //                     credentials!.password,
 //                     result.password!
 //                 )
-
 //                 if (!checkPassword) {
 //                     throw new Error("Password doesn't match")
 //                 }
@@ -91,7 +90,5 @@ export async function GET() {
 //         secret: process.env.NEXTAUTH_SECRET,
 //     },
 // }
-
 // const handler = NextAuth(authOptions)
-
 // export default { handler as GET, handler as POST }

@@ -7,7 +7,8 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
+    if (!session) return
+    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     return (
         <>
             <PageHeading title="Crear nuevo usuario" />

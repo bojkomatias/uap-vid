@@ -13,7 +13,7 @@ export default function Pagination({
     shownRecords: number
 }) {
     const pageNumber = useCallback(() => {
-        let pageArray: number[] = []
+        const pageArray: number[] = []
         for (let i = 1; i <= Math.ceil(count / shownRecords); i++) {
             pageArray.push(i)
         }

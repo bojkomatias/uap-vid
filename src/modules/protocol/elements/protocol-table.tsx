@@ -1,4 +1,4 @@
-import { Protocol } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'

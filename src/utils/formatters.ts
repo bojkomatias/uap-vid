@@ -5,3 +5,5 @@ export const dateFormatter = new Intl.DateTimeFormat('es-AR', {
     hour: '2-digit',
     minute: '2-digit',
 })
+
+export const relativeTimeFormatter = new Intl.RelativeTimeFormat('es-AR')

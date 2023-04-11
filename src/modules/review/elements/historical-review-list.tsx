@@ -1,6 +1,6 @@
 'use client'
 
-import { Review, Role, User } from '@prisma/client'
+import type { Review, Role, User } from '@prisma/client'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { ChevronRight } from 'tabler-icons-react'

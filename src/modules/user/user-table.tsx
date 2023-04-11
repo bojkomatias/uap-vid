@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 
 export default function UserTable({ users }: { users: User[] }) {

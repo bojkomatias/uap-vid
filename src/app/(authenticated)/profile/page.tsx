@@ -5,10 +5,11 @@ import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
+    if (!session) return
     return (
         <>
             <PageHeading title="Perfil" />
-            <Profile user={session?.user!} />
+            <Profile user={session.user} />
         </>
     )
 }

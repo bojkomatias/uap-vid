@@ -11,7 +11,8 @@ import { CalendarPlus } from 'tabler-icons-react'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!canAccess(ACCESS.CONVOCATORIES, session?.user?.role!))
+    if (!session) return
+    if (!canAccess(ACCESS.CONVOCATORIES, session.user.role))
         redirect('/protocols')
 
     return (

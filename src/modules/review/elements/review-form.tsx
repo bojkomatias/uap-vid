@@ -6,9 +6,8 @@ import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
-import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { Review, ReviewVerdict, User } from '@prisma/client'
+import type { Review, ReviewVerdict, User } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -22,7 +21,6 @@ export default function ReviewForm({
 }: {
     review: Review & { reviewer: User }
 }) {
-    const router = useRouter()
     const form = useForm<Review>({
         initialValues: review,
         validate: zodResolver(ReviewSchema),
@@ -65,7 +63,7 @@ export default function ReviewForm({
                 })
             }
         },
-        []
+        [notifications, review.id]
     )
     return (
         <ItemContainer title="Realizar revisión">

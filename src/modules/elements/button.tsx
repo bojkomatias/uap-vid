@@ -1,6 +1,6 @@
 'use client'
 import clsx from 'clsx'
-import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
 
 const styles = {
     primary:
