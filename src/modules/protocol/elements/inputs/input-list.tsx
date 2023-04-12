@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react'
 import Input from './input'
 import Select from './select'
 import { Plus, Trash } from 'tabler-icons-react'
@@ -10,58 +9,129 @@ import NumberInput from './number-input'
 type Header = {
     x: string
     label: string
+    hidden?: true
     options?: string[]
     class?: string
     currency?: boolean
     number?: boolean
 }
+type InsertedItemFormat = { [key: string]: string | number }
 
-export function InputList({
-    path,
-    label,
-    headers,
-    insertedItemFormat,
-}: PropsWithChildren<{
+const preprocess = (array: InsertedItemFormat[], key: string) => {
+    const uniqueKeys = array
+        .map((e) => e[key])
+        .filter((value, i, a) => a.indexOf(value) === i)
+
+    return uniqueKeys.map((k) => {
+        return { key: k, array: array.filter((item) => item[key] === k) }
+    })
+}
+
+export function InputList(props: {
     path: string
     label: string
     headers: Header[]
-    insertedItemFormat: { [key: string]: string | number }
-}>) {
+    insertedItemFormat: InsertedItemFormat
+    preprocessKey?: string
+}) {
     const form = useProtocolContext()
 
-    const fields = form
-        .getInputProps(path)
-        .value.map((_: { [key: string]: string | number }, index: number) => (
+    const data: InsertedItemFormat[] = form.getInputProps(props.path).value
+    // If no preprocessed key, just default to the mapping the value itself
+    const arraysOfData = props.preprocessKey
+        ? preprocess(data, props.preprocessKey)
+        : []
+
+    console.log(arraysOfData)
+
+    return (
+        <InputListWrapper label={props.label}>
+            {props.preprocessKey ? (
+                arraysOfData.map(({ key, array }, i: number) => (
+                    <>
+                        <label className="label text-sm text-gray-800">
+                            {key}
+                        </label>
+                        <FieldsMap
+                            path={props.path}
+                            headers={props.headers}
+                            insertedItemFormat={{
+                                [String(props.preprocessKey)]: key,
+                                task: '',
+                            }}
+                            fieldsToMap={array}
+                            key={i}
+                            carryOver={i}
+                        />
+                    </>
+                ))
+            ) : (
+                <FieldsMap {...props} fieldsToMap={data} />
+            )}
+        </InputListWrapper>
+    )
+}
+
+function FieldsMap({
+    fieldsToMap,
+    path,
+    headers,
+    insertedItemFormat,
+    carryOver = 0,
+}: {
+    path: string
+    fieldsToMap: InsertedItemFormat[]
+    headers: Header[]
+    insertedItemFormat: InsertedItemFormat
+    carryOver?: number
+}) {
+    const form = useProtocolContext()
+
+    const fields = fieldsToMap.map(
+        (_: { [key: string]: string | number }, index: number) => (
             <div
-                key={index}
-                id={`row-${index}`}
+                key={index + carryOver}
+                id={`row-${index + carryOver}`}
                 className="flex w-full items-start justify-around gap-2"
             >
-                {headers.map((h: Header, i: number) => (
-                    <div className={` ${h.class}`} key={i}>
-                        {h.options ? (
-                            <Select
-                                options={h.options}
-                                path={path + `.${index}.` + h.x}
-                                label={h.label}
-                            />
-                        ) : h.currency ? (
-                            <CurrencyInput
-                                path={path + `.${index}.` + h.x}
-                                label={h.label}
-                            />
-                        ) : h.number ? (
-                            <NumberInput
-                                path={path + `.${index}.` + h.x}
-                                label={h.label}
-                            />
-                        ) : (
-                            <Input
-                                path={path + `.${index}.` + h.x}
-                                label={h.label}
-                            />
+                {headers.map((h: Header) => (
+                    <>
+                        {/* Means it's a hardcoded value, is persisted but hidden (example, 1st semester) */}
+                        {h.hidden ? null : (
+                            <div className={h.class} key={h.x}>
+                                {h.options ? (
+                                    <Select
+                                        options={h.options}
+                                        path={`${path}.${index + carryOver}.${
+                                            h.x
+                                        }`}
+                                        label={h.label}
+                                    />
+                                ) : h.currency ? (
+                                    <CurrencyInput
+                                        path={`${path}.${index + carryOver}.${
+                                            h.x
+                                        }`}
+                                        label={h.label}
+                                    />
+                                ) : h.number ? (
+                                    <NumberInput
+                                        path={`${path}.${index + carryOver}.${
+                                            h.x
+                                        }`}
+                                        label={h.label}
+                                    />
+                                ) : (
+                                    <Input
+                                        path={`${path}.${index + carryOver}.${
+                                            h.x
+                                        }`}
+                                        label={h.label}
+                                    />
+                                )}
+                            </div>
                         )}
-                    </div>
+                    </>
                 ))}
 
                 <Trash
@@ -71,35 +141,49 @@ export function InputList({
                     }`}
                 />
             </div>
-        ))
+        )
+    )
+    return (
+        <>
+            {/* {fields.length === 0 ? (
+                <div className="label text-center text-primary">
+                    La lista esta vacía ...
+                </div>
+            ) : null} */}
+            {fields}
+            <Button
+                onClick={() => {
+                    form.insertListItem(path, insertedItemFormat)
+                    /* Esto es una chanchada, habría que mejorarlo*/
+                    setTimeout(() => {
+                        document
+                            .getElementById(`row-${fields.length}`)
+                            ?.getElementsByTagName('input')[0]
+                            .focus()
+                    }, 10)
+                }}
+                intent="secondary"
+                className="mx-auto w-full max-w-xs"
+            >
+                <p> Añadir otra fila </p>
+                <Plus className="h-5" />
+            </Button>
+        </>
+    )
+}
 
+function InputListWrapper({
+    label,
+    children,
+}: {
+    label: string
+    children: React.ReactNode
+}) {
     return (
         <div>
             <div className="label text-center">{label}</div>
             <div className="space-y-3 rounded-xl border px-4 pb-2 pt-6">
-                {fields.length === 0 ? (
-                    <div className="label text-center text-primary">
-                        La lista esta vacía ...
-                    </div>
-                ) : null}
-                {fields}
-                <Button
-                    onClick={() => {
-                        form.insertListItem(path, insertedItemFormat)
-                        /* Esto es una chanchada, habría que mejorarlo*/
-                        setTimeout(() => {
-                            document
-                                .getElementById(`row-${fields.length}`)
-                                ?.getElementsByTagName('input')[0]
-                                .focus()
-                        }, 10)
-                    }}
-                    intent="secondary"
-                    className="mx-auto w-full max-w-xs"
-                >
-                    <p> Añadir otra fila </p>
-                    <Plus className="h-5" />
-                </Button>
+                {children}
             </div>
         </div>
     )

@@ -40,7 +40,6 @@ export default async function Page({
                   shownRecords
               )
         : null
-    console.log(protocols)
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = searchParams?.search
         ? fuzzysort

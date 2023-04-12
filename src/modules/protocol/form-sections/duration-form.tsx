@@ -25,25 +25,30 @@ export function DurationForm() {
                     label="modalidad"
                     options={modalities}
                     conditionalCleanup={() =>
-                        (form.values.sections.duration.modality = '')
+                        (form.values.sections.duration.duration = '')
                     }
                 />
                 <Select
                     path={path + 'duration'}
                     label="duración"
                     options={duration(form.values.sections.duration.modality)}
+                    conditionalCleanup={() =>
+                        form.setFieldValue(path + 'chronogram', [
+                            { semester: '1er semestre', task: '' },
+                            { semester: '2do semestre', task: '' },
+                        ])
+                    }
                 />
                 <InputList
                     path={path + 'chronogram'}
                     label="cronograma de tareas"
-                    insertedItemFormat={{ semester: '', task: '' }}
+                    insertedItemFormat={{ semester: '2do', task: '' }}
+                    preprocessKey={'semester'}
                     headers={[
                         {
                             x: 'semester',
                             label: 'Semestre',
-                            options: chron(
-                                form.values.sections.duration.duration
-                            ),
+                            hidden: true,
                         },
                         { x: 'task', label: 'Tarea', class: 'flex-grow' },
                     ]}
@@ -67,45 +72,6 @@ const duration = (v: string) => {
     if (v === 'Proyecto de investigación desde las cátedras (PIC)')
         return ['6 meses', '12 meses', '24 meses']
     else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
-}
-const chron = (v: string) => {
-    if (v === '6 meses') return ['1° semestre']
-    if (v === '12 meses') return ['1° semestre', '2° semestre']
-    if (v === '24 meses')
-        return ['1° semestre', '2° semestre', '3° semestre', '4° semestre']
-    if (v === '36 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-        ]
-    if (v === '48 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-            '7° semestre',
-            '8° semestre',
-        ]
-    if (v === '60 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-            '7° semestre',
-            '8° semestre',
-            '9° semestre',
-            '10° semestre',
-        ]
 }
 
 const Info = () => (
