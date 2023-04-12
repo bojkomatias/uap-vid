@@ -5,6 +5,7 @@ import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
 import { InputList } from '@protocol/elements/inputs/input-list'
+import { cache } from 'react'
 
 export function DurationForm() {
     const form = useProtocolContext()
@@ -32,20 +33,14 @@ export function DurationForm() {
                     path={path + 'duration'}
                     label="duración"
                     options={duration(form.values.sections.duration.modality)}
-                    conditionalCleanup={() =>
-                        form.setFieldValue(path + 'chronogram', [
-                            { semester: '1er semestre', data: [{ task: '' }] },
-                            { semester: '2do semestre', data: [{ task: '' }] },
-                        ])
-                    }
+                    conditionalCleanup={(e) => {
+                        if (!e) return null
+                        form.setFieldValue(
+                            path + 'chronogram',
+                            structureSemestersFromMonths(e)
+                        )
+                    }}
                 />
-                <pre className="text-xs">
-                    {JSON.stringify(
-                        form.getInputProps(path + 'chronogram').value,
-                        null,
-                        2
-                    )}
-                </pre>
                 <InputList
                     path={path + 'chronogram'}
                     label="cronograma de tareas"
@@ -77,6 +72,16 @@ const duration = (v: string) => {
         return ['6 meses', '12 meses', '24 meses']
     else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
 }
+
+const structureSemestersFromMonths = cache((e: string) => {
+    const semesters = Number(e.substring(0, 2)) / 6
+
+    const allSemesters = []
+    for (let i = 1; i <= semesters; i++) {
+        allSemesters.push({ semester: `${i}º semestre`, data: [{ task: '' }] })
+    }
+    return allSemesters
+})
 
 const Info = () => (
     <InfoTooltip>

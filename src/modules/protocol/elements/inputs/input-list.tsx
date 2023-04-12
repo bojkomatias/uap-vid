@@ -119,7 +119,7 @@ function PreprocessFieldsMap({
             ))}
 
             <Trash
-                onClick={() => form.removeListItem(path, index)}
+                onClick={() => form.removeListItem(path + deepPushPath, index)}
                 className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
                     index == 0 ? 'pointer-events-none invisible' : ''
                 }`}
