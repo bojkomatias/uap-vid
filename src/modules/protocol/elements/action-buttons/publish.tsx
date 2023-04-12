@@ -1,9 +1,9 @@
 'use client'
 import { Button } from '@elements/button'
 import type { Protocol } from '@prisma/client'
-import type { Protocol as ProtocolZod } from '@utils/zod'
+import type { Protocol as ProtocolZod , RoleType } from '@utils/zod'
 import { canExecute } from '@utils/scopes'
-import { ACTION, ProtocolSchema, RoleType } from '@utils/zod'
+import { ACTION, ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
@@ -42,7 +42,6 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         () => ProtocolSchema.safeParse(protocol).success,
         [protocol]
     )
-    console.log(ProtocolSchema.safeParse(protocol), !isValid)
 
     if (!protocol.id || !canExecute(ACTION.PUBLISH, role, protocol.state))
         return <></>

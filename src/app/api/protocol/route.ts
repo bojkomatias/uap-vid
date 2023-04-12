@@ -1,11 +1,7 @@
 /* eslint-disable @next/next/no-server-import-in-page */
-
-import { ROLE } from '@utils/zod'
-import { NextRequest, NextResponse } from 'next/server'
-import {
-    createProtocol,
-    getProtocolByRol,
-} from '../../../repositories/protocol'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
+import { createProtocol } from '../../../repositories/protocol'
 export async function POST(request: NextRequest) {
     const data = await request.json()
     const created = await createProtocol({
@@ -19,4 +15,3 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(created)
 }
-

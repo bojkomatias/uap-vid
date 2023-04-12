@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import clsx from 'clsx'
 import { redirect } from 'next/navigation'
@@ -14,7 +14,7 @@ export default async function Navigation({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) redirect('/')
+    if (!session) return redirect('/')
 
     const currentConvocatory = await getCurrentConvocatory()
 
@@ -24,8 +24,8 @@ export default async function Navigation({
         <>
             {hasNavigation ? (
                 <div className="absolute inset-0">
-                    <MobileNavigation user={session?.user!} />
-                    <DesktopNavigation user={session?.user!} />
+                    <MobileNavigation user={session.user} />
+                    <DesktopNavigation user={session.user} />
                 </div>
             ) : null}
             {currentConvocatory ? (

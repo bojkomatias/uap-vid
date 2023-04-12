@@ -1,4 +1,4 @@
-import { ProtocolSectionsPublication } from '@prisma/client'
+import type { ProtocolSectionsPublication } from '@prisma/client'
 import RichViewer from '@protocol/elements/text-item-view'
 
 import SectionViewer from '../elements/section-viewer'

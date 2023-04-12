@@ -5,8 +5,9 @@ import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
-import { Protocol as ProtocolZod, ProtocolSchema } from '@utils/zod'
-import { Protocol } from '@prisma/client'
+import type { Protocol as ProtocolZod } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
+import type { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { SegmentedControl } from '@mantine/core'
 import { motion } from 'framer-motion'
@@ -52,30 +53,55 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     useEffect(() => {
         // Validate if not existing path goes to section 0
         if (
+            path &&
             !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
-                path?.split('/')[3]!
+                path?.split('/')[3]
             )
         )
             router.push('/protocols/' + path?.split('/')[2] + '/0')
-    }, [path])
+    }, [path, router])
 
-    const upsertProtocol = useCallback(async (protocol: ProtocolZod) => {
-        // flow for protocols that don't have ID
-        if (!protocol.id) {
-            const res = await fetch(`/api/protocol`, {
-                method: 'POST',
+    const upsertProtocol = useCallback(
+        async (protocol: ProtocolZod) => {
+            // flow for protocols that don't have ID
+            if (!protocol.id) {
+                const res = await fetch(`/api/protocol`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(protocol),
+                })
+                const { id }: Protocol = await res.json()
+
+                if (res.status === 200) {
+                    notifications.showNotification({
+                        title: 'Protocolo creado',
+                        message: 'El protocolo ha sido creado con éxito',
+                        color: 'teal',
+                        icon: <Check />,
+                        radius: 0,
+                        style: {
+                            marginBottom: '.8rem',
+                        },
+                    })
+                }
+                return router.push(`/protocols/${id}/${section}`)
+            }
+            const res = await fetch(`/api/protocol/${protocol.id}`, {
+                method: 'PUT',
                 mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(protocol),
             })
-            const { id }: Protocol = await res.json()
 
             if (res.status === 200) {
                 notifications.showNotification({
-                    title: 'Protocolo creado',
-                    message: 'El protocolo ha sido creado con éxito',
+                    title: 'Protocolo guardado',
+                    message: 'El protocolo ha sido guardado con éxito',
                     color: 'teal',
                     icon: <Check />,
                     radius: 0,
@@ -83,34 +109,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         marginBottom: '.8rem',
                     },
                 })
+                startTransition(() => {
+                    router.refresh()
+                })
             }
-            return router.push(`/protocols/${id}/${section}`)
-        }
-        const res = await fetch(`/api/protocol/${protocol.id}`, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(protocol),
-        })
-
-        if (res.status === 200) {
-            notifications.showNotification({
-                title: 'Protocolo guardado',
-                message: 'El protocolo ha sido guardado con éxito',
-                color: 'teal',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
-            })
-            startTransition(() => {
-                router.refresh()
-            })
-        }
-    }, [])
+        },
+        [notifications, router, section]
+    )
 
     return (
         <ProtocolProvider form={form}>

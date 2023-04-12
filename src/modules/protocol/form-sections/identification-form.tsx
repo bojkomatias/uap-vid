@@ -4,10 +4,10 @@ import full from 'config/careers.json'
 import { motion } from 'framer-motion'
 import Input from '@protocol/elements/inputs/input'
 import Select from '@protocol/elements/inputs/select'
-import List from '@protocol/elements/inputs/input-list'
 import InfoTooltip from '@protocol/elements/tooltip'
 import MultipleSelect from '@protocol/elements/inputs/multiple-select'
 import SectionTitle from '@protocol/elements/form-section-title'
+import { InputList } from '@protocol/elements/inputs/input-list'
 
 export function IdentificationForm() {
     const form = useProtocolContext()
@@ -40,10 +40,9 @@ export function IdentificationForm() {
                     )}
                 />
                 <TeamInfo />
-                <List
+                <InputList
                     path={`${path}team`}
                     label="miembros de equipo"
-                    toMap={form.values.sections.identification.team}
                     insertedItemFormat={{
                         role: '',
                         last_name: '',
@@ -131,7 +130,7 @@ const AssignmentInfo = () => (
 
 const careers = full.map((x) => x.career)
 // conditional
-const assignments = (v: any) =>
+const assignments = (v: string) =>
     full
         .filter((x) => x.career === v)
         .map((x) => x.assignment)

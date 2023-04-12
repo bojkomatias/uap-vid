@@ -1,4 +1,4 @@
-import { Fragment, PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 import Input from './input'
 import Select from './select'
 import { Plus, Trash } from 'tabler-icons-react'
@@ -7,69 +7,71 @@ import { useProtocolContext } from '@utils/createContext'
 import { Button } from '@elements/button'
 import NumberInput from './number-input'
 
-export default function InputList({
+type Header = {
+    x: string
+    label: string
+    options?: string[]
+    class?: string
+    currency?: boolean
+    number?: boolean
+}
+
+export function InputList({
     path,
     label,
     headers,
     insertedItemFormat,
-    toMap,
 }: PropsWithChildren<{
     path: string
     label: string
-    headers: {
-        x: string
-        label: string
-        options?: string[]
-        class?: string
-        currency?: boolean
-        number?: boolean
-    }[]
-    insertedItemFormat: any
-    toMap: any
+    headers: Header[]
+    insertedItemFormat: { [key: string]: string | number }
 }>) {
     const form = useProtocolContext()
 
-    const fields = toMap.map((_: any, index: number) => (
-        <div
-            key={index}
-            id={`row-${index}`}
-            className="flex w-full items-start justify-around gap-2"
-        >
-            {headers.map((h: any, i: number) => (
-                <div className={` ${h.class}`} key={i}>
-                    {h.options ? (
-                        <Select
-                            options={h.options}
-                            path={path + `.${index}.` + h.x}
-                            label={h.label}
-                        />
-                    ) : h.currency ? (
-                        <CurrencyInput
-                            path={path + `.${index}.` + h.x}
-                            label={h.label}
-                        />
-                    ) : h.number ? (
-                        <NumberInput
-                            path={path + `.${index}.` + h.x}
-                            label={h.label}
-                        />
-                    ) : (
-                        <Input
-                            path={path + `.${index}.` + h.x}
-                            label={h.label}
-                        />
-                    )}
-                </div>
-            ))}
+    const fields = form
+        .getInputProps(path)
+        .value.map((_: { [key: string]: string | number }, index: number) => (
+            <div
+                key={index}
+                id={`row-${index}`}
+                className="flex w-full items-start justify-around gap-2"
+            >
+                {headers.map((h: Header, i: number) => (
+                    <div className={` ${h.class}`} key={i}>
+                        {h.options ? (
+                            <Select
+                                options={h.options}
+                                path={path + `.${index}.` + h.x}
+                                label={h.label}
+                            />
+                        ) : h.currency ? (
+                            <CurrencyInput
+                                path={path + `.${index}.` + h.x}
+                                label={h.label}
+                            />
+                        ) : h.number ? (
+                            <NumberInput
+                                path={path + `.${index}.` + h.x}
+                                label={h.label}
+                            />
+                        ) : (
+                            <Input
+                                path={path + `.${index}.` + h.x}
+                                label={h.label}
+                            />
+                        )}
+                    </div>
+                ))}
 
-            <Trash
-                onClick={() => form.removeListItem(path, index)}
-                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
-                    index == 0 ? 'pointer-events-none invisible' : ''
-                }`}
-            />
-        </div>
-    ))
+                <Trash
+                    onClick={() => form.removeListItem(path, index)}
+                    className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
+                        index == 0 ? 'pointer-events-none invisible' : ''
+                    }`}
+                />
+            </div>
+        ))
 
     return (
         <div>

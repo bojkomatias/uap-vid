@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 
 import { createConvocatory } from '@repositories/convocatory'
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest} from 'next/server';
+import { NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
     const data = await request.json()

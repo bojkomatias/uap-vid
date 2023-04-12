@@ -1,4 +1,4 @@
-import { Review, ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
+import { ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import ItemContainer from '@review/elements/review-container'

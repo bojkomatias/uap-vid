@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@elements/button'
 import { canAccess } from '@utils/scopes'
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import clsx from 'clsx'
 
 export function MobileNavigation({ user }: { user: User }) {

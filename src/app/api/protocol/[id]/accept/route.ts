@@ -1,5 +1,6 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
-import { NextRequest, NextResponse } from 'next/server'
+/* eslint-disable @next/next/no-server-import-in-page */
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 

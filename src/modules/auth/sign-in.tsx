@@ -71,7 +71,7 @@ export const SignIn = () => {
                 <Button
                     type="button"
                     loading={loadingMicrosoft}
-                    onClick={(e: any) => {
+                    onClick={(e) => {
                         setLoadingMicrosoft(true)
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })

@@ -4,11 +4,7 @@ import { EmptyStateItem } from './empty-state-item'
 interface ItemListProps {
     data: {
         title: string
-        values: {
-            up: string
-            down: string
-            inverted?: boolean
-        }[][]
+        values: ListRowValues[]
     }
 }
 const ItemListView = ({ data }: ItemListProps) => {
@@ -29,15 +25,13 @@ const ItemListView = ({ data }: ItemListProps) => {
         </div>
     )
 }
+export type ListRowValues = {
+    up: string
+    down: string | number
+    inverted?: boolean
+}[]
 
-interface ListRowProps {
-    data: {
-        up: string
-        down: string
-        inverted?: boolean
-    }[]
-}
-const ListRow = ({ data }: ListRowProps) => {
+const ListRow = ({ data }: { data: ListRowValues }) => {
     return (
         <div
             className={clsx(

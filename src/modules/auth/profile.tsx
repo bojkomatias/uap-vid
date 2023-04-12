@@ -1,5 +1,5 @@
 'use client'
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 
 export default function Profile({ user }: { user: User }) {
     return (

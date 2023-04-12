@@ -5,8 +5,7 @@ import {
     getAllConvocatories,
     getCurrentConvocatory,
 } from '@repositories/convocatory'
-import { canExecute } from '@utils/scopes'
-import { ACTION, RoleType } from '@utils/zod'
+import type { RoleType } from '@utils/zod'
 import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 

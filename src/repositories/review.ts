@@ -1,4 +1,4 @@
-import { Review, ReviewType } from '@prisma/client'
+import type { Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
@@ -63,11 +63,11 @@ export const reassignReviewerToProtocol = async (
     return review
 }
 
-export const updateReview = async (reviewId: string, data: Review) => {
+export const updateReview = async (data: Review) => {
     const { id, ...rest } = data
     const review = await prisma.review.update({
         where: {
-            id: reviewId,
+            id,
         },
         data: rest,
     })

@@ -1,12 +1,9 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
-import { NextRequest, NextResponse } from 'next/server'
-import { updateProtocolById } from '@repositories/protocol'
+/* eslint-disable @next/next/no-server-import-in-page */
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { updateConvocatory } from '@repositories/convocatory'
 
-export async function PUT(
-    request: NextRequest,
-    { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest) {
     const data = await request.json()
     const updated = await updateConvocatory(data)
     if (!updated) {

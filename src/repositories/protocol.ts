@@ -1,6 +1,7 @@
 import { prisma } from '../utils/bd'
-import { ROLE, RoleType, StateType } from '@utils/zod'
-import { Protocol, State } from '@prisma/client'
+import type { RoleType, StateType } from '@utils/zod'
+import { ROLE } from '@utils/zod'
+import type { Protocol } from '@prisma/client'
 import { cache } from 'react'
 
 const findProtocolById = cache(async (id: string) => {

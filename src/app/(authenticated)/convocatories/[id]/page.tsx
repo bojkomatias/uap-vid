@@ -5,7 +5,6 @@ import {
     getConvocatoryById,
     getCurrentConvocatory,
 } from '@repositories/convocatory'
-import { Convocatory } from '@utils/zod'
 import { redirect } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
