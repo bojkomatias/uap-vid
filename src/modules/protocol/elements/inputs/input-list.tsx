@@ -5,6 +5,7 @@ import CurrencyInput from './currency-input'
 import { useProtocolContext } from '@utils/createContext'
 import { Button } from '@elements/button'
 import NumberInput from './number-input'
+import { cache } from 'react'
 
 type Header = {
     x: string
@@ -15,17 +16,22 @@ type Header = {
     currency?: boolean
     number?: boolean
 }
-type InsertedItemFormat = { [key: string]: string | number }
+type InsertedItemFormat = { [key: string]: string | string[] | number }
 
-const preprocess = (array: InsertedItemFormat[], key: string) => {
+const preprocess = cache((array: InsertedItemFormat[], key: string) => {
     const uniqueKeys = array
         .map((e) => e[key])
         .filter((value, i, a) => a.indexOf(value) === i)
 
     return uniqueKeys.map((k) => {
-        return { key: k, array: array.filter((item) => item[key] === k) }
+        return {
+            key: k,
+            array: array
+                .filter((item) => item[key] === k)
+                .flatMap((e) => e.data),
+        }
     })
-}
+})
 
 export function InputList(props: {
     path: string
@@ -42,26 +48,18 @@ export function InputList(props: {
         ? preprocess(data, props.preprocessKey)
         : []
 
-    console.log(arraysOfData)
-
     return (
         <InputListWrapper label={props.label}>
             {props.preprocessKey ? (
-                arraysOfData.map(({ key, array }, i: number) => (
+                arraysOfData.map(({ key, array }, i) => (
                     <>
                         <label className="label text-sm text-gray-800">
                             {key}
                         </label>
-                        <FieldsMap
-                            path={props.path}
-                            headers={props.headers}
-                            insertedItemFormat={{
-                                [String(props.preprocessKey)]: key,
-                                task: '',
-                            }}
+                        <PreprocessFieldsMap
+                            {...props}
                             fieldsToMap={array}
-                            key={i}
-                            carryOver={i}
+                            deepPushPath={`${i}.data`}
                         />
                     </>
                 ))
@@ -72,77 +70,149 @@ export function InputList(props: {
     )
 }
 
+function PreprocessFieldsMap({
+    fieldsToMap,
+    path,
+    headers,
+    insertedItemFormat,
+    deepPushPath = '',
+}: {
+    path: string
+    fieldsToMap: (string | number)[]
+    headers: Header[]
+    insertedItemFormat: InsertedItemFormat
+    deepPushPath?: string
+}) {
+    const form = useProtocolContext()
+
+    const fields = fieldsToMap.map((_, index) => (
+        <div
+            key={deepPushPath + index}
+            id={`row-${deepPushPath}.${index}`}
+            className="flex w-full items-start justify-around gap-2"
+        >
+            {headers.map((h: Header) => (
+                <div className={h.class} key={h.x + deepPushPath + index}>
+                    {h.options ? (
+                        <Select
+                            options={h.options}
+                            path={`${path}.${deepPushPath}.${index}`}
+                            label={h.label}
+                        />
+                    ) : h.currency ? (
+                        <CurrencyInput
+                            path={`${path}.${deepPushPath}.${index}`}
+                            label={h.label}
+                        />
+                    ) : h.number ? (
+                        <NumberInput
+                            path={`${path}.${deepPushPath}.${index}`}
+                            label={h.label}
+                        />
+                    ) : (
+                        <Input
+                            path={`${path}.${deepPushPath}.${index}.${h.x}`}
+                            label={h.label}
+                        />
+                    )}
+                </div>
+            ))}
+
+            <Trash
+                onClick={() => form.removeListItem(path, index)}
+                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
+                    index == 0 ? 'pointer-events-none invisible' : ''
+                }`}
+            />
+        </div>
+    ))
+    return (
+        <>
+            {/* {fields.length === 0 ? (
+                <div className="label text-center text-primary">
+                    La lista esta vacía ...
+                </div>
+            ) : null} */}
+            {fields}
+            <Button
+                onClick={() => {
+                    form.insertListItem(
+                        `${path}.${deepPushPath}`,
+                        insertedItemFormat
+                    )
+
+                    /* Esto es una chanchada, habría que mejorarlo*/
+                    setTimeout(() => {
+                        document
+                            .getElementById(`row-${fields.length}`)
+                            ?.getElementsByTagName('input')[0]
+                            .focus()
+                    }, 10)
+                }}
+                intent="secondary"
+                className="mx-auto w-full max-w-xs"
+            >
+                <p> Añadir otra fila </p>
+                <Plus className="h-5" />
+            </Button>
+        </>
+    )
+}
+
 function FieldsMap({
     fieldsToMap,
     path,
     headers,
     insertedItemFormat,
-    carryOver = 0,
 }: {
     path: string
     fieldsToMap: InsertedItemFormat[]
     headers: Header[]
     insertedItemFormat: InsertedItemFormat
-    carryOver?: number
 }) {
     const form = useProtocolContext()
 
-    const fields = fieldsToMap.map(
-        (_: { [key: string]: string | number }, index: number) => (
-            <div
-                key={index + carryOver}
-                id={`row-${index + carryOver}`}
-                className="flex w-full items-start justify-around gap-2"
-            >
-                {headers.map((h: Header) => (
-                    <>
-                        {/* Means it's a hardcoded value, is persisted but hidden (example, 1st semester) */}
-                        {h.hidden ? null : (
-                            <div className={h.class} key={h.x}>
-                                {h.options ? (
-                                    <Select
-                                        options={h.options}
-                                        path={`${path}.${index + carryOver}.${
-                                            h.x
-                                        }`}
-                                        label={h.label}
-                                    />
-                                ) : h.currency ? (
-                                    <CurrencyInput
-                                        path={`${path}.${index + carryOver}.${
-                                            h.x
-                                        }`}
-                                        label={h.label}
-                                    />
-                                ) : h.number ? (
-                                    <NumberInput
-                                        path={`${path}.${index + carryOver}.${
-                                            h.x
-                                        }`}
-                                        label={h.label}
-                                    />
-                                ) : (
-                                    <Input
-                                        path={`${path}.${index + carryOver}.${
-                                            h.x
-                                        }`}
-                                        label={h.label}
-                                    />
-                                )}
-                            </div>
-                        )}
-                    </>
-                ))}
+    const fields = fieldsToMap.map((_, index) => (
+        <div
+            key={index}
+            id={`row-${index}`}
+            className="flex w-full items-start justify-around gap-2"
+        >
+            {headers.map((h: Header) => (
+                <div className={h.class} key={h.x + index}>
+                    {h.options ? (
+                        <Select
+                            options={h.options}
+                            path={`${path}.${index}.${h.x}`}
+                            label={h.label}
+                        />
+                    ) : h.currency ? (
+                        <CurrencyInput
+                            path={`${path}.${index}.${h.x}`}
+                            label={h.label}
+                        />
+                    ) : h.number ? (
+                        <NumberInput
+                            path={`${path}.${index}.${h.x}`}
+                            label={h.label}
+                        />
+                    ) : (
+                        <Input
+                            path={`${path}.${index}.${h.x}`}
+                            label={h.label}
+                        />
+                    )}
+                </div>
+            ))}
 
-                <Trash
-                    onClick={() => form.removeListItem(path, index)}
-                    className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
-                        index == 0 ? 'pointer-events-none invisible' : ''
-                    }`}
-                />
-            </div>
-        )
-    )
+            <Trash
+                onClick={() => form.removeListItem(path, index)}
+                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
+                    index == 0 ? 'pointer-events-none invisible' : ''
+                }`}
+            />
+        </div>
+    ))
     return (
         <>
             {/* {fields.length === 0 ? (
@@ -154,6 +224,7 @@ function FieldsMap({
             <Button
                 onClick={() => {
                     form.insertListItem(path, insertedItemFormat)
+
                     /* Esto es una chanchada, habría que mejorarlo*/
                     setTimeout(() => {
                         document

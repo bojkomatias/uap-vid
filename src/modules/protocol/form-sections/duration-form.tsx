@@ -34,22 +34,26 @@ export function DurationForm() {
                     options={duration(form.values.sections.duration.modality)}
                     conditionalCleanup={() =>
                         form.setFieldValue(path + 'chronogram', [
-                            { semester: '1er semestre', task: '' },
-                            { semester: '2do semestre', task: '' },
+                            { semester: '1er semestre', data: [{ task: '' }] },
+                            { semester: '2do semestre', data: [{ task: '' }] },
                         ])
                     }
                 />
+                <pre className="text-xs">
+                    {JSON.stringify(
+                        form.getInputProps(path + 'chronogram').value,
+                        null,
+                        2
+                    )}
+                </pre>
                 <InputList
                     path={path + 'chronogram'}
                     label="cronograma de tareas"
-                    insertedItemFormat={{ semester: '2do', task: '' }}
+                    insertedItemFormat={{
+                        task: '',
+                    }}
                     preprocessKey={'semester'}
                     headers={[
-                        {
-                            x: 'semester',
-                            label: 'Semestre',
-                            hidden: true,
-                        },
                         { x: 'task', label: 'Tarea', class: 'flex-grow' },
                     ]}
                 />
