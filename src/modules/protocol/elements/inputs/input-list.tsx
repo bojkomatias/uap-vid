@@ -16,9 +16,9 @@ type Header = {
     currency?: boolean
     number?: boolean
 }
-type InsertedItemFormat = { [key: string]: string | string[] | number }
+type LeafItemProps = { [key: string]: string | string[] | number }
 
-const preprocess = cache((array: InsertedItemFormat[], key: string) => {
+const preprocess = cache((array: LeafItemProps[], key: string) => {
     const uniqueKeys = array
         .map((e) => e[key])
         .filter((value, i, a) => a.indexOf(value) === i)
@@ -37,12 +37,12 @@ export function InputList(props: {
     path: string
     label: string
     headers: Header[]
-    insertedItemFormat: InsertedItemFormat
+    newLeafItemValue: LeafItemProps
     preprocessKey?: string
 }) {
     const form = useProtocolContext()
 
-    const data: InsertedItemFormat[] = form.getInputProps(props.path).value
+    const data: LeafItemProps[] = form.getInputProps(props.path).value
     // If no preprocessed key, just default to the mapping the value itself
     const arraysOfData = props.preprocessKey
         ? preprocess(data, props.preprocessKey)
@@ -74,13 +74,13 @@ function PreprocessFieldsMap({
     fieldsToMap,
     path,
     headers,
-    insertedItemFormat,
+    newLeafItemValue,
     deepPushPath = '',
 }: {
     path: string
     fieldsToMap: (string | number)[]
     headers: Header[]
-    insertedItemFormat: InsertedItemFormat
+    newLeafItemValue: LeafItemProps
     deepPushPath?: string
 }) {
     const form = useProtocolContext()
@@ -138,7 +138,7 @@ function PreprocessFieldsMap({
                 onClick={() => {
                     form.insertListItem(
                         `${path}.${deepPushPath}`,
-                        insertedItemFormat
+                        newLeafItemValue
                     )
 
                     /* Esto es una chanchada, habría que mejorarlo*/
@@ -163,12 +163,12 @@ function FieldsMap({
     fieldsToMap,
     path,
     headers,
-    insertedItemFormat,
+    newLeafItemValue,
 }: {
     path: string
-    fieldsToMap: InsertedItemFormat[]
+    fieldsToMap: LeafItemProps[]
     headers: Header[]
-    insertedItemFormat: InsertedItemFormat
+    newLeafItemValue: LeafItemProps
 }) {
     const form = useProtocolContext()
 
@@ -223,7 +223,7 @@ function FieldsMap({
             {fields}
             <Button
                 onClick={() => {
-                    form.insertListItem(path, insertedItemFormat)
+                    form.insertListItem(path, newLeafItemValue)
 
                     /* Esto es una chanchada, habría que mejorarlo*/
                     setTimeout(() => {

@@ -22,7 +22,7 @@ export function BudgetForm() {
                 <InputList
                     path={path + 'expenses'}
                     label="gastos"
-                    insertedItemFormat={{
+                    newLeafItemValue={{
                         type: '',
                         detail: '',
                         amount: 0,

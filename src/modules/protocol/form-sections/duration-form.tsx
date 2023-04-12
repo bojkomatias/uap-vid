@@ -44,7 +44,8 @@ export function DurationForm() {
                 <InputList
                     path={path + 'chronogram'}
                     label="cronograma de tareas"
-                    insertedItemFormat={{
+                    // When preprocessKey, means nested, so the shape of the Inserted, is the LEAF one.
+                    newLeafItemValue={{
                         task: '',
                     }}
                     preprocessKey={'semester'}
