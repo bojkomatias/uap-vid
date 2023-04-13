@@ -310,7 +310,7 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                                                     {gasto.data.map(
                                                         (gasto, i) => {
                                                             return (
-                                                                <Text>
+                                                                <Text key={i}>
                                                                     {`${
                                                                         i + 1
                                                                     }) `}
