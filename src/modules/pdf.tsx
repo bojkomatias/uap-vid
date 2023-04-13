@@ -6,7 +6,7 @@ import {
     View,
     Text,
     usePDF,
-    PDFDownloadLink,
+    PDFViewer,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
 
@@ -117,10 +117,7 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                                                 <Text
                                                     style={{ fontWeight: 600 }}
                                                 >
-                                                    {' '}
-                                                    | Rol: {
-                                                        teamMember.role
-                                                    }{' '}
+                                                    | Rol: {teamMember.role}
                                                 </Text>{' '}
                                                 <Text
                                                     style={{ fontWeight: 300 }}
@@ -190,34 +187,61 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                             style={{
                                 fontWeight: 300,
                                 fontSize: 10,
-                                display: 'flex',
-                                flexDirection: 'column',
                             }}
                         >
-                            <Text style={{ color: 'gray', marginBottom: 4 }}>
+                            <Text
+                                style={{
+                                    color: 'gray',
+                                    marginBottom: 4,
+                                }}
+                            >
                                 Cronograma
                             </Text>{' '}
                             <View
                                 style={{
                                     display: 'flex',
+                                    flexDirection: 'column',
                                 }}
                             >
                                 {protocol.sections.duration.chronogram.map(
                                     (crono, idx) => {
                                         return (
-                                            <Text
+                                            <View
                                                 key={idx}
-                                                style={{ fontWeight: 300 }}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                }}
                                             >
-                                                {crono.semester}:{' '}
-                                                {crono.data.map((cron, i) => {
-                                                    return (
-                                                        <Text key={i}>
-                                                            {cron.task}
-                                                        </Text>
-                                                    )
-                                                })}
-                                            </Text>
+                                                <Text
+                                                    style={{
+                                                        color: 'gray',
+                                                    }}
+                                                >
+                                                    {crono.semester}:{' '}
+                                                </Text>
+                                                <View
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        marginHorizontal: 8,
+                                                        marginVertical: 5,
+                                                    }}
+                                                >
+                                                    {crono.data.map(
+                                                        (cron, i) => {
+                                                            return (
+                                                                <Text key={i}>
+                                                                    {`${
+                                                                        i + 1
+                                                                    })`}{' '}
+                                                                    {cron.task}{' '}
+                                                                </Text>
+                                                            )
+                                                        }
+                                                    )}
+                                                </View>
+                                            </View>
                                         )
                                     }
                                 )}
@@ -255,45 +279,63 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                             <Text style={{ color: 'gray', marginBottom: 4 }}>
                                 Detalles del presupuesto
                             </Text>{' '}
-                            <Text style={{ fontWeight: 600 }}>
+                            <View
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
                                 {protocol.sections.budget.expenses.map(
                                     (gasto, idx) => {
                                         return (
                                             <>
                                                 <Text
                                                     key={idx}
-                                                    style={{ fontWeight: 300 }}
+                                                    style={{
+                                                        fontWeight: 300,
+                                                        color: 'gray',
+                                                    }}
                                                 >
                                                     Tipo: {gasto.type}
                                                 </Text>
-                                                <Text
+                                                <View
                                                     key={idx}
-                                                    style={{ fontWeight: 300 }}
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        marginHorizontal: 8,
+                                                        marginVertical: 5,
+                                                    }}
                                                 >
-                                                    {' '}
                                                     {gasto.data.map(
                                                         (gasto, i) => {
                                                             return (
-                                                                <Text key={i}>
+                                                                <Text>
+                                                                    {`${
+                                                                        i + 1
+                                                                    }) `}
                                                                     {
                                                                         gasto.detail
                                                                     }{' '}
-                                                                    | $
-                                                                    {
-                                                                        gasto.amount
-                                                                    }{' '}
-                                                                    |{' '}
+                                                                    | Monto: $
+                                                                    {gasto.amount
+                                                                        .toString()
+                                                                        .replace(
+                                                                            /\B(?=(\d{3})+(?!\d))/g,
+                                                                            '.'
+                                                                        )}{' '}
+                                                                    | Año:{' '}
                                                                     {gasto.year}
                                                                 </Text>
                                                             )
                                                         }
                                                     )}
-                                                </Text>
+                                                </View>
                                             </>
                                         )
                                     }
                                 )}
-                            </Text>
+                            </View>
                         </View>
                     </View>
                     <View
@@ -674,11 +716,14 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
     if (instance.loading) return <Button>Cargando PDF</Button>
 
     return (
-        <PDFDownloadLink
-            fileName={`proyecto-${protocol.id}`}
-            document={PDFDocument({ protocol })}
-        >
-            <Button>Descargar en PDF</Button>
-        </PDFDownloadLink>
+        // <PDFDownloadLink
+        //     fileName={`proyecto-${protocol.id}`}
+        //     document={PDFDocument({ protocol })}
+        // >
+        //     <Button>Descargar en PDF</Button>
+        // </PDFDownloadLink>
+        <PDFViewer style={{ width: '70vw', height: '100vh' }}>
+            <PDFDocument protocol={protocol}></PDFDocument>
+        </PDFViewer>
     )
 }
