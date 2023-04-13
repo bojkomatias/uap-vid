@@ -3,7 +3,7 @@ import UserForm from '@user/user-form'
 import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)

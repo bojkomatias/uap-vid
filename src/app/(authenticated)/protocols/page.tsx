@@ -2,7 +2,7 @@ import { PageHeading } from '@layout/page-heading'
 import CreateButton from '@protocol/elements/action-buttons/create'
 import Table from '@protocol/elements/protocol-table'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {
     getProtocolsWithoutPagination,
     getProtocolByRol,
