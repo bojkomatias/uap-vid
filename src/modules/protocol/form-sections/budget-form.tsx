@@ -18,27 +18,24 @@ export function BudgetForm() {
         >
             <SectionTitle title="Presupuesto de gastos directos" />
             <>
+                <pre className="text-xs">
+                    {JSON.stringify(
+                        form.getInputProps(path + 'expenses').value,
+                        null,
+                        2
+                    )}
+                </pre>
                 <Info />
                 <InputList
                     path={path + 'expenses'}
                     label="gastos"
                     newLeafItemValue={{
-                        type: '',
                         detail: '',
                         amount: 0,
                         year: '',
                     }}
+                    preprocessKey="type"
                     headers={[
-                        {
-                            x: 'type',
-                            label: 'tipo',
-                            options: [
-                                'Insumos',
-                                'Libros',
-                                'Fotocopias, materiales de impresión, papelería',
-                                'Viajes',
-                            ],
-                        },
                         { x: 'detail', label: 'detalle', class: 'flex-grow' },
                         {
                             x: 'amount',

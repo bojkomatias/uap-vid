@@ -188,15 +188,15 @@ export const BudgetSchema = z.object({
                     .min(1, { message: 'El campo no puede estar vacío' }),
                 data: z
                     .object({
+                        detail: z.string().min(1, {
+                            message: 'El campo no puede estar vacío',
+                        }),
                         amount: z
                             .number({
                                 invalid_type_error:
                                     'Este campo debe ser numérico',
                             })
                             .positive({ message: 'Debe ser mayor que cero' }),
-                        detail: z.string().min(1, {
-                            message: 'El campo no puede estar vacío',
-                        }),
                         year: z.string().min(1, {
                             message: 'El campo no puede estar vacío',
                         }),

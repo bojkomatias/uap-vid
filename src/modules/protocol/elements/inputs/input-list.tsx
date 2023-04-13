@@ -96,17 +96,17 @@ function PreprocessFieldsMap({
                     {h.options ? (
                         <Select
                             options={h.options}
-                            path={`${path}.${deepPushPath}.${index}`}
+                            path={`${path}.${deepPushPath}.${index}.${h.x}`}
                             label={h.label}
                         />
                     ) : h.currency ? (
                         <CurrencyInput
-                            path={`${path}.${deepPushPath}.${index}`}
+                            path={`${path}.${deepPushPath}.${index}.${h.x}`}
                             label={h.label}
                         />
                     ) : h.number ? (
                         <NumberInput
-                            path={`${path}.${deepPushPath}.${index}`}
+                            path={`${path}.${deepPushPath}.${index}.${h.x}`}
                             label={h.label}
                         />
                     ) : (
