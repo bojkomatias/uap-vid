@@ -1,7 +1,7 @@
 import { PageHeading } from '@layout/page-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import type { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
