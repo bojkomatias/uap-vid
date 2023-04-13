@@ -4,21 +4,22 @@ services:
         image: mongo:latest
         ports:
             - '27017:27017'
-        # volumes:
-        #     - ~/apps/mongo-data:/data/db
+        volumes:
+            - ~/apps/mongo-data:/data/db
         environment:
             - MONGO_INITDB_ROOT_USERNAME=admin
             - MONGO_INITDB_ROOT_PASSWORD=admin
         networks:
-            - node-next
-    uap-research: #Our container app name
+            - uap-vid-network
+    uap-research:
+        #Our container app name
         image: uapvid:latest
-        # build:
-        # context: . #Compose will use this context to find a Dockerfile
+        build:
+        context: . #Compose will use this context to find a Dockerfile
         ports:
             - '3000:3000'
         networks:
-            - node-next
+            - uap-vid-network
 networks:
-    node-next:
+    uap-vid-network:
         driver: bridge
