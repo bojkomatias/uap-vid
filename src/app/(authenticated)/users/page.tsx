@@ -4,15 +4,15 @@ import { getAllUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
 
 export default async function UserList() {
     const session = await getServerSession(authOptions)
-
-    if (!canAccess('USERS', session?.user?.role!)) redirect('/protocols')
+    if (!session) return
+    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     const users = await getAllUsers()
 
     return (

@@ -1,3 +1,4 @@
+import type { User } from '@prisma/client'
 import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
@@ -16,7 +17,7 @@ const getAllUsersWithoutResearchers = async () => {
         const users = await prisma.user.findMany({
             where: {
                 role: {
-                    not: Role.RESEARCHER
+                    not: Role.RESEARCHER,
                 },
             },
         })
@@ -52,7 +53,7 @@ const findUserByEmail = cache(async (email: string) => {
     }
 })
 
-const updateUserById = async (id: string, data: any) => {
+const updateUserById = async (id: string, data: User) => {
     try {
         const user = await prisma.user.update({
             where: {
@@ -66,7 +67,21 @@ const updateUserById = async (id: string, data: any) => {
     }
 }
 
-const updateUserByEmail = async (email: string, data: any) => {
+const updateUserRoleById = async (id: string, role: Role) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: { role },
+        })
+        return user
+    } catch (error) {
+        return null
+    }
+}
+
+const updateUserByEmail = async (email: string, data: User) => {
     try {
         const user = await prisma.user.update({
             where: {
@@ -80,7 +95,14 @@ const updateUserByEmail = async (email: string, data: any) => {
     }
 }
 
-const saveUser = async (data: any) => {
+const saveUser = async (data: {
+    name: string
+    email: string
+    image?: string | null
+    password?: string
+    role: Role
+    lastLogin?: Date
+}) => {
     try {
         const user = await prisma.user.create({
             data,
@@ -97,6 +119,7 @@ export {
     findUserById,
     findUserByEmail,
     updateUserById,
+    updateUserRoleById,
     updateUserByEmail,
     saveUser,
 }

@@ -1,5 +1,6 @@
 'use client'
-import { Protocol, Review, ReviewVerdict, Role, State } from '@prisma/client'
+import type { Protocol, Review, Role} from '@prisma/client';
+import { ReviewVerdict, State } from '@prisma/client'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
@@ -9,10 +10,11 @@ import { useTransition } from 'react'
 
 type ActionButtonTypes = {
     role: Role
-    protocol: Protocol & { reviews: Review[] }
+    protocol: Protocol
+    reviews: Review[]    
 }
 
-const AcceptButton = ({ role, protocol }: ActionButtonTypes) => {
+const AcceptButton = ({ role, protocol, reviews}: ActionButtonTypes) => {
     const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -20,8 +22,8 @@ const AcceptButton = ({ role, protocol }: ActionButtonTypes) => {
         !protocol.id ||
         !canExecute(ACTION.ACCEPT, role, protocol.state) ||
         protocol.state !== State.SCIENTIFIC_EVALUATION ||
-        protocol.reviews.length !== 3 ||
-        !protocol.reviews.every(
+        reviews.length !== 3 ||
+        reviews.every(
             (review) => review.verdict === ReviewVerdict.APPROVED
         )
     )

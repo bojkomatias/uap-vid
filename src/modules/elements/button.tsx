@@ -1,6 +1,6 @@
 'use client'
 import clsx from 'clsx'
-import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
 
 const styles = {
     primary:
@@ -33,7 +33,7 @@ export const Button = ({
     return (
         <button
             {...buttonProps}
-            disabled={loading}
+            disabled={loading || buttonProps.disabled}
             type={type}
             className={clsx(
                 className,

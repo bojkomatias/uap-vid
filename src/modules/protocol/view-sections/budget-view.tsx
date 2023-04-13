@@ -1,4 +1,5 @@
-import { ProtocolSectionsBudget } from '@prisma/client'
+import type { ProtocolSectionsBudget } from '@prisma/client'
+import type { ListRowValues } from '@protocol/elements/item-list-view'
 import ItemListView from '@protocol/elements/item-list-view'
 import SectionViewer from '../elements/section-viewer'
 
@@ -9,7 +10,7 @@ interface BudgetViewProps {
 const BudgetView = ({ data }: BudgetViewProps) => {
     const tableData = {
         title: 'Presupuesto de gastos directos',
-        values: data.expenses.reduce((newVal: any, item) => {
+        values: data.expenses.reduce((newVal: ListRowValues[], item) => {
             newVal.push([
                 {
                     up: item.type,

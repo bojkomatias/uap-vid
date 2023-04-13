@@ -2,7 +2,7 @@
 import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { SessionProvider } from 'next-auth/react'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export default function Providers({ children }: { children: ReactNode }) {
     return (

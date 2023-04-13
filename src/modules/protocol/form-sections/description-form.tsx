@@ -33,7 +33,9 @@ export function DescriptionForm() {
                 <Select
                     path={path + 'line'}
                     label="línea de investigación"
-                    options={lines(form.values.sections.description.discipline)}
+                    options={
+                        lines(form.values.sections.description.discipline) ?? []
+                    }
                 />
                 <Textarea path={path + 'technical'} label="Resumen técnico" />
                 <Input path={path + 'words'} label="palabras clave" />
@@ -121,7 +123,6 @@ const FieldInfo = () => (
         </p>
     </InfoTooltip>
 )
-
 const ObjectiveInfo = () => (
     <InfoTooltip className="fixed bottom-4">
         <p>

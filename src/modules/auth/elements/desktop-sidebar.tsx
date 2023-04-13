@@ -1,5 +1,6 @@
 'use client'
 import {
+    CalendarEvent,
     ClipboardList,
     List,
     ListDetails,
@@ -8,7 +9,7 @@ import {
 } from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
-import { User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import Link from 'next/link'
 import clsx from 'clsx'
@@ -95,5 +96,11 @@ export const navigation = [
         icon: Users,
         href: '/users',
         scope: ACCESS.USERS,
+    },
+    {
+        name: 'Panel de convocatorias',
+        icon: CalendarEvent,
+        href: '/convocatories',
+        scope: ACCESS.CONVOCATORIES,
     },
 ]

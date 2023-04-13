@@ -7,11 +7,15 @@ import Link from 'next/link'
 import { Button } from './button'
 
 export default function MultipleButton({
+    defaultValue,
     options,
 }: {
+    defaultValue: { title: string; description: string; href: string } | null
     options: { title: string; description: string; href: string }[]
 }) {
-    const [selected, setSelected] = useState(options[0])
+    const [selected, setSelected] = useState(
+        defaultValue ? defaultValue : options[0]
+    )
     return (
         <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (

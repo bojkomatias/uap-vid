@@ -1,10 +1,12 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import clsx from 'clsx'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
+import { CurrentConvocatory } from '@convocatory/timer'
+import { getCurrentConvocatory } from '@repositories/convocatory'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 export default async function Navigation({
     children,
@@ -12,16 +14,22 @@ export default async function Navigation({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) redirect('/')
+    if (!session) return redirect('/')
+
+    const currentConvocatory = await getCurrentConvocatory()
+
     const hasNavigation =
         session?.user?.role === 'ADMIN' || session?.user?.role === 'SECRETARY'
     return (
         <>
             {hasNavigation ? (
                 <div className="absolute inset-0">
-                    <MobileNavigation user={session?.user!} />
-                    <DesktopNavigation user={session?.user!} />
+                    <MobileNavigation user={session.user} />
+                    <DesktopNavigation user={session.user} />
                 </div>
+            ) : null}
+            {currentConvocatory ? (
+                <CurrentConvocatory convocatory={currentConvocatory} />
             ) : null}
             <div
                 className={clsx(

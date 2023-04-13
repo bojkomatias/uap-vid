@@ -1,5 +1,6 @@
-import { Protocol } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
+import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
 export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
@@ -43,9 +44,7 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                 {item.sections.identification.title}
                                 <dl>
                                     <dd className="truncate text-xs font-thin text-gray-500 lg:text-sm">
-                                        {new Date(
-                                            item.createdAt
-                                        ).toLocaleString('es-AR')}
+                                        {dateFormatter.format(item.createdAt)}
                                     </dd>
                                     <dd className="truncate text-gray-600 lg:hidden">
                                         {item.sections.identification.sponsor
