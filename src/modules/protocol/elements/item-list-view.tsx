@@ -18,7 +18,7 @@ const ItemListView = ({ data }: ItemListProps) => {
             <dt className="text-sm font-medium text-gray-500">{data.title}</dt>
             {data.values && data.values.length > 0 ? (
                 <dd className="mt-1 text-sm text-gray-900">
-                    <div className="mt-2 flex flex-col divide-y rounded-lg border">
+                    <div className="mt-2 flex flex-col divide-y rounded-lg border pt-2">
                         {data.values.map((row, index) => (
                             <ListRow data={row} key={index} />
                         ))}
@@ -28,8 +28,8 @@ const ItemListView = ({ data }: ItemListProps) => {
                 <dd className="mt-1 text-sm text-gray-900">
                     <div className="mt-2 flex flex-col divide-y overflow-hidden rounded-lg border">
                         {data.deepValues.map((item, i) => (
-                            <div key={i} className="space-y-0 pt-4">
-                                <span className="ml-5 text-sm font-semibold text-gray-500">
+                            <div key={i} className="space-y-0 pt-3">
+                                <span className="ml-4 text-sm font-semibold text-gray-500">
                                     {item.groupLabel}:
                                 </span>
 

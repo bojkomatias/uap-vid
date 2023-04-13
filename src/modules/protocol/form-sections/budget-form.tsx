@@ -18,13 +18,6 @@ export function BudgetForm() {
         >
             <SectionTitle title="Presupuesto de gastos directos" />
             <>
-                <pre className="text-xs">
-                    {JSON.stringify(
-                        form.getInputProps(path + 'expenses').value,
-                        null,
-                        2
-                    )}
-                </pre>
                 <Info />
                 <InputList
                     path={path + 'expenses'}

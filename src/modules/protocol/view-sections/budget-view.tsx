@@ -22,7 +22,10 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                         },
                         {
                             up: 'Monto',
-                            down: `$${item.amount}`,
+                            down: `$${item.amount}`.replace(
+                                /\B(?=(\d{3})+(?!\d))/g,
+                                '.'
+                            ),
                             inverted: true,
                         },
                         {
