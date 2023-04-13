@@ -21,7 +21,11 @@ export default function MultipleButton({
             {({ open }) => (
                 <div className="relative">
                     <div className="inline-flex rounded-md shadow-sm">
-                        <Link href={selected.href} passHref>
+                        <Link
+                            href={selected.href}
+                            className="hover:z-10"
+                            passHref
+                        >
                             <Button
                                 intent={'tertiary'}
                                 className="rounded-r-none"
