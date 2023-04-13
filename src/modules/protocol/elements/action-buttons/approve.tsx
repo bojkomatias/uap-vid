@@ -1,5 +1,6 @@
 'use client'
-import { Protocol, Role, State } from '@prisma/client'
+import type { Protocol, Role} from '@prisma/client';
+import { State } from '@prisma/client'
 import { ACTION } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'

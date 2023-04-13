@@ -1,4 +1,3 @@
-import { Button } from '@elements/button'
 import { PageHeading } from '@layout/page-heading'
 
 export default function Exhibit() {

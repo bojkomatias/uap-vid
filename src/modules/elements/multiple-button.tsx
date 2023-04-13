@@ -5,7 +5,6 @@ import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Button } from './button'
-import { Convocatory } from '@prisma/client'
 
 export default function MultipleButton({
     defaultValue,
@@ -22,7 +21,11 @@ export default function MultipleButton({
             {({ open }) => (
                 <div className="relative">
                     <div className="inline-flex rounded-md shadow-sm">
-                        <Link href={selected.href} passHref>
+                        <Link
+                            href={selected.href}
+                            className="hover:z-10"
+                            passHref
+                        >
                             <Button
                                 intent={'tertiary'}
                                 className="rounded-r-none"
@@ -100,7 +103,7 @@ export default function MultipleButton({
                                                     active
                                                         ? 'text-gray-300'
                                                         : 'text-gray-500',
-                                                    'mt-1 text-xs font-thin'
+                                                    'mt-1 text-xs font-light'
                                                 )}
                                             >
                                                 {option.description}

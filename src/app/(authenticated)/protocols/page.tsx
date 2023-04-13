@@ -2,7 +2,7 @@ import { PageHeading } from '@layout/page-heading'
 import CreateButton from '@protocol/elements/action-buttons/create'
 import Table from '@protocol/elements/protocol-table'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import {
     getProtocolsWithoutPagination,
     getProtocolByRol,
@@ -11,7 +11,7 @@ import {
 import Pagination from '@elements/pagination'
 import SearchBar from '@elements/search-bar'
 import fuzzysort from 'fuzzysort'
-import { Protocol } from '@prisma/client'
+import type { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
 
@@ -22,8 +22,11 @@ export default async function Page({
     searchParams?: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-
-    const protocolCount = await getTotalRecordsProtocol()
+    if (!session) return
+    const protocolCount = await getTotalRecordsProtocol(
+        session.user.role,
+        session.user.id
+    )
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
@@ -41,22 +44,20 @@ export default async function Page({
               )
         : null
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
-    const searchedProtocols = (): Protocol[] => {
-        const results = fuzzysort.go(
-            searchParams?.search!,
-            protocols as Protocol[],
-            {
-                keys: [
-                    'sections.identification.title',
-                    'sections.identification.career',
-                    'sections.identification.assignment',
-                ],
-            }
-        )
-        return results.map((result) => {
-            return result.obj as Protocol
-        })
-    }
+    const searchedProtocols = searchParams?.search
+        ? fuzzysort
+              .go(searchParams.search, protocols as Protocol[], {
+                  keys: [
+                      'sections.identification.title',
+                      'sections.identification.career',
+                      'sections.identification.assignment',
+                  ],
+              })
+              .map((result) => {
+                  return result.obj as Protocol
+              })
+        : protocols
+
     return (
         <>
             <PageHeading title="Lista de proyectos de investigación" />
@@ -68,19 +69,17 @@ export default async function Page({
             <div className="mt-3 flex justify-end">
                 {canExecute(
                     ACTION.CREATE,
-                    session?.user?.role!,
+                    session.user.role,
                     'NOT_CREATED'
-                ) ? (
+                ) && (
                     // @ts-expect-error
-                    <CreateButton role={session?.user?.role!} />
-                ) : null}
+                    <CreateButton role={session.user.role} />
+                )}
             </div>
 
             <SearchBar />
 
-            <Table
-                items={searchParams?.search ? searchedProtocols() : protocols}
-            />
+            <Table items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
                     pageParams={Number(searchParams?.page) || 1}

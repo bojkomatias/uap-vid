@@ -1,8 +1,9 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
-import { NextRequest, NextResponse } from 'next/server'
-import { updateUserById } from '@repositories/user'
+/* eslint-disable @next/next/no-server-import-in-page */
+import { updateUserRoleById } from '@repositories/user'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function PUT(
+export async function PATCH(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
@@ -15,7 +16,7 @@ export async function PUT(
         })
     }
 
-    const updated = await updateUserById(id as string, { role })
+    const updated = await updateUserRoleById(id, role)
 
     if (!updated) {
         return new Response('We cannot update your user', { status: 500 })

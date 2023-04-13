@@ -1,11 +1,13 @@
 'use client'
-import { Review, ReviewVerdict, Role, State, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
+import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import TextItemView from '@protocol/elements/text-item-view'
+import { relativeTimeFormatter } from '@utils/formatters'
 
 export default function ReviewItem({
     review,
@@ -16,14 +18,14 @@ export default function ReviewItem({
 }) {
     if (!review.data) return null
     function getDuration(millis: number) {
-        let minutes = Math.floor(millis / 60000)
-        let hours = Math.round(minutes / 60)
-        let days = Math.round(hours / 24)
+        const minutes = Math.floor(millis / 60000)
+        const hours = Math.round(minutes / 60)
+        const days = Math.round(hours / 24)
 
         return (
-            ' hace ' + (days && days + (days > 1 ? ' días' : ' día')) ||
-            (hours && hours + (hours > 1 ? '  horas' : ' hora')) ||
-            minutes + (minutes > 1 ? '  minutos' : ' minuto')
+            (days && relativeTimeFormatter.format(-days, 'day')) ||
+            (hours && relativeTimeFormatter.format(-hours, 'hour')) ||
+            (minutes && relativeTimeFormatter.format(-minutes, 'minute'))
         )
     }
 
@@ -39,7 +41,7 @@ export default function ReviewItem({
                 >
                     <div className="-mb-px flex items-center justify-between space-x-4 bg-gray-100 px-2 py-1 text-gray-500">
                         <div className="flex items-center gap-2">
-                            <span className="text-sm font-thin text-gray-600">
+                            <span className="text-sm font-light text-gray-600">
                                 Veredicto:
                             </span>
                             <span
@@ -135,7 +137,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 router.refresh()
             })
         },
-        [id]
+        [id, router]
     )
 
     return (

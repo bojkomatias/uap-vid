@@ -1,6 +1,6 @@
 'use client'
 
-import { Convocatory } from '@prisma/client'
+import type { Convocatory } from '@prisma/client'
 import { useEffect, useMemo, useState } from 'react'
 
 export function CurrentConvocatory({
@@ -11,7 +11,7 @@ export function CurrentConvocatory({
     const date = useMemo(() => new Date(convocatory.to), [convocatory])
     const [today, setToday] = useState(new Date())
     useEffect(() => {
-        let timeout = setTimeout(() => {
+        const timeout = setTimeout(() => {
             setToday(new Date())
         }, 3600000)
         return () => clearTimeout(timeout)

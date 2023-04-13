@@ -1,5 +1,6 @@
 'use client'
-import { Protocol, Review, ReviewVerdict, Role, State } from '@prisma/client'
+import type { Protocol, Review, Role} from '@prisma/client';
+import { ReviewVerdict, State } from '@prisma/client'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'

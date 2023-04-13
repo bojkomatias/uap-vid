@@ -14,7 +14,7 @@
 }
 @layer components {
     .input {
-        @apply w-full self-start rounded border border-gray-300 p-3 py-2 pl-3 pr-4 placeholder:text-xs placeholder:uppercase placeholder:text-gray-400/80 focus:outline-none focus:ring-[2px] focus:ring-primary/80 focus:ring-offset-2;
+        @apply w-full self-start rounded border border-gray-300 p-3 py-2 pl-3 pr-4 placeholder:text-xs placeholder:uppercase placeholder:text-gray-400/80 focus:outline-none focus:ring-[2px] focus:ring-primary/80 focus:ring-offset-2 disabled:pointer-events-none disabled:select-none;
     }
     .label {
         @apply pointer-events-none select-none p-1 text-xs font-normal uppercase text-gray-500;

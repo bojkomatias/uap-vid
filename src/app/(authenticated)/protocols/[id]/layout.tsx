@@ -1,8 +1,8 @@
 import { PageHeading } from '@layout/page-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { ReactNode } from 'react'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import type { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
@@ -15,8 +15,9 @@ async function Layout({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
+    if (!session) return
     if (params.id === 'new') {
-        if (!canExecute('CREATE', session?.user?.role!, 'NOT_CREATED'))
+        if (!canExecute('CREATE', session.user.role, 'NOT_CREATED'))
             redirect('/protocols')
         return (
             <>
@@ -47,8 +48,8 @@ async function Layout({
                 <Reviews
                     id={protocol.id}
                     state={protocol.state}
-                    userId={session?.user?.id!}
-                    userRole={session?.user?.role!}
+                    userId={session.user.id}
+                    userRole={session.user.role}
                 />
             </div>
         </>

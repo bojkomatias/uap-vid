@@ -6,12 +6,13 @@ import { ACCESS } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { CalendarPlus } from 'tabler-icons-react'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!canAccess(ACCESS.CONVOCATORIES, session?.user?.role!))
+    if (!session) return
+    if (!canAccess(ACCESS.CONVOCATORIES, session.user.role))
         redirect('/protocols')
 
     return (

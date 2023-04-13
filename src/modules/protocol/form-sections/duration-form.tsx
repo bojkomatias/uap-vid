@@ -1,10 +1,11 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import List from '@protocol/elements/inputs/input-list'
 import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
+import { InputList } from '@protocol/elements/inputs/input-list'
+import { cache } from 'react'
 
 export function DurationForm() {
     const form = useProtocolContext()
@@ -25,27 +26,30 @@ export function DurationForm() {
                     label="modalidad"
                     options={modalities}
                     conditionalCleanup={() =>
-                        (form.values.sections.duration.modality = '')
+                        (form.values.sections.duration.duration = '')
                     }
                 />
                 <Select
                     path={path + 'duration'}
                     label="duración"
                     options={duration(form.values.sections.duration.modality)}
+                    conditionalCleanup={(e) => {
+                        if (!e) return null
+                        form.setFieldValue(
+                            path + 'chronogram',
+                            structureSemestersFromMonths(e)
+                        )
+                    }}
                 />
-                <List
+                <InputList
                     path={path + 'chronogram'}
                     label="cronograma de tareas"
-                    toMap={form.values.sections.duration.chronogram}
-                    insertedItemFormat={{ semester: '', task: '' }}
+                    // When preprocessKey, means nested, so the shape of the Inserted, is the LEAF one.
+                    newLeafItemValue={{
+                        task: '',
+                    }}
+                    preprocessKey={'semester'}
                     headers={[
-                        {
-                            x: 'semester',
-                            label: 'Semestre',
-                            options: chron(
-                                form.values.sections.duration.duration
-                            ),
-                        },
                         { x: 'task', label: 'Tarea', class: 'flex-grow' },
                     ]}
                 />
@@ -64,50 +68,21 @@ const modalities = [
     'Proyecto Tesis Posgrado (PTP)',
 ]
 
-const duration = (v: any) => {
+const duration = (v: string) => {
     if (v === 'Proyecto de investigación desde las cátedras (PIC)')
         return ['6 meses', '12 meses', '24 meses']
     else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
 }
-const chron = (v: string) => {
-    if (v === '6 meses') return ['1° semestre']
-    if (v === '12 meses') return ['1° semestre', '2° semestre']
-    if (v === '24 meses')
-        return ['1° semestre', '2° semestre', '3° semestre', '4° semestre']
-    if (v === '36 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-        ]
-    if (v === '48 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-            '7° semestre',
-            '8° semestre',
-        ]
-    if (v === '60 meses')
-        return [
-            '1° semestre',
-            '2° semestre',
-            '3° semestre',
-            '4° semestre',
-            '5° semestre',
-            '6° semestre',
-            '7° semestre',
-            '8° semestre',
-            '9° semestre',
-            '10° semestre',
-        ]
-}
+
+const structureSemestersFromMonths = cache((e: string) => {
+    const semesters = Number(e.substring(0, 2)) / 6
+
+    const allSemesters = []
+    for (let i = 1; i <= semesters; i++) {
+        allSemesters.push({ semester: `${i}º semestre`, data: [{ task: '' }] })
+    }
+    return allSemesters
+})
 
 const Info = () => (
     <InfoTooltip>

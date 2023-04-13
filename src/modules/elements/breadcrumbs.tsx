@@ -5,7 +5,9 @@ import { ChevronRight } from 'tabler-icons-react'
 import Link from 'next/link'
 import { Home } from 'tabler-icons-react'
 
-const newLinkMap: any = {
+type MapLink = { [key: string]: string }
+
+const newLinkMap: MapLink = {
     users: 'Lista de usuarios',
     protocols: 'Lista de protocolos',
     convocatories: 'Lista de convocatorias',
@@ -58,7 +60,7 @@ export const Breadcrumbs = () => {
                     </li>
                 ) : null}
 
-                {breadcrumbs.slice(0, -1).map((page, idx) => (
+                {breadcrumbs.slice(0, -1).map((page) => (
                     <li key={page.name} className="flex">
                         {page.name == 'Inicio' ? null : (
                             <div className="flex items-center">

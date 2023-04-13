@@ -1,4 +1,5 @@
-import { ProtocolSectionsBudget } from '@prisma/client'
+import type { ProtocolSectionsBudget } from '@prisma/client'
+import type { ListRowValues } from '@protocol/elements/item-list-view'
 import ItemListView from '@protocol/elements/item-list-view'
 import SectionViewer from '../elements/section-viewer'
 
@@ -9,25 +10,34 @@ interface BudgetViewProps {
 const BudgetView = ({ data }: BudgetViewProps) => {
     const tableData = {
         title: 'Presupuesto de gastos directos',
-        values: data.expenses.reduce((newVal: any, item) => {
-            newVal.push([
-                {
-                    up: item.type,
-                    down: item.detail,
-                },
-                {
-                    up: 'Monto',
-                    down: `$${item.amount}`,
-                    inverted: true,
-                },
-                {
-                    up: 'Año',
-                    down: item.year,
-                    inverted: true,
-                },
-            ])
-            return newVal
-        }, []),
+        deepValues: data.expenses.map((item) => {
+            return {
+                groupLabel: item.type,
+                data: item.data.reduce((newVal: ListRowValues[], item) => {
+                    newVal.push([
+                        {
+                            up: 'Detalle',
+                            down: item.detail,
+                            inverted: true,
+                        },
+                        {
+                            up: 'Monto',
+                            down: `$${item.amount}`.replace(
+                                /\B(?=(\d{3})+(?!\d))/g,
+                                '.'
+                            ),
+                            inverted: true,
+                        },
+                        {
+                            up: 'Año',
+                            down: item.year,
+                            inverted: true,
+                        },
+                    ])
+                    return newVal
+                }, []),
+            }
+        }),
     }
 
     return (

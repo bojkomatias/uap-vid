@@ -1,11 +1,9 @@
 'use client'
-import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import SectionTitle from '@protocol/elements/form-section-title'
-import List from '@protocol/elements/inputs/input-list'
+import { InputList } from '@protocol/elements/inputs/input-list'
 
 export function BibliographyForm() {
-    const form = useProtocolContext()
     const path = 'sections.bibliography.'
 
     return (
@@ -18,11 +16,10 @@ export function BibliographyForm() {
             <SectionTitle title="Bibliografía" />
             <span />
             <>
-                <List
+                <InputList
                     path={path + 'chart'}
                     label="cuadro bibliográfico"
-                    toMap={form.values.sections.bibliography.chart}
-                    insertedItemFormat={{ author: '', title: '', year: 0 }}
+                    newLeafItemValue={{ author: '', title: '', year: 0 }}
                     headers={[
                         {
                             x: 'author',

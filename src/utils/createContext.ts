@@ -1,6 +1,6 @@
 'use client'
 import { createFormContext } from '@mantine/form'
-import { Protocol, Sections } from './zod'
+import type { Protocol, Sections } from './zod'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
     createFormContext<Protocol>()
@@ -19,7 +19,15 @@ export const initialSectionValues: Sections = {
         modality: '',
     },
     budget: {
-        expenses: [{ type: '', detail: '', amount: 0, year: '' }],
+        expenses: [
+            { type: 'Insumos', data: [{ detail: '', amount: 0, year: '' }] },
+            { type: 'Libros', data: [{ detail: '', amount: 0, year: '' }] },
+            {
+                type: 'Materiales de Impresión',
+                data: [{ detail: '', amount: 0, year: '' }],
+            },
+            { type: 'Viajes', data: [{ detail: '', amount: 0, year: '' }] },
+        ],
     },
     description: {
         discipline: '',
