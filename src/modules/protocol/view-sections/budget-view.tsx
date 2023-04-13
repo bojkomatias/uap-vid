@@ -10,25 +10,31 @@ interface BudgetViewProps {
 const BudgetView = ({ data }: BudgetViewProps) => {
     const tableData = {
         title: 'Presupuesto de gastos directos',
-        values: data.expenses.reduce((newVal: ListRowValues[], item) => {
-            newVal.push([
-                {
-                    up: item.type,
-                    down: item.detail,
-                },
-                {
-                    up: 'Monto',
-                    down: `$${item.amount}`,
-                    inverted: true,
-                },
-                {
-                    up: 'Año',
-                    down: item.year,
-                    inverted: true,
-                },
-            ])
-            return newVal
-        }, []),
+        deepValues: data.expenses.map((item) => {
+            return {
+                type: item.type,
+                data: item.data.reduce((newVal: ListRowValues[], item) => {
+                    newVal.push([
+                        {
+                            up: 'Detalle',
+                            down: item.detail,
+                            inverted: true,
+                        },
+                        {
+                            up: 'Monto',
+                            down: `$${item.amount}`,
+                            inverted: true,
+                        },
+                        {
+                            up: 'Año',
+                            down: item.year,
+                            inverted: true,
+                        },
+                    ])
+                    return newVal
+                }, []),
+            }
+        }),
     }
 
     return (
