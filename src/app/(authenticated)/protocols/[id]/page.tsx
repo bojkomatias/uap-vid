@@ -4,7 +4,7 @@ import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictiona
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[..nextauth]'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
