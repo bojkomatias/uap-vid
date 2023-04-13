@@ -1,10 +1,8 @@
 import clsx from 'clsx'
 import { EmptyStateItem } from './empty-state-item'
 
-// This interface could be refactor, should force data:, and loosely [type] and [semester] into a [key:string]
 interface DeepValue {
-    type?: string
-    semester?: string
+    groupLabel: string
     data: ListRowValues[]
 }
 interface ItemListProps {
@@ -30,10 +28,11 @@ const ItemListView = ({ data }: ItemListProps) => {
                 <dd className="mt-1 text-sm text-gray-900">
                     <div className="mt-2 flex flex-col divide-y overflow-hidden rounded-lg border">
                         {data.deepValues.map((item, i) => (
-                            <div key={i}>
-                                <div className="bg-gray-50 pb-1 pl-4 pt-2 font-semibold text-gray-600">
-                                    {item.type}
-                                </div>
+                            <div key={i} className="space-y-0 pt-4">
+                                <span className="ml-5 text-sm font-semibold text-gray-500">
+                                    {item.groupLabel}:
+                                </span>
+
                                 {item.data.map((row, index) => (
                                     <ListRow data={row} key={index} />
                                 ))}
@@ -57,7 +56,7 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
     return (
         <div
             className={clsx(
-                'relative place-items-center space-y-2 px-4 py-4 sm:grid sm:space-y-0',
+                'relative place-items-center space-y-2 px-4 py-2 sm:grid sm:space-y-0',
                 {
                     'grid-cols-2': data.length == 2,
                     'grid-cols-3': data.length == 3,

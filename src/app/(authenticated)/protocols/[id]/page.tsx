@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <>
             <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
                 <div className="flex-1">
-                    <span className="rounded border bg-gray-50 px-2 py-0.5 text-sm font-semibold uppercase text-gray-600">
+                    <span className="rounded border bg-gray-50 px-2 pt-1 pb-0.5 text-sm font-semibold uppercase text-gray-600">
                         {ProtocolStatesDictionary[protocol?.state]}
                     </span>
                 </div>

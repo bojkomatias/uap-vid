@@ -12,7 +12,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
         title: 'Presupuesto de gastos directos',
         deepValues: data.expenses.map((item) => {
             return {
-                type: item.type,
+                groupLabel: item.type,
                 data: item.data.reduce((newVal: ListRowValues[], item) => {
                     newVal.push([
                         {
