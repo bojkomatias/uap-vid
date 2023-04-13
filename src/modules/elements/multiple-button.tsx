@@ -103,7 +103,7 @@ export default function MultipleButton({
                                                     active
                                                         ? 'text-gray-300'
                                                         : 'text-gray-500',
-                                                    'mt-1 text-xs font-thin'
+                                                    'mt-1 text-xs font-light'
                                                 )}
                                             >
                                                 {option.description}

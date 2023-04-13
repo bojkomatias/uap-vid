@@ -1,7 +1,7 @@
 import './globals.css'
 import { Footer } from '@layout/footer'
 import { Header } from '@layout/header'
-import { Catamaran } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import Providers from './providers'
 
 export const metadata = {
@@ -12,7 +12,7 @@ export const metadata = {
     icons: { icon: '/favicon.ico' },
 }
 
-const font = Catamaran({ subsets: ['latin'], variable: '--font-sans' })
+const font = Montserrat({ subsets: ['latin'], variable: '--font-sans' })
 
 export default async function RootLayout({
     children,

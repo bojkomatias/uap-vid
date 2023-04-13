@@ -23,7 +23,10 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
-    const protocolCount = await getTotalRecordsProtocol()
+    const protocolCount = await getTotalRecordsProtocol(
+        session.user.role,
+        session.user.id
+    )
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
