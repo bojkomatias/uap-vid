@@ -6,7 +6,7 @@ import {
     View,
     Text,
     usePDF,
-    PDFViewer,
+    PDFDownloadLink,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
 
@@ -716,14 +716,11 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
     if (instance.loading) return <Button>Cargando PDF</Button>
 
     return (
-        // <PDFDownloadLink
-        //     fileName={`proyecto-${protocol.id}`}
-        //     document={PDFDocument({ protocol })}
-        // >
-        //     <Button>Descargar en PDF</Button>
-        // </PDFDownloadLink>
-        <PDFViewer style={{ width: '70vw', height: '100vh' }}>
-            <PDFDocument protocol={protocol}></PDFDocument>
-        </PDFViewer>
+        <PDFDownloadLink
+            fileName={`proyecto-${protocol.id}`}
+            document={PDFDocument({ protocol })}
+        >
+            <Button>Descargar en PDF</Button>
+        </PDFDownloadLink>
     )
 }
