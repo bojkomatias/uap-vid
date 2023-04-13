@@ -18,7 +18,7 @@ services:
             context: . #Compose will use this context to find a Dockerfile
             dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
         ports:
-            - '3000:3000'
+            - '80:3000'
         networks:
             - uap-vid-network
 networks:
