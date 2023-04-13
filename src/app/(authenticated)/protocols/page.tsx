@@ -23,7 +23,10 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
-    const protocolCount = await getTotalRecordsProtocol()
+    const protocolCount = await getTotalRecordsProtocol(
+        session.user.role,
+        session.user.id
+    )
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
@@ -40,7 +43,6 @@ export default async function Page({
                   shownRecords
               )
         : null
-    console.log(protocols)
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = searchParams?.search
         ? fuzzysort

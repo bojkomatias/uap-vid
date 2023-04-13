@@ -9,10 +9,8 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
 import PublishButton from '@protocol/elements/action-buttons/publish'
-
-import { PDF } from 'modules/pdf'
-
 import { getReviewsByProtocol } from '@repositories/review'
+import { PDF } from 'modules/pdf'
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')

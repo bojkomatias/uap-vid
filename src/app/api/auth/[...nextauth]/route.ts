@@ -79,8 +79,8 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: async ({ token, user }) => {
-            if (user) {
-                const userFromDb = await findUserByEmail(user.email!)
+            if (user && user.email) {
+                const userFromDb = await findUserByEmail(user.email)
                 token.user = userFromDb
             }
             return token

@@ -183,20 +183,25 @@ export const BudgetSchema = z.object({
     expenses: z
         .lazy(() =>
             z.object({
-                amount: z
-                    .number({
-                        invalid_type_error: 'Este campo debe ser numérico',
-                    })
-                    .positive({ message: 'Debe ser mayor que cero' }),
-                detail: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
                 type: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
-                year: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                data: z
+                    .object({
+                        detail: z.string().min(1, {
+                            message: 'El campo no puede estar vacío',
+                        }),
+                        amount: z
+                            .number({
+                                invalid_type_error:
+                                    'Este campo debe ser numérico',
+                            })
+                            .positive({ message: 'Debe ser mayor que cero' }),
+                        year: z.string().min(1, {
+                            message: 'El campo no puede estar vacío',
+                        }),
+                    })
+                    .array(),
             })
         )
         .array(),
@@ -238,9 +243,11 @@ export const DurationSchema = z.object({
                 semester: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
-                task: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                data: z
+                    .object({
+                        task: z.string().min(1, { message: 'Cannot be empty' }),
+                    })
+                    .array(),
             })
         )
         .array(),
