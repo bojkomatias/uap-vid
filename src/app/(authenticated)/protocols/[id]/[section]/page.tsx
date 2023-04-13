@@ -5,7 +5,7 @@ import { STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[..nextauth]'
 import { findProtocolById } from 'repositories/protocol'
 const ProtocolForm = dynamic(() => import('@protocol/protocol-form-template'))
 

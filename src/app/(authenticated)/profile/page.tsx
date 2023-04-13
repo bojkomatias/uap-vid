@@ -1,6 +1,6 @@
 import Profile from '@auth/profile'
 import { PageHeading } from '@layout/page-heading'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[..nextauth]'
 import { getServerSession } from 'next-auth'
 
 export default async function Page() {

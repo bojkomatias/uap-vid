@@ -6,7 +6,7 @@ import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[..nextauth]'
 
 export default async function Navigation({
     children,
