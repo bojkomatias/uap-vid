@@ -209,7 +209,14 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                                                 key={idx}
                                                 style={{ fontWeight: 300 }}
                                             >
-                                                {crono.semester}: {crono.task}
+                                                {crono.semester}:{' '}
+                                                {crono.data.map((cron, i) => {
+                                                    return (
+                                                        <Text key={i}>
+                                                            {cron.task}
+                                                        </Text>
+                                                    )
+                                                })}
                                             </Text>
                                         )
                                     }
@@ -252,15 +259,37 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
                                 {protocol.sections.budget.expenses.map(
                                     (gasto, idx) => {
                                         return (
-                                            <Text
-                                                key={idx}
-                                                style={{ fontWeight: 300 }}
-                                            >
-                                                Detalle: {gasto.detail} | Tipo:{' '}
-                                                {gasto.type} | Monto: $
-                                                {gasto.amount} | Año:{' '}
-                                                {gasto.year}
-                                            </Text>
+                                            <>
+                                                <Text
+                                                    key={idx}
+                                                    style={{ fontWeight: 300 }}
+                                                >
+                                                    Tipo: {gasto.type}
+                                                </Text>
+                                                <Text
+                                                    key={idx}
+                                                    style={{ fontWeight: 300 }}
+                                                >
+                                                    {' '}
+                                                    {gasto.data.map(
+                                                        (gasto, i) => {
+                                                            return (
+                                                                <Text key={i}>
+                                                                    {
+                                                                        gasto.detail
+                                                                    }{' '}
+                                                                    | $
+                                                                    {
+                                                                        gasto.amount
+                                                                    }{' '}
+                                                                    |{' '}
+                                                                    {gasto.year}
+                                                                </Text>
+                                                            )
+                                                        }
+                                                    )}
+                                                </Text>
+                                            </>
                                         )
                                     }
                                 )}
