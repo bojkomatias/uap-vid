@@ -15,7 +15,8 @@ services:
         #Our container app name
         image: uapvid:latest
         build:
-        context: . #Compose will use this context to find a Dockerfile
+            context: . #Compose will use this context to find a Dockerfile
+            dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
         ports:
             - '3000:3000'
         networks:
