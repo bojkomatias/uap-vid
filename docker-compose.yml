@@ -2,13 +2,18 @@ version: '3'
 services:
     mongodb:
         image: mongo:latest
+        # TODO: Create a custom image of mongo (from  latest) that has the mongo-init.sh file in it and use that instead. The script will create a user with ONLY read/write access to the database.
         ports:
             - '27017:27017'
         volumes:
             - ~/apps/mongo-data:/data/db
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
+            MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGODB_ROOT_USERNAME
+            MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGODB_ROOT_PASSWORD
+            MONGO_DATABASE: main
+        secrets:
+            - MONGODB_ROOT_USERNAME
+            - MONGODB_ROOT_PASSWORD
         networks:
             - uap-vid-network
     uap-research:
@@ -19,6 +24,20 @@ services:
             dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
         ports:
             - '80:3000'
+        environment:
+            AZURE_AD_TENANT_ID: /run/secrets/AZURE_AD_TENANT_ID
+            AZURE_AD_CLIENT_ID: /run/secrets/AZURE_AD_CLIENT_ID
+            AZURE_AD_CLIENT_SECRET: /run/secrets/AZURE_AD_CLIENT_SECRET
+            NEXTURL: http://localhost:3000
+            NEXTAUTH_SECRET: /run/secrets/NEXTAUTH_SECRET
+            NEXTAUTH_URL: http://localhost:3000
+            DATABASE_URL: /run/secrets/DATABASE_URL
+        secrets:
+            - AZURE_AD_TENANT_ID
+            - AZURE_AD_CLIENT_ID
+            - AZURE_AD_CLIENT_SECRET
+            - NEXTAUTH_SECRET
+            - DATABASE_URL
         networks:
             - uap-vid-network
 networks:
