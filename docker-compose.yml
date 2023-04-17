@@ -16,6 +16,7 @@ services:
             - MONGODB_ROOT_PASSWORD
         networks:
             - uap-vid-network
+        restart: always
     uap-research:
         #Our container app name
         image: uapvid:latest
@@ -40,6 +41,7 @@ services:
             - DATABASE_URL
         networks:
             - uap-vid-network
+        restart: always
 networks:
     uap-vid-network:
         driver: bridge
