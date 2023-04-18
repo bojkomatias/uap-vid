@@ -1,6 +1,7 @@
 {
     "packageManager": "yarn@3.2.1",
     "private": true,
+    "target": "es2021",
     "scripts": {
         "dev": "next dev",
         "build": "next build",
