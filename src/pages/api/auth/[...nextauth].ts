@@ -1,14 +1,14 @@
 import { compare } from 'bcryptjs'
+import AzureADProvider from 'next-auth/providers/azure-ad'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import type { NextAuthOptions } from 'next-auth'
+import type { User } from '@prisma/client'
+import NextAuth from 'next-auth'
 import {
     updateUserByEmail,
     saveUser,
     findUserByEmail,
-} from '../../../repositories/user'
-import AzureADProvider from 'next-auth/providers/azure-ad'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import type { NextAuthOptions } from 'next-auth'
-import NextAuth from 'next-auth'
-import type { User } from '@prisma/client'
+} from '@repositories/user'
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -32,7 +32,8 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 //Find user with the email
-                const result = await findUserByEmail(credentials!.email)
+                if (!credentials) return null
+                const result = await findUserByEmail(credentials?.email)
 
                 //NextAuth maneja el error
                 if (!result) {
@@ -58,16 +59,16 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user }) => {
-            if (!user || !user.email || !user.name) return false
+            if (!user || !user.email) return false
             const userExist = await findUserByEmail(user.email)
             if (userExist) {
-                await updateUserByEmail(user.email!, {
+                await updateUserByEmail(user.email, {
                     ...userExist,
                     lastLogin: new Date(),
                 })
             } else {
                 await saveUser({
-                    name: user.name,
+                    name: user.name!,
                     email: user.email,
                     image: user.image,
                     role: 'RESEARCHER',
@@ -77,8 +78,8 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: async ({ token, user }) => {
-            if (user) {
-                const userFromDb = await findUserByEmail(user.email!)
+            if (user && user.email) {
+                const userFromDb = await findUserByEmail(user.email)
                 token.user = userFromDb
             }
             return token
@@ -97,3 +98,5 @@ export const authOptions: NextAuthOptions = {
 }
 
 export default NextAuth(authOptions)
+
+// export { handler as GET, handler as POST }

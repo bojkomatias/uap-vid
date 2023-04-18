@@ -27,7 +27,15 @@ export const initialSectionValues: Sections = {
         modality: '',
     },
     budget: {
-        expenses: [{ type: '', detail: '', amount: 0, year: '' }],
+        expenses: [
+            { type: 'Insumos', data: [{ detail: '', amount: 0, year: '' }] },
+            { type: 'Libros', data: [{ detail: '', amount: 0, year: '' }] },
+            {
+                type: 'Materiales de Impresión',
+                data: [{ detail: '', amount: 0, year: '' }],
+            },
+            { type: 'Viajes', data: [{ detail: '', amount: 0, year: '' }] },
+        ],
     },
     description: {
         discipline: '',

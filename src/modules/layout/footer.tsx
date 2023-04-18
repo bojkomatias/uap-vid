@@ -9,9 +9,9 @@ export const Footer = () => (
             </a>
         </div>
         <div className="mt-2 flex gap-1">
-            <div className="font-thin">WebApp desarrollada por </div>
+            <div className="font-light">WebApp desarrollada por </div>
             <a href="/">
-                <p className="font-thin transition-all duration-200 hover:ml-1 hover:rotate-[7deg] hover:scale-125 hover:font-bold">
+                <p className="font-light transition-all duration-200 hover:ml-1 hover:rotate-[7deg] hover:scale-125 hover:font-bold">
                     TPC
                 </p>
             </a>

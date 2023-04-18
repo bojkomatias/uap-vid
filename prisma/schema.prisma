@@ -80,9 +80,13 @@ type ProtocolSectionsBudget {
 }
 
 type ProtocolSectionsBudgetExpenses {
+  type String
+  data ProtocolSectionsBudgetExpensesData[]
+}
+
+type ProtocolSectionsBudgetExpensesData {
   amount Float
   detail String
-  type   String
   year   String
 }
 
@@ -104,7 +108,11 @@ type ProtocolSectionsDuration {
 
 type ProtocolSectionsDurationChronogram {
   semester String
-  task     String
+  data     ProtocolSectionsDurationChronogramData[]
+}
+
+type ProtocolSectionsDurationChronogramData {
+  task String
 }
 
 type ProtocolSectionsIdentification {

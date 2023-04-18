@@ -20,19 +20,23 @@ const DurationView = ({ data }: DurationViewProps) => {
     ]
     const tableData = {
         title: 'Cronograma',
-        values: data.chronogram.reduce((newVal: ListRowValues[], item) => {
-            newVal.push([
-                {
-                    up: 'Semestre',
-                    down: item.semester,
-                },
-                {
-                    up: 'Tarea',
-                    down: item.task,
-                },
-            ])
-            return newVal
-        }, []),
+        deepValues: data.chronogram.map((item) => {
+            return {
+                groupLabel: item.semester,
+                data: item.data.reduce((newVal: ListRowValues[], item) => {
+                    newVal.push([
+                        {
+                            up: 'Tarea',
+                            down: item.task,
+                            inverted: true,
+                        },
+                        // Fake last to override last:class
+                        { up: '', down: '' },
+                    ])
+                    return newVal
+                }, []),
+            }
+        }),
     }
     return (
         <SectionViewer

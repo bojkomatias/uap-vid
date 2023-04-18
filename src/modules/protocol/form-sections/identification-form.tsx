@@ -43,7 +43,7 @@ export function IdentificationForm() {
                 <InputList
                     path={`${path}team`}
                     label="miembros de equipo"
-                    insertedItemFormat={{
+                    newLeafItemValue={{
                         role: '',
                         last_name: '',
                         name: '',

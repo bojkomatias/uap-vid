@@ -43,7 +43,7 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
                                 {item.sections.identification.title}
                                 <dl>
-                                    <dd className="truncate text-xs font-thin text-gray-500 lg:text-sm">
+                                    <dd className="truncate text-xs font-light text-gray-500 lg:text-sm">
                                         {dateFormatter.format(item.createdAt)}
                                     </dd>
                                     <dd className="truncate text-gray-600 lg:hidden">
@@ -74,7 +74,7 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                                   )
                                                   .join(' - ')}
                                     </dd>
-                                    <dd className="truncate font-thin text-gray-500">
+                                    <dd className="truncate font-light text-gray-500">
                                         {item.sections.identification.career}
                                     </dd>
                                 </dl>

@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import clsx from 'clsx'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export default async function Navigation({
     children,

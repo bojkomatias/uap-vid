@@ -2,7 +2,7 @@
 import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
 import { useNotifications } from '@mantine/notifications'
-import type { Convocatory} from '@utils/zod';
+import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
@@ -80,8 +80,8 @@ export function ConvocatoryForm({
     return (
         <form
             onSubmit={form.onSubmit(
-                (values) => upsertConvocatory(values),
-                (errors) => console.log(errors)
+                (values) => upsertConvocatory(values)
+                // (errors) => console.log(errors)
             )}
             className="mx-auto mt-8 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
