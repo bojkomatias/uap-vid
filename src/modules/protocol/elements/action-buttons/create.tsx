@@ -31,7 +31,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
     }
     if (role === Role.ADMIN || Role.SECRETARY) {
         const convocatories = await getAllConvocatories()
-        if (!convocatories) return null
+        if (!convocatories || convocatories.length === 0) return null
         const current = await getCurrentConvocatory()
         return (
             <MultipleButton
