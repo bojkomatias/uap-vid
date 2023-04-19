@@ -258,7 +258,7 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-    assignment: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    assignment: z.string().optional(),
     career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
@@ -286,7 +286,17 @@ export const IdentificationSchema = z.object({
                     .min(1, { message: 'El campo no puede estar vacío' }),
             })
         )
-        .array(),
+        .array()
+        .min(1, { message: 'Debe tener al menos un integrante' })
+        .refine((value) => {
+            //Al menos un integrante debe tener el rol de Director,
+            const hasDirector = value.some(team => team.role === 'Director')
+            console.log(hasDirector);
+
+            if (!hasDirector) return false
+            return true
+        }, { message: 'Debe tener al menos un Director' })
+
 })
 
 /////////////////////////////////////////
