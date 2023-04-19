@@ -7,7 +7,7 @@ import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
-import type { Review, ReviewVerdict, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -30,13 +30,10 @@ export default function ReviewForm({
     const notifications = useNotifications()
 
     const addReview = useCallback(
-        async (data: string, verdict: ReviewVerdict) => {
+        async (review: Review) => {
             const res = await fetch(`/api/review/${review.id}`, {
                 method: 'PUT',
-                body: JSON.stringify({
-                    data,
-                    verdict,
-                }),
+                body: JSON.stringify(review),
             })
 
             if (res.status == 200) {
@@ -63,7 +60,7 @@ export default function ReviewForm({
                 })
             }
         },
-        [notifications, review.id]
+        [notifications]
     )
     return (
         <ItemContainer title="Realizar revisión">
@@ -94,7 +91,17 @@ export default function ReviewForm({
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    addReview(form.values.data, form.values.verdict)
+                    addReview({
+                        id: form.values.id,
+                        data: form.values.data,
+                        verdict: form.values.verdict,
+                        createdAt: form.values.createdAt,
+                        updatedAt: form.values.updatedAt,
+                        type: form.values.type,
+                        protocolId: form.values.protocolId,
+                        reviewerId: form.values.reviewerId,
+                        revised: form.values.revised,
+                    })
                 }}
                 className={editing === '1' ? 'block' : 'hidden'}
             >
