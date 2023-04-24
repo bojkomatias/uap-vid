@@ -19,6 +19,9 @@
     .label {
         @apply pointer-events-none select-none p-1 text-xs font-normal uppercase text-gray-500;
     }
+    .error {
+        @apply pl-3 pt-1 text-xs font-semibold text-error-500;
+    }
 }
 
 /* ===== Scrollbar CSS ===== */

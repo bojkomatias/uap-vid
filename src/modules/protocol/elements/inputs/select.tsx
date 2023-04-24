@@ -66,7 +66,7 @@ export default function Select({
                         </div>
                     </Combobox.Button>
                     {form.getInputProps(path).error ? (
-                        <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
+                        <p className="error">
                             *{form.getInputProps(path).error}
                         </p>
                     ) : null}
