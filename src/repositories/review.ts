@@ -74,7 +74,7 @@ export const updateReview = async (data: Review) => {
         })
         return review
     } catch (error) {
-        return console.log(error)
+        return null
     }
 }
 

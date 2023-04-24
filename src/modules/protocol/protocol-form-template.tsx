@@ -1,6 +1,14 @@
 'use client'
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
-import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
+import {
+    AlertCircle,
+    Check,
+    ChevronLeft,
+    ChevronRight,
+    CircleCheck,
+    CircleDashed,
+    X,
+} from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -21,6 +29,7 @@ import {
     PublicationForm,
     BibliographyForm,
 } from '@protocol/form-sections'
+import InfoTooltip from './elements/tooltip'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <IdentificationForm />,
@@ -117,6 +126,38 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         [notifications, router, section]
     )
 
+    const SegmentLabel = useCallback(
+        ({
+            path,
+            label,
+            value,
+        }: {
+            path: string
+            label: string
+            value: string
+        }) => (
+            <span className={'flex gap-1'}>
+                <span
+                    className={
+                        !form.isValid(path) && section !== value
+                            ? 'opacity-50'
+                            : ''
+                    }
+                >
+                    {label}
+                </span>
+                {!form.isValid(path) ? (
+                    form.isDirty(path) ? (
+                        <AlertCircle className="h-4 w-4 stroke-warning-500 stroke-2" />
+                    ) : null
+                ) : (
+                    <CircleCheck className="h-4 w-4 stroke-success-500 stroke-2" />
+                )}
+            </span>
+        ),
+        [form, section]
+    )
+
     return (
         <ProtocolProvider form={form}>
             <form
@@ -153,6 +194,29 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 }}
                 className="w-full px-4"
             >
+                <InfoTooltip className="fixed">
+                    <div>
+                        <h4>Indicadores de sección</h4>
+                        <p>
+                            <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
+                            Indica que la sección se encuentra completada y sin
+                            errores. Cuando todas las secciones tengan este
+                            indicador, se permite publicar un protocolo.
+                        </p>
+                        <p>
+                            <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
+                            Indica que la sección fue modificada pero necesita
+                            ser completada correctamente, falta algún campo
+                            obligatorio o tiene algún error.
+                        </p>
+                        <p>
+                            <CircleDashed className="mr-2 inline h-4 w-4 stroke-gray-500 opacity-40" />
+                            Si la sección se encuentra con menor opacidad, es
+                            porque no fue modificada en la session activa, pero
+                            se encuentra incompleta.
+                        </p>
+                    </div>
+                </InfoTooltip>
                 <motion.div
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -163,19 +227,91 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         value={section}
                         onChange={setSection}
                         data={[
-                            { label: 'Identificación', value: '0' },
-                            { label: 'Duración', value: '1' },
-                            { label: 'Presupuesto', value: '2' },
-                            { label: 'Descripción', value: '3' },
-                            { label: 'Introducción', value: '4' },
-                            { label: 'Metodología', value: '5' },
-                            { label: 'Publicación', value: '6' },
-                            { label: 'Bibliografía', value: '7' },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.identification'}
+                                        label={'Identificación'}
+                                        value={'0'}
+                                    />
+                                ),
+                                value: '0',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.duration'}
+                                        label={'Duración'}
+                                        value={'1'}
+                                    />
+                                ),
+                                value: '1',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.budget'}
+                                        label={'Presupuesto'}
+                                        value={'2'}
+                                    />
+                                ),
+                                value: '2',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.description'}
+                                        label={'Descripción'}
+                                        value={'3'}
+                                    />
+                                ),
+                                value: '3',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.introduction'}
+                                        label={'Introducción'}
+                                        value={'4'}
+                                    />
+                                ),
+                                value: '4',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.methodology'}
+                                        label={'Metodología'}
+                                        value={'5'}
+                                    />
+                                ),
+                                value: '5',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.publication'}
+                                        label={'Publicación'}
+                                        value={'6'}
+                                    />
+                                ),
+                                value: '6',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.bibliography'}
+                                        label={'Bibliografía'}
+                                        value={'7'}
+                                    />
+                                ),
+                                value: '7',
+                            },
                         ]}
                         classNames={{
                             root: 'bg-gray-50 border rounded',
-                            label: 'uppercase text-xs px-2 py-1 font-light',
-                            indicator: 'bg-primary font-semibold',
+                            label: 'uppercase text-xs px-2 py-1 font-regular rounded flex gap-1',
+                            indicator: 'bg-primary rounded',
                         }}
                         color="blue"
                         transitionDuration={300}

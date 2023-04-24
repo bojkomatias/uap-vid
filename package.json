@@ -32,10 +32,11 @@
         "framer-motion": "^6.5.1",
         "fuzzysort": "^2.0.4",
         "mongodb": "^4.15.0",
-        "next": "latest",
+        "next": "13.3.0",
         "next-auth": "^4.22.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "sharp": "^0.32.0",
         "tabler-icons-react": "^1.56.0",
         "zod": "^3.21.4"
     },
