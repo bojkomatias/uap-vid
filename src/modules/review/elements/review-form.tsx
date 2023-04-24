@@ -108,7 +108,7 @@ export default function ReviewForm({
                 <label className="label">Observación</label>
                 <Tiptap {...form.getInputProps('data')} />
                 {form.getInputProps('data').error ? (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
+                    <p className="error">
                         *{form.getInputProps('data').error}
                     </p>
                 ) : null}
