@@ -1,6 +1,13 @@
 'use client'
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
-import { Check, ChevronLeft, ChevronRight, X } from 'tabler-icons-react'
+import {
+    AlertCircle,
+    Check,
+    ChevronLeft,
+    ChevronRight,
+    CircleCheck,
+    X,
+} from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -117,6 +124,38 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         [notifications, router, section]
     )
 
+    const SegmentLabel = useCallback(
+        ({
+            path,
+            label,
+            value,
+        }: {
+            path: string
+            label: string
+            value: string
+        }) => (
+            <span className={'flex gap-1'}>
+                <span
+                    className={
+                        !form.isValid(path) && section !== value
+                            ? 'opacity-50'
+                            : ''
+                    }
+                >
+                    {label}
+                </span>
+                {!form.isValid(path) ? (
+                    form.isDirty(path) ? (
+                        <AlertCircle className="h-4 w-4 stroke-warning-500 stroke-2" />
+                    ) : null
+                ) : (
+                    <CircleCheck className="h-4 w-4 stroke-success-500 stroke-2" />
+                )}
+            </span>
+        ),
+        [form, section]
+    )
+
     return (
         <ProtocolProvider form={form}>
             <form
@@ -163,19 +202,91 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         value={section}
                         onChange={setSection}
                         data={[
-                            { label: 'Identificación', value: '0' },
-                            { label: 'Duración', value: '1' },
-                            { label: 'Presupuesto', value: '2' },
-                            { label: 'Descripción', value: '3' },
-                            { label: 'Introducción', value: '4' },
-                            { label: 'Metodología', value: '5' },
-                            { label: 'Publicación', value: '6' },
-                            { label: 'Bibliografía', value: '7' },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.identification'}
+                                        label={'Identificación'}
+                                        value={'0'}
+                                    />
+                                ),
+                                value: '0',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.duration'}
+                                        label={'Duración'}
+                                        value={'1'}
+                                    />
+                                ),
+                                value: '1',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.budget'}
+                                        label={'Presupuesto'}
+                                        value={'2'}
+                                    />
+                                ),
+                                value: '2',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.description'}
+                                        label={'Descripción'}
+                                        value={'3'}
+                                    />
+                                ),
+                                value: '3',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.introduction'}
+                                        label={'Introducción'}
+                                        value={'4'}
+                                    />
+                                ),
+                                value: '4',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.methodology'}
+                                        label={'Metodología'}
+                                        value={'5'}
+                                    />
+                                ),
+                                value: '5',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.publication'}
+                                        label={'Publicación'}
+                                        value={'6'}
+                                    />
+                                ),
+                                value: '6',
+                            },
+                            {
+                                label: (
+                                    <SegmentLabel
+                                        path={'sections.bibliography'}
+                                        label={'Bibliografía'}
+                                        value={'7'}
+                                    />
+                                ),
+                                value: '7',
+                            },
                         ]}
                         classNames={{
                             root: 'bg-gray-50 border rounded',
-                            label: 'uppercase text-xs px-2 py-1 font-light',
-                            indicator: 'bg-primary font-semibold',
+                            label: 'uppercase text-xs px-2 py-1 font-regular rounded flex gap-1',
+                            indicator: 'bg-primary rounded',
                         }}
                         color="blue"
                         transitionDuration={300}
