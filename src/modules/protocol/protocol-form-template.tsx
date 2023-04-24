@@ -6,6 +6,7 @@ import {
     ChevronLeft,
     ChevronRight,
     CircleCheck,
+    CircleDashed,
     X,
 } from 'tabler-icons-react'
 import { useNotifications } from '@mantine/notifications'
@@ -28,6 +29,7 @@ import {
     PublicationForm,
     BibliographyForm,
 } from '@protocol/form-sections'
+import InfoTooltip from './elements/tooltip'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <IdentificationForm />,
@@ -192,6 +194,29 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 }}
                 className="w-full px-4"
             >
+                <InfoTooltip className="fixed">
+                    <div>
+                        <h4>Indicadores de sección</h4>
+                        <p>
+                            <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
+                            Indica que la sección se encuentra completada y sin
+                            errores. Cuando todas las secciones tengan este
+                            indicador, se permite publicar un protocolo.
+                        </p>
+                        <p>
+                            <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
+                            Indica que la sección fue modificada pero necesita
+                            ser completada correctamente, falta algún campo
+                            obligatorio o tiene algún error.
+                        </p>
+                        <p>
+                            <CircleDashed className="mr-2 inline h-4 w-4 stroke-gray-500 opacity-40" />
+                            Si la sección se encuentra con menor opacidad, es
+                            porque no fue modificada en la session activa, pero
+                            se encuentra incompleta.
+                        </p>
+                    </div>
+                </InfoTooltip>
                 <motion.div
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
