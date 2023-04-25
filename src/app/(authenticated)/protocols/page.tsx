@@ -14,6 +14,7 @@ import fuzzysort from 'fuzzysort'
 import type { Protocol } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
+import ProtocolCsv from '@protocol/protocol-csv'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -58,6 +59,24 @@ export default async function Page({
               })
         : protocols
 
+    const dataForCsv = protocols?.map((protocol) => {
+        return {
+            'Numero del protocolo': protocol.id,
+            Título: protocol.sections.identification.title,
+            Integrantes: protocol.sections.identification.team.map((member) => {
+                return ` ${member.name} ${member.last_name} - ${member.role}, Horas: ${member.hours}`
+            }),
+            Período: protocol.sections.duration.duration,
+            Presupuesto: protocol.sections.budget.expenses.map((expense) => {
+                return [
+                    ` ${expense.type}: ${expense.data.map((d) => {
+                        return `${d.detail}: $${d.amount}, año: ${d.year}`
+                    })}`,
+                ]
+            }),
+        }
+    })
+
     return (
         <>
             <PageHeading title="Lista de proyectos de investigación" />
@@ -78,7 +97,11 @@ export default async function Page({
             </div>
 
             <SearchBar />
-
+            {JSON.stringify(dataForCsv)}
+            <ProtocolCsv
+                csvData={dataForCsv}
+                title="Descargar datos en CSV"
+            ></ProtocolCsv>
             <Table items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
