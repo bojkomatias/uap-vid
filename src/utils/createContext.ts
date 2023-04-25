@@ -13,12 +13,11 @@ export const initialSectionValues: Sections = {
         team: [
             {
                 hours: 0,
-                last_name: "",
-                name: "",
-                role: "Director",
-            }
-        ]
-        ,
+                last_name: '',
+                name: '',
+                role: 'Director',
+            },
+        ],
         title: '',
     },
     duration: {
@@ -35,6 +34,11 @@ export const initialSectionValues: Sections = {
                 data: [{ detail: '', amount: 0, year: '' }],
             },
             { type: 'Viajes', data: [{ detail: '', amount: 0, year: '' }] },
+            {
+                type: 'Gastos por publicación',
+                data: [{ detail: '', amount: 0, year: '' }],
+            },
+            { type: 'Otros', data: [{ detail: '', amount: 0, year: '' }] },
         ],
     },
     description: {
