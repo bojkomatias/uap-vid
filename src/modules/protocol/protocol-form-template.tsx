@@ -192,36 +192,34 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         : null
                     upsertProtocol(form.values)
                 }}
-                className="w-full px-4"
+                className="w-full px-4 py-4"
             >
-                <InfoTooltip className="fixed">
-                    <div>
-                        <h4>Indicadores de sección</h4>
-                        <p>
-                            <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
-                            Indica que la sección se encuentra completada y sin
-                            errores. Cuando todas las secciones tengan este
-                            indicador, se permite publicar un protocolo.
-                        </p>
-                        <p>
-                            <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
-                            Indica que la sección fue modificada pero necesita
-                            ser completada correctamente, falta algún campo
-                            obligatorio o tiene algún error.
-                        </p>
-                        <p>
-                            <CircleDashed className="mr-2 inline h-4 w-4 stroke-gray-500 opacity-40" />
-                            Si la sección se encuentra con menor opacidad, es
-                            porque no fue modificada en la session activa, pero
-                            se encuentra incompleta.
-                        </p>
-                    </div>
+                <InfoTooltip>
+                    <h4>Indicadores de sección</h4>
+                    <p>
+                        <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
+                        Indica que la sección se encuentra completada y sin
+                        errores. Cuando todas las secciones tengan este
+                        indicador, se permite publicar un protocolo.
+                    </p>
+                    <p>
+                        <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
+                        Indica que la sección fue modificada pero necesita ser
+                        completada correctamente, falta algún campo obligatorio
+                        o tiene algún error.
+                    </p>
+                    <p>
+                        <CircleDashed className="mr-2 inline h-4 w-4 stroke-gray-500 opacity-40" />
+                        Si la sección se encuentra con menor opacidad, es porque
+                        no fue modificada en la session activa, pero se
+                        encuentra incompleta.
+                    </p>
                 </InfoTooltip>
                 <motion.div
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="mx-auto my-6 w-fit max-w-full overflow-auto py-2"
+                    className="mx-auto mb-6 w-fit max-w-full overflow-auto py-2"
                 >
                     <SegmentedControl
                         value={section}

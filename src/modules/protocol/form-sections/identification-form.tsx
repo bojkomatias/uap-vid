@@ -64,6 +64,7 @@ export function IdentificationForm() {
                                 'Profesional Adjunto',
                                 'Profesional Principal',
                                 'Becario CONICET',
+                                'A definir',
                             ],
                         },
                         {

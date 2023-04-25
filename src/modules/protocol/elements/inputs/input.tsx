@@ -1,4 +1,5 @@
 import { useProtocolContext } from '@utils/createContext'
+import clsx from 'clsx'
 import type { PropsWithChildren } from 'react'
 
 const Input = ({
@@ -14,7 +15,13 @@ const Input = ({
 
     return (
         <div>
-            <label className="label">{label}</label>
+            <label
+                className={clsx('label required', {
+                    'after:text-error-500': form.getInputProps(path).error,
+                })}
+            >
+                {label}
+            </label>
             <input
                 disabled={disabled}
                 {...form.getInputProps(path)}
