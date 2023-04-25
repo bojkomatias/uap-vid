@@ -10,12 +10,12 @@ export default function InfoTooltip({
     className?: string
 }) {
     return (
-        <div className="group relative pointer-events-none flex justify-end h-0">
-            <InfoCircle className="mt-3.5 h-4 w-4 cursor-help text-base-600 group-hover:scale-105 pointer-events-auto" />
+        <div className="group pointer-events-none relative flex h-0 justify-end">
+            <InfoCircle className="pointer-events-auto mt-3.5 h-4 w-4 cursor-help text-base-600 group-hover:scale-105" />
 
             <div
                 className={clsx(
-                    'delay-75 ring-1 ring-gray-300 ring-inset rounded inset-auto mr-6 prose text-xs prose-zinc z-10 opacity-0 bg-white p-3 shadow-xl shadow-gray-400 transition group-hover:opacity-100 prose-p:pl-2 group-hover:delay-500',
+                    'prose prose-zinc inset-auto z-10 mr-6 min-w-[20vw] rounded bg-white p-3 text-xs opacity-0 shadow-xl shadow-gray-400 ring-1 ring-inset ring-gray-300 transition delay-75 group-hover:opacity-100 group-hover:delay-500 prose-p:pl-2',
                     className ?? 'absolute'
                 )}
             >

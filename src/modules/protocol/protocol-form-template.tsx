@@ -192,7 +192,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                         : null
                     upsertProtocol(form.values)
                 }}
-                className="w-full px-4"
+                className="w-full px-4 py-4"
             >
                 <InfoTooltip>
                     <div>
@@ -221,7 +221,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="mx-auto my-6 w-fit max-w-full overflow-auto py-2"
+                    className="mx-auto mb-6 w-fit max-w-full overflow-auto py-2"
                 >
                     <SegmentedControl
                         value={section}
