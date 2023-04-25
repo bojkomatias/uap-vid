@@ -194,7 +194,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 }}
                 className="w-full px-4"
             >
-                <InfoTooltip className="fixed">
+                <InfoTooltip>
                     <div>
                         <h4>Indicadores de sección</h4>
                         <p>
