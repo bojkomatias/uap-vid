@@ -197,9 +197,7 @@ export const BudgetSchema = z.object({
                                     'Este campo debe ser numérico',
                             })
                             .positive({ message: 'Debe ser mayor que cero' }),
-                        year: z.string().min(1, {
-                            message: 'El campo no puede estar vacío',
-                        }),
+                        year: z.string(),
                     })
                     .array(),
             })
@@ -217,11 +215,11 @@ export const DescriptionSchema = z.object({
     line: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     technical: z
         .string()
-        .min(500, {
+        .min(300, {
             message:
                 'El resumen técnico debe contener entre 150 - 250 palabras',
         })
-        .max(1000, {
+        .max(1500, {
             message:
                 'El resumen técnico debe contener entre 150 - 250 palabras',
         }),
@@ -245,11 +243,9 @@ export const DurationSchema = z.object({
                     .min(1, { message: 'El campo no puede estar vacío' }),
                 data: z
                     .object({
-                        task: z
-                            .string()
-                            .min(1, {
-                                message: 'El campo no puede estar vació',
-                            }),
+                        task: z.string().min(1, {
+                            message: 'El campo no puede estar vació',
+                        }),
                     })
                     .array(),
             })
