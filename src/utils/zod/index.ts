@@ -197,9 +197,7 @@ export const BudgetSchema = z.object({
                                     'Este campo debe ser numérico',
                             })
                             .positive({ message: 'Debe ser mayor que cero' }),
-                        year: z.string().min(1, {
-                            message: 'El campo no puede estar vacío',
-                        }),
+                        year: z.string(),
                     })
                     .array(),
             })
