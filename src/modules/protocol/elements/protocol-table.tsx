@@ -40,7 +40,7 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
                         <tr key={item.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
+                            <td className="truncate py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
                                 {item.sections.identification.title}
                                 <dl>
                                     <dd className="truncate text-xs font-light text-gray-500 lg:text-sm">
@@ -60,7 +60,7 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                     </dd>
                                 </dl>
                             </td>
-                            <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            <td className="hidden max-w-xs truncate px-3 py-4 text-sm text-gray-500 lg:table-cell">
                                 <dl>
                                     <dd className="truncate text-gray-700">
                                         {item.sections.identification.sponsor
