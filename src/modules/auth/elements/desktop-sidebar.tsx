@@ -1,12 +1,5 @@
 'use client'
-import {
-    CalendarEvent,
-    ClipboardList,
-    List,
-    ListDetails,
-    ReportSearch,
-    Users,
-} from 'tabler-icons-react'
+import { CalendarEvent, List, Users } from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
@@ -73,24 +66,24 @@ export const navigation = [
         href: '/protocols',
         scope: ACCESS.PROTOCOLS,
     },
-    {
-        name: 'Lista base de datos evaluadores',
-        icon: ClipboardList,
-        href: '#',
-        scope: ACCESS.USERS,
-    },
-    {
-        name: 'Seguimiento de proyectos aprobados',
-        icon: ListDetails,
-        href: '#',
-        scope: ACCESS.USERS,
-    },
-    {
-        name: 'Información de publicaciones científicas',
-        icon: ReportSearch,
-        href: '#',
-        scope: ACCESS.USERS,
-    },
+    // {
+    //     name: 'Lista base de datos evaluadores',
+    //     icon: ClipboardList,
+    //     href: '#',
+    //     scope: ACCESS.USERS,
+    // },
+    // {
+    //     name: 'Seguimiento de proyectos aprobados',
+    //     icon: ListDetails,
+    //     href: '#',
+    //     scope: ACCESS.USERS,
+    // },
+    // {
+    //     name: 'Información de publicaciones científicas',
+    //     icon: ReportSearch,
+    //     href: '#',
+    //     scope: ACCESS.USERS,
+    // },
     {
         name: 'Lista de usuarios',
         icon: Users,
