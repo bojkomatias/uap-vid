@@ -22,11 +22,7 @@ export default function IdentificationView({ data }: IdentificationProps) {
         },
         {
             title: 'Ente Patrocinante',
-            value: data.sponsor.reduce((allSponsors, sponsor) => {
-                if (allSponsors === '') allSponsors += `${sponsor}`
-                allSponsors += `, ${sponsor}`
-                return allSponsors
-            }, ''),
+            value: data.sponsor.join(' | '),
         },
     ]
     const tableData = {
