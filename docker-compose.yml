@@ -45,3 +45,18 @@ services:
 networks:
     uap-vid-network:
         driver: bridge
+secrets:
+    AZURE_AD_TENANT_ID:
+        file: ./secrets/AZURE_AD_TENANT_ID
+    AZURE_AD_CLIENT_ID:
+        file: ./secrets/AZURE_AD_CLIENT_ID
+    AZURE_AD_CLIENT_SECRET:
+        file: ./secrets/AZURE_AD_CLIENT_SECRET
+    NEXTAUTH_SECRET:
+        file: ./secrets/NEXTAUTH_SECRET
+    DATABASE_URL:
+        file: ./secrets/DATABASE_URL
+    MONGODB_ROOT_USERNAME:
+        file: ./secrets/MONGODB_ROOT_USERNAME
+    MONGODB_ROOT_PASSWORD:
+        file: ./secrets/MONGODB_ROOT_PASSWORD
