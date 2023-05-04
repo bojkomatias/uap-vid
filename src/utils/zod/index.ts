@@ -41,7 +41,13 @@ const ActionSchema = z.enum([
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
 
-const AccessSchema = z.enum(['PROTOCOLS', 'USERS', 'REVIEWS', 'CONVOCATORIES'])
+const AccessSchema = z.enum([
+    'PROTOCOLS',
+    'USERS',
+    'REVIEWS',
+    'CONVOCATORIES',
+    'ACADEMIC_UNITS',
+])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
 
