@@ -1,5 +1,10 @@
 'use client'
-import { CalendarEvent, List, Users } from 'tabler-icons-react'
+import {
+    BuildingCommunity,
+    CalendarEvent,
+    List,
+    Users,
+} from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
@@ -85,15 +90,21 @@ export const navigation = [
     //     scope: ACCESS.USERS,
     // },
     {
-        name: 'Lista de usuarios',
-        icon: Users,
-        href: '/users',
-        scope: ACCESS.USERS,
-    },
-    {
         name: 'Panel de convocatorias',
         icon: CalendarEvent,
         href: '/convocatories',
         scope: ACCESS.CONVOCATORIES,
+    },
+    {
+        name: 'Unidades académicas',
+        icon: BuildingCommunity,
+        href: '/academic-units',
+        scope: ACCESS.ACADEMIC_UNITS,
+    },
+    {
+        name: 'Lista de usuarios',
+        icon: Users,
+        href: '/users',
+        scope: ACCESS.USERS,
     },
 ]
