@@ -7,7 +7,8 @@ import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
-import { Review, ReviewType, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client';
+import { ReviewType } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -65,8 +66,6 @@ export default function ReviewForm({
         [notifications]
     )
 
-    console.log(form.getInputProps('data'))
-
     return (
         <ItemContainer title="Realizar revisión">
             <SegmentedControl
@@ -90,15 +89,14 @@ export default function ReviewForm({
                 {review.type === ReviewType.METHODOLOGICAL && (
                     <ReviewMethodologicalInstructions />
                 )}
-                {review.type === ReviewType.SCIENTIFIC_EXTERNAL ||
-                    (review.type === ReviewType.SCIENTIFIC_INTERNAL && (
-                        <ReviewScientificInstructions />
-                    ))}
+                {(review.type === ReviewType.SCIENTIFIC_EXTERNAL ||
+                    review.type === ReviewType.SCIENTIFIC_INTERNAL) && (
+                    <ReviewScientificInstructions />
+                )}
                 <ReviewItem
                     review={{ ...form.values, reviewer: review.reviewer }}
                     role={review.reviewer.role}
                 />
-                <pre>{JSON.stringify(review, null, 2)}</pre>
             </ul>
 
             <form

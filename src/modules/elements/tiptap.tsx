@@ -62,7 +62,7 @@ const Tiptap = ({
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
-                onBlur={() => console.log('asdasd')}
+                onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
         </div>
@@ -247,12 +247,13 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
             >
                 <ArrowBackUp className="h-4 w-5" />
             </button>
-            <button
+            {/* I let this here just in case we decided to try aggain this approach */}
+            {/* <button
                 onClick={() => editor.chain().focus().toggleTaskList().run()}
                 className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
             >
                 💸
-            </button>
+            </button> */}
         </div>
     )
 }
