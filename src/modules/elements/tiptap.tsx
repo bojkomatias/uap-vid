@@ -3,6 +3,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import TaskList from '@tiptap/extension-task-list'
 import clsx from 'clsx'
 import {
     ArrowBackUp,
@@ -19,6 +20,7 @@ import {
     AlignCenter,
     AlignJustified,
 } from 'tabler-icons-react'
+import TaskItem from '@tiptap/extension-task-item'
 const Tiptap = ({
     value,
     editable,
@@ -35,6 +37,16 @@ const Tiptap = ({
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
+            TaskList.configure({
+                HTMLAttributes: {
+                    class: 'checkbox',
+                },
+            }),
+            TaskItem.configure({
+                HTMLAttributes: {
+                    class: 'checkbox-item',
+                },
+            }),
         ],
         editorProps: {
             attributes: {
@@ -50,7 +62,7 @@ const Tiptap = ({
             <MenuBar editor={editor} />
             <EditorContent
                 value={value}
-                onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
+                onBlur={() => console.log('asdasd')}
                 editor={editor}
             />
         </div>
@@ -234,6 +246,12 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 disabled={!editor.can().chain().focus().undo().run()}
             >
                 <ArrowBackUp className="h-4 w-5" />
+            </button>
+            <button
+                onClick={() => editor.chain().focus().toggleTaskList().run()}
+                className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
+            >
+                💸
             </button>
         </div>
     )
