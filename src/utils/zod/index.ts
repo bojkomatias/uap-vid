@@ -300,8 +300,6 @@ export const IdentificationSchema = z.object({
                 const hasDirector = value.some(
                     (team) => team.role === 'Director'
                 )
-                console.log(hasDirector)
-
                 if (!hasDirector) return false
                 return true
             },

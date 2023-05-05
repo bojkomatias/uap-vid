@@ -9,7 +9,6 @@ export default async function AcademicUnitsTable({
         secretaries: User[]
     })[]
 }) {
-    console.log(academicUnits)
     const secretaries = await getAllSecretaries()
     if (!secretaries)
         return <div>No hay secretarios cargados en el sistema</div>
@@ -50,6 +49,7 @@ export default async function AcademicUnitsTable({
                                 <SecretaryMultipleSelect
                                     currentSecretaries={unit.secretaries}
                                     secretaries={secretaries}
+                                    unitId={unit.id}
                                 />
                             </td>
                         </tr>

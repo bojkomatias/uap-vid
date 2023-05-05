@@ -15,9 +15,10 @@ export default async function Page() {
 
     return (
         <>
-            <PageHeading title="Asignación de secretarios a unidades académicas" />
+            <PageHeading title="Asignación de Secretarios de Investigación" />
 
             {academicUnits && academicUnits.length > 0 ? (
+                // @ts-expect-error
                 <AcademicUnitsTable academicUnits={academicUnits} />
             ) : (
                 'No se encontraron unidades académicas'

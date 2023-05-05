@@ -10,3 +10,20 @@ export const getAllAcademicUnits = async () => {
         return null
     }
 }
+
+export const updateAcademicUnit = async (
+    id: string,
+    secretariesIds: string[]
+) => {
+    try {
+        const unit = await prisma.academicUnit.update({
+            where: {
+                id,
+            },
+            data: { secretariesIds },
+        })
+        return unit
+    } catch (error) {
+        return null
+    }
+}
