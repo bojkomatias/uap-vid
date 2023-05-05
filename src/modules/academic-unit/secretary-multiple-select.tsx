@@ -1,6 +1,5 @@
 'use client'
 import { Combobox } from '@headlessui/react'
-import { useForm } from '@mantine/form'
 import { useNotifications } from '@mantine/notifications'
 import type { User } from '@prisma/client'
 import clsx from 'clsx'
@@ -16,12 +15,10 @@ export function SecretaryMultipleSelect({
 }: {
     unitId: string
     secretaries: User[]
-    currentSecretaries: User[]
+    currentSecretaries: string[]
 }) {
     const notifications = useNotifications()
-    const form = useForm({
-        initialValues: { secretaries: currentSecretaries },
-    })
+    const [selected, setSelected] = useState(currentSecretaries)
 
     const updateSecretaries = useCallback(
         async (id: string, secretaries: string[]) => {
@@ -54,23 +51,33 @@ export function SecretaryMultipleSelect({
         },
         [notifications]
     )
-    // clearTimeout(timeout)
-    // timeout = setTimeout(() => {
-    //     updateSecretaries(
-    //         unitId,
-    //         e.map((user: User) => user.id)
-    //     )
-    // }, 1500)
+
     return (
-        <Combobox {...form.getInputProps('secretaries')} multiple>
+        <Combobox
+            value={selected}
+            onChange={(e) => {
+                setSelected(e)
+                clearTimeout(timeout)
+                timeout = setTimeout(() => {
+                    updateSecretaries(unitId, e)
+                }, 1500)
+            }}
+            multiple
+        >
             <div className="relative">
                 <Combobox.Button className="relative w-full">
                     <Combobox.Input
                         autoComplete="off"
                         className={'input text-sm'}
                         placeholder="Secretarios..."
-                        displayValue={(secretaries: User[]) =>
-                            secretaries.map((sec) => sec.name).join(', ')
+                        displayValue={(e: string[]) =>
+                            e
+                                .map(
+                                    (j) =>
+                                        secretaries.find((x) => x.id === j)
+                                            ?.name
+                                )
+                                .join(', ')
                         }
                     />
 
@@ -86,7 +93,7 @@ export function SecretaryMultipleSelect({
                     {secretaries.map((secretary, index) => (
                         <Combobox.Option
                             key={index}
-                            value={secretary}
+                            value={secretary.id}
                             className={({ active }) =>
                                 clsx(
                                     'relative cursor-default select-none py-2 pl-8 pr-4',

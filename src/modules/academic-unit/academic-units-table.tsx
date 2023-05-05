@@ -1,13 +1,11 @@
-import type { AcademicUnit, User } from '@prisma/client'
+import type { AcademicUnit } from '@prisma/client'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import { getAllSecretaries } from '@repositories/user'
 
 export default async function AcademicUnitsTable({
     academicUnits,
 }: {
-    academicUnits: (AcademicUnit & {
-        secretaries: User[]
-    })[]
+    academicUnits: AcademicUnit[]
 }) {
     const secretaries = await getAllSecretaries()
     if (!secretaries)
@@ -47,7 +45,7 @@ export default async function AcademicUnitsTable({
 
                             <td className="w-1/2 px-3 py-2 text-sm text-gray-500">
                                 <SecretaryMultipleSelect
-                                    currentSecretaries={unit.secretaries}
+                                    currentSecretaries={unit.secretariesIds}
                                     secretaries={secretaries}
                                     unitId={unit.id}
                                 />
