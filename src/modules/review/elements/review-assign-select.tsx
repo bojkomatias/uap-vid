@@ -1,12 +1,14 @@
 'use client'
 import { Combobox } from '@headlessui/react'
 import { useNotifications } from '@mantine/notifications'
-import type { Review, ReviewType, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
+import { ReviewType } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Selector, Check } from 'tabler-icons-react'
+import { Selector, Check, Plus } from 'tabler-icons-react'
+import { Tooltip } from '@mantine/core'
 
 interface ReviewAssignSelectProps {
     type: ReviewType
@@ -53,6 +55,15 @@ const ReviewAssignSelect = ({
         })
     }
 
+    const tooltipMessage = {
+        [ReviewType.METHODOLOGICAL]:
+            "Al asignar un metodologo el protocolo pasará a estado 'Evaluación Metodológica'.",
+        [ReviewType.SCIENTIFIC_EXTERNAL]:
+            "Al asignar un evaluador el protocolo pasará a estado 'Evaluación Científica'.",
+        [ReviewType.SCIENTIFIC_INTERNAL]:
+            "Al asignar un evaluador el protocolo pasará a estado 'Evaluación Científica'.",
+    }
+
     const [query, setQuery] = useState('')
 
     const filteredPeople =
@@ -61,7 +72,20 @@ const ReviewAssignSelect = ({
             : users.filter((person) => {
                   return person.name.toLowerCase().includes(query.toLowerCase())
               })
+    const [show, setShow] = useState(false)
 
+    if (!show && !review?.reviewerId) {
+        return (
+            <Tooltip label={tooltipMessage[review.type]}>
+                <button
+                    onClick={() => setShow(true)}
+                    className="my-4 flex w-full justify-center rounded border border border-gray-300 p-2"
+                >
+                    <Plus className="text-gray-300" size={20} />
+                </button>
+            </Tooltip>
+        )
+    }
     return (
         <Combobox
             as="div"
