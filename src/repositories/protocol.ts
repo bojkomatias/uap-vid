@@ -3,6 +3,7 @@ import type { RoleType, StateType } from '@utils/zod'
 import { ROLE } from '@utils/zod'
 import type { Protocol } from '@prisma/client'
 import { cache } from 'react'
+import { getAcademicUnitsByUserId } from './academic-unit'
 
 const findProtocolById = cache(async (id: string) => {
     try {
@@ -80,7 +81,6 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
                 type: 'METHODOLOGICAL',
             },
         }),
-
         [ROLE.SCIENTIST]: prisma.review.count({
             where: {
                 reviewerId: id,
@@ -105,63 +105,77 @@ const getProtocolByRol = cache(
     async (role: RoleType, id: string, page: number, shownRecords: number) => {
         if (!id) return null
 
-        const query = {
-            [ROLE.RESEARCHER]: prisma.protocol.findMany({
-                skip: shownRecords * (page - 1),
-                take: shownRecords,
-                where: {
-                    researcher: id,
-                },
-            }),
-            [ROLE.METHODOLOGIST]: prisma.review
-                .findMany({
+        const queryBuilder = async () => {
+            const query = {
+                [ROLE.RESEARCHER]: prisma.protocol.findMany({
                     skip: shownRecords * (page - 1),
                     take: shownRecords,
-                    select: {
-                        protocol: true,
-                    },
                     where: {
-                        reviewerId: id,
-                        type: 'METHODOLOGICAL',
+                        researcher: id,
                     },
-                })
-                .then((result) => result.map((item) => item.protocol)),
-            [ROLE.SCIENTIST]: prisma.review
-                .findMany({
-                    skip: shownRecords * (page - 1),
-                    take: shownRecords,
-                    select: {
-                        protocol: true,
-                    },
-                    where: {
-                        reviewerId: id,
-                        type: {
-                            in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
+                }),
+                [ROLE.METHODOLOGIST]: prisma.review
+                    .findMany({
+                        skip: shownRecords * (page - 1),
+                        take: shownRecords,
+                        select: {
+                            protocol: true,
                         },
-                    },
-                })
-                .then((result) => result.map((item) => item.protocol)),
-            [ROLE.SECRETARY]: prisma.protocol.findMany({
-                where: {
-                    sections: {
-                        identification: {
-                            sponsor: {
-                                has: 'Facultad de Ciencias Económicas y de la Administración - FACEA',
+                        where: {
+                            reviewerId: id,
+                            type: 'METHODOLOGICAL',
+                        },
+                    })
+                    .then((result) => result.map((item) => item.protocol)),
+                [ROLE.SCIENTIST]: prisma.review
+                    .findMany({
+                        skip: shownRecords * (page - 1),
+                        take: shownRecords,
+                        select: {
+                            protocol: true,
+                        },
+                        where: {
+                            reviewerId: id,
+                            type: {
+                                in: [
+                                    'SCIENTIFIC_EXTERNAL',
+                                    'SCIENTIFIC_INTERNAL',
+                                ],
+                            },
+                        },
+                    })
+                    .then((result) => result.map((item) => item.protocol)),
+                [ROLE.ADMIN]: prisma.protocol.findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                }),
+            }
+
+            if (role === ROLE.SECRETARY) {
+                const academicUnits = await getAcademicUnitsByUserId(id)
+                return prisma.protocol.findMany({
+                    where: {
+                        sections: {
+                            is: {
+                                identification: {
+                                    is: {
+                                        sponsor: {
+                                            hasSome: academicUnits?.map(
+                                                (e) => e.name
+                                            ),
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
-                },
-            }),
+                })
+            }
+            return query[role]
         }
 
         try {
-            if (ROLE.ADMIN === role)
-                return prisma.protocol.findMany({
-                    skip: shownRecords * (page - 1),
-                    take: shownRecords,
-                })
-
-            return await query[role]
+            return await queryBuilder()
         } catch (e) {
             return null
         }

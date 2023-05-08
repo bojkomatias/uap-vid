@@ -1,5 +1,5 @@
 'use client'
-import type { Protocol, Role} from '@prisma/client';
+import type { Protocol, Role } from '@prisma/client'
 import { State } from '@prisma/client'
 import { ACTION } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
@@ -44,7 +44,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
     return (
         <Button
             onClick={approveProtocol}
-            intent={'primary'}
+            intent={'secondary'}
             disabled={protocol.state !== State.ACCEPTED}
             loading={isPending}
         >
