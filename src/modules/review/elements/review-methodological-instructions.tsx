@@ -2,8 +2,9 @@ import React from 'react'
 
 const ReviewMethodologicalInstructions = () => {
     return (
-        <li>
-            <div className="prose mt-2 space-x-4 rounded bg-gray-100 p-4 text-gray-500">
+        <li className="h-96 overflow-scroll">
+            <div className="prose-sm mt-2 space-x-4 rounded bg-gray-100 p-4 text-gray-500">
+                <h1>Criterios de evaluación</h1>
                 <h2>1. Aspectos generales</h2>
                 <ol>
                     <li>
