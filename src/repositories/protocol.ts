@@ -141,10 +141,21 @@ const getProtocolByRol = cache(
                     },
                 })
                 .then((result) => result.map((item) => item.protocol)),
+            [ROLE.SECRETARY]: prisma.protocol.findMany({
+                where: {
+                    sections: {
+                        identification: {
+                            sponsor: {
+                                has: 'Facultad de Ciencias Económicas y de la Administración - FACEA',
+                            },
+                        },
+                    },
+                },
+            }),
         }
 
         try {
-            if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
+            if (ROLE.ADMIN === role)
                 return prisma.protocol.findMany({
                     skip: shownRecords * (page - 1),
                     take: shownRecords,
