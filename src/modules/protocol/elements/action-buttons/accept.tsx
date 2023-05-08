@@ -7,6 +7,7 @@ import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
 import { useTransition } from 'react'
+import { FileCheck } from 'tabler-icons-react'
 
 type ActionButtonTypes = {
     role: Role
@@ -58,7 +59,9 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
             disabled={protocol.state !== State.SCIENTIFIC_EVALUATION}
             loading={isPending}
         >
-            Aceptar para evaluación en comisión
+            <FileCheck className="mr-2 h-5" />
+            Aceptar
+            <span className="ml-1 text-[0.5rem]">(a evaluar en comisión)</span>
         </Button>
     )
 }

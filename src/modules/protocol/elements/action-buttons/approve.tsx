@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
 import { useTransition } from 'react'
+import { FileCertificate } from 'tabler-icons-react'
 
 type ActionButtonTypes = { role: Role; protocol: Protocol }
 
@@ -48,7 +49,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             disabled={protocol.state !== State.ACCEPTED}
             loading={isPending}
         >
-            {/* No se que texto poner acá jepz */}
+            <FileCertificate className="mr-2 h-5" />
             Aprobar: En curso
         </Button>
     )

@@ -15,7 +15,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
         if (!currentConvocatory)
             return (
                 <Button intent={'secondary'} disabled>
-                    <FilePlus className="mr-3 h-5" /> Nueva Postulación
+                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
                 </Button>
             )
         return (
@@ -24,7 +24,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
                 passHref
             >
                 <Button intent={'secondary'}>
-                    <FilePlus className="mr-3 h-5" /> Nueva Postulación
+                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
                 </Button>
             </Link>
         )
