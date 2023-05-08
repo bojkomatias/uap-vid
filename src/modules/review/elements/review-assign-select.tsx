@@ -1,8 +1,7 @@
 'use client'
 import { Combobox } from '@headlessui/react'
 import { useNotifications } from '@mantine/notifications'
-import type { Review, User } from '@prisma/client'
-import { ReviewType } from '@prisma/client'
+import type { Review, User, ReviewType } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -55,15 +54,6 @@ const ReviewAssignSelect = ({
         })
     }
 
-    const tooltipMessage = {
-        [ReviewType.METHODOLOGICAL]:
-            "Al asignar un metodologo el protocolo pasará a estado 'Evaluación Metodológica'.",
-        [ReviewType.SCIENTIFIC_EXTERNAL]:
-            "Al asignar un evaluador el protocolo pasará a estado 'Evaluación Científica'.",
-        [ReviewType.SCIENTIFIC_INTERNAL]:
-            "Al asignar un evaluador el protocolo pasará a estado 'Evaluación Científica'.",
-    }
-
     const [query, setQuery] = useState('')
 
     const filteredPeople =
@@ -76,10 +66,14 @@ const ReviewAssignSelect = ({
 
     if (!show && !review?.reviewerId) {
         return (
-            <Tooltip label={tooltipMessage[review.type]}>
+            <Tooltip
+                label={
+                    'Al asignar el evaluador el protocolo cambiara de estado.'
+                }
+            >
                 <button
                     onClick={() => setShow(true)}
-                    className="my-4 flex w-full justify-center rounded border border border-gray-300 p-2"
+                    className="my-1 flex w-full justify-center rounded border border-gray-300 p-2"
                 >
                     <Plus className="text-gray-300" size={20} />
                 </button>
