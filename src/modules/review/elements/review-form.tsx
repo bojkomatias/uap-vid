@@ -7,7 +7,7 @@ import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
-import type { Review, User } from '@prisma/client';
+import type { Review, User } from '@prisma/client'
 import { ReviewType } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
@@ -15,8 +15,6 @@ import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictiona
 import ItemContainer from '@review/elements/review-container'
 import ReviewItem from '@review/elements/review-item'
 import { SegmentedControl } from '@mantine/core'
-import ReviewMethodologicalInstructions from './review-methodological-instructions'
-import ReviewScientificInstructions from './review-scientific-instructions'
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 
 export default function ReviewForm({
@@ -86,13 +84,6 @@ export default function ReviewForm({
             />
 
             <ul className={editing === '0' ? 'block' : 'hidden'}>
-                {review.type === ReviewType.METHODOLOGICAL && (
-                    <ReviewMethodologicalInstructions />
-                )}
-                {(review.type === ReviewType.SCIENTIFIC_EXTERNAL ||
-                    review.type === ReviewType.SCIENTIFIC_INTERNAL) && (
-                    <ReviewScientificInstructions />
-                )}
                 <ReviewItem
                     review={{ ...form.values, reviewer: review.reviewer }}
                     role={review.reviewer.role}
