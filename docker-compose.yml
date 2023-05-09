@@ -19,7 +19,7 @@ services:
             context: . #Compose will use this context to find a Dockerfile
             dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
         ports:
-            - '80:3000'
+            - '8080:3000'
         env_file:
             - ../apps/enviroments/mongo.env
         networks:
