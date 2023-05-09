@@ -7,13 +7,8 @@ services:
             - '27017:27017'
         volumes:
             - ~/apps/mongo-data:/data/db
-        environment:
-            MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGODB_ROOT_USERNAME
-            MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGODB_ROOT_PASSWORD
-            MONGO_DATABASE: main
-        secrets:
-            - MONGODB_ROOT_USERNAME
-            - MONGODB_ROOT_PASSWORD
+        env_file:
+            - ../apps/enviroments/mongo.env
         networks:
             - uap-vid-network
         restart: always
@@ -25,38 +20,11 @@ services:
             dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
         ports:
             - '80:3000'
-        environment:
-            AZURE_AD_TENANT_ID: /run/secrets/AZURE_AD_TENANT_ID
-            AZURE_AD_CLIENT_ID: /run/secrets/AZURE_AD_CLIENT_ID
-            AZURE_AD_CLIENT_SECRET: /run/secrets/AZURE_AD_CLIENT_SECRET
-            NEXTURL: http://localhost:3000
-            NEXTAUTH_SECRET: /run/secrets/NEXTAUTH_SECRET
-            NEXTAUTH_URL: http://localhost:3000
-            DATABASE_URL: /run/secrets/DATABASE_URL
-        secrets:
-            - AZURE_AD_TENANT_ID
-            - AZURE_AD_CLIENT_ID
-            - AZURE_AD_CLIENT_SECRET
-            - NEXTAUTH_SECRET
-            - DATABASE_URL
+        env_file:
+            - ../apps/enviroments/mongo.env
         networks:
             - uap-vid-network
         restart: always
 networks:
     uap-vid-network:
         driver: bridge
-secrets:
-    AZURE_AD_TENANT_ID:
-        file: ./secrets/AZURE_AD_TENANT_ID
-    AZURE_AD_CLIENT_ID:
-        file: ./secrets/AZURE_AD_CLIENT_ID
-    AZURE_AD_CLIENT_SECRET:
-        file: ./secrets/AZURE_AD_CLIENT_SECRET
-    NEXTAUTH_SECRET:
-        file: ./secrets/NEXTAUTH_SECRET
-    DATABASE_URL:
-        file: ./secrets/DATABASE_URL
-    MONGODB_ROOT_USERNAME:
-        file: ./secrets/MONGODB_ROOT_USERNAME
-    MONGODB_ROOT_PASSWORD:
-        file: ./secrets/MONGODB_ROOT_PASSWORD
