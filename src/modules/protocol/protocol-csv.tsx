@@ -88,7 +88,7 @@ export default function ProtocolCsv({
     return (
         <>
             {' '}
-            <div className="flex w-full justify-center">
+            <div className=" hidden w-full justify-center">
                 <div className="" ref={jssRef as any | undefined} />
                 <br />
             </div>
