@@ -41,7 +41,7 @@ export default function ReviewItem({
                 >
                     <div className="-mb-px flex items-center justify-between space-x-4 bg-gray-100 px-2 py-1 text-gray-500">
                         <div className="flex items-center gap-2">
-                            <span className="text-sm font-thin text-gray-600">
+                            <span className="text-sm font-light text-gray-600">
                                 Veredicto:
                             </span>
                             <span

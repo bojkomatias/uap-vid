@@ -4,15 +4,13 @@ import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictiona
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import ApproveButton from '@protocol/elements/action-buttons/approve'
 import PublishButton from '@protocol/elements/action-buttons/publish'
-
-import { PDF } from 'modules/pdf'
-
 import { getReviewsByProtocol } from '@repositories/review'
+import { PDF } from 'modules/pdf'
 
 export default async function Page({ params }: { params: { id: string } }) {
     if (params.id === 'new') return redirect('/protocols/new/0')

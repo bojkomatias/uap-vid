@@ -183,20 +183,23 @@ export const BudgetSchema = z.object({
     expenses: z
         .lazy(() =>
             z.object({
-                amount: z
-                    .number({
-                        invalid_type_error: 'Este campo debe ser numérico',
-                    })
-                    .positive({ message: 'Debe ser mayor que cero' }),
-                detail: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
                 type: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
-                year: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                data: z
+                    .object({
+                        detail: z.string().min(1, {
+                            message: 'El campo no puede estar vacío',
+                        }),
+                        amount: z
+                            .number({
+                                invalid_type_error:
+                                    'Este campo debe ser numérico',
+                            })
+                            .positive({ message: 'Debe ser mayor que cero' }),
+                        year: z.string(),
+                    })
+                    .array(),
             })
         )
         .array(),
@@ -212,11 +215,11 @@ export const DescriptionSchema = z.object({
     line: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     technical: z
         .string()
-        .min(500, {
+        .min(300, {
             message:
                 'El resumen técnico debe contener entre 150 - 250 palabras',
         })
-        .max(1000, {
+        .max(1500, {
             message:
                 'El resumen técnico debe contener entre 150 - 250 palabras',
         }),
@@ -238,9 +241,13 @@ export const DurationSchema = z.object({
                 semester: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
-                task: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                data: z
+                    .object({
+                        task: z.string().min(1, {
+                            message: 'El campo no puede estar vació',
+                        }),
+                    })
+                    .array(),
             })
         )
         .array(),
@@ -251,7 +258,7 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-    assignment: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    assignment: z.string().optional(),
     career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
@@ -279,7 +286,21 @@ export const IdentificationSchema = z.object({
                     .min(1, { message: 'El campo no puede estar vacío' }),
             })
         )
-        .array(),
+        .array()
+        .min(1, { message: 'Debe tener al menos un integrante' })
+        .refine(
+            (value) => {
+                //Al menos un integrante debe tener el rol de Director,
+                const hasDirector = value.some(
+                    (team) => team.role === 'Director'
+                )
+                console.log(hasDirector)
+
+                if (!hasDirector) return false
+                return true
+            },
+            { message: 'Debe tener al menos un Director' }
+        ),
 })
 
 /////////////////////////////////////////

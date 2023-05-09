@@ -1,28 +1,36 @@
 import { useProtocolContext } from '@utils/createContext'
+import clsx from 'clsx'
 import type { PropsWithChildren } from 'react'
 
 const Input = ({
     path,
     label,
+    disabled,
 }: PropsWithChildren<{
     path: string
     label: string
+    disabled?: true
 }>) => {
     const form = useProtocolContext()
 
     return (
         <div>
-            <label className="label">{label}</label>
+            <label
+                className={clsx('label required', {
+                    'after:text-error-500': form.getInputProps(path).error,
+                })}
+            >
+                {label}
+            </label>
             <input
+                disabled={disabled}
                 {...form.getInputProps(path)}
                 className="input form-input"
                 placeholder={label}
                 autoComplete="off"
             />
             {form.getInputProps(path).error ? (
-                <p className=" pt-1 pl-3 text-xs text-gray-600 saturate-[80%]">
-                    *{form.getInputProps(path).error}
-                </p>
+                <p className="error">*{form.getInputProps(path).error}</p>
             ) : null}
         </div>
     )

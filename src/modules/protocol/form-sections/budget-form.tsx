@@ -22,23 +22,13 @@ export function BudgetForm() {
                 <InputList
                     path={path + 'expenses'}
                     label="gastos"
-                    insertedItemFormat={{
-                        type: '',
+                    newLeafItemValue={{
                         detail: '',
                         amount: 0,
                         year: '',
                     }}
+                    preprocessKey="type"
                     headers={[
-                        {
-                            x: 'type',
-                            label: 'tipo',
-                            options: [
-                                'Insumos',
-                                'Libros',
-                                'Fotocopias, materiales de impresión, papelería',
-                                'Viajes',
-                            ],
-                        },
                         { x: 'detail', label: 'detalle', class: 'flex-grow' },
                         {
                             x: 'amount',

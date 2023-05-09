@@ -19,7 +19,7 @@ export function BibliographyForm() {
                 <InputList
                     path={path + 'chart'}
                     label="cuadro bibliográfico"
-                    insertedItemFormat={{ author: '', title: '', year: 0 }}
+                    newLeafItemValue={{ author: '', title: '', year: 0 }}
                     headers={[
                         {
                             x: 'author',

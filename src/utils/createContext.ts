@@ -10,7 +10,14 @@ export const initialSectionValues: Sections = {
         assignment: '',
         career: '',
         sponsor: [],
-        team: [],
+        team: [
+            {
+                hours: 0,
+                last_name: '',
+                name: '',
+                role: 'Director',
+            },
+        ],
         title: '',
     },
     duration: {
@@ -19,7 +26,20 @@ export const initialSectionValues: Sections = {
         modality: '',
     },
     budget: {
-        expenses: [{ type: '', detail: '', amount: 0, year: '' }],
+        expenses: [
+            { type: 'Insumos', data: [{ detail: '-', amount: 0, year: '' }] },
+            { type: 'Libros', data: [{ detail: '-', amount: 0, year: '' }] },
+            {
+                type: 'Materiales de Impresión',
+                data: [{ detail: '-', amount: 0, year: '' }],
+            },
+            { type: 'Viajes', data: [{ detail: '-', amount: 0, year: '' }] },
+            {
+                type: 'Gastos por publicación',
+                data: [{ detail: '-', amount: 0, year: '' }],
+            },
+            { type: 'Otros', data: [{ detail: '-', amount: 0, year: '' }] },
+        ],
     },
     description: {
         discipline: '',

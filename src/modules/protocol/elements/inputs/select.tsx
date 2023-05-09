@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react'
 import { useState } from 'react'
 import { Combobox } from '@headlessui/react'
 import { Check, Selector, X } from 'tabler-icons-react'
@@ -10,12 +9,12 @@ export default function Select({
     label,
     options,
     conditionalCleanup = () => null,
-}: PropsWithChildren<{
+}: {
     path: string
     label: string
     options: string[]
-    conditionalCleanup?: () => void
-}>) {
+    conditionalCleanup?: (e?: string) => void
+}) {
     const form = useProtocolContext()
     const [query, setQuery] = useState('')
 
@@ -28,13 +27,23 @@ export default function Select({
 
     return (
         <div>
-            <label className="label">{label}</label>
-            <Combobox as="div" {...form.getInputProps(path)}>
+            <label
+                className={clsx('label required', {
+                    'after:text-error-500': form.getInputProps(path).error,
+                })}
+            >
+                {label}
+            </label>
+            <Combobox
+                as="div"
+                value={form.getInputProps(path).value}
+                onChange={(e) => {
+                    form.setFieldValue(path, e)
+                    conditionalCleanup(e)
+                }}
+            >
                 <div className="relative">
-                    <Combobox.Button
-                        className="relative w-full"
-                        onClick={conditionalCleanup}
-                    >
+                    <Combobox.Button className="relative w-full">
                         <Combobox.Input
                             autoComplete="off"
                             className="input form-input"
@@ -63,7 +72,7 @@ export default function Select({
                         </div>
                     </Combobox.Button>
                     {form.getInputProps(path).error ? (
-                        <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
+                        <p className="error">
                             *{form.getInputProps(path).error}
                         </p>
                     ) : null}

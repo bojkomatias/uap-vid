@@ -59,7 +59,6 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         signIn: async ({ user }) => {
-            console.log(user)
             if (!user || !user.email) return false
             const userExist = await findUserByEmail(user.email)
             if (userExist) {
@@ -79,8 +78,8 @@ export const authOptions: NextAuthOptions = {
             return true
         },
         jwt: async ({ token, user }) => {
-            if (user) {
-                const userFromDb = await findUserByEmail(user.email!)
+            if (user && user.email) {
+                const userFromDb = await findUserByEmail(user.email)
                 token.user = userFromDb
             }
             return token
@@ -98,6 +97,6 @@ export const authOptions: NextAuthOptions = {
     },
 }
 
-const handler = NextAuth(authOptions)
+export default NextAuth(authOptions)
 
-export { handler as GET, handler as POST }
+// export { handler as GET, handler as POST }

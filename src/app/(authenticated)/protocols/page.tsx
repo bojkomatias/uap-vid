@@ -2,7 +2,7 @@ import { PageHeading } from '@layout/page-heading'
 import CreateButton from '@protocol/elements/action-buttons/create'
 import Table from '@protocol/elements/protocol-table'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 import {
     getProtocolsWithoutPagination,
     getProtocolByRol,
@@ -23,7 +23,10 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
-    const protocolCount = await getTotalRecordsProtocol()
+    const protocolCount = await getTotalRecordsProtocol(
+        session.user.role,
+        session.user.id
+    )
     const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
@@ -40,7 +43,6 @@ export default async function Page({
                   shownRecords
               )
         : null
-    console.log(protocols)
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
     const searchedProtocols = searchParams?.search
         ? fuzzysort

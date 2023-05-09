@@ -40,13 +40,13 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
                         <tr key={item.id}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
+                            <td className="  py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
                                 {item.sections.identification.title}
                                 <dl>
-                                    <dd className="truncate text-xs font-thin text-gray-500 lg:text-sm">
+                                    <dd className=" text-xs font-light text-gray-500 lg:text-sm">
                                         {dateFormatter.format(item.createdAt)}
                                     </dd>
-                                    <dd className="truncate text-gray-600 lg:hidden">
+                                    <dd className=" text-gray-600 lg:hidden">
                                         {item.sections.identification.sponsor
                                             .length < 2
                                             ? item.sections.identification
@@ -60,9 +60,9 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                     </dd>
                                 </dl>
                             </td>
-                            <td className="hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            <td className="hidden  px-3 py-4 text-sm text-gray-500 lg:table-cell">
                                 <dl>
-                                    <dd className="truncate text-gray-700">
+                                    <dd className=" text-gray-700">
                                         {item.sections.identification.sponsor
                                             .length < 2
                                             ? item.sections.identification
@@ -74,13 +74,13 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                                   )
                                                   .join(' - ')}
                                     </dd>
-                                    <dd className="truncate font-thin text-gray-500">
+                                    <dd className=" font-light text-gray-500">
                                         {item.sections.identification.career}
                                     </dd>
                                 </dl>
                             </td>
 
-                            <td className="table-cell whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-600">
+                            <td className="table-cell px-3 py-4 text-sm font-medium text-gray-600">
                                 {ProtocolStatesDictionary[item.state]}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>

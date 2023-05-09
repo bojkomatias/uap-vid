@@ -46,7 +46,7 @@ export const createConvocatory = async (data: Convocatory) => {
             data,
         })
     } catch (e) {
-        return console.log(e)
+        return null
     }
 }
 export const updateConvocatory = async (data: Convocatory) => {

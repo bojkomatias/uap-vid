@@ -7,13 +7,16 @@ import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
-import type { Review, ReviewVerdict, User } from '@prisma/client'
+import type { Review, User } from '@prisma/client';
+import { ReviewType } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ItemContainer from '@review/elements/review-container'
 import ReviewItem from '@review/elements/review-item'
 import { SegmentedControl } from '@mantine/core'
+import ReviewMethodologicalInstructions from './review-methodological-instructions'
+import ReviewScientificInstructions from './review-scientific-instructions'
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 
 export default function ReviewForm({
@@ -30,13 +33,10 @@ export default function ReviewForm({
     const notifications = useNotifications()
 
     const addReview = useCallback(
-        async (data: string, verdict: ReviewVerdict) => {
+        async (review: Review) => {
             const res = await fetch(`/api/review/${review.id}`, {
                 method: 'PUT',
-                body: JSON.stringify({
-                    data,
-                    verdict,
-                }),
+                body: JSON.stringify(review),
             })
 
             if (res.status == 200) {
@@ -63,8 +63,9 @@ export default function ReviewForm({
                 })
             }
         },
-        [notifications, review.id]
+        [notifications]
     )
+
     return (
         <ItemContainer title="Realizar revisión">
             <SegmentedControl
@@ -85,6 +86,13 @@ export default function ReviewForm({
             />
 
             <ul className={editing === '0' ? 'block' : 'hidden'}>
+                {review.type === ReviewType.METHODOLOGICAL && (
+                    <ReviewMethodologicalInstructions />
+                )}
+                {(review.type === ReviewType.SCIENTIFIC_EXTERNAL ||
+                    review.type === ReviewType.SCIENTIFIC_INTERNAL) && (
+                    <ReviewScientificInstructions />
+                )}
                 <ReviewItem
                     review={{ ...form.values, reviewer: review.reviewer }}
                     role={review.reviewer.role}
@@ -94,16 +102,24 @@ export default function ReviewForm({
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    addReview(form.values.data, form.values.verdict)
+                    addReview({
+                        id: form.values.id,
+                        data: form.values.data,
+                        verdict: form.values.verdict,
+                        createdAt: form.values.createdAt,
+                        updatedAt: form.values.updatedAt,
+                        type: form.values.type,
+                        protocolId: form.values.protocolId,
+                        reviewerId: form.values.reviewerId,
+                        revised: form.values.revised,
+                    })
                 }}
                 className={editing === '1' ? 'block' : 'hidden'}
             >
                 <label className="label">Observación</label>
                 <Tiptap {...form.getInputProps('data')} />
                 {form.getInputProps('data').error ? (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-                        *{form.getInputProps('data').error}
-                    </p>
+                    <p className="error">*{form.getInputProps('data').error}</p>
                 ) : null}
 
                 <RadioGroup
