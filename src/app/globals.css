@@ -25,6 +25,21 @@
     .error {
         @apply pl-2 pt-1 text-xs font-medium text-error-500;
     }
+    .checkbox {
+        @apply list-none p-0;
+    }
+    .checkbox p {
+        @apply m-0;
+    }
+    .checkbox-item {
+        @apply flex flex-row items-center space-x-2;
+    }
+    .checkbox-item > label {
+        @apply flex-grow-0 select-none flex-col;
+    }
+    .checkbox > div {
+        @apply flex-1;
+    }
 }
 
 /* ===== Scrollbar CSS ===== */
