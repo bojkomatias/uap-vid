@@ -221,14 +221,14 @@ export const DescriptionSchema = z.object({
     line: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     technical: z
         .string()
-        .min(300, {
-            message:
-                'El resumen técnico debe contener entre 150 - 250 palabras',
-        })
-        .max(1500, {
-            message:
-                'El resumen técnico debe contener entre 150 - 250 palabras',
-        }),
+        .refine(
+            (data) =>
+                data.split(' ').length >= 150 && data.split(' ').length <= 250,
+            {
+                message:
+                    'El resumen técnico debe contener entre 150 - 250 palabras',
+            }
+        ),
     objective: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     words: z.string().min(1, { message: 'El campo no puede estar vacío' }),

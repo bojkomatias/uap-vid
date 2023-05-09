@@ -30,7 +30,7 @@ export default function MultipleButton({
                                 intent={'tertiary'}
                                 className="rounded-r-none"
                             >
-                                <FilePlus className="mr-3 h-5" /> Crear en{' '}
+                                <FilePlus className="mr-2 h-5" /> Crear en{' '}
                                 {selected.title}
                             </Button>
                         </Link>

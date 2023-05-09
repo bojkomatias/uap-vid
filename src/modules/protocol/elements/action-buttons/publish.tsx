@@ -8,6 +8,7 @@ import { useMemo, useTransition } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import InfoTooltip from '../tooltip'
+import { Upload } from 'tabler-icons-react'
 
 type ActionButtonTypes = { role: RoleType; protocol: Protocol | ProtocolZod }
 
@@ -67,7 +68,8 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
                         </p>
                     </InfoTooltip>
                 </div>
-                <Button intent={'primary'} disabled={!isValid}>
+                <Button intent={'secondary'} disabled={!isValid}>
+                    <Upload className="mr-2 h-5" />
                     Publicar
                     <div className="w-4" />
                 </Button>
@@ -79,6 +81,7 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
             intent={'primary'}
             loading={isPending}
         >
+            <Upload className="mr-2 h-5" />
             Publicar
         </Button>
     )
