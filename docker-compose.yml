@@ -11,10 +11,12 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=admin
         networks:
             - node-next
-    uap-research: #Our container app name
-        image: uapvid:latest
-        # build:
-        # context: . #Compose will use this context to find a Dockerfile
+    uap-research:
+        #Our container app name
+        image: uapvid
+        build:
+            context: .
+            dockerfile: ./Dockerfile
         ports:
             - '3000:3000'
         networks:
