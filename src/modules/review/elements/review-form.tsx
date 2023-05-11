@@ -17,10 +17,7 @@ export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
         initialValues: {
             ...review,
-            questions: [
-                { id: '0', approved: true, comment: '' },
-                { id: '1', approved: true, comment: '' },
-            ],
+            questions: [{ id: '0', approved: true, comment: '' }],
         },
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,

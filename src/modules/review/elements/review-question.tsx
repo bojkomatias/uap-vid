@@ -1,5 +1,4 @@
 import { RadioGroup } from '@headlessui/react'
-import { ReviewType } from '@prisma/client'
 import { useReviewContext } from '@utils/reviewContext'
 import clsx from 'clsx'
 import { questions } from 'config/review-questions'
@@ -32,12 +31,8 @@ export default function ReviewQuestion({
                     form.getInputProps('questions.' + index + '.approved').value
                 }
             >
-                <RadioGroup.Label className="select-none text-xs first-letter:capitalize">
-                    {questions[
-                        form.values.type === ReviewType.METHODOLOGICAL
-                            ? 'METHODOLOGICAL'
-                            : 'SCIENTIFIC'
-                    ].get(id)}
+                <RadioGroup.Label className="select-none text-xs">
+                    {questions.find((question) => question.id === id)?.question}
                 </RadioGroup.Label>
                 <div className="grid grid-cols-2 gap-6">
                     <RadioGroup.Option

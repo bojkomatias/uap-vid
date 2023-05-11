@@ -1,0 +1,17 @@
+import { ReviewType } from '@prisma/client'
+import { questions } from 'config/review-questions'
+
+export function getInitialQuestionsByType(type: ReviewType) {
+    if (type === ReviewType.METHODOLOGICAL) {
+        return questions
+            .filter((q) => q.type === 'METHODOLOGICAL')
+            .map(({ id }) => {
+                return { id, approved: true, comment: null }
+            })
+    }
+    return questions
+        .filter((q) => q.type === 'SCIENTIFIC')
+        .map(({ id }) => {
+            return { id, approved: true, comment: null }
+        })
+}
