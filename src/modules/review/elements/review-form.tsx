@@ -65,7 +65,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         addReview(form.values)
                     }}
                 >
-                    <div className="mb-2">
+                    <div className="max-h-[50svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
                         {form.values.questions.map((q, index) => (
                             <ReviewQuestion
                                 key={q.id}
@@ -78,6 +78,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                     <RadioGroup
                         {...form.getInputProps('verdict')}
                         defaultValue="PENDING"
+                        className={'mx-2'}
                     >
                         <RadioGroup.Label className="label">
                             Veredicto
@@ -161,10 +162,10 @@ export default function ReviewForm({ review }: { review: Review }) {
 
                     <Button
                         type="submit"
-                        className="ml-auto mt-2"
+                        className="ml-auto mr-2 mt-2"
                         intent="secondary"
                     >
-                        Comentar
+                        Enviar
                     </Button>
                 </form>
             </ReviewProvider>

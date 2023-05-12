@@ -6,7 +6,6 @@ import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import TextItemView from '@protocol/elements/text-item-view'
 import { relativeTimeFormatter } from '@utils/formatters'
 
 export default function ReviewItem({
@@ -16,9 +15,8 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     role: Role
 }) {
-    if (!review.que) return null
-    function getDuration(millis: number) {
-        const minutes = Math.floor(millis / 60000)
+    function getDuration(milliseconds: number) {
+        const minutes = Math.floor(milliseconds / 60000)
         const hours = Math.round(minutes / 60)
         const days = Math.round(hours / 24)
 
@@ -92,17 +90,12 @@ export default function ReviewItem({
                             )
                         ) : null}
                     </div>
-                    <div
-                    // className={clsx({
-                    //     hidden: review.revised,
-                    //     block: !review.revised,
-                    // })}
-                    >
-                        <TextItemView
-                            title=""
-                            content={review.data}
-                            className="px-2"
-                        />
+                    <div>
+                        {review.questions.map((question) => (
+                            <>
+                                <pre>{JSON.stringify(question, null, 2)}</pre>
+                            </>
+                        ))}
                     </div>
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">

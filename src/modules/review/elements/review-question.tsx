@@ -38,15 +38,12 @@ export default function ReviewQuestion({
                     <RadioGroup.Option
                         key={`yes-${id}`}
                         value={true}
-                        className={({ active, checked }) =>
+                        className={({ checked }) =>
                             clsx(
-                                active
-                                    ? 'ring-2 ring-primary/50 ring-offset-2'
-                                    : '',
                                 checked
-                                    ? 'bg-primary text-white hover:bg-primary/90'
-                                    : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
-                                'flex items-center justify-center rounded-md py-1.5 text-sm font-semibold uppercase'
+                                    ? 'bg-success-50 text-success-600 ring-[1.5px] ring-success-600'
+                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100',
+                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase '
                             )
                         }
                     >
@@ -55,15 +52,12 @@ export default function ReviewQuestion({
                     <RadioGroup.Option
                         key={`no-${id}`}
                         value={false}
-                        className={({ active, checked }) =>
+                        className={({ checked }) =>
                             clsx(
-                                active
-                                    ? 'ring-2 ring-gray-700/50 ring-offset-2'
-                                    : '',
                                 checked
-                                    ? 'bg-gray-800 text-white hover:bg-gray-700'
-                                    : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
-                                'flex items-center justify-center rounded-md py-1.5 text-sm font-semibold uppercase'
+                                    ? 'bg-error-50 text-error-600 ring-[1.5px] ring-error-600'
+                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100',
+                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase'
                             )
                         }
                     >
