@@ -11,7 +11,13 @@ type ReviewStateProps = {
 }
 async function ReviewList({ id, role, state }: ReviewStateProps) {
     const reviews = await getReviewsByProtocol(id)
-    if (!reviews || state === State.DRAFT || state === State.PUBLISHED)
+
+    if (
+        !reviews ||
+        state === State.DRAFT ||
+        state === State.PUBLISHED ||
+        !reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED)
+    )
         return null
 
     const reviewsInState = reviews.filter((r) =>
@@ -31,12 +37,6 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
                       ? r.type === ReviewType.METHODOLOGICAL
                       : null
               )
-
-    if (
-        reviewsInState.length > 0 &&
-        !reviewsInState.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED)
-    )
-        return null
 
     return (
         <ItemContainer title="Revisiones">

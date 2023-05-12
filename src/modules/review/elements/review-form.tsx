@@ -84,8 +84,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                             Veredicto
                         </RadioGroup.Label>
                         <div className="-space-y-px bg-white">
-                            {Object.entries(ReviewVerdictsDictionary).map(
-                                ([id, name], index) => (
+                            {Object.entries(ReviewVerdictsDictionary)
+                                .filter((e) => e[0] !== 'NOT_REVIEWED')
+                                .map(([id, name], index) => (
                                     <RadioGroup.Option
                                         key={id}
                                         value={id}
@@ -149,14 +150,13 @@ export default function ReviewForm({ review }: { review: Review }) {
                                                             ? 'Enviar correcciones sin veredicto, esperar cambios para re-evaluar.'
                                                             : id === 'APPROVED'
                                                             ? 'Hacer devolución del proyecto como válido y apto para continuar el proceso.'
-                                                            : 'Marcar proyecto como rechazado.'}
+                                                            : 'Marcar proyecto como desaprobado.'}
                                                     </RadioGroup.Description>
                                                 </span>
                                             </>
                                         )}
                                     </RadioGroup.Option>
-                                )
-                            )}
+                                ))}
                         </div>
                     </RadioGroup>
 

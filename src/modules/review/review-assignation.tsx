@@ -78,7 +78,7 @@ const ReviewAssignation = async ({
     return (
         <ItemContainer title="Evaluadores">
             {reviewAssignSelectsData.map((data) => (
-                <div key={data.type} className="mb-4">
+                <div key={data.type} className="mb-4 px-2">
                     <label className="label">
                         {EvaluatorsByReviewType[data.type]}
                     </label>
