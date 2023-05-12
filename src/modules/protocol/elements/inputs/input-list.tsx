@@ -39,6 +39,7 @@ export function InputList(props: {
     headers: Header[]
     newLeafItemValue: LeafItemProps
     preprocessKey?: string
+    footer?: React.ReactNode
 }) {
     const form = useProtocolContext()
 
@@ -66,6 +67,7 @@ export function InputList(props: {
             ) : (
                 <FieldsMap {...props} fieldsToMap={data} />
             )}
+            {props.footer}
         </InputListWrapper>
     )
 }

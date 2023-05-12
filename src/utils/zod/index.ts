@@ -191,13 +191,8 @@ export const BudgetSchema = z.object({
                         detail: z.string().min(1, {
                             message: 'El campo no puede estar vacío',
                         }),
-                        amount: z
-                            .number({
-                                invalid_type_error:
-                                    'Este campo debe ser numérico',
-                            })
-                            .positive({ message: 'Debe ser mayor que cero' }),
-                        year: z.string().min(1, {
+                        amount: z.any(),
+                        year: z.string().min(0, {
                             message: 'El campo no puede estar vacío',
                         }),
                     })
@@ -296,7 +291,6 @@ export const IdentificationSchema = z.object({
                 const hasDirector = value.some(
                     (team) => team.role === 'Director'
                 )
-                console.log(hasDirector)
 
                 if (!hasDirector) return false
                 return true

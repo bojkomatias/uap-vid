@@ -32,12 +32,29 @@ const CurrencyInput = ({
                     .value.toString()
                     .replace(/\D/g, '')
                     .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                onChange={(e) =>
+                onChange={(e) =>{
+                    if(isNaN(form.getInputProps(path).value)){
+                       return form.setFieldValue(path, 0)
+                    }
                     form.setFieldValue(
                         path,
-                        parseInt(e.target.value.replace(/\./g, ''))
+                        parseInt(e.target.value.replace(/\./g, '').replace(/\^$/, "0"))
                     )
+                    
+                   
                 }
+                }
+
+             
+                onBlur={()=>{
+                    if(isNaN(form.getInputProps(path).value)){
+                        form.setFieldValue(path, 0)
+                    }
+                    
+                }}
+
+                
+
                 className="input pl-6"
                 placeholder={label}
                 autoComplete="off"
