@@ -6,12 +6,12 @@ export function getInitialQuestionsByType(type: ReviewType) {
         return questions
             .filter((q) => q.type === 'METHODOLOGICAL')
             .map(({ id }) => {
-                return { id, approved: true, comment: null }
+                return { id, approved: true, comment: '' }
             })
     }
     return questions
         .filter((q) => q.type === 'SCIENTIFIC')
         .map(({ id }) => {
-            return { id, approved: true, comment: null }
+            return { id, approved: true, comment: '' }
         })
 }

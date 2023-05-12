@@ -74,7 +74,7 @@ export default function ReviewQuestion({
             {form.getInputProps('questions.' + index + '.approved')
                 .value ? null : (
                 <>
-                    <label className="label">Comentario</label>
+                    <label className="label">Recomendación</label>
                     <textarea
                         className="input"
                         {...form.getInputProps(

@@ -15,10 +15,7 @@ import { ReviewProvider, useReview } from '@utils/reviewContext'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
-        initialValues: {
-            ...review,
-            questions: [{ id: '0', approved: true, comment: '' }],
-        },
+        initialValues: review,
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
@@ -61,15 +58,14 @@ export default function ReviewForm({ review }: { review: Review }) {
 
     return (
         <ItemContainer title="Realizar revisión">
-            <button onClick={() => console.log(form.values)}>Clog</button>
             <ReviewProvider form={form}>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
-                        addReview(review)
+                        addReview(form.values)
                     }}
                 >
-                    <div className="py-4">
+                    <div className="mb-2">
                         {form.values.questions.map((q, index) => (
                             <ReviewQuestion
                                 key={q.id}

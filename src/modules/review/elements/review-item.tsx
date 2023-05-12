@@ -16,7 +16,7 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     role: Role
 }) {
-    if (!review.data) return null
+    if (!review.que) return null
     function getDuration(millis: number) {
         const minutes = Math.floor(millis / 60000)
         const hours = Math.round(minutes / 60)
