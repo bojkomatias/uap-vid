@@ -56,7 +56,7 @@ model Review {
   type       ReviewType
   questions  ReviewQuestion[]
   revised    Boolean          @default(false)
-  verdict    ReviewVerdict    @default(PENDING)
+  verdict    ReviewVerdict    @default(NOT_REVIEWED)
   reviewerId String           @db.ObjectId
   reviewer   User             @relation(fields: [reviewerId], references: [id])
   protocolId String           @db.ObjectId
@@ -180,6 +180,7 @@ enum ReviewVerdict {
   APPROVED
   REJECTED
   PENDING
+  NOT_REVIEWED
 }
 
 enum Role {
