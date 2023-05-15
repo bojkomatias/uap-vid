@@ -4,11 +4,10 @@ services:
         image: mongo:latest
         ports:
             - '27017:27017'
-        # volumes:
-        #     - ~/apps/mongo-data:/data/db
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
+        volumes:
+            - ../apps/mongo-data:/data/db
+        env_file:
+            - ../apps/enviroments/mongo.env
         networks:
             - node-next
     uap-research:
@@ -17,8 +16,10 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
+        env_file:
+            - ../apps/enviroments/uap-vid.env
         ports:
-            - '3000:3000'
+            - '80:3000'
         networks:
             - node-next
 networks:
