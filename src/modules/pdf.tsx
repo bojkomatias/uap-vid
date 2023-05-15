@@ -9,6 +9,7 @@ import {
     PDFDownloadLink,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
+import { Download } from 'tabler-icons-react'
 
 const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
     return (
@@ -720,7 +721,10 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
             fileName={`proyecto-${protocol.id}`}
             document={PDFDocument({ protocol })}
         >
-            <Button>Descargar en PDF</Button>
+            <Button>
+                <Download className="mr-2 h-5" />
+                <span className="text-xs">Descargar PDF</span>
+            </Button>
         </PDFDownloadLink>
     )
 }

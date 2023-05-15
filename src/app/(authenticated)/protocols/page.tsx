@@ -24,6 +24,7 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
+
     const protocolCount = await getTotalRecordsProtocol(
         session.user.role,
         session.user.id

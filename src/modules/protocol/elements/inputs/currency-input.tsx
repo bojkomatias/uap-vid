@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../../../utils/createContext'
 
@@ -12,7 +13,13 @@ const CurrencyInput = ({
 
     return (
         <div className="relative">
-            <label className="label">{label}</label>
+            <label
+                className={clsx('label required', {
+                    'after:text-error-500': form.getInputProps(path).error,
+                })}
+            >
+                {label}
+            </label>
             <div className="pointer-events-none absolute left-0 top-8 mt-0.5 flex items-center pt-px">
                 <span className="ml-3 text-sm text-gray-400">$</span>
             </div>
