@@ -7,3 +7,11 @@ export const dateFormatter = new Intl.DateTimeFormat('es-AR', {
 })
 
 export const relativeTimeFormatter = new Intl.RelativeTimeFormat('es-AR')
+
+export const currencyFormatter = (value: number | string) => {
+    if (typeof value === 'number') {
+        return `$${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
+    } else {
+        return `$${value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
+    }
+}

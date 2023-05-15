@@ -27,6 +27,17 @@ const getAllUsersWithoutResearchers = async () => {
     }
 }
 
+const getAllSecretaries = cache(async () => {
+    try {
+        const secretaries = await prisma.user.findMany({
+            where: { role: Role.SECRETARY },
+        })
+        return secretaries
+    } catch (error) {
+        return null
+    }
+})
+
 const findUserById = cache(async (id: string) => {
     try {
         const user = await prisma.user.findUnique({
@@ -116,6 +127,7 @@ const saveUser = async (data: {
 export {
     getAllUsers,
     getAllUsersWithoutResearchers,
+    getAllSecretaries,
     findUserById,
     findUserByEmail,
     updateUserById,

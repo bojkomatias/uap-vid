@@ -41,7 +41,13 @@ const ActionSchema = z.enum([
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
 
-const AccessSchema = z.enum(['PROTOCOLS', 'USERS', 'REVIEWS', 'CONVOCATORIES'])
+const AccessSchema = z.enum([
+    'PROTOCOLS',
+    'USERS',
+    'REVIEWS',
+    'CONVOCATORIES',
+    'ACADEMIC_UNITS',
+])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
 
@@ -197,9 +203,7 @@ export const BudgetSchema = z.object({
                                     'Este campo debe ser numérico',
                             })
                             .positive({ message: 'Debe ser mayor que cero' }),
-                        year: z.string().min(1, {
-                            message: 'El campo no puede estar vacío',
-                        }),
+                        year: z.string(),
                     })
                     .array(),
             })
@@ -217,14 +221,14 @@ export const DescriptionSchema = z.object({
     line: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     technical: z
         .string()
-        .min(500, {
-            message:
-                'El resumen técnico debe contener entre 150 - 250 palabras',
-        })
-        .max(1000, {
-            message:
-                'El resumen técnico debe contener entre 150 - 250 palabras',
-        }),
+        .refine(
+            (data) =>
+                data.split(' ').length >= 150 && data.split(' ').length <= 250,
+            {
+                message:
+                    'El resumen técnico debe contener entre 150 - 250 palabras',
+            }
+        ),
     objective: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     words: z.string().min(1, { message: 'El campo no puede estar vacío' }),
@@ -245,11 +249,9 @@ export const DurationSchema = z.object({
                     .min(1, { message: 'El campo no puede estar vacío' }),
                 data: z
                     .object({
-                        task: z
-                            .string()
-                            .min(1, {
-                                message: 'El campo no puede estar vació',
-                            }),
+                        task: z.string().min(1, {
+                            message: 'El campo no puede estar vació',
+                        }),
                     })
                     .array(),
             })
@@ -298,8 +300,6 @@ export const IdentificationSchema = z.object({
                 const hasDirector = value.some(
                     (team) => team.role === 'Director'
                 )
-                console.log(hasDirector)
-
                 if (!hasDirector) return false
                 return true
             },

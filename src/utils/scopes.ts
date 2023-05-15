@@ -1,14 +1,5 @@
-import type {
-    RoleType,
-    StateType,
-    ActionType,
-    AccessType} from './zod';
-import {
-    ROLE,
-    STATE,
-    ACTION,
-    ACCESS
-} from './zod'
+import type { RoleType, StateType, ActionType, AccessType } from './zod'
+import { ROLE, STATE, ACTION, ACCESS } from './zod'
 
 // This component is meant to export helper functionalities in a centralized matter when we come to roles or states.
 // Atomic SRP Components that operate with one of these actions, should be guarded by this functions.
@@ -28,6 +19,7 @@ const ROLE_SCOPE = {
         ACCESS.REVIEWS,
         ACTION.ACCEPT,
         ACTION.CREATE,
+        ACTION.EDIT,
     ],
     [ROLE.METHODOLOGIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
     [ROLE.SCIENTIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
@@ -36,6 +28,7 @@ const ROLE_SCOPE = {
         ACCESS.CONVOCATORIES,
         ACCESS.REVIEWS,
         ACCESS.USERS,
+        ACCESS.ACADEMIC_UNITS,
         ACTION.CREATE,
         ACTION.EDIT,
         ACTION.ACCEPT,

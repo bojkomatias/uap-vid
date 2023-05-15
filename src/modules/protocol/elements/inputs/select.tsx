@@ -27,7 +27,13 @@ export default function Select({
 
     return (
         <div>
-            <label className="label">{label}</label>
+            <label
+                className={clsx('label required', {
+                    'after:text-error-500': form.getInputProps(path).error,
+                })}
+            >
+                {label}
+            </label>
             <Combobox
                 as="div"
                 value={form.getInputProps(path).value}

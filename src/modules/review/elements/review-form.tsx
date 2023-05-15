@@ -8,6 +8,7 @@ import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
 import type { Review, User } from '@prisma/client'
+import { ReviewType } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -62,6 +63,7 @@ export default function ReviewForm({
         },
         [notifications]
     )
+
     return (
         <ItemContainer title="Realizar revisión">
             <SegmentedControl
@@ -108,9 +110,7 @@ export default function ReviewForm({
                 <label className="label">Observación</label>
                 <Tiptap {...form.getInputProps('data')} />
                 {form.getInputProps('data').error ? (
-                    <p className="error">
-                        *{form.getInputProps('data').error}
-                    </p>
+                    <p className="error">*{form.getInputProps('data').error}</p>
                 ) : null}
 
                 <RadioGroup

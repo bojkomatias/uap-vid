@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 //I couldn't implement this as a server side component, sadly.
 import { Button } from '@elements/button'
