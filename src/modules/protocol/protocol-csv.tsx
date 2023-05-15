@@ -18,8 +18,8 @@ export default function ProtocolCsv({
 }: {
     protocols: Protocol[] | null
 }) {
-    const jssRef: React.MutableRefObject<undefined | null> = useRef(null)
-    const spreadsheet: React.MutableRefObject<undefined | null> = useRef(null)
+    const jssRef = useRef(null)
+    const spreadsheet = useRef(null)
 
     jspreadsheet.setLicense(
         'ZTYyMTQ4MjY3MTAwYjFhOTBmMjIwY2UwYTdjMWIyZTczYWQ4MWFlYzFkYzZlNDYzZWY0ZTExOWE0Mjg4NmIyNTI1ZWU2ZmVmZDgwMjU4NDVhNGYxY2U4ZjYzZGZjNGU3OGRjNjA3NjdkNDVmZTUyMjkwOTlkM2ViY2M2NTQ0MjksZXlKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UWTVOVGMyT1RJd01Dd2laRzl0WVdsdUlqcGJJbXB6YUdWc2JDNXVaWFFpTENKcWMzQnlaV0ZrYzJobFpYUXVZMjl0SWl3aVkzTmlMbUZ3Y0NJc0luTmhiM0p2WTJzdVkyOXRJaXdpZFdVdVkyOXRMbUp5SWl3aWRXNXBkR1ZrTG1Wa2RXTmhkR2x2YmlJc0ltTnZaR1Z6WVc1a1ltOTRMbWx2SWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpNU0lzSW5OamIzQmxJanBiSW5ZM0lpd2lkamdpTENKMk9TSXNJbVp2Y20xeklpd2labTl5YlhWc1lTSXNJbkpsYm1SbGNpSXNJbkJoY25ObGNpSXNJbWx0Y0c5eWRHVnlJaXdpZG1Gc2FXUmhkR2x2Ym5NaUxDSmpiMjF0Wlc1MGN5SXNJbk5sWVhKamFDSXNJbU5vWVhKMGN5SXNJbU5zYjNWa0lpd2lZbUZ5SWl3aWNISnBiblFpTENKdFlYTnJJaXdpYzJobFpYUnpJbDE5'

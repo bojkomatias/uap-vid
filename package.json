@@ -12,7 +12,6 @@
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@headlessui/react": "^1.7.14",
-        "@jspreadsheet/autowidth": "^2.2.2",
         "@jspreadsheet/render": "^3.0.3",
         "@mantine/core": "^6.0.7",
         "@mantine/dates": "^6.0.7",
