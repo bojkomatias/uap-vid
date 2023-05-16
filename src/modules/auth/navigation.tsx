@@ -19,7 +19,7 @@ export default async function Navigation({
     const currentConvocatory = await getCurrentConvocatory()
 
     const hasNavigation =
-        session?.user?.role === 'ADMIN' || session?.user?.role === 'SECRETARY'
+        session?.user?.role === 'ADMIN'
     return (
         <>
             {hasNavigation ? (

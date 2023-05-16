@@ -49,7 +49,7 @@ export default function ReviewItem({
                                     {
                                         'ring-1 ring-warning-500/50':
                                             review.verdict ===
-                                            ReviewVerdict.PENDING,
+                                            ReviewVerdict.APPROVED_WITH_CHANGES,
                                         'ring-1 ring-success-500/50':
                                             review.verdict ===
                                             ReviewVerdict.APPROVED,
@@ -64,7 +64,7 @@ export default function ReviewItem({
                                     className={clsx('h-2 w-2 rounded', {
                                         'bg-warning-500 ':
                                             review.verdict ===
-                                            ReviewVerdict.PENDING,
+                                            ReviewVerdict.APPROVED_WITH_CHANGES,
                                         'bg-success-600':
                                             review.verdict ===
                                             ReviewVerdict.APPROVED,
@@ -76,7 +76,8 @@ export default function ReviewItem({
                             </span>
                         </div>
 
-                        {review.verdict === ReviewVerdict.PENDING ? (
+                        {review.verdict ===
+                        ReviewVerdict.APPROVED_WITH_CHANGES ? (
                             role === Role.RESEARCHER ? (
                                 <ReviseCheckbox
                                     id={review.id}
@@ -91,7 +92,7 @@ export default function ReviewItem({
                             )
                         ) : null}
                     </div>
-                    <div className="max-h-[50svh] overflow-y-auto">
+                    <div className="max-h-[70svh] overflow-y-auto">
                         {review.questions.map((question) => (
                             <ReviewQuestionView
                                 key={question.id}
