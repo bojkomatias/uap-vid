@@ -26,7 +26,10 @@ export default function ReviewForm({ review }: { review: Review }) {
     const notifications = useNotifications()
 
     const addReview = useCallback(
-        async (review: Review, saveOnly = false) => {
+        async (
+            review: Review,
+            notificationText = 'La revisión fue correctamente publicada.'
+        ) => {
             const res = await fetch(`/api/review/${review.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(review),
@@ -35,9 +38,7 @@ export default function ReviewForm({ review }: { review: Review }) {
             if (res.status == 200) {
                 notifications.showNotification({
                     title: 'Revisión publicada',
-                    message: saveOnly
-                        ? 'Tu revisión fue guardada como borrador, sin veredicto.'
-                        : 'Tu revisión fue correctamente publicada.',
+                    message: notificationText,
                     color: 'teal',
                     icon: <Check />,
                     radius: 0,
@@ -297,7 +298,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         ...form.values,
                                         verdict: 'NOT_REVIEWED',
                                     },
-                                    true
+                                    'La revision fue guardada como borrador, sin veredicto. No podrá ser vista por nadie más que usted.'
                                 )
                             }
                         >

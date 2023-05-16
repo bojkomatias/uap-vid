@@ -6,10 +6,12 @@ export default function ReviewQuestionView({
     id,
     approved,
     comment,
-}: ReviewQuestion) {
+    index,
+}: ReviewQuestion & { index: number }) {
     return (
-        <div className="p-3">
-            <div className="flex justify-between gap-1 text-xs font-semibold text-gray-600">
+        <div>
+            <div className="flex justify-between gap-1 text-xs text-gray-600">
+                <b>{index + 1}- </b>
                 {questions.find((question) => question.id === id)?.question}
                 <div>
                     {approved ? (
@@ -19,7 +21,7 @@ export default function ReviewQuestionView({
                     )}
                 </div>
             </div>
-            <div className="mt-1 pl-2 text-xs font-medium text-gray-500">
+            <div className="mt-1 pl-4 text-xs font-light text-gray-900">
                 {comment}
             </div>
         </div>

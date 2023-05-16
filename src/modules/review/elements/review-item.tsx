@@ -4,10 +4,11 @@ import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
-import { useCallback, useTransition } from 'react'
+import { useCallback, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
+import { ChevronRight } from 'tabler-icons-react'
 
 export default function ReviewItem({
     review,
@@ -27,6 +28,7 @@ export default function ReviewItem({
             (minutes && relativeTimeFormatter.format(-minutes, 'minute'))
         )
     }
+    const [showReviewQuestions, setShowReviewQuestions] = useState(false)
 
     return (
         <li>
@@ -38,7 +40,10 @@ export default function ReviewItem({
                         'bg-white opacity-100': !review.revised,
                     })}
                 >
-                    <div className="-mb-px flex items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500">
+                    <button
+                        className="-mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
+                        onClick={() => setShowReviewQuestions((prv) => !prv)}
+                    >
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-light text-gray-600">
                                 Veredicto:
@@ -91,15 +96,24 @@ export default function ReviewItem({
                                 </label>
                             )
                         ) : null}
-                    </div>
-                    <div className="max-h-[70svh] overflow-y-auto">
-                        {review.questions.map((question) => (
-                            <ReviewQuestionView
-                                key={question.id}
-                                {...question}
-                            />
-                        ))}
-                    </div>
+                        <ChevronRight
+                            className={clsx('h-4 w-4 transition', {
+                                'rotate-90': showReviewQuestions,
+                            })}
+                        />
+                    </button>
+
+                    {showReviewQuestions && (
+                        <div className="space-y-4 py-4 pl-2 pr-4">
+                            {review.questions.map((question, index) => (
+                                <ReviewQuestionView
+                                    key={question.id}
+                                    index={index}
+                                    {...question}
+                                />
+                            ))}
+                        </div>
+                    )}
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
                         <span className="font-semibold text-gray-700">

@@ -32,9 +32,10 @@ export default function ReviewQuestion({
                 }
             >
                 <RadioGroup.Label className="select-none text-xs">
+                    <b>{index + 1}- </b>
                     {questions.find((question) => question.id === id)?.question}
                 </RadioGroup.Label>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="mt-1 grid grid-cols-2 gap-6">
                     <RadioGroup.Option
                         key={`yes-${id}`}
                         value={true}
