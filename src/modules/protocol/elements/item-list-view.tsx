@@ -35,12 +35,12 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
                                 </span>
 
                                 {item.data.map((row, index) => (
-                                    <ListRow data={row} key={index} />
+                                    <ListRow data={row} key={index}/>
+                                    
                                 ))}
                             </div>
                         ))}
                     </div>
-
                 </dd>
             ) : (
                 <EmptyStateItem />
