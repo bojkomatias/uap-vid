@@ -1,7 +1,6 @@
 import { ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
-import ItemContainer from '@review/elements/review-container'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
 
@@ -48,7 +47,7 @@ const ReviewAssignation = async ({
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
                         ?.verdict === ReviewVerdict.APPROVED) ||
                 reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.PENDING ||
+                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
                 protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(
@@ -66,7 +65,7 @@ const ReviewAssignation = async ({
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
                         ?.verdict === ReviewVerdict.APPROVED) ||
                 reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.PENDING ||
+                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
                 protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(
@@ -75,18 +74,12 @@ const ReviewAssignation = async ({
         },
     ].filter((r) => r.enabled)
 
-    return (
-        <ItemContainer title="Evaluadores">
-            {reviewAssignSelectsData.map((data) => (
-                <div key={data.type} className="mb-4">
-                    <label className="label">
-                        {EvaluatorsByReviewType[data.type]}
-                    </label>
-                    <ReviewAssignSelect {...data} />
-                </div>
-            ))}
-        </ItemContainer>
-    )
+    return reviewAssignSelectsData.map((data) => (
+        <div key={data.type} className="mb-4 px-2">
+            <label className="label">{EvaluatorsByReviewType[data.type]}</label>
+            <ReviewAssignSelect {...data} />
+        </div>
+    ))
 }
 
 export default ReviewAssignation

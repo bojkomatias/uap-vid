@@ -1,37 +1,35 @@
 'use client'
 import { Button } from '@elements/button'
-import { useForm } from '@mantine/form'
-import { useCallback, useState } from 'react'
+import { useCallback, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
 import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
-import dynamic from 'next/dynamic'
-import type { Review, User } from '@prisma/client'
-import { ReviewType } from '@prisma/client'
+import { ReviewType, ReviewVerdict } from '@prisma/client'
+import type { Review } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ItemContainer from '@review/elements/review-container'
-import ReviewItem from '@review/elements/review-item'
-import { SegmentedControl } from '@mantine/core'
-const Tiptap = dynamic(() => import('@elements/tiptap'))
+import ReviewQuestion from './review-question'
+import { ReviewProvider, useReview } from '@utils/reviewContext'
+import { useRouter } from 'next/navigation'
 
-export default function ReviewForm({
-    review,
-}: {
-    review: Review & { reviewer: User }
-}) {
-    const form = useForm<Review>({
+export default function ReviewForm({ review }: { review: Review }) {
+    const form = useReview({
         initialValues: review,
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
-    const [editing, setEditing] = useState('0')
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition()
     const notifications = useNotifications()
 
     const addReview = useCallback(
-        async (review: Review) => {
+        async (
+            review: Review,
+            notificationText = 'La revisión fue correctamente publicada.'
+        ) => {
             const res = await fetch(`/api/review/${review.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(review),
@@ -40,7 +38,7 @@ export default function ReviewForm({
             if (res.status == 200) {
                 notifications.showNotification({
                     title: 'Revisión publicada',
-                    message: 'Tu revisión fue correctamente publicada.',
+                    message: notificationText,
                     color: 'teal',
                     icon: <Check />,
                     radius: 0,
@@ -60,151 +58,266 @@ export default function ReviewForm({
                     },
                 })
             }
+            startTransition(() => router.refresh())
         },
-        [notifications]
+        [notifications, router]
     )
 
     return (
         <ItemContainer title="Realizar revisión">
-            <SegmentedControl
-                value={editing}
-                onChange={setEditing}
-                data={[
-                    { label: 'Vista previa', value: '0' },
-                    { label: 'Edición', value: '1' },
-                ]}
-                classNames={{
-                    root: 'bg-gray-50 border rounded',
-                    label: 'uppercase text-xs px-2 py-1 font-light',
-                    indicator: 'bg-primary font-semibold',
-                }}
-                color="blue"
-                fullWidth
-                transitionDuration={300}
-            />
-
-            <ul className={editing === '0' ? 'block' : 'hidden'}>
-                <ReviewItem
-                    review={{ ...form.values, reviewer: review.reviewer }}
-                    role={review.reviewer.role}
-                />
-            </ul>
-
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    addReview({
-                        id: form.values.id,
-                        data: form.values.data,
-                        verdict: form.values.verdict,
-                        createdAt: form.values.createdAt,
-                        updatedAt: form.values.updatedAt,
-                        type: form.values.type,
-                        protocolId: form.values.protocolId,
-                        reviewerId: form.values.reviewerId,
-                        revised: form.values.revised,
-                    })
-                }}
-                className={editing === '1' ? 'block' : 'hidden'}
-            >
-                <label className="label">Observación</label>
-                <Tiptap {...form.getInputProps('data')} />
-                {form.getInputProps('data').error ? (
-                    <p className="error">*{form.getInputProps('data').error}</p>
-                ) : null}
-
-                <RadioGroup
-                    {...form.getInputProps('verdict')}
-                    defaultValue="PENDING"
+            <ReviewProvider form={form}>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        addReview(form.values)
+                    }}
                 >
-                    <RadioGroup.Label className="label">
-                        Veredicto
-                    </RadioGroup.Label>
-                    <div className="-space-y-px bg-white">
-                        {Object.entries(ReviewVerdictsDictionary).map(
-                            ([id, name], index) => (
-                                <RadioGroup.Option
-                                    key={id}
-                                    value={id}
-                                    className={({ checked }) =>
-                                        clsx(
-                                            index === 0
-                                                ? 'rounded-tl rounded-tr'
-                                                : '',
-                                            index ===
-                                                Object.keys(
-                                                    ReviewVerdictsDictionary
-                                                ).length -
-                                                    1
-                                                ? 'rounded-bl rounded-br'
-                                                : '',
-                                            checked
-                                                ? 'z-10 border-gray-300 bg-primary/5'
-                                                : 'border-gray-200',
-                                            'relative flex cursor-pointer items-baseline border px-5 py-2.5 focus:outline-none'
-                                        )
-                                    }
-                                >
-                                    {({ active, checked }) => (
-                                        <>
-                                            <span
+                    <div className="max-h-[54svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
+                        {form.values.questions.map((q, index) => (
+                            <ReviewQuestion
+                                key={q.id}
+                                index={index}
+                                id={q.id}
+                            />
+                        ))}
+                    </div>
+                    <RadioGroup
+                        {...form.getInputProps('verdict')}
+                        className={'mx-2'}
+                    >
+                        <RadioGroup.Label className="label">
+                            Veredicto
+                        </RadioGroup.Label>
+                        <div className="-space-y-px bg-white">
+                            <RadioGroup.Option
+                                value={ReviewVerdict.APPROVED}
+                                className={({ checked }) =>
+                                    clsx(
+                                        checked
+                                            ? 'z-10 border-success-600/30 bg-success-600/5'
+                                            : 'border-gray-200',
+                                        'relative flex cursor-pointer items-baseline rounded-t border px-5 py-2.5 focus:outline-none'
+                                    )
+                                }
+                            >
+                                {({ active, checked }) => (
+                                    <>
+                                        <span
+                                            className={clsx(
+                                                checked
+                                                    ? 'border-transparent bg-success-600'
+                                                    : 'border-gray-300 bg-white',
+                                                active
+                                                    ? 'ring-2 ring-success-600 ring-offset-1'
+                                                    : '',
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                            )}
+                                            aria-hidden="true"
+                                        >
+                                            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                                        </span>
+                                        <span className="ml-3 flex flex-col">
+                                            <RadioGroup.Label
+                                                as="span"
                                                 className={clsx(
                                                     checked
-                                                        ? 'border-transparent bg-primary'
-                                                        : 'border-gray-300 bg-white',
-                                                    active
-                                                        ? 'ring-2 ring-primary ring-offset-1'
-                                                        : '',
-                                                    'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                                        ? 'font-medium text-gray-900'
+                                                        : 'font-regular text-gray-700',
+                                                    'block text-sm'
                                                 )}
-                                                aria-hidden="true"
                                             >
-                                                <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                                            </span>
-                                            <span className="ml-3 flex flex-col">
-                                                <RadioGroup.Label
-                                                    as="span"
-                                                    className={clsx(
-                                                        checked
-                                                            ? 'font-medium text-gray-900'
-                                                            : 'font-regular text-gray-700',
-                                                        'block text-sm'
-                                                    )}
-                                                >
-                                                    {name}
-                                                </RadioGroup.Label>
-                                                <RadioGroup.Description
-                                                    as="span"
-                                                    className={clsx(
-                                                        checked
-                                                            ? 'text-gray-700'
-                                                            : 'text-gray-500',
-                                                        'block text-xs'
-                                                    )}
-                                                >
-                                                    {id === 'PENDING'
-                                                        ? 'Enviar correcciones sin veredicto, esperar cambios para re-evaluar.'
-                                                        : id === 'APPROVED'
-                                                        ? 'Hacer devolución del proyecto como válido y apto para continuar el proceso.'
-                                                        : 'Marcar proyecto como rechazado.'}
-                                                </RadioGroup.Description>
-                                            </span>
-                                        </>
-                                    )}
-                                </RadioGroup.Option>
-                            )
-                        )}
+                                                {
+                                                    ReviewVerdictsDictionary[
+                                                        ReviewVerdict.APPROVED
+                                                    ]
+                                                }
+                                            </RadioGroup.Label>
+                                            <RadioGroup.Description
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'text-gray-700'
+                                                        : 'text-gray-500',
+                                                    'block text-xs'
+                                                )}
+                                            >
+                                                Hacer devolución del proyecto
+                                                como válido y apto para
+                                                continuar el proceso.
+                                            </RadioGroup.Description>
+                                        </span>
+                                    </>
+                                )}
+                            </RadioGroup.Option>
+                            <RadioGroup.Option
+                                value={ReviewVerdict.APPROVED_WITH_CHANGES}
+                                className={({ checked }) =>
+                                    clsx(
+                                        {
+                                            'rounded-b':
+                                                review.type ===
+                                                ReviewType.METHODOLOGICAL,
+                                        },
+                                        checked
+                                            ? 'z-10 border-warning-600/30 bg-warning-600/5'
+                                            : 'border-gray-200',
+                                        'relative flex cursor-pointer items-baseline border px-5 py-2.5 focus:outline-none'
+                                    )
+                                }
+                            >
+                                {({ active, checked }) => (
+                                    <>
+                                        <span
+                                            className={clsx(
+                                                checked
+                                                    ? 'border-transparent bg-warning-600'
+                                                    : 'border-gray-300 bg-white',
+                                                active
+                                                    ? 'ring-2 ring-warning-600 ring-offset-1'
+                                                    : '',
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                            )}
+                                            aria-hidden="true"
+                                        >
+                                            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                                        </span>
+                                        <span className="ml-3 flex flex-col">
+                                            <RadioGroup.Label
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'font-medium text-gray-900'
+                                                        : 'font-regular text-gray-700',
+                                                    'block text-sm'
+                                                )}
+                                            >
+                                                {
+                                                    ReviewVerdictsDictionary[
+                                                        ReviewVerdict
+                                                            .APPROVED_WITH_CHANGES
+                                                    ]
+                                                }
+                                            </RadioGroup.Label>
+                                            <RadioGroup.Description
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'text-gray-700'
+                                                        : 'text-gray-500',
+                                                    'block text-xs'
+                                                )}
+                                            >
+                                                Enviar correcciones, si los
+                                                cambios son abordados
+                                                correctamente, se da como
+                                                aprobado.
+                                            </RadioGroup.Description>
+                                        </span>
+                                    </>
+                                )}
+                            </RadioGroup.Option>
+                            <RadioGroup.Option
+                                value={ReviewVerdict.REJECTED}
+                                className={({ checked }) =>
+                                    clsx(
+                                        {
+                                            hidden:
+                                                review.type ===
+                                                ReviewType.METHODOLOGICAL,
+                                        },
+                                        checked
+                                            ? 'z-10 border-error-600/30 bg-error-600/5'
+                                            : 'border-gray-200',
+                                        'relative flex cursor-pointer items-baseline rounded-b border px-5 py-2.5 focus:outline-none'
+                                    )
+                                }
+                            >
+                                {({ active, checked }) => (
+                                    <>
+                                        <span
+                                            className={clsx(
+                                                checked
+                                                    ? 'border-transparent bg-error-600'
+                                                    : 'border-gray-300 bg-white',
+                                                active
+                                                    ? 'ring-2 ring-error-600 ring-offset-1'
+                                                    : '',
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                            )}
+                                            aria-hidden="true"
+                                        >
+                                            <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                                        </span>
+                                        <span className="ml-3 flex flex-col">
+                                            <RadioGroup.Label
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'font-medium text-gray-900'
+                                                        : 'font-regular text-gray-700',
+                                                    'block text-sm'
+                                                )}
+                                            >
+                                                {
+                                                    ReviewVerdictsDictionary[
+                                                        ReviewVerdict.REJECTED
+                                                    ]
+                                                }
+                                            </RadioGroup.Label>
+                                            <RadioGroup.Description
+                                                as="span"
+                                                className={clsx(
+                                                    checked
+                                                        ? 'text-gray-700'
+                                                        : 'text-gray-500',
+                                                    'block text-xs'
+                                                )}
+                                            >
+                                                Marcar protocolo de
+                                                investigación como rechazado.
+                                            </RadioGroup.Description>
+                                        </span>
+                                    </>
+                                )}
+                            </RadioGroup.Option>
+                        </div>
+                    </RadioGroup>
+                    <div className="ml-auto mr-2 mt-2 flex w-fit gap-2">
+                        <Button
+                            type="button"
+                            intent="tertiary"
+                            loading={isPending}
+                            className={
+                                review.verdict !== ReviewVerdict.NOT_REVIEWED
+                                    ? 'hidden'
+                                    : ''
+                            }
+                            onClick={() =>
+                                addReview(
+                                    {
+                                        ...form.values,
+                                        verdict: 'NOT_REVIEWED',
+                                    },
+                                    'La revision fue guardada como borrador, sin veredicto. No podrá ser vista por nadie más que usted.'
+                                )
+                            }
+                        >
+                            Guardar
+                        </Button>
+                        <Button
+                            type="submit"
+                            loading={isPending}
+                            intent="secondary"
+                            disabled={
+                                form.values.verdict ===
+                                ReviewVerdict.NOT_REVIEWED
+                            }
+                        >
+                            Enviar
+                        </Button>
                     </div>
-                </RadioGroup>
-
-                <Button
-                    type="submit"
-                    className="ml-auto mt-2"
-                    intent="secondary"
-                >
-                    Comentar
-                </Button>
-            </form>
+                </form>
+            </ReviewProvider>
         </ItemContainer>
     )
 }

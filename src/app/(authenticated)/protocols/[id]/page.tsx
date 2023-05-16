@@ -1,6 +1,4 @@
-'use server'
 import View from '@protocol/protocol-view-template'
-import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
 import { getServerSession } from 'next-auth'
@@ -25,12 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <div className="mr-3 mt-1 flex items-center gap-2 md:ml-8">
-                <div className="flex-1">
-                    <span className="rounded border bg-gray-50 px-2 py-0.5 text-sm font-semibold uppercase text-gray-600">
-                        {ProtocolStatesDictionary[protocol?.state]}
-                    </span>
-                </div>
+            <div className="mr-3 mt-1 flex items-center justify-end gap-2 md:ml-8">
                 <PDF protocol={protocol} />
                 <ApproveButton role={session.user.role} protocol={protocol} />
                 <AcceptButton
@@ -45,6 +38,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     id={protocol?.id}
                 />
             </div>
+
             <View sections={protocol.sections} role={session.user.role} />
         </>
     )

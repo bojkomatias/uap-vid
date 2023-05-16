@@ -4,10 +4,11 @@ import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
-import { useCallback, useTransition } from 'react'
+import { useCallback, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import TextItemView from '@protocol/elements/text-item-view'
 import { relativeTimeFormatter } from '@utils/formatters'
+import ReviewQuestionView from './review-question-view'
+import { ChevronRight } from 'tabler-icons-react'
 
 export default function ReviewItem({
     review,
@@ -16,9 +17,8 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     role: Role
 }) {
-    if (!review.data) return null
-    function getDuration(millis: number) {
-        const minutes = Math.floor(millis / 60000)
+    function getDuration(milliseconds: number) {
+        const minutes = Math.floor(milliseconds / 60000)
         const hours = Math.round(minutes / 60)
         const days = Math.round(hours / 24)
 
@@ -28,6 +28,7 @@ export default function ReviewItem({
             (minutes && relativeTimeFormatter.format(-minutes, 'minute'))
         )
     }
+    const [showReviewQuestions, setShowReviewQuestions] = useState(false)
 
     return (
         <li>
@@ -39,7 +40,10 @@ export default function ReviewItem({
                         'bg-white opacity-100': !review.revised,
                     })}
                 >
-                    <div className="-mb-px flex items-center justify-between space-x-4 bg-gray-100 px-2 py-1 text-gray-500">
+                    <button
+                        className="-mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
+                        onClick={() => setShowReviewQuestions((prv) => !prv)}
+                    >
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-light text-gray-600">
                                 Veredicto:
@@ -50,7 +54,7 @@ export default function ReviewItem({
                                     {
                                         'ring-1 ring-warning-500/50':
                                             review.verdict ===
-                                            ReviewVerdict.PENDING,
+                                            ReviewVerdict.APPROVED_WITH_CHANGES,
                                         'ring-1 ring-success-500/50':
                                             review.verdict ===
                                             ReviewVerdict.APPROVED,
@@ -65,7 +69,7 @@ export default function ReviewItem({
                                     className={clsx('h-2 w-2 rounded', {
                                         'bg-warning-500 ':
                                             review.verdict ===
-                                            ReviewVerdict.PENDING,
+                                            ReviewVerdict.APPROVED_WITH_CHANGES,
                                         'bg-success-600':
                                             review.verdict ===
                                             ReviewVerdict.APPROVED,
@@ -77,7 +81,8 @@ export default function ReviewItem({
                             </span>
                         </div>
 
-                        {review.verdict === ReviewVerdict.PENDING ? (
+                        {review.verdict ===
+                        ReviewVerdict.APPROVED_WITH_CHANGES ? (
                             role === Role.RESEARCHER ? (
                                 <ReviseCheckbox
                                     id={review.id}
@@ -91,19 +96,24 @@ export default function ReviewItem({
                                 </label>
                             )
                         ) : null}
-                    </div>
-                    <div
-                    // className={clsx({
-                    //     hidden: review.revised,
-                    //     block: !review.revised,
-                    // })}
-                    >
-                        <TextItemView
-                            title=""
-                            content={review.data}
-                            className="px-2"
+                        <ChevronRight
+                            className={clsx('h-4 w-4 transition', {
+                                'rotate-90': showReviewQuestions,
+                            })}
                         />
-                    </div>
+                    </button>
+
+                    {showReviewQuestions && (
+                        <div className="space-y-4 py-4 pl-2 pr-4">
+                            {review.questions.map((question, index) => (
+                                <ReviewQuestionView
+                                    key={question.id}
+                                    index={index}
+                                    {...question}
+                                />
+                            ))}
+                        </div>
+                    )}
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
                         <span className="font-semibold text-gray-700">

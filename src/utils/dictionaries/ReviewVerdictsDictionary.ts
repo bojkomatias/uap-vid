@@ -1,7 +1,8 @@
 import { ReviewVerdict } from '@prisma/client'
 
 export default {
-    [ReviewVerdict.PENDING]: 'Pendiente',
+    [ReviewVerdict.NOT_REVIEWED]: 'Sin revisión',
+    [ReviewVerdict.APPROVED_WITH_CHANGES]: 'Aprobado con cambios',
     [ReviewVerdict.APPROVED]: 'Aprobado',
-    [ReviewVerdict.REJECTED]: 'Rechazado',
+    [ReviewVerdict.REJECTED]: 'Desaprobado',
 } as const

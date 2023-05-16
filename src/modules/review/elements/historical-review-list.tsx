@@ -21,7 +21,7 @@ export function HistoricalReviewList({
                 onClick={() => setShowHistorical((prv) => !prv)}
                 className="flex cursor-pointer items-center gap-3 focus:outline-0"
             >
-                <span className="text-sm font-semibold leading-10 text-gray-700">
+                <span className="ml-2 text-sm font-semibold leading-10 text-gray-700">
                     Revisiones históricas
                 </span>
                 <ChevronRight
@@ -30,7 +30,7 @@ export function HistoricalReviewList({
                     })}
                 />
             </button>
-            <ul role="list" className="space-y-3">
+            <ul role="list" className="space-y-3 px-1">
                 {showHistorical &&
                     reviews.map((r, i) => (
                         <ReviewItem key={i} review={r} role={role} />
