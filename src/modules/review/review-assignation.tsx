@@ -48,7 +48,7 @@ const ReviewAssignation = async ({
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
                         ?.verdict === ReviewVerdict.APPROVED) ||
                 reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.PENDING ||
+                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
                 protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(
@@ -66,7 +66,7 @@ const ReviewAssignation = async ({
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
                         ?.verdict === ReviewVerdict.APPROVED) ||
                 reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.PENDING ||
+                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
                 protocolState === State.SCIENTIFIC_EVALUATION,
             review:
                 reviews.find(

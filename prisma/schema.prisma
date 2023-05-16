@@ -179,7 +179,7 @@ enum ReviewType {
 enum ReviewVerdict {
   APPROVED
   REJECTED
-  PENDING
+  APPROVED_WITH_CHANGES
   NOT_REVIEWED
 }
 
