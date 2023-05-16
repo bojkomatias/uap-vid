@@ -21,6 +21,7 @@
         "@react-pdf/renderer": "^3.1.9",
         "@tabler/icons": "^2.15.0",
         "@tailwindcss/forms": "^0.5.3",
+        "@tiptap/extension-character-count": "^2.0.3",
         "@tiptap/extension-text-align": "2.0.0-beta.220",
         "@tiptap/pm": "^2.0.3",
         "@tiptap/react": "2.0.0-beta.220",
