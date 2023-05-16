@@ -6,8 +6,8 @@ import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import TextItemView from '@protocol/elements/text-item-view'
 import { relativeTimeFormatter } from '@utils/formatters'
+import ReviewQuestionView from './review-question-view'
 
 export default function ReviewItem({
     review,
@@ -16,9 +16,8 @@ export default function ReviewItem({
     review: Review & { reviewer: User }
     role: Role
 }) {
-    if (!review.data) return null
-    function getDuration(millis: number) {
-        const minutes = Math.floor(millis / 60000)
+    function getDuration(milliseconds: number) {
+        const minutes = Math.floor(milliseconds / 60000)
         const hours = Math.round(minutes / 60)
         const days = Math.round(hours / 24)
 
@@ -39,7 +38,7 @@ export default function ReviewItem({
                         'bg-white opacity-100': !review.revised,
                     })}
                 >
-                    <div className="-mb-px flex items-center justify-between space-x-4 bg-gray-100 px-2 py-1 text-gray-500">
+                    <div className="-mb-px flex items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500">
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-light text-gray-600">
                                 Veredicto:
@@ -92,17 +91,13 @@ export default function ReviewItem({
                             )
                         ) : null}
                     </div>
-                    <div
-                    // className={clsx({
-                    //     hidden: review.revised,
-                    //     block: !review.revised,
-                    // })}
-                    >
-                        <TextItemView
-                            title=""
-                            content={review.data}
-                            className="px-2"
-                        />
+                    <div className="max-h-[50svh] overflow-y-auto">
+                        {review.questions.map((question) => (
+                            <ReviewQuestionView
+                                key={question.id}
+                                {...question}
+                            />
+                        ))}
                     </div>
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
