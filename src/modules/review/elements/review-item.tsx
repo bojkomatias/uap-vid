@@ -76,7 +76,8 @@ export default function ReviewItem({
                             </span>
                         </div>
 
-                        {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ? (
+                        {review.verdict ===
+                        ReviewVerdict.APPROVED_WITH_CHANGES ? (
                             role === Role.RESEARCHER ? (
                                 <ReviseCheckbox
                                     id={review.id}
@@ -91,7 +92,7 @@ export default function ReviewItem({
                             )
                         ) : null}
                     </div>
-                    <div className="max-h-[50svh] overflow-y-auto">
+                    <div className="max-h-[70svh] overflow-y-auto">
                         {review.questions.map((question) => (
                             <ReviewQuestionView
                                 key={question.id}

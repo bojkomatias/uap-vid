@@ -71,7 +71,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         addReview(form.values)
                     }}
                 >
-                    <div className="max-h-[50svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
+                    <div className="max-h-[54svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
                         {form.values.questions.map((q, index) => (
                             <ReviewQuestion
                                 key={q.id}

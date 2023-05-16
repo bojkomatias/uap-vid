@@ -39,7 +39,7 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
               )
 
     return (
-        <ItemContainer title="Revisiones">
+        <ItemContainer title="Revisiones" fit={role === Role.ADMIN || role === Role.SECRETARY}>
             {reviewsInState.some(
                 (r) => r.verdict !== ReviewVerdict.NOT_REVIEWED
             ) ? (
