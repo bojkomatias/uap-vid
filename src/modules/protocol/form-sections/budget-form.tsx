@@ -43,6 +43,26 @@ export function BudgetForm() {
                             ),
                         },
                     ]}
+                    footer={
+                        <div className="ml-auto mr-4 flex w-fit gap-2 py-4 text-xl">
+                            <p className="text-gray-400">Total: </p> $
+                            {form.values.sections.budget.expenses
+                                .reduce((acc, val) => {
+                                    return (
+                                        acc +
+                                        val.data.reduce((prev, curr) => {
+                                            if (isNaN(curr.amount))
+                                                curr.amount = 0
+                                            else curr.amount
+                                            return prev + curr.amount
+                                        }, 0)
+                                    )
+                                }, 0)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        </div>
+                    }
+                    isBudget={true}
                 />
             </>
         </motion.div>

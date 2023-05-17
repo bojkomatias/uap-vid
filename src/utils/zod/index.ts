@@ -142,16 +142,40 @@ export const UserSchema = z.object({
 // PROTOCOL SECTIONS SCHEMA
 /////////////////////////////////////////
 
-export const SectionsSchema = z.object({
-    bibliography: z.lazy(() => BibliographySchema),
-    budget: z.lazy(() => BudgetSchema),
-    description: z.lazy(() => DescriptionSchema),
-    duration: z.lazy(() => DurationSchema),
-    identification: z.lazy(() => IdentificationSchema),
-    introduction: z.lazy(() => IntroductionSchema),
-    methodology: z.lazy(() => MethodologySchema),
-    publication: z.lazy(() => PublicationSchema),
-})
+export const SectionsSchema = z
+    .object({
+        bibliography: z.lazy(() => BibliographySchema),
+        budget: z.lazy(() => BudgetSchema),
+        description: z.lazy(() => DescriptionSchema),
+        duration: z.lazy(() => DurationSchema),
+        identification: z.lazy(() => IdentificationSchema),
+        introduction: z.lazy(() => IntroductionSchema),
+        methodology: z.lazy(() => MethodologySchema),
+        publication: z.lazy(() => PublicationSchema),
+    })
+    .refine(
+        (value) => {
+            //Check if the protocol (investigation project) is of PIC type. If it is, enforce the "assignment" field in the validation. If it isn't, it's an optional field.
+            if (
+                value.duration.modality ===
+                'Proyecto de investigación desde las cátedras (PIC)'
+            ) {
+                if (value.identification.assignment)
+                    if (value.identification.assignment.length <= 0)
+                        return false
+                    else {
+                        return true
+                    }
+            } else {
+                return true
+            }
+        },
+
+        {
+            message: 'Campo requerido',
+            path: ['identification', 'assignment'],
+        }
+    )
 
 export type Sections = z.infer<typeof SectionsSchema>
 
@@ -197,13 +221,12 @@ export const BudgetSchema = z.object({
                         detail: z.string().min(1, {
                             message: 'El campo no puede estar vacío',
                         }),
-                        amount: z
-                            .number({
-                                invalid_type_error:
-                                    'Este campo debe ser numérico',
+                        amount: z.any(),
+                        year: z
+                            .string({
+                                invalid_type_error: 'Debe seleccionar un año',
                             })
-                            .positive({ message: 'Debe ser mayor que cero' }),
-                        year: z.string(),
+                            .min(1, { message: 'Debe seleccionar un año' }),
                     })
                     .array(),
             })
@@ -265,7 +288,7 @@ export const DurationSchema = z.object({
 
 export const IdentificationSchema = z.object({
     assignment: z.string().optional(),
-    career: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+    career: z.string().min(1, 'El campo no puede estar vacío'),
     sponsor: z.string().array(),
     title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
     team: z
@@ -300,6 +323,7 @@ export const IdentificationSchema = z.object({
                 const hasDirector = value.some(
                     (team) => team.role === 'Director'
                 )
+
                 if (!hasDirector) return false
                 return true
             },

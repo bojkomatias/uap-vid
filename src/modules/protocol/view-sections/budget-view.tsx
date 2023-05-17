@@ -20,17 +20,18 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                             down: item.detail,
                             inverted: true,
                         },
+                       
+                        {
+                            up: 'Año',
+                            down: item.year,
+                            inverted: true,
+                        },
                         {
                             up: 'Monto',
                             down: `$${item.amount}`.replace(
                                 /\B(?=(\d{3})+(?!\d))/g,
                                 '.'
                             ),
-                            inverted: true,
-                        },
-                        {
-                            up: 'Año',
-                            down: item.year,
                             inverted: true,
                         },
                     ])
@@ -45,7 +46,18 @@ const BudgetView = ({ data }: BudgetViewProps) => {
             title="Presupuesto"
             description="Detalles del presupuesto"
         >
-            <ItemListView data={tableData} />
+            <ItemListView data={tableData} footer={<div className='flex gap-2 py-4 ml-auto w-fit text-xl mr-4'><p className='text-gray-400'>Total: </p> ${data.expenses.reduce((acc, val) => {
+                        return (
+                            acc +
+                            val.data.reduce((prev, curr) => {
+                                
+                                if(isNaN(curr.amount)) curr.amount = 0
+                                else curr.amount
+                                return prev + curr.amount;
+                            }, 0) 
+                        )
+                    }, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>} />
+            
         </SectionViewer>
     )
 }

@@ -27,18 +27,19 @@ export const initialSectionValues: Sections = {
     },
     budget: {
         expenses: [
-            { type: 'Insumos', data: [{ detail: '-', amount: 0, year: '' }] },
-            { type: 'Libros', data: [{ detail: '-', amount: 0, year: '' }] },
+            { type: 'Insumos', data: [] },
+            { type: 'Libros', data: [] },
             {
                 type: 'Materiales de Impresión',
-                data: [{ detail: '-', amount: 0, year: '' }],
+                data: [],
             },
-            { type: 'Viajes', data: [{ detail: '-', amount: 0, year: '' }] },
+            { type: 'Viajes', data: [] },
             {
                 type: 'Gastos por publicación',
-                data: [{ detail: '-', amount: 0, year: '' }],
+                data: [],
             },
-            { type: 'Otros', data: [{ detail: '-', amount: 0, year: '' }] },
+            { type: 'Otros', data: [] },
+
         ],
     },
     description: {

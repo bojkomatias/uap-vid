@@ -11,8 +11,9 @@ interface ItemListProps {
         values?: ListRowValues[]
         deepValues?: DeepValue[]
     }
+    footer?: React.ReactNode
 }
-const ItemListView = ({ data }: ItemListProps) => {
+const ItemListView = ({ data, footer }: ItemListProps) => {
     return (
         <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">{data.title}</dt>
@@ -34,7 +35,8 @@ const ItemListView = ({ data }: ItemListProps) => {
                                 </span>
 
                                 {item.data.map((row, index) => (
-                                    <ListRow data={row} key={index} />
+                                    <ListRow data={row} key={index}/>
+                                    
                                 ))}
                             </div>
                         ))}
@@ -43,6 +45,7 @@ const ItemListView = ({ data }: ItemListProps) => {
             ) : (
                 <EmptyStateItem />
             )}
+            {footer}
         </div>
     )
 }
