@@ -3,6 +3,7 @@ module.exports = {
     reactStrictMode: true,
     output: 'standalone',
     experimental: {
+        serverActions: true,
         appDir: true,
     },
     images: {
