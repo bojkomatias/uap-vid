@@ -142,7 +142,6 @@ function PreprocessFieldsMap({
 
             <Trash
                 onClick={() => {
-                    console.log(path + replaceString(deepPushPath))
                     form.removeListItem(
                         path + replaceString(deepPushPath),
                         index
