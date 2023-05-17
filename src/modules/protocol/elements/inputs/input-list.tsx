@@ -74,6 +74,16 @@ export function InputList(props: {
     )
 }
 
+/** Helper function that replaces the number of the row or whatever from the deepPushValue so that the trash button can properly target the value it needs to delete.
+ *
+ * E.g:
+ *
+ * Let's say we have this string => sections.budget.expenses1.data
+ *
+ * This function will convert it to the following string => sections.budget.expenses.1.data
+ *
+ * It simply added a dot before the number.
+ */
 function replaceString(input: string) {
     const number = input.slice(-6, -5)
     const newString = input.replace(number, `.${number}`)
