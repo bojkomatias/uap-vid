@@ -39,6 +39,7 @@ export const initialSectionValues: Sections = {
                 data: [],
             },
             { type: 'Otros', data: [] },
+
         ],
     },
     description: {
