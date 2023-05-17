@@ -40,6 +40,7 @@ export function InputList(props: {
     newLeafItemValue: LeafItemProps
     preprocessKey?: string
     footer?: React.ReactNode
+    isBudget?: boolean
 }) {
     const form = useProtocolContext()
 
@@ -61,6 +62,7 @@ export function InputList(props: {
                             {...props}
                             fieldsToMap={array}
                             deepPushPath={`${i}.data`}
+                            isBudget={props.isBudget}
                         />
                     </>
                 ))
@@ -78,12 +80,14 @@ function PreprocessFieldsMap({
     headers,
     newLeafItemValue,
     deepPushPath = '',
+    isBudget,
 }: {
     path: string
     fieldsToMap: (string | number)[]
     headers: Header[]
     newLeafItemValue: LeafItemProps
     deepPushPath?: string
+    isBudget?: boolean
 }) {
     const form = useProtocolContext()
 
@@ -121,9 +125,13 @@ function PreprocessFieldsMap({
             ))}
 
             <Trash
-                onClick={() => form.removeListItem(path + deepPushPath, index)}
+                onClick={() => {
+                    form.removeListItem(path + deepPushPath, index)
+                }}
                 className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
-                    index == 0 ? 'pointer-events-none invisible' : ''
+                    index == 0 && !isBudget
+                        ? 'pointer-events-none invisible'
+                        : ''
                 }`}
             />
         </div>
