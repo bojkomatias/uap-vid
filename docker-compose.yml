@@ -4,9 +4,8 @@ services:
         image: mongo
         volumes:
             - ../apps/mongo-data:/data/db
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=admin
+        env_file:
+            - ../apps/enviroments/mongo.env
         networks:
             - node-next
     uap-research:
@@ -16,7 +15,7 @@ services:
             context: .
             dockerfile: ./Dockerfile
         env_file:
-            - ../enviroments/uap-vid.env
+            - ../apps/enviroments/uap-vid.env
         networks:
             - node-next
             - exposed-services
