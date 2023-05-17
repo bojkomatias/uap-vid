@@ -1,9 +1,7 @@
 version: '3'
 services:
     mongodb:
-        image: mongo:latest
-        ports:
-            - '27017:27017'
+        image: mongo
         volumes:
             - ../apps/mongo-data:/data/db
         env_file:
@@ -18,10 +16,10 @@ services:
             dockerfile: ./Dockerfile
         env_file:
             - ../apps/enviroments/uap-vid.env
-        ports:
-            - '80:3000'
         networks:
             - node-next
+            - exposed-services
 networks:
     node-next:
-        driver: bridge
+    exposed-services:
+        external: true
