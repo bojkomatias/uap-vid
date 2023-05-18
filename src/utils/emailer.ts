@@ -231,4 +231,6 @@ export async function emailer(
         },
         body: JSON.stringify(emailObject),
     })
+
+    return res.json()
 }
