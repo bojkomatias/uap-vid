@@ -8,13 +8,17 @@ import { useNotifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import dynamic from 'next/dynamic'
 import type { Review, User } from '@prisma/client'
-import { ReviewType } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import clsx from 'clsx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ItemContainer from '@review/elements/review-container'
 import ReviewItem from '@review/elements/review-item'
 import { SegmentedControl } from '@mantine/core'
+import { emailer } from '@utils/emailer'
+import { usePathname } from 'next/navigation'
+
+import { useSession } from 'next-auth/react'
+
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 
 export default function ReviewForm({
@@ -22,6 +26,8 @@ export default function ReviewForm({
 }: {
     review: Review & { reviewer: User }
 }) {
+    const { data: session } = useSession()
+    const pathname = usePathname()
     const form = useForm<Review>({
         initialValues: review,
         validate: zodResolver(ReviewSchema),
@@ -48,6 +54,13 @@ export default function ReviewForm({
                         marginBottom: '.8rem',
                     },
                 })
+                emailer(
+                    `${session?.user.email}`,
+                    'contact@nicohorn.com',
+                    'Nueva revisión',
+                    'comeme los huevos',
+                    `${pathname}`
+                )
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',
