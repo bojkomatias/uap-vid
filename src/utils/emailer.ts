@@ -1,12 +1,25 @@
-export async function emailer(
-    from: string,
-    to: string,
-    subject: string,
-    message: string,
-    link: string,
-    protocolId: string
-) {
-    const template = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+export enum useCases {
+    onMethodologicalReview,
+    onScientificReview,
+    onAssignation,
+}
+
+const messages = {
+    [useCases.onMethodologicalReview]:
+        'Tu protocolo fue revisado por el metodólogo.',
+    [useCases.onScientificReview]:
+        'Tu protocolo fue revisado por los evaluadores.',
+    [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
+}
+
+const subjects = {
+    [useCases.onMethodologicalReview]: 'Proyecto evaluado',
+    [useCases.onScientificReview]: 'Proyecto evaluado',
+    [useCases.onAssignation]: 'Nuevo proyecto asignado',
+}
+
+export async function emailer(useCase: useCases, protocolId: string) {
+    const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -173,7 +186,7 @@ export async function emailer(
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">Tu proyecto tiene una nueva revisión de <strong>${from}</strong></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}</h1>
     
           </td>
         </tr>
@@ -186,7 +199,7 @@ export async function emailer(
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
       <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-        <p style="line-height: 140%;">Entrá a ver la revisión haciendo <a rel="noopener" href="http://localhost:3000/protocols/6440405dc0e148f220e0f83f" target="_blank">click acá.</a></p>
+        <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${process.env.NEXT_PUBLIC_DOMAIN}/protocols/${protocolId} target="_blank">click acá.</a></p>
       </div>
     
           </td>
@@ -216,12 +229,9 @@ export async function emailer(
     </html>`
 
     const emailObject = {
-        from: from,
-        to: to,
-        subject: subject,
-        message: message,
-        link: link,
-        template: template,
+        subject: subjects[useCase],
+        message: messages[useCase],
+        html: html,
         protocolId: protocolId,
     }
 

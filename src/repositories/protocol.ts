@@ -17,14 +17,18 @@ const findProtocolById = cache(async (id: string) => {
     }
 })
 
-const getProtocolWithResearcher = cache(async (id: string) => {
+const getResearcherEmailByProtocolId = cache(async (id: string) => {
     try {
         return await prisma.protocol.findUnique({
+            select: {
+                researcher: {
+                    select: {
+                        email: true,
+                    },
+                },
+            },
             where: {
                 id,
-            },
-            include: {
-                researcher: true,
             },
         })
     } catch (e) {
@@ -251,5 +255,5 @@ export {
     getProtocolByRol,
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
-    getProtocolWithResearcher,
+    getResearcherEmailByProtocolId,
 }

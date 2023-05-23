@@ -1,11 +1,14 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 
+import { getResearcherEmailByProtocolId } from '@repositories/protocol'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
-    const { from, to, subject, message, template } = await request.json()
+    const { subject, message, html, protocolId } = await request.json()
+
+    const researcherEmail = await getResearcherEmailByProtocolId(protocolId)
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -16,12 +19,14 @@ export async function POST(request: NextRequest) {
         },
     })
 
+    console.log(message)
+
     const emailObject = {
-        from: from,
-        to: to,
+        from: 'no-reply@uap.edu.ar',
+        to: 'contact@nicohorn.com',
         subject: subject,
         text: message,
-        html: template,
+        html: html,
     }
 
     transporter.sendMail(emailObject, (err, info) => {
