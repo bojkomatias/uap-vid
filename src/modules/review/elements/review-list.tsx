@@ -1,4 +1,4 @@
-import { ReviewType, Role, State } from '@prisma/client'
+import { ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import ItemContainer from '@review/elements/review-container'
 import { HistoricalReviewList } from './historical-review-list'
@@ -11,7 +11,13 @@ type ReviewStateProps = {
 }
 async function ReviewList({ id, role, state }: ReviewStateProps) {
     const reviews = await getReviewsByProtocol(id)
-    if (!reviews || state === State.DRAFT || state === State.PUBLISHED)
+
+    if (
+        !reviews ||
+        state === State.DRAFT ||
+        state === State.PUBLISHED ||
+        !reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED)
+    )
         return null
 
     const reviewsInState = reviews.filter((r) =>
@@ -32,13 +38,12 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
                       : null
               )
 
-    if (reviewsInState.length > 0 && !reviewsInState.some((r) => r.data))
-        return null
-
     return (
-        <ItemContainer title="Revisiones">
-            {reviewsInState.some((r) => r.data) ? (
-                <ul role="list" className="space-y-3">
+        <ItemContainer title="Revisiones" fit={role === Role.ADMIN || role === Role.SECRETARY}>
+            {reviewsInState.some(
+                (r) => r.verdict !== ReviewVerdict.NOT_REVIEWED
+            ) ? (
+                <ul role="list" className="space-y-3 px-1">
                     {reviewsInState.map((r, i) => (
                         <ReviewItem key={i} review={r} role={role} />
                     ))}

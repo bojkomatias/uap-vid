@@ -39,6 +39,8 @@ export function InputList(props: {
     headers: Header[]
     newLeafItemValue: LeafItemProps
     preprocessKey?: string
+    footer?: React.ReactNode
+    isBudget?: boolean
 }) {
     const form = useProtocolContext()
 
@@ -60,14 +62,32 @@ export function InputList(props: {
                             {...props}
                             fieldsToMap={array}
                             deepPushPath={`${i}.data`}
+                            isBudget={props.isBudget}
                         />
                     </>
                 ))
             ) : (
                 <FieldsMap {...props} fieldsToMap={data} />
             )}
+            {props.footer}
         </InputListWrapper>
     )
+}
+
+/** Helper function that replaces the number of the row or whatever from the deepPushValue so that the trash button can properly target the value it needs to delete.
+ *
+ * E.g:
+ *
+ * Let's say we have this string => sections.budget.expenses1.data
+ *
+ * This function will convert it to the following string => sections.budget.expenses.1.data
+ *
+ * It simply added a dot before the number.
+ */
+function replaceString(input: string) {
+    const number = input.slice(-6, -5)
+    const newString = input.replace(number, `.${number}`)
+    return newString
 }
 
 function PreprocessFieldsMap({
@@ -76,12 +96,14 @@ function PreprocessFieldsMap({
     headers,
     newLeafItemValue,
     deepPushPath = '',
+    isBudget,
 }: {
     path: string
     fieldsToMap: (string | number)[]
     headers: Header[]
     newLeafItemValue: LeafItemProps
     deepPushPath?: string
+    isBudget?: boolean
 }) {
     const form = useProtocolContext()
 
@@ -119,9 +141,16 @@ function PreprocessFieldsMap({
             ))}
 
             <Trash
-                onClick={() => form.removeListItem(path + deepPushPath, index)}
+                onClick={() => {
+                    form.removeListItem(
+                        path + replaceString(deepPushPath),
+                        index
+                    )
+                }}
                 className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
-                    index == 0 ? 'pointer-events-none invisible' : ''
+                    index == 0 && !isBudget
+                        ? 'pointer-events-none invisible'
+                        : ''
                 }`}
             />
         </div>

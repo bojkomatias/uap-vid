@@ -39,15 +39,6 @@ export default function View({
                 <MethodologyView data={sections.methodology} />
             </div>
         )
-    if (role === 'SCIENTIST')
-        return (
-            <div className="px-4">
-                <DescriptionView data={sections.description} />
-                <IntroductionView data={sections.introduction} />
-                <PublicationView data={sections.publication} />
-                <BibliographyView data={sections.bibliography} />
-            </div>
-        )
     return (
         <div className="px-4">
             <IdentificationView data={sections.identification} />

@@ -4,6 +4,8 @@ import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import clsx from 'clsx'
+import CharacterCount from '@tiptap/extension-character-count'
+
 import {
     ArrowBackUp,
     Bold,
@@ -35,6 +37,7 @@ const Tiptap = ({
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
+            CharacterCount
         ],
         editorProps: {
             attributes: {
@@ -53,6 +56,10 @@ const Tiptap = ({
                 onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
+            <div className='absolute bottom-1 px-3 right-0 text-black/30'>
+            {editor.storage.characterCount.words() <= 1 && editor.storage.characterCount.words() !==0 ?  <>{editor.storage.characterCount.words()} palabra</> : <>{editor.storage.characterCount.words()} palabras</>}
+            </div>
+
         </div>
     )
 }

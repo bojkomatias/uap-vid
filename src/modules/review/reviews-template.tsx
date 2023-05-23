@@ -4,6 +4,7 @@ import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'
 import ReviewAssignation from './review-assignation'
 import ReviewFormTemplate from './review-form-template'
+import ReviewAssignationWrapper from './review-assignation-wrapper'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function ReviewsTemplate({
@@ -29,8 +30,13 @@ export default async function ReviewsTemplate({
                     userRole,
                     state
                 ) && (
-                    //  @ts-expect-error Server Component
-                    <ReviewAssignation protocolId={id} protocolState={state} />
+                    <ReviewAssignationWrapper>
+                        {/* @ts-expect-error Server Component */}
+                        <ReviewAssignation
+                            protocolId={id}
+                            protocolState={state}
+                        />
+                    </ReviewAssignationWrapper>
                 )}
 
                 {canExecute(ACTION.COMMENT, userRole, state) && (
