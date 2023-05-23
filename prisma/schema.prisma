@@ -46,7 +46,6 @@ model User {
   role            Role           @default(RESEARCHER)
   Review          Review[]
   AcademicUnits   AcademicUnit[] @relation(fields: [AcademicUnitIds], references: [id])
-  researcherId    String         @db.ObjectId
   AcademicUnitIds String[]       @db.ObjectId
   protocols       Protocol[]
 }
