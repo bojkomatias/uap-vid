@@ -99,7 +99,7 @@ export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
     state: StateSchema,
-    researcher: z.string(),
+    researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
 })

@@ -59,7 +59,8 @@ export default function ReviewForm({
                     'contact@nicohorn.com',
                     'Nueva revisión',
                     'comeme los huevos',
-                    `${pathname}`
+                    `${pathname}`,
+                    `${pathname?.split('/')}`
                 )
             } else {
                 notifications.showNotification({
