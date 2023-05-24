@@ -8,7 +8,7 @@ import nodemailer from 'nodemailer'
 export async function POST(request: NextRequest) {
     const { subject, message, html, protocolId } = await request.json()
 
-    const researcherEmail = await getResearcherEmailByProtocolId(protocolId)
+    const data = await getResearcherEmailByProtocolId(protocolId)
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -19,21 +19,18 @@ export async function POST(request: NextRequest) {
         },
     })
 
-    console.log(message)
-
     const emailObject = {
         from: 'no-reply@uap.edu.ar',
-        to: 'contact@nicohorn.com',
+        to: data?.researcher.email,
         subject: subject,
         text: message,
         html: html,
     }
 
-    transporter.sendMail(emailObject, (err, info) => {
+    transporter.sendMail(emailObject, (err) => {
         if (err) {
             return new Response('Error sending email', { status: 500 })
         } else {
-            console.log(info)
             return new Response('Sucessfully sent email', { status: 250 })
         }
     })
