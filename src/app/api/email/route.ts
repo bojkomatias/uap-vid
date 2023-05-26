@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     let toEmail: string
 
-    if (typeof toId !== 'undefined') {
+    if (toId) {
         toEmail = (await findUserById(toId).then((res) => {
             return res?.email
         })) as string
@@ -47,6 +47,8 @@ export async function POST(request: NextRequest) {
             return new Response('Sucessfully sent email', { status: 250 })
         }
     })
+
+    console.log(toEmail)
 
     return NextResponse.json(request)
 }
