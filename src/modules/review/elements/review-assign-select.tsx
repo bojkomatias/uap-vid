@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check, Plus } from 'tabler-icons-react'
 import { Tooltip } from '@mantine/core'
+import { emailer } from '@utils/emailer'
+import { useCases } from '@utils/emailer'
 
 interface ReviewAssignSelectProps {
     type: ReviewType
@@ -45,6 +47,7 @@ const ReviewAssignSelect = ({
                 message: 'El evaluador ha sido asignado con éxito',
                 color: 'green',
             })
+            emailer(useCases.onAssignation, protocolId, review?.reviewerId)
             return router.refresh()
         }
         return notification.showNotification({
@@ -87,6 +90,9 @@ const ReviewAssignSelect = ({
             onChange={(e) => {
                 if (e !== null) changeState(e)
             }}
+            // onClick={() => {
+            //     emailer(useCases.onAssignation, protocolId, review?.reviewerId)
+            // }}
         >
             <div className="relative">
                 <Combobox.Button className="relative w-full">

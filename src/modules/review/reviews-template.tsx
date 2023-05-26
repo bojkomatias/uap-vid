@@ -4,15 +4,18 @@ import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'
 import ReviewAssignation from './review-assignation'
 import ReviewFormTemplate from './review-form-template'
+import ReviewAssignationWrapper from './review-assignation-wrapper'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function ReviewsTemplate({
     id,
+    researcherId,
     state,
     userId,
     userRole,
 }: {
     id: string
+    researcherId: string
     state: State
     userId: string
     userRole: Role
@@ -21,16 +24,23 @@ export default async function ReviewsTemplate({
         <aside className="relative">
             <div className="sticky top-4 mb-4 space-y-3">
                 {canExecuteActions(
-                    [
-                        ACTION.ASSIGN_TO_METHODOLOGIST,
-                        ACTION.ASSIGN_TO_SCIENTIFIC,
-                        ACTION.ACCEPT,
-                    ],
+                    userId === researcherId
+                        ? []
+                        : [
+                              ACTION.ASSIGN_TO_METHODOLOGIST,
+                              ACTION.ASSIGN_TO_SCIENTIFIC,
+                              ACTION.ACCEPT,
+                          ],
                     userRole,
                     state
                 ) && (
-                    //  @ts-expect-error Server Component
-                    <ReviewAssignation protocolId={id} protocolState={state} />
+                    <ReviewAssignationWrapper>
+                        {/* @ts-expect-error Server Component */}
+                        <ReviewAssignation
+                            protocolId={id}
+                            protocolState={state}
+                        />
+                    </ReviewAssignationWrapper>
                 )}
 
                 {canExecute(ACTION.COMMENT, userRole, state) && (

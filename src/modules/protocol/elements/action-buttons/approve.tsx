@@ -29,7 +29,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
         })
         if (approved.ok) {
             notification.showNotification({
-                title: 'Protocolo publicado',
+                title: 'Protocolo aprobado',
                 message: 'El protocolo ha sido aprobado, ahora está en curso',
                 color: 'green',
             })

@@ -21,7 +21,7 @@ async function Layout({
             redirect('/protocols')
         return (
             <>
-                <PageHeading title={'Nuevo protocolo'} />
+                <PageHeading title={'Nuevo protocolo'} state={'DRAFT'} />
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
             </>
         )
@@ -40,6 +40,7 @@ async function Layout({
                         </span>
                     </span>
                 }
+                state={protocol.state}
             />
 
             <div className="flex flex-col-reverse lg:flex-row">
@@ -47,6 +48,7 @@ async function Layout({
                 {/* @ts-expect-error Server Component */}
                 <Reviews
                     id={protocol.id}
+                    researcherId={protocol.researcherId}
                     state={protocol.state}
                     userId={session.user.id}
                     userRole={session.user.role}

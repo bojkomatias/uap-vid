@@ -79,10 +79,7 @@ export function ConvocatoryForm({
 
     return (
         <form
-            onSubmit={form.onSubmit(
-                (values) => upsertConvocatory(values)
-                // (errors) => console.log(errors)
-            )}
+            onSubmit={form.onSubmit((values) => upsertConvocatory(values))}
             className="mx-auto mt-8 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
             <div className="m-3 p-1">

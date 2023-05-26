@@ -8,6 +8,7 @@ import {
 import type { Review } from '@prisma/client'
 import { ReviewType, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
+import { logProtocolUpdate } from '@utils/logger'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -45,6 +46,16 @@ export async function PUT(
             params.id,
             newStateByReviewType[data.type]
         )
+
+        await logProtocolUpdate({
+            fromState:
+                data.type === ReviewType.METHODOLOGICAL
+                    ? State.PUBLISHED
+                    : State.METHODOLOGICAL_EVALUATION,
+            toState: newStateByReviewType[data.type],
+            protocolId: params.id,
+        })
+
         return NextResponse.json({ newReview, protocol }, { status: 200 })
     }
 

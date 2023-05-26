@@ -3,8 +3,9 @@ import TextAlign from '@tiptap/extension-text-align'
 import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import TaskList from '@tiptap/extension-task-list'
 import clsx from 'clsx'
+import CharacterCount from '@tiptap/extension-character-count'
+
 import {
     ArrowBackUp,
     Bold,
@@ -20,7 +21,6 @@ import {
     AlignCenter,
     AlignJustified,
 } from 'tabler-icons-react'
-import TaskItem from '@tiptap/extension-task-item'
 const Tiptap = ({
     value,
     editable,
@@ -37,16 +37,7 @@ const Tiptap = ({
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
-            TaskList.configure({
-                HTMLAttributes: {
-                    class: 'checkbox',
-                },
-            }),
-            TaskItem.configure({
-                HTMLAttributes: {
-                    class: 'checkbox-item',
-                },
-            }),
+            CharacterCount.configure(),
         ],
         editorProps: {
             attributes: {
@@ -65,6 +56,14 @@ const Tiptap = ({
                 onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
+            <div className="absolute bottom-1 right-0 px-3 text-black/30">
+                {editor.storage.characterCount.words() <= 1 &&
+                editor.storage.characterCount.words() !== 0 ? (
+                    <>{editor.storage.characterCount.words()} palabra</>
+                ) : (
+                    <>{editor.storage.characterCount.words()} palabras</>
+                )}
+            </div>
         </div>
     )
 }
@@ -247,13 +246,6 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
             >
                 <ArrowBackUp className="h-4 w-5" />
             </button>
-            {/* I let this here just in case we decided to try aggain this approach */}
-            {/* <button
-                onClick={() => editor.chain().focus().toggleTaskList().run()}
-                className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
-            >
-                💸
-            </button> */}
         </div>
     )
 }

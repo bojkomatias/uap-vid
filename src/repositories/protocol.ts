@@ -17,6 +17,25 @@ const findProtocolById = cache(async (id: string) => {
     }
 })
 
+const getResearcherEmailByProtocolId = cache(async (id: string) => {
+    try {
+        return await prisma.protocol.findUnique({
+            select: {
+                researcher: {
+                    select: {
+                        email: true,
+                    },
+                },
+            },
+            where: {
+                id,
+            },
+        })
+    } catch (e) {
+        return null
+    }
+})
+
 const updateProtocolById = async (id: string, data: Protocol) => {
     try {
         const protocol = await prisma.protocol.update({
@@ -72,7 +91,7 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
     const query = {
         [ROLE.RESEARCHER]: prisma.protocol.count({
             where: {
-                researcher: id,
+                researcherId: id,
             },
         }),
         [ROLE.METHODOLOGIST]: prisma.review.count({
@@ -111,7 +130,7 @@ const getProtocolByRol = cache(
                     skip: shownRecords * (page - 1),
                     take: shownRecords,
                     where: {
-                        researcher: id,
+                        researcherId: id,
                     },
                 }),
                 [ROLE.METHODOLOGIST]: prisma.review
@@ -189,7 +208,7 @@ const getProtocolsWithoutPagination = cache(
         const query = {
             [ROLE.RESEARCHER]: prisma.protocol.findMany({
                 where: {
-                    researcher: id,
+                    researcherId: id,
                 },
             }),
             [ROLE.METHODOLOGIST]: prisma.review
@@ -236,4 +255,5 @@ export {
     getProtocolByRol,
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
+    getResearcherEmailByProtocolId,
 }

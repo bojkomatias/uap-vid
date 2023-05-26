@@ -1,7 +1,7 @@
 import PublishButton from '@protocol/elements/action-buttons/publish'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
-import { STATE } from '@utils/zod'
+import { ACTION, STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
@@ -26,13 +26,21 @@ export default async function Page({
             ? {
                   convocatoryId: searchParams.convocatory,
                   state: STATE.DRAFT,
-                  researcher: session.user.id,
+                  researcherId: session.user.id,
                   sections: initialSectionValues,
               }
             : await findProtocolById(params.id)
 
     if (!protocol) redirect('/protocols')
-    if (!canExecute('EDIT', session.user.role, protocol.state))
+    if (
+        !canExecute(
+            session.user.id === protocol.researcherId
+                ? ACTION.EDIT_BY_OWNER
+                : ACTION.EDIT,
+            session.user.role,
+            protocol.state
+        )
+    )
         redirect('/protocols')
 
     return (
