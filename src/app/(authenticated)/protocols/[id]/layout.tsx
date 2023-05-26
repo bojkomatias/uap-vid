@@ -48,6 +48,7 @@ async function Layout({
                 {/* @ts-expect-error Server Component */}
                 <Reviews
                     id={protocol.id}
+                    researcherId={protocol.researcherId}
                     state={protocol.state}
                     userId={session.user.id}
                     userRole={session.user.role}

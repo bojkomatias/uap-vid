@@ -33,7 +33,8 @@ export default async function Page({ params }: { params: { id: string } }) {
                 />
                 <PublishButton role={session.user.role} protocol={protocol} />
                 <EditButton
-                    role={session.user.role}
+                    user={session.user}
+                    researcherId={protocol.researcherId}
                     state={protocol.state}
                     id={protocol?.id}
                 />

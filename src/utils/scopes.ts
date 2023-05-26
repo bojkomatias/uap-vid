@@ -12,7 +12,7 @@ const ROLE_SCOPE = {
         ACCESS.REVIEWS,
         ACTION.PUBLISH,
         ACTION.CREATE,
-        ACTION.EDIT,
+        ACTION.EDIT_BY_OWNER,
     ],
     [ROLE.SECRETARY]: [
         ACCESS.PROTOCOLS,
@@ -20,6 +20,7 @@ const ROLE_SCOPE = {
         ACTION.ACCEPT,
         ACTION.CREATE,
         ACTION.EDIT,
+        ACTION.EDIT_BY_OWNER,
     ],
     [ROLE.METHODOLOGIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
     [ROLE.SCIENTIST]: [ACCESS.PROTOCOLS, ACTION.COMMENT],
@@ -31,6 +32,7 @@ const ROLE_SCOPE = {
         ACCESS.ACADEMIC_UNITS,
         ACTION.CREATE,
         ACTION.EDIT,
+        ACTION.EDIT_BY_OWNER,
         ACTION.ACCEPT,
         ACTION.PUBLISH,
         ACTION.COMMENT,
@@ -43,13 +45,18 @@ const ROLE_SCOPE = {
 // Check if state allows the action
 const STATE_SCOPE = {
     [STATE.NOT_CREATED]: [ACTION.CREATE],
-    [STATE.DRAFT]: [ACTION.PUBLISH, ACTION.EDIT],
-    [STATE.PUBLISHED]: [ACTION.ASSIGN_TO_METHODOLOGIST],
+    [STATE.DRAFT]: [ACTION.PUBLISH, ACTION.EDIT_BY_OWNER],
+    [STATE.PUBLISHED]: [ACTION.ASSIGN_TO_METHODOLOGIST, ACTION.EDIT],
     [STATE.METHODOLOGICAL_EVALUATION]: [
+        ACTION.EDIT_BY_OWNER,
         ACTION.COMMENT,
         ACTION.ASSIGN_TO_SCIENTIFIC,
     ],
-    [STATE.SCIENTIFIC_EVALUATION]: [ACTION.COMMENT, ACTION.ACCEPT],
+    [STATE.SCIENTIFIC_EVALUATION]: [
+        ACTION.EDIT_BY_OWNER,
+        ACTION.COMMENT,
+        ACTION.ACCEPT,
+    ],
     [STATE.ACCEPTED]: [ACTION.APPROVE],
     [STATE.ON_GOING]: [],
 }
@@ -61,15 +68,6 @@ export function canExecute(
     state: StateType
 ) {
     if (!action || !role || !state) return false
-    // * Added special guard for editing during evaluation, to keep its access to a minimum.
-    if (
-        action === ACTION.EDIT &&
-        ((role === ROLE.RESEARCHER &&
-            (state === STATE.METHODOLOGICAL_EVALUATION ||
-                state === STATE.SCIENTIFIC_EVALUATION)) ||
-            (role === ROLE.SECRETARY && state === STATE.PUBLISHED))
-    )
-        return true
     if (
         ROLE_SCOPE[role].some((a) => a === action) &&
         STATE_SCOPE[state].some((a) => a === action)
