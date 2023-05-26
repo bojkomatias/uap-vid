@@ -1,30 +1,25 @@
 version: '3'
 services:
     mongodb:
-        image: mongo:latest
-        # TODO: Create a custom image of mongo (from  latest) that has the mongo-init.sh file in it and use that instead. The script will create a user with ONLY read/write access to the database.
-        ports:
-            - '27017:27017'
+        image: mongo
         volumes:
-            - ~/apps/mongo-data:/data/db
+            - ../apps/mongo-data:/data/db
         env_file:
             - ../apps/enviroments/mongo.env
         networks:
-            - uap-vid-network
-        restart: always
+            - node-next
     uap-research:
         #Our container app name
-        image: uapvid:latest
+        image: uapvid
         build:
-            context: . #Compose will use this context to find a Dockerfile
-            dockerfile: ./Dockerfile #Compose will use this Dockerfile to build the image
-        ports:
-            - '8080:3000'
+            context: .
+            dockerfile: ./Dockerfile
         env_file:
-            - ../apps/enviroments/mongo.env
+            - ../apps/enviroments/uap-vid.env
         networks:
-            - uap-vid-network
-        restart: always
+            - node-next
+            - exposed-services
 networks:
-    uap-vid-network:
-        driver: bridge
+    node-next:
+    exposed-services:
+        external: true
