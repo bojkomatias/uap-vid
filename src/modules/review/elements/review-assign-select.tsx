@@ -47,7 +47,7 @@ const ReviewAssignSelect = ({
                 message: 'El evaluador ha sido asignado con éxito',
                 color: 'green',
             })
-            emailer(useCases.onAssignation, protocolId)
+            emailer(useCases.onAssignation, protocolId, reviewerId)
             return router.refresh()
         }
         return notification.showNotification({

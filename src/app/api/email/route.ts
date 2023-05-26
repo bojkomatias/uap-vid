@@ -1,14 +1,27 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 
 import { getResearcherEmailByProtocolId } from '@repositories/protocol'
+import { findUserById } from '@repositories/user'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
-    const { subject, message, html, protocolId } = await request.json()
+    const { subject, message, html, protocolId, toId } = await request.json()
 
-    const data = await getResearcherEmailByProtocolId(protocolId)
+    let toEmail: string
+
+    if (typeof toId !== 'undefined') {
+        toEmail = (await findUserById(toId).then((res) => {
+            return res?.email
+        })) as string
+    } else {
+        toEmail = (await getResearcherEmailByProtocolId(protocolId).then(
+            (res) => {
+                return res?.researcher.email
+            }
+        )) as string
+    }
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -21,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     const emailObject = {
         from: 'no-reply@uap.edu.ar',
-        to: data?.researcher.email,
+        to: toEmail,
         subject: subject,
         text: message,
         html: html,
