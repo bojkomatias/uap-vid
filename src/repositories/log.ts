@@ -4,10 +4,10 @@ import { cache } from 'react'
 
 const newLog = async (data: Logs) => {
     try {
-        const protocol = await prisma.logs.create({
+        const log = await prisma.logs.create({
             data,
         })
-        return protocol
+        return log
     } catch (e) {
         return null
     }

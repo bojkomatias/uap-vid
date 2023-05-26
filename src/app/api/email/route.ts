@@ -48,7 +48,5 @@ export async function POST(request: NextRequest) {
         }
     })
 
-    console.log(toEmail)
-
     return NextResponse.json(request)
 }

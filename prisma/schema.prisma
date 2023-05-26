@@ -24,13 +24,12 @@ model Convocatory {
   protocols Protocol[]
 }
 
-model Logs{
-  id            String           @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt     DateTime         @default(now())
-  message       String
-  protocolId    String           @db.ObjectId
-  userId        String           @db.ObjectId
-
+model Logs {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime @default(now())
+  message    String
+  protocolId String   @db.ObjectId
+  userId     String   @db.ObjectId
 }
 
 model Protocol {

@@ -1,6 +1,8 @@
 import type { Logs, State } from '@prisma/client'
 import { newLog } from '@repositories/log'
 import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import ProtocolStatesDictionary from './dictionaries/ProtocolStatesDictionary'
 interface LoggerArguments {
     fromState: State
     toState: State
@@ -11,7 +13,7 @@ export const logProtocolUpdate = async ({
     toState,
     protocolId,
 }: LoggerArguments) => {
-    const session = await getServerSession()
-    const message = `${fromState} --> ${toState}`
+    const session = await getServerSession(authOptions)
+    const message = `${ProtocolStatesDictionary[fromState]} --> ${ProtocolStatesDictionary[toState]}`
     await newLog({ message, protocolId, userId: session?.user.id } as Logs)
 }
