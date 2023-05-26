@@ -18,7 +18,11 @@ const subjects = {
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
 }
 
-export async function emailer(useCase: useCases, protocolId: string) {
+export async function emailer(
+    useCase: useCases,
+    protocolId: string,
+    toId?: string
+) {
     const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
@@ -228,11 +232,12 @@ export async function emailer(useCase: useCases, protocolId: string) {
     
     </html>`
 
-    const emailObject = {
+    const dataObject = {
         subject: subjects[useCase],
         message: messages[useCase],
         html: html,
         protocolId: protocolId,
+        toId: toId,
     }
 
     const res = await fetch('/api/email', {
@@ -241,7 +246,7 @@ export async function emailer(useCase: useCases, protocolId: string) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(emailObject),
+        body: JSON.stringify(dataObject),
     })
 
     return res.json()
