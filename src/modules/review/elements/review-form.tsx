@@ -14,6 +14,7 @@ import ItemContainer from '@review/elements/review-container'
 import ReviewQuestion from './review-question'
 import { ReviewProvider, useReview } from '@utils/reviewContext'
 import { useRouter } from 'next/navigation'
+import { emailer, useCases } from '@utils/emailer'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
@@ -46,6 +47,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         marginBottom: '.8rem',
                     },
                 })
+                emailer(useCases.onMethodologicalReview, review.protocolId)
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',

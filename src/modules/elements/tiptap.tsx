@@ -37,7 +37,7 @@ const Tiptap = ({
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
-            CharacterCount
+            CharacterCount.configure(),
         ],
         editorProps: {
             attributes: {
@@ -56,10 +56,14 @@ const Tiptap = ({
                 onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
-            <div className='absolute bottom-1 px-3 right-0 text-black/30'>
-            {editor.storage.characterCount.words() <= 1 && editor.storage.characterCount.words() !==0 ?  <>{editor.storage.characterCount.words()} palabra</> : <>{editor.storage.characterCount.words()} palabras</>}
+            <div className="absolute bottom-1 right-0 px-3 text-black/30">
+                {editor.storage.characterCount.words() <= 1 &&
+                editor.storage.characterCount.words() !== 0 ? (
+                    <>{editor.storage.characterCount.words()} palabra</>
+                ) : (
+                    <>{editor.storage.characterCount.words()} palabras</>
+                )}
             </div>
-
         </div>
     )
 }

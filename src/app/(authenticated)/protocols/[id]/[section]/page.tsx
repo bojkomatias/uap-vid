@@ -26,7 +26,7 @@ export default async function Page({
             ? {
                   convocatoryId: searchParams.convocatory,
                   state: STATE.DRAFT,
-                  researcher: session.user.id,
+                  researcherId: session.user.id,
                   sections: initialSectionValues,
               }
             : await findProtocolById(params.id)

@@ -27,8 +27,8 @@ model Convocatory {
 model Protocol {
   id            String           @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime         @db.Date
-  researcher    String           @db.ObjectId
-  // !Dont we need here researcher be the relation and add researcherId of ID?
+  researcherId  String           @db.ObjectId
+  researcher    User             @relation(fields: [researcherId], references: [id])
   state         State            @default(DRAFT)
   reviews       Review[]
   sections      ProtocolSections
@@ -47,6 +47,7 @@ model User {
   Review          Review[]
   AcademicUnits   AcademicUnit[] @relation(fields: [AcademicUnitIds], references: [id])
   AcademicUnitIds String[]       @db.ObjectId
+  protocols       Protocol[]
 }
 
 model Review {
