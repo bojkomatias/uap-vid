@@ -32,7 +32,7 @@ export function DeleteButton({ protocolId }: { protocolId: string }) {
                 setDeleting(false)
             }}
             disabled={isPending}
-            className="flex items-center gap-1 text-error-600/60 transition-all duration-150 hover:text-error-600"
+            className="-mr-2 flex items-center gap-1 text-error-600/60 transition duration-150 hover:text-error-600"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export function DeleteButton({ protocolId }: { protocolId: string }) {
                 }, 3000)
             }}
             disabled={isPending}
-            className="transition-all duration-150 hover:text-black/60"
+            className="transition duration-150 hover:text-black/60"
         >
             Eliminar
         </button>

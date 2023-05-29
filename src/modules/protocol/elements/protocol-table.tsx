@@ -58,7 +58,7 @@ export default function ProtocolTable({
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
                         <tr key={item.id}>
-                            <td className="pb-3.5">
+                            <td className="pb-4">
                                 {user.id === item.researcherId ? (
                                     <UserIcon className="h-4 w-4 text-gray-600" />
                                 ) : null}
@@ -106,7 +106,7 @@ export default function ProtocolTable({
                                 {ProtocolStatesDictionary[item.state]}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
+                            <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
                                 <Link
                                     href={`/protocols/${item.id}`}
                                     passHref
@@ -116,7 +116,7 @@ export default function ProtocolTable({
                                 </Link>
                             </td>
                             {user.role === 'ADMIN' ? (
-                                <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-1">
+                                <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
                                     <DeleteButton protocolId={item.id} />
                                 </td>
                             ) : null}
