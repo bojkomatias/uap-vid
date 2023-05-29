@@ -1,5 +1,4 @@
 {
-    "packageManager": "pnpm@8.1.1",
     "private": true,
     "target": "es2021",
     "scripts": {
