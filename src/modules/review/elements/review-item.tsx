@@ -29,7 +29,7 @@ export default function ReviewItem({
         )
     }
     const [showReviewQuestions, setShowReviewQuestions] = useState(false)
-
+    if (review.verdict === 'NOT_REVIEWED') return null
     return (
         <li>
             <div className="min-w-0 flex-1">

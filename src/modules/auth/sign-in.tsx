@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export const SignIn = () => {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
     const [email, setEmail] = useState('')
@@ -36,7 +38,7 @@ export const SignIn = () => {
                     const res = await signIn('credentials', {
                         email: email,
                         password: password,
-                        redirect: true,
+                        redirect: false,
                         callbackUrl: '/protocols',
                     })
                     if (res && res.status !== 200) {
@@ -46,8 +48,10 @@ export const SignIn = () => {
                             message: 'Credenciales inválidas',
                             color: 'red',
                         })
+                    } else {
+                        setLoading(false)
+                        router.refresh()
                     }
-                    setLoading(false)
                 }}
             >
                 <input
