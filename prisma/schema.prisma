@@ -69,7 +69,7 @@ model Review {
   reviewerId String           @db.ObjectId
   reviewer   User             @relation(fields: [reviewerId], references: [id])
   protocolId String           @db.ObjectId
-  protocol   Protocol         @relation(fields: [protocolId], references: [id])
+  protocol   Protocol         @relation(fields: [protocolId], references: [id], onDelete: Cascade)
 }
 
 type ReviewQuestion {

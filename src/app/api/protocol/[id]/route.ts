@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { updateProtocolById } from '@repositories/protocol'
+import { deleteProtocolById, updateProtocolById } from '@repositories/protocol'
 
 export async function PUT(
     request: NextRequest,
@@ -16,5 +16,18 @@ export async function PUT(
     if (!updated) {
         return new Response('We cannot update the protocol', { status: 500 })
     }
+    return NextResponse.json({ success: true })
+}
+
+export async function DELETE(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    const id = params.id
+    const deleted = await deleteProtocolById(id)
+
+    if (!deleted)
+        return new Response("We couldn't delete the protocol", { status: 500 })
+
     return NextResponse.json({ success: true })
 }
