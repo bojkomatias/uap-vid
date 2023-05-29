@@ -49,6 +49,7 @@ export function ConvocatoryForm({
                         },
                     })
                 }
+                router.refresh()
                 return router.push(`/convocatories`)
             }
             const res = await fetch(`/api/convocatory/${convocatory.id}`, {
