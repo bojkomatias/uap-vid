@@ -24,12 +24,8 @@ export async function POST(request: NextRequest) {
     }
 
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        auth: {
-            user: 'nicoskate000@gmail.com',
-            pass: 'xypthvctqnialcre',
-        },
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
     })
 
     const emailObject = {

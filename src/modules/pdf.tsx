@@ -715,6 +715,7 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
     })
 
     if (instance.loading) return <Button>Cargando PDF</Button>
+    else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
 
     return (
         <PDFDownloadLink
