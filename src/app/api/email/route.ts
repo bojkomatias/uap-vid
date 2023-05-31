@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
         port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
     })
 
     const emailObject = {
