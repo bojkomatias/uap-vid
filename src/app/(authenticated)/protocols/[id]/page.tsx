@@ -37,6 +37,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     researcherId={protocol.researcherId}
                     state={protocol.state}
                     id={protocol?.id}
+                    reviews={reviews}
                 />
             </div>
 

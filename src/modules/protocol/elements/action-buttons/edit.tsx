@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import type { User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import type { StateType } from '@utils/zod'
 import { ACTION } from '@utils/zod'
@@ -13,6 +13,7 @@ type ActionButtonTypes = {
     researcherId: string
     state: StateType
     id: string
+    reviews: Review[]
 }
 
 export default function EditButton(props: ActionButtonTypes) {
@@ -25,7 +26,8 @@ export default function EditButton(props: ActionButtonTypes) {
                 : ACTION.EDIT,
             props.user.role,
             props.state
-        )
+        ) ||
+        props.reviews.every((r) => r.verdict === 'APPROVED')
     )
         return <></>
     return (
