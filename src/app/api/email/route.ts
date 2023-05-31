@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     })
 
     const emailObject = {
-        from: 'no-reply@uap.edu.ar',
+        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
         to: toEmail,
         subject: subject,
         text: message,
