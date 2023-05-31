@@ -203,7 +203,7 @@ export async function emailer(
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
       <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-        <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${process.env.NEXT_PUBLIC_DOMAIN}/protocols/${protocolId} target="_blank">click acá.</a></p>
+        <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${process.env.PUBLIC_DOMAIN}/protocols/${protocolId} target="_blank">click acá.</a></p>
       </div>
     
           </td>
