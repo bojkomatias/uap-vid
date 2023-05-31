@@ -18,6 +18,7 @@ type ActionButtonTypes = {
 
 export default function EditButton(props: ActionButtonTypes) {
     const path = usePathname()
+    console.log(props)
     if (path?.split('/')[3]) return <></>
     if (
         !canExecute(
@@ -27,7 +28,8 @@ export default function EditButton(props: ActionButtonTypes) {
             props.user.role,
             props.state
         ) ||
-        props.reviews.every((r) => r.verdict === 'APPROVED')
+        (props.reviews.length > 2 &&
+            props.reviews.every((r) => r.verdict === 'APPROVED'))
     )
         return <></>
     return (
