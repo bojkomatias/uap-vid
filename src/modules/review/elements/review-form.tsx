@@ -47,7 +47,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         marginBottom: '.8rem',
                     },
                 })
-                emailer(useCases.onMethodologicalReview, review.protocolId)
+                emailer(useCases.onReview, review.protocolId)
             } else {
                 notifications.showNotification({
                     title: 'Ocurrió un error',

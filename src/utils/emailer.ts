@@ -1,20 +1,16 @@
 export enum useCases {
-    onMethodologicalReview,
-    onScientificReview,
+    onReview,
     onAssignation,
 }
 
 const messages = {
-    [useCases.onMethodologicalReview]:
-        'Tu protocolo fue revisado por el metodólogo.',
-    [useCases.onScientificReview]:
-        'Tu protocolo fue revisado por los evaluadores.',
+    [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
+
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
 }
 
 const subjects = {
-    [useCases.onMethodologicalReview]: 'Proyecto evaluado',
-    [useCases.onScientificReview]: 'Proyecto evaluado',
+    [useCases.onReview]: 'Proyecto evaluado',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
 }
 
