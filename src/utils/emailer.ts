@@ -1,20 +1,16 @@
 export enum useCases {
-    onMethodologicalReview,
-    onScientificReview,
+    onReview,
     onAssignation,
 }
 
 const messages = {
-    [useCases.onMethodologicalReview]:
-        'Tu protocolo fue revisado por el metodólogo.',
-    [useCases.onScientificReview]:
-        'Tu protocolo fue revisado por los evaluadores.',
+    [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
+
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
 }
 
 const subjects = {
-    [useCases.onMethodologicalReview]: 'Proyecto evaluado',
-    [useCases.onScientificReview]: 'Proyecto evaluado',
+    [useCases.onReview]: 'Proyecto evaluado',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
 }
 
@@ -203,7 +199,7 @@ export async function emailer(
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
       <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-        <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${process.env.NEXT_PUBLIC_DOMAIN}/protocols/${protocolId} target="_blank">click acá.</a></p>
+        <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${process.env.PUBLIC_DOMAIN}/protocols/${protocolId} target="_blank">click acá.</a></p>
       </div>
     
           </td>

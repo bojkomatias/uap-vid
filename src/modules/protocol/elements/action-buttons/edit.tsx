@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import type { User } from '@prisma/client'
+import type { Review, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import type { StateType } from '@utils/zod'
 import { ACTION } from '@utils/zod'
@@ -13,10 +13,12 @@ type ActionButtonTypes = {
     researcherId: string
     state: StateType
     id: string
+    reviews: Review[]
 }
 
 export default function EditButton(props: ActionButtonTypes) {
     const path = usePathname()
+    console.log(props)
     if (path?.split('/')[3]) return <></>
     if (
         !canExecute(
@@ -25,7 +27,9 @@ export default function EditButton(props: ActionButtonTypes) {
                 : ACTION.EDIT,
             props.user.role,
             props.state
-        )
+        ) ||
+        (props.reviews.length > 2 &&
+            props.reviews.every((r) => r.verdict === 'APPROVED'))
     )
         return <></>
     return (

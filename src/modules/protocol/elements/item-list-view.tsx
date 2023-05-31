@@ -28,18 +28,29 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
             ) : data.deepValues && data.deepValues.length > 0 ? (
                 <dd className="mt-1 text-sm text-gray-900">
                     <div className="mt-2 flex flex-col divide-y overflow-hidden rounded-lg border">
-                        {data.deepValues.map((item, i) => (
-                            <div key={i} className="space-y-0 pt-3">
-                                <span className="ml-4 text-sm font-semibold text-gray-500">
-                                    {item.groupLabel}:
-                                </span>
-
-                                {item.data.map((row, index) => (
-                                    <ListRow data={row} key={index}/>
-                                    
-                                ))}
-                            </div>
-                        ))}
+                        {data.deepValues.some((e) => e.data.length > 0) ? (
+                            data.deepValues.map((item, i) => (
+                                <>
+                                    {item.data.length === 0 ? null : (
+                                        <div key={i} className="space-y-0 pt-3">
+                                            <span className="ml-4 text-sm font-semibold text-gray-500">
+                                                {item.groupLabel}:
+                                            </span>
+                                            {item.data.map((row, index) => (
+                                                <ListRow
+                                                    data={row}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            ))
+                        ) : (
+                            <span className="mx-auto w-fit py-3 text-sm text-gray-400">
+                                Sin elementos cargados.
+                            </span>
+                        )}
                     </div>
                 </dd>
             ) : (

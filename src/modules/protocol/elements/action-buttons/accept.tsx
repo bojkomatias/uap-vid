@@ -23,8 +23,7 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
         !protocol.id ||
         !canExecute(ACTION.ACCEPT, role, protocol.state) ||
         protocol.state !== State.SCIENTIFIC_EVALUATION ||
-        reviews.length !== 3 ||
-        reviews.every((review) => review.verdict === ReviewVerdict.APPROVED)
+        reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED)
     )
         return <></>
 

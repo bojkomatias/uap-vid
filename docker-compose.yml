@@ -2,6 +2,7 @@ version: '3'
 services:
     mongodb:
         image: mongo
+        userns_mode: 'host'
         volumes:
             - ../apps/mongo-data:/data/db
         env_file:

@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-server-import-in-page */
-
 import { getResearcherEmailByProtocolId } from '@repositories/protocol'
 import { findUserById } from '@repositories/user'
 import type { NextRequest } from 'next/server'
@@ -26,10 +25,12 @@ export async function POST(request: NextRequest) {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
         port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
     })
 
     const emailObject = {
-        from: 'no-reply@uap.edu.ar',
+        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
         to: toEmail,
         subject: subject,
         text: message,
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
         if (err) {
             return new Response('Error sending email', { status: 500 })
         } else {
-            return new Response('Sucessfully sent email', { status: 250 })
+            return new Response('Successfully sent email', { status: 250 })
         }
     })
 
