@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 
 export default async function CreateButton({ role }: { role: RoleType }) {
-    if (role === Role.RESEARCHER) {
+    if (role === Role.RESEARCHER || Role.SECRETARY) {
         const currentConvocatory = await getCurrentConvocatory()
         if (!currentConvocatory)
             return (
@@ -29,7 +29,7 @@ export default async function CreateButton({ role }: { role: RoleType }) {
             </Link>
         )
     }
-    if (role === Role.ADMIN || Role.SECRETARY) {
+    if (role === Role.ADMIN) {
         const convocatories = await getAllConvocatories()
         if (!convocatories || convocatories.length === 0) return null
         const current = await getCurrentConvocatory()
