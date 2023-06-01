@@ -124,6 +124,19 @@ const saveUser = async (data: {
     }
 }
 
+const deleteUserById = async (id: string) => {
+    try {
+        const user = await prisma.user.delete({
+            where: {
+                id,
+            },
+        })
+        return user.id
+    } catch (error) {
+        return null
+    }
+}
+
 export {
     getAllUsers,
     getAllUsersWithoutResearchers,
@@ -134,4 +147,5 @@ export {
     updateUserRoleById,
     updateUserByEmail,
     saveUser,
+    deleteUserById,
 }

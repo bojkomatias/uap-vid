@@ -18,7 +18,7 @@ type ActionButtonTypes = {
 
 export default function EditButton(props: ActionButtonTypes) {
     const path = usePathname()
-    console.log(props)
+
     if (path?.split('/')[3]) return <></>
     if (
         !canExecute(

@@ -5,25 +5,33 @@ import { useCallback, useState, useTransition } from 'react'
 
 let timeout: NodeJS.Timeout
 
-export function DeleteButton({ protocolId }: { protocolId: string }) {
+export function DeleteUserButton({ userId }: { userId: string }) {
     const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
 
-    const deleteProtocol = useCallback(async () => {
-        const res = await fetch(`/api/protocol/${protocolId}`, {
+    const deleteUser = useCallback(async () => {
+        const res = await fetch(`/api/users/${userId}`, {
             method: 'DELETE',
         })
         if (res.ok) {
             notification.showNotification({
-                title: 'Protocolo eliminado',
-                message: 'El protocolo ha sido eliminado con éxito.',
+                title: 'Usuario eliminado',
+                message: 'El usuario ha sido eliminado con éxito.',
                 color: 'green',
             })
             return startTransition(() => router.refresh())
         }
-    }, [notification, protocolId, router])
+        notification.showNotification({
+            title: 'No se pudo eliminar usuario',
+            message:
+                'El usuario esta vinculado con algún protocolo y no se puede eliminar.',
+            color: 'red',
+        })
+        setDeleting(false)
+        return startTransition(() => router.refresh())
+    }, [notification, router, userId])
 
     return deleting ? (
         <button
@@ -32,7 +40,7 @@ export function DeleteButton({ protocolId }: { protocolId: string }) {
                 setDeleting(false)
             }}
             disabled={isPending}
-            className="-mr-2 flex items-center gap-1 text-error-600/60 transition duration-150 hover:text-error-600"
+            className="-mr-2 flex w-full items-center justify-end gap-1 text-error-600/60 transition duration-150 hover:text-error-600"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,11 +73,11 @@ export function DeleteButton({ protocolId }: { protocolId: string }) {
             onClick={() => {
                 setDeleting(true)
                 timeout = setTimeout(() => {
-                    deleteProtocol()
+                    deleteUser()
                 }, 3000)
             }}
             disabled={isPending}
-            className="transition duration-150 hover:text-black/60"
+            className="transition duration-150 hover:text-black/70"
         >
             Eliminar
         </button>

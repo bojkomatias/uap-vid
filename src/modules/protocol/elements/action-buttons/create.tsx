@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 
 export default async function CreateButton({ role }: { role: RoleType }) {
-    if (role === Role.RESEARCHER || Role.SECRETARY) {
+    if (role === Role.RESEARCHER || role === Role.SECRETARY) {
         const currentConvocatory = await getCurrentConvocatory()
         if (!currentConvocatory)
             return (
