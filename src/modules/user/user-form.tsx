@@ -35,6 +35,7 @@ export default function UserForm() {
                 },
             })
             setLoading(false)
+            router.refresh()
             router.push('/users')
         } else if (res.status === 422) {
             notifications.showNotification({

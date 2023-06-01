@@ -1,5 +1,6 @@
 import type { User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
+import { DeleteUserButton } from './elements/delete-user-button'
 
 export default function UserTable({ users }: { users: User[] }) {
     return (
@@ -25,11 +26,8 @@ export default function UserTable({ users }: { users: User[] }) {
                         >
                             Rol
                         </th>
-                        <th
-                            scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                        >
-                            <span className="sr-only">Edit</span>
+                        <th scope="col" className="relative py-3.5 sm:pr-0">
+                            <span className="sr-only">Delete</span>
                         </th>
                     </tr>
                 </thead>
@@ -52,6 +50,11 @@ export default function UserTable({ users }: { users: User[] }) {
                                 <RoleUpdater
                                     user={JSON.parse(JSON.stringify(user))}
                                 />
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium text-gray-500">
+                                {user.role === 'ADMIN' ? null : (
+                                    <DeleteUserButton userId={user.id} />
+                                )}
                             </td>
                         </tr>
                     ))}

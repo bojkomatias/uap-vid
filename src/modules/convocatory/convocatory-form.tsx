@@ -7,7 +7,7 @@ import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Check } from 'tabler-icons-react'
-import { DateInput } from '@mantine/dates'
+import { DateTimePicker } from '@mantine/dates'
 import 'dayjs/locale/es'
 
 export function ConvocatoryForm({
@@ -49,6 +49,7 @@ export function ConvocatoryForm({
                         },
                     })
                 }
+                router.refresh()
                 return router.push(`/convocatories`)
             }
             const res = await fetch(`/api/convocatory/${convocatory.id}`, {
@@ -114,11 +115,10 @@ export function ConvocatoryForm({
             </div>
 
             <div className="m-3 p-1">
-                <DateInput
-                    minDate={new Date()}
+                <DateTimePicker
                     firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY"
-                    locale="es-AR"
+                    valueFormat="DD/MM/YYYY HH:mm"
+                    locale="es"
                     label="Fecha desde"
                     placeholder="Desde"
                     classNames={{
@@ -135,11 +135,11 @@ export function ConvocatoryForm({
                 )}
             </div>
             <div className="m-3 p-1">
-                <DateInput
+                <DateTimePicker
                     minDate={new Date()}
                     firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY"
-                    locale="es-AR"
+                    valueFormat="DD/MM/YYYY HH:mm"
+                    locale="es"
                     label="Fecha hasta"
                     placeholder="Hasta"
                     classNames={{

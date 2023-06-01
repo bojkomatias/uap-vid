@@ -80,7 +80,7 @@ export default async function Page({
 
             <SearchBar />
 
-            <Table items={searchedProtocols} />
+            <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
                     pageParams={Number(searchParams?.page) || 1}

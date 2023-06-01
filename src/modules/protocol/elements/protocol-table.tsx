@@ -1,15 +1,26 @@
-import type { Protocol } from '@prisma/client'
+import type { Protocol, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
+import { DeleteButton } from './action-buttons/delete'
+import { User as UserIcon } from 'tabler-icons-react'
 
-export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
+export default function ProtocolTable({
+    items,
+    user,
+}: {
+    items: Protocol[] | null
+    user: User
+}) {
     if (!items || items.length === 0) return <EmptyState />
     return (
         <div className="mx-auto max-w-7xl">
             <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                 <thead>
                     <tr>
+                        <th scope="col" className="py-3.5">
+                            <span className="sr-only">Self indicator</span>
+                        </th>
                         <th
                             scope="col"
                             className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-1"
@@ -22,7 +33,6 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                         >
                             Facultad / Carrera
                         </th>
-
                         <th
                             scope="col"
                             className="table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -35,12 +45,25 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                         >
                             <span className="sr-only">Ver</span>
                         </th>
+                        {user.role === 'ADMIN' ? (
+                            <th
+                                scope="col"
+                                className="relative py-3.5 pl-3 pr-4 sm:pr-1"
+                            >
+                                <span className="sr-only">Ver</span>
+                            </th>
+                        ) : null}
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
                         <tr key={item.id}>
-                            <td className="  py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
+                            <td className="pb-4">
+                                {user.id === item.researcherId ? (
+                                    <UserIcon className="h-4 w-4 text-gray-600" />
+                                ) : null}
+                            </td>
+                            <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
                                 {item.sections.identification.title}
                                 <dl>
                                     <dd className=" text-xs font-light text-gray-500 lg:text-sm">
@@ -79,12 +102,11 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                     </dd>
                                 </dl>
                             </td>
-
                             <td className="table-cell px-3 py-4 text-sm font-medium text-gray-600">
                                 {ProtocolStatesDictionary[item.state]}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-                            <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-1">
+                            <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
                                 <Link
                                     href={`/protocols/${item.id}`}
                                     passHref
@@ -93,6 +115,11 @@ export default function ProtocolTable({ items }: { items: Protocol[] | null }) {
                                     Ver
                                 </Link>
                             </td>
+                            {user.role === 'ADMIN' ? (
+                                <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
+                                    <DeleteButton protocolId={item.id} />
+                                </td>
+                            ) : null}
                         </tr>
                     ))}
                 </tbody>

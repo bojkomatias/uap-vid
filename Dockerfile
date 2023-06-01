@@ -30,6 +30,9 @@ RUN pnpm build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+ENV TZ="America/Argentina/Buenos_Aires"
+RUN date
+
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
