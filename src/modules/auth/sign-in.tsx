@@ -5,6 +5,7 @@ import { useNotifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { Disclosure, Transition } from '@headlessui/react'
 
 export const SignIn = () => {
     const router = useRouter()
@@ -13,9 +14,12 @@ export const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const notifications = useNotifications()
+    const [microsoftImage, setMicImage] = useState(
+        '/whitebackgroundmicrosoft.png'
+    )
 
     return (
-        <div className="mx-auto flex max-w-xl flex-col items-center justify-center pb-12 pt-4">
+        <div className="absolute left-1/2 top-[8%] mx-auto flex max-w-xl  -translate-x-1/2 flex-col items-center ">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
                 <div className="flex flex-col items-center justify-center py-10 text-center">
                     <Image
@@ -23,15 +27,15 @@ export const SignIn = () => {
                         w-[30%] transition duration-200 md:h-[50%] md:w-[50%]"
                         src="/UAPazul.png"
                         alt="UAP Logo"
-                        width={400}
-                        height={400}
+                        width={600}
+                        height={600}
                     />
                     <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>
 
             <form
-                className="flex w-full flex-col items-stretch gap-6 px-24"
+                className="flex w-full flex-col items-stretch gap-3 px-24"
                 onSubmit={async (e) => {
                     e.preventDefault()
                     setLoading(true)
@@ -54,24 +58,6 @@ export const SignIn = () => {
                     }
                 }}
             >
-                <input
-                    type="email"
-                    className="input"
-                    placeholder="Email"
-                    required
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    className="input"
-                    placeholder="Password"
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <Button type="submit" loading={loading}>
-                    Iniciar sesión
-                </Button>
                 <Button
                     type="button"
                     loading={loadingMicrosoft}
@@ -80,18 +66,68 @@ export const SignIn = () => {
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
+                    onMouseEnter={() => {
+                        setMicImage('/blackbackgroundmicrosoft.png')
+                    }}
+                    onMouseLeave={() => {
+                        setMicImage('/whitebackgroundmicrosoft.png')
+                    }}
                 >
                     <>
                         <span>Iniciar sesión con</span>
                         <Image
-                            className="-my-6 ml-2"
-                            src="/microsoft-svgrepo-com.svg"
+                            className="-my-6"
+                            src={microsoftImage}
                             alt="Microsoft Logo"
-                            width={70}
-                            height={20}
+                            width={100}
+                            height={50}
                         />
                     </>
                 </Button>
+
+                <Disclosure>
+                    <Disclosure.Button className="relative mb-3 w-full">
+                        <p className="text-xs text-primary/80 transition-all  duration-200 hover:text-primary hover:drop-shadow-sm active:text-primary/30">
+                            <div
+                                className="inset-0 my-4 flex items-center"
+                                aria-hidden="true"
+                            >
+                                <div className="w-full border-t border-gray-300" />
+                            </div>
+                            Si tenés tus credenciales (email y contraseña),
+                            <b> iniciá sesión acá</b>.
+                        </p>
+                    </Disclosure.Button>
+                    <Transition
+                        enter="transform transition ease-in-out duration-500 sm:duration-500"
+                        enterFrom="translate-y-full opacity-0"
+                        enterTo="translate-y-0 opacity-100"
+                        leave="transform transition ease-in-out duration-500 sm:duration-500"
+                        leaveFrom="translate-y-0 opacity-100"
+                        leaveTo="translate-y-full opacity-0"
+                    >
+                        <Disclosure.Panel className="flex w-full flex-col items-stretch gap-6">
+                            <input
+                                type="email"
+                                className="input"
+                                placeholder="Email"
+                                required
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <input
+                                type="password"
+                                className="input"
+                                placeholder="Password"
+                                required
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+
+                            <Button type="submit" loading={loading}>
+                                Iniciar sesión
+                            </Button>
+                        </Disclosure.Panel>{' '}
+                    </Transition>
+                </Disclosure>
             </form>
         </div>
     )
