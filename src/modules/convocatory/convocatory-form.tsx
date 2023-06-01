@@ -116,9 +116,8 @@ export function ConvocatoryForm({
 
             <div className="m-3 p-1">
                 <DateInput
-                    minDate={new Date()}
                     firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY"
+                    valueFormat="DD/MM/YYYY HH:mm:ss"
                     locale="es-AR"
                     label="Fecha desde"
                     placeholder="Desde"
@@ -139,7 +138,7 @@ export function ConvocatoryForm({
                 <DateInput
                     minDate={new Date()}
                     firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY"
+                    valueFormat="DD/MM/YYYY HH:mm:ss"
                     locale="es-AR"
                     label="Fecha hasta"
                     placeholder="Hasta"

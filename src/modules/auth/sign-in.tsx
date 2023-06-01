@@ -58,6 +58,10 @@ export const SignIn = () => {
                     }
                 }}
             >
+                <div className="text-xs text-primary/80">
+                    Iniciar sesión con credenciales institucionales de office
+                    365.
+                </div>
                 <Button
                     type="button"
                     loading={loadingMicrosoft}
@@ -87,16 +91,16 @@ export const SignIn = () => {
 
                 <Disclosure>
                     <Disclosure.Button className="relative mb-3 w-full">
-                        <p className="text-xs text-primary/80 transition-all  duration-200 hover:text-primary hover:drop-shadow-sm active:text-primary/30">
+                        <div className="text-xs text-primary/80 transition-all  duration-200 hover:text-primary hover:drop-shadow-sm active:text-primary/30">
                             <div
                                 className="inset-0 my-4 flex items-center"
                                 aria-hidden="true"
                             >
                                 <div className="w-full border-t border-gray-300" />
                             </div>
-                            Si tenés tus credenciales (email y contraseña),
+                            Si tenés credenciales locales,
                             <b> iniciá sesión acá</b>.
-                        </p>
+                        </div>
                     </Disclosure.Button>
                     <Transition
                         enter="transform transition ease-in-out duration-500 sm:duration-500"
