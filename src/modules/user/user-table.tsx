@@ -52,7 +52,9 @@ export default function UserTable({ users }: { users: User[] }) {
                                 />
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium text-gray-500">
-                                <DeleteUserButton userId={user.id} />
+                                {user.role === 'ADMIN' ? null : (
+                                    <DeleteUserButton userId={user.id} />
+                                )}
                             </td>
                         </tr>
                     ))}
