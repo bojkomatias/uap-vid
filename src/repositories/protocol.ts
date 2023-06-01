@@ -253,7 +253,7 @@ const deleteProtocolById = async (id: string) => {
         })
         return protocol.id
     } catch (error) {
-        return console.log(error)
+        return null
     }
 }
 
