@@ -30,6 +30,9 @@ RUN yarn build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+ENV TZ America/Argentina/Buenos_Aires
+RUN ln -snf /user/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 ENV NODE_ENV production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
