@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { genSalt, hash } from 'bcryptjs'
 import { findUserByEmail, saveUser } from '../../../../repositories/user'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
