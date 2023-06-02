@@ -5,7 +5,7 @@ import {
     assignReviewerToProtocol,
     reassignReviewerToProtocol,
 } from '@repositories/review'
-import { Review, Role } from '@prisma/client'
+import { type Review, Role } from '@prisma/client'
 import { ReviewType, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'

@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
             }
         )) as string
     }
-    console.log(toEmail)
 
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
@@ -56,9 +55,11 @@ export async function POST(request: NextRequest) {
 
     transporter.verify(function (error, success) {
         if (error) {
-            console.log(error)
+            // eslint-disable-next-line no-console
+            console.log(`Error sending the email: ${error}`)
         } else {
-            console.log(success)
+            // eslint-disable-next-line no-console
+            console.log(`Email sent: ${success}`)
         }
     })
 
