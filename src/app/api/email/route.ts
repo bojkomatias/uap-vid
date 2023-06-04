@@ -1,11 +1,19 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import { getResearcherEmailByProtocolId } from '@repositories/protocol'
 import { findUserById } from '@repositories/user'
+import { getServerSession } from 'next-auth'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
+
+    const session = await getServerSession()
+
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
     const { subject, message, html, protocolId, toId } = await request.json()
 
     let toEmail: string
@@ -21,7 +29,6 @@ export async function POST(request: NextRequest) {
             }
         )) as string
     }
-    console.log(toEmail)
 
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
@@ -48,9 +55,11 @@ export async function POST(request: NextRequest) {
 
     transporter.verify(function (error, success) {
         if (error) {
-            console.log(error)
+            // eslint-disable-next-line no-console
+            console.log(`Error sending the email: ${error}`)
         } else {
-            console.log(success)
+            // eslint-disable-next-line no-console
+            console.log(`Email sent: ${success}`)
         }
     })
 

@@ -5,10 +5,12 @@ import {
     assignReviewerToProtocol,
     reassignReviewerToProtocol,
 } from '@repositories/review'
-import type { Review } from '@prisma/client'
+import { type Review, Role } from '@prisma/client'
 import { ReviewType, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -20,6 +22,15 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+    const sessionRole = session.user.role
+    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
     const data = (await request.json()) as {
         review: Review
         reviewerId: string
