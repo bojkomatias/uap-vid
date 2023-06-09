@@ -24,7 +24,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 COPY . .
-RUN pnpm build
+RUN yarn build
 
 # Production image, copy all the files and run next
 FROM node:18-alpine AS runner
