@@ -71,7 +71,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
-                        addReview(form.values)
+                        addReview({ ...form.values, updatedAt: new Date() })
                     }}
                 >
                     <div className="max-h-[54svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
