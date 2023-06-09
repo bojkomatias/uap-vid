@@ -25,7 +25,8 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
             ? r.type === ReviewType.METHODOLOGICAL
             : state === State.SCIENTIFIC_EVALUATION
             ? r.type === ReviewType.SCIENTIFIC_EXTERNAL ||
-              r.type == ReviewType.SCIENTIFIC_INTERNAL
+              r.type == ReviewType.SCIENTIFIC_INTERNAL ||
+              r.type == ReviewType.SCIENTIFIC_THIRD
             : null
     )
 
@@ -39,7 +40,10 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
               )
 
     return (
-        <ItemContainer title="Revisiones" fit={role === Role.ADMIN || role === Role.SECRETARY}>
+        <ItemContainer
+            title="Revisiones"
+            fit={role === Role.ADMIN || role === Role.SECRETARY}
+        >
             {reviewsInState.some(
                 (r) => r.verdict !== ReviewVerdict.NOT_REVIEWED
             ) ? (
