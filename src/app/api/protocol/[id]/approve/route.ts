@@ -16,7 +16,7 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
-    if (sessionRole === Role.ADMIN) {
+    if (sessionRole !== Role.ADMIN) {
         return new Response('Unauthorized', { status: 401 })
     }
 

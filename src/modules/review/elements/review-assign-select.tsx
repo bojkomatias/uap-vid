@@ -2,6 +2,7 @@
 import { Combobox } from '@headlessui/react'
 import { useNotifications } from '@mantine/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
+import { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
@@ -16,6 +17,7 @@ interface ReviewAssignSelectProps {
     users: User[]
     review: Review | null
     protocolId: string
+    protocolState: State
 }
 
 const ReviewAssignSelect = ({
@@ -23,6 +25,7 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
+    protocolState,
 }: ReviewAssignSelectProps) => {
     const notification = useNotifications()
     const router = useRouter()
@@ -67,7 +70,7 @@ const ReviewAssignSelect = ({
               })
     const [show, setShow] = useState(false)
 
-    if (!show && !review?.reviewerId) {
+    if (!show && protocolState === State.METHODOLOGICAL_EVALUATION) {
         return (
             <Tooltip
                 label={
