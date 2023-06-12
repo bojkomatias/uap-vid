@@ -7,10 +7,12 @@ import ReviewAssignSelect from './elements/review-assign-select'
 interface ReviewAssignProps {
     protocolId: string
     protocolState: State
+    researcherId: string
 }
 const ReviewAssignation = async ({
     protocolId,
     protocolState,
+    researcherId,
 }: ReviewAssignProps) => {
     const reviews = await getReviewsByProtocol(protocolId)
     const users = await getAllUsersWithoutResearchers()
@@ -26,7 +28,9 @@ const ReviewAssignation = async ({
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
-            users: users.filter((u) => u.role === Role.METHODOLOGIST),
+            users: users.filter(
+                (u) => u.role === Role.METHODOLOGIST && u.id !== researcherId
+            ),
             enabled:
                 protocolState === State.PUBLISHED ||
                 protocolState === State.METHODOLOGICAL_EVALUATION,

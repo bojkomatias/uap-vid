@@ -133,19 +133,22 @@ const getProtocolByRol = cache(
                         researcherId: id,
                     },
                 }),
-                [ROLE.METHODOLOGIST]: prisma.review
-                    .findMany({
-                        skip: shownRecords * (page - 1),
-                        take: shownRecords,
-                        select: {
-                            protocol: true,
-                        },
-                        where: {
-                            reviewerId: id,
-                            type: 'METHODOLOGICAL',
-                        },
-                    })
-                    .then((result) => result.map((item) => item.protocol)),
+                [ROLE.METHODOLOGIST]: prisma.protocol.findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                    where: {
+                        OR: [
+                            {
+                                researcherId: id,
+                            },
+                            {
+                                reviews: {
+                                    some: { reviewerId: id },
+                                },
+                            },
+                        ],
+                    },
+                }),
                 [ROLE.SCIENTIST]: prisma.review
                     .findMany({
                         skip: shownRecords * (page - 1),
@@ -174,19 +177,26 @@ const getProtocolByRol = cache(
                 const academicUnits = await getAcademicUnitsByUserId(id)
                 return prisma.protocol.findMany({
                     where: {
-                        sections: {
-                            is: {
-                                identification: {
+                        OR: [
+                            {
+                                researcherId: id,
+                            },
+                            {
+                                sections: {
                                     is: {
-                                        sponsor: {
-                                            hasSome: academicUnits?.map(
-                                                (e) => e.name
-                                            ),
+                                        identification: {
+                                            is: {
+                                                sponsor: {
+                                                    hasSome: academicUnits?.map(
+                                                        (e) => e.name
+                                                    ),
+                                                },
+                                            },
                                         },
                                     },
                                 },
                             },
-                        },
+                        ],
                     },
                 })
             }

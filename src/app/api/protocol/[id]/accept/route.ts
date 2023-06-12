@@ -16,23 +16,25 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
-    if (sessionRole !== (Role.ADMIN || Role.SECRETARY)) {
-        return new Response('Unauthorized', { status: 401 })
+
+    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
+        const id = params.id
+        const protocol = await request.json()
+        if (protocol) delete protocol.id
+        const updated = await updateProtocolStateById(id, State.ACCEPTED)
+
+        await logProtocolUpdate({
+            fromState: State.SCIENTIFIC_EVALUATION,
+            toState: State.ACCEPTED,
+            protocolId: id,
+        })
+
+        if (!updated) {
+            return new Response('We cannot accept this protocol', {
+                status: 500,
+            })
+        }
+        return NextResponse.json({ success: true })
     }
-
-    const id = params.id
-    const protocol = await request.json()
-    if (protocol) delete protocol.id
-    const updated = await updateProtocolStateById(id, State.ACCEPTED)
-
-    await logProtocolUpdate({
-        fromState: State.SCIENTIFIC_EVALUATION,
-        toState: State.ACCEPTED,
-        protocolId: id,
-    })
-
-    if (!updated) {
-        return new Response('We cannot accept this protocol', { status: 500 })
-    }
-    return NextResponse.json({ success: true })
+    return new Response('Unauthorized', { status: 401 })
 }

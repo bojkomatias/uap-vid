@@ -70,7 +70,12 @@ const ReviewAssignSelect = ({
               })
     const [show, setShow] = useState(false)
 
-    if (!show && protocolState === State.METHODOLOGICAL_EVALUATION) {
+
+    if (
+        !show &&
+        !review?.reviewerId &&
+        protocolState !== State.SCIENTIFIC_EVALUATION
+    ) {
         return (
             <Tooltip
                 label={
