@@ -28,60 +28,63 @@ export async function PUT(
     }
     const sessionRole = session.user.role
 
-    if (sessionRole !== (Role.ADMIN || Role.SECRETARY)) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-    const data = (await request.json()) as {
-        review: Review
-        reviewerId: string
-        type: ReviewType
-    }
-    if (!data) {
-        return NextResponse.json({ error: 'No data provided' }, { status: 400 })
-    }
+    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
+        const data = (await request.json()) as {
+            review: Review
+            reviewerId: string
+            type: ReviewType
+        }
+        if (!data) {
+            return NextResponse.json(
+                { error: 'No data provided' },
+                { status: 400 }
+            )
+        }
 
-    //If is new review, create it
-    if (!data.review) {
-        const newReview = await assignReviewerToProtocol(
+        //If is new review, create it
+        if (!data.review) {
+            const newReview = await assignReviewerToProtocol(
+                params.id,
+                data.reviewerId,
+                data.type
+            )
+            if (!newReview) {
+                return NextResponse.json(
+                    { error: 'Error assigning reviewer to protocol' },
+                    { status: 500 }
+                )
+            }
+
+            const protocol =
+                data.type === ReviewType.SCIENTIFIC_THIRD
+                    ? null
+                    : await updateProtocolStateById(
+                          params.id,
+                          newStateByReviewType[data.type]
+                      )
+
+            if (data.type !== ReviewType.SCIENTIFIC_THIRD)
+                await logProtocolUpdate({
+                    fromState:
+                        data.type === ReviewType.METHODOLOGICAL
+                            ? State.PUBLISHED
+                            : State.METHODOLOGICAL_EVALUATION,
+                    toState: newStateByReviewType[data.type],
+                    protocolId: params.id,
+                })
+
+            return NextResponse.json({ newReview, protocol }, { status: 200 })
+        }
+
+        //If is existing review, update it
+        const updatedReview = await reassignReviewerToProtocol(
+            data.review.id,
             params.id,
             data.reviewerId,
             data.type
         )
-        if (!newReview) {
-            return NextResponse.json(
-                { error: 'Error assigning reviewer to protocol' },
-                { status: 500 }
-            )
-        }
 
-        const protocol =
-            data.type === ReviewType.SCIENTIFIC_THIRD
-                ? null
-                : await updateProtocolStateById(
-                      params.id,
-                      newStateByReviewType[data.type]
-                  )
-
-        if (data.type !== ReviewType.SCIENTIFIC_THIRD)
-            await logProtocolUpdate({
-                fromState:
-                    data.type === ReviewType.METHODOLOGICAL
-                        ? State.PUBLISHED
-                        : State.METHODOLOGICAL_EVALUATION,
-                toState: newStateByReviewType[data.type],
-                protocolId: params.id,
-            })
-
-        return NextResponse.json({ newReview, protocol }, { status: 200 })
+        return NextResponse.json({ updatedReview }, { status: 200 })
     }
-
-    //If is existing review, update it
-    const updatedReview = await reassignReviewerToProtocol(
-        data.review.id,
-        params.id,
-        data.reviewerId,
-        data.type
-    )
-
-    return NextResponse.json({ updatedReview }, { status: 200 })
+    return new Response('Unauthorized', { status: 401 })
 }
