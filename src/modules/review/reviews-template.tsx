@@ -38,6 +38,7 @@ export default async function ReviewsTemplate({
                         {/* @ts-expect-error Server Component */}
                         <ReviewAssignation
                             protocolId={id}
+                            researcherId={researcherId}
                             protocolState={state}
                         />
                     </ReviewAssignationWrapper>
