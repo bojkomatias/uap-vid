@@ -27,10 +27,10 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
-    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
+
+    if (sessionRole !== (Role.ADMIN || Role.SECRETARY)) {
         return new Response('Unauthorized', { status: 401 })
     }
-
     const data = (await request.json()) as {
         review: Review
         reviewerId: string
@@ -53,19 +53,24 @@ export async function PUT(
                 { status: 500 }
             )
         }
-        const protocol = await updateProtocolStateById(
-            params.id,
-            newStateByReviewType[data.type]
-        )
 
-        await logProtocolUpdate({
-            fromState:
-                data.type === ReviewType.METHODOLOGICAL
-                    ? State.PUBLISHED
-                    : State.METHODOLOGICAL_EVALUATION,
-            toState: newStateByReviewType[data.type],
-            protocolId: params.id,
-        })
+        const protocol =
+            data.type === ReviewType.SCIENTIFIC_THIRD
+                ? null
+                : await updateProtocolStateById(
+                      params.id,
+                      newStateByReviewType[data.type]
+                  )
+
+        if (data.type !== ReviewType.SCIENTIFIC_THIRD)
+            await logProtocolUpdate({
+                fromState:
+                    data.type === ReviewType.METHODOLOGICAL
+                        ? State.PUBLISHED
+                        : State.METHODOLOGICAL_EVALUATION,
+                toState: newStateByReviewType[data.type],
+                protocolId: params.id,
+            })
 
         return NextResponse.json({ newReview, protocol }, { status: 200 })
     }

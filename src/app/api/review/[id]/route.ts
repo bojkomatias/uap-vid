@@ -12,7 +12,7 @@ export async function PUT(request: NextRequest) {
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
-    if (sessionRole !== Role.RESEARCHER) {
+    if (sessionRole === Role.RESEARCHER) {
         return new Response('Unauthorized', { status: 401 })
     }
     const data = await request.json()
@@ -29,10 +29,7 @@ export async function PATCH(
     if (!session) {
         return new Response('Unauthorized', { status: 401 })
     }
-    const sessionRole = session.user.role
-    if (sessionRole !== Role.RESEARCHER) {
-        return new Response('Unauthorized', { status: 401 })
-    }
+
     const data = await request.json()
     const review = await markRevised(params.id, data)
     return NextResponse.json(review)
