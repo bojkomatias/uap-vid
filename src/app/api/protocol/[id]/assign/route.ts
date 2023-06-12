@@ -84,6 +84,7 @@ export async function PUT(
             data.type
         )
 
+
         return NextResponse.json({ updatedReview }, { status: 200 })
     }
     return new Response('Unauthorized', { status: 401 })

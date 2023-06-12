@@ -16,6 +16,7 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
+
     if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
         const id = params.id
         const protocol = await request.json()

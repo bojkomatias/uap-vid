@@ -83,9 +83,13 @@ const ReviewAssignation = async ({
             ),
             enabled:
                 protocolState === State.SCIENTIFIC_EVALUATION &&
-                reviews.filter((e) => e.verdict === ReviewVerdict.REJECTED)
-                    .length === 1,
-
+                reviews.filter(
+                    (e) =>
+                        (e.type === ReviewType.SCIENTIFIC_EXTERNAL ||
+                            e.type === ReviewType.SCIENTIFIC_INTERNAL) &&
+                        e.verdict !== ReviewVerdict.NOT_REVIEWED
+                ).length === 2 &&
+                reviews.some((e) => e.verdict === ReviewVerdict.REJECTED),
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_THIRD
