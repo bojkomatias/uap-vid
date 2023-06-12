@@ -32,7 +32,6 @@ const ActionSchema = z.enum([
     'CREATE',
     'EDIT',
     'EDIT_BY_OWNER',
-    'PUBLISH',
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
     'COMMENT',
