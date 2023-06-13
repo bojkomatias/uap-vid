@@ -21,7 +21,7 @@ export default async function UserList({
     const session = await getServerSession(authOptions)
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
-    const shownRecords = 5
+    const shownRecords = 8
     const users = await getAllUsers(
         shownRecords,
         Number(searchParams?.page) || 1
