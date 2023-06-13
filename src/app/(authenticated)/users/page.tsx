@@ -55,12 +55,14 @@ export default async function UserList({
             />
 
             <UserTable users={searchedUsers!} />
-            <Pagination
-                url="/users"
-                pageParams={Number(searchParams?.page) || 1}
-                count={userCount!}
-                shownRecords={shownRecords}
-            />
+            {searchParams?.search ? null : (
+                <Pagination
+                    url="/users"
+                    pageParams={Number(searchParams?.page) || 1}
+                    count={userCount!}
+                    shownRecords={shownRecords}
+                />
+            )}
         </>
     )
 }
