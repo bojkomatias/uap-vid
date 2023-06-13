@@ -59,7 +59,7 @@ export const SignIn = () => {
                 }}
             >
                 <div className="text-xs text-primary/80">
-                    Iniciar sesión con credenciales institucionales de office
+                    Iniciar sesión con credenciales institucionales de Office
                     365.
                 </div>
                 <Button
