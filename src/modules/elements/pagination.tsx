@@ -3,11 +3,13 @@ import Link from 'next/link'
 import { Button } from './button'
 /**Receives 4 arguments: the current page number (pageParams), the total records count from the db (count), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
+    url,
     pageParams,
     count,
     shownRecords,
     listLength = 5,
 }: {
+    url: string
     pageParams: number
     count: number
     shownRecords: number
@@ -33,7 +35,11 @@ export default function Pagination({
                 ? 5
                 : pageParams + Math.ceil(lLength / 2)
 
-        const pages = originalArray.slice(floor, ceil)
+        const pages =
+            originalArray.length > lLength
+                ? originalArray.slice(floor, ceil)
+                : originalArray
+        console.log(floor, ceil)
 
         return { originalArray, pages }
     }, [count, shownRecords, listLength, pageParams])
@@ -44,14 +50,14 @@ export default function Pagination({
                 {listLength >= Math.ceil(count / shownRecords) ? null : (
                     <>
                         {' '}
-                        <Link href={`/protocols?page=${1}`} passHref>
+                        <Link href={`${url}?page=${1}`} passHref>
                             <Button title="Primer página" intent="special">
                                 {'<<'}
                             </Button>
                         </Link>
                         <Link
-                            href={`/protocols?page=${
-                                pageParams !== 1 ? pageParams - 1 : 1
+                            href={`${url}?page=${
+                                pageParams > 1 ? pageParams - 1 : 1
                             }`}
                             passHref
                         >
@@ -66,7 +72,7 @@ export default function Pagination({
                     ? pageNumbers().pages.map((page: number) => (
                           <Link
                               key={page}
-                              href={`/protocols?page=${page}`}
+                              href={`${url}?page=${page}`}
                               passHref
                           >
                               <Button
@@ -86,11 +92,8 @@ export default function Pagination({
                     <>
                         {' '}
                         <Link
-                            href={`/protocols?page=${
-                                pageParams !==
-                                pageNumbers().originalArray[
-                                    pageNumbers().originalArray.length - 1
-                                ]
+                            href={`${url}?page=${
+                                pageParams < pageNumbers().originalArray.length
                                     ? pageParams + 1
                                     : pageNumbers().originalArray[
                                           pageNumbers().originalArray.length - 1
@@ -103,7 +106,7 @@ export default function Pagination({
                             </Button>
                         </Link>
                         <Link
-                            href={`/protocols?page=${
+                            href={`${url}?page=${
                                 pageNumbers().originalArray[
                                     pageNumbers().originalArray.length - 1
                                 ]

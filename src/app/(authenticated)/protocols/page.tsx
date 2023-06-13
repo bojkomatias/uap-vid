@@ -28,7 +28,7 @@ export default async function Page({
         session.user.role,
         session.user.id
     )
-    const shownRecords = 8
+    const shownRecords = 4
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
     const protocols = session?.user
@@ -83,6 +83,7 @@ export default async function Page({
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
+                    url="/protocols"
                     pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount!}
                     shownRecords={shownRecords}
