@@ -78,7 +78,7 @@ export default async function Page({
                 )}
             </div>
 
-            <SearchBar />
+            <SearchBar url="/protocols" />
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
