@@ -1,6 +1,10 @@
 import Link from 'next/link'
 import { Button } from '@elements/button'
-import { getAllUsers, totalUserRecords } from '@repositories/user'
+import {
+    getAllUsers,
+    totalUserRecords,
+    getAllUsersWithoutPagination,
+} from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
@@ -30,9 +34,13 @@ export default async function UserList({
 
     const searchedUsers = searchParams?.search
         ? fuzzysort
-              .go(searchParams.search, users as User[], {
-                  keys: ['name', 'role', 'email'],
-              })
+              .go(
+                  searchParams.search,
+                  (await getAllUsersWithoutPagination()) as User[],
+                  {
+                      keys: ['name', 'role', 'email'],
+                  }
+              )
               .map((result) => {
                   return result.obj as User
               })
@@ -49,7 +57,10 @@ export default async function UserList({
                     </Button>
                 </Link>
             </div>
-            <SearchBar url="/users" />
+            <SearchBar
+                placeholderMessage="Buscar usuario por nombre, rol o email"
+                url="/users"
+            />
 
             <UserTable users={searchedUsers!} />
             <Pagination
