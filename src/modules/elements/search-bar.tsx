@@ -3,7 +3,13 @@ import { Button } from './button'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function SearchBar({ url }: { url: string }) {
+export default function SearchBar({
+    url,
+    placeholderMessage,
+}: {
+    url: string
+    placeholderMessage: string
+}) {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
 
@@ -22,7 +28,7 @@ export default function SearchBar({ url }: { url: string }) {
                     }
                 }}
                 className="input"
-                placeholder="Buscar protocolo por título o carrera"
+                placeholder={placeholderMessage}
             />
             <Button
                 onClick={() => {

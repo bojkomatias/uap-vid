@@ -78,7 +78,10 @@ export default async function Page({
                 )}
             </div>
 
-            <SearchBar url="/protocols" />
+            <SearchBar
+                placeholderMessage="Buscar protocolo por título o carrera"
+                url="/protocols"
+            />
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (

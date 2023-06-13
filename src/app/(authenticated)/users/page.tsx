@@ -49,7 +49,10 @@ export default async function UserList({
                     </Button>
                 </Link>
             </div>
-            <SearchBar url="/users" />
+            <SearchBar
+                url="/users"
+                placeholderMessage="Buscar usuario por nombre, rol o email"
+            />
 
             <UserTable users={searchedUsers!} />
             <Pagination
