@@ -3,7 +3,7 @@ import { Button } from './button'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function SearchBar() {
+export default function SearchBar({ url }: { url: string }) {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
 
@@ -12,13 +12,13 @@ export default function SearchBar() {
             <input
                 onKeyUpCapture={(e) => {
                     if (e.key === 'Enter')
-                        router.push(`/protocols?search=${searchQuery}`)
+                        router.push(`${url}?search=${searchQuery}`)
                 }}
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
                     //If searchQuery is empty, goes back to the normal paginated page
                     if (e.target.value === '') {
-                        router.push('/protocols')
+                        router.push(url)
                     }
                 }}
                 className="input"
@@ -27,9 +27,9 @@ export default function SearchBar() {
             <Button
                 onClick={() => {
                     if (searchQuery == '') {
-                        router.push('/protocols')
+                        router.push(url)
                     } else {
-                        router.push(`/protocols?search=${searchQuery}`)
+                        router.push(`${url}?search=${searchQuery}`)
                     }
                 }}
                 intent="secondary"

@@ -1,4 +1,3 @@
-import { compare } from 'bcryptjs'
 import AzureADProvider from 'next-auth/providers/azure-ad'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
@@ -9,6 +8,7 @@ import {
     saveUser,
     findUserByEmail,
 } from '@repositories/user'
+import { verifyHashScrypt } from '@utils/hash'
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 //Check hased password with DB password
-                const checkPassword = await compare(
+                const checkPassword = await verifyHashScrypt(
                     credentials!.password,
                     result.password!
                 )

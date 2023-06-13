@@ -2,13 +2,22 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { deleteProtocolById, updateProtocolById } from '@repositories/protocol'
+import { Role } from '@prisma/client'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
 
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    //I cannot find the type for params https://beta.nextjs.org/docs/routing/route-handlers#dynamic-route-segments
-    // You put them according to the naming of the folder ([id] params.id || [...your_mom] params.your_mom[0])
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+    const sessionRole = session.user.role
+    if (sessionRole !== Role.METHODOLOGIST && sessionRole !== Role.SCIENTIST) {
+        return new Response('Unauthorized', { status: 401 })
+    }
     const id = params.id
     const protocol = await request.json()
     if (protocol) delete protocol.id
@@ -23,6 +32,14 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+    const sessionRole = session.user.role
+    if (sessionRole !== Role.ADMIN) {
+        return new Response('Unauthorized', { status: 401 })
+    }
     const id = params.id
     const deleted = await deleteProtocolById(id)
 

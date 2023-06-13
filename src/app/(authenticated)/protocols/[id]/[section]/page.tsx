@@ -46,7 +46,7 @@ export default async function Page({
     return (
         <>
             <div className="mr-3 mt-1 flex items-center justify-end gap-2">
-                <PublishButton role={session.user.role} protocol={protocol} />
+                <PublishButton userId={session.user.id} protocol={protocol} />
             </div>
             <ProtocolForm protocol={protocol} />
         </>

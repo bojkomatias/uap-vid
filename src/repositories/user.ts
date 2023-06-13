@@ -3,10 +3,22 @@ import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
-const getAllUsers = async () => {
+const getAllUsers = cache(async (shownRecords: number, page: number) => {
     try {
-        const users = await prisma.user.findMany()
+        const users = await prisma.user.findMany({
+            skip: shownRecords * (page - 1),
+            take: shownRecords,
+        })
         return users
+    } catch (error) {
+        return null
+    }
+})
+
+const totalUserRecords = async () => {
+    try {
+        const records = prisma.user.count()
+        return records
     } catch (error) {
         return null
     }
@@ -148,4 +160,5 @@ export {
     updateUserByEmail,
     saveUser,
     deleteUserById,
+    totalUserRecords,
 }

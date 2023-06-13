@@ -3,6 +3,7 @@ services:
     mongodb:
         image: mongo
         userns_mode: 'host'
+        restart: always
         volumes:
             - ../apps/mongo-data:/data/db
         env_file:
@@ -28,6 +29,7 @@ services:
     uap-research:
         #Our container app name
         image: uapvid
+        restart: always
         build:
             context: .
             dockerfile: ./Dockerfile

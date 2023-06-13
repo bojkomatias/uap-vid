@@ -7,10 +7,12 @@ import ReviewAssignSelect from './elements/review-assign-select'
 interface ReviewAssignProps {
     protocolId: string
     protocolState: State
+    researcherId: string
 }
 const ReviewAssignation = async ({
     protocolId,
     protocolState,
+    researcherId,
 }: ReviewAssignProps) => {
     const reviews = await getReviewsByProtocol(protocolId)
     const users = await getAllUsersWithoutResearchers()
@@ -26,8 +28,9 @@ const ReviewAssignation = async ({
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
-            users: users.filter((u) => u.role === Role.METHODOLOGIST),
-            protocolId: protocolId,
+            users: users.filter(
+                (u) => u.role === Role.METHODOLOGIST && u.id !== researcherId
+            ),
             enabled:
                 protocolState === State.PUBLISHED ||
                 protocolState === State.METHODOLOGICAL_EVALUATION,
@@ -41,7 +44,6 @@ const ReviewAssignation = async ({
             users: users.filter(
                 (u) => u.role === Role.SCIENTIST && assignedExternal !== u.id
             ),
-            protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
@@ -59,7 +61,6 @@ const ReviewAssignation = async ({
             users: users.filter(
                 (u) => u.role === Role.SCIENTIST && assignedInternal !== u.id
             ),
-            protocolId: protocolId,
             enabled:
                 (protocolState === State.METHODOLOGICAL_EVALUATION &&
                     reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
@@ -72,12 +73,38 @@ const ReviewAssignation = async ({
                     (review) => review.type === ReviewType.SCIENTIFIC_EXTERNAL
                 ) ?? null,
         },
+        {
+            type: ReviewType.SCIENTIFIC_THIRD,
+            users: users.filter(
+                (u) =>
+                    u.role === Role.SCIENTIST &&
+                    assignedInternal !== u.id &&
+                    assignedExternal !== u.id
+            ),
+            enabled:
+                protocolState === State.SCIENTIFIC_EVALUATION &&
+                reviews.filter(
+                    (e) =>
+                        (e.type === ReviewType.SCIENTIFIC_EXTERNAL ||
+                            e.type === ReviewType.SCIENTIFIC_INTERNAL) &&
+                        e.verdict !== ReviewVerdict.NOT_REVIEWED
+                ).length === 2 &&
+                reviews.some((e) => e.verdict === ReviewVerdict.REJECTED),
+            review:
+                reviews.find(
+                    (review) => review.type === ReviewType.SCIENTIFIC_THIRD
+                ) ?? null,
+        },
     ].filter((r) => r.enabled)
 
     return reviewAssignSelectsData.map((data) => (
         <div key={data.type} className="mb-4 px-2">
             <label className="label">{EvaluatorsByReviewType[data.type]}</label>
-            <ReviewAssignSelect {...data} />
+            <ReviewAssignSelect
+                {...data}
+                protocolId={protocolId}
+                protocolState={protocolState}
+            />
         </div>
     ))
 }

@@ -10,25 +10,6 @@ import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 
 export default async function CreateButton({ role }: { role: RoleType }) {
-    if (role === Role.RESEARCHER || role === Role.SECRETARY) {
-        const currentConvocatory = await getCurrentConvocatory()
-        if (!currentConvocatory)
-            return (
-                <Button intent={'secondary'} disabled>
-                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
-                </Button>
-            )
-        return (
-            <Link
-                href={`/protocols/new/0?convocatory=${currentConvocatory?.id}`}
-                passHref
-            >
-                <Button intent={'secondary'}>
-                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
-                </Button>
-            </Link>
-        )
-    }
     if (role === Role.ADMIN) {
         const convocatories = await getAllConvocatories()
         if (!convocatories || convocatories.length === 0) return null
@@ -54,6 +35,24 @@ export default async function CreateButton({ role }: { role: RoleType }) {
                     )},  ${e.to.toLocaleDateString('es-AR')}`,
                 }))}
             />
+        )
+    } else {
+        const currentConvocatory = await getCurrentConvocatory()
+        if (!currentConvocatory)
+            return (
+                <Button intent={'secondary'} disabled>
+                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
+                </Button>
+            )
+        return (
+            <Link
+                href={`/protocols/new/0?convocatory=${currentConvocatory?.id}`}
+                passHref
+            >
+                <Button intent={'secondary'}>
+                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
+                </Button>
+            </Link>
         )
     }
 }

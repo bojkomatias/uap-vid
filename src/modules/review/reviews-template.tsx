@@ -38,20 +38,23 @@ export default async function ReviewsTemplate({
                         {/* @ts-expect-error Server Component */}
                         <ReviewAssignation
                             protocolId={id}
+                            researcherId={researcherId}
                             protocolState={state}
                         />
                     </ReviewAssignationWrapper>
                 )}
 
-                {canExecute(ACTION.COMMENT, userRole, state) && (
-                    // @ts-expect-error
-                    <ReviewFormTemplate protocolId={id} userId={userId} />
-                )}
+                {userId !== researcherId &&
+                    canExecute(ACTION.COMMENT, userRole, state) && (
+                        // @ts-expect-error
+                        <ReviewFormTemplate protocolId={id} userId={userId} />
+                    )}
 
-                {canAccess(ACCESS.REVIEWS, userRole) && (
-                    // @ts-expect-error
-                    <ReviewList role={userRole} state={state} id={id} />
-                )}
+                {userId === researcherId ||
+                    (canAccess(ACCESS.REVIEWS, userRole) && (
+                        // @ts-expect-error
+                        <ReviewList role={userRole} state={state} id={id} />
+                    ))}
             </div>
         </aside>
     )

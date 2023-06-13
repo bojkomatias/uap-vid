@@ -9,6 +9,8 @@ const styles = {
         'text-xs ring-1 bg-white focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700',
     tertiary:
         'text-xs ring-1 focus:ring-offset-0 ring-gray-200 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700 active:bg-primary active:text-white',
+    special:
+        'text-xs ring-1 focus:ring-offset-0 ring-base-50 hover:ring-primary hover:ring-2 hover:bg-gray-50 hover:text-primary text-gray-700 active:bg-primary active:text-white bg-base-100/70 active:scale-95',
 }
 
 interface Props
@@ -16,7 +18,7 @@ interface Props
         ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
     > {
-    intent?: 'primary' | 'secondary' | 'tertiary'
+    intent?: 'primary' | 'secondary' | 'tertiary' | 'special'
     className?: string
     type?: 'button' | 'reset' | 'submit'
     loading?: boolean

@@ -78,11 +78,12 @@ export default async function Page({
                 )}
             </div>
 
-            <SearchBar />
+            <SearchBar url="/protocols" />
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
+                    url="/protocols"
                     pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount!}
                     shownRecords={shownRecords}

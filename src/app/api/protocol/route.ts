@@ -2,7 +2,13 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createProtocol } from '../../../repositories/protocol'
+import { getServerSession } from 'next-auth'
 export async function POST(request: NextRequest) {
+    const session = await getServerSession()
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
     const data = await request.json()
     const created = await createProtocol({
         createdAt: new Date(),

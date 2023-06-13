@@ -1,18 +1,18 @@
 'use client'
 import { Button } from '@elements/button'
 import type { Protocol } from '@prisma/client'
-import type { Protocol as ProtocolZod, RoleType } from '@utils/zod'
-import { canExecute } from '@utils/scopes'
-import { ACTION, ProtocolSchema } from '@utils/zod'
+import { State } from '@prisma/client'
+import type { Protocol as ProtocolZod } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
 import { useNotifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import InfoTooltip from '../tooltip'
 import { Upload } from 'tabler-icons-react'
 
-type ActionButtonTypes = { role: RoleType; protocol: Protocol | ProtocolZod }
+type ActionButtonTypes = { userId: string; protocol: Protocol | ProtocolZod }
 
-export default function PublishButton({ role, protocol }: ActionButtonTypes) {
+export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
     const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -45,7 +45,11 @@ export default function PublishButton({ role, protocol }: ActionButtonTypes) {
         [protocol]
     )
 
-    if (!protocol.id || !canExecute(ACTION.PUBLISH, role, protocol.state))
+    if (
+        !protocol.id ||
+        protocol.state !== State.DRAFT ||
+        userId !== protocol.researcherId
+    )
         return <></>
 
     if (!isValid)
