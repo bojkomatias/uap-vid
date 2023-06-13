@@ -28,7 +28,7 @@ export default async function Page({
         session.user.role,
         session.user.id
     )
-    const shownRecords = 4
+    const shownRecords = 8
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
     const protocols = session?.user
