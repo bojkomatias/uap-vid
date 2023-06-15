@@ -58,17 +58,20 @@ export default async function UserList({
                 </Link>
             </div>
             <SearchBar
-                placeholderMessage="Buscar usuario por nombre, rol o email."
+
                 url="/users"
+                placeholderMessage="Buscar usuario por nombre, rol o email"
             />
 
             <UserTable users={searchedUsers!} />
-            <Pagination
-                url="/users"
-                pageParams={Number(searchParams?.page) || 1}
-                count={userCount!}
-                shownRecords={shownRecords}
-            />
+            {searchParams?.search ? null : (
+                <Pagination
+                    url="/users"
+                    pageParams={Number(searchParams?.page) || 1}
+                    count={userCount!}
+                    shownRecords={shownRecords}
+                />
+            )}
         </>
     )
 }

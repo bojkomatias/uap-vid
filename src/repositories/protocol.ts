@@ -94,10 +94,18 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
                 researcherId: id,
             },
         }),
-        [ROLE.METHODOLOGIST]: prisma.review.count({
+        [ROLE.METHODOLOGIST]: prisma.protocol.count({
             where: {
-                reviewerId: id,
-                type: 'METHODOLOGICAL',
+                OR: [
+                    {
+                        researcherId: id,
+                    },
+                    {
+                        reviews: {
+                            some: { reviewerId: id },
+                        },
+                    },
+                ],
             },
         }),
         [ROLE.SCIENTIST]: prisma.review.count({
@@ -111,9 +119,34 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
     }
 
     try {
-        if (ROLE.ADMIN === role || ROLE.SECRETARY === role)
-            return prisma.protocol.count({})
-
+        if (ROLE.ADMIN === role) return prisma.protocol.count({})
+        if (role === ROLE.SECRETARY) {
+            const academicUnits = await getAcademicUnitsByUserId(id)
+            return prisma.protocol.count({
+                where: {
+                    OR: [
+                        {
+                            researcherId: id,
+                        },
+                        {
+                            sections: {
+                                is: {
+                                    identification: {
+                                        is: {
+                                            sponsor: {
+                                                hasSome: academicUnits?.map(
+                                                    (e) => e.name
+                                                ),
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    ],
+                },
+            })
+        }
         return await query[role]
     } catch (e) {
         return null

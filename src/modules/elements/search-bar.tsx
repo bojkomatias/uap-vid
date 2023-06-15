@@ -9,6 +9,7 @@ export default function SearchBar({
 }: {
     placeholderMessage: string
     url: string
+
 }) {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()

@@ -28,7 +28,7 @@ export default async function Page({
         session.user.role,
         session.user.id
     )
-    const shownRecords = 8
+    const shownRecords = 1
 
     // Since the page refreshes or pushes according to params, I grouped the query through ternaries here.
     const protocols = session?.user
@@ -45,6 +45,7 @@ export default async function Page({
               )
         : null
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
+
     const searchedProtocols = searchParams?.search
         ? fuzzysort
               .go(searchParams.search, protocols as Protocol[], {
