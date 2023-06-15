@@ -58,7 +58,7 @@ export default async function UserList({
                 </Link>
             </div>
             <SearchBar
-                placeholderMessage="Buscar usuario por nombre, rol o email"
+                placeholderMessage="Buscar usuario por nombre, rol o email."
                 url="/users"
             />
 
