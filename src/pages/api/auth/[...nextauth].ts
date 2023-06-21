@@ -13,6 +13,7 @@ import { verifyHashScrypt } from '@utils/hash'
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt',
+        maxAge: 7 * 24 * 60 * 60,
     },
     providers: [
         AzureADProvider({
