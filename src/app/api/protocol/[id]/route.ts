@@ -15,17 +15,19 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
     const sessionRole = session.user.role
-    if (sessionRole !== Role.METHODOLOGIST && sessionRole !== Role.SCIENTIST) {
-        return new Response('Unauthorized', { status: 401 })
+    if (sessionRole === Role.METHODOLOGIST || sessionRole === Role.SCIENTIST) {
+        const id = params.id
+        const protocol = await request.json()
+        if (protocol) delete protocol.id
+        const updated = await updateProtocolById(id, protocol)
+        if (!updated) {
+            return new Response('We cannot update the protocol', {
+                status: 500,
+            })
+        }
+        return NextResponse.json({ success: true })
     }
-    const id = params.id
-    const protocol = await request.json()
-    if (protocol) delete protocol.id
-    const updated = await updateProtocolById(id, protocol)
-    if (!updated) {
-        return new Response('We cannot update the protocol', { status: 500 })
-    }
-    return NextResponse.json({ success: true })
+    return new Response('Unauthorized', { status: 401 })
 }
 
 export async function DELETE(
