@@ -39,7 +39,6 @@ export default function Pagination({
             originalArray.length > lLength
                 ? originalArray.slice(floor, ceil)
                 : originalArray
-        console.log(floor, ceil)
 
         return { originalArray, pages }
     }, [count, shownRecords, listLength, pageParams])

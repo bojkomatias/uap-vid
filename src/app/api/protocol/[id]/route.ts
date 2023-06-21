@@ -14,16 +14,15 @@ export async function PUT(
     if (!session) {
         return new Response('Unauthorized', { status: 401 })
     }
-    const sessionRole = session.user.role
-    if (sessionRole !== Role.METHODOLOGIST && sessionRole !== Role.SCIENTIST) {
-        return new Response('Unauthorized', { status: 401 })
-    }
+
     const id = params.id
     const protocol = await request.json()
     if (protocol) delete protocol.id
     const updated = await updateProtocolById(id, protocol)
     if (!updated) {
-        return new Response('We cannot update the protocol', { status: 500 })
+        return new Response('We cannot update the protocol', {
+            status: 500,
+        })
     }
     return NextResponse.json({ success: true })
 }

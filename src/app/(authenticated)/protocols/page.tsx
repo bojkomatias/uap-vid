@@ -45,6 +45,7 @@ export default async function Page({
               )
         : null
     /**  This is the function that performs the search. Uses fuzzysort library. In the keys array you can put whatever key/s you want the search to be performed onto */
+
     const searchedProtocols = searchParams?.search
         ? fuzzysort
               .go(searchParams.search, protocols as Protocol[], {
@@ -78,7 +79,10 @@ export default async function Page({
                 )}
             </div>
 
-            <SearchBar url="/protocols" />
+            <SearchBar
+                placeholderMessage="Buscar protocolo por título o carrera"
+                url="/protocols"
+            />
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
