@@ -15,6 +15,15 @@ const getAllUsers = cache(async (shownRecords: number, page: number) => {
     }
 })
 
+const getAllUsersWithoutPagination = cache(async () => {
+    try {
+        const users = await prisma.user.findMany({})
+        return users
+    } catch (error) {
+        return null
+    }
+})
+
 const totalUserRecords = async () => {
     try {
         const records = prisma.user.count()
@@ -151,6 +160,7 @@ const deleteUserById = async (id: string) => {
 
 export {
     getAllUsers,
+    getAllUsersWithoutPagination,
     getAllUsersWithoutResearchers,
     getAllSecretaries,
     findUserById,

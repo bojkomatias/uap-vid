@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function SearchBar({
-    url,
     placeholderMessage,
+    url,
 }: {
-    url: string
     placeholderMessage: string
+    url: string
+
 }) {
     const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
