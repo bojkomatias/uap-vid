@@ -1,13 +1,13 @@
 import PublishButton from '@protocol/elements/action-buttons/publish'
+import ProtocolForm from '@protocol/protocol-form-template'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
 import { ACTION, STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
-import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
 import { findProtocolById } from 'repositories/protocol'
-const ProtocolForm = dynamic(() => import('@protocol/protocol-form-template'))
+
 
 export default async function Page({
     params,
