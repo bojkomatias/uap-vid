@@ -289,17 +289,6 @@ const getProtocolsWithoutPagination = cache(
     }
 )
 
-const deleteProtocolById = async (id: string) => {
-    try {
-        const protocol = await prisma.protocol.delete({
-            where: { id },
-        })
-        return protocol.id
-    } catch (error) {
-        return null
-    }
-}
-
 export {
     findProtocolById,
     updateProtocolById,
@@ -310,5 +299,4 @@ export {
     getTotalRecordsProtocol,
     getProtocolsWithoutPagination,
     getResearcherEmailByProtocolId,
-    deleteProtocolById,
 }

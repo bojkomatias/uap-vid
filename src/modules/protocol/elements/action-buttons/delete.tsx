@@ -1,11 +1,18 @@
 'use client'
 import { useNotifications } from '@mantine/notifications'
+import type { State } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
 let timeout: NodeJS.Timeout
 
-export function DeleteButton({ protocolId }: { protocolId: string }) {
+export function DeleteButton({
+    protocolId,
+    protocolState,
+}: {
+    protocolId: string
+    protocolState: State
+}) {
     const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -14,16 +21,21 @@ export function DeleteButton({ protocolId }: { protocolId: string }) {
     const deleteProtocol = useCallback(async () => {
         const res = await fetch(`/api/protocol/${protocolId}`, {
             method: 'DELETE',
+            body: JSON.stringify({ state: protocolState }),
         })
+
         if (res.ok) {
             notification.showNotification({
                 title: 'Protocolo eliminado',
                 message: 'El protocolo ha sido eliminado con éxito.',
                 color: 'green',
             })
-            return startTransition(() => router.refresh())
+            return startTransition(() => {
+                setDeleting(false)
+                router.refresh()
+            })
         }
-    }, [notification, protocolId, router])
+    }, [notification, protocolId, protocolState, router])
 
     return deleting ? (
         <button

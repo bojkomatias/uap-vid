@@ -117,7 +117,10 @@ export default function ProtocolTable({
                             </td>
                             {user.role === 'ADMIN' ? (
                                 <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
-                                    <DeleteButton protocolId={item.id} />
+                                    <DeleteButton
+                                        protocolId={item.id}
+                                        protocolState={item.state}
+                                    />
                                 </td>
                             ) : null}
                         </tr>
