@@ -1,9 +1,11 @@
 import type { Protocol, User } from '@prisma/client'
+import { State } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 import { DeleteButton } from './action-buttons/delete'
 import { User as UserIcon } from 'tabler-icons-react'
+import clsx from 'clsx'
 
 export default function ProtocolTable({
     items,
@@ -57,8 +59,13 @@ export default function ProtocolTable({
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                     {items.map((item) => (
-                        <tr key={item.id}>
-                            <td className="pb-4">
+                        <tr
+                            key={item.id}
+                            className={
+                                item.state === State.DELETED ? 'opacity-50' : ''
+                            }
+                        >
+                            <td className={'pb-4'}>
                                 {user.id === item.researcherId ? (
                                     <UserIcon className="h-4 w-4 text-gray-600" />
                                 ) : null}
@@ -83,7 +90,7 @@ export default function ProtocolTable({
                                     </dd>
                                 </dl>
                             </td>
-                            <td className="hidden  px-3 py-4 text-sm text-gray-500 lg:table-cell">
+                            <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
                                 <dl>
                                     <dd className=" text-gray-700">
                                         {item.sections.identification.sponsor
@@ -115,7 +122,8 @@ export default function ProtocolTable({
                                     Ver
                                 </Link>
                             </td>
-                            {user.role === 'ADMIN' ? (
+                            {user.role === 'ADMIN' &&
+                            item.state !== State.DELETED ? (
                                 <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
                                     <DeleteButton
                                         protocolId={item.id}
