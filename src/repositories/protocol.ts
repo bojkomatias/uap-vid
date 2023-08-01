@@ -92,6 +92,7 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
         [ROLE.RESEARCHER]: prisma.protocol.count({
             where: {
                 researcherId: id,
+                NOT: { state: 'DELETED' },
             },
         }),
         [ROLE.METHODOLOGIST]: prisma.protocol.count({
@@ -106,14 +107,15 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
                         },
                     },
                 ],
+                NOT: { state: 'DELETED' },
             },
         }),
-        [ROLE.SCIENTIST]: prisma.review.count({
+        [ROLE.SCIENTIST]: prisma.protocol.count({
             where: {
-                reviewerId: id,
-                type: {
-                    in: ['SCIENTIFIC_EXTERNAL', 'SCIENTIFIC_INTERNAL'],
+                reviews: {
+                    some: { reviewerId: id },
                 },
+                NOT: { state: 'DELETED' },
             },
         }),
     }
@@ -144,6 +146,7 @@ const getTotalRecordsProtocol = cache(async (role: RoleType, id: string) => {
                             },
                         },
                     ],
+                    NOT: { state: 'DELETED' },
                 },
             })
         }
@@ -164,6 +167,7 @@ const getProtocolByRol = cache(
                     take: shownRecords,
                     where: {
                         researcherId: id,
+                        NOT: { state: 'DELETED' },
                     },
                 }),
                 [ROLE.METHODOLOGIST]: prisma.protocol.findMany({
@@ -180,26 +184,19 @@ const getProtocolByRol = cache(
                                 },
                             },
                         ],
+                        NOT: { state: 'DELETED' },
                     },
                 }),
-                [ROLE.SCIENTIST]: prisma.review
-                    .findMany({
-                        skip: shownRecords * (page - 1),
-                        take: shownRecords,
-                        select: {
-                            protocol: true,
+                [ROLE.SCIENTIST]: prisma.protocol.findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                    where: {
+                        reviews: {
+                            some: { reviewerId: id },
                         },
-                        where: {
-                            reviewerId: id,
-                            type: {
-                                in: [
-                                    'SCIENTIFIC_EXTERNAL',
-                                    'SCIENTIFIC_INTERNAL',
-                                ],
-                            },
-                        },
-                    })
-                    .then((result) => result.map((item) => item.protocol)),
+                        NOT: { state: 'DELETED' },
+                    },
+                }),
                 [ROLE.ADMIN]: prisma.protocol.findMany({
                     skip: shownRecords * (page - 1),
                     take: shownRecords,
@@ -230,6 +227,7 @@ const getProtocolByRol = cache(
                                 },
                             },
                         ],
+                        NOT: { state: 'DELETED' },
                     },
                 })
             }
