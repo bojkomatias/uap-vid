@@ -5,7 +5,6 @@ import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 import { DeleteButton } from './action-buttons/delete'
 import { User as UserIcon } from 'tabler-icons-react'
-import clsx from 'clsx'
 
 export default function ProtocolTable({
     items,
