@@ -22,6 +22,7 @@ const StateSchema = z.enum([
     'SCIENTIFIC_EVALUATION',
     'ACCEPTED',
     'ON_GOING',
+    'DELETED',
 ])
 
 export const STATE = StateSchema.Enum

@@ -1,10 +1,14 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { deleteProtocolById, updateProtocolById } from '@repositories/protocol'
-import { Role } from '@prisma/client'
+import {
+    updateProtocolById,
+    updateProtocolStateById,
+} from '@repositories/protocol'
+import { Role, State } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { logProtocolUpdate } from '@utils/logger'
 
 export async function PUT(
     request: NextRequest,
@@ -39,8 +43,17 @@ export async function DELETE(
     if (sessionRole !== Role.ADMIN) {
         return new Response('Unauthorized', { status: 401 })
     }
+    // Deleted in in disguise an STATE transition => 'DELETED'
+    const { state } = await request.json()
+
     const id = params.id
-    const deleted = await deleteProtocolById(id)
+    const deleted = await updateProtocolStateById(id, State.DELETED)
+
+    await logProtocolUpdate({
+        fromState: state,
+        toState: State.DELETED,
+        protocolId: id,
+    })
 
     if (!deleted)
         return new Response("We couldn't delete the protocol", { status: 500 })

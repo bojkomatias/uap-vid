@@ -8,4 +8,5 @@ export default {
     [State.SCIENTIFIC_EVALUATION]: 'En evaluación científica',
     [State.ACCEPTED]: 'Aceptado para evaluación en comisión',
     [State.ON_GOING]: 'Aprobado y en curso',
+    [State.DELETED]: 'Eliminado',
 } as const

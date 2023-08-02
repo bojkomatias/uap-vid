@@ -62,6 +62,7 @@ const STATE_SCOPE = {
     ],
     [STATE.ACCEPTED]: [ACTION.APPROVE],
     [STATE.ON_GOING]: [],
+    [STATE.DELETED]: [],
 }
 
 // ! Use to guard transitions
