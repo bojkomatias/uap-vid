@@ -35,7 +35,6 @@ export default async function ReviewsTemplate({
                     state
                 ) && (
                     <ReviewAssignationWrapper>
-                        {/* @ts-expect-error Server Component */}
                         <ReviewAssignation
                             protocolId={id}
                             researcherId={researcherId}
@@ -46,13 +45,11 @@ export default async function ReviewsTemplate({
 
                 {userId !== researcherId &&
                     canExecute(ACTION.COMMENT, userRole, state) && (
-                        // @ts-expect-error
                         <ReviewFormTemplate protocolId={id} userId={userId} />
                     )}
 
                 {userId === researcherId ||
                     (canAccess(ACCESS.REVIEWS, userRole) && (
-                        // @ts-expect-error
                         <ReviewList role={userRole} state={state} id={id} />
                     ))}
             </div>

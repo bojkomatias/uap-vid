@@ -45,7 +45,7 @@ async function Layout({
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
-                {/* @ts-expect-error Server Component */}
+                
                 <Reviews
                     id={protocol.id}
                     researcherId={protocol.researcherId}

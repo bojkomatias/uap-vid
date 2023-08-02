@@ -26,7 +26,6 @@ export default async function Page() {
                     </Button>
                 </Link>
             </div>
-            {/* @ts-expect-error */}
             <ConvocatoryTable />
         </>
     )

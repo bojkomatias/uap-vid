@@ -7,7 +7,6 @@ export default async function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        // @ts-expect-error
         <Navigation>
             <Breadcrumbs />
           

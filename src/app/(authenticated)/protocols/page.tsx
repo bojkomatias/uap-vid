@@ -74,7 +74,6 @@ export default async function Page({
                     session.user.role,
                     'NOT_CREATED'
                 ) && (
-                    // @ts-expect-error
                     <CreateButton role={session.user.role} />
                 )}
             </div>
