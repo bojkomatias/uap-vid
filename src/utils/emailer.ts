@@ -17,7 +17,7 @@ const subjects = {
 export async function emailer(
     useCase: useCases,
     protocolId: string,
-    toId?: string
+    toUserId?: string
 ) {
     // Variable used in template to redirect (hardcoded cause process.env failed.)
     const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
@@ -235,7 +235,7 @@ export async function emailer(
         message: messages[useCase],
         html: html,
         protocolId: protocolId,
-        toId: toId,
+        toUserId: toUserId,
     }
 
     const res = await fetch('/api/email', {
