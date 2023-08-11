@@ -5,9 +5,8 @@ import { canExecute } from '@utils/scopes'
 import { ACTION, STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { findProtocolById } from 'repositories/protocol'
-
 
 export default async function Page({
     params,

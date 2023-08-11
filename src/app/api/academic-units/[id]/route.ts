@@ -3,7 +3,7 @@ import { updateAcademicUnit } from '@repositories/academic-unit'
 import { getServerSession } from 'next-auth'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 export async function PUT(
     request: NextRequest,

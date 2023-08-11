@@ -7,7 +7,7 @@ import {
 } from '@repositories/protocol'
 import { Role, State } from '@prisma/client'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { logProtocolUpdate } from '@utils/logger'
 
 export async function PUT(

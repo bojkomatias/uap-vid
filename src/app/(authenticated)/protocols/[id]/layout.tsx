@@ -1,11 +1,11 @@
 import { PageHeading } from '@layout/page-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
 import type { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 async function Layout({
     params,
@@ -45,7 +45,7 @@ async function Layout({
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
-                
+
                 <Reviews
                     id={protocol.id}
                     researcherId={protocol.researcherId}

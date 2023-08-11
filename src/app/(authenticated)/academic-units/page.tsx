@@ -4,7 +4,7 @@ import { canAccess } from '@utils/scopes'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
