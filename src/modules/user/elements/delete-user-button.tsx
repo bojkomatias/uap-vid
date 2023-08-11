@@ -1,12 +1,11 @@
 'use client'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
 let timeout: NodeJS.Timeout
 
 export function DeleteUserButton({ userId }: { userId: string }) {
-    const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
@@ -16,14 +15,14 @@ export function DeleteUserButton({ userId }: { userId: string }) {
             method: 'DELETE',
         })
         if (res.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Usuario eliminado',
                 message: 'El usuario ha sido eliminado con éxito.',
                 color: 'green',
             })
             return startTransition(() => router.refresh())
         }
-        notification.showNotification({
+        notifications.show({
             title: 'No se pudo eliminar usuario',
             message:
                 'El usuario esta vinculado con algún protocolo y no se puede eliminar.',
@@ -31,7 +30,7 @@ export function DeleteUserButton({ userId }: { userId: string }) {
         })
         setDeleting(false)
         return startTransition(() => router.refresh())
-    }, [notification, router, userId])
+    }, [router, userId])
 
     return deleting ? (
         <button

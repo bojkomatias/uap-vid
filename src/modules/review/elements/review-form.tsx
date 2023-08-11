@@ -3,7 +3,7 @@ import { Button } from '@elements/button'
 import { useCallback, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
 import { ReviewSchema } from '@utils/zod'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { ReviewType, ReviewVerdict } from '@prisma/client'
 import type { Review } from '@prisma/client'
@@ -24,7 +24,6 @@ export default function ReviewForm({ review }: { review: Review }) {
     })
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
-    const notifications = useNotifications()
 
     const addReview = useCallback(
         async (
@@ -38,7 +37,7 @@ export default function ReviewForm({ review }: { review: Review }) {
             })
 
             if (res.status == 200) {
-                notifications.showNotification({
+                notifications.show({
                     title: notifcationTitle,
                     message: notificationText,
                     color: 'teal',
@@ -50,7 +49,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                 })
                 emailer(useCases.onReview, review.protocolId)
             } else {
-                notifications.showNotification({
+                notifications.show({
                     title: 'Ocurrió un error',
                     message: 'Hubo un problema al publicar tu revisión.',
                     color: 'red',
@@ -63,7 +62,7 @@ export default function ReviewForm({ review }: { review: Review }) {
             }
             startTransition(() => router.refresh())
         },
-        [notifications, router]
+        [router]
     )
 
     return (

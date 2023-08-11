@@ -9,7 +9,7 @@ import {
     CircleDashed,
     X,
 } from 'tabler-icons-react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
@@ -46,7 +46,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const router = useRouter()
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
-    const notifications = useNotifications()
+
     const [isPending, startTransition] = useTransition()
 
     const form = useProtocol({
@@ -59,12 +59,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         validateInputOnChange: true,
     })
 
-
-
-
     useEffect(() => {
         // Validate if not existing path goes to section 0
-        
+
         if (
             path &&
             !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
@@ -89,7 +86,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 const { id }: Protocol = await res.json()
 
                 if (res.status === 200) {
-                    notifications.showNotification({
+                    notifications.show({
                         title: 'Protocolo creado',
                         message: 'El protocolo ha sido creado con éxito',
                         color: 'teal',
@@ -112,7 +109,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
 
             if (res.status === 200) {
-                notifications.showNotification({
+                notifications.show({
                     title: 'Protocolo guardado',
                     message: 'El protocolo ha sido guardado con éxito',
                     color: 'teal',
@@ -127,7 +124,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 })
             }
         },
-        [notifications, router, section]
+        [router, section]
     )
 
     const SegmentLabel = useCallback(
@@ -178,7 +175,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     e.preventDefault()
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification')) {
-                        notifications.showNotification({
+                        notifications.show({
                             title: 'No se pudo guardar',
                             message:
                                 'Debes completar la sección "Identificación" para poder guardar un borrador',

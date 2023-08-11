@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -18,7 +18,7 @@ export function ConvocatoryForm({
     isNew: boolean
 }) {
     const router = useRouter()
-    const notifications = useNotifications()
+
     const [isPending, startTransition] = useTransition()
     const form = useForm<Convocatory>({
         initialValues: convocatory,
@@ -38,7 +38,7 @@ export function ConvocatoryForm({
                 })
 
                 if (res.status === 200) {
-                    notifications.showNotification({
+                    notifications.show({
                         title: 'Convocatoria creada',
                         message: 'La convocatoria ha sido creada con éxito',
                         color: 'teal',
@@ -62,7 +62,7 @@ export function ConvocatoryForm({
             })
 
             if (res.status === 200) {
-                notifications.showNotification({
+                notifications.show({
                     title: 'Convocatoria guardada',
                     message: 'La convocatoria ha sido guardado con éxito',
                     color: 'teal',
@@ -75,7 +75,7 @@ export function ConvocatoryForm({
                 startTransition(() => router.refresh())
             }
         },
-        [isNew, notifications, router]
+        [isNew, router]
     )
 
     return (
