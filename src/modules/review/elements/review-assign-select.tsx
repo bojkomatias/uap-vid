@@ -50,7 +50,7 @@ const ReviewAssignSelect = ({
                 message: 'El evaluador ha sido asignado con éxito',
                 color: 'green',
             })
-            emailer(useCases.onAssignation, protocolId, review?.reviewerId)
+            emailer(useCases.onAssignation, protocolId, reviewerId)
             return router.refresh()
         }
         return notification.showNotification({
@@ -69,7 +69,6 @@ const ReviewAssignSelect = ({
                   return person.name.toLowerCase().includes(query.toLowerCase())
               })
     const [show, setShow] = useState(false)
-
 
     if (
         !show &&
@@ -98,9 +97,6 @@ const ReviewAssignSelect = ({
             onChange={(e) => {
                 if (e !== null) changeState(e)
             }}
-            // onClick={() => {
-            //     emailer(useCases.onAssignation, protocolId, review?.reviewerId)
-            // }}
         >
             <div className="relative">
                 <Combobox.Button className="relative w-full">

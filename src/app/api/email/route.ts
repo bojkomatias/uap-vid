@@ -7,19 +7,19 @@ import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
-
     const session = await getServerSession()
 
     if (!session) {
         return new Response('Unauthorized', { status: 401 })
     }
 
-    const { subject, message, html, protocolId, toId } = await request.json()
+    const { subject, message, html, protocolId, toUserId } =
+        await request.json()
 
     let toEmail: string
 
-    if (toId) {
-        toEmail = (await findUserById(toId).then((res) => {
+    if (toUserId) {
+        toEmail = (await findUserById(toUserId).then((res) => {
             return res?.email
         })) as string
     } else {
@@ -29,6 +29,8 @@ export async function POST(request: NextRequest) {
             }
         )) as string
     }
+
+    console.log('ENVIANDO EMAIL A : ', toEmail)
 
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
