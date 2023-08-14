@@ -32,6 +32,7 @@ export default function UserTable({
                         {cell.getValue() as ReactNode}
                     </span>
                 ),
+                enableHiding: false,
             },
             {
                 accessorKey: 'email',

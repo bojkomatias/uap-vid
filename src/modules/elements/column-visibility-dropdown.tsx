@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDown } from 'tabler-icons-react'
+import { Check, ChevronDown } from 'tabler-icons-react'
 import clsx from 'clsx'
 import type { Column } from '@tanstack/react-table'
 
@@ -30,27 +30,44 @@ export default function ColumnVisibilityDropdown({
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items
+                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    static
+                >
                     <div className="py-1">
-                        {columns.map((column) => (
-                            <Menu.Item key={column.id}>
-                                {({ active }) => (
-                                    <span
-                                        onClick={() =>
-                                            column.getToggleVisibilityHandler()
-                                        }
-                                        className={clsx(
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm'
+                        {columns.map(
+                            (column) =>
+                                column.getCanHide() && (
+                                    <Menu.Item key={column.id}>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    column.toggleVisibility(
+                                                        !column.getIsVisible()
+                                                    )
+                                                }}
+                                                className={clsx(
+                                                    active
+                                                        ? 'bg-gray-100 text-gray-900'
+                                                        : 'text-gray-700',
+                                                    'flex w-full items-center gap-1 px-4 py-2 text-sm'
+                                                )}
+                                            >
+                                                {column.getIsVisible() ? (
+                                                    <Check className="h-4 w-4 stroke-gray-600" />
+                                                ) : (
+                                                    <span className="w-4" />
+                                                )}
+                                                {
+                                                    column.columnDef
+                                                        .header as ReactNode
+                                                }
+                                            </button>
                                         )}
-                                    >
-                                        {column.columnDef.header as ReactNode}
-                                    </span>
-                                )}
-                            </Menu.Item>
-                        ))}
+                                    </Menu.Item>
+                                )
+                        )}
                     </div>
                 </Menu.Items>
             </Transition>
