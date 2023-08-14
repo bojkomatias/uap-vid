@@ -1,5 +1,5 @@
 'use client'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import type { State } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
@@ -13,7 +13,6 @@ export function DeleteButton({
     protocolId: string
     protocolState: State
 }) {
-    const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
@@ -25,7 +24,7 @@ export function DeleteButton({
         })
 
         if (res.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Protocolo eliminado',
                 message: 'El protocolo ha sido eliminado con éxito.',
                 color: 'green',
@@ -35,7 +34,7 @@ export function DeleteButton({
                 router.refresh()
             })
         }
-    }, [notification, protocolId, protocolState, router])
+    }, [protocolId, protocolState, router])
 
     return deleting ? (
         <button

@@ -3,11 +3,8 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { findUserByEmail, saveUser } from '../../../../repositories/user'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { createHashScrypt } from '@utils/hash'
-
-
-
 
 export async function POST(request: NextRequest) {
     const { name, email, password, role } = await request.json()
@@ -38,7 +35,7 @@ export async function POST(request: NextRequest) {
         name,
         email,
         password: await createHashScrypt(password), //Hash password
-        role
+        role,
     })
     return NextResponse.json(newUser, { status: 201 })
 }

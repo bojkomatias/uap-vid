@@ -6,7 +6,7 @@ import { ACCESS } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { CalendarPlus } from 'tabler-icons-react'
 
 export default async function Page() {
@@ -26,7 +26,6 @@ export default async function Page() {
                     </Button>
                 </Link>
             </div>
-            {/* @ts-expect-error */}
             <ConvocatoryTable />
         </>
     )

@@ -10,7 +10,7 @@ import { ReviewType, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -83,7 +83,6 @@ export async function PUT(
             data.reviewerId,
             data.type
         )
-
 
         return NextResponse.json({ updatedReview }, { status: 200 })
     }

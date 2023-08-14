@@ -1,7 +1,7 @@
 'use client'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -13,7 +13,7 @@ export const SignIn = () => {
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const notifications = useNotifications()
+
     const [microsoftImage, setMicImage] = useState(
         '/whitebackgroundmicrosoft.png'
     )
@@ -47,7 +47,7 @@ export const SignIn = () => {
                     })
                     if (res && res.status !== 200) {
                         setLoading(false)
-                        notifications.showNotification({
+                        notifications.show({
                             title: 'No se pudo iniciar sesión',
                             message: 'Credenciales inválidas',
                             color: 'red',

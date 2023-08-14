@@ -1,7 +1,7 @@
 import type { Logs, State } from '@prisma/client'
 import { newLog } from '@repositories/log'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import ProtocolStatesDictionary from './dictionaries/ProtocolStatesDictionary'
 interface LoggerArguments {
     fromState: State

@@ -1,6 +1,6 @@
 'use client'
 import { Combobox } from '@headlessui/react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import type { User } from '@prisma/client'
 import clsx from 'clsx'
 import { useCallback, useState } from 'react'
@@ -17,7 +17,6 @@ export function SecretaryMultipleSelect({
     secretaries: User[]
     currentSecretaries: string[]
 }) {
-    const notifications = useNotifications()
     const [selected, setSelected] = useState(currentSecretaries)
 
     const updateSecretaries = useCallback(
@@ -27,7 +26,7 @@ export function SecretaryMultipleSelect({
                 body: JSON.stringify(secretaries),
             })
             if (res.status === 200)
-                return notifications.showNotification({
+                return notifications.show({
                     title: 'Secretarios modificados',
                     message:
                         'Se actualizo la lista de secretarios para la unidad académica.',
@@ -38,7 +37,7 @@ export function SecretaryMultipleSelect({
                         marginBottom: '.8rem',
                     },
                 })
-            notifications.showNotification({
+            notifications.show({
                 title: 'Error',
                 message: 'Ocurrió un error al actualizar los secretarios',
                 color: 'red',
@@ -49,7 +48,7 @@ export function SecretaryMultipleSelect({
                 },
             })
         },
-        [notifications]
+        []
     )
 
     return (

@@ -1,6 +1,6 @@
 'use client'
 import { Combobox } from '@headlessui/react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
 import { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
@@ -27,7 +27,6 @@ const ReviewAssignSelect = ({
     protocolId,
     protocolState,
 }: ReviewAssignSelectProps) => {
-    const notification = useNotifications()
     const router = useRouter()
 
     const changeState = async (reviewerId: string) => {
@@ -45,7 +44,7 @@ const ReviewAssignSelect = ({
             }),
         })
         if (assigned.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Evaluador asignado',
                 message: 'El evaluador ha sido asignado con éxito',
                 color: 'green',
@@ -53,7 +52,7 @@ const ReviewAssignSelect = ({
             emailer(useCases.onAssignation, protocolId, reviewerId)
             return router.refresh()
         }
-        return notification.showNotification({
+        return notifications.show({
             title: 'No hemos podido asignar el evaluador',
             message: 'Lo lamentamos, ha ocurrido un error',
             color: 'red',
