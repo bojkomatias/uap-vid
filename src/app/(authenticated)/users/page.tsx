@@ -12,10 +12,8 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
-import Pagination from '@elements/pagination'
 import fuzzysort from 'fuzzysort'
 import type { User } from '@prisma/client'
-import SearchBar from '@elements/search-bar'
 
 export default async function UserList({
     searchParams,
@@ -25,7 +23,9 @@ export default async function UserList({
     const session = await getServerSession(authOptions)
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+
     const shownRecords = 8
+
     const users = await getAllUsers(
         shownRecords,
         Number(searchParams?.page) || 1
@@ -57,20 +57,12 @@ export default async function UserList({
                     </Button>
                 </Link>
             </div>
-            <SearchBar
-                url="/users"
-                placeholderMessage="Buscar usuario por nombre, rol o email"
-            />
 
-            <UserTable users={searchedUsers!} />
-            {searchParams?.search ? null : (
-                <Pagination
-                    url="/users"
-                    pageParams={Number(searchParams?.page) || 1}
-                    count={userCount!}
-                    shownRecords={shownRecords}
-                />
-            )}
+            <UserTable
+                users={searchedUsers!}
+                page={Number(searchParams?.page)}
+                userCount={userCount ?? 0}
+            />
         </>
     )
 }
