@@ -25,22 +25,6 @@ export default async function UserList({
         searchParams?.order && { [searchParams?.order]: searchParams?.sort }
     )
 
-    console.log(userCount)
-
-    // const searchedUsers = searchParams?.search
-    //     ? fuzzysort
-    //           .go(
-    //               searchParams.search,
-    //               (await getAllUsersWithoutPagination()) as User[],
-    //               {
-    //                   keys: ['name', 'role', 'email'],
-    //               }
-    //           )
-    //           .map((result) => {
-    //               return result.obj as User
-    //           })
-    //     : users
-
     return (
         <>
             <PageHeading title="Lista de usuarios" />
