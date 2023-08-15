@@ -50,11 +50,11 @@ export default async function ReviewsTemplate({
                         <ReviewFormTemplate protocolId={id} userId={userId} />
                     )}
 
-                {userId === researcherId ||
-                    (canAccess(ACCESS.REVIEWS, userRole) && (
-                        // @ts-expect-error
-                        <ReviewList role={userRole} state={state} id={id} />
-                    ))}
+                {(userId === researcherId ||
+                    canAccess(ACCESS.REVIEWS, userRole)) && (
+                    // @ts-expect-error
+                    <ReviewList role={userRole} state={state} id={id} />
+                )}
             </div>
         </aside>
     )
