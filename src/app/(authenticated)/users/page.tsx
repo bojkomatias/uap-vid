@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@elements/button'
+import { getUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
@@ -7,7 +8,6 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
-import { getUsers } from '@repositories/user'
 
 export default async function UserList({
     searchParams,

@@ -7,9 +7,9 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
+import HeaderSorter from './header-sorter'
 
 export default function TanStackTable({
     data,
@@ -20,10 +20,6 @@ export default function TanStackTable({
     columns: ColumnDef<any, any>[]
     totalRecords: number
 }) {
-    const router = useRouter()
-    const path = usePathname()
-    const searchParams = useSearchParams()
-
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
     )
@@ -52,51 +48,7 @@ export default function TanStackTable({
                                         key={header.id}
                                         className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-0"
                                     >
-                                        {header.isPlaceholder ? null : (
-                                            <div
-                                                {...{
-                                                    className:
-                                                        header.column.getCanSort()
-                                                            ? 'cursor-pointer select-none'
-                                                            : '',
-                                                    onClick: () =>
-                                                        router.push(
-                                                            `${path}?page=1${
-                                                                !searchParams.get(
-                                                                    'sort'
-                                                                )
-                                                                    ? `&order=${header.id}&sort=asc`
-                                                                    : searchParams.get(
-                                                                          'sort'
-                                                                      ) ===
-                                                                      'asc'
-                                                                    ? `&order=${header.id}&sort=desc`
-                                                                    : ''
-                                                            }${
-                                                                searchParams.get(
-                                                                    'search'
-                                                                )
-                                                                    ? `&search=${searchParams.get(
-                                                                          'search'
-                                                                      )}`
-                                                                    : ''
-                                                            }`
-                                                        ),
-                                                }}
-                                            >
-                                                {flexRender(
-                                                    header.column.columnDef
-                                                        .header,
-                                                    header.getContext()
-                                                )}
-                                                {{
-                                                    asc: ' 🔼',
-                                                    desc: ' 🔽',
-                                                }[
-                                                    header.column.getIsSorted() as string
-                                                ] ?? null}
-                                            </div>
-                                        )}
+                                        <HeaderSorter header={header} />
                                     </th>
                                 ))}
                             </tr>
@@ -119,23 +71,6 @@ export default function TanStackTable({
                             </tr>
                         ))}
                     </tbody>
-                    <tfoot>
-                        {table.getFooterGroups().map((footerGroup) => (
-                            <tr key={footerGroup.id}>
-                                {footerGroup.headers.map((header) => (
-                                    <th key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .footer,
-                                                  header.getContext()
-                                              )}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </tfoot>
                 </table>
             </div>
             <Pagination count={totalRecords} />
