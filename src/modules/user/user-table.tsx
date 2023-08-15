@@ -6,8 +6,7 @@ import TanStackTable from '@elements/tan-stack-table'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
-import SearchBar from '@elements/search-bar'
-import Pagination from '@elements/pagination'
+
 
 /**
  * This component is meant to handle business logic
@@ -55,9 +54,11 @@ export default function UserTable({
 
     return (
         <>
-            <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
-            <TanStackTable data={users} columns={columns} />
-            <Pagination count={userCount} shownRecords={4} />
+            <TanStackTable
+                data={users}
+                columns={columns}
+                totalRecords={userCount}
+            />
         </>
     )
 }

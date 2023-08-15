@@ -13,18 +13,22 @@ import {
 import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import SearchBar from './search-bar'
+import Pagination from './pagination'
 
 export default function TanStackTable({
     data,
     columns,
+    totalRecords,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
+    totalRecords: number
 }) {
     const router = useRouter()
     const path = usePathname()
     const searchParams = useSearchParams()
-    const [sorting, setSorting] = useState<SortingState>([])
+
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
     )
@@ -33,16 +37,14 @@ export default function TanStackTable({
         data,
         columns,
         state: {
-            sorting,
             columnVisibility,
         },
         onColumnVisibilityChange: setColumnVisibility,
-        onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
     })
     return (
         <>
+            <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
             <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             <div className="mx-auto max-w-7xl">
                 <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
@@ -140,6 +142,7 @@ export default function TanStackTable({
                     </tfoot>
                 </table>
             </div>
+            <Pagination count={totalRecords} shownRecords={4} />
         </>
     )
 }
