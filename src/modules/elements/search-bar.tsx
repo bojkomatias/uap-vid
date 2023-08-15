@@ -21,14 +21,14 @@ export default function SearchBar({
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
                     //If searchQuery is empty, goes back to the normal paginated page
-                    if (e.target.value === '') update({})
+                    if (e.target.value === '') update({ search: '' })
                 }}
                 className="input"
                 placeholder={placeholderMessage}
             />
             <Button
                 onClick={() => {
-                    if (searchQuery == '') update({})
+                    if (searchQuery == '') update({ search: '' })
                     else update({ search: searchQuery })
                 }}
                 intent="secondary"

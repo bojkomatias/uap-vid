@@ -4,12 +4,7 @@ import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 const getUsers = cache(
-    async (
-        shownRecords: number,
-        page: number,
-        search?: string,
-        order?: any
-    ) => {
+    async (records: number, page: number, search?: string, order?: any) => {
         try {
             return await prisma.$transaction([
                 prisma.user.count({
@@ -21,8 +16,8 @@ const getUsers = cache(
                     },
                 }),
                 prisma.user.findMany({
-                    skip: shownRecords * (page - 1),
-                    take: shownRecords,
+                    skip: records * (page - 1),
+                    take: records,
                     where: {
                         name: {
                             contains: search,

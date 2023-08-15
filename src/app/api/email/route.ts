@@ -30,8 +30,6 @@ export async function POST(request: NextRequest) {
         )) as string
     }
 
-    console.log('ENVIANDO EMAIL A : ', toEmail)
-
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_ADDRESS,
         port: Number(process.env.SMTP_PORT),

@@ -15,7 +15,6 @@ export default function Pagination({
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
     const shownRecords = Number(searchParams.get('records')) || 4
-    console.log(count, shownRecords)
 
     const currentPage = Number(searchParams.get('page')) ?? 1
 

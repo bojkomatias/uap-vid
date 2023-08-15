@@ -19,10 +19,12 @@ export default async function UserList({
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
     const [userCount, users] = await getUsers(
-        Number(searchParams?.records) || 4,
+        Number(searchParams?.records) || 8,
         Number(searchParams?.page) || 1,
         searchParams?.search,
-        searchParams?.order && { [searchParams?.order]: searchParams?.sort }
+        searchParams?.order && {
+            [searchParams?.order]: searchParams?.sort,
+        }
     )
 
     return (

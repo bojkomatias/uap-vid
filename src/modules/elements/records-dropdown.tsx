@@ -3,12 +3,12 @@ import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
 import clsx from 'clsx'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useUpdateQuery } from '@utils/updateQuery'
 
 export default function RecordsDropdown({ options }: { options: number[] }) {
-    const [selected, setSelected] = useState(options[0])
-
-    const router = useRouter()
+    const update = useUpdateQuery()
+    const searchParams = useSearchParams()
 
     return (
         <Menu as="div" className="relative float-right text-left">
@@ -40,9 +40,7 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                             <Menu.Item key={idx}>
                                 {({ active }) => (
                                     <button
-                                        onClick={() => {
-                                            setSelected(o)
-                                        }}
+                                        onClick={() => update({ records: o })}
                                         className={clsx(
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
@@ -50,7 +48,8 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                                             'flex w-full items-center justify-end gap-1 px-4 py-2 text-sm'
                                         )}
                                     >
-                                        {selected === o ? (
+                                        {Number(searchParams.get('records')) ===
+                                        o ? (
                                             <div className="flex font-bold">
                                                 <Check className="mr-1 h-4 w-4" />
                                                 {o}

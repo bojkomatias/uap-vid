@@ -80,10 +80,7 @@ export default async function Page({
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
-                <Pagination
-                    count={protocolCount!}
-                    shownRecords={shownRecords}
-                />
+                <Pagination count={protocolCount!} />
             )}
         </>
     )

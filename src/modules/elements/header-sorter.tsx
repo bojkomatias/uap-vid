@@ -15,7 +15,7 @@ export default function HeaderSorter({
                 className: header.column.getCanSort()
                     ? 'cursor-pointer select-none'
                     : '',
-                onClick: () => update({ order: header.id, sort: 'asc' }),
+                onClick: () => update({ order: header.id }),
             }}
         >
             {flexRender(header.column.columnDef.header, header.getContext())}
