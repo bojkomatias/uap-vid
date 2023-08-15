@@ -3,17 +3,41 @@ import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
-const getAllUsers = cache(async (shownRecords: number, page: number) => {
-    try {
-        const users = await prisma.user.findMany({
-            skip: shownRecords * (page - 1),
-            take: shownRecords,
-        })
-        return users
-    } catch (error) {
-        return null
+const getAllUsers = cache(
+    async (
+        shownRecords: number,
+        page: number,
+        search?: string,
+        order?: any
+    ) => {
+        try {
+            return await prisma.$transaction([
+                prisma.user.count({
+                    where: {
+                        name: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+                }),
+                prisma.user.findMany({
+                    skip: shownRecords * (page - 1),
+                    take: shownRecords,
+                    where: {
+                        name: {
+                            contains: search,
+                            mode: 'insensitive',
+                        },
+                    },
+
+                    orderBy: order,
+                }),
+            ])
+        } catch (error) {
+            return []
+        }
     }
-})
+)
 
 const getAllUsersWithoutPagination = cache(async () => {
     try {

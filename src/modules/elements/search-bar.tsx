@@ -1,31 +1,31 @@
 'use client'
 import { Button } from './button'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function SearchBar({
     placeholderMessage,
-    url,
 }: {
     placeholderMessage: string
-    url: string
-
 }) {
-    const [searchQuery, setSearchQuery] = useState('')
     const router = useRouter()
+    const path = usePathname()
+    const searchParams = useSearchParams()
+
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search'))
 
     return (
         <div className="mx-auto mt-3 flex max-w-4xl flex-grow items-center gap-2 rounded-md">
             <input
                 onKeyUpCapture={(e) => {
                     if (e.key === 'Enter')
-                        router.push(`${url}?search=${searchQuery}`)
+                        router.push(`${path}?search=${searchQuery}&page=1`)
                 }}
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
                     //If searchQuery is empty, goes back to the normal paginated page
                     if (e.target.value === '') {
-                        router.push(url)
+                        router.push(`${path}?page=${searchParams.get('page')}`)
                     }
                 }}
                 className="input"
@@ -34,9 +34,9 @@ export default function SearchBar({
             <Button
                 onClick={() => {
                     if (searchQuery == '') {
-                        router.push(url)
+                        router.push(path)
                     } else {
-                        router.push(`${url}?search=${searchQuery}`)
+                        router.push(`${path}?search=${searchQuery}`)
                     }
                 }}
                 intent="secondary"

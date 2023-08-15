@@ -1,3 +1,4 @@
+'use client'
 import type {
     ColumnDef,
     SortingState,
@@ -11,15 +12,23 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import SearchBar from './search-bar'
+import Pagination from './pagination'
 
 export default function TanStackTable({
     data,
     columns,
+    totalRecords,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
+    totalRecords: number
 }) {
-    const [sorting, setSorting] = useState<SortingState>([])
+    const router = useRouter()
+    const path = usePathname()
+    const searchParams = useSearchParams()
+
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
     )
@@ -28,16 +37,14 @@ export default function TanStackTable({
         data,
         columns,
         state: {
-            sorting,
             columnVisibility,
         },
         onColumnVisibilityChange: setColumnVisibility,
-        onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
     })
     return (
         <>
+            <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
             <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             <div className="mx-auto max-w-7xl">
                 <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
@@ -56,8 +63,29 @@ export default function TanStackTable({
                                                         header.column.getCanSort()
                                                             ? 'cursor-pointer select-none'
                                                             : '',
-                                                    onClick:
-                                                        header.column.getToggleSortingHandler(),
+                                                    onClick: () =>
+                                                        router.push(
+                                                            `${path}?page=1${
+                                                                !searchParams.get(
+                                                                    'sort'
+                                                                )
+                                                                    ? `&order=${header.id}&sort=asc`
+                                                                    : searchParams.get(
+                                                                          'sort'
+                                                                      ) ===
+                                                                      'asc'
+                                                                    ? `&order=${header.id}&sort=desc`
+                                                                    : ''
+                                                            }${
+                                                                searchParams.get(
+                                                                    'search'
+                                                                )
+                                                                    ? `&search=${searchParams.get(
+                                                                          'search'
+                                                                      )}`
+                                                                    : ''
+                                                            }`
+                                                        ),
                                                 }}
                                             >
                                                 {flexRender(
@@ -114,6 +142,7 @@ export default function TanStackTable({
                     </tfoot>
                 </table>
             </div>
+            <Pagination count={totalRecords} shownRecords={4} />
         </>
     )
 }
