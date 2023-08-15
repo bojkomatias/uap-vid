@@ -3,18 +3,19 @@ import { useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from './button'
 import { usePathname, useSearchParams } from 'next/navigation'
+import RecordsDropdown from './records-dropdown'
 /**Receives 4 arguments: the current page number (currentPage), the total records count from the db (count), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
     count,
-    shownRecords,
     listLength = 5,
 }: {
     count: number
-    shownRecords: number
     listLength?: number
 }) {
     const path = usePathname()
     const searchParams = useSearchParams()
+    const shownRecords = Number(searchParams.get('records')) || 4
+    console.log(count, shownRecords)
 
     const currentPage = Number(searchParams.get('page')) ?? 1
 
@@ -61,7 +62,7 @@ export default function Pagination({
     }, [count, shownRecords, listLength, currentPage])
 
     return (
-        <>
+        <div className="flex flex-col items-center gap-2">
             <div className="mx-auto mt-12 flex w-fit gap-2">
                 {listLength >= Math.ceil(count / shownRecords) ? null : (
                     <>
@@ -129,7 +130,23 @@ export default function Pagination({
                         </Link>
                     </>
                 )}
+                <RecordsDropdown options={[8, 16, 24, 32]} />
             </div>
-        </>
+            <span className="text-sm  text-primary">
+                Mostrando registros{' '}
+                <span className="font-semibold">
+                    {shownRecords * Number(searchParams.get('page') || 1) -
+                        shownRecords +
+                        1}
+                    {' a '}
+                    {shownRecords * Number(searchParams.get('page') || 1) >=
+                    count
+                        ? count
+                        : shownRecords *
+                          Number(searchParams.get('page') || 1)}{' '}
+                    de {count}
+                </span>
+            </span>
+        </div>
     )
 }

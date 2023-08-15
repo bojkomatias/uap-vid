@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Button } from '@elements/button'
-import { getAllUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
@@ -8,6 +7,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
+import { getUsers } from '@repositories/user'
 
 export default async function UserList({
     searchParams,
@@ -18,8 +18,8 @@ export default async function UserList({
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
-    const [userCount, users] = await getAllUsers(
-        Number(searchParams?.records) ?? 8,
+    const [userCount, users] = await getUsers(
+        Number(searchParams?.records) || 4,
         Number(searchParams?.page) || 1,
         searchParams?.search,
         searchParams?.order && { [searchParams?.order]: searchParams?.sort }

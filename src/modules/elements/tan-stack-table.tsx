@@ -1,13 +1,8 @@
 'use client'
-import type {
-    ColumnDef,
-    SortingState,
-    VisibilityState,
-} from '@tanstack/react-table'
+import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
 import {
     flexRender,
     getCoreRowModel,
-    getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table'
 import { useState } from 'react'
@@ -46,6 +41,7 @@ export default function TanStackTable({
         <>
             <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
             <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
+
             <div className="mx-auto max-w-7xl">
                 <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                     <thead>
@@ -142,7 +138,7 @@ export default function TanStackTable({
                     </tfoot>
                 </table>
             </div>
-            <Pagination count={totalRecords} shownRecords={4} />
+            <Pagination count={totalRecords} />
         </>
     )
 }
