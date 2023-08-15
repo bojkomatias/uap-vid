@@ -76,16 +76,11 @@ export default async function Page({
                 ) && <CreateButton role={session.user.role} />}
             </div>
 
-            <SearchBar
-                placeholderMessage="Buscar protocolo por título o carrera"
-                url="/protocols"
-            />
+            <SearchBar placeholderMessage="Buscar protocolo por título o carrera" />
 
             <Table user={session.user} items={searchedProtocols} />
             {searchParams?.search ? null : (
                 <Pagination
-                    url="/protocols"
-                    pageParams={Number(searchParams?.page) || 1}
                     count={protocolCount!}
                     shownRecords={shownRecords}
                 />

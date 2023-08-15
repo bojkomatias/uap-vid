@@ -1,20 +1,37 @@
+'use client'
 import { useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from './button'
-/**Receives 4 arguments: the current page number (pageParams), the total records count from the db (count), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
+import { usePathname, useSearchParams } from 'next/navigation'
+/**Receives 4 arguments: the current page number (currentPage), the total records count from the db (count), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
-    url,
-    pageParams,
     count,
     shownRecords,
     listLength = 5,
 }: {
-    url: string
-    pageParams: number
     count: number
     shownRecords: number
     listLength?: number
 }) {
+    const path = usePathname()
+    const searchParams = useSearchParams()
+
+    const currentPage = Number(searchParams.get('page')) ?? 1
+
+    // This method maintains the search params through page navigation.
+    const hrefToPage = (page: number) =>
+        `${path}?page=${page}${
+            searchParams.get('search')
+                ? `&search=${searchParams.get('search')}`
+                : ''
+        }${
+            searchParams.get('sort')
+                ? `&order=${searchParams.get('order')}&sort=${searchParams.get(
+                      'sort'
+                  )}`
+                : ''
+        }`
+
     const pageNumbers = useCallback(() => {
         const lLength = listLength
         const originalArray: number[] = []
@@ -23,17 +40,17 @@ export default function Pagination({
         }
 
         const floor =
-            pageParams - Math.floor(lLength / 2) <= 0
+            currentPage - Math.floor(lLength / 2) <= 0
                 ? 0
-                : pageParams + Math.ceil(lLength / 2) >= originalArray.length
+                : currentPage + Math.ceil(lLength / 2) >= originalArray.length
                 ? originalArray.length - lLength
-                : pageParams - Math.floor(lLength / 2)
+                : currentPage - Math.floor(lLength / 2)
         const ceil =
-            pageParams + Math.ceil(lLength / 2) >= originalArray.length
+            currentPage + Math.ceil(lLength / 2) >= originalArray.length
                 ? originalArray.length
-                : pageParams - Math.floor(lLength / 2) <= 0
+                : currentPage - Math.floor(lLength / 2) <= 0
                 ? 5
-                : pageParams + Math.ceil(lLength / 2)
+                : currentPage + Math.ceil(lLength / 2)
 
         const pages =
             originalArray.length > lLength
@@ -41,23 +58,22 @@ export default function Pagination({
                 : originalArray
 
         return { originalArray, pages }
-    }, [count, shownRecords, listLength, pageParams])
+    }, [count, shownRecords, listLength, currentPage])
 
     return (
         <>
             <div className="mx-auto mt-12 flex w-fit gap-2">
                 {listLength >= Math.ceil(count / shownRecords) ? null : (
                     <>
-                        {' '}
-                        <Link href={`${url}?page=${1}`} passHref>
+                        <Link href={hrefToPage(1)} passHref>
                             <Button title="Primer página" intent="special">
                                 {'<<'}
                             </Button>
                         </Link>
                         <Link
-                            href={`${url}?page=${
-                                pageParams > 1 ? pageParams - 1 : 1
-                            }`}
+                            href={hrefToPage(
+                                currentPage > 1 ? currentPage - 1 : 1
+                            )}
                             passHref
                         >
                             <Button title="Página anterior" intent="special">
@@ -69,15 +85,11 @@ export default function Pagination({
 
                 {Math.ceil(count / shownRecords) > 1
                     ? pageNumbers().pages.map((page: number) => (
-                          <Link
-                              key={page}
-                              href={`${url}?page=${page}`}
-                              passHref
-                          >
+                          <Link key={page} href={hrefToPage(page)} passHref>
                               <Button
                                   intent="tertiary"
                                   className={
-                                      Number(pageParams) === page
+                                      Number(currentPage) === page
                                           ? 'bg-primary text-white'
                                           : ''
                                   }
@@ -89,15 +101,14 @@ export default function Pagination({
                     : null}
                 {listLength >= Math.ceil(count / shownRecords) ? null : (
                     <>
-                        {' '}
                         <Link
-                            href={`${url}?page=${
-                                pageParams < pageNumbers().originalArray.length
-                                    ? pageParams + 1
+                            href={hrefToPage(
+                                currentPage < pageNumbers().originalArray.length
+                                    ? currentPage + 1
                                     : pageNumbers().originalArray[
                                           pageNumbers().originalArray.length - 1
                                       ]
-                            }`}
+                            )}
                             passHref
                         >
                             <Button title="Siguiente página" intent="special">
@@ -105,11 +116,11 @@ export default function Pagination({
                             </Button>
                         </Link>
                         <Link
-                            href={`${url}?page=${
+                            href={hrefToPage(
                                 pageNumbers().originalArray[
                                     pageNumbers().originalArray.length - 1
                                 ]
-                            }`}
+                            )}
                             passHref
                         >
                             <Button title="Última página" intent="special">

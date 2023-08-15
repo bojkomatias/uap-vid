@@ -1,10 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@elements/button'
-import {
-    getAllUsers,
-    totalUserRecords,
-    getAllUsersWithoutPagination,
-} from '@repositories/user'
+import { getAllUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
@@ -12,8 +8,6 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
-import fuzzysort from 'fuzzysort'
-import type { User } from '@prisma/client'
 
 export default async function UserList({
     searchParams,
@@ -24,27 +18,30 @@ export default async function UserList({
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
-    const shownRecords = 8
+    const shownRecords = 4
 
-    const users = await getAllUsers(
+    const [userCount, users] = await getAllUsers(
         shownRecords,
-        Number(searchParams?.page) || 1
+        Number(searchParams?.page) || 1,
+        searchParams?.search,
+        searchParams?.order && { [searchParams?.order]: searchParams?.sort }
     )
-    const userCount = await totalUserRecords()
 
-    const searchedUsers = searchParams?.search
-        ? fuzzysort
-              .go(
-                  searchParams.search,
-                  (await getAllUsersWithoutPagination()) as User[],
-                  {
-                      keys: ['name', 'role', 'email'],
-                  }
-              )
-              .map((result) => {
-                  return result.obj as User
-              })
-        : users
+    console.log(userCount)
+
+    // const searchedUsers = searchParams?.search
+    //     ? fuzzysort
+    //           .go(
+    //               searchParams.search,
+    //               (await getAllUsersWithoutPagination()) as User[],
+    //               {
+    //                   keys: ['name', 'role', 'email'],
+    //               }
+    //           )
+    //           .map((result) => {
+    //               return result.obj as User
+    //           })
+    //     : users
 
     return (
         <>
@@ -59,7 +56,7 @@ export default async function UserList({
             </div>
 
             <UserTable
-                users={searchedUsers!}
+                users={users}
                 page={Number(searchParams?.page)}
                 userCount={userCount ?? 0}
             />

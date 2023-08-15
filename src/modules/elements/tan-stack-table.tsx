@@ -1,3 +1,4 @@
+'use client'
 import type {
     ColumnDef,
     SortingState,
@@ -11,6 +12,7 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function TanStackTable({
     data,
@@ -19,6 +21,9 @@ export default function TanStackTable({
     data: any[]
     columns: ColumnDef<any, any>[]
 }) {
+    const router = useRouter()
+    const path = usePathname()
+    const searchParams = useSearchParams()
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
@@ -56,8 +61,29 @@ export default function TanStackTable({
                                                         header.column.getCanSort()
                                                             ? 'cursor-pointer select-none'
                                                             : '',
-                                                    onClick:
-                                                        header.column.getToggleSortingHandler(),
+                                                    onClick: () =>
+                                                        router.push(
+                                                            `${path}?page=1${
+                                                                !searchParams.get(
+                                                                    'sort'
+                                                                )
+                                                                    ? `&order=${header.id}&sort=asc`
+                                                                    : searchParams.get(
+                                                                          'sort'
+                                                                      ) ===
+                                                                      'asc'
+                                                                    ? `&order=${header.id}&sort=desc`
+                                                                    : ''
+                                                            }${
+                                                                searchParams.get(
+                                                                    'search'
+                                                                )
+                                                                    ? `&search=${searchParams.get(
+                                                                          'search'
+                                                                      )}`
+                                                                    : ''
+                                                            }`
+                                                        ),
                                                 }}
                                             >
                                                 {flexRender(
