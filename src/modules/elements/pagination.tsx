@@ -14,9 +14,9 @@ export default function Pagination({
 }) {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const shownRecords = Number(searchParams.get('records')) || 4
+    const shownRecords = Number(searchParams?.get('records')) || 4
 
-    const currentPage = Number(searchParams.get('page')) ?? 1
+    const currentPage = Number(searchParams?.get('page')) ?? 1
 
     const pageNumbers = useCallback(() => {
         const lLength = listLength
@@ -48,6 +48,7 @@ export default function Pagination({
 
     return (
         <div className="flex flex-col items-center gap-2">
+            {}
             <div className="mx-auto mt-12 flex w-fit gap-2">
                 {listLength >= Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
@@ -73,15 +74,19 @@ export default function Pagination({
                     </>
                 )}
 
-                {Math.ceil(totalRecords / shownRecords) > 1
+                {Math.ceil(totalRecords / shownRecords) > 1 &&
+                shownRecords * Number(searchParams?.get('page') || 1) -
+                    shownRecords +
+                    1 <
+                    totalRecords
                     ? pageNumbers().pages.map((page: number) => (
                           <Button
                               key={page}
                               intent="tertiary"
                               className={
                                   Number(currentPage) === page
-                                      ? 'bg-primary text-white'
-                                      : ''
+                                      ? 'fade-in bg-primary text-white'
+                                      : 'fade-in'
                               }
                               onClick={() => update({ page: page })}
                           >
@@ -127,20 +132,39 @@ export default function Pagination({
                 )}
                 <RecordsDropdown options={[5, 10, 15, 20, totalRecords]} />
             </div>
-            <span className="text-sm  text-primary">
-                Mostrando registros{' '}
-                <span className="font-semibold">
-                    {shownRecords * Number(searchParams.get('page') || 1) -
-                        shownRecords +
-                        1}
-                    {' a '}
-                    {shownRecords * Number(searchParams.get('page') || 1) >=
-                    totalRecords
-                        ? totalRecords
-                        : shownRecords *
-                          Number(searchParams.get('page') || 1)}{' '}
-                    de {totalRecords}
-                </span>
+            <span className="flex  gap-1 text-sm text-primary">
+                {shownRecords * Number(searchParams?.get('page') || 1) -
+                    shownRecords +
+                    1 <
+                    totalRecords && (
+                    <>
+                        Mostrando registros
+                        <span className="font-semibold">
+                            {shownRecords *
+                                Number(searchParams?.get('page') || 1) -
+                                shownRecords +
+                                1}
+                            {' a '}
+                            {shownRecords *
+                                Number(searchParams?.get('page') || 1) >=
+                            totalRecords
+                                ? totalRecords
+                                : shownRecords *
+                                  Number(searchParams?.get('page') || 1)}{' '}
+                        </span>
+                        de{' '}
+                        <p
+                            className="cursor-pointer border-b border-b-primary/0 transition-all duration-150 hover:border-b-primary"
+                            onClick={() =>
+                                update({
+                                    records: totalRecords,
+                                })
+                            }
+                        >
+                            {totalRecords} en total
+                        </p>
+                    </>
+                )}
             </span>
         </div>
     )
