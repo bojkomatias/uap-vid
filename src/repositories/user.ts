@@ -4,8 +4,15 @@ import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 const getUsers = cache(
-    async (records: number, page: number, search?: string, order?: any) => {
+    async (
+        records: number,
+        page: number,
+        search?: string,
+        order?: string,
+        sort?: 'asc' | 'desc'
+    ) => {
         try {
+            const isCount = order === 'protocols' || order === 'Review'
             return await prisma.$transaction([
                 prisma.user.count({
                     where: {
@@ -18,14 +25,43 @@ const getUsers = cache(
                 prisma.user.findMany({
                     skip: records * (page - 1),
                     take: records,
-                    where: {
-                        name: {
-                            contains: search,
-                            mode: 'insensitive',
-                        },
+                    // Grab the model, and  bring relational data
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: true,
+                        role: true,
+                        lastLogin: true,
+                        image: true,
+                        AcademicUnitIds: true,
+                        _count: true,
                     },
-
-                    orderBy: order,
+                    // Add all the globally searchable fields
+                    where: search
+                        ? {
+                              OR: [
+                                  {
+                                      name: {
+                                          contains: search,
+                                          mode: 'insensitive',
+                                      },
+                                  },
+                                  {
+                                      email: {
+                                          contains: search,
+                                      },
+                                  },
+                              ],
+                          }
+                        : {},
+                    // Sort by, distinguishing _count fields from plain fields
+                    orderBy:
+                        order && sort
+                            ? isCount
+                                ? { [order]: { _count: sort } }
+                                : { [order]: sort }
+                            : {},
                 }),
             ])
         } catch (error) {

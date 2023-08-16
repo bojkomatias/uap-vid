@@ -22,10 +22,11 @@ export default async function UserList({
         Number(searchParams?.records) || 8,
         Number(searchParams?.page) || 1,
         searchParams?.search,
-        searchParams?.order && {
-            [searchParams?.order]: searchParams?.sort,
-        }
+        searchParams?.order,
+        searchParams?.sort as any
     )
+
+    console.log(users)
 
     return (
         <>

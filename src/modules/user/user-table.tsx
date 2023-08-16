@@ -1,11 +1,14 @@
 'use client'
-import type { User } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
-import { useMemo } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import { ReactNode, useMemo } from 'react'
+import { type ColumnDef } from '@tanstack/react-table'
 
+type UsersWithCount = Prisma.UserGetPayload<{
+    include: { _count: true }
+}>
 /**
  * This component is meant to handle business logic
  * What are the values needed, and what the actions performed
@@ -16,7 +19,7 @@ export default function UserTable({
     userCount,
     loggedInUser,
 }: {
-    users: User[]
+    users: UsersWithCount[]
     userCount: number
     loggedInUser: User
 }) {
@@ -58,7 +61,26 @@ export default function UserTable({
                     ) : (
                         <RoleUpdater user={row.original} />
                     ),
-                enableHiding: false,
+            },
+            {
+                accessorKey: '_count.protocols',
+                id: 'protocols',
+                header: 'Protocolos',
+                cell: ({ cell }) => (
+                    <div className="w-20 text-right">
+                        {cell.getValue() as ReactNode}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: '_count.Review',
+                id: 'Review',
+                header: 'Evaluaciones',
+                cell: ({ cell }) => (
+                    <div className="w-20 text-right">
+                        {cell.getValue() as ReactNode}
+                    </div>
+                ),
             },
             {
                 accessorKey: 'delete',
@@ -82,7 +104,11 @@ export default function UserTable({
                 data={users}
                 columns={columns}
                 totalRecords={userCount}
-                initialVisibility={{ id: false }}
+                initialVisibility={{
+                    id: false,
+                    protocols: false,
+                    Review: false,
+                }}
             />
         </>
     )
