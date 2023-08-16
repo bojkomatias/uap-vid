@@ -3,6 +3,15 @@ import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
+/** This query returns all users that match the filtering criteria. The criteria includes:
+ 
+ * @param records this is the amount of records shown in the table at once.
+ * @param page necessary for pagination, the total amount of pages is calculated using the records number. Defaults to 1.
+ * @param search string that, for now, only searches the name of the user, which is defined as insensitive.
+ * @param order this is the key which will be used to order the records.
+ * @param sort this is the type of ordering which will be used: asc or desc. Always present when a key is given to the order param.
+ *
+ */
 const getUsers = cache(
     async ({
         records = '8',
