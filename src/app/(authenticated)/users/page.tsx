@@ -18,7 +18,7 @@ export default async function UserList({
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
-    const [userCount, users] = await getUsers(searchParams)
+    const [totalRecords, users] = await getUsers(searchParams)
 
     return (
         <>
@@ -35,7 +35,7 @@ export default async function UserList({
             <UserTable
                 loggedInUser={session.user}
                 users={users}
-                userCount={userCount ?? 0}
+                totalRecords={totalRecords}
             />
         </>
     )

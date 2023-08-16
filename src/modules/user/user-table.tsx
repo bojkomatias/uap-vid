@@ -3,7 +3,8 @@ import type { Prisma, User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
-import { ReactNode, useMemo } from 'react'
+import type { ReactNode } from 'react'
+import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 
 type UsersWithCount = Prisma.UserGetPayload<{
@@ -16,11 +17,11 @@ type UsersWithCount = Prisma.UserGetPayload<{
 
 export default function UserTable({
     users,
-    userCount,
+    totalRecords,
     loggedInUser,
 }: {
     users: UsersWithCount[]
-    userCount: number
+    totalRecords: number
     loggedInUser: User
 }) {
     const columns = useMemo<ColumnDef<User>[]>(
@@ -97,18 +98,16 @@ export default function UserTable({
         ],
         [loggedInUser.id]
     )
+    // Explicitly announce initial state of hidden columns.
+    const initialVisible = { id: false, protocols: false, Review: false }
 
     return (
         <>
             <TanStackTable
                 data={users}
                 columns={columns}
-                totalRecords={userCount}
-                initialVisibility={{
-                    id: false,
-                    protocols: false,
-                    Review: false,
-                }}
+                totalRecords={totalRecords}
+                initialVisibility={initialVisible}
             />
         </>
     )
