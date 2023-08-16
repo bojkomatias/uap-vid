@@ -3,14 +3,7 @@ import { flexRender, type Header } from '@tanstack/react-table'
 import { useUpdateQuery } from '@utils/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
-import {
-    ArrowDown,
-    ArrowUp,
-    CaretDown,
-    CaretUp,
-    ChevronDown,
-    ChevronUp,
-} from 'tabler-icons-react'
+import { ArrowDown, ArrowUp } from 'tabler-icons-react'
 
 export default function HeaderSorter({
     header,
@@ -33,7 +26,7 @@ export default function HeaderSorter({
             }}
         >
             {flexRender(header.column.columnDef.header, header.getContext())}
-            {searchParams.get('order') === header.column.id ? (
+            {searchParams?.get('order') === header.column.id ? (
                 searchParams.get('sort') === 'asc' ? (
                     <ArrowUp className="ml-1.5 h-4 w-4 text-primary" />
                 ) : (
