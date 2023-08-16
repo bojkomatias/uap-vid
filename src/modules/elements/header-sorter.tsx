@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { flexRender, type Header } from '@tanstack/react-table'
 import { useUpdateQuery } from '@utils/updateQuery'
