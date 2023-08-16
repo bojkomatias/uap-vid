@@ -8,6 +8,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
+import { use } from 'react'
 
 export default async function UserList({
     searchParams,

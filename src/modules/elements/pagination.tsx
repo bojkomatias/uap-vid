@@ -132,7 +132,7 @@ export default function Pagination({
                 )}
                 <RecordsDropdown options={[5, 10, 15, 20, totalRecords]} />
             </div>
-            <span className="flex  gap-1 text-sm text-primary">
+            <span className="flex  gap-1 text-xs text-black">
                 {shownRecords * Number(searchParams?.get('page') || 1) -
                     shownRecords +
                     1 <

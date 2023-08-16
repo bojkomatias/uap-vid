@@ -29,7 +29,7 @@ export const useUpdateQuery = () => {
             e.order !== undefined ? e.order : searchParams?.get('order')
         const sort = e.sort !== undefined ? e.sort : searchParams?.get('sort')
 
-        const newUrl = new URL(path as string, process.env.NEXTURL)
+        const newUrl = new URL(path as string, process.env.NEXT_PUBLIC_URL)
         if (page) newUrl.searchParams.set('page', page.toString())
         if (records) newUrl.searchParams.set('records', records.toString())
         if (search) newUrl.searchParams.set('search', search)
@@ -38,6 +38,6 @@ export const useUpdateQuery = () => {
             newUrl.searchParams.set('sort', sort)
         }
 
-        router.push(newUrl.href)
+        router.push(newUrl.href, { scroll: false })
     }
 }

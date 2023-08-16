@@ -40,7 +40,23 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                             <Menu.Item key={idx}>
                                 {({ active }) => (
                                     <button
-                                        onClick={() => update({ records: o })}
+                                        onClick={() =>
+                                            update({
+                                                records: o,
+                                                page:
+                                                    Math.ceil(
+                                                        options[
+                                                            options.length - 1
+                                                        ] / o
+                                                    ) == 1
+                                                        ? 1
+                                                        : Number(
+                                                              searchParams?.get(
+                                                                  'page'
+                                                              )
+                                                          ),
+                                            })
+                                        }
                                         className={clsx(
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
