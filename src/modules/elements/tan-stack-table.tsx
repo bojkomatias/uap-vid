@@ -75,7 +75,7 @@ export default function TanStackTable({
                 </tbody>
             </table>
 
-            <Pagination count={totalRecords} />
+            <Pagination totalRecords={totalRecords} />
         </>
     )
 }

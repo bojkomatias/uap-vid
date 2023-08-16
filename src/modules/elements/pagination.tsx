@@ -4,12 +4,12 @@ import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/updateQuery'
-/**Receives 4 arguments: the current page number (currentPage), the total records count from the db (count), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
+/**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
-    count,
+    totalRecords,
     listLength = 5,
 }: {
-    count: number
+    totalRecords: number
     listLength?: number
 }) {
     const update = useUpdateQuery()
@@ -21,7 +21,7 @@ export default function Pagination({
     const pageNumbers = useCallback(() => {
         const lLength = listLength
         const originalArray: number[] = []
-        for (let i = 1; i <= Math.ceil(count / shownRecords); i++) {
+        for (let i = 1; i <= Math.ceil(totalRecords / shownRecords); i++) {
             originalArray.push(i)
         }
 
@@ -44,12 +44,12 @@ export default function Pagination({
                 : originalArray
 
         return { originalArray, pages }
-    }, [count, shownRecords, listLength, currentPage])
+    }, [totalRecords, shownRecords, listLength, currentPage])
 
     return (
         <div className="flex flex-col items-center gap-2">
             <div className="mx-auto mt-12 flex w-fit gap-2">
-                {listLength >= Math.ceil(count / shownRecords) ? null : (
+                {listLength >= Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
                         <Button
                             title="Primer página"
@@ -73,7 +73,7 @@ export default function Pagination({
                     </>
                 )}
 
-                {Math.ceil(count / shownRecords) > 1
+                {Math.ceil(totalRecords / shownRecords) > 1
                     ? pageNumbers().pages.map((page: number) => (
                           <Button
                               key={page}
@@ -89,7 +89,7 @@ export default function Pagination({
                           </Button>
                       ))
                     : null}
-                {listLength >= Math.ceil(count / shownRecords) ? null : (
+                {listLength >= Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
                         <Button
                             title="Siguiente página"
@@ -125,7 +125,7 @@ export default function Pagination({
                         </Button>
                     </>
                 )}
-                <RecordsDropdown options={[8, 16, 24, 32]} />
+                <RecordsDropdown options={[5, 10, 15, 20, totalRecords]} />
             </div>
             <span className="text-sm  text-primary">
                 Mostrando registros{' '}
@@ -135,11 +135,11 @@ export default function Pagination({
                         1}
                     {' a '}
                     {shownRecords * Number(searchParams.get('page') || 1) >=
-                    count
-                        ? count
+                    totalRecords
+                        ? totalRecords
                         : shownRecords *
                           Number(searchParams.get('page') || 1)}{' '}
-                    de {count}
+                    de {totalRecords}
                 </span>
             </span>
         </div>

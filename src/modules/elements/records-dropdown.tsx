@@ -36,7 +36,7 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                     static
                 >
                     <div className="py-1">
-                        {options.map((o, idx) => (
+                        {options.slice(0, options.length - 1).map((o, idx) => (
                             <Menu.Item key={idx}>
                                 {({ active }) => (
                                     <button
@@ -45,12 +45,12 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
                                                 : 'text-gray-700',
-                                            'flex w-full items-center justify-end gap-1 px-4 py-2 text-sm'
+                                            'flex w-full items-center justify-center gap-1 px-4 py-2 text-sm'
                                         )}
                                     >
                                         {Number(searchParams.get('records')) ===
                                         o ? (
-                                            <div className="flex font-bold">
+                                            <div className="flex items-center font-bold">
                                                 <Check className="mr-1 h-4 w-4" />
                                                 {o}
                                             </div>
@@ -61,6 +61,34 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                                 )}
                             </Menu.Item>
                         ))}
+                        <Menu.Item key={options.length}>
+                            {({ active }) => (
+                                <button
+                                    onClick={() =>
+                                        update({
+                                            records:
+                                                options[options.length - 1],
+                                        })
+                                    }
+                                    className={clsx(
+                                        active
+                                            ? 'bg-gray-100 text-gray-900'
+                                            : 'text-gray-700',
+                                        ' flex w-full items-center justify-end gap-1 px-4 py-2  text-sm'
+                                    )}
+                                >
+                                    {Number(searchParams.get('records')) ===
+                                    options[options.length - 1] ? (
+                                        <div className=" flex items-center font-bold">
+                                            <Check className=" mr-1 h-4 w-4" />
+                                            Todos los registros
+                                        </div>
+                                    ) : (
+                                        <>Todos los registros</>
+                                    )}
+                                </button>
+                            )}
+                        </Menu.Item>
                     </div>
                 </Menu.Items>
             </Transition>
