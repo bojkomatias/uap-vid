@@ -12,21 +12,13 @@ import UserTable from '@user/user-table'
 export default async function UserList({
     searchParams,
 }: {
-    searchParams?: { [key: string]: string }
+    searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
-    const [userCount, users] = await getUsers(
-        Number(searchParams?.records) || 8,
-        Number(searchParams?.page) || 1,
-        searchParams?.search,
-        searchParams?.order,
-        searchParams?.sort as any
-    )
-
-    console.log(users)
+    const [userCount, users] = await getUsers(searchParams)
 
     return (
         <>

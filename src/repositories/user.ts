@@ -4,13 +4,15 @@ import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
 const getUsers = cache(
-    async (
-        records: number,
-        page: number,
-        search?: string,
-        order?: string,
-        sort?: 'asc' | 'desc'
-    ) => {
+    async ({
+        records = '8',
+        page = '1',
+        search,
+        order,
+        sort,
+    }: {
+        [key: string]: string
+    }) => {
         try {
             const isCount = order === 'protocols' || order === 'Review'
             return await prisma.$transaction([
@@ -23,8 +25,8 @@ const getUsers = cache(
                     },
                 }),
                 prisma.user.findMany({
-                    skip: records * (page - 1),
-                    take: records,
+                    skip: Number(records) * (Number(page) - 1),
+                    take: Number(records),
                     // Grab the model, and  bring relational data
                     select: {
                         id: true,
