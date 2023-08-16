@@ -40,8 +40,8 @@ export default async function UserList({
             </div>
 
             <UserTable
+                loggedInUser={session.user}
                 users={users}
-                page={Number(searchParams?.page)}
                 userCount={userCount ?? 0}
             />
         </>

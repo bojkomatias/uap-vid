@@ -1,9 +1,8 @@
 'use client'
 import type { User } from '@prisma/client'
-// import { RoleUpdater } from './elements/role-updater'
-// import { DeleteUserButton } from './elements/delete-user-button'
+import { RoleUpdater } from './elements/role-updater'
+import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 
@@ -15,41 +14,66 @@ import type { ColumnDef } from '@tanstack/react-table'
 export default function UserTable({
     users,
     userCount,
+    loggedInUser,
 }: {
     users: User[]
-    page?: number
     userCount: number
+    loggedInUser: User
 }) {
     const columns = useMemo<ColumnDef<User>[]>(
         () => [
             {
                 accessorKey: 'id',
-                header: 'ID',
+                header: 'Id',
+                cell: ({ row }) => (
+                    <span className="text-xs text-gray-600">
+                        {row.original.id}
+                    </span>
+                ),
                 enableSorting: false,
             },
             {
                 accessorKey: 'name',
-                header: 'Name',
-                cell: ({ cell }) => (
-                    <span className="text-success-400">
-                        {cell.getValue() as ReactNode}
-                    </span>
-                ),
+                header: 'Nombre',
                 enableHiding: false,
             },
             {
                 accessorKey: 'email',
                 header: 'Email',
+                enableHiding: false,
             },
             {
                 accessorKey: 'password',
-                header: 'Origen de usuario',
+                header: 'Origen',
+                cell: ({ cell }) =>
+                    cell.getValue() ? <>Microsoft 365</> : <>Usuario local</>,
+            },
+            {
+                accessorKey: 'role',
+                header: 'Rol',
+                // Guard for not changing your own role.
                 cell: ({ row }) =>
-                    row.original.password ? <>Microsoft 365</> : <>Local</>,
-                sortUndefined: 1,
+                    row.original.id === loggedInUser.id ? (
+                        <></>
+                    ) : (
+                        <RoleUpdater user={row.original} />
+                    ),
+                enableHiding: false,
+            },
+            {
+                accessorKey: 'delete',
+                header: 'Acciones',
+                cell: ({ row }) =>
+                    row.original.role === 'ADMIN' ? (
+                        <></>
+                    ) : (
+                        <DeleteUserButton userId={row.original.id} />
+                    ),
+                enableHiding: false,
+                enableSorting: false,
             },
         ],
-        []
+        [loggedInUser.id]
     )
 
     return (

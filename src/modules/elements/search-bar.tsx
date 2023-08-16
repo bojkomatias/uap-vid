@@ -13,7 +13,7 @@ export default function SearchBar({
     const [searchQuery, setSearchQuery] = useState('')
 
     return (
-        <div className="mx-auto mt-3 flex max-w-4xl flex-grow items-center gap-2 rounded-md">
+        <div className="flex max-w-4xl flex-grow items-center gap-2 rounded-md">
             <input
                 onKeyUpCapture={(e) => {
                     if (e.key === 'Enter') update({ search: searchQuery })
