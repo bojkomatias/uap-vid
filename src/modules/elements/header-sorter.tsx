@@ -22,6 +22,15 @@ export default function HeaderSorter({
                     header.column.getCanSort() &&
                     update({
                         order: header.id,
+                        sort:
+                            searchParams?.get('sort') == null ||
+                            searchParams.get('order') !== header.id
+                                ? 'asc'
+                                : searchParams?.get('sort') == 'asc'
+                                ? 'desc'
+                                : searchParams?.get('sort') == 'desc'
+                                ? null
+                                : 'asc',
                     }),
             }}
         >
