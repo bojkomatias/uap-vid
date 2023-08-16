@@ -64,8 +64,9 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                                             'flex w-full items-center justify-center gap-1 px-4 py-2 text-sm'
                                         )}
                                     >
-                                        {Number(searchParams.get('records')) ===
-                                        o ? (
+                                        {Number(
+                                            searchParams?.get('records')
+                                        ) === o ? (
                                             <div className="flex items-center font-bold">
                                                 <Check className="mr-1 h-4 w-4" />
                                                 {o}
@@ -93,7 +94,7 @@ export default function RecordsDropdown({ options }: { options: number[] }) {
                                         ' flex w-full items-center justify-end gap-1 px-4 py-2  text-sm'
                                     )}
                                 >
-                                    {Number(searchParams.get('records')) ===
+                                    {Number(searchParams?.get('records')) ===
                                     options[options.length - 1] ? (
                                         <div className=" flex items-center font-bold">
                                             <Check className=" mr-1 h-4 w-4" />
