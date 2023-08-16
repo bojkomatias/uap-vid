@@ -15,14 +15,15 @@ export default function TanStackTable({
     data,
     columns,
     totalRecords,
+    initialVisibility,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
     totalRecords: number
+    initialVisibility: VisibilityState
 }) {
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-        {}
-    )
+    const [columnVisibility, setColumnVisibility] =
+        useState<VisibilityState>(initialVisibility)
 
     const table = useReactTable({
         data,

@@ -7,7 +7,6 @@ import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 
-
 /**
  * This component is meant to handle business logic
  * What are the values needed, and what the actions performed
@@ -26,6 +25,7 @@ export default function UserTable({
             {
                 accessorKey: 'id',
                 header: 'ID',
+                enableSorting: false,
             },
             {
                 accessorKey: 'name',
@@ -58,6 +58,7 @@ export default function UserTable({
                 data={users}
                 columns={columns}
                 totalRecords={userCount}
+                initialVisibility={{ id: false }}
             />
         </>
     )

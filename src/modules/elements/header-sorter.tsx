@@ -15,7 +15,11 @@ export default function HeaderSorter({
                 className: header.column.getCanSort()
                     ? 'cursor-pointer select-none'
                     : '',
-                onClick: () => update({ order: header.id }),
+                onClick: () =>
+                    header.column.getCanSort() &&
+                    update({
+                        order: header.id,
+                    }),
             }}
         >
             {flexRender(header.column.columnDef.header, header.getContext())}
