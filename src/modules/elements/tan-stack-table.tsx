@@ -10,17 +10,22 @@ import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
+import FilterOptions from './filter-options'
 
 export default function TanStackTable({
     data,
     columns,
     totalRecords,
     initialVisibility,
+    searchOptions,
+    searchOptionsTitle,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
     totalRecords: number
     initialVisibility: VisibilityState
+    searchOptions?: string[]
+    searchOptionsTitle?: string
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -36,8 +41,14 @@ export default function TanStackTable({
     })
     return (
         <>
-            <div className="mx-auto mt-8 flex justify-between gap-4">
+            <div className="mx-auto mt-8 flex items-start justify-between gap-4">
                 <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
+                {searchOptions && searchOptionsTitle && (
+                    <FilterOptions
+                        title={searchOptionsTitle}
+                        options={searchOptions}
+                    />
+                )}
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
 

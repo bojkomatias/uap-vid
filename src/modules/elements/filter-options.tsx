@@ -1,0 +1,82 @@
+import React from 'react'
+import { Button } from './button'
+import { useSearchParams } from 'next/navigation'
+import { useUpdateQuery } from '@utils/updateQuery'
+import { Trash } from 'tabler-icons-react'
+import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+
+function scroll(elementId: string) {
+    const element = document.getElementById(elementId)
+
+    element?.addEventListener('wheel', (event) => {
+        event.preventDefault()
+        element.scrollBy({
+            left: event.deltaY < 0 ? -100 : 100,
+        })
+    })
+}
+
+export default function FilterOptions({
+    options,
+    title,
+}: {
+    options: string[]
+    title: string
+}) {
+    const searchParams = useSearchParams()
+    const update = useUpdateQuery()
+    return (
+        <div>
+            <div className="relative flex flex-col items-start text-sm">
+                <h1
+                    className="absolute -top-5
+             text-xs"
+                >
+                    Filtrar por <span className="font-bold">{title}</span>
+                </h1>
+
+                <div className="relative flex gap-2">
+                    <div className="absolute -right-2 h-full w-4 bg-white blur-sm"></div>
+                    <div className="absolute -left-2 h-full w-4 bg-white blur-sm"></div>
+                    <div
+                        id="scrollableDiv"
+                        onMouseOver={() => {
+                            scroll('scrollableDiv')
+                        }}
+                        className="flex max-w-[30vw] gap-2 overflow-x-auto overflow-y-hidden scroll-smooth px-4 py-2 "
+                    >
+                        {options.map((o, i) => {
+                            return (
+                                <Button
+                                    className="h-8 flex-shrink-0"
+                                    onClick={() => {
+                                        update({ search: o })
+                                    }}
+                                    intent={
+                                        searchParams?.get('search') === o
+                                            ? 'secondary'
+                                            : 'tertiary'
+                                    }
+                                    key={i}
+                                >
+                                    {getValueByKey(RolesDictionary, o)}
+                                </Button>
+                            )
+                        })}
+                        <Button
+                            className="h-8"
+                            onClick={() => {
+                                update({ search: '' })
+                            }}
+                            intent="primary"
+                            key={999}
+                        >
+                            <Trash />
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

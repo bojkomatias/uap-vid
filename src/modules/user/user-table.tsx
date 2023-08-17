@@ -108,6 +108,14 @@ export default function UserTable({
                 columns={columns}
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
+                searchOptions={[
+                    'RESEARCHER',
+                    'SECRETARY',
+                    'METHODOLOGIST',
+                    'SCIENTIST',
+                    'ADMIN',
+                ]}
+                searchOptionsTitle="rol del usuario"
             />
         </>
     )
