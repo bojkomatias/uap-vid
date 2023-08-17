@@ -30,7 +30,7 @@ function enumGetter(search: string) {
 
 const getUsers = cache(
     async ({
-        records = '8',
+        records = '5',
         page = '1',
         search,
         order,
