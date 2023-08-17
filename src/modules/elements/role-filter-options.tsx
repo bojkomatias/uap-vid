@@ -7,35 +7,38 @@ import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { scroll } from '@utils/helpers'
 
-export default function FilterOptions({ options }: { options: string[] }) {
+export default function RoleFilterOptions({ options }: { options: string[] }) {
     const searchParams = useSearchParams()
     const update = useUpdateQuery()
     return (
         <div>
-            <div className="relative flex flex-col items-start text-sm">
+            <div className="relative mt-2 flex flex-col items-start text-sm">
                 <div className="relative flex gap-2">
-                    <div className="absolute -right-2 h-full w-4 bg-white blur-sm"></div>
-                    <div className="absolute -left-2 h-full w-4 bg-white blur-sm"></div>
                     <div
                         id="scrollableDiv"
                         onMouseOver={() => {
                             scroll('scrollableDiv')
                         }}
-                        className="flex max-w-[30vw] gap-2 overflow-x-auto overflow-y-hidden scroll-smooth px-4 py-2 "
+                        className="flex  gap-2 "
                     >
                         {options.map((o, i) => {
                             return (
                                 <Button
-                                    className="h-8 flex-shrink-0"
+                                    className={
+                                        getValueByKey(RolesDictionary, o) ==
+                                        getValueByKey(
+                                            RolesDictionary,
+                                            searchParams?.get(
+                                                'search'
+                                            ) as string
+                                        )
+                                            ? 'h-5 flex-shrink-0 bg-primary text-white'
+                                            : 'h-5 flex-shrink-0'
+                                    }
                                     onClick={() => {
                                         update({ search: o })
                                     }}
-                                    intent={
-                                        searchParams?.get('search') ===
-                                        getValueByKey(RolesDictionary, o)
-                                            ? 'special'
-                                            : 'secondary'
-                                    }
+                                    intent="special"
                                     key={i}
                                 >
                                     {getValueByKey(RolesDictionary, o)}
@@ -43,14 +46,14 @@ export default function FilterOptions({ options }: { options: string[] }) {
                             )
                         })}
                         <Button
-                            className="h-8"
+                            className="h-5"
                             onClick={() => {
                                 update({ search: '' })
                             }}
                             intent="primary"
                             key={999}
                         >
-                            <Trash />
+                            <Trash height={20} className=" stroke-1" />
                         </Button>
                     </div>
                 </div>

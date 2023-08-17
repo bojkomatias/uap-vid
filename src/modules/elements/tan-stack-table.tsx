@@ -10,7 +10,7 @@ import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import FilterOptions from './filter-options'
+import RoleFilterOptions from './role-filter-options'
 
 export default function TanStackTable({
     data,
@@ -42,12 +42,13 @@ export default function TanStackTable({
     return (
         <>
             <div className="mx-auto mt-8 flex items-center justify-between gap-4">
-                <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
-                {searchOptions && searchOptionsTitle && (
-                    <FilterOptions options={searchOptions} />
-                )}
+                <SearchBar placeholderMessage="Buscar usuario por nombre o email" />
+
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
+            {searchOptions && searchOptionsTitle && (
+                <RoleFilterOptions options={searchOptions} />
+            )}
 
             {data.length >= 1 ? (
                 <table className="fade-in -mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
