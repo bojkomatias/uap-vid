@@ -1,5 +1,5 @@
 'use client'
-import type { Prisma, Protocol, User } from '@prisma/client'
+import { Prisma, Protocol, ReviewVerdict, User } from '@prisma/client'
 import { State } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
@@ -9,6 +9,10 @@ import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
+import { Button } from '@elements/button'
+import { cx } from '@utils/cx'
+import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
@@ -51,6 +55,16 @@ export default function ProtocolTable({
     const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
         () => [
             {
+                accessorKey: 'self-indicator',
+                header: '',
+                cell: ({ row }) =>
+                    user.id === row.original.researcher.id && (
+                        <UserIcon className="h-4 w-4 text-gray-600" />
+                    ),
+                enableHiding: false,
+                enableSorting: false,
+            },
+            {
                 accessorKey: 'id',
                 header: 'Id',
                 cell: ({ row }) => (
@@ -69,13 +83,26 @@ export default function ProtocolTable({
                 ),
             },
             {
+                accessorKey: 'researcher.name',
+                header: 'Investigador',
+            },
+            {
                 accessorKey: 'sections.identification.title',
                 header: 'Titulo',
                 enableHiding: false,
             },
             {
                 accessorKey: 'sections.identification.sponsor',
-                header: 'Unidad Académica',
+                header: 'Unidades Académicas',
+                cell: ({ row }) => (
+                    <ul className="text-xs">
+                        {row.original.sections.identification.sponsor.map(
+                            (s) => (
+                                <li key={s}>{s}</li>
+                            )
+                        )}
+                    </ul>
+                ),
             },
             {
                 accessorKey: 'sections.duration.modality',
@@ -89,7 +116,12 @@ export default function ProtocolTable({
                 accessorKey: 'state',
                 header: 'Estado',
                 cell: ({ row }) => (
-                    <>{ProtocolStatesDictionary[row.original.state]}</>
+                    <Button
+                        intent="badge"
+                        className="pointer-events-none whitespace-nowrap text-xs"
+                    >
+                        {ProtocolStatesDictionary[row.original.state]}
+                    </Button>
                 ),
             },
             {
@@ -97,11 +129,17 @@ export default function ProtocolTable({
                 accessorFn: (row) => row.reviews[0]?.reviewer.name,
                 header: 'Evaluador Metodólogo',
                 enableSorting: false,
+                enableHiding: user.role === 'RESEARCHER',
             },
             {
                 id: 'reviews_0.verdict',
                 accessorFn: (row) => row.reviews[0]?.verdict,
                 header: 'Veredicto Metodológico',
+                cell: ({ row }) => (
+                    <ReviewVerdictBadge
+                        verdict={row.original.reviews[0]?.verdict}
+                    />
+                ),
                 enableSorting: false,
             },
 
@@ -110,11 +148,17 @@ export default function ProtocolTable({
                 accessorFn: (row) => row.reviews[1]?.reviewer.name,
                 header: 'Evaluador Interno',
                 enableSorting: false,
+                enableHiding: user.role === 'RESEARCHER',
             },
             {
                 id: 'reviews_1.verdict',
                 accessorFn: (row) => row.reviews[1]?.verdict,
                 header: 'Veredicto Interno',
+                cell: ({ row }) => (
+                    <ReviewVerdictBadge
+                        verdict={row.original.reviews[1]?.verdict}
+                    />
+                ),
                 enableSorting: false,
             },
 
@@ -123,11 +167,17 @@ export default function ProtocolTable({
                 accessorFn: (row) => row.reviews[2]?.reviewer.name,
                 header: 'Evaluador Externo',
                 enableSorting: false,
+                enableHiding: user.role === 'RESEARCHER',
             },
             {
                 id: 'reviews_2.verdict',
                 accessorFn: (row) => row.reviews[2]?.verdict,
                 header: 'Veredicto Externo',
+                cell: ({ row }) => (
+                    <ReviewVerdictBadge
+                        verdict={row.original.reviews[2]?.verdict}
+                    />
+                ),
                 enableSorting: false,
             },
 
@@ -135,13 +185,21 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <Link
-                        href={`/protocols/${row.original.id}`}
-                        passHref
-                        className="transition-all duration-150 hover:text-black/60"
-                    >
-                        Ver
-                    </Link>
+                    <div className="mx-1 flex gap-3 font-semibold">
+                        <Link
+                            href={`/protocols/${row.original.id}`}
+                            passHref
+                            className="transition-all duration-150 hover:text-black/60"
+                        >
+                            Ver
+                        </Link>
+                        {user.role === 'ADMIN' && (
+                            <DeleteButton
+                                protocolId={row.original.id}
+                                protocolState={row.original.state}
+                            />
+                        )}
+                    </div>
                 ),
                 enableHiding: false,
                 enableSorting: false,
@@ -160,148 +218,11 @@ export default function ProtocolTable({
         'reviews_2.reviewer.name': false,
     }
     return (
-        // <div className="mx-auto max-w-7xl">
-        //     <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
-        //         <thead>
-        //             <tr>
-        //                 <th scope="col" className="py-3.5">
-        //                     <span className="sr-only">Self indicator</span>
-        //                 </th>
-        //                 <th
-        //                     scope="col"
-        //                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-1"
-        //                 >
-        //                     Título
-        //                 </th>
-        //                 <th
-        //                     scope="col"
-        //                     className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
-        //                 >
-        //                     Facultad / Carrera
-        //                 </th>
-        //                 <th
-        //                     scope="col"
-        //                     className="table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-        //                 >
-        //                     Estado
-        //                 </th>
-        //                 <th
-        //                     scope="col"
-        //                     className="relative py-3.5 pl-3 pr-4 sm:pr-1"
-        //                 >
-        //                     <span className="sr-only">Ver</span>
-        //                 </th>
-        //                 {user.role === 'ADMIN' ? (
-        //                     <th
-        //                         scope="col"
-        //                         className="relative py-3.5 pl-3 pr-4 sm:pr-1"
-        //                     >
-        //                         <span className="sr-only">Ver</span>
-        //                     </th>
-        //                 ) : null}
-        //             </tr>
-        //         </thead>
-        //         <tbody className="divide-y divide-gray-200 bg-white">
-        //             {protocols.map((protocol) => (
-        //                 <tr
-        //                     key={protocol.id}
-        //                     className={
-        //                         protocol.state === State.DELETED
-        //                             ? 'opacity-50'
-        //                             : ''
-        //                     }
-        //                 >
-        //                     <td className={'pb-4'}>
-        //                         {user.id === protocol.researcherId ? (
-        //                             <UserIcon className="h-4 w-4 text-gray-600" />
-        //                         ) : null}
-        //                     </td>
-        //                     <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-1">
-        //                         {protocol.sections.identification.title}
-        //                         <dl>
-        //                             <dd className=" text-xs font-light text-gray-500 lg:text-sm">
-        //                                 {dateFormatter.format(
-        //                                     protocol.createdAt
-        //                                 )}
-        //                             </dd>
-        //                             <dd className=" text-gray-600 lg:hidden">
-        //                                 {protocol.sections.identification
-        //                                     .sponsor.length < 2
-        //                                     ? protocol.sections.identification
-        //                                           .sponsor
-        //                                     : protocol.sections.identification.sponsor
-        //                                           .map(
-        //                                               (e: string) =>
-        //                                                   e.split('-')[1]
-        //                                           )
-        //                                           .join(' - ')}
-        //                             </dd>
-        //                         </dl>
-        //                     </td>
-        //                     <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-        //                         <dl>
-        //                             <dd className=" text-gray-700">
-        //                                 {protocol.sections.identification
-        //                                     .sponsor.length < 2
-        //                                     ? protocol.sections.identification
-        //                                           .sponsor
-        //                                     : protocol.sections.identification.sponsor
-        //                                           .map(
-        //                                               (e: string) =>
-        //                                                   e.split('-')[1]
-        //                                           )
-        //                                           .join(' - ')}
-        //                             </dd>
-        //                             <dd className=" font-light text-gray-500">
-        //                                 {
-        //                                     protocol.sections.identification
-        //                                         .career
-        //                                 }
-        //                             </dd>
-        //                         </dl>
-        //                     </td>
-        //                     <td className="table-cell px-3 py-4 text-sm font-medium text-gray-600">
-        //                         {ProtocolStatesDictionary[protocol.state]}
-        //                     </td>
-        //                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
-        //                     <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
-        //                         <Link
-        //                             href={`/protocols/${protocol.id}`}
-        //                             passHref
-        //                             className="transition-all duration-150 hover:text-black/60"
-        //                         >
-        //                             Ver
-        //                         </Link>
-        //                     </td>
-        //                     {user.role === 'ADMIN' &&
-        //                     protocol.state !== State.DELETED ? (
-        //                         <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium">
-        //                             <DeleteButton
-        //                                 protocolId={protocol.id}
-        //                                 protocolState={protocol.state}
-        //                             />
-        //                         </td>
-        //                     ) : null}
-        //                 </tr>
-        //             ))}
-        //         </tbody>
-        //     </table>
-        // </div>
         <TanStackTable
             data={protocols}
             columns={columns}
             totalRecords={totalRecords}
             initialVisibility={initialVisible}
-            searchOptions={[
-                'DRAFT',
-                'PUBLISHED',
-                'METHODOLOGICAL_EVALUATION',
-                'SCIENTIFIC_EVALUATION',
-                'ACCEPTED',
-                'ON_GOING',
-                'DELETED',
-            ]}
-            enumDict={ProtocolStatesDictionary}
         />
     )
 }

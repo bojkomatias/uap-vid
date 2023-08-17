@@ -94,8 +94,10 @@ const getProtocolsByRol = cache(
             records = '5',
             page = '1',
             search,
-            order,
             sort,
+            order,
+            filter,
+            values,
         }: { [key: string]: string }
     ) => {
         if (!id) throw Error('No ID passed')
@@ -139,7 +141,32 @@ const getProtocolsByRol = cache(
         }
 
         // orderBy reusable using the helper function
-        const orderBy = order && sort ? orderByQuery(order, sort) : {}
+        const orderBy = order && sort ? orderByQuery(sort, order) : {}
+
+        // Search reusable
+        const whereSearch = search
+            ? {
+                  OR: [
+                      {
+                          sections: {
+                              is: {
+                                  identification: {
+                                      is: {
+                                          title: {
+                                              contains: search,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
+                      { researcher: { name: { contains: search } } },
+                  ],
+              }
+            : {}
+        // filter reusable
+        const whereFilter =
+            filter && values ? { [filter]: { in: values.split('-') } } : {}
 
         const queryBuilder = async () => {
             const query = {
@@ -151,7 +178,14 @@ const getProtocolsByRol = cache(
                         select,
                         orderBy,
                         where: {
-                            AND: [{ researcherId: id }, { OR: [] }],
+                            AND: [
+                                // According to business logic
+                                { researcher: { id: id } },
+                                // According to table features (search, filter)
+
+                                whereSearch,
+                                whereFilter,
+                            ],
                             NOT: { state: 'DELETED' },
                         },
                     }),
@@ -164,15 +198,23 @@ const getProtocolsByRol = cache(
                         select,
                         orderBy,
                         where: {
-                            OR: [
+                            AND: [
                                 {
-                                    researcherId: id,
+                                    // Business logic
+                                    OR: [
+                                        {
+                                            researcherId: id,
+                                        },
+                                        {
+                                            reviews: {
+                                                some: { reviewerId: id },
+                                            },
+                                        },
+                                    ],
                                 },
-                                {
-                                    reviews: {
-                                        some: { reviewerId: id },
-                                    },
-                                },
+                                // Table feature
+                                whereSearch,
+                                whereFilter,
                             ],
                             NOT: { state: 'DELETED' },
                         },
@@ -186,9 +228,17 @@ const getProtocolsByRol = cache(
                         select,
                         orderBy,
                         where: {
-                            reviews: {
-                                some: { reviewerId: id },
-                            },
+                            AND: [
+                                // Business logic
+                                {
+                                    reviews: {
+                                        some: { reviewerId: id },
+                                    },
+                                },
+                                whereSearch,
+                                whereFilter,
+                            ],
+
                             NOT: { state: 'DELETED' },
                         },
                     }),
@@ -199,6 +249,9 @@ const getProtocolsByRol = cache(
                         skip,
                         take,
                         select,
+                        where: {
+                            AND: [whereSearch, whereFilter],
+                        },
                         orderBy,
                     }),
                 ]),
@@ -214,27 +267,36 @@ const getProtocolsByRol = cache(
                         select,
                         orderBy,
                         where: {
-                            OR: [
+                            AND: [
+                                // Business logic
                                 {
-                                    researcherId: id,
-                                },
-                                {
-                                    sections: {
-                                        is: {
-                                            identification: {
+                                    OR: [
+                                        {
+                                            researcherId: id,
+                                        },
+                                        {
+                                            sections: {
                                                 is: {
-                                                    sponsor: {
-                                                        hasSome:
-                                                            academicUnits?.map(
-                                                                (e) => e.name
-                                                            ),
+                                                    identification: {
+                                                        is: {
+                                                            sponsor: {
+                                                                hasSome:
+                                                                    academicUnits?.map(
+                                                                        (e) =>
+                                                                            e.name
+                                                                    ),
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
                                         },
-                                    },
+                                    ],
                                 },
+                                whereSearch,
+                                whereFilter,
                             ],
+
                             NOT: { state: 'DELETED' },
                         },
                     }),

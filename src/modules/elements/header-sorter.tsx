@@ -17,7 +17,7 @@ export default function HeaderSorter({
         <div
             {...{
                 className: header.column.getCanSort()
-                    ? 'cursor-pointer select-none flex items-center'
+                    ? 'cursor-pointer select-none flex items-center hover:text-black hover:font-medium'
                     : '',
                 onClick: () =>
                     header.column.getCanSort() &&
@@ -25,7 +25,7 @@ export default function HeaderSorter({
                         sort: header.id,
                         order:
                             searchParams?.get('sort') == null ||
-                            searchParams.get('order') !== header.id
+                            searchParams.get('sort') !== header.id
                                 ? 'asc'
                                 : searchParams?.get('order') == 'asc'
                                 ? 'desc'

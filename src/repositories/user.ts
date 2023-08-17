@@ -2,6 +2,7 @@ import type { User } from '@prisma/client'
 import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
+import { orderByQuery } from '@utils/query-helper/orderBy'
 
 /** This query returns all users that match the filtering criteria. The criteria includes:
  
@@ -26,7 +27,8 @@ const getUsers = cache(
         [key: string]: string
     }) => {
         try {
-            const isCount = sort === 'protocols' || sort === 'Review'
+            const orderBy = order && sort ? orderByQuery(sort, order) : {}
+
             return await prisma.$transaction([
                 prisma.user.count({
                     where: {
@@ -94,13 +96,8 @@ const getUsers = cache(
                                 : {},
                         ],
                     },
-                    // Sort by, distinguishing _count fields from plain fields
-                    orderBy:
-                        order && sort
-                            ? isCount
-                                ? { [sort]: { _count: order } }
-                                : { [sort]: order }
-                            : {},
+
+                    orderBy,
                 }),
             ])
         } catch (error) {
