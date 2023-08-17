@@ -17,7 +17,7 @@ export default function HeaderSorter({
         <div
             {...{
                 className: header.column.getCanSort()
-                    ? 'cursor-pointer select-none flex items-center hover:text-black hover:font-medium'
+                    ? 'cursor-pointer select-none flex items-center hover:text-black hover:drop-shadow'
                     : '',
                 onClick: () =>
                     header.column.getCanSort() &&

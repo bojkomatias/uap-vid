@@ -18,12 +18,14 @@ export default function TanStackTable({
     totalRecords,
     initialVisibility,
     filterableByKey,
+    searchBarPlaceholder,
 }: {
     data: unknown[]
     columns: ColumnDef<any, unknown>[]
     totalRecords: number
     initialVisibility: VisibilityState
-    filterableByKey?: { filter: string; values: string[][] }
+    filterableByKey?: { filter: string; values: any[][] }
+    searchBarPlaceholder: string
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -40,7 +42,7 @@ export default function TanStackTable({
     return (
         <>
             <div className="mx-auto mt-6 flex items-center justify-between gap-4">
-                <SearchBar placeholderMessage="Buscar usuario por nombre o email" />
+                <SearchBar placeholderMessage={searchBarPlaceholder} />
 
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
@@ -60,7 +62,7 @@ export default function TanStackTable({
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="py-2 pr-4 text-left text-xs font-light uppercase text-gray-800 last:text-right"
+                                            className="py-2 pr-4 text-left text-sm font-medium uppercase text-gray-600 last:text-right"
                                         >
                                             <HeaderSorter header={header} />
                                         </th>

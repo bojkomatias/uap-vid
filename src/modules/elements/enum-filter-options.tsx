@@ -16,7 +16,7 @@ export default function EnumFilterOptions({
     const currentValues = searchParams.get('values')?.split('-')
     return (
         <div>
-            <div className="relative mt-2 flex flex-col items-start text-sm">
+            <div className="relative mt-4 flex flex-col items-start text-sm">
                 <div className="relative flex gap-2">
                     <div className="flex gap-2">
                         {values.map(([value, name], i) => {

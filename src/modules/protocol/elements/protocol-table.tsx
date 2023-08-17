@@ -1,17 +1,14 @@
 'use client'
-import { Prisma, Protocol, ReviewVerdict, User } from '@prisma/client'
-import { State } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 import { DeleteButton } from './action-buttons/delete'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
-import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import { Button } from '@elements/button'
-import { cx } from '@utils/cx'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
@@ -83,12 +80,21 @@ export default function ProtocolTable({
                 ),
             },
             {
+                accessorKey: 'convocatory.name',
+                header: 'Convocatoria',
+            },
+            {
                 accessorKey: 'researcher.name',
                 header: 'Investigador',
             },
             {
                 accessorKey: 'sections.identification.title',
                 header: 'Titulo',
+                cell: ({ row }) => (
+                    <div className="min-w-[24rem] whitespace-normal font-semibold">
+                        {row.original.sections.identification.title}
+                    </div>
+                ),
                 enableHiding: false,
             },
             {
@@ -103,6 +109,14 @@ export default function ProtocolTable({
                         )}
                     </ul>
                 ),
+            },
+            {
+                accessorKey: 'sections.identification.career',
+                header: 'Carrera',
+            },
+            {
+                accessorKey: 'sections.identification.assignment',
+                header: 'Asignatura',
             },
             {
                 accessorKey: 'sections.duration.modality',
@@ -129,7 +143,8 @@ export default function ProtocolTable({
                 accessorFn: (row) => row.reviews[0]?.reviewer.name,
                 header: 'Evaluador Metodólogo',
                 enableSorting: false,
-                enableHiding: user.role === 'RESEARCHER',
+                enableHiding:
+                    user.role === 'ADMIN' || user.role === 'SECRETARY',
             },
             {
                 id: 'reviews_0.verdict',
@@ -141,6 +156,10 @@ export default function ProtocolTable({
                     />
                 ),
                 enableSorting: false,
+                enableHiding:
+                    user.role === 'ADMIN' ||
+                    user.role === 'SECRETARY' ||
+                    user.role === 'RESEARCHER',
             },
 
             {
@@ -148,7 +167,8 @@ export default function ProtocolTable({
                 accessorFn: (row) => row.reviews[1]?.reviewer.name,
                 header: 'Evaluador Interno',
                 enableSorting: false,
-                enableHiding: user.role === 'RESEARCHER',
+                enableHiding:
+                    user.role === 'ADMIN' || user.role === 'SECRETARY',
             },
             {
                 id: 'reviews_1.verdict',
@@ -160,14 +180,18 @@ export default function ProtocolTable({
                     />
                 ),
                 enableSorting: false,
+                enableHiding:
+                    user.role === 'ADMIN' ||
+                    user.role === 'SECRETARY' ||
+                    user.role === 'RESEARCHER',
             },
-
             {
                 id: 'reviews_2.reviewer.name',
                 accessorFn: (row) => row.reviews[2]?.reviewer.name,
                 header: 'Evaluador Externo',
                 enableSorting: false,
-                enableHiding: user.role === 'RESEARCHER',
+                enableHiding:
+                    user.role === 'ADMIN' || user.role === 'SECRETARY',
             },
             {
                 id: 'reviews_2.verdict',
@@ -179,8 +203,34 @@ export default function ProtocolTable({
                     />
                 ),
                 enableSorting: false,
+                enableHiding:
+                    user.role === 'ADMIN' ||
+                    user.role === 'SECRETARY' ||
+                    user.role === 'RESEARCHER',
             },
-
+            {
+                id: 'reviews_3.reviewer.name',
+                accessorFn: (row) => row.reviews[3]?.reviewer.name,
+                header: 'Evaluador Tercero',
+                enableSorting: false,
+                enableHiding:
+                    user.role === 'ADMIN' || user.role === 'SECRETARY',
+            },
+            {
+                id: 'reviews_3.verdict',
+                accessorFn: (row) => row.reviews[3]?.verdict,
+                header: 'Veredicto Tercero',
+                cell: ({ row }) => (
+                    <ReviewVerdictBadge
+                        verdict={row.original.reviews[3]?.verdict}
+                    />
+                ),
+                enableSorting: false,
+                enableHiding:
+                    user.role === 'ADMIN' ||
+                    user.role === 'SECRETARY' ||
+                    user.role === 'RESEARCHER',
+            },
             {
                 accessorKey: 'actions',
                 header: 'Acciones',
@@ -205,17 +255,26 @@ export default function ProtocolTable({
                 enableSorting: false,
             },
         ],
-        []
+        [user.id, user.role]
     )
 
     const initialVisible = {
         id: false,
+        createdAt: false,
+        convocatory_name: false,
+        researcher_name: false,
+        'sections_identification.career': false,
+        'sections_identification.assignment': false,
+        'sections_duration.modality': false,
+        'sections_duration.duration': false,
         'reviews_0.verdict': false,
         'reviews_0.reviewer.name': false,
         'reviews_1.verdict': false,
         'reviews_1.reviewer.name': false,
         'reviews_2.verdict': false,
         'reviews_2.reviewer.name': false,
+        'reviews_3.verdict': false,
+        'reviews_3.reviewer.name': false,
     }
     return (
         <TanStackTable
@@ -223,6 +282,15 @@ export default function ProtocolTable({
             columns={columns}
             totalRecords={totalRecords}
             initialVisibility={initialVisible}
+            filterableByKey={{
+                filter: 'state',
+                // Slice to avoid NOT_CREATED
+                values: Object.entries(ProtocolStatesDictionary).slice(
+                    1,
+                    user.role === 'ADMIN' ? undefined : -1
+                ),
+            }}
+            searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
         />
     )
 }

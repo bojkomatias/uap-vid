@@ -112,6 +112,7 @@ export default function UserTable({
                     filter: 'role',
                     values: Object.entries(RolesDictionary),
                 }}
+                searchBarPlaceholder="Buscar por: Nombre, Email"
             />
         </>
     )

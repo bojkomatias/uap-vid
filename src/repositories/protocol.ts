@@ -160,6 +160,19 @@ const getProtocolsByRol = cache(
                               },
                           },
                       },
+                      {
+                          sections: {
+                              is: {
+                                  duration: {
+                                      is: {
+                                          modality: {
+                                              contains: search,
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      },
                       { researcher: { name: { contains: search } } },
                   ],
               }
@@ -180,9 +193,8 @@ const getProtocolsByRol = cache(
                         where: {
                             AND: [
                                 // According to business logic
-                                { researcher: { id: id } },
+                                { researcherId: id },
                                 // According to table features (search, filter)
-
                                 whereSearch,
                                 whereFilter,
                             ],
