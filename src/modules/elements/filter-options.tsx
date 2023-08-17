@@ -12,7 +12,7 @@ function scroll(elementId: string) {
     element?.addEventListener('wheel', (event) => {
         event.preventDefault()
         element.scrollBy({
-            left: event.deltaY < 0 ? -100 : 100,
+            left: event.deltaY < 0 ? -200 : 200,
         })
     })
 }
@@ -41,9 +41,10 @@ export default function FilterOptions({ options }: { options: string[] }) {
                                         update({ search: o })
                                     }}
                                     intent={
-                                        searchParams?.get('search') === o
-                                            ? 'secondary'
-                                            : 'tertiary'
+                                        searchParams?.get('search') ===
+                                        getValueByKey(RolesDictionary, o)
+                                            ? 'special'
+                                            : 'secondary'
                                     }
                                     key={i}
                                 >
