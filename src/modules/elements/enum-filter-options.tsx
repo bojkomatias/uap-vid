@@ -1,65 +1,54 @@
 import React from 'react'
 import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
+import { cx } from '@utils/cx'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { Trash } from 'tabler-icons-react'
-import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
-import { scroll } from '@utils/helpers'
 
 export default function EnumFilterOptions({
-    options,
-    dictionary,
+    filter,
+    values,
 }: {
-    options: string[]
-    dictionary: any
+    filter: string
+    values: string[][]
 }) {
-    const searchParams = useSearchParams()
     const update = useUpdateQuery()
+    const searchParams = useSearchParams()
+    const currentValues = searchParams.get('values')?.split('-')
     return (
         <div>
             <div className="relative mt-2 flex flex-col items-start text-sm">
                 <div className="relative flex gap-2">
-                    <div
-                        id="scrollableDiv"
-                        onMouseOver={() => {
-                            scroll('scrollableDiv')
-                        }}
-                        className="flex  gap-2 "
-                    >
-                        {options.map((o, i) => {
+                    <div className="flex gap-2">
+                        {values.map(([value, name], i) => {
                             return (
                                 <Button
-                                    className={
-                                        getValueByKey(dictionary, o) ==
-                                        getValueByKey(
-                                            dictionary,
-                                            searchParams?.get(
-                                                'search'
-                                            ) as string
-                                        )
-                                            ? 'h-5 flex-shrink-0 bg-primary text-white'
-                                            : 'h-5 flex-shrink-0'
-                                    }
                                     onClick={() => {
-                                        update({ search: o })
+                                        update({
+                                            filter,
+                                            values: currentValues
+                                                ? currentValues.includes(value)
+                                                    ? currentValues
+                                                          .filter(
+                                                              (e) => e !== value
+                                                          )
+                                                          .join('-')
+                                                    : currentValues
+                                                          .join('-')
+                                                          .concat('-', value)
+                                                : value,
+                                        })
                                     }}
-                                    intent="special"
+                                    className={cx({
+                                        'bg-gray-300 hover:bg-gray-200':
+                                            currentValues?.includes(value),
+                                    })}
+                                    intent="badge"
                                     key={i}
                                 >
-                                    {getValueByKey(dictionary, o)}
+                                    {name}
                                 </Button>
                             )
                         })}
-                        <Button
-                            className="h-5"
-                            onClick={() => {
-                                update({ search: '' })
-                            }}
-                            intent="primary"
-                            key={999}
-                        >
-                            <Trash height={20} className=" stroke-1" />
-                        </Button>
                     </div>
                 </div>
             </div>

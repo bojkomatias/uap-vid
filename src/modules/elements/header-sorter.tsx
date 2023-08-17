@@ -1,16 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { flexRender, type Header } from '@tanstack/react-table'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
-import {
-    ArrowDown,
-    ArrowUp,
-    CaretDown,
-    CaretUp,
-    ChevronDown,
-    ChevronUp,
-} from 'tabler-icons-react'
+import { ArrowDown, ArrowUp } from 'tabler-icons-react'
 
 export default function HeaderSorter({
     header,
@@ -28,13 +22,22 @@ export default function HeaderSorter({
                 onClick: () =>
                     header.column.getCanSort() &&
                     update({
-                        order: header.id,
+                        sort: header.id,
+                        order:
+                            searchParams?.get('sort') == null ||
+                            searchParams.get('order') !== header.id
+                                ? 'asc'
+                                : searchParams?.get('order') == 'asc'
+                                ? 'desc'
+                                : searchParams?.get('order') == 'desc'
+                                ? null
+                                : 'asc',
                     }),
             }}
         >
             {flexRender(header.column.columnDef.header, header.getContext())}
-            {searchParams.get('order') === header.column.id ? (
-                searchParams.get('sort') === 'asc' ? (
+            {searchParams?.get('sort') === header.column.id ? (
+                searchParams.get('order') === 'asc' ? (
                     <ArrowUp className="ml-1.5 h-4 w-4 text-primary" />
                 ) : (
                     <ArrowDown className="ml-1.5 h-4 w-4 text-primary" />

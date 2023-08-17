@@ -7,7 +7,7 @@ import type { Column } from '@tanstack/react-table'
 export default function ColumnVisibilityDropdown({
     columns,
 }: {
-    columns: Column<any, unknown>[]
+    columns: Column<unknown, unknown>[]
 }) {
     return (
         <Menu as="div" className="relative">

@@ -98,7 +98,7 @@ export default function UserTable({
         ],
         [loggedInUser.id]
     )
-    // Explicitly announce initial state of hidden columns.
+    /** Explicitly announce initial state of hidden columns. */
     const initialVisible = { id: false, protocols: false, Review: false }
 
     return (
@@ -108,14 +108,10 @@ export default function UserTable({
                 columns={columns}
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
-                searchOptions={[
-                    'RESEARCHER',
-                    'SECRETARY',
-                    'METHODOLOGIST',
-                    'SCIENTIST',
-                    'ADMIN',
-                ]}
-                enumDict={RolesDictionary}
+                filterableByKey={{
+                    filter: 'role',
+                    values: Object.entries(RolesDictionary),
+                }}
             />
         </>
     )

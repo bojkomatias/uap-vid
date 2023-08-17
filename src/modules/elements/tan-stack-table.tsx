@@ -10,7 +10,6 @@ import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import { scroll } from '@utils/helpers'
 import EnumFilterOptions from './enum-filter-options'
 
 export default function TanStackTable({
@@ -18,15 +17,13 @@ export default function TanStackTable({
     columns,
     totalRecords,
     initialVisibility,
-    searchOptions,
-    enumDict,
+    filterableByKey,
 }: {
-    data: any[]
-    columns: ColumnDef<any, any>[]
+    data: unknown[]
+    columns: ColumnDef<any, unknown>[]
     totalRecords: number
     initialVisibility: VisibilityState
-    searchOptions?: string[]
-    enumDict?: any
+    filterableByKey?: { filter: string; values: string[][] }
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -42,32 +39,27 @@ export default function TanStackTable({
     })
     return (
         <>
-            <div className="mx-auto mt-8 flex justify-between gap-4">
-                <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
+            <div className="mx-auto mt-8 flex items-center justify-between gap-4">
+                <SearchBar placeholderMessage="Buscar usuario por nombre o email" />
+
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
-            {searchOptions && (
+            {filterableByKey && (
                 <EnumFilterOptions
-                    dictionary={enumDict}
-                    options={searchOptions}
+                    filter={filterableByKey.filter}
+                    values={filterableByKey.values}
                 />
             )}
-            <div
-                onMouseOver={() => {
-                    scroll('scrollableTable')
-                }}
-                id="scrollableTable"
-                className="w-full overflow-x-auto scroll-smooth"
-            >
-                <table className="-mx-4 mt-8 divide-y divide-gray-300 sm:-mx-0">
+
+            {data.length >= 1 ? (
+                <table className="fade-in -mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
                                     <th
                                         key={header.id}
-                                        className="px-2 py-1 text-xs font-light uppercase text-gray-700 last:text-right"
-                                        colSpan={header.colSpan}
+                                        className="py-3.5 text-left text-sm text-gray-900 last:text-right sm:pl-0"
                                     >
                                         <HeaderSorter header={header} />
                                     </th>
@@ -81,7 +73,7 @@ export default function TanStackTable({
                                 {row.getVisibleCells().map((cell) => (
                                     <td
                                         key={cell.id}
-                                        className="whitespace-nowrap px-2 py-3 text-sm font-medium text-gray-900 last:text-right"
+                                        className="py-3.5 text-sm font-medium text-gray-900 last:text-right sm:w-auto sm:pl-0"
                                     >
                                         {flexRender(
                                             cell.column.columnDef.cell,
@@ -93,8 +85,17 @@ export default function TanStackTable({
                         ))}
                     </tbody>
                 </table>
-            </div>
-
+            ) : (
+                <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center  gap-4 text-gray-500">
+                    <h1 className="font-semibold">
+                        No se encontraron registros con los criterios de
+                        búsqueda especificados
+                    </h1>
+                    <p className="text-xs">
+                        Pruebe nuevamente con otros criterios de filtrado
+                    </p>
+                </div>
+            )}
             <Pagination totalRecords={totalRecords} />
         </>
     )
