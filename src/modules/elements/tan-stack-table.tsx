@@ -17,11 +17,13 @@ export default function TanStackTable({
     columns,
     totalRecords,
     initialVisibility,
+    searchOptions,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
     totalRecords: number
     initialVisibility: VisibilityState
+    searchOptions?: string[]
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
