@@ -5,17 +5,7 @@ import { useUpdateQuery } from '@utils/updateQuery'
 import { Trash } from 'tabler-icons-react'
 import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-
-function scroll(elementId: string) {
-    const element = document.getElementById(elementId)
-
-    element?.addEventListener('wheel', (event) => {
-        event.preventDefault()
-        element.scrollBy({
-            left: event.deltaY < 0 ? -200 : 200,
-        })
-    })
-}
+import { scroll } from '@utils/helpers'
 
 export default function FilterOptions({ options }: { options: string[] }) {
     const searchParams = useSearchParams()
