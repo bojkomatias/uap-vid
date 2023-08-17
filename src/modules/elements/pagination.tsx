@@ -14,9 +14,9 @@ export default function Pagination({
 }) {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const shownRecords = Number(searchParams.get('records')) || 4
+    const shownRecords = Number(searchParams?.get('records')) || 5
 
-    const currentPage = Number(searchParams.get('page')) ?? 1
+    const currentPage = Number(searchParams?.get('page')) ?? 1
 
     const pageNumbers = useCallback(() => {
         const lLength = listLength
@@ -130,15 +130,15 @@ export default function Pagination({
             <span className="text-sm  text-primary">
                 Mostrando registros{' '}
                 <span className="font-semibold">
-                    {shownRecords * Number(searchParams.get('page') || 1) -
+                    {shownRecords * Number(searchParams?.get('page') || 1) -
                         shownRecords +
                         1}
                     {' a '}
-                    {shownRecords * Number(searchParams.get('page') || 1) >=
+                    {shownRecords * Number(searchParams?.get('page') || 1) >=
                     totalRecords
                         ? totalRecords
                         : shownRecords *
-                          Number(searchParams.get('page') || 1)}{' '}
+                          Number(searchParams?.get('page') || 1)}{' '}
                     de {totalRecords}
                 </span>
             </span>
