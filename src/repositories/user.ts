@@ -3,6 +3,21 @@ import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 
+function enumGetter(search: string) {
+    switch (search) {
+        case 'ADMIN':
+            return Role.ADMIN
+        case 'SECRETARY':
+            return Role.SECRETARY
+        case 'RESEARCHER':
+            return Role.RESEARCHER
+        case 'METHODOLOGIST':
+            return Role.METHODOLOGIST
+        case 'SCIENTIST':
+            return Role.SCIENTIST
+    }
+}
+
 /** This query returns all users that match the filtering criteria. The criteria includes:
  
  * @param records this is the amount of records shown in the table at once.
@@ -12,6 +27,7 @@ import { prisma } from '../utils/bd'
  * @param sort this is the type of ordering which will be used: asc or desc. Always present when a key is given to the order param.
  *
  */
+
 const getUsers = cache(
     async ({
         records = '5',
@@ -36,8 +52,18 @@ const getUsers = cache(
                 prisma.user.findMany({
                     skip: Number(records) * (Number(page) - 1),
                     take: Number(records),
-                    // Grab the model, and  bring relational data using include or select
-                    include: { _count: true },
+                    // Grab the model, and  bring relational data
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: true,
+                        role: true,
+                        lastLogin: true,
+                        image: true,
+                        AcademicUnitIds: true,
+                        _count: true,
+                    },
                     // Add all the globally searchable fields
                     where: search
                         ? {
@@ -52,6 +78,9 @@ const getUsers = cache(
                                       email: {
                                           contains: search,
                                       },
+                                  },
+                                  {
+                                      role: enumGetter(search),
                                   },
                               ],
                           }

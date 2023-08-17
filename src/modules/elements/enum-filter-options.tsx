@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { Trash } from 'tabler-icons-react'
 import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { scroll } from '@utils/helpers'
 
 export default function EnumFilterOptions({
@@ -33,7 +32,7 @@ export default function EnumFilterOptions({
                                     className={
                                         getValueByKey(dictionary, o) ==
                                         getValueByKey(
-                                            RolesDictionary,
+                                            dictionary,
                                             searchParams?.get(
                                                 'search'
                                             ) as string

@@ -12,7 +12,6 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import { scroll } from '@utils/helpers'
 import EnumFilterOptions from './enum-filter-options'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 export default function TanStackTable({
     data,
@@ -20,12 +19,14 @@ export default function TanStackTable({
     totalRecords,
     initialVisibility,
     searchOptions,
+    enumDict,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
     totalRecords: number
     initialVisibility: VisibilityState
     searchOptions?: string[]
+    enumDict?: any
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -47,7 +48,7 @@ export default function TanStackTable({
             </div>
             {searchOptions && (
                 <EnumFilterOptions
-                    dictionary={RolesDictionary}
+                    dictionary={enumDict}
                     options={searchOptions}
                 />
             )}

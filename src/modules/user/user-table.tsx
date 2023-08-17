@@ -5,6 +5,7 @@ import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 type UsersWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
@@ -114,6 +115,7 @@ export default function UserTable({
                     'SCIENTIST',
                     'ADMIN',
                 ]}
+                enumDict={RolesDictionary}
             />
         </>
     )

@@ -292,6 +292,16 @@ export default function ProtocolTable({
             columns={columns}
             totalRecords={totalRecords}
             initialVisibility={initialVisible}
+            searchOptions={[
+                'DRAFT',
+                'PUBLISHED',
+                'METHODOLOGICAL_EVALUATION',
+                'SCIENTIFIC_EVALUATION',
+                'ACCEPTED',
+                'ON_GOING',
+                'DELETED',
+            ]}
+            enumDict={ProtocolStatesDictionary}
         />
     )
 }
