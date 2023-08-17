@@ -11,6 +11,8 @@ import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import { scroll } from '@utils/helpers'
+import EnumFilterOptions from './enum-filter-options'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 export default function TanStackTable({
     data,
@@ -43,6 +45,12 @@ export default function TanStackTable({
                 <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
+            {searchOptions && (
+                <EnumFilterOptions
+                    dictionary={RolesDictionary}
+                    options={searchOptions}
+                />
+            )}
             <div
                 onMouseOver={() => {
                     scroll('scrollableTable')
