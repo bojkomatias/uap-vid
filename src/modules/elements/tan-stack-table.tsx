@@ -41,13 +41,10 @@ export default function TanStackTable({
     })
     return (
         <>
-            <div className="mx-auto mt-8 flex items-start justify-between gap-4">
+            <div className="mx-auto mt-8 flex items-center justify-between gap-4">
                 <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
                 {searchOptions && searchOptionsTitle && (
-                    <FilterOptions
-                        title={searchOptionsTitle}
-                        options={searchOptions}
-                    />
+                    <FilterOptions options={searchOptions} />
                 )}
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>

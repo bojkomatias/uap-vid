@@ -17,25 +17,12 @@ function scroll(elementId: string) {
     })
 }
 
-export default function FilterOptions({
-    options,
-    title,
-}: {
-    options: string[]
-    title: string
-}) {
+export default function FilterOptions({ options }: { options: string[] }) {
     const searchParams = useSearchParams()
     const update = useUpdateQuery()
     return (
         <div>
             <div className="relative flex flex-col items-start text-sm">
-                <h1
-                    className="absolute -top-5
-             text-xs"
-                >
-                    Filtrar por <span className="font-bold">{title}</span>
-                </h1>
-
                 <div className="relative flex gap-2">
                     <div className="absolute -right-2 h-full w-4 bg-white blur-sm"></div>
                     <div className="absolute -left-2 h-full w-4 bg-white blur-sm"></div>
