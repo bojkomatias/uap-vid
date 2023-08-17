@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
-import { useUpdateQuery } from '@utils/updateQuery'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { Trash } from 'tabler-icons-react'
 import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
