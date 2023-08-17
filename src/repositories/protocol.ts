@@ -184,7 +184,18 @@ const getProtocolsByRol = cache(
         const queryBuilder = async () => {
             const query = {
                 [ROLE.RESEARCHER]: prisma.$transaction([
-                    prisma.protocol.count({}),
+                    prisma.protocol.count({
+                        where: {
+                            AND: [
+                                // According to business logic
+                                { researcherId: id },
+                                // According to table features (search, filter)
+                                whereSearch,
+                                whereFilter,
+                            ],
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
                     prisma.protocol.findMany({
                         skip,
                         take,
@@ -203,7 +214,29 @@ const getProtocolsByRol = cache(
                     }),
                 ]),
                 [ROLE.METHODOLOGIST]: prisma.$transaction([
-                    prisma.protocol.count({}),
+                    prisma.protocol.count({
+                        where: {
+                            AND: [
+                                {
+                                    // Business logic
+                                    OR: [
+                                        {
+                                            researcherId: id,
+                                        },
+                                        {
+                                            reviews: {
+                                                some: { reviewerId: id },
+                                            },
+                                        },
+                                    ],
+                                },
+                                // Table feature
+                                whereSearch,
+                                whereFilter,
+                            ],
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
                     prisma.protocol.findMany({
                         skip,
                         take,
@@ -233,7 +266,22 @@ const getProtocolsByRol = cache(
                     }),
                 ]),
                 [ROLE.SCIENTIST]: prisma.$transaction([
-                    prisma.protocol.count({}),
+                    prisma.protocol.count({
+                        where: {
+                            AND: [
+                                // Business logic
+                                {
+                                    reviews: {
+                                        some: { reviewerId: id },
+                                    },
+                                },
+                                whereSearch,
+                                whereFilter,
+                            ],
+
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
                     prisma.protocol.findMany({
                         skip,
                         take,
@@ -256,7 +304,11 @@ const getProtocolsByRol = cache(
                     }),
                 ]),
                 [ROLE.ADMIN]: prisma.$transaction([
-                    prisma.protocol.count({}),
+                    prisma.protocol.count({
+                        where: {
+                            AND: [whereSearch, whereFilter],
+                        },
+                    }),
                     prisma.protocol.findMany({
                         skip,
                         take,
@@ -272,7 +324,41 @@ const getProtocolsByRol = cache(
             if (role === ROLE.SECRETARY) {
                 const academicUnits = await getAcademicUnitsByUserId(id)
                 return prisma.$transaction([
-                    prisma.protocol.count({}),
+                    prisma.protocol.count({
+                        where: {
+                            AND: [
+                                // Business logic
+                                {
+                                    OR: [
+                                        {
+                                            researcherId: id,
+                                        },
+                                        {
+                                            sections: {
+                                                is: {
+                                                    identification: {
+                                                        is: {
+                                                            sponsor: {
+                                                                hasSome:
+                                                                    academicUnits?.map(
+                                                                        (e) =>
+                                                                            e.name
+                                                                    ),
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                                whereSearch,
+                                whereFilter,
+                            ],
+
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
                     prisma.protocol.findMany({
                         skip,
                         take,
