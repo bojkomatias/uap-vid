@@ -5,7 +5,7 @@ import {
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table'
-import { cache, useState } from 'react'
+import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
@@ -19,8 +19,8 @@ export default function TanStackTable({
     initialVisibility,
     filterableByKey,
 }: {
-    data: any[]
-    columns: ColumnDef<any, any>[]
+    data: unknown[]
+    columns: ColumnDef<unknown, unknown>[]
     totalRecords: number
     initialVisibility: VisibilityState
     filterableByKey?: { filter: string; values: string[][] }

@@ -22,22 +22,22 @@ export default function HeaderSorter({
                 onClick: () =>
                     header.column.getCanSort() &&
                     update({
-                        order: header.id,
-                        sort:
+                        sort: header.id,
+                        order:
                             searchParams?.get('sort') == null ||
                             searchParams.get('order') !== header.id
                                 ? 'asc'
-                                : searchParams?.get('sort') == 'asc'
+                                : searchParams?.get('order') == 'asc'
                                 ? 'desc'
-                                : searchParams?.get('sort') == 'desc'
+                                : searchParams?.get('order') == 'desc'
                                 ? null
                                 : 'asc',
                     }),
             }}
         >
             {flexRender(header.column.columnDef.header, header.getContext())}
-            {searchParams?.get('order') === header.column.id ? (
-                searchParams.get('sort') === 'asc' ? (
+            {searchParams?.get('sort') === header.column.id ? (
+                searchParams.get('order') === 'asc' ? (
                     <ArrowUp className="ml-1.5 h-4 w-4 text-primary" />
                 ) : (
                     <ArrowDown className="ml-1.5 h-4 w-4 text-primary" />

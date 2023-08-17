@@ -5,8 +5,8 @@ type UpdateEvent = {
     page?: number
     records?: number
     search?: string
-    order?: string
-    sort?: 'asc' | 'desc' | null
+    sort?: string
+    order?: 'asc' | 'desc' | null
     filter?: string
     values?: string
 }
