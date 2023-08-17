@@ -3,7 +3,6 @@ import type { Prisma, User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 
@@ -24,7 +23,7 @@ export default function UserTable({
     totalRecords: number
     loggedInUser: User
 }) {
-    const columns = useMemo<ColumnDef<User>[]>(
+    const columns = useMemo<ColumnDef<UsersWithCount>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -67,9 +66,9 @@ export default function UserTable({
                 accessorKey: '_count.protocols',
                 id: 'protocols',
                 header: 'Protocolos',
-                cell: ({ cell }) => (
+                cell: ({ row }) => (
                     <div className="w-20 text-right">
-                        {cell.getValue() as ReactNode}
+                        {row.original._count.protocols}
                     </div>
                 ),
             },
@@ -77,9 +76,9 @@ export default function UserTable({
                 accessorKey: '_count.Review',
                 id: 'Review',
                 header: 'Evaluaciones',
-                cell: ({ cell }) => (
+                cell: ({ row }) => (
                     <div className="w-20 text-right">
-                        {cell.getValue() as ReactNode}
+                        {row.original._count.Review}
                     </div>
                 ),
             },

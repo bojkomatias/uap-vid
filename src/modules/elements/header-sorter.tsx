@@ -1,6 +1,6 @@
 'use client'
 import { flexRender, type Header } from '@tanstack/react-table'
-import { useUpdateQuery } from '@utils/updateQuery'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import {

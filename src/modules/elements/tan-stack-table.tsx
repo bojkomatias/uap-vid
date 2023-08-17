@@ -40,40 +40,42 @@ export default function TanStackTable({
                 <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
-
-            <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
-                <thead>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <th
-                                    key={header.id}
-                                    className="py-3.5 text-left text-sm text-gray-900 last:text-right sm:pl-0"
-                                >
-                                    <HeaderSorter header={header} />
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                    {table.getRowModel().rows.map((row) => (
-                        <tr key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <td
-                                    key={cell.id}
-                                    className="py-3.5 text-sm font-medium text-gray-900 last:text-right sm:w-auto sm:pl-0"
-                                >
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="w-full overflow-x-auto">
+                <table className="-mx-4 mt-8 divide-y divide-gray-300 sm:-mx-0">
+                    <thead>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        className="px-2 py-1 text-xs font-light uppercase text-gray-700 last:text-right"
+                                        colSpan={header.colSpan}
+                                    >
+                                        <HeaderSorter header={header} />
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                        {table.getRowModel().rows.map((row) => (
+                            <tr key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <td
+                                        key={cell.id}
+                                        className="whitespace-nowrap px-2 py-3 text-sm font-medium text-gray-900 last:text-right"
+                                    >
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             <Pagination totalRecords={totalRecords} />
         </>

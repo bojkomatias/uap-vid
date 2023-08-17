@@ -1,7 +1,7 @@
 'use client'
 import { Button } from './button'
 import { useState } from 'react'
-import { useUpdateQuery } from '@utils/updateQuery'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 export default function SearchBar({
     placeholderMessage,

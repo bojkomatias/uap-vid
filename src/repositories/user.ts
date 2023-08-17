@@ -36,18 +36,8 @@ const getUsers = cache(
                 prisma.user.findMany({
                     skip: Number(records) * (Number(page) - 1),
                     take: Number(records),
-                    // Grab the model, and  bring relational data
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                        password: true,
-                        role: true,
-                        lastLogin: true,
-                        image: true,
-                        AcademicUnitIds: true,
-                        _count: true,
-                    },
+                    // Grab the model, and  bring relational data using include or select
+                    include: { _count: true },
                     // Add all the globally searchable fields
                     where: search
                         ? {

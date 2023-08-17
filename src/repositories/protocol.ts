@@ -4,6 +4,7 @@ import { ROLE } from '@utils/zod'
 import type { Protocol } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
+import { orderByQuery } from '@utils/query-helper/orderBy'
 
 const findProtocolById = cache(async (id: string) => {
     try {
@@ -85,7 +86,7 @@ const getAllProtocols = cache(async () => {
     }
 })
 
-const getProtocolByRol = cache(
+const getProtocolsByRol = cache(
     async (
         role: RoleType,
         id: string,
@@ -97,95 +98,155 @@ const getProtocolByRol = cache(
             sort,
         }: { [key: string]: string }
     ) => {
-        if (!id) return null
+        if (!id) throw Error('No ID passed')
 
+        // Pagination reusable
         const [skip, take] = [
             Number(records) * (Number(page) - 1),
             Number(records),
         ]
-        const select = {}
+        // Select model reusable
+        const select = {
+            id: true,
+            state: true,
+            createdAt: true,
+            convocatory: { select: { id: true, name: true } },
+            researcher: {
+                select: { id: true, name: true, role: true, email: true },
+            },
+            reviews: {
+                select: {
+                    id: true,
+                    updatedAt: true,
+                    type: true,
+                    verdict: true,
+                    reviewer: {
+                        select: {
+                            id: true,
+                            name: true,
+                            role: true,
+                            email: true,
+                        },
+                    },
+                },
+            },
+            sections: {
+                select: {
+                    identification: true,
+                    duration: { select: { modality: true, duration: true } },
+                },
+            },
+        }
+
+        // orderBy reusable using the helper function
+        const orderBy = order && sort ? orderByQuery(order, sort) : {}
+
         const queryBuilder = async () => {
             const query = {
-                [ROLE.RESEARCHER]: prisma.protocol.findMany({
-                    skip,
-                    take,
-                    where: {
-                        AND: [{ researcherId: id }, {OR:[]}],
-                        NOT: { state: 'DELETED' },
-                    },
-                    select
-                }),
-                [ROLE.METHODOLOGIST]: prisma.protocol.findMany({
-                    skip,
-                    take,
-                    where: {
-                        OR: [
-                            {
-                                researcherId: id,
-                            },
-                            {
-                                reviews: {
-                                    some: { reviewerId: id },
-                                },
-                            },
-                        ],
-                        NOT: { state: 'DELETED' },
-                    },
-                }),
-                [ROLE.SCIENTIST]: prisma.protocol.findMany({
-                    skip,
-                    take,
-                    where: {
-                        reviews: {
-                            some: { reviewerId: id },
+                [ROLE.RESEARCHER]: prisma.$transaction([
+                    prisma.protocol.count({}),
+                    prisma.protocol.findMany({
+                        skip,
+                        take,
+                        select,
+                        orderBy,
+                        where: {
+                            AND: [{ researcherId: id }, { OR: [] }],
+                            NOT: { state: 'DELETED' },
                         },
-                        NOT: { state: 'DELETED' },
-                    },
-                }),
-                [ROLE.ADMIN]: prisma.protocol.findMany({
-                    skip,
-                    take,
-                    select: { convocatory: {} },
-                }),
+                    }),
+                ]),
+                [ROLE.METHODOLOGIST]: prisma.$transaction([
+                    prisma.protocol.count({}),
+                    prisma.protocol.findMany({
+                        skip,
+                        take,
+                        select,
+                        orderBy,
+                        where: {
+                            OR: [
+                                {
+                                    researcherId: id,
+                                },
+                                {
+                                    reviews: {
+                                        some: { reviewerId: id },
+                                    },
+                                },
+                            ],
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
+                ]),
+                [ROLE.SCIENTIST]: prisma.$transaction([
+                    prisma.protocol.count({}),
+                    prisma.protocol.findMany({
+                        skip,
+                        take,
+                        select,
+                        orderBy,
+                        where: {
+                            reviews: {
+                                some: { reviewerId: id },
+                            },
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
+                ]),
+                [ROLE.ADMIN]: prisma.$transaction([
+                    prisma.protocol.count({}),
+                    prisma.protocol.findMany({
+                        skip,
+                        take,
+                        select,
+                        orderBy,
+                    }),
+                ]),
             }
 
             if (role === ROLE.SECRETARY) {
                 const academicUnits = await getAcademicUnitsByUserId(id)
-                return prisma.protocol.findMany({
-                    skip,
-                    take,
-                    where: {
-                        OR: [
-                            {
-                                researcherId: id,
-                            },
-                            {
-                                sections: {
-                                    is: {
-                                        identification: {
-                                            is: {
-                                                sponsor: {
-                                                    hasSome: academicUnits?.map(
-                                                        (e) => e.name
-                                                    ),
+                return prisma.$transaction([
+                    prisma.protocol.count({}),
+                    prisma.protocol.findMany({
+                        skip,
+                        take,
+                        select,
+                        orderBy,
+                        where: {
+                            OR: [
+                                {
+                                    researcherId: id,
+                                },
+                                {
+                                    sections: {
+                                        is: {
+                                            identification: {
+                                                is: {
+                                                    sponsor: {
+                                                        hasSome:
+                                                            academicUnits?.map(
+                                                                (e) => e.name
+                                                            ),
+                                                    },
                                                 },
                                             },
                                         },
                                     },
                                 },
-                            },
-                        ],
-                        NOT: { state: 'DELETED' },
-                    },
-                })
+                            ],
+                            NOT: { state: 'DELETED' },
+                        },
+                    }),
+                ])
             }
             return query[role]
         }
 
         try {
             return await queryBuilder()
-        } catch (e) {
-            return null
+        } catch (error) {
+            return []
         }
     }
 )
@@ -196,6 +257,6 @@ export {
     createProtocol,
     getAllProtocols,
     updateProtocolStateById,
-    getProtocolByRol,
+    getProtocolsByRol,
     getResearcherEmailByProtocolId,
 }

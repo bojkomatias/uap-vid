@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
 import clsx from 'clsx'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useUpdateQuery } from '@utils/updateQuery'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 export default function RecordsDropdown({ options }: { options: number[] }) {
     const update = useUpdateQuery()
