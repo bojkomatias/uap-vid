@@ -8,7 +8,7 @@ export default {
     [Role.ADMIN]: 'Administrador',
 } as const
 
-/** Made this helper function to help me retrieve the value of one of these items it the map given a key */
+/** Made this helper function to help me retrieve the value of one of these items given a key */
 export function getValueByKey<T extends Record<string, string | symbol>>(
     obj: T,
     key: keyof T | string

@@ -7,7 +7,13 @@ import { getValueByKey } from '@utils/dictionaries/RolesDictionary'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { scroll } from '@utils/helpers'
 
-export default function RoleFilterOptions({ options }: { options: string[] }) {
+export default function EnumFilterOptions({
+    options,
+    dictionary,
+}: {
+    options: string[]
+    dictionary: any
+}) {
     const searchParams = useSearchParams()
     const update = useUpdateQuery()
     return (
@@ -25,7 +31,7 @@ export default function RoleFilterOptions({ options }: { options: string[] }) {
                             return (
                                 <Button
                                     className={
-                                        getValueByKey(RolesDictionary, o) ==
+                                        getValueByKey(dictionary, o) ==
                                         getValueByKey(
                                             RolesDictionary,
                                             searchParams?.get(
@@ -41,7 +47,7 @@ export default function RoleFilterOptions({ options }: { options: string[] }) {
                                     intent="special"
                                     key={i}
                                 >
-                                    {getValueByKey(RolesDictionary, o)}
+                                    {getValueByKey(dictionary, o)}
                                 </Button>
                             )
                         })}

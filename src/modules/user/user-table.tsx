@@ -6,6 +6,7 @@ import TanStackTable from '@elements/tan-stack-table'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
+import { Role } from '@prisma/client'
 
 type UsersWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
@@ -98,7 +99,7 @@ export default function UserTable({
         ],
         [loggedInUser.id]
     )
-    // Explicitly announce initial state of hidden columns.
+    /** Explicitly announce initial state of hidden columns. */
     const initialVisible = { id: false, protocols: false, Review: false }
 
     return (

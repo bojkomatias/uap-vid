@@ -10,7 +10,8 @@ import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import RoleFilterOptions from './role-filter-options'
+import EnumFilterOptions from './enum-filter-options'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 export default function TanStackTable({
     data,
@@ -47,7 +48,10 @@ export default function TanStackTable({
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
             {searchOptions && searchOptionsTitle && (
-                <RoleFilterOptions options={searchOptions} />
+                <EnumFilterOptions
+                    dictionary={RolesDictionary}
+                    options={searchOptions}
+                />
             )}
 
             {data.length >= 1 ? (
