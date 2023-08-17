@@ -1,5 +1,5 @@
 'use client'
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
@@ -7,50 +7,52 @@ import { useUpdateQuery } from '@utils/updateQuery'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
     totalRecords,
-    listLength = 5,
+    numberOfDisplayedPages = 4,
 }: {
     totalRecords: number
-    listLength?: number
+    numberOfDisplayedPages?: number
 }) {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const shownRecords = Number(searchParams?.get('records')) || 4
+    const shownRecords = Number(searchParams?.get('records')) || 5
 
     const currentPage = Number(searchParams?.get('page')) ?? 1
 
-    const pageNumbers = useCallback(() => {
-        const lLength = listLength
-        const originalArray: number[] = []
+    const { allPages, displayedPages } = useMemo(() => {
+        const allPages: number[] = []
         for (let i = 1; i <= Math.ceil(totalRecords / shownRecords); i++) {
-            originalArray.push(i)
+            allPages.push(i)
         }
 
         const floor =
-            currentPage - Math.floor(lLength / 2) <= 0
+            currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
                 ? 0
-                : currentPage + Math.ceil(lLength / 2) >= originalArray.length
-                ? originalArray.length - lLength
-                : currentPage - Math.floor(lLength / 2)
+                : currentPage + Math.ceil(numberOfDisplayedPages / 2) >=
+                  allPages.length
+                ? allPages.length - numberOfDisplayedPages
+                : currentPage - Math.floor(numberOfDisplayedPages / 2)
         const ceil =
-            currentPage + Math.ceil(lLength / 2) >= originalArray.length
-                ? originalArray.length
-                : currentPage - Math.floor(lLength / 2) <= 0
-                ? 5
-                : currentPage + Math.ceil(lLength / 2)
+            currentPage + Math.ceil(numberOfDisplayedPages / 2) >=
+            allPages.length
+                ? allPages.length
+                : currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
+                ? numberOfDisplayedPages
+                : currentPage + Math.ceil(numberOfDisplayedPages / 2)
 
-        const pages =
-            originalArray.length > lLength
-                ? originalArray.slice(floor, ceil)
-                : originalArray
+        const displayedPages =
+            allPages.length > numberOfDisplayedPages
+                ? allPages.slice(floor, ceil)
+                : allPages
 
-        return { originalArray, pages }
-    }, [totalRecords, shownRecords, listLength, currentPage])
+        return { allPages, displayedPages }
+    }, [totalRecords, shownRecords, numberOfDisplayedPages, currentPage])
 
     return (
         <div className="flex flex-col items-center gap-2">
             {}
             <div className="mx-auto mt-12 flex w-fit gap-2">
-                {listLength >= Math.ceil(totalRecords / shownRecords) ? null : (
+                {numberOfDisplayedPages >=
+                Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
                         <Button
                             title="Primer página"
@@ -79,7 +81,7 @@ export default function Pagination({
                     shownRecords +
                     1 <
                     totalRecords
-                    ? pageNumbers().pages.map((page: number) => (
+                    ? displayedPages.map((page: number) => (
                           <Button
                               key={page}
                               intent="tertiary"
@@ -94,7 +96,8 @@ export default function Pagination({
                           </Button>
                       ))
                     : null}
-                {listLength >= Math.ceil(totalRecords / shownRecords) ? null : (
+                {numberOfDisplayedPages >=
+                Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
                         <Button
                             title="Siguiente página"
@@ -102,13 +105,9 @@ export default function Pagination({
                             onClick={() =>
                                 update({
                                     page:
-                                        currentPage <
-                                        pageNumbers().originalArray.length
+                                        currentPage < allPages.length
                                             ? currentPage + 1
-                                            : pageNumbers().originalArray[
-                                                  pageNumbers().originalArray
-                                                      .length - 1
-                                              ],
+                                            : allPages[allPages.length - 1],
                                 })
                             }
                         >
@@ -120,9 +119,7 @@ export default function Pagination({
                             intent="special"
                             onClick={() =>
                                 update({
-                                    page: pageNumbers().originalArray[
-                                        pageNumbers().originalArray.length - 1
-                                    ],
+                                    page: allPages[allPages.length - 1],
                                 })
                             }
                         >
@@ -130,7 +127,11 @@ export default function Pagination({
                         </Button>
                     </>
                 )}
-                <RecordsDropdown options={[5, 10, 15, 20, totalRecords]} />
+                <RecordsDropdown
+                    options={[5, 10, 15, 20, totalRecords]}
+                    shownRecords={shownRecords}
+                    currentPage={currentPage}
+                />
             </div>
             <span className="flex  gap-1 text-xs text-black">
                 {shownRecords * Number(searchParams?.get('page') || 1) -

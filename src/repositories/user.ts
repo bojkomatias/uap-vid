@@ -35,6 +35,7 @@ const getUsers = cache(
         search,
         order,
         sort,
+        ...rest
     }: {
         [key: string]: string
     }) => {
