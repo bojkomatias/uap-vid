@@ -10,6 +10,7 @@ import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
+import { scroll } from '@utils/helpers'
 
 export default function TanStackTable({
     data,
@@ -40,7 +41,13 @@ export default function TanStackTable({
                 <SearchBar placeholderMessage="Buscar usuario por nombre, rol o email" />
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
-            <div className="w-full overflow-x-auto">
+            <div
+                onMouseOver={() => {
+                    scroll('scrollableTable')
+                }}
+                id="scrollableTable"
+                className="w-full overflow-x-auto scroll-smooth"
+            >
                 <table className="-mx-4 mt-8 divide-y divide-gray-300 sm:-mx-0">
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
