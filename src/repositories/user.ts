@@ -35,7 +35,8 @@ const getUsers = cache(
         search,
         order,
         sort,
-        ...rest
+        filter,
+        values,
     }: {
         [key: string]: string
     }) => {
@@ -44,10 +45,28 @@ const getUsers = cache(
             return await prisma.$transaction([
                 prisma.user.count({
                     where: {
-                        name: {
-                            contains: search,
-                            mode: 'insensitive',
-                        },
+                        AND: [
+                            search
+                                ? {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: search,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              email: {
+                                                  contains: search,
+                                              },
+                                          },
+                                      ],
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
                     },
                 }),
                 prisma.user.findMany({
@@ -66,26 +85,30 @@ const getUsers = cache(
                         _count: true,
                     },
                     // Add all the globally searchable fields
-                    where: search
-                        ? {
-                              OR: [
-                                  {
-                                      name: {
-                                          contains: search,
-                                          mode: 'insensitive',
-                                      },
-                                  },
-                                  {
-                                      email: {
-                                          contains: search,
-                                      },
-                                  },
-                                  {
-                                      role: enumGetter(search),
-                                  },
-                              ],
-                          }
-                        : {},
+                    where: {
+                        AND: [
+                            search
+                                ? {
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: search,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                          {
+                                              email: {
+                                                  contains: search,
+                                              },
+                                          },
+                                      ],
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
+                    },
                     // Sort by, distinguishing _count fields from plain fields
                     orderBy:
                         order && sort

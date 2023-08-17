@@ -46,6 +46,7 @@
         "react-dom": "^18.2.0",
         "sharp": "^0.32.4",
         "tabler-icons-react": "^1.56.0",
+        "tailwind-merge": "^1.14.0",
         "zod": "^3.21.4"
     },
     "devDependencies": {

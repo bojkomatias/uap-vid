@@ -6,7 +6,7 @@ import TanStackTable from '@elements/tan-stack-table'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { Role } from '@prisma/client'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 type UsersWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
@@ -109,14 +109,10 @@ export default function UserTable({
                 columns={columns}
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
-                searchOptions={[
-                    'RESEARCHER',
-                    'SECRETARY',
-                    'METHODOLOGIST',
-                    'SCIENTIST',
-                    'ADMIN',
-                ]}
-                searchOptionsTitle="rol del usuario"
+                filterableByKey={{
+                    filter: 'role',
+                    values: Object.entries(RolesDictionary),
+                }}
             />
         </>
     )

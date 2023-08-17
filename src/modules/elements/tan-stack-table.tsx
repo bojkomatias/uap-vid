@@ -5,28 +5,25 @@ import {
     getCoreRowModel,
     useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
+import { cache, useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
 export default function TanStackTable({
     data,
     columns,
     totalRecords,
     initialVisibility,
-    searchOptions,
-    searchOptionsTitle,
+    filterableByKey,
 }: {
     data: any[]
     columns: ColumnDef<any, any>[]
     totalRecords: number
     initialVisibility: VisibilityState
-    searchOptions?: string[]
-    searchOptionsTitle?: string
+    filterableByKey?: { filter: string; values: string[][] }
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -47,10 +44,10 @@ export default function TanStackTable({
 
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
-            {searchOptions && searchOptionsTitle && (
+            {filterableByKey && (
                 <EnumFilterOptions
-                    dictionary={RolesDictionary}
-                    options={searchOptions}
+                    filter={filterableByKey.filter}
+                    values={filterableByKey.values}
                 />
             )}
 

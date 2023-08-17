@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
 import clsx from 'clsx'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/updateQuery'
 
 export default function RecordsDropdown({

@@ -7,6 +7,8 @@ type UpdateEvent = {
     search?: string
     order?: string
     sort?: 'asc' | 'desc' | null
+    filter?: string
+    values?: string
 }
 /**
  * Priority in query updates:
@@ -28,6 +30,10 @@ export const useUpdateQuery = () => {
         const order =
             e.order !== undefined ? e.order : searchParams?.get('order')
         const sort = e.sort !== undefined ? e.sort : searchParams?.get('sort')
+        const filter =
+            e.filter !== undefined ? e.filter : searchParams?.get('filter')
+        const values =
+            e.values !== undefined ? e.values : searchParams?.get('values')
 
         const newUrl = new URL(path as string, process.env.NEXT_PUBLIC_URL)
         if (page) newUrl.searchParams.set('page', page.toString())
@@ -36,6 +42,10 @@ export const useUpdateQuery = () => {
         if (order && sort) {
             newUrl.searchParams.set('order', order)
             newUrl.searchParams.set('sort', sort)
+        }
+        if (filter && values) {
+            newUrl.searchParams.set('filter', filter)
+            newUrl.searchParams.set('values', values)
         }
 
         router.push(newUrl.href, { scroll: false })
