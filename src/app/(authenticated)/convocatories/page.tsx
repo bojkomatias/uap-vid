@@ -1,5 +1,4 @@
 import { ConvocatoryTable } from '@convocatory/convocatory-table'
-import { Button, buttonStyle } from '@elements/button'
 import { PageHeading } from '@layout/page-heading'
 import { canAccess } from '@utils/scopes'
 import { ACCESS } from '@utils/zod'
@@ -8,6 +7,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { CalendarPlus } from 'tabler-icons-react'
+import { buttonStyle } from '@elements/button/styles'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)

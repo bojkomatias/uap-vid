@@ -1,5 +1,5 @@
 'use client'
-import { Button, buttonStyle } from '@elements/button'
+import { buttonStyle } from '@elements/button/styles'
 import type { Review, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import type { StateType } from '@utils/zod'

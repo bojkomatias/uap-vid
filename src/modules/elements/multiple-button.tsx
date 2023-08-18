@@ -4,7 +4,9 @@ import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import Link from 'next/link'
-import { Button, buttonStyle } from './button'
+import { Button } from './button'
+import { buttonStyle } from './button/styles'
+
 
 export default function MultipleButton({
     defaultValue,

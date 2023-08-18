@@ -22,7 +22,7 @@ export default async function Navigation({
     return (
         <>
             {hasNavigation ? (
-                <div className="absolute inset-0">
+                <div className="absolute inset-0 z-50">
                     <MobileNavigation user={session.user} />
                     <DesktopNavigation user={session.user} />
                 </div>
@@ -33,7 +33,7 @@ export default async function Navigation({
             <div
                 className={cx(
                     'flex flex-1 flex-col',
-                    hasNavigation && 'lg:pl-64'
+                    hasNavigation && 'lg:pl-16'
                 )}
             >
                 <main className="relative mx-auto w-full max-w-[100rem] flex-1 px-4 pb-20 sm:px-6 2xl:px-10">

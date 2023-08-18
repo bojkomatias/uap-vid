@@ -1,4 +1,6 @@
-import { Button, buttonStyle } from '@elements/button'
+
+import { Button } from '@elements/button'
+import { buttonStyle } from '@elements/button/styles'
 import MultipleButton from '@elements/multiple-button'
 import { Role } from '@prisma/client'
 import {
