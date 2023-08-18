@@ -334,7 +334,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     <div className="flex gap-2">
                         <Button
                             type="submit"
-                            intent="primary"
+                            intent="secondary"
                             loading={isPending}
                         >
                             Guardar

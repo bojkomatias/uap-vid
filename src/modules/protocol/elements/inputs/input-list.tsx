@@ -178,11 +178,11 @@ function PreprocessFieldsMap({
                             .focus()
                     }, 10)
                 }}
-                intent="secondary"
+                intent="outline"
                 className="mx-auto w-full max-w-xs"
             >
                 <p> Añadir otra fila </p>
-                <Plus className="h-5" />
+                <Plus className="h-5 text-gray-500" />
             </Button>
         </>
     )
@@ -262,11 +262,11 @@ function FieldsMap({
                             .focus()
                     }, 10)
                 }}
-                intent="secondary"
+                intent="outline"
                 className="mx-auto w-full max-w-xs"
             >
                 <p> Añadir otra fila </p>
-                <Plus className="h-5" />
+                <Plus className="h-5 text-gray-500" />
             </Button>
         </>
     )

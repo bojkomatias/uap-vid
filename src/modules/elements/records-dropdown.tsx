@@ -40,7 +40,7 @@ export default function RecordsDropdown({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1 ring-black/5 focus:outline-none"
                     static
                 >
                     <div className="py-1">

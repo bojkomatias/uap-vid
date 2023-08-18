@@ -11,6 +11,8 @@ import { useMemo } from 'react'
 import { Button } from '@elements/button'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
+import { buttonStyle } from '@elements/button/styles'
+import { cx } from '@utils/cx'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
@@ -92,7 +94,7 @@ export default function ProtocolTable({
                 accessorKey: 'sections.identification.title',
                 header: 'Titulo',
                 cell: ({ row }) => (
-                    <div className="min-w-[24rem] whitespace-normal font-semibold">
+                    <div className="min-w-[24rem] whitespace-normal font-medium">
                         {row.original.sections.identification.title}
                     </div>
                 ),
@@ -233,19 +235,25 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <div className="mx-1 flex gap-3 font-semibold">
+                    <div className="flex justify-between gap-2">
                         <Link
                             href={`/protocols/${row.original.id}`}
                             passHref
-                            className="transition-all duration-150 hover:text-black/60"
+                            className={cx(
+                                buttonStyle('secondary'),
+                                'px-2.5 py-1 text-xs'
+                            )}
                         >
                             Ver
                         </Link>
-                        {user.role === 'ADMIN' && (
+                        {user.role === 'ADMIN' ? (
                             <DeleteButton
                                 protocolId={row.original.id}
                                 protocolState={row.original.state}
+                                className={'px-2.5 py-1 text-xs'}
                             />
+                        ) : (
+                            <></>
                         )}
                     </div>
                 ),

@@ -44,7 +44,7 @@ export const RoleSelector = ({
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="max-h-50 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="max-h-50 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                                 {Object.entries(RolesDictionary).map(
                                     ([key, role]) => (
                                         <Listbox.Option

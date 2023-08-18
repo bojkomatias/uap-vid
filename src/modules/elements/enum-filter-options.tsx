@@ -46,7 +46,7 @@ export default function EnumFilterOptions({
                                         className={cx(
                                             'cursor-pointer hover:bg-gray-100',
                                             currentValues?.includes(value) &&
-                                                'bg-gray-200 ring-gray-500/20'
+                                                'bg-gray-200 ring-black/5'
                                         )}
                                     >
                                         {name}

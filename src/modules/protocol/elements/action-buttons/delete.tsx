@@ -10,9 +10,11 @@ let timeout: NodeJS.Timeout
 export function DeleteButton({
     protocolId,
     protocolState,
+    className,
 }: {
     protocolId: string
     protocolState: State
+    className?: string
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -39,13 +41,14 @@ export function DeleteButton({
 
     return protocolState !== 'DELETED' ? (
         deleting ? (
-            <button
+            <Button
                 onClick={() => {
                     clearTimeout(timeout)
                     setDeleting(false)
                 }}
                 disabled={isPending}
-                className="-mr-2 flex items-center gap-1 text-error-600/60 transition duration-150 hover:text-error-600"
+                className={className}
+                intent="destructive"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +75,7 @@ export function DeleteButton({
                     </path>
                 </svg>
                 Cancelar
-            </button>
+            </Button>
         ) : (
             <Button
                 onClick={() => {
@@ -83,6 +86,7 @@ export function DeleteButton({
                 }}
                 disabled={isPending}
                 intent="destructive"
+                className={className}
             >
                 Eliminar
             </Button>

@@ -14,10 +14,6 @@ export const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const [microsoftImage, setMicImage] = useState(
-        '/whitebackgroundmicrosoft.png'
-    )
-
     return (
         <div className="absolute left-1/2 top-[8%] mx-auto flex max-w-xl  -translate-x-1/2 flex-col items-center ">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
@@ -70,18 +66,12 @@ export const SignIn = () => {
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
-                    onMouseEnter={() => {
-                        setMicImage('/blackbackgroundmicrosoft.png')
-                    }}
-                    onMouseLeave={() => {
-                        setMicImage('/whitebackgroundmicrosoft.png')
-                    }}
                 >
                     <>
                         <span>Iniciar sesión con</span>
                         <Image
                             className="-my-6"
-                            src={microsoftImage}
+                            src={'/blackbackgroundmicrosoft.png'}
                             alt="Microsoft Logo"
                             width={100}
                             height={50}
@@ -137,15 +127,6 @@ export const SignIn = () => {
                     </Transition>
                 </Disclosure>
             </form>
-            <Button intent="primary" disabled>
-                Hola
-            </Button>
-            <Button intent="secondary" disabled>
-                Hola
-            </Button>
-            <Button intent="primary" loading>
-                Hola
-            </Button>
         </div>
     )
 }

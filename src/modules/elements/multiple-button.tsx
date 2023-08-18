@@ -31,8 +31,8 @@ export default function MultipleButton({
                             )}
                             passHref
                         >
-                            <FilePlus className="mr-2 h-5" /> Crear en{' '}
-                            {selected.title}
+                            <FilePlus className="mr-2 h-5 text-gray-500" />{' '}
+                            Crear en {selected.title}
                         </Link>
                         <Listbox.Button
                             as={Button}
@@ -56,7 +56,7 @@ export default function MultipleButton({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Listbox.Options className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Listbox.Options className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                             {options.map((option) => (
                                 <Listbox.Option
                                     key={option.title}

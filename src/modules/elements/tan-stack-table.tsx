@@ -76,7 +76,7 @@ export default function TanStackTable({
                                     {row.getVisibleCells().map((cell) => (
                                         <td
                                             key={cell.id}
-                                            className="whitespace-nowrap py-3.5 pr-4 text-sm text-gray-900 last:pr-0 last:text-right sm:w-auto"
+                                            className="whitespace-nowrap py-3.5 pr-4 text-sm text-gray-900 last:flex last:justify-end last:pr-2 last:text-right sm:w-auto"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
