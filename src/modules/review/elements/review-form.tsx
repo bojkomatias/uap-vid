@@ -283,7 +283,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                     <div className="ml-auto mr-2 mt-2 flex w-fit gap-2">
                         <Button
                             type="button"
-                            intent="tertiary"
+                            intent="outline"
                             loading={isPending}
                             className={
                                 review.verdict !== ReviewVerdict.NOT_REVIEWED

@@ -113,6 +113,7 @@ export default function UserForm() {
                 <RoleSelector user={newUser} />
             </div>
             <Button
+                intent="secondary"
                 type="submit"
                 className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
             >

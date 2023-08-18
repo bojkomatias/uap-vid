@@ -714,7 +714,8 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
         document: PDFDocument({ protocol }),
     })
 
-    if (instance.loading) return <Button>Cargando PDF</Button>
+    if (instance.loading)
+        return <Button intent="secondary">Cargando PDF</Button>
     else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
 
     return (
@@ -722,7 +723,7 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
             fileName={`proyecto-${protocol.id}`}
             document={PDFDocument({ protocol })}
         >
-            <Button>
+            <Button intent="secondary">
                 <Download className="mr-2 h-5" />
                 <span className="text-xs">Descargar PDF</span>
             </Button>

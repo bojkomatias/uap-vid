@@ -26,17 +26,14 @@ export default function MultipleButton({
                             className="hover:z-10"
                             passHref
                         >
-                            <Button
-                                intent={'tertiary'}
-                                className="rounded-r-none"
-                            >
+                            <Button intent="outline" className="rounded-r-none">
                                 <FilePlus className="mr-2 h-5" /> Crear en{' '}
                                 {selected.title}
                             </Button>
                         </Link>
                         <Listbox.Button
                             as={Button}
-                            intent={'tertiary'}
+                            intent="outline"
                             className="border-l-none ml-px rounded-l-none"
                             // className="inline-flex items-center rounded-l-none rounded-r-md bg-primary p-2 ring-primary ring-offset-2 ring-offset-white hover:bg-primary hover:ring-2 focus:outline-none focus:ring-2"
                         >

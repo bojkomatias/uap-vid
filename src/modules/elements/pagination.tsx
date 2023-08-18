@@ -56,7 +56,7 @@ export default function Pagination({
                     <>
                         <Button
                             title="Primer página"
-                            intent="special"
+                            intent="outline"
                             onClick={() => update({ page: 1 })}
                         >
                             {'<<'}
@@ -64,7 +64,7 @@ export default function Pagination({
 
                         <Button
                             title="Página anterior"
-                            intent="special"
+                            intent="outline"
                             onClick={() =>
                                 update({
                                     page: currentPage > 1 ? currentPage - 1 : 1,
@@ -84,10 +84,10 @@ export default function Pagination({
                     ? displayedPages.map((page: number) => (
                           <Button
                               key={page}
-                              intent="tertiary"
+                              intent="outline"
                               className={
                                   Number(currentPage) === page
-                                      ? 'fade-in bg-primary text-white'
+                                      ? 'fade-in bg-primary text-white hover:bg-primary hover:text-white'
                                       : 'fade-in'
                               }
                               onClick={() => update({ page: page })}
@@ -101,7 +101,7 @@ export default function Pagination({
                     <>
                         <Button
                             title="Siguiente página"
-                            intent="special"
+                            intent="outline"
                             onClick={() =>
                                 update({
                                     page:
@@ -116,7 +116,7 @@ export default function Pagination({
 
                         <Button
                             title="Última página"
-                            intent="special"
+                            intent="outline"
                             onClick={() =>
                                 update({
                                     page: allPages[allPages.length - 1],

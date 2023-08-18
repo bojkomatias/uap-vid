@@ -157,6 +157,7 @@ export function ConvocatoryForm({
             </div>
 
             <Button
+                intent="secondary"
                 type="submit"
                 loading={isPending}
                 className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"

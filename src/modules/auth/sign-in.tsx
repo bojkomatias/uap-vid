@@ -33,7 +33,6 @@ export const SignIn = () => {
                     <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>
-
             <form
                 className="flex w-full flex-col items-stretch gap-3 px-24"
                 onSubmit={async (e) => {
@@ -63,6 +62,7 @@ export const SignIn = () => {
                     365.
                 </div>
                 <Button
+                    intent="primary"
                     type="button"
                     loading={loadingMicrosoft}
                     onClick={(e) => {
@@ -126,13 +126,26 @@ export const SignIn = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
 
-                            <Button type="submit" loading={loading}>
+                            <Button
+                                intent="primary"
+                                type="submit"
+                                loading={loading}
+                            >
                                 Iniciar sesión
                             </Button>
-                        </Disclosure.Panel>{' '}
+                        </Disclosure.Panel>
                     </Transition>
                 </Disclosure>
             </form>
+            <Button intent="primary" disabled>
+                Hola
+            </Button>
+            <Button intent="secondary" disabled>
+                Hola
+            </Button>
+            <Button intent="primary" loading>
+                Hola
+            </Button>
         </div>
     )
 }
