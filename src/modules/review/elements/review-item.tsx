@@ -1,7 +1,6 @@
 'use client'
 import type { Review, User } from '@prisma/client'
 import { ReviewVerdict, Role } from '@prisma/client'
-import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import clsx from 'clsx'
 import { useCallback, useState, useTransition } from 'react'
@@ -9,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight } from 'tabler-icons-react'
+import ReviewVerdictBadge from './review-verdict-badge'
 
 export default function ReviewItem({
     review,
@@ -48,37 +48,7 @@ export default function ReviewItem({
                             <span className="text-sm font-light text-gray-600">
                                 Veredicto:
                             </span>
-                            <span
-                                className={clsx(
-                                    'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
-                                    {
-                                        'ring-1 ring-warning-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED_WITH_CHANGES,
-                                        'ring-1 ring-success-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED,
-                                        'ring-1 ring-error-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.REJECTED,
-                                    }
-                                )}
-                            >
-                                {ReviewVerdictsDictionary[review.verdict]}
-                                <div
-                                    className={clsx('h-2 w-2 rounded', {
-                                        'bg-warning-500 ':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED_WITH_CHANGES,
-                                        'bg-success-600':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED,
-                                        'bg-error-600':
-                                            review.verdict ===
-                                            ReviewVerdict.REJECTED,
-                                    })}
-                                />
-                            </span>
+                            <ReviewVerdictBadge verdict={review.verdict} />
                         </div>
 
                         {review.verdict ===
