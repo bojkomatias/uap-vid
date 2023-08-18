@@ -7,7 +7,6 @@ import Link from 'next/link'
 import { Button } from './button'
 import { buttonStyle } from './button/styles'
 
-
 export default function MultipleButton({
     defaultValue,
     options,
@@ -27,7 +26,7 @@ export default function MultipleButton({
                             href={selected.href}
                             className={cx(
                                 'hover:z-10 focus-visible:z-10',
-                                buttonStyle('outline'),
+                                buttonStyle('secondary'),
                                 'rounded-r-none'
                             )}
                             passHref
@@ -37,7 +36,7 @@ export default function MultipleButton({
                         </Link>
                         <Listbox.Button
                             as={Button}
-                            intent="outline"
+                            intent="secondary"
                             className="border-l-none ml-px rounded-l-none"
                         >
                             <span className="sr-only">

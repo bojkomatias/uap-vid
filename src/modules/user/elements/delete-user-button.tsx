@@ -1,4 +1,5 @@
 'use client'
+import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
@@ -68,7 +69,7 @@ export function DeleteUserButton({ userId }: { userId: string }) {
             Cancelar
         </button>
     ) : (
-        <button
+        <Button
             onClick={() => {
                 setDeleting(true)
                 timeout = setTimeout(() => {
@@ -76,9 +77,9 @@ export function DeleteUserButton({ userId }: { userId: string }) {
                 }, 3000)
             }}
             disabled={isPending}
-            className="transition duration-150 hover:text-black/70"
+            intent="destructive"
         >
             Eliminar
-        </button>
+        </Button>
     )
 }

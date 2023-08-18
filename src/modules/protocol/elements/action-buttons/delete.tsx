@@ -1,4 +1,5 @@
 'use client'
+import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
 import type { State } from '@prisma/client'
 import { useRouter } from 'next/navigation'
@@ -73,7 +74,7 @@ export function DeleteButton({
                 Cancelar
             </button>
         ) : (
-            <button
+            <Button
                 onClick={() => {
                     setDeleting(true)
                     timeout = setTimeout(() => {
@@ -81,10 +82,10 @@ export function DeleteButton({
                     }, 3000)
                 }}
                 disabled={isPending}
-                className="transition duration-150 hover:text-black/60"
+                intent="destructive"
             >
                 Eliminar
-            </button>
+            </Button>
         )
     ) : null
 }

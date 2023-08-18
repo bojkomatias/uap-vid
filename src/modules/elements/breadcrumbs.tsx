@@ -42,10 +42,7 @@ export const Breadcrumbs = () => {
     )
 
     return (
-        <nav
-            className="absolute left-4 top-8 flex sm:left-6 2xl:left-10"
-            aria-label="Breadcrumb"
-        >
+        <nav className="absolute left-24 top-8 flex" aria-label="Breadcrumb">
             <ol role="list" className="flex rounded-md bg-white">
                 {pathname !== '/protocols' ? (
                     <li className="flex items-center">
