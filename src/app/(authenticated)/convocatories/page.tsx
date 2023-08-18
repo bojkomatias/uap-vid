@@ -1,5 +1,5 @@
 import { ConvocatoryTable } from '@convocatory/convocatory-table'
-import { Button } from '@elements/button'
+import { Button, buttonStyle } from '@elements/button'
 import { PageHeading } from '@layout/page-heading'
 import { canAccess } from '@utils/scopes'
 import { ACCESS } from '@utils/zod'
@@ -19,11 +19,13 @@ export default async function Page() {
         <>
             <PageHeading title="Lista de convocatorias" />
             <div className="flex flex-row-reverse">
-                <Link href={'/convocatories/new'} passHref>
-                    <Button intent="secondary">
-                        <CalendarPlus className="h-5 w-5" />
-                        <span className="ml-3"> Nueva convocatoria</span>
-                    </Button>
+                <Link
+                    href={'/convocatories/new'}
+                    className={buttonStyle('secondary')}
+                    passHref
+                >
+                    <CalendarPlus className="h-5 w-5" />
+                    <span className="ml-3"> Nueva convocatoria</span>
                 </Link>
             </div>
             <ConvocatoryTable />

@@ -1,4 +1,4 @@
-import { Button } from '@elements/button'
+import { Button, buttonStyle } from '@elements/button'
 import MultipleButton from '@elements/multiple-button'
 import { Role } from '@prisma/client'
 import {
@@ -47,11 +47,10 @@ export default async function CreateButton({ role }: { role: RoleType }) {
         return (
             <Link
                 href={`/protocols/new/0?convocatory=${currentConvocatory?.id}`}
+                className={buttonStyle('secondary')}
                 passHref
             >
-                <Button intent={'secondary'}>
-                    <FilePlus className="mr-2 h-5" /> Nueva Postulación
-                </Button>
+                <FilePlus className="mr-2 h-5" /> Nueva Postulación
             </Link>
         )
     }

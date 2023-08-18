@@ -10,6 +10,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { Button } from '@elements/button'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
+import { Badge } from '@elements/badge'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
@@ -130,12 +131,9 @@ export default function ProtocolTable({
                 accessorKey: 'state',
                 header: 'Estado',
                 cell: ({ row }) => (
-                    <Button
-                        intent="badge"
-                        className="pointer-events-none whitespace-nowrap text-xs"
-                    >
+                    <Badge>
                         {ProtocolStatesDictionary[row.original.state]}
-                    </Button>
+                    </Badge>
                 ),
             },
             {

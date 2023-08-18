@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '@elements/button'
+import { Button, buttonStyle } from '@elements/button'
 import { getUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
@@ -24,11 +24,13 @@ export default async function UserList({
         <>
             <PageHeading title="Lista de usuarios" />
             <div className="flex flex-row-reverse">
-                <Link href={'/users/new'} passHref>
-                    <Button intent="secondary">
-                        <UserPlus className="h-5" />
-                        <span className="ml-3"> Nuevo usuario</span>
-                    </Button>
+                <Link
+                    href={'/users/new'}
+                    className={buttonStyle('secondary')}
+                    passHref
+                >
+                    <UserPlus className="h-5" />
+                    <span className="ml-3"> Nuevo usuario</span>
                 </Link>
             </div>
 

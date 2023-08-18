@@ -4,7 +4,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import Link from 'next/link'
-import { Button } from './button'
+import { Button, buttonStyle } from './button'
 
 export default function MultipleButton({
     defaultValue,
@@ -23,19 +23,20 @@ export default function MultipleButton({
                     <div className="inline-flex rounded-md shadow-sm">
                         <Link
                             href={selected.href}
-                            className="hover:z-10"
+                            className={cx(
+                                'hover:z-10 focus-visible:z-10',
+                                buttonStyle('outline'),
+                                'rounded-r-none'
+                            )}
                             passHref
                         >
-                            <Button intent="outline" className="rounded-r-none">
-                                <FilePlus className="mr-2 h-5" /> Crear en{' '}
-                                {selected.title}
-                            </Button>
+                            <FilePlus className="mr-2 h-5" /> Crear en{' '}
+                            {selected.title}
                         </Link>
                         <Listbox.Button
                             as={Button}
                             intent="outline"
                             className="border-l-none ml-px rounded-l-none"
-                            // className="inline-flex items-center rounded-l-none rounded-r-md bg-primary p-2 ring-primary ring-offset-2 ring-offset-white hover:bg-primary hover:ring-2 focus:outline-none focus:ring-2"
                         >
                             <span className="sr-only">
                                 Change published status

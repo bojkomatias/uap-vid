@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/button'
+import { Button, buttonStyle } from '@elements/button'
 import type { Review, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import type { StateType } from '@utils/zod'
@@ -33,11 +33,13 @@ export default function EditButton(props: ActionButtonTypes) {
     )
         return <></>
     return (
-        <Link href={`/protocols/${props.id}/0`} passHref>
-            <Button intent={'secondary'}>
-                <Edit className="mr-2 h-5" />
-                Editar
-            </Button>
+        <Link
+            href={`/protocols/${props.id}/0`}
+            className={buttonStyle('secondary')}
+            passHref
+        >
+            <Edit className="mr-2 h-5" />
+            Editar
         </Link>
     )
 }

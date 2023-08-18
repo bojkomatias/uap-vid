@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import type { Column } from '@tanstack/react-table'
+import { Button } from './button'
 
 export default function ColumnVisibilityDropdown({
     columns,
@@ -12,10 +13,10 @@ export default function ColumnVisibilityDropdown({
     return (
         <Menu as="div" className="relative">
             <div>
-                <Menu.Button className="inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                <Menu.Button as={Button} intent="outline">
                     Columnas
                     <ChevronDown
-                        className="-mr-1 h-4 w-4 text-gray-400"
+                        className="-mr-1 ml-2 h-4 w-4 text-gray-500"
                         aria-hidden="true"
                     />
                 </Menu.Button>

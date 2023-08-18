@@ -2,6 +2,8 @@ import React from 'react'
 import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { Badge } from './badge'
+import { cx } from '@utils/cx'
 
 export default function EnumFilterOptions({
     filter,
@@ -37,15 +39,18 @@ export default function EnumFilterOptions({
                                                 : value,
                                         })
                                     }}
-                                    className={
-                                        currentValues?.includes(value)
-                                            ? 'bg-gray-300 hover:bg-gray-200'
-                                            : ''
-                                    }
-                                    intent="badge"
+                                    intent="unset"
                                     key={i}
                                 >
-                                    {name}
+                                    <Badge
+                                        className={cx(
+                                            'cursor-pointer hover:bg-gray-100',
+                                            currentValues?.includes(value) &&
+                                                'bg-gray-200 ring-gray-500/20'
+                                        )}
+                                    >
+                                        {name}
+                                    </Badge>
                                 </Button>
                             )
                         })}
