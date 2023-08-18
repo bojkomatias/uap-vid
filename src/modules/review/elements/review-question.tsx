@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react'
 import { useReviewContext } from '@utils/reviewContext'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { questions } from 'config/review-questions'
 import React from 'react'
 
@@ -40,11 +40,11 @@ export default function ReviewQuestion({
                         key={`yes-${id}`}
                         value={true}
                         className={({ checked }) =>
-                            clsx(
+                            cx(
+                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase ',
                                 checked
                                     ? 'bg-success-50 text-success-600 ring-[1.5px] ring-success-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100',
-                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase '
+                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100'
                             )
                         }
                     >
@@ -54,11 +54,11 @@ export default function ReviewQuestion({
                         key={`no-${id}`}
                         value={false}
                         className={({ checked }) =>
-                            clsx(
+                            cx(
+                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase',
                                 checked
                                     ? 'bg-error-50 text-error-600 ring-[1.5px] ring-error-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100',
-                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase'
+                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-gray-200 hover:bg-gray-100'
                             )
                         }
                     >

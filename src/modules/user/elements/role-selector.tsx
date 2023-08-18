@@ -2,7 +2,7 @@
 import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import type { Role, User } from '@prisma/client'
 
@@ -50,9 +50,9 @@ export const RoleSelector = ({
                                         <Listbox.Option
                                             key={key}
                                             className={({ active }) =>
-                                                clsx(
-                                                    active ? 'bg-gray-100' : '',
-                                                    'relative cursor-pointer select-none py-2 pl-3 pr-9 '
+                                                cx(
+                                                    'relative cursor-pointer select-none py-2 pl-3 pr-9',
+                                                    active ? 'bg-gray-100' : ''
                                                 )
                                             }
                                             value={key}
@@ -60,11 +60,11 @@ export const RoleSelector = ({
                                             {({ selected, active }) => (
                                                 <>
                                                     <span
-                                                        className={clsx(
+                                                        className={cx(
+                                                            'block truncate',
                                                             selected
                                                                 ? 'font-bold'
-                                                                : '',
-                                                            'block truncate'
+                                                                : ''
                                                         )}
                                                     >
                                                         {role}
@@ -72,11 +72,11 @@ export const RoleSelector = ({
 
                                                     {selected ? (
                                                         <span
-                                                            className={clsx(
+                                                            className={cx(
+                                                                'absolute inset-y-0 right-0 flex items-center pr-4',
                                                                 active
                                                                     ? 'text-primary'
-                                                                    : 'text-primary',
-                                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                    : ''
                                                             )}
                                                         >
                                                             <Check

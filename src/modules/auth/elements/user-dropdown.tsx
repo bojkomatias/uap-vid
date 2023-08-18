@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserCircle } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import Image from 'next/image'
 import { useState } from 'react'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
@@ -67,9 +67,9 @@ export const UserDropdown = () => {
                                 {({ active }) => (
                                     <Link
                                         href={'/profile'}
-                                        className={clsx(
-                                            active ? 'bg-gray-100 ' : '',
-                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700'
+                                        className={cx(
+                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
+                                            active && 'bg-gray-100'
                                         )}
                                     >
                                         Perfil
@@ -79,9 +79,9 @@ export const UserDropdown = () => {
                             <Menu.Item>
                                 {({ active }) => (
                                     <button
-                                        className={clsx(
-                                            active ? 'bg-gray-100 ' : '',
-                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700'
+                                        className={cx(
+                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
+                                            active && 'bg-gray-100'
                                         )}
                                         onClick={() => {
                                             setLoading(true)

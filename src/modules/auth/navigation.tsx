@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { redirect } from 'next/navigation'
 import { MobileNavigation } from './elements/mobile-navigation'
 import { DesktopNavigation } from './elements/desktop-sidebar'
@@ -31,9 +31,9 @@ export default async function Navigation({
                 <CurrentConvocatory convocatory={currentConvocatory} />
             ) : null}
             <div
-                className={clsx(
+                className={cx(
                     'flex flex-1 flex-col',
-                    hasNavigation ? 'lg:pl-64' : ''
+                    hasNavigation && 'lg:pl-64'
                 )}
             >
                 <main className="relative mx-auto w-full max-w-[100rem] flex-1 px-4 pb-20 sm:px-6 2xl:px-10">

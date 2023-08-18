@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { EmptyStateItem } from './empty-state-item'
 
 interface TextItemProps {
@@ -11,7 +11,7 @@ const TextItemView = ({ title, content, className }: TextItemProps) => {
         <div className="sm:col-span-2">
             <dt className="text-sm font-medium text-gray-500">{title}</dt>
             {content ? (
-                <dd className={clsx(className, 'prose max-w-none text-sm')}>
+                <dd className={cx(className, 'prose max-w-none text-sm')}>
                     <div dangerouslySetInnerHTML={{ __html: content }} />
                 </dd>
             ) : (

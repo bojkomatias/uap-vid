@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import type { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../../../utils/createContext'
 
@@ -14,9 +14,10 @@ const CurrencyInput = ({
     return (
         <div className="relative">
             <label
-                className={clsx('label required', {
-                    'after:text-error-500': form.getInputProps(path).error,
-                })}
+                className={cx(
+                    'label required',
+                    form.getInputProps(path).error && 'after:text-error-500'
+                )}
             >
                 {label}
             </label>
@@ -32,29 +33,24 @@ const CurrencyInput = ({
                     .value.toString()
                     .replace(/\D/g, '')
                     .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                onChange={(e) =>{
-                    if(isNaN(form.getInputProps(path).value)){
-                       return form.setFieldValue(path, 0)
+                onChange={(e) => {
+                    if (isNaN(form.getInputProps(path).value)) {
+                        return form.setFieldValue(path, 0)
                     }
                     form.setFieldValue(
                         path,
-                        parseInt(e.target.value.replace(/\./g, '').replace(/\^$/, "0"))
+                        parseInt(
+                            e.target.value
+                                .replace(/\./g, '')
+                                .replace(/\^$/, '0')
+                        )
                     )
-                    
-                   
-                }
-                }
-
-             
-                onBlur={()=>{
-                    if(isNaN(form.getInputProps(path).value)){
+                }}
+                onBlur={() => {
+                    if (isNaN(form.getInputProps(path).value)) {
                         form.setFieldValue(path, 0)
                     }
-                    
                 }}
-
-                
-
                 className="input pl-6"
                 placeholder={label}
                 autoComplete="off"

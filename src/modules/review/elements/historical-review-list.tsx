@@ -1,7 +1,7 @@
 'use client'
 
 import type { Review, Role, User } from '@prisma/client'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useState } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
 import ReviewItem from './review-item'
@@ -25,9 +25,10 @@ export function HistoricalReviewList({
                     Revisiones históricas
                 </span>
                 <ChevronRight
-                    className={clsx('h-4 w-4 transition', {
-                        'rotate-90': showHistorical,
-                    })}
+                    className={cx(
+                        'h-4 w-4 transition',
+                        showHistorical && 'rotate-90'
+                    )}
                 />
             </button>
             <ul role="list" className="space-y-3 px-1">

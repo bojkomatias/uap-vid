@@ -1,5 +1,5 @@
 import { useProtocolContext } from '@utils/createContext'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import type { PropsWithChildren } from 'react'
 
 const Input = ({
@@ -16,9 +16,10 @@ const Input = ({
     return (
         <div>
             <label
-                className={clsx('label required', {
-                    'after:text-error-500': form.getInputProps(path).error,
-                })}
+                className={cx(
+                    'label required',
+                    form.getInputProps(path).error && 'after:text-error-500'
+                )}
             >
                 {label}
             </label>

@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import type { Column } from '@tanstack/react-table'
 
 export default function ColumnVisibilityDropdown({
@@ -47,11 +47,11 @@ export default function ColumnVisibilityDropdown({
                                                         !column.getIsVisible()
                                                     )
                                                 }}
-                                                className={clsx(
+                                                className={cx(
+                                                    'flex w-full items-center gap-1 px-4 py-2 text-sm',
                                                     active
                                                         ? 'bg-gray-100 text-gray-900'
-                                                        : 'text-gray-700',
-                                                    'flex w-full items-center gap-1 px-4 py-2 text-sm'
+                                                        : 'text-gray-700'
                                                 )}
                                             >
                                                 {column.getIsVisible() ? (

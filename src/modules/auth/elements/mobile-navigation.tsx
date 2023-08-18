@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { Button } from '@elements/button'
 import { canAccess } from '@utils/scopes'
 import type { User } from '@prisma/client'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 
 export function MobileNavigation({ user }: { user: User }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -93,7 +93,9 @@ export function MobileNavigation({ user }: { user: User }) {
                                                 <Link
                                                     key={item.name}
                                                     href={item.href}
-                                                    className={clsx(
+                                                    className={cx(
+                                                        'text-base-700 hover:bg-gray-100 hover:text-black',
+                                                        'group flex items-center rounded px-4 py-3 text-sm font-medium',
                                                         {
                                                             'bg-gray-200 ring-2 ring-primary/80 ring-offset-1 hover:ring-offset-2':
                                                                 pathname?.includes(
@@ -103,14 +105,12 @@ export function MobileNavigation({ user }: { user: User }) {
                                                             'bg-primary text-white':
                                                                 pathname ===
                                                                 item.href,
-                                                        },
-                                                        'text-base-700 hover:bg-gray-100 hover:text-black',
-                                                        'group flex items-center rounded px-4 py-3 text-sm font-medium'
+                                                        }
                                                     )}
                                                     passHref
                                                 >
                                                     <item.icon
-                                                        className={clsx(
+                                                        className={cx(
                                                             {
                                                                 'stroke-2 text-primary':
                                                                     pathname?.includes(

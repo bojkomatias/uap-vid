@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import Link from 'next/link'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 
 export function DesktopNavigation({ user }: { user: User }) {
     const pathname = usePathname()
@@ -25,31 +25,24 @@ export function DesktopNavigation({ user }: { user: User }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={clsx(
-                                        {
-                                            'bg-primary text-white ':
-                                                pathname?.includes(item.href),
-
-                                            'ring-2 ring-primary ':
-                                                pathname === item.href,
-                                        },
+                                    className={cx(
                                         'text-base-700 ring-gray-300 ring-offset-2 hover:bg-gray-200 hover:text-black hover:ring-2 focus:outline-none focus:ring-2',
-                                        'group flex items-center rounded px-4 py-3 text-sm font-medium transition'
+                                        'group flex items-center rounded px-4 py-3 text-sm font-medium transition',
+                                        pathname?.includes(item.href) &&
+                                            'bg-primary text-white ',
+                                        pathname === item.href &&
+                                            'ring-2 ring-primary '
                                     )}
                                     passHref
                                 >
                                     <item.icon
-                                        className={clsx(
-                                            {
-                                                'text-white':
-                                                    pathname?.includes(
-                                                        item.href
-                                                    ),
-                                                'stroke-[3px]':
-                                                    pathname === item.href,
-                                            },
+                                        className={cx(
                                             'text-base-700 group-hover:text-black',
-                                            'mr-3 h-5 flex-shrink-0'
+                                            'mr-3 h-5 flex-shrink-0',
+                                            pathname?.includes(item.href) &&
+                                                'text-white',
+                                            pathname === item.href &&
+                                                'stroke-[2.5px]'
                                         )}
                                         aria-hidden="true"
                                     />
@@ -71,24 +64,6 @@ export const navigation = [
         href: '/protocols',
         scope: ACCESS.PROTOCOLS,
     },
-    // {
-    //     name: 'Lista base de datos evaluadores',
-    //     icon: ClipboardList,
-    //     href: '#',
-    //     scope: ACCESS.USERS,
-    // },
-    // {
-    //     name: 'Seguimiento de proyectos aprobados',
-    //     icon: ListDetails,
-    //     href: '#',
-    //     scope: ACCESS.USERS,
-    // },
-    // {
-    //     name: 'Información de publicaciones científicas',
-    //     icon: ReportSearch,
-    //     href: '#',
-    //     scope: ACCESS.USERS,
-    // },
     {
         name: 'Panel de convocatorias',
         icon: CalendarEvent,

@@ -2,7 +2,7 @@
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import Link from 'next/link'
 import { Button } from './button'
 
@@ -62,11 +62,11 @@ export default function MultipleButton({
                                 <Listbox.Option
                                     key={option.title}
                                     className={({ active }) =>
-                                        clsx(
+                                        cx(
+                                            'cursor-default select-none px-5 pb-3 pt-4 text-sm',
                                             active
                                                 ? 'bg-primary text-white'
-                                                : 'text-gray-900',
-                                            'cursor-default select-none px-5 pb-3 pt-4 text-sm'
+                                                : 'text-gray-900'
                                         )
                                     }
                                     value={option}
@@ -99,11 +99,11 @@ export default function MultipleButton({
                                                 ) : null}
                                             </div>
                                             <p
-                                                className={clsx(
+                                                className={cx(
+                                                    'mt-1 text-xs font-light',
                                                     active
                                                         ? 'text-gray-300'
-                                                        : 'text-gray-500',
-                                                    'mt-1 text-xs font-light'
+                                                        : 'text-gray-500'
                                                 )}
                                             >
                                                 {option.description}

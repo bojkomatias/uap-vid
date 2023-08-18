@@ -4,7 +4,7 @@ import { notifications } from '@mantine/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
 import { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check, Plus } from 'tabler-icons-react'
@@ -127,7 +127,7 @@ const ReviewAssignSelect = ({
                                 key={value.id}
                                 value={value.id}
                                 className={({ active }) =>
-                                    clsx(
+                                    cx(
                                         'relative cursor-default select-none py-2 pl-8 pr-4',
                                         active ? 'bg-gray-100' : 'text-base-600'
                                     )
@@ -137,7 +137,7 @@ const ReviewAssignSelect = ({
                                     <>
                                         <span className="block truncate">
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     selected &&
                                                         'font-semibold text-primary'
                                                 )}
@@ -145,7 +145,7 @@ const ReviewAssignSelect = ({
                                                 {value.name}
                                             </span>
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     'ml-2 truncate text-gray-500',
                                                     active
                                                         ? 'text-indigo-200'
@@ -158,7 +158,7 @@ const ReviewAssignSelect = ({
 
                                         {selected && (
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
                                                     active ? 'text-white' : ''
                                                 )}

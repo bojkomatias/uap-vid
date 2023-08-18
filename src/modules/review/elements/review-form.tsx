@@ -8,7 +8,7 @@ import { Check, X } from 'tabler-icons-react'
 import { ReviewType, ReviewVerdict } from '@prisma/client'
 import type { Review } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ItemContainer from '@review/elements/review-container'
 import ReviewQuestion from './review-question'
@@ -94,25 +94,25 @@ export default function ReviewForm({ review }: { review: Review }) {
                             <RadioGroup.Option
                                 value={ReviewVerdict.APPROVED}
                                 className={({ checked }) =>
-                                    clsx(
+                                    cx(
+                                        'relative flex cursor-pointer items-baseline rounded-t border px-5 py-2.5 focus:outline-none',
                                         checked
                                             ? 'z-10 border-success-600/30 bg-success-600/5'
-                                            : 'border-gray-200',
-                                        'relative flex cursor-pointer items-baseline rounded-t border px-5 py-2.5 focus:outline-none'
+                                            : 'border-gray-200'
                                     )
                                 }
                             >
                                 {({ active, checked }) => (
                                     <>
                                         <span
-                                            className={clsx(
+                                            className={cx(
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-success-600'
                                                     : 'border-gray-300 bg-white',
                                                 active
                                                     ? 'ring-2 ring-success-600 ring-offset-1'
-                                                    : '',
-                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                                    : ''
                                             )}
                                             aria-hidden="true"
                                         >
@@ -121,11 +121,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         <span className="ml-3 flex flex-col">
                                             <RadioGroup.Label
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-sm',
                                                     checked
                                                         ? 'font-medium text-gray-900'
-                                                        : 'font-regular text-gray-700',
-                                                    'block text-sm'
+                                                        : 'font-regular text-gray-700'
                                                 )}
                                             >
                                                 {
@@ -136,11 +136,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             </RadioGroup.Label>
                                             <RadioGroup.Description
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-xs',
                                                     checked
                                                         ? 'text-gray-700'
-                                                        : 'text-gray-500',
-                                                    'block text-xs'
+                                                        : 'text-gray-500'
                                                 )}
                                             >
                                                 Hacer devolución del proyecto
@@ -154,30 +154,28 @@ export default function ReviewForm({ review }: { review: Review }) {
                             <RadioGroup.Option
                                 value={ReviewVerdict.APPROVED_WITH_CHANGES}
                                 className={({ checked }) =>
-                                    clsx(
-                                        {
-                                            'rounded-b':
-                                                review.type ===
-                                                ReviewType.METHODOLOGICAL,
-                                        },
+                                    cx(
+                                        'relative flex cursor-pointer items-baseline border px-5 py-2.5 focus:outline-none',
+                                        review.type ===
+                                            ReviewType.METHODOLOGICAL &&
+                                            'rounded-b',
                                         checked
                                             ? 'z-10 border-warning-600/30 bg-warning-600/5'
-                                            : 'border-gray-200',
-                                        'relative flex cursor-pointer items-baseline border px-5 py-2.5 focus:outline-none'
+                                            : 'border-gray-200'
                                     )
                                 }
                             >
                                 {({ active, checked }) => (
                                     <>
                                         <span
-                                            className={clsx(
+                                            className={cx(
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-warning-600'
                                                     : 'border-gray-300 bg-white',
                                                 active
                                                     ? 'ring-2 ring-warning-600 ring-offset-1'
-                                                    : '',
-                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                                    : ''
                                             )}
                                             aria-hidden="true"
                                         >
@@ -186,11 +184,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         <span className="ml-3 flex flex-col">
                                             <RadioGroup.Label
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-sm',
                                                     checked
                                                         ? 'font-medium text-gray-900'
-                                                        : 'font-regular text-gray-700',
-                                                    'block text-sm'
+                                                        : 'font-regular text-gray-700'
                                                 )}
                                             >
                                                 {
@@ -202,11 +200,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             </RadioGroup.Label>
                                             <RadioGroup.Description
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-xs',
                                                     checked
                                                         ? 'text-gray-700'
-                                                        : 'text-gray-500',
-                                                    'block text-xs'
+                                                        : 'text-gray-500'
                                                 )}
                                             >
                                                 Enviar correcciones, si los
@@ -221,30 +219,28 @@ export default function ReviewForm({ review }: { review: Review }) {
                             <RadioGroup.Option
                                 value={ReviewVerdict.REJECTED}
                                 className={({ checked }) =>
-                                    clsx(
-                                        {
-                                            hidden:
-                                                review.type ===
-                                                ReviewType.METHODOLOGICAL,
-                                        },
+                                    cx(
+                                        'relative flex cursor-pointer items-baseline rounded-b border px-5 py-2.5 focus:outline-none',
                                         checked
                                             ? 'z-10 border-error-600/30 bg-error-600/5'
                                             : 'border-gray-200',
-                                        'relative flex cursor-pointer items-baseline rounded-b border px-5 py-2.5 focus:outline-none'
+                                        review.type ===
+                                            ReviewType.METHODOLOGICAL &&
+                                            'hidden'
                                     )
                                 }
                             >
                                 {({ active, checked }) => (
                                     <>
                                         <span
-                                            className={clsx(
+                                            className={cx(
+                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-error-600'
                                                     : 'border-gray-300 bg-white',
                                                 active
                                                     ? 'ring-2 ring-error-600 ring-offset-1'
-                                                    : '',
-                                                'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border'
+                                                    : ''
                                             )}
                                             aria-hidden="true"
                                         >
@@ -253,11 +249,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         <span className="ml-3 flex flex-col">
                                             <RadioGroup.Label
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-sm',
                                                     checked
                                                         ? 'font-medium text-gray-900'
-                                                        : 'font-regular text-gray-700',
-                                                    'block text-sm'
+                                                        : 'font-regular text-gray-700'
                                                 )}
                                             >
                                                 {
@@ -268,11 +264,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             </RadioGroup.Label>
                                             <RadioGroup.Description
                                                 as="span"
-                                                className={clsx(
+                                                className={cx(
+                                                    'block text-xs',
                                                     checked
                                                         ? 'text-gray-700'
-                                                        : 'text-gray-500',
-                                                    'block text-xs'
+                                                        : 'text-gray-500'
                                                 )}
                                             >
                                                 Marcar protocolo de

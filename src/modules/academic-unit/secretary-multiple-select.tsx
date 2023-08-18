@@ -2,7 +2,7 @@
 import { Combobox } from '@headlessui/react'
 import { notifications } from '@mantine/notifications'
 import type { User } from '@prisma/client'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 
@@ -94,16 +94,16 @@ export function SecretaryMultipleSelect({
                             key={index}
                             value={secretary.id}
                             className={({ active }) =>
-                                clsx(
-                                    'relative cursor-default select-none py-2 pl-8 pr-4',
-                                    active ? 'bg-gray-100' : 'text-base-600'
+                                cx(
+                                    active ? 'bg-gray-100' : 'text-base-600',
+                                    'relative cursor-default select-none py-2 pl-8 pr-4'
                                 )
                             }
                         >
                             {({ active, selected }) => (
                                 <>
                                     <span
-                                        className={clsx(
+                                        className={cx(
                                             'block truncate',
                                             selected &&
                                                 'font-semibold text-primary'
@@ -114,9 +114,9 @@ export function SecretaryMultipleSelect({
 
                                     {selected && (
                                         <span
-                                            className={clsx(
+                                            className={cx(
                                                 'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
-                                                active ? 'text-white' : ''
+                                                active && 'text-white'
                                             )}
                                         >
                                             <Check

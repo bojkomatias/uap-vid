@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
-import { cx } from '@utils/cx'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 export default function EnumFilterOptions({
@@ -38,10 +37,11 @@ export default function EnumFilterOptions({
                                                 : value,
                                         })
                                     }}
-                                    className={cx({
-                                        'bg-gray-300 hover:bg-gray-200':
-                                            currentValues?.includes(value),
-                                    })}
+                                    className={
+                                        currentValues?.includes(value)
+                                            ? 'bg-gray-300 hover:bg-gray-200'
+                                            : ''
+                                    }
                                     intent="badge"
                                     key={i}
                                 >
