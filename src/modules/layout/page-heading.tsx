@@ -1,5 +1,4 @@
 import { Badge } from '@elements/badge'
-import { Button } from '@elements/button'
 import type { State } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import type { ReactNode } from 'react'

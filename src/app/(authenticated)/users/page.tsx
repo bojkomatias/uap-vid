@@ -29,8 +29,8 @@ export default async function UserList({
                     className={buttonStyle('secondary')}
                     passHref
                 >
-                    <UserPlus className="h-5" />
-                    <span className="ml-3"> Nuevo usuario</span>
+                    <UserPlus className="h-5 text-current" />
+                    <span> Nuevo usuario</span>
                 </Link>
             </div>
 

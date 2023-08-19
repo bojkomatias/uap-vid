@@ -55,14 +55,14 @@ export default function TanStackTable({
 
             {data.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
-                    <table className="fade-in -mx-4 mt-6 min-w-full divide-y-2 sm:-mx-0">
+                    <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="py-2 pr-4 text-left text-sm font-medium uppercase text-gray-600 last:text-right"
+                                            className="py-2 pr-4 text-left text-sm font-medium uppercase text-gray-600 last:pr-2 last:text-right"
                                         >
                                             <HeaderSorter header={header} />
                                         </th>
@@ -76,7 +76,7 @@ export default function TanStackTable({
                                     {row.getVisibleCells().map((cell) => (
                                         <td
                                             key={cell.id}
-                                            className="whitespace-nowrap py-3.5 pr-4 text-sm text-gray-900 last:flex last:justify-end last:gap-2 last:pr-2 last:text-right sm:w-auto"
+                                            className="whitespace-nowrap py-3.5 pr-4 text-sm text-gray-800 last:w-16 last:px-2"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

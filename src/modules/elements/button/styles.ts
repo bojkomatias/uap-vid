@@ -21,6 +21,6 @@ export const buttonStyle = (
     intent: 'primary' | 'secondary' | 'outline' | 'destructive' | 'unset'
 ) =>
     cx(
-        'group flex items-center gap-1 justify-center rounded-md px-4 py-2.5 text-sm transition duration-200 ease-out focus-visible:outline focus-visible:outline-[1.5px] focus-visible:outline-primary active:brightness-95 disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50',
+        'group flex items-center gap-1.5 justify-center rounded-md px-4 py-2.5 text-sm transition duration-200 ease-out focus-visible:outline focus-visible:outline-[1.5px] focus-visible:outline-primary active:brightness-95 disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50',
         styles[intent]
     )

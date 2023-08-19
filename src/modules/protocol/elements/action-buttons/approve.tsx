@@ -48,7 +48,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             disabled={protocol.state !== State.ACCEPTED}
             loading={isPending}
         >
-            <FileCertificate className="mr-2 h-5" />
+            <FileCertificate className="h-5 text-current" />
             Aprobar: En curso
         </Button>
     )

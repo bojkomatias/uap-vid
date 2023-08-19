@@ -31,8 +31,8 @@ export default function MultipleButton({
                             )}
                             passHref
                         >
-                            <FilePlus className="mr-2 h-5 text-gray-500" />{' '}
-                            Crear en {selected.title}
+                            <FilePlus className="h-5 text-current" /> Crear en{' '}
+                            {selected.title}
                         </Link>
                         <Listbox.Button
                             as={Button}
@@ -43,7 +43,7 @@ export default function MultipleButton({
                                 Change published status
                             </span>
                             <ChevronDown
-                                className="h-5 w-5 text-primary"
+                                className="h-5 w-5 text-current"
                                 aria-hidden="true"
                             />
                         </Listbox.Button>
@@ -64,8 +64,8 @@ export default function MultipleButton({
                                         cx(
                                             'cursor-default select-none px-5 pb-3 pt-4 text-sm',
                                             active
-                                                ? 'bg-primary text-white'
-                                                : 'text-gray-900'
+                                                ? 'bg-gray-100 text-gray-900'
+                                                : 'text-gray-700'
                                         )
                                     }
                                     value={option}
@@ -86,8 +86,8 @@ export default function MultipleButton({
                                                     <span
                                                         className={
                                                             active
-                                                                ? 'text-white'
-                                                                : 'text-primary'
+                                                                ? 'text-gray-700'
+                                                                : 'text-gray-600'
                                                         }
                                                     >
                                                         <Check
@@ -101,7 +101,7 @@ export default function MultipleButton({
                                                 className={cx(
                                                     'mt-1 text-xs font-light',
                                                     active
-                                                        ? 'text-gray-300'
+                                                        ? 'text-gray-700'
                                                         : 'text-gray-500'
                                                 )}
                                             >

@@ -38,7 +38,7 @@ export default function EditButton(props: ActionButtonTypes) {
             className={buttonStyle('secondary')}
             passHref
         >
-            <Edit className="mr-2 h-5" />
+            <Edit className="h-5 text-current" />
             Editar
         </Link>
     )

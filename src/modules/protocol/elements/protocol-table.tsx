@@ -8,7 +8,6 @@ import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { Button } from '@elements/button'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
 import { buttonStyle } from '@elements/button/styles'
@@ -235,7 +234,7 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <>
+                    <div className="flex items-center justify-between gap-1">
                         <Link
                             href={`/protocols/${row.original.id}`}
                             passHref
@@ -255,7 +254,7 @@ export default function ProtocolTable({
                         ) : (
                             <></>
                         )}
-                    </>
+                    </div>
                 ),
                 enableHiding: false,
                 enableSorting: false,
