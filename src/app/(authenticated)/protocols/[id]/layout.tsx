@@ -6,6 +6,7 @@ import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { ProtocolMetadata } from '@protocol/protocol-metadata'
 
 async function Layout({
     params,
@@ -41,7 +42,13 @@ async function Layout({
                     </span>
                 }
             />
-            <pre>{JSON.stringify(protocol.researcher)}</pre>
+            <ProtocolMetadata
+                id={protocol.id}
+                createdAt={protocol.createdAt}
+                state={protocol.state}
+                researcher={protocol.researcher}
+                convocatory={protocol.convocatory}
+            />
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
