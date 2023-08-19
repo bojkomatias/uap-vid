@@ -21,7 +21,7 @@ async function Layout({
             redirect('/protocols')
         return (
             <>
-                <PageHeading title={'Nuevo protocolo'} state={'DRAFT'} />
+                <PageHeading title={'Nuevo protocolo'} />
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
             </>
         )
@@ -40,8 +40,8 @@ async function Layout({
                         </span>
                     </span>
                 }
-                state={protocol.state}
             />
+            <pre>{JSON.stringify(protocol.researcher)}</pre>
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="mx-auto w-full max-w-7xl">{children}</div>
