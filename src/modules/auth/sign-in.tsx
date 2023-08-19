@@ -86,7 +86,7 @@ export const SignIn = () => {
                                 className="inset-0 my-4 flex items-center"
                                 aria-hidden="true"
                             >
-                                <div className="w-full border-t border-gray-300" />
+                                <div className="w-full border-t " />
                             </div>
                             Si tenés credenciales locales,
                             <b> iniciá sesión acá</b>.

@@ -34,6 +34,14 @@ module.exports = {
         },
         extend: {
             borderRadius: { DEFAULT: '0.5rem' },
+            borderColor: ({ theme }) => ({
+                ...theme('colors'),
+                DEFAULT: theme('colors.gray.200', 'currentColor'),
+            }),
+            ringColor: ({ theme }) => ({
+                DEFAULT: theme('colors.gray.300', 'currentColor'),
+                ...theme('colors'),
+            }),
         },
     },
     plugins: [

@@ -82,20 +82,20 @@ export function SecretaryMultipleSelect({
 
                     <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                         <Selector
-                            className="h-5 text-primary transition-all duration-200 hover:text-base-400"
+                            className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
                             aria-hidden="true"
                         />
                     </div>
                 </Combobox.Button>
 
-                <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 shadow focus:outline-none sm:text-sm">
+                <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 shadow focus:outline-none sm:text-sm">
                     {secretaries.map((secretary, index) => (
                         <Combobox.Option
                             key={index}
                             value={secretary.id}
                             className={({ active }) =>
                                 cx(
-                                    active ? 'bg-gray-100' : 'text-base-600',
+                                    active ? 'bg-gray-100' : 'text-gray-600',
                                     'relative cursor-default select-none py-2 pl-8 pr-4'
                                 )
                             }

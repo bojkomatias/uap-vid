@@ -131,7 +131,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 name={`revised-${id}`}
                 type="checkbox"
                 defaultChecked={revised}
-                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md  text-primary focus:ring-primary"
                 onChange={(e) => updateRevised(e.target.checked)}
             />
 

@@ -44,7 +44,7 @@ export default function ReviewQuestion({
                                 'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase ',
                                 checked
                                     ? 'bg-success-50 text-success-600 ring-[1.5px] ring-success-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-black/5 hover:bg-gray-100'
+                                    : 'bg-white text-gray-500 ring-1 ring-inset  hover:bg-gray-100'
                             )
                         }
                     >
@@ -58,7 +58,7 @@ export default function ReviewQuestion({
                                 'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase',
                                 checked
                                     ? 'bg-error-50 text-error-600 ring-[1.5px] ring-error-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset ring-black/5 hover:bg-gray-100'
+                                    : 'bg-white text-gray-500 ring-1 ring-inset  hover:bg-gray-100'
                             )
                         }
                     >

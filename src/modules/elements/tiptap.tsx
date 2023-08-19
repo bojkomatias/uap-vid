@@ -74,7 +74,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
     }
 
     return (
-        <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border border-gray-300 bg-gray-100 px-0.5 ">
+        <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border  bg-gray-100 px-0.5 ">
             {/* Mark text */}
             <button
                 type="button"
@@ -85,7 +85,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bold')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -98,7 +98,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('italic')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -113,7 +113,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 2 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -127,7 +127,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 3 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -141,7 +141,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 4 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -154,7 +154,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bulletList')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -166,7 +166,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('orderedList')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -181,7 +181,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'left' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -195,7 +195,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'center' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -209,7 +209,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'right' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -223,7 +223,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'justify' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-black/5 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >

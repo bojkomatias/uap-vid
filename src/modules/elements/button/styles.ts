@@ -9,7 +9,7 @@ const styles = {
         'bg-primary font-bold text-white shadow hover:bg-primary/90 hover:shadow-primary/50 active:scale-95 focus-visible:outline-offset-2',
     secondary:
         'bg-gray-100 font-semibold text-gray-600 hover:bg-gray-200 hover:text-gray-700',
-    outline: 'text-gray-700 ring-1 ring-black/5 hover:bg-gray-50',
+    outline: 'text-gray-700 ring-1 hover:bg-gray-50',
     destructive: 'font-semibold text-error-600 bg-error-50 hover:bg-error-100',
 }
 

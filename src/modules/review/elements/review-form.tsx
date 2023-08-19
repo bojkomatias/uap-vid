@@ -98,7 +98,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         'relative flex cursor-pointer items-baseline rounded-t border px-5 py-2.5 focus:outline-none',
                                         checked
                                             ? 'z-10 border-success-600/30 bg-success-600/5'
-                                            : 'border-gray-200'
+                                            : ''
                                     )
                                 }
                             >
@@ -109,7 +109,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                                 'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-success-600'
-                                                    : 'border-gray-300 bg-white',
+                                                    : ' bg-white',
                                                 active
                                                     ? 'ring-2 ring-success-600 ring-offset-1'
                                                     : ''
@@ -161,7 +161,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                             'rounded-b',
                                         checked
                                             ? 'z-10 border-warning-600/30 bg-warning-600/5'
-                                            : 'border-gray-200'
+                                            : ''
                                     )
                                 }
                             >
@@ -172,7 +172,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                                 'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-warning-600'
-                                                    : 'border-gray-300 bg-white',
+                                                    : ' bg-white',
                                                 active
                                                     ? 'ring-2 ring-warning-600 ring-offset-1'
                                                     : ''
@@ -223,7 +223,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                         'relative flex cursor-pointer items-baseline rounded-b border px-5 py-2.5 focus:outline-none',
                                         checked
                                             ? 'z-10 border-error-600/30 bg-error-600/5'
-                                            : 'border-gray-200',
+                                            : '',
                                         review.type ===
                                             ReviewType.METHODOLOGICAL &&
                                             'hidden'
@@ -237,7 +237,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                                 'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
                                                 checked
                                                     ? 'border-transparent bg-error-600'
-                                                    : 'border-gray-300 bg-white',
+                                                    : ' bg-white',
                                                 active
                                                     ? 'ring-2 ring-error-600 ring-offset-1'
                                                     : ''

@@ -76,7 +76,7 @@ const ConditionalIfRecollection = ({ path }: { path: string }) => {
                     id="recollection"
                     name="recollection"
                     type="checkbox"
-                    className="h-4 w-4 rounded-md border-gray-300 text-primary focus:ring-primary"
+                    className="h-4 w-4 rounded-md  text-primary focus:ring-primary"
                     {...form.getInputProps(path + 'humanAnimalOrDb', {
                         type: 'checkbox',
                     })}

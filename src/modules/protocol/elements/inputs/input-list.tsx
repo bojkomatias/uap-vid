@@ -147,7 +147,7 @@ function PreprocessFieldsMap({
                         index
                     )
                 }}
-                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
+                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
                     index == 0 && !isBudget
                         ? 'pointer-events-none invisible'
                         : ''
@@ -236,7 +236,7 @@ function FieldsMap({
 
             <Trash
                 onClick={() => form.removeListItem(path, index)}
-                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-base-400 active:scale-[0.90] ${
+                className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
                     index == 0 ? 'pointer-events-none invisible' : ''
                 }`}
             />

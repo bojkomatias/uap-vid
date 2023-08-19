@@ -16,7 +16,7 @@ import { buttonStyle } from '@elements/button/styles'
 export function DesktopNavigation({ user }: { user: User }) {
     const pathname = usePathname()
     return (
-        <div className="absolute inset-0 left-0 z-20 h-full w-16 border-r bg-base-50">
+        <div className="absolute inset-0 left-0 z-20 h-full w-16 border-r bg-gray-50">
             {/* Sidebar component, swap this element with another sidebar if you like */}
             <div className="sticky inset-0 flex min-h-0 flex-1 flex-col pt-8">
                 <nav className="flex-1 space-y-3 px-1.5">
@@ -41,7 +41,7 @@ export function DesktopNavigation({ user }: { user: User }) {
                                 </div>
                                 <item.icon
                                     className={cx(
-                                        'pointer-events-auto h-12 w-12 flex-shrink-0 stroke-[1.5px] p-3 text-base-700',
+                                        'pointer-events-auto h-12 w-12 flex-shrink-0 stroke-[1.5px] p-3 text-gray-700',
                                         pathname?.includes(item.href) &&
                                             'text-white'
                                     )}

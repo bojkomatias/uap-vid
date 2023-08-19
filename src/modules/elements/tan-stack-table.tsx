@@ -55,7 +55,7 @@ export default function TanStackTable({
 
             {data.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
-                    <table className="fade-in -mx-4 mt-6 min-w-full divide-y divide-gray-300 sm:-mx-0">
+                    <table className="fade-in -mx-4 mt-6 min-w-full divide-y-2 sm:-mx-0">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
@@ -70,7 +70,7 @@ export default function TanStackTable({
                                 </tr>
                             ))}
                         </thead>
-                        <tbody className="divide-y divide-gray-200 bg-white">
+                        <tbody className="divide-y bg-white">
                             {table.getRowModel().rows.map((row) => (
                                 <tr key={row.id}>
                                     {row.getVisibleCells().map((cell) => (

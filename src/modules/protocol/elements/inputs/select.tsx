@@ -67,7 +67,7 @@ export default function Select({
                                 aria-hidden="true"
                             />
                             <Selector
-                                className="h-5 text-primary transition-all duration-200 hover:text-base-400"
+                                className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
                                 aria-hidden="true"
                             />
                         </div>
@@ -79,7 +79,7 @@ export default function Select({
                     ) : null}
 
                     {filteredValues?.length > 0 && (
-                        <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
+                        <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
                             {filteredValues.map(
                                 (value: string, index: number) => (
                                     <Combobox.Option
@@ -90,7 +90,7 @@ export default function Select({
                                                 'relative cursor-default select-none py-2 pl-8 pr-4',
                                                 active
                                                     ? 'bg-gray-100'
-                                                    : 'text-base-600'
+                                                    : 'text-gray-600'
                                             )
                                         }
                                     >
