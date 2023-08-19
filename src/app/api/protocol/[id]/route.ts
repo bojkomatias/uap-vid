@@ -31,6 +31,28 @@ export async function PUT(
     return NextResponse.json({ success: true })
 }
 
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
+    const id = params.id
+    // {reviewerId: '' }
+    const data = await request.json()
+
+    const patched = await updateProtocolById(id, data)
+    if (!patched) {
+        return new Response('We cannot update the protocol', {
+            status: 500,
+        })
+    }
+    return NextResponse.json({ success: true })
+}
+
 export async function DELETE(
     request: NextRequest,
     { params }: { params: { id: string } }

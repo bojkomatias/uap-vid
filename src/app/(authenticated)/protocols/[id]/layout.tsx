@@ -32,17 +32,9 @@ async function Layout({
 
     return (
         <>
-            <PageHeading
-                title={
-                    <span>
-                        Protocolo:{' '}
-                        <span className="font-normal">
-                            {protocol.sections.identification.title}
-                        </span>
-                    </span>
-                }
-            />
+            <PageHeading title={protocol.sections.identification.title} />
             <ProtocolMetadata
+                currentUser={session.user}
                 id={protocol.id}
                 createdAt={protocol.createdAt}
                 state={protocol.state}
