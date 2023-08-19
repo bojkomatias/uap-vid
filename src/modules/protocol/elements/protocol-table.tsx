@@ -235,7 +235,7 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <div className="flex justify-between gap-2">
+                    <>
                         <Link
                             href={`/protocols/${row.original.id}`}
                             passHref
@@ -255,7 +255,7 @@ export default function ProtocolTable({
                         ) : (
                             <></>
                         )}
-                    </div>
+                    </>
                 ),
                 enableHiding: false,
                 enableSorting: false,

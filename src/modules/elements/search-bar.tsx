@@ -31,7 +31,7 @@ export default function SearchBar({
                     if (searchQuery == '') update({ search: '' })
                     else update({ search: searchQuery })
                 }}
-                intent="secondary"
+                intent="outline"
             >
                 Buscar
             </Button>
