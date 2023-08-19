@@ -23,8 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <div className="mr-3 mt-1 flex items-center justify-end gap-2 md:ml-8">
-                <PDF protocol={protocol} />
+            <div className="mr-3 flex items-center justify-end gap-2">
                 <ApproveButton role={session.user.role} protocol={protocol} />
                 <AcceptButton
                     role={session.user.role}
@@ -40,6 +39,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     reviews={reviews}
                 />
             </div>
+            <PDF protocol={protocol} />
 
             <View sections={protocol.sections} role={session.user.role} />
         </>

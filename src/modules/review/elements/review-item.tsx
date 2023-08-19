@@ -2,7 +2,7 @@
 import type { Review, User } from '@prisma/client'
 import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useCallback, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
@@ -35,10 +35,12 @@ export default function ReviewItem({
             <div className="min-w-0 flex-1">
                 <dt className="label">{ReviewTypesDictionary[review.type]}</dt>
                 <div
-                    className={clsx('rounded border', {
-                        'bg-gray-50 opacity-70': review.revised,
-                        'bg-white opacity-100': !review.revised,
-                    })}
+                    className={cx(
+                        'rounded border',
+                        review.revised
+                            ? 'bg-gray-50 opacity-70'
+                            : 'bg-white opacity-100'
+                    )}
                 >
                     <button
                         className="-mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
@@ -67,9 +69,10 @@ export default function ReviewItem({
                             )
                         ) : null}
                         <ChevronRight
-                            className={clsx('h-4 w-4 transition', {
-                                'rotate-90': showReviewQuestions,
-                            })}
+                            className={cx(
+                                'h-4 w-4 transition',
+                                showReviewQuestions && 'rotate-90'
+                            )}
                         />
                     </button>
 
@@ -128,7 +131,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 name={`revised-${id}`}
                 type="checkbox"
                 defaultChecked={revised}
-                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md  text-primary focus:ring-primary"
                 onChange={(e) => updateRevised(e.target.checked)}
             />
 

@@ -2,8 +2,9 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Check, ChevronDown } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { Button } from './button'
 
 export default function RecordsDropdown({
     options,
@@ -19,11 +20,11 @@ export default function RecordsDropdown({
     return (
         <Menu as="div" className="relative float-right text-left">
             <div>
-                <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-200 hover:bg-gray-50">
+                <Menu.Button as={Button} intent="outline">
                     Cantidad de registros
                     {': ' + shownRecords}
                     <ChevronDown
-                        className="-mr-1 h-5 w-5 text-gray-400"
+                        className="-mr-1 ml-2 h-5 w-5 text-gray-500"
                         aria-hidden="true"
                     />
                 </Menu.Button>
@@ -39,7 +40,7 @@ export default function RecordsDropdown({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1  focus:outline-none"
                     static
                 >
                     <div className="py-1">
@@ -57,11 +58,11 @@ export default function RecordsDropdown({
                                                         : currentPage,
                                             })
                                         }
-                                        className={clsx(
+                                        className={cx(
+                                            'flex w-full items-center justify-center gap-1 px-4 py-2 text-sm',
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'flex w-full items-center justify-center gap-1 px-4 py-2 text-sm'
+                                                : 'text-gray-700'
                                         )}
                                     >
                                         {shownRecords === o ? (
@@ -84,11 +85,11 @@ export default function RecordsDropdown({
                                             records: options.at(-1),
                                         })
                                     }
-                                    className={clsx(
+                                    className={cx(
+                                        ' flex w-full items-center justify-end gap-1 px-4 py-2 text-sm',
                                         active
                                             ? 'bg-gray-100 text-gray-900'
-                                            : 'text-gray-700',
-                                        ' flex w-full items-center justify-end gap-1 px-4 py-2  text-sm'
+                                            : 'text-gray-700'
                                     )}
                                 >
                                     {shownRecords === options.at(-1) ? (

@@ -3,7 +3,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import CharacterCount from '@tiptap/extension-character-count'
 
 import {
@@ -74,7 +74,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
     }
 
     return (
-        <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border border-gray-300 bg-gray-100 px-0.5 ">
+        <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border  bg-gray-100 px-0.5 ">
             {/* Mark text */}
             <button
                 type="button"
@@ -82,10 +82,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                     editor.chain().focus().toggleBold().run()
                 }}
                 disabled={!editor.can().chain().focus().toggleBold().run()}
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bold')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -95,10 +95,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 type="button"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 disabled={!editor.can().chain().focus().toggleItalic().run()}
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('italic')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -110,10 +110,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().toggleHeading({ level: 2 }).run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 2 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -124,10 +124,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().toggleHeading({ level: 3 }).run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 3 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -138,10 +138,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().toggleHeading({ level: 4 }).run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('heading', { level: 4 })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -151,10 +151,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('bulletList')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -163,10 +163,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive('orderedList')
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -178,10 +178,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().setTextAlign('left').run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'left' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -192,10 +192,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().setTextAlign('center').run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'center' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -206,10 +206,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().setTextAlign('right').run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'right' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >
@@ -220,10 +220,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
                 onClick={() =>
                     editor.chain().focus().setTextAlign('justify').run()
                 }
-                className={clsx(
+                className={cx(
                     'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
                     editor.isActive({ textAlign: 'justify' })
-                        ? 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:ring-offset-0'
+                        ? 'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
                         : 'text-gray-500'
                 )}
             >

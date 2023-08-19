@@ -14,10 +14,6 @@ export const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const [microsoftImage, setMicImage] = useState(
-        '/whitebackgroundmicrosoft.png'
-    )
-
     return (
         <div className="absolute left-1/2 top-[8%] mx-auto flex max-w-xl  -translate-x-1/2 flex-col items-center ">
             <div className=" flex items-center text-sm font-bold uppercase text-primary">
@@ -33,7 +29,6 @@ export const SignIn = () => {
                     <p>Vicerrectoría de Investigación y Desarrollo</p>
                 </div>
             </div>
-
             <form
                 className="flex w-full flex-col items-stretch gap-3 px-24"
                 onSubmit={async (e) => {
@@ -63,6 +58,7 @@ export const SignIn = () => {
                     365.
                 </div>
                 <Button
+                    intent="primary"
                     type="button"
                     loading={loadingMicrosoft}
                     onClick={(e) => {
@@ -70,18 +66,12 @@ export const SignIn = () => {
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
-                    onMouseEnter={() => {
-                        setMicImage('/blackbackgroundmicrosoft.png')
-                    }}
-                    onMouseLeave={() => {
-                        setMicImage('/whitebackgroundmicrosoft.png')
-                    }}
                 >
                     <>
                         <span>Iniciar sesión con</span>
                         <Image
                             className="-my-6"
-                            src={microsoftImage}
+                            src={'/blackbackgroundmicrosoft.png'}
                             alt="Microsoft Logo"
                             width={100}
                             height={50}
@@ -96,7 +86,7 @@ export const SignIn = () => {
                                 className="inset-0 my-4 flex items-center"
                                 aria-hidden="true"
                             >
-                                <div className="w-full border-t border-gray-300" />
+                                <div className="w-full border-t " />
                             </div>
                             Si tenés credenciales locales,
                             <b> iniciá sesión acá</b>.
@@ -126,10 +116,14 @@ export const SignIn = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
 
-                            <Button type="submit" loading={loading}>
+                            <Button
+                                intent="primary"
+                                type="submit"
+                                loading={loading}
+                            >
                                 Iniciar sesión
                             </Button>
-                        </Disclosure.Panel>{' '}
+                        </Disclosure.Panel>
                     </Transition>
                 </Disclosure>
             </form>

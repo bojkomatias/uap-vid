@@ -322,7 +322,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 <div className="mb-8 mt-12 flex w-full justify-between">
                     <Button
                         type="button"
-                        intent="secondary"
+                        intent="outline"
                         disabled={section === '0'}
                         onClick={() =>
                             setSection((p) => (Number(p) - 1).toString())
@@ -342,7 +342,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     </div>
                     <Button
                         type="button"
-                        intent="secondary"
+                        intent="outline"
                         disabled={section === '7'}
                         onClick={() =>
                             setSection((p) => (Number(p) + 1).toString())

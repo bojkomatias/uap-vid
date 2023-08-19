@@ -1,4 +1,4 @@
-import { Button } from '@elements/button'
+import { Badge } from '@elements/badge'
 import type { State } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import type { ReactNode } from 'react'
@@ -12,10 +12,6 @@ export const PageHeading = ({
 }) => (
     <div className="mt-16">
         <h2 className="text-3xl font-bold text-black/70">{title}</h2>
-        {state ? (
-            <Button intent="badge" className="pointer-events-none">
-                {ProtocolStatesDictionary[state]}
-            </Button>
-        ) : null}
+        {state ? <Badge>{ProtocolStatesDictionary[state]}</Badge> : null}
     </div>
 )

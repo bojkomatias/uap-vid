@@ -35,7 +35,7 @@ async function Layout({
                 title={
                     <span>
                         Protocolo:{' '}
-                        <span className="font-light">
+                        <span className="font-normal">
                             {protocol.sections.identification.title}
                         </span>
                     </span>

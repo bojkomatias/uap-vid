@@ -53,17 +53,6 @@ export default function UserTable({
                     cell.getValue() ? <>Microsoft 365</> : <>Usuario local</>,
             },
             {
-                accessorKey: 'role',
-                header: 'Rol',
-                // Guard for not changing your own role.
-                cell: ({ row }) =>
-                    row.original.id === loggedInUser.id ? (
-                        <></>
-                    ) : (
-                        <RoleUpdater user={row.original} />
-                    ),
-            },
-            {
                 accessorKey: '_count.protocols',
                 id: 'protocols',
                 header: 'Protocolos',
@@ -84,13 +73,27 @@ export default function UserTable({
                 ),
             },
             {
+                accessorKey: 'role',
+                header: 'Rol',
+                // Guard for not changing your own role.
+                cell: ({ row }) =>
+                    row.original.id === loggedInUser.id ? (
+                        <></>
+                    ) : (
+                        <RoleUpdater user={row.original} />
+                    ),
+            },
+            {
                 accessorKey: 'delete',
                 header: 'Acciones',
                 cell: ({ row }) =>
                     row.original.role === 'ADMIN' ? (
                         <></>
                     ) : (
-                        <DeleteUserButton userId={row.original.id} />
+                        <DeleteUserButton
+                            userId={row.original.id}
+                            className="px-2.5 py-1 text-xs"
+                        />
                     ),
                 enableHiding: false,
                 enableSorting: false,

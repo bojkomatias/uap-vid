@@ -9,7 +9,6 @@ export default async function RootLayout({
     return (
         <Navigation>
             <Breadcrumbs />
-          
             {children}
         </Navigation>
     )

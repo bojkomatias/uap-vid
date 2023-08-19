@@ -44,7 +44,7 @@ export default function IdentificationView({ data }: IdentificationProps) {
     return (
         <>
             <SectionViewer
-                title="Identification"
+                title="Identificación"
                 description="Datos del proyecto"
             >
                 <>

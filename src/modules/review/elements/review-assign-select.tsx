@@ -4,7 +4,7 @@ import { notifications } from '@mantine/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
 import { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check, Plus } from 'tabler-icons-react'
@@ -82,7 +82,7 @@ const ReviewAssignSelect = ({
             >
                 <button
                     onClick={() => setShow(true)}
-                    className="my-1 flex w-full justify-center rounded border border-gray-300 p-2"
+                    className="my-1 flex w-full justify-center rounded border  p-2"
                 >
                     <Plus className="text-gray-300" size={20} />
                 </button>
@@ -114,22 +114,22 @@ const ReviewAssignSelect = ({
 
                     <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
                         <Selector
-                            className="h-5 text-primary transition-all duration-200 hover:text-base-400"
+                            className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
                             aria-hidden="true"
                         />
                     </div>
                 </Combobox.Button>
 
                 {filteredPeople.length > 0 && (
-                    <Combobox.Options className="z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
+                    <Combobox.Options className="z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
                         {filteredPeople.map((value) => (
                             <Combobox.Option
                                 key={value.id}
                                 value={value.id}
                                 className={({ active }) =>
-                                    clsx(
+                                    cx(
                                         'relative cursor-default select-none py-2 pl-8 pr-4',
-                                        active ? 'bg-gray-100' : 'text-base-600'
+                                        active ? 'bg-gray-100' : 'text-gray-600'
                                     )
                                 }
                             >
@@ -137,7 +137,7 @@ const ReviewAssignSelect = ({
                                     <>
                                         <span className="block truncate">
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     selected &&
                                                         'font-semibold text-primary'
                                                 )}
@@ -145,7 +145,7 @@ const ReviewAssignSelect = ({
                                                 {value.name}
                                             </span>
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     'ml-2 truncate text-gray-500',
                                                     active
                                                         ? 'text-indigo-200'
@@ -158,7 +158,7 @@ const ReviewAssignSelect = ({
 
                                         {selected && (
                                             <span
-                                                className={clsx(
+                                                className={cx(
                                                     'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
                                                     active ? 'text-white' : ''
                                                 )}

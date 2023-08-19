@@ -13,7 +13,7 @@ export default async function AcademicUnitsTable({
 
     return (
         <div className="mx-auto max-w-7xl">
-            <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
+            <table className="-mx-4 mt-8 min-w-full divide-y-2 sm:-mx-0">
                 <thead>
                     <tr>
                         <th
@@ -36,7 +36,7 @@ export default async function AcademicUnitsTable({
                         </th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="divide-y  bg-white">
                     {academicUnits?.map((unit) => (
                         <tr key={unit.id}>
                             <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
