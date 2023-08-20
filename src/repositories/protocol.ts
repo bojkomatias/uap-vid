@@ -12,6 +12,10 @@ const findProtocolById = cache(async (id: string) => {
             where: {
                 id,
             },
+            include: {
+                researcher: { select: { id: true, name: true, email: true } },
+                convocatory: { select: { id: true, name: true } },
+            },
         })
     } catch (e) {
         return null

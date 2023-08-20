@@ -106,6 +106,20 @@ const getUsers = cache(
     }
 )
 
+const getAllResearchers = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                role: {
+                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY'],
+                },
+            },
+        })
+        return users
+    } catch (error) {
+        return []
+    }
+}
 const getAllUsersWithoutResearchers = async () => {
     try {
         const users = await prisma.user.findMany({
@@ -233,6 +247,7 @@ const deleteUserById = async (id: string) => {
 
 export {
     getUsers,
+    getAllResearchers,
     getAllUsersWithoutResearchers,
     getAllSecretaries,
     findUserById,
