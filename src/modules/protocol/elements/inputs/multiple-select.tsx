@@ -36,7 +36,7 @@ export default function MultipleSelect({
                         <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                             <X
                                 className={cx(
-                                    'mr-1 h-5 w-5 rounded-full p-1 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-gray-100 hover:stroke-2 hover:text-gray-700 active:scale-95',
+                                    'mr-1 h-6 w-6 rounded-full p-1 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-gray-100 hover:stroke-2 hover:text-gray-700 active:scale-95',
                                     form.getInputProps(path).value.length === 0
                                         ? 'hidden'
                                         : ''
@@ -48,7 +48,7 @@ export default function MultipleSelect({
                                 aria-hidden="true"
                             />
                             <Selector
-                                className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
+                                className="h-5 text-gray-600 hover:text-gray-400"
                                 aria-hidden="true"
                             />
                         </div>

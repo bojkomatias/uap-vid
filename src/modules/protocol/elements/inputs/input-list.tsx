@@ -182,7 +182,7 @@ function PreprocessFieldsMap({
                 className="mx-auto w-full max-w-xs"
             >
                 <p> Añadir otra fila </p>
-                <Plus className="h-5 text-gray-500" />
+                <Plus className="h-4 text-gray-500" />
             </Button>
         </>
     )
@@ -266,7 +266,7 @@ function FieldsMap({
                 className="mx-auto w-full max-w-xs"
             >
                 <p> Añadir otra fila </p>
-                <Plus className="h-5 text-gray-500" />
+                <Plus className="h-4 text-gray-500" />
             </Button>
         </>
     )
