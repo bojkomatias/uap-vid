@@ -23,6 +23,8 @@ const StateSchema = z.enum([
     'ACCEPTED',
     'ON_GOING',
     'DELETED',
+    'DISCONTINUED',
+    'FINISHED',
 ])
 
 export const STATE = StateSchema.Enum
@@ -92,6 +94,7 @@ export const ConvocatorySchema = z
         path: ['to'],
     })
 export type Convocatory = z.infer<typeof ConvocatorySchema>
+
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
 /////////////////////////////////////////
@@ -103,6 +106,7 @@ export const ProtocolSchema = z.object({
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
+    observations: z.string().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -137,6 +141,49 @@ export const UserSchema = z.object({
     name: z.string().nullable(),
     password: z.string().nullable(),
     role: RoleSchema,
+})
+
+/////////////////////////////////////////
+// HISTORIC PRICE CATEGORY SCHEMA
+/////////////////////////////////////////
+export const HistoricCategoryPriceSchema = z.object({
+    from: z.coerce.date(),
+    to: z.coerce.date().nullable(),
+    price: z.number().min(1, { message: 'El campo no puede estar vacío' }),
+    currency: z.string().default('ARS').nullable(),
+})
+
+/////////////////////////////////////////
+// TEAM MEMBER CATEGORY SCHEMA
+// Contiene el array histórico de categorías
+/////////////////////////////////////////
+export const TeamMemberCategorySchema = z.object({
+    id: z.string(),
+    name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+    price: HistoricCategoryPriceSchema.array(),
+})
+
+/////////////////////////////////////////
+// HISTORIC TEAM MEMBER CATEGORY SCHEMA
+/////////////////////////////////////////
+export const HistoricTeamMemberCategorySchema = z.object({
+    id: z.string().optional(),
+    from: z.coerce.date(),
+    to: z.coerce.date().nullable(),
+    teamMemberId: z.string(),
+    categoryId: z.string(),
+})
+
+/////////////////////////////////////////
+// TEAM MEMBER SCHEMA
+/////////////////////////////////////////
+
+export const TeamMemberSchema = z.object({
+    id: z.string(),
+    UserSchema: UserSchema.optional(),
+    name: z.string().optional(),
+    categories: TeamMemberCategorySchema.array(),
+    obrero: z.boolean(),
 })
 
 /////////////////////////////////////////
@@ -307,13 +354,16 @@ export const IdentificationSchema = z.object({
                     }),
                 last_name: z
                     .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                    .min(1, { message: 'El campo no puede estar vacío' })
+                    .nullable(),
                 name: z
                     .string()
-                    .min(1, { message: 'El campo no puede estar vacío' }),
+                    .min(1, { message: 'El campo no puede estar vacío' })
+                    .nullable(),
                 role: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
+                teamMemberId: z.string().nullable(),
             })
         )
         .array()

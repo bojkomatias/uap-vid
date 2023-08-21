@@ -62,6 +62,8 @@ const STATE_SCOPE = {
     ],
     [STATE.ACCEPTED]: [ACTION.APPROVE],
     [STATE.ON_GOING]: [],
+    [STATE.FINISHED]: [],
+    [STATE.DISCONTINUED]: [],
     [STATE.DELETED]: [],
 }
 
