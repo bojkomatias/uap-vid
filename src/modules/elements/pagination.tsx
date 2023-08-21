@@ -14,9 +14,10 @@ export default function Pagination({
 }) {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
+
     const shownRecords = Number(searchParams?.get('records')) || 5
 
-    const currentPage = Number(searchParams?.get('page')) ?? 1
+    const currentPage = Number(searchParams?.get('page')) || 1
 
     const { allPages, displayedPages } = useMemo(() => {
         const allPages: number[] = []
@@ -57,6 +58,7 @@ export default function Pagination({
                         <Button
                             title="Primer página"
                             intent="outline"
+                            className="bg-primary/10"
                             onClick={() => update({ page: 1 })}
                         >
                             {'<<'}
@@ -65,6 +67,7 @@ export default function Pagination({
                         <Button
                             title="Página anterior"
                             intent="outline"
+                            className="bg-primary/10"
                             onClick={() =>
                                 update({
                                     page: currentPage > 1 ? currentPage - 1 : 1,
@@ -102,6 +105,7 @@ export default function Pagination({
                         <Button
                             title="Siguiente página"
                             intent="outline"
+                            className="bg-primary/10"
                             onClick={() =>
                                 update({
                                     page:
@@ -117,6 +121,7 @@ export default function Pagination({
                         <Button
                             title="Última página"
                             intent="outline"
+                            className="bg-primary/10"
                             onClick={() =>
                                 update({
                                     page: allPages[allPages.length - 1],
