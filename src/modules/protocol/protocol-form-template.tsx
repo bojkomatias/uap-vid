@@ -137,7 +137,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             label: string
             value: string
         }) => (
-            <span className={'flex gap-1'}>
+            <>
                 <span
                     className={
                         !form.isValid(path) && section !== value
@@ -149,12 +149,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 </span>
                 {!form.isValid(path) ? (
                     form.isDirty(path) ? (
-                        <AlertCircle className="h-4 w-4 stroke-warning-500 stroke-2" />
-                    ) : null
+                        <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
+                    ) : (
+                        <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
+                    )
                 ) : (
-                    <CircleCheck className="h-4 w-4 stroke-success-500 stroke-2" />
+                    <CircleCheck className="h-4 w-4 stroke-success-500/80" />
                 )}
-            </span>
+            </>
         ),
         [form, section]
     )
@@ -308,11 +310,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             },
                         ]}
                         classNames={{
-                            root: 'bg-gray-50 border rounded',
-                            label: 'uppercase text-xs px-2 py-1 font-regular rounded flex gap-1',
-                            indicator: 'bg-primary rounded',
+                            root: 'bg-gray-50 border rounded divide-x-0 gap-1',
+                            label: 'inline-flex items-center gap-2 px-2 py-1 text-xs font-semibold text-gray-600',
+                            indicator: 'rounded-md ring-1 ring-inset',
                         }}
-                        color="blue"
                         transitionDuration={300}
                     />
                 </motion.div>
@@ -328,7 +329,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             setSection((p) => (Number(p) - 1).toString())
                         }
                     >
-                        <ChevronLeft className="h-5" />
+                        <ChevronLeft className="h-4 text-gray-500" />
                     </Button>
 
                     <div className="flex gap-2">
@@ -348,7 +349,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             setSection((p) => (Number(p) + 1).toString())
                         }
                     >
-                        <ChevronRight className="h-5" />
+                        <ChevronRight className="h-4 text-gray-500" />
                     </Button>
                 </div>
             </form>

@@ -4,6 +4,12 @@ import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import {
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
+} from 'tabler-icons-react'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
     totalRecords,
@@ -58,23 +64,23 @@ export default function Pagination({
                         <Button
                             title="Primer página"
                             intent="outline"
-                            className="bg-primary/10"
+                            className="bg-gray-100"
                             onClick={() => update({ page: 1 })}
                         >
-                            {'<<'}
+                            <ChevronsLeft className="w-4 text-gray-500" />
                         </Button>
 
                         <Button
                             title="Página anterior"
                             intent="outline"
-                            className="bg-primary/10"
+                            className="bg-gray-100"
                             onClick={() =>
                                 update({
                                     page: currentPage > 1 ? currentPage - 1 : 1,
                                 })
                             }
                         >
-                            {'<'}
+                            <ChevronLeft className="w-3.5 text-gray-500" />
                         </Button>
                     </>
                 )}
@@ -105,7 +111,7 @@ export default function Pagination({
                         <Button
                             title="Siguiente página"
                             intent="outline"
-                            className="bg-primary/10"
+                            className="bg-gray-100"
                             onClick={() =>
                                 update({
                                     page:
@@ -115,20 +121,20 @@ export default function Pagination({
                                 })
                             }
                         >
-                            {'>'}
+                            <ChevronRight className="w-3.5 text-gray-500" />
                         </Button>
 
                         <Button
                             title="Última página"
                             intent="outline"
-                            className="bg-primary/10"
+                            className="bg-gray-100"
                             onClick={() =>
                                 update({
                                     page: allPages[allPages.length - 1],
                                 })
                             }
                         >
-                            {'>>'}
+                            <ChevronsRight className="w-4 text-gray-500" />
                         </Button>
                     </>
                 )}
