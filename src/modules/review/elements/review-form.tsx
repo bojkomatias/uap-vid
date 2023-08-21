@@ -10,7 +10,6 @@ import type { Review } from '@prisma/client'
 import { RadioGroup } from '@headlessui/react'
 import { cx } from '@utils/cx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
-import ItemContainer from '@review/elements/review-container'
 import ReviewQuestion from './review-question'
 import { ReviewProvider, useReview } from '@utils/reviewContext'
 import { useRouter } from 'next/navigation'
@@ -66,7 +65,10 @@ export default function ReviewForm({ review }: { review: Review }) {
     )
 
     return (
-        <ItemContainer title="Realizar revisión">
+        <>
+            <h3 className="ml-2 text-lg font-semibold text-gray-900">
+                Realizar revisión
+            </h3>
             <ReviewProvider form={form}>
                 <form
                     onSubmit={(e) => {
@@ -74,7 +76,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         addReview({ ...form.values, updatedAt: new Date() })
                     }}
                 >
-                    <div className="max-h-[54svh] space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
+                    <div className="space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
                         {form.values.questions.map((q, index) => (
                             <ReviewQuestion
                                 key={q.id}
@@ -317,6 +319,6 @@ export default function ReviewForm({ review }: { review: Review }) {
                     </div>
                 </form>
             </ReviewProvider>
-        </ItemContainer>
+        </>
     )
 }

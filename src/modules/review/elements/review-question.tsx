@@ -35,16 +35,16 @@ export default function ReviewQuestion({
                     <b>{index + 1}- </b>
                     {questions.find((question) => question.id === id)?.question}
                 </RadioGroup.Label>
-                <div className="mt-1 grid grid-cols-2 gap-6">
+                <div className="mt-1 flex justify-end gap-2">
                     <RadioGroup.Option
                         key={`yes-${id}`}
                         value={true}
                         className={({ checked }) =>
                             cx(
-                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase ',
+                                'flex w-20 cursor-pointer items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase',
                                 checked
-                                    ? 'bg-success-50 text-success-600 ring-[1.5px] ring-success-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset  hover:bg-gray-100'
+                                    ? 'bg-success-50 text-success-600'
+                                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
                             )
                         }
                     >
@@ -55,10 +55,10 @@ export default function ReviewQuestion({
                         value={false}
                         className={({ checked }) =>
                             cx(
-                                'flex items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase',
+                                'flex w-20 items-center justify-center rounded-md py-0.5 text-sm font-semibold uppercase',
                                 checked
-                                    ? 'bg-error-50 text-error-600 ring-[1.5px] ring-error-600'
-                                    : 'bg-white text-gray-500 ring-1 ring-inset  hover:bg-gray-100'
+                                    ? 'bg-error-50 text-error-600'
+                                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
                             )
                         }
                     >

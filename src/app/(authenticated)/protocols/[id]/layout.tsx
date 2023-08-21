@@ -14,7 +14,6 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ACTION } from '@utils/zod'
 import ReviewAssignation from '@review/review-assignation'
-import { cx } from '@utils/cx'
 
 async function Layout({
     params,
@@ -95,7 +94,7 @@ async function Layout({
                 </div>
             ) : null}
 
-            <div className="flex flex-col-reverse lg:flex-row">
+            <div className="flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
                 <div className="w-full">{children}</div>
                 <Reviews
                     id={protocol.id}

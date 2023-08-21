@@ -27,7 +27,7 @@ export default async function Navigation({
             <div
                 className={cx('flex flex-1 flex-col', hasNavigation && 'pl-16')}
             >
-                <main className="w-full flex-1 px-4 pb-20 sm:px-6 2xl:px-10">
+                <main className="w-full flex-1 px-4 pb-20 sm:px-6 xl:px-10">
                     {children}
                 </main>
             </div>

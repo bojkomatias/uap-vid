@@ -10,9 +10,12 @@ export default function ReviewQuestionView({
 }: ReviewQuestion & { index: number }) {
     return (
         <div>
-            <div className="flex justify-between gap-1 text-xs text-gray-600">
+            <div className="flex gap-1 text-xs text-gray-600">
                 <b>{index + 1}- </b>
-                {questions.find((question) => question.id === id)?.question}
+                <div className="flex-grow">
+                    {questions.find((question) => question.id === id)?.question}
+                </div>
+
                 <div>
                     {approved ? (
                         <Check className="h-5 w-5 text-success-600" />
