@@ -7,6 +7,12 @@ import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { ProtocolMetadata } from '@protocol/protocol-metadata'
+import ApproveButton from '@protocol/elements/action-buttons/approve'
+import AcceptButton from '@protocol/elements/action-buttons/accept'
+import PublishButton from '@protocol/elements/action-buttons/publish'
+import EditButton from '@protocol/elements/action-buttons/edit'
+import { getReviewsByProtocol } from '@repositories/review'
+import { Button } from '@elements/button'
 
 async function Layout({
     params,
@@ -29,22 +35,46 @@ async function Layout({
     }
     const protocol = await findProtocolById(params.id)
     if (!protocol) redirect('/protocols')
+    const reviews = await getReviewsByProtocol(protocol.id)
 
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
-            <ProtocolMetadata
-                currentUser={session.user}
-                id={protocol.id}
-                createdAt={protocol.createdAt}
-                state={protocol.state}
-                researcher={protocol.researcher}
-                convocatory={protocol.convocatory}
-            />
+            <div className="flex w-full gap-3">
+                <ProtocolMetadata
+                    currentUser={session.user}
+                    id={protocol.id}
+                    createdAt={protocol.createdAt}
+                    state={protocol.state}
+                    researcher={protocol.researcher}
+                    convocatory={protocol.convocatory}
+                />
+                <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
+                    <ApproveButton
+                        role={session.user.role}
+                        protocol={protocol}
+                    />
+                    <AcceptButton
+                        role={session.user.role}
+                        protocol={protocol}
+                        reviews={reviews}
+                    />
+                    <PublishButton
+                        userId={session.user.id}
+                        protocol={protocol}
+                    />
+                    <EditButton
+                        user={session.user}
+                        researcherId={protocol.researcherId}
+                        state={protocol.state}
+                        id={protocol.id}
+                        reviews={reviews}
+                    />
+                </div>
+            </div>
 
             <div className="flex flex-col-reverse lg:flex-row">
-                <div className="mx-auto w-full max-w-7xl">{children}</div>
-
+                <div className="w-full">{children}</div>
                 <Reviews
                     id={protocol.id}
                     researcherId={protocol.researcherId}

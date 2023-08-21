@@ -9,7 +9,6 @@ import {
     PDFDownloadLink,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
-import { Download } from 'tabler-icons-react'
 
 const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
     return (

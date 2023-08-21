@@ -21,38 +21,36 @@ export default async function ReviewsTemplate({
     userRole: Role
 }) {
     return (
-        <aside className="relative">
-            <div className="sticky top-4 mb-4 space-y-3">
-                {canExecuteActions(
-                    userId === researcherId
-                        ? []
-                        : [
-                              ACTION.ASSIGN_TO_METHODOLOGIST,
-                              ACTION.ASSIGN_TO_SCIENTIFIC,
-                              ACTION.ACCEPT,
-                          ],
-                    userRole,
-                    state
-                ) && (
-                    <ReviewAssignationWrapper>
-                        <ReviewAssignation
-                            protocolId={id}
-                            researcherId={researcherId}
-                            protocolState={state}
-                        />
-                    </ReviewAssignationWrapper>
+        <aside className="sticky top-4 mb-4 h-fit space-y-3">
+            {canExecuteActions(
+                userId === researcherId
+                    ? []
+                    : [
+                          ACTION.ASSIGN_TO_METHODOLOGIST,
+                          ACTION.ASSIGN_TO_SCIENTIFIC,
+                          ACTION.ACCEPT,
+                      ],
+                userRole,
+                state
+            ) && (
+                <ReviewAssignationWrapper>
+                    <ReviewAssignation
+                        protocolId={id}
+                        researcherId={researcherId}
+                        protocolState={state}
+                    />
+                </ReviewAssignationWrapper>
+            )}
+
+            {userId !== researcherId &&
+                canExecute(ACTION.COMMENT, userRole, state) && (
+                    <ReviewFormTemplate protocolId={id} userId={userId} />
                 )}
 
-                {userId !== researcherId &&
-                    canExecute(ACTION.COMMENT, userRole, state) && (
-                        <ReviewFormTemplate protocolId={id} userId={userId} />
-                    )}
-
-                {userId === researcherId ||
-                    (canAccess(ACCESS.REVIEWS, userRole) && (
-                        <ReviewList role={userRole} state={state} id={id} />
-                    ))}
-            </div>
+            {userId === researcherId ||
+                (canAccess(ACCESS.REVIEWS, userRole) && (
+                    <ReviewList role={userRole} state={state} id={id} />
+                ))}
         </aside>
     )
 }
