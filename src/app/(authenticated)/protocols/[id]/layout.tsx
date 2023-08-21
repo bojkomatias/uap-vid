@@ -12,10 +12,9 @@ import AcceptButton from '@protocol/elements/action-buttons/accept'
 import PublishButton from '@protocol/elements/action-buttons/publish'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import { getReviewsByProtocol } from '@repositories/review'
-import { Button } from '@elements/button'
 import { ACTION } from '@utils/zod'
-import ReviewAssignationWrapper from '@review/review-assignation-wrapper'
 import ReviewAssignation from '@review/review-assignation'
+import { cx } from '@utils/cx'
 
 async function Layout({
     params,
@@ -86,15 +85,15 @@ async function Layout({
                       ],
                 session.user.role,
                 protocol.state
-            ) && (
-                <div className="my-1 ml-2 rounded bg-gray-50/50 px-3 py-2 leading-loose drop-shadow-sm">
+            ) ? (
+                <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-loose drop-shadow-sm">
                     <ReviewAssignation
                         protocolId={protocol.id}
                         researcherId={protocol.researcherId}
                         protocolState={protocol.state}
                     />
                 </div>
-            )}
+            ) : null}
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="w-full">{children}</div>

@@ -2,15 +2,16 @@
 import { Combobox } from '@headlessui/react'
 import { notifications } from '@mantine/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
-import { State } from '@prisma/client'
+import type { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Selector, Check, Plus } from 'tabler-icons-react'
+import { Selector, Check } from 'tabler-icons-react'
 import { Tooltip } from '@mantine/core'
 import { emailer } from '@utils/emailer'
 import { useCases } from '@utils/emailer'
+import { Button } from '@elements/button'
 
 interface ReviewAssignSelectProps {
     type: ReviewType
@@ -25,7 +26,6 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
-    protocolState,
 }: ReviewAssignSelectProps) => {
     const router = useRouter()
 
@@ -50,6 +50,7 @@ const ReviewAssignSelect = ({
                 color: 'green',
             })
             emailer(useCases.onAssignation, protocolId, reviewerId)
+            setShow(false)
             return router.refresh()
         }
         return notifications.show({
@@ -69,26 +70,32 @@ const ReviewAssignSelect = ({
               })
     const [show, setShow] = useState(false)
 
-    if (
-        !show &&
-        !review?.reviewerId &&
-        protocolState !== State.SCIENTIFIC_EVALUATION
-    ) {
+    if (!show && !review?.reviewerId)
         return (
             <Tooltip
                 label={
                     'Al asignar el evaluador el protocolo cambiara de estado.'
                 }
             >
-                <button
+                <Button
+                    intent="outline"
+                    className="px-3 py-1.5 text-xs"
                     onClick={() => setShow(true)}
-                    className="my-1 flex w-full justify-center rounded border  p-2"
                 >
-                    <Plus className="text-gray-300" size={20} />
-                </button>
+                    Asignar evaluador
+                </Button>
             </Tooltip>
         )
-    }
+    if (!show && review?.reviewerId)
+        return (
+            <Button
+                intent="outline"
+                className="px-3 py-1.5 text-xs"
+                onClick={() => setShow(true)}
+            >
+                Reasignar evaluador
+            </Button>
+        )
     return (
         <Combobox
             as="div"
@@ -96,86 +103,86 @@ const ReviewAssignSelect = ({
             onChange={(e) => {
                 if (e !== null) changeState(e)
             }}
+            className="relative w-80"
         >
-            <div className="relative">
-                <Combobox.Button className="relative w-full">
-                    <Combobox.Input
-                        autoComplete="off"
-                        className="input form-input"
-                        placeholder={`Seleccione un  ${EvaluatorsByReviewType[
-                            type
-                        ].toLocaleLowerCase()}`}
-                        onChange={(e) => setQuery(e.target.value)}
-                        displayValue={() =>
-                            users.find((user) => user.id === review?.reviewerId)
-                                ?.name ?? ''
-                        }
+            <Combobox.Button className="relative w-full">
+                <Combobox.Input
+                    autoComplete="off"
+                    className="input form-input px-3 py-1 text-sm"
+                    placeholder={`Seleccione un  ${EvaluatorsByReviewType[
+                        type
+                    ].toLocaleLowerCase()}`}
+                    onChange={(e) => setQuery(e.target.value)}
+                    displayValue={() =>
+                        users.find((user) => user.id === review?.reviewerId)
+                            ?.name ?? ''
+                    }
+                />
+
+                <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
+                    <Selector
+                        className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
+                        aria-hidden="true"
                     />
+                </div>
+            </Combobox.Button>
 
-                    <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
-                        <Selector
-                            className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
-                            aria-hidden="true"
-                        />
-                    </div>
-                </Combobox.Button>
-
-                {filteredPeople.length > 0 && (
-                    <Combobox.Options className="z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
-                        {filteredPeople.map((value) => (
-                            <Combobox.Option
-                                key={value.id}
-                                value={value.id}
-                                className={({ active }) =>
-                                    cx(
-                                        'relative cursor-default select-none py-2 pl-8 pr-4',
-                                        active ? 'bg-gray-100' : 'text-gray-600'
-                                    )
-                                }
-                            >
-                                {({ active, selected }) => (
-                                    <>
-                                        <span className="block truncate">
-                                            <span
-                                                className={cx(
-                                                    selected &&
-                                                        'font-semibold text-primary'
-                                                )}
-                                            >
-                                                {value.name}
-                                            </span>
-                                            <span
-                                                className={cx(
-                                                    'ml-2 truncate text-gray-500',
-                                                    active
-                                                        ? 'text-indigo-200'
-                                                        : 'text-gray-500'
-                                                )}
-                                            >
-                                                {value.email}
-                                            </span>
+            {filteredPeople.length > 0 && (
+                <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                    {filteredPeople.map((value) => (
+                        <Combobox.Option
+                            key={value.id}
+                            value={value.id}
+                            className={({ active }) =>
+                                cx(
+                                    'relative cursor-default select-none py-2 pl-8 pr-2',
+                                    active ? 'bg-gray-100' : 'text-gray-600'
+                                )
+                            }
+                        >
+                            {({ active, selected }) => (
+                                <>
+                                    <span className="block truncate font-medium">
+                                        <span
+                                            className={cx(
+                                                active && 'text-gray-800',
+                                                selected && 'text-primary'
+                                            )}
+                                        >
+                                            {value.name}
                                         </span>
+                                        <span
+                                            title={value.email}
+                                            className={cx(
+                                                'ml-2 truncate text-xs font-light',
+                                                active
+                                                    ? 'text-gray-700'
+                                                    : 'text-gray-500'
+                                            )}
+                                        >
+                                            {value.email}
+                                        </span>
+                                    </span>
 
-                                        {selected && (
-                                            <span
-                                                className={cx(
-                                                    'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
-                                                    active ? 'text-white' : ''
-                                                )}
-                                            >
-                                                <Check
-                                                    className="ml-1 h-4 w-4 text-gray-500"
-                                                    aria-hidden="true"
-                                                />
-                                            </span>
-                                        )}
-                                    </>
-                                )}
-                            </Combobox.Option>
-                        ))}
-                    </Combobox.Options>
-                )}
-            </div>
+                                    {selected && (
+                                        <span
+                                            className={cx(
+                                                'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
+                                                active ? 'text-white' : ''
+                                            )}
+                                        >
+                                            <Check
+                                                className="h-4 w-4 text-gray-500"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                    )}
+                                </>
+                            )}
+                        </Combobox.Option>
+                    ))}
+                </Combobox.Options>
+            )}
         </Combobox>
     )
 }
