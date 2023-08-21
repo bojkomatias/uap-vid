@@ -149,7 +149,7 @@ export const ResearcherReassignation = ({
             disabled={researchers.length === 0}
             onClick={() => setShowSelector(true)}
         >
-            Re-asignar investigador
+            Reasignar investigador
         </Button>
     )
 }
