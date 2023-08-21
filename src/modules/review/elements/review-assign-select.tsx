@@ -8,7 +8,6 @@ import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
-import { Tooltip } from '@mantine/core'
 import { emailer } from '@utils/emailer'
 import { useCases } from '@utils/emailer'
 import { Button } from '@elements/button'
@@ -72,27 +71,32 @@ const ReviewAssignSelect = ({
 
     if (!show && !review?.reviewerId)
         return (
-            <Tooltip
-                label={
-                    'Al asignar el evaluador el protocolo cambiara de estado.'
-                }
+            <Button
+                intent="outline"
+                className="relative px-3 py-1.5 text-xs"
+                onClick={() => setShow(true)}
             >
-                <Button
-                    intent="outline"
-                    className="px-3 py-1.5 text-xs"
-                    onClick={() => setShow(true)}
-                >
-                    Asignar evaluador
-                </Button>
-            </Tooltip>
+                <div className="invisible absolute left-36 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
+                    <div className="w-64 rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
+                        Al asignar el evaluador el protocolo cambiara de estado.
+                    </div>
+                </div>
+                Asignar evaluador
+            </Button>
         )
     if (!show && review?.reviewerId)
         return (
             <Button
                 intent="outline"
-                className="px-3 py-1.5 text-xs"
+                className="relative px-3 py-1.5 text-xs"
                 onClick={() => setShow(true)}
             >
+                <div className="invisible absolute left-40 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
+                    <div className="w-64 rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
+                        Al reasignar se perderá la evaluación ya realizada por
+                        el evaluador.
+                    </div>
+                </div>
                 Reasignar evaluador
             </Button>
         )

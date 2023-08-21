@@ -107,8 +107,10 @@ const ReviewAssignation = async ({
                     {data.review?.reviewer.name ?? (
                         <span className="text-sm text-gray-500">-</span>
                     )}
-                    <div className="-mt-2 ml-px text-xs font-light text-gray-500">
-                        {data.review?.reviewer.email}
+                    <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
+                        {data.review?.reviewer.email ?? (
+                            <span className="invisible">-</span>
+                        )}
                     </div>
                 </div>
                 <Badge className="ml-4">

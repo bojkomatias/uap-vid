@@ -4,7 +4,7 @@ import { flexRender, type Header } from '@tanstack/react-table'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
-import { ArrowDown, ArrowUp } from 'tabler-icons-react'
+import { ArrowDown, ArrowsSort, ArrowUp } from 'tabler-icons-react'
 
 export default function HeaderSorter({
     header,
@@ -17,7 +17,7 @@ export default function HeaderSorter({
         <div
             {...{
                 className: header.column.getCanSort()
-                    ? 'cursor-pointer select-none flex items-center hover:text-black hover:drop-shadow'
+                    ? 'cursor-pointer select-none flex items-center hover:text-black group'
                     : '',
                 onClick: () =>
                     header.column.getCanSort() &&
@@ -42,7 +42,11 @@ export default function HeaderSorter({
                 ) : (
                     <ArrowDown className="ml-1.5 h-4 w-4 text-primary" />
                 )
-            ) : null}
+            ) : (
+                header.column.getCanSort() && (
+                    <ArrowsSort className="ml-1.5 h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                )
+            )}
         </div>
     )
 }

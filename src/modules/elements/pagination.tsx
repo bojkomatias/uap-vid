@@ -96,7 +96,7 @@ export default function Pagination({
                               intent="outline"
                               className={
                                   Number(currentPage) === page
-                                      ? 'fade-in border-2 border-primary '
+                                      ? 'fade-in ring ring-primary'
                                       : 'fade-in'
                               }
                               onClick={() => update({ page: page })}
