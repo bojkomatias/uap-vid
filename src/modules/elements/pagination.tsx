@@ -7,7 +7,7 @@ import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
     totalRecords,
-    numberOfDisplayedPages = 4,
+    numberOfDisplayedPages = 5,
 }: {
     totalRecords: number
     numberOfDisplayedPages?: number
@@ -90,7 +90,7 @@ export default function Pagination({
                               intent="outline"
                               className={
                                   Number(currentPage) === page
-                                      ? 'fade-in bg-primary text-white hover:bg-primary hover:text-white'
+                                      ? 'fade-in border-2 border-primary '
                                       : 'fade-in'
                               }
                               onClick={() => update({ page: page })}
