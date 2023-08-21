@@ -158,6 +158,7 @@ const getProtocolsByRol = cache(
                                       is: {
                                           title: {
                                               contains: search,
+                                              mode: 'insensitive',
                                           },
                                       },
                                   },
