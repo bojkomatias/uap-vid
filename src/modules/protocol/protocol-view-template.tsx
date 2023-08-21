@@ -32,7 +32,7 @@ export default function View({
 }) {
     if (role === 'METHODOLOGIST')
         return (
-            <div className="px-4">
+            <div className="px-2">
                 <IdentificationView data={sections.identification} />
                 <DurationView data={sections.duration} />
                 <DescriptionView data={sections.description} />
@@ -40,7 +40,7 @@ export default function View({
             </div>
         )
     return (
-        <div className="px-4">
+        <div className="px-2">
             <IdentificationView data={sections.identification} />
             <DurationView data={sections.duration} />
             <BudgetView data={sections.budget} />

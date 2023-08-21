@@ -116,7 +116,7 @@ const getProtocolsByRol = cache(
             id: true,
             state: true,
             createdAt: true,
-            convocatory: { select: { id: true, name: true } },
+            convocatory: { select: { id: true, name: true, year: true } },
             researcher: {
                 select: { id: true, name: true, role: true, email: true },
             },
@@ -145,7 +145,8 @@ const getProtocolsByRol = cache(
         }
 
         // orderBy reusable using the helper function
-        const orderBy = order && sort ? orderByQuery(sort, order) : {}
+        const orderBy =
+            order && sort ? orderByQuery(sort, order) : { createdAt: 'desc' }
 
         // Search reusable
         const whereSearch = search

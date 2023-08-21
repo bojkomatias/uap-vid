@@ -43,15 +43,10 @@ export default function ReviewItem({
                     )}
                 >
                     <button
-                        className="-mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
+                        className="group -mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
                         onClick={() => setShowReviewQuestions((prv) => !prv)}
                     >
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-light text-gray-600">
-                                Veredicto:
-                            </span>
-                            <ReviewVerdictBadge verdict={review.verdict} />
-                        </div>
+                        <ReviewVerdictBadge verdict={review.verdict} />
 
                         {review.verdict ===
                         ReviewVerdict.APPROVED_WITH_CHANGES ? (
@@ -68,12 +63,15 @@ export default function ReviewItem({
                                 </label>
                             )
                         ) : null}
-                        <ChevronRight
-                            className={cx(
-                                'h-4 w-4 transition',
-                                showReviewQuestions && 'rotate-90'
-                            )}
-                        />
+                        <span className="flex text-xs font-semibold text-gray-600 group-hover:underline">
+                            Ver detalles
+                            <ChevronRight
+                                className={cx(
+                                    'h-4 w-4 transition',
+                                    showReviewQuestions && 'rotate-90'
+                                )}
+                            />
+                        </span>
                     </button>
 
                     {showReviewQuestions && (

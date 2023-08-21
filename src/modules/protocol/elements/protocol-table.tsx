@@ -65,7 +65,7 @@ export default function ProtocolTable({
             },
             {
                 accessorKey: 'id',
-                header: 'Id',
+                header: '#',
                 cell: ({ row }) => (
                     <span className="text-xs text-gray-600">
                         {row.original.id}
@@ -74,12 +74,16 @@ export default function ProtocolTable({
             },
             {
                 accessorKey: 'createdAt',
-                header: 'Creado',
+                header: 'Creación',
                 cell: ({ row }) => (
                     <span className="text-xs text-gray-600">
                         {dateFormatter.format(row.original.createdAt)}
                     </span>
                 ),
+            },
+            {
+                accessorKey: 'convocatory.year',
+                header: 'Año',
             },
             {
                 accessorKey: 'convocatory.name',
