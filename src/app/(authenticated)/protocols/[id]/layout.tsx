@@ -1,5 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
-import { canExecute } from '@utils/scopes'
+import { canExecute, canExecuteActions } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import type { ReactNode } from 'react'
 import { findProtocolById } from 'repositories/protocol'
@@ -13,6 +13,9 @@ import PublishButton from '@protocol/elements/action-buttons/publish'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import { getReviewsByProtocol } from '@repositories/review'
 import { Button } from '@elements/button'
+import { ACTION } from '@utils/zod'
+import ReviewAssignationWrapper from '@review/review-assignation-wrapper'
+import ReviewAssignation from '@review/review-assignation'
 
 async function Layout({
     params,
@@ -72,6 +75,26 @@ async function Layout({
                     />
                 </div>
             </div>
+
+            {canExecuteActions(
+                session.user.id === protocol.researcherId
+                    ? []
+                    : [
+                          ACTION.ASSIGN_TO_METHODOLOGIST,
+                          ACTION.ASSIGN_TO_SCIENTIFIC,
+                          ACTION.ACCEPT,
+                      ],
+                session.user.role,
+                protocol.state
+            ) && (
+                <div className="my-1 ml-2 rounded bg-gray-50/50 px-3 py-2 leading-loose drop-shadow-sm">
+                    <ReviewAssignation
+                        protocolId={protocol.id}
+                        researcherId={protocol.researcherId}
+                        protocolState={protocol.state}
+                    />
+                </div>
+            )}
 
             <div className="flex flex-col-reverse lg:flex-row">
                 <div className="w-full">{children}</div>

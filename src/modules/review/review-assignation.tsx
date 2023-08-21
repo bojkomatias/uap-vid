@@ -3,6 +3,8 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
+import { User } from 'tabler-icons-react'
+import { Badge } from '@elements/badge'
 
 interface ReviewAssignProps {
     protocolId: string
@@ -98,8 +100,16 @@ const ReviewAssignation = async ({
     ].filter((r) => r.enabled)
 
     return reviewAssignSelectsData.map((data) => (
-        <div key={data.type} className="mb-4 px-2">
-            <label className="label">{EvaluatorsByReviewType[data.type]}</label>
+        <div key={data.type} className="flex items-baseline">
+            <div className="flex items-center gap-2">
+                <Badge>{EvaluatorsByReviewType[data.type]}</Badge>
+                <div className="font-medium">
+                    {data.review?.reviewer.name}
+                    <div className="-mt-2 ml-px text-xs font-light text-gray-500">
+                        {data.review?.reviewer.email}
+                    </div>
+                </div>
+            </div>
             <ReviewAssignSelect
                 {...data}
                 protocolId={protocolId}
