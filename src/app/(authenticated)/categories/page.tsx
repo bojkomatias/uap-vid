@@ -17,7 +17,7 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
 
-    const categories = getCategories(searchParams)
+    const [totalRecords, categories] = await getCategories(searchParams)
 
     const dummydata = [
         {
@@ -52,8 +52,8 @@ export default async function Page({
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     return (
-        <section className="flex flex-col gap-2">
-            <pre>{JSON.stringify(searchParams)}</pre>
+        <>
+            <pre>{JSON.stringify(categories)}</pre>
 
             <PageHeading title="Categorías de miembros de equipo de investigación" />
             <p className="ml-2 text-sm text-gray-500">
@@ -66,7 +66,10 @@ export default async function Page({
             >
                 Crear categoría
             </Link>
-            <CategoriesTable categories={dummydata} />
-        </section>
+            <CategoriesTable
+                categories={categories}
+                totalRecords={totalRecords}
+            />
+        </>
     )
 }

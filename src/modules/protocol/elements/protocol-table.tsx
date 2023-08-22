@@ -286,20 +286,23 @@ export default function ProtocolTable({
         'reviews_3.reviewer.name': false,
     }
     return (
-        <TanStackTable
-            data={protocols}
-            columns={columns}
-            totalRecords={totalRecords}
-            initialVisibility={initialVisible}
-            filterableByKey={{
-                filter: 'state',
-                // Slice to avoid NOT_CREATED
-                values: Object.entries(ProtocolStatesDictionary).slice(
-                    1,
-                    user.role === 'ADMIN' ? undefined : -1
-                ),
-            }}
-            searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-        />
+        <>
+            <>{JSON.stringify(protocols)}</>
+            <TanStackTable
+                data={protocols}
+                columns={columns}
+                totalRecords={totalRecords}
+                initialVisibility={initialVisible}
+                filterableByKey={{
+                    filter: 'state',
+                    // Slice to avoid NOT_CREATED
+                    values: Object.entries(ProtocolStatesDictionary).slice(
+                        1,
+                        user.role === 'ADMIN' ? undefined : -1
+                    ),
+                }}
+                searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
+            />
+        </>
     )
 }

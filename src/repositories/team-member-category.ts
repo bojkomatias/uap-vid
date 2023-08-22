@@ -1,5 +1,4 @@
-import type { User } from '@prisma/client'
-import { Role } from '@prisma/client'
+import type { HistoricCategoryPrice, User } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -8,7 +7,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
  
  * @param records this is the amount of records shown in the table at once.
  * @param page necessary for pagination, the total amount of pages is calculated using the records number. Defaults to 1.
- * @param search string that, for now, only searches the name of the user, which is defined as insensitive.
+ * @param search string that, for now, only searches the name of the category, which is defined as insensitive.
  * @param sort this is the key which will be used to order the records.
  * @param order this is the type of ordering which will be used: asc or desc. Always present when a key is given to the order param.
  *
@@ -50,6 +49,7 @@ const getCategories = cache(
                         ],
                     },
                 }),
+
                 prisma.teamMemberCategory.findMany({
                     skip: Number(records) * (Number(page) - 1),
                     take: Number(records),
@@ -88,72 +88,6 @@ const getCategories = cache(
     }
 )
 
-const getAllResearchers = async () => {
-    try {
-        const users = await prisma.user.findMany({
-            where: {
-                role: {
-                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY'],
-                },
-            },
-        })
-        return users
-    } catch (error) {
-        return []
-    }
-}
-const getAllUsersWithoutResearchers = async () => {
-    try {
-        const users = await prisma.user.findMany({
-            where: {
-                role: {
-                    not: Role.RESEARCHER,
-                },
-            },
-        })
-        return users
-    } catch (error) {
-        return null
-    }
-}
-
-const getAllSecretaries = cache(async () => {
-    try {
-        const secretaries = await prisma.user.findMany({
-            where: { role: Role.SECRETARY },
-        })
-        return secretaries
-    } catch (error) {
-        return null
-    }
-})
-
-const findUserById = cache(async (id: string) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                id,
-            },
-        })
-        return user
-    } catch (error) {
-        return null
-    }
-})
-
-const findUserByEmail = cache(async (email: string) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                email,
-            },
-        })
-        return user
-    } catch (error) {
-        return null
-    }
-})
-
 const updateUserById = async (id: string, data: User) => {
     try {
         const user = await prisma.user.update({
@@ -168,47 +102,15 @@ const updateUserById = async (id: string, data: User) => {
     }
 }
 
-const updateUserRoleById = async (id: string, role: Role) => {
-    try {
-        const user = await prisma.user.update({
-            where: {
-                id,
-            },
-            data: { role },
-        })
-        return user
-    } catch (error) {
-        return null
-    }
-}
-
-const updateUserByEmail = async (email: string, data: User) => {
-    try {
-        const user = await prisma.user.update({
-            where: {
-                email,
-            },
-            data,
-        })
-        return user
-    } catch (error) {
-        return null
-    }
-}
-
-const saveUser = async (data: {
+const createCategory = async (data: {
     name: string
-    email: string
-    image?: string | null
-    password?: string
-    role: Role
-    lastLogin?: Date
+    price: HistoricCategoryPrice[]
 }) => {
     try {
-        const user = await prisma.user.create({
+        const category = await prisma.teamMemberCategory.create({
             data,
         })
-        return user
+        return category
     } catch (error) {
         return null
     }
@@ -227,16 +129,4 @@ const deleteUserById = async (id: string) => {
     }
 }
 
-export {
-    getCategories,
-    getAllResearchers,
-    getAllUsersWithoutResearchers,
-    getAllSecretaries,
-    findUserById,
-    findUserByEmail,
-    updateUserById,
-    updateUserRoleById,
-    updateUserByEmail,
-    saveUser,
-    deleteUserById,
-}
+export { getCategories, updateUserById, createCategory, deleteUserById }

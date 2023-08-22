@@ -4,14 +4,15 @@ import { useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'
+import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
 
-export default function UserForm() {
+export default function CategoryForm() {
     const router = useRouter()
     const [category, setCategory] = useState({})
+
     const [loading, setLoading] = useState(false)
 
     const createCategory = async () => {
-        setLoading(true)
         const res = await fetch(`/api/categories`, {
             method: 'POST',
             mode: 'cors',
@@ -20,7 +21,7 @@ export default function UserForm() {
             },
             body: JSON.stringify(category),
         })
-        if (res.status === 201) {
+        if (res.status === 200) {
             notifications.show({
                 title: 'Categoría creada',
                 message: 'Nueva cateogría creada correctamente',
@@ -33,7 +34,7 @@ export default function UserForm() {
             })
             setLoading(false)
             router.refresh()
-            router.push('/users')
+            router.push('/categories')
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',
@@ -84,13 +85,19 @@ export default function UserForm() {
                     id="price"
                     required
                     className="input"
-                    type="numbef"
+                    type="number"
                     name="price"
                     placeholder="$2300.00"
                     onChange={(e) =>
                         setCategory({
                             ...category,
-                            [e.target.name]: e.target.value,
+                            [e.target.name]: [
+                                {
+                                    from: new Date(),
+                                    price: Number(e.target.value),
+                                    //No le paso la currency porque está por default en ARS.
+                                },
+                            ] as HistoricCategoryPrice[],
                         })
                     }
                 />
