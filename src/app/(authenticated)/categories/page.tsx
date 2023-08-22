@@ -7,14 +7,54 @@ import { redirect } from 'next/navigation'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
 import Link from 'next/link'
+import CategoriesTable from 'modules/categories/team-member-category-table'
+import { getCategories } from '@repositories/team-member-category'
 
-export default async function Page() {
+export default async function Page({
+    searchParams,
+}: {
+    searchParams: { [key: string]: string }
+}) {
     const session = await getServerSession(authOptions)
+
+    const categories = getCategories(searchParams)
+
+    const dummydata = [
+        {
+            id: 1,
+            name: 'Categoría 1',
+            price: [
+                { from: '2020', to: '2021', price: 200.5, currency: 'ARS' },
+                { from: '2021', to: '2022', price: 320.5, currency: 'ARS' },
+                { from: '2022', to: '2023', price: 500.5, currency: 'ARS' },
+            ],
+        },
+        {
+            id: 2,
+            name: 'Categoría 2',
+            price: [
+                { from: '2020', to: '2021', price: 200.5, currency: 'USD' },
+                { from: '2021', to: '2022', price: 320.5, currency: 'ARS' },
+                { from: '2022', to: '2023', price: 500.5, currency: 'ARS' },
+            ],
+        },
+        {
+            id: 3,
+            name: 'Categoría 3',
+            price: [
+                { from: '2020', to: '2021', price: 200.5, currency: 'ARS' },
+                { from: '2021', to: '2022', price: 320.5, currency: 'USD' },
+                { from: '2022', to: '2023', price: 500.5, currency: 'USD' },
+            ],
+        },
+    ]
 
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     return (
         <section className="flex flex-col gap-2">
+            <pre>{JSON.stringify(searchParams)}</pre>
+
             <PageHeading title="Categorías de miembros de equipo de investigación" />
             <p className="ml-2 text-sm text-gray-500">
                 Lista de las categorías asignables a los miembros de equipo de
@@ -26,6 +66,7 @@ export default async function Page() {
             >
                 Crear categoría
             </Link>
+            <CategoriesTable categories={dummydata} />
         </section>
     )
 }
