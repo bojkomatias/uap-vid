@@ -56,7 +56,6 @@ export default function Pagination({
 
     return (
         <div className="flex flex-col items-center gap-2">
-            {}
             <div className="mx-auto mt-12 flex w-fit gap-2">
                 {numberOfDisplayedPages >=
                 Math.ceil(totalRecords / shownRecords) ? null : (
@@ -67,7 +66,7 @@ export default function Pagination({
                             className="bg-gray-100"
                             onClick={() => update({ page: 1 })}
                         >
-                            <ChevronsLeft className="w-4 text-gray-500" />
+                            <ChevronsLeft className="w-3.5 text-gray-500" />
                         </Button>
 
                         <Button
@@ -134,7 +133,7 @@ export default function Pagination({
                                 })
                             }
                         >
-                            <ChevronsRight className="w-4 text-gray-500" />
+                            <ChevronsRight className="w-3.5 text-gray-500" />
                         </Button>
                     </>
                 )}
@@ -144,7 +143,7 @@ export default function Pagination({
                     currentPage={currentPage}
                 />
             </div>
-            <span className="flex  gap-1 text-xs text-black">
+            <span className="flex gap-1 text-xs text-black">
                 {shownRecords * Number(searchParams?.get('page') || 1) -
                     shownRecords +
                     1 <
@@ -170,6 +169,7 @@ export default function Pagination({
                             onClick={() =>
                                 update({
                                     records: totalRecords,
+                                    page: 1,
                                 })
                             }
                         >
