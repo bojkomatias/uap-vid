@@ -83,6 +83,7 @@ export default function RecordsDropdown({
                                     onClick={() =>
                                         update({
                                             records: options.at(-1),
+                                            page: 1,
                                         })
                                     }
                                     className={cx(
