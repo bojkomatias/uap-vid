@@ -53,7 +53,7 @@ export default function TanStackTable({
                 />
             )}
 
-            {data.length >= 1 ? (
+            {data?.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
                     <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
                         <thead>
