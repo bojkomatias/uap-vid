@@ -26,7 +26,7 @@ export async function ProtocolMetadata({
         researcherList = await getAllResearchers()
     }
     return (
-        <div className="z-10 my-1 ml-2 max-w-4xl flex-grow rounded-lg bg-gray-50/50 px-3 py-2 leading-loose drop-shadow-sm">
+        <div className="z-10 my-1 ml-2 max-w-4xl flex-grow rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                     <Calendar className="h-4 text-gray-600" />
@@ -41,7 +41,7 @@ export async function ProtocolMetadata({
                     <UserIcon className="h-4 text-gray-600" />
                     <div className="font-medium">
                         {researcher.name}
-                        <div className="-mt-2 ml-px text-xs font-light text-gray-500">
+                        <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
                             {researcher.email}
                         </div>
                     </div>

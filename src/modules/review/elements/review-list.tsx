@@ -1,4 +1,4 @@
-import type { Role} from '@prisma/client';
+import type { Role } from '@prisma/client'
 import { ReviewType, ReviewVerdict, State } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import ReviewItem from './review-item'
@@ -13,8 +13,6 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
 
     if (
         !reviews ||
-        state === State.DRAFT ||
-        state === State.PUBLISHED ||
         !reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED)
     )
         return null
@@ -39,7 +37,7 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
               )
 
     return (
-        <>
+        <div className="w-full lg:w-[28rem] xl:w-[36rem]">
             <h3 className="ml-2 text-lg font-semibold text-gray-900">
                 Revisiones
             </h3>
@@ -57,7 +55,7 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
                     ))}
                 </ul>
             )}
-        </>
+        </div>
     )
 }
 
