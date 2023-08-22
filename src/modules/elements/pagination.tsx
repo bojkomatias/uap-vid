@@ -170,6 +170,7 @@ export default function Pagination({
                             onClick={() =>
                                 update({
                                     records: totalRecords,
+                                    page: 1,
                                 })
                             }
                         >
