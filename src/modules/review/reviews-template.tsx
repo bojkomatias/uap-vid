@@ -28,14 +28,13 @@ export default async function ReviewsTemplate({
             )}
         >
             {userId !== researcherId &&
-                canExecute(ACTION.COMMENT, userRole, state) && (
-                    <ReviewFormTemplate protocolId={id} userId={userId} />
-                )}
+            canExecute(ACTION.COMMENT, userRole, state) ? (
+                <ReviewFormTemplate protocolId={id} userId={userId} />
+            ) : null}
 
-            {(userId === researcherId ||
-                    canAccess(ACCESS.REVIEWS, userRole)) && (
-                    <ReviewList role={userRole} state={state} id={id} />
-                ))}
+            {userId === researcherId || canAccess(ACCESS.REVIEWS, userRole) ? (
+                <ReviewList role={userRole} state={state} id={id} />
+            ) : null}
         </aside>
     )
 }
