@@ -9,7 +9,7 @@ import {
     CircleDashed,
     X,
 } from 'tabler-icons-react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import { zodResolver } from '@mantine/form'
@@ -46,7 +46,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     const router = useRouter()
     const path = usePathname()
     const [section, setSection] = useState(path?.split('/')[3])
-    const notifications = useNotifications()
+
     const [isPending, startTransition] = useTransition()
 
     const form = useProtocol({
@@ -59,12 +59,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         validateInputOnChange: true,
     })
 
-
-
-
     useEffect(() => {
         // Validate if not existing path goes to section 0
-        
+
         if (
             path &&
             !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
@@ -89,7 +86,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 const { id }: Protocol = await res.json()
 
                 if (res.status === 200) {
-                    notifications.showNotification({
+                    notifications.show({
                         title: 'Protocolo creado',
                         message: 'El protocolo ha sido creado con éxito',
                         color: 'teal',
@@ -112,7 +109,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
 
             if (res.status === 200) {
-                notifications.showNotification({
+                notifications.show({
                     title: 'Protocolo guardado',
                     message: 'El protocolo ha sido guardado con éxito',
                     color: 'teal',
@@ -127,7 +124,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 })
             }
         },
-        [notifications, router, section]
+        [router, section]
     )
 
     const SegmentLabel = useCallback(
@@ -140,7 +137,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             label: string
             value: string
         }) => (
-            <span className={'flex gap-1'}>
+            <>
                 <span
                     className={
                         !form.isValid(path) && section !== value
@@ -152,12 +149,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 </span>
                 {!form.isValid(path) ? (
                     form.isDirty(path) ? (
-                        <AlertCircle className="h-4 w-4 stroke-warning-500 stroke-2" />
-                    ) : null
+                        <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
+                    ) : (
+                        <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
+                    )
                 ) : (
-                    <CircleCheck className="h-4 w-4 stroke-success-500 stroke-2" />
+                    <CircleCheck className="h-4 w-4 stroke-success-500/80" />
                 )}
-            </span>
+            </>
         ),
         [form, section]
     )
@@ -178,7 +177,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     e.preventDefault()
                     // Enforce validity only on first section to Save
                     if (!form.isValid('sections.identification')) {
-                        notifications.showNotification({
+                        notifications.show({
                             title: 'No se pudo guardar',
                             message:
                                 'Debes completar la sección "Identificación" para poder guardar un borrador',
@@ -311,11 +310,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             },
                         ]}
                         classNames={{
-                            root: 'bg-gray-50 border rounded',
-                            label: 'uppercase text-xs px-2 py-1 font-regular rounded flex gap-1',
-                            indicator: 'bg-primary rounded',
+                            root: 'bg-gray-50 border rounded divide-x-0 gap-1',
+                            label: 'inline-flex items-center gap-2 px-2 py-1 text-xs font-semibold text-gray-600',
+                            indicator: 'rounded-md ring-1 ring-inset',
                         }}
-                        color="blue"
                         transitionDuration={300}
                     />
                 </motion.div>
@@ -325,13 +323,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 <div className="mb-8 mt-12 flex w-full justify-between">
                     <Button
                         type="button"
-                        intent="secondary"
+                        intent="outline"
                         disabled={section === '0'}
                         onClick={() =>
                             setSection((p) => (Number(p) - 1).toString())
                         }
                     >
-                        <ChevronLeft className="h-5" />
+                        <ChevronLeft className="h-4 text-gray-500" />
                     </Button>
 
                     <div className="flex gap-2">
@@ -345,13 +343,13 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     </div>
                     <Button
                         type="button"
-                        intent="secondary"
+                        intent="outline"
                         disabled={section === '7'}
                         onClick={() =>
                             setSection((p) => (Number(p) + 1).toString())
                         }
                     >
-                        <ChevronRight className="h-5" />
+                        <ChevronRight className="h-4 text-gray-500" />
                     </Button>
                 </div>
             </form>

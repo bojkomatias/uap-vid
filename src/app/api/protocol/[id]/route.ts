@@ -7,7 +7,7 @@ import {
 } from '@repositories/protocol'
 import { Role, State } from '@prisma/client'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { logProtocolUpdate } from '@utils/logger'
 
 export async function PUT(
@@ -24,6 +24,28 @@ export async function PUT(
     if (protocol) delete protocol.id
     const updated = await updateProtocolById(id, protocol)
     if (!updated) {
+        return new Response('We cannot update the protocol', {
+            status: 500,
+        })
+    }
+    return NextResponse.json({ success: true })
+}
+
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    const session = await getServerSession(authOptions)
+    if (!session) {
+        return new Response('Unauthorized', { status: 401 })
+    }
+
+    const id = params.id
+    // {reviewerId: '' }
+    const data = await request.json()
+
+    const patched = await updateProtocolById(id, data)
+    if (!patched) {
         return new Response('We cannot update the protocol', {
             status: 500,
         })

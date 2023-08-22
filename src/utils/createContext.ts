@@ -16,6 +16,7 @@ export const initialSectionValues: Sections = {
                 last_name: '',
                 name: '',
                 role: 'Director',
+                teamMemberId: null,
             },
         ],
         title: '',
@@ -39,7 +40,6 @@ export const initialSectionValues: Sections = {
                 data: [],
             },
             { type: 'Otros', data: [] },
-
         ],
     },
     description: {

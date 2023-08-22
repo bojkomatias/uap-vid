@@ -1,77 +1,44 @@
 import Link from 'next/link'
-import { Button } from '@elements/button'
-import {
-    getAllUsers,
-    totalUserRecords,
-    getAllUsersWithoutPagination,
-} from '@repositories/user'
+import { getUsers } from '@repositories/user'
 import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canAccess } from '@utils/scopes'
 import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
-import Pagination from '@elements/pagination'
-import fuzzysort from 'fuzzysort'
-import type { User } from '@prisma/client'
-import SearchBar from '@elements/search-bar'
+import { buttonStyle } from '@elements/button/styles'
 
 export default async function UserList({
     searchParams,
 }: {
-    searchParams?: { [key: string]: string }
+    searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
-    const shownRecords = 8
-    const users = await getAllUsers(
-        shownRecords,
-        Number(searchParams?.page) || 1
-    )
-    const userCount = await totalUserRecords()
 
-    const searchedUsers = searchParams?.search
-        ? fuzzysort
-              .go(
-                  searchParams.search,
-                  (await getAllUsersWithoutPagination()) as User[],
-                  {
-                      keys: ['name', 'role', 'email'],
-                  }
-              )
-              .map((result) => {
-                  return result.obj as User
-              })
-        : users
+    const [totalRecords, users] = await getUsers(searchParams)
 
     return (
         <>
             <PageHeading title="Lista de usuarios" />
             <div className="flex flex-row-reverse">
-                <Link href={'/users/new'} passHref>
-                    <Button intent="secondary">
-                        <UserPlus className="h-5" />
-                        <span className="ml-3"> Nuevo usuario</span>
-                    </Button>
+                <Link
+                    href={'/users/new'}
+                    className={buttonStyle('secondary')}
+                    passHref
+                >
+                    <UserPlus className="h-5 text-current" />
+                    <span> Nuevo usuario</span>
                 </Link>
             </div>
-            <SearchBar
 
-                url="/users"
-                placeholderMessage="Buscar usuario por nombre, rol o email"
+            <UserTable
+                loggedInUser={session.user}
+                users={users}
+                totalRecords={totalRecords}
             />
-
-            <UserTable users={searchedUsers!} />
-            {searchParams?.search ? null : (
-                <Pagination
-                    url="/users"
-                    pageParams={Number(searchParams?.page) || 1}
-                    count={userCount!}
-                    shownRecords={shownRecords}
-                />
-            )}
         </>
     )
 }

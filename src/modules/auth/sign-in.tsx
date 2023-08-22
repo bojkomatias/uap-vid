@@ -1,7 +1,7 @@
 'use client'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -13,29 +13,21 @@ export const SignIn = () => {
     const [loadingMicrosoft, setLoadingMicrosoft] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const notifications = useNotifications()
-    const [microsoftImage, setMicImage] = useState(
-        '/whitebackgroundmicrosoft.png'
-    )
 
     return (
-        <div className="absolute left-1/2 top-[8%] mx-auto flex max-w-xl  -translate-x-1/2 flex-col items-center ">
-            <div className=" flex items-center text-sm font-bold uppercase text-primary">
-                <div className="flex flex-col items-center justify-center py-10 text-center">
-                    <Image
-                        className="h-[30%]
-                        w-[30%] transition duration-200 md:h-[50%] md:w-[50%]"
-                        src="/UAPazul.png"
-                        alt="UAP Logo"
-                        width={600}
-                        height={600}
-                    />
-                    <p>Vicerrectoría de Investigación y Desarrollo</p>
-                </div>
+        <div className="absolute inset-x-4 top-12 mx-auto flex max-w-sm flex-col items-center">
+            <div className="flex flex-col items-center justify-center py-10 text-center text-xs font-bold uppercase text-primary">
+                <Image
+                    src="/UAPazul.png"
+                    alt="UAP Logo"
+                    width={300}
+                    height={300}
+                />
+                <p>Vicerrectoría de Investigación y Desarrollo</p>
             </div>
 
             <form
-                className="flex w-full flex-col items-stretch gap-3 px-24"
+                className="flex w-full flex-col items-stretch gap-3"
                 onSubmit={async (e) => {
                     e.preventDefault()
                     setLoading(true)
@@ -47,7 +39,7 @@ export const SignIn = () => {
                     })
                     if (res && res.status !== 200) {
                         setLoading(false)
-                        notifications.showNotification({
+                        notifications.show({
                             title: 'No se pudo iniciar sesión',
                             message: 'Credenciales inválidas',
                             color: 'red',
@@ -58,11 +50,12 @@ export const SignIn = () => {
                     }
                 }}
             >
-                <div className="text-xs text-primary/80">
+                <div className="text-center text-xs font-medium text-gray-700">
                     Iniciar sesión con credenciales institucionales de Office
                     365.
                 </div>
                 <Button
+                    intent="primary"
                     type="button"
                     loading={loadingMicrosoft}
                     onClick={(e) => {
@@ -70,18 +63,12 @@ export const SignIn = () => {
                         e.preventDefault()
                         signIn('azure-ad', { callbackUrl: '/protocols' })
                     }}
-                    onMouseEnter={() => {
-                        setMicImage('/blackbackgroundmicrosoft.png')
-                    }}
-                    onMouseLeave={() => {
-                        setMicImage('/whitebackgroundmicrosoft.png')
-                    }}
                 >
                     <>
                         <span>Iniciar sesión con</span>
                         <Image
                             className="-my-6"
-                            src={microsoftImage}
+                            src={'/blackbackgroundmicrosoft.png'}
                             alt="Microsoft Logo"
                             width={100}
                             height={50}
@@ -91,12 +78,12 @@ export const SignIn = () => {
 
                 <Disclosure>
                     <Disclosure.Button className="relative mb-3 w-full">
-                        <div className="text-xs text-primary/80 transition-all  duration-200 hover:text-primary hover:drop-shadow-sm active:text-primary/30">
+                        <div className="text-center text-xs font-medium text-gray-700 transition-all duration-200 hover:text-primary hover:drop-shadow-sm active:text-primary/80">
                             <div
                                 className="inset-0 my-4 flex items-center"
                                 aria-hidden="true"
                             >
-                                <div className="w-full border-t border-gray-300" />
+                                <div className="w-full border-t " />
                             </div>
                             Si tenés credenciales locales,
                             <b> iniciá sesión acá</b>.
@@ -126,10 +113,14 @@ export const SignIn = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
 
-                            <Button type="submit" loading={loading}>
+                            <Button
+                                intent="primary"
+                                type="submit"
+                                loading={loading}
+                            >
                                 Iniciar sesión
                             </Button>
-                        </Disclosure.Panel>{' '}
+                        </Disclosure.Panel>
                     </Transition>
                 </Disclosure>
             </form>

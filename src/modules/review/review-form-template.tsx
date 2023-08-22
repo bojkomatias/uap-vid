@@ -10,5 +10,9 @@ export default async function ReviewFormTemplate({
 }) {
     const review = await getProtocolReviewByReviewer(protocolId, userId)
     if (!review) return null
-    return <ReviewForm review={review} />
+    return (
+        <div className="w-full lg:w-[28rem] xl:w-[36rem]">
+            <ReviewForm review={review} />
+        </div>
+    )
 }

@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'
 
@@ -12,7 +12,7 @@ export default function UserForm() {
     const router = useRouter()
     const [newUser, setNewUser] = useState({ role: ROLE.RESEARCHER })
     const [loading, setLoading] = useState(false)
-    const notifications = useNotifications()
+
     const createNewUser = async () => {
         setLoading(true)
         const res = await fetch(`/api/auth/signup`, {
@@ -24,7 +24,7 @@ export default function UserForm() {
             body: JSON.stringify(newUser),
         })
         if (res.status === 201) {
-            notifications.showNotification({
+            notifications.show({
                 title: 'Usuario creado',
                 message: 'El usuario fue creado correctamente',
                 color: 'success',
@@ -38,7 +38,7 @@ export default function UserForm() {
             router.refresh()
             router.push('/users')
         } else if (res.status === 422) {
-            notifications.showNotification({
+            notifications.show({
                 title: 'Usuario existente',
                 message: 'El usuario ya existe',
                 color: 'red',
@@ -113,6 +113,7 @@ export default function UserForm() {
                 <RoleSelector user={newUser} />
             </div>
             <Button
+                intent="secondary"
                 type="submit"
                 className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
             >

@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { EmptyStateItem } from './empty-state-item'
 
 interface DeepValue {
@@ -69,13 +69,11 @@ export type ListRowValues = {
 const ListRow = ({ data }: { data: ListRowValues }) => {
     return (
         <div
-            className={clsx(
+            className={cx(
                 'relative place-items-center space-y-2 px-4 py-2 sm:grid sm:space-y-0',
-                {
-                    'grid-cols-2': data.length == 2,
-                    'grid-cols-3': data.length == 3,
-                    'grid-cols-4': data.length == 4,
-                }
+                data.length == 2 && 'grid-cols-2',
+                data.length == 3 && 'grid-cols-3',
+                data.length == 4 && 'grid-cols-4'
             )}
         >
             {data.map((item, index) => (
@@ -84,17 +82,17 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
                     className="first:place-self-start last:place-self-end last:text-right"
                 >
                     <p
-                        className={clsx(
-                            { 'font-medium text-gray-900': !item.inverted },
-                            'text-sm text-gray-500'
+                        className={cx(
+                            'text-sm text-gray-500',
+                            !item.inverted && 'font-medium text-gray-900'
                         )}
                     >
                         {item.up}
                     </p>
                     <p
-                        className={clsx(
-                            { 'font-medium text-gray-900': item.inverted },
-                            'text-sm text-gray-500'
+                        className={cx(
+                            'text-sm text-gray-500',
+                            !item.inverted && 'font-medium text-gray-900'
                         )}
                     >
                         {item.down}

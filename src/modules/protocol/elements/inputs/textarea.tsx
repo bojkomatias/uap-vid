@@ -1,5 +1,5 @@
 import { useProtocolContext } from '@utils/createContext'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import dynamic from 'next/dynamic'
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 
@@ -9,9 +9,10 @@ const Textarea = ({ path, label }: { path: string; label: string }) => {
     return (
         <div>
             <label
-                className={clsx('label required', {
-                    'after:text-error-500': form.getInputProps(path).error,
-                })}
+                className={cx(
+                    'label required',
+                    form.getInputProps(path).error && 'after:text-error-500'
+                )}
             >
                 {label}
             </label>

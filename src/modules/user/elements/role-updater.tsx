@@ -1,14 +1,13 @@
 'use client'
 import { Check, X } from 'tabler-icons-react'
 import { useRouter } from 'next/navigation'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { RoleSelector } from '../elements/role-selector'
 import type { User } from '@prisma/client'
 
 // Wrapper around Role Selector, to trigger save on role change (Used for UserList)
 export const RoleUpdater = ({ user }: { user: User }) => {
     const router = useRouter()
-    const notifications = useNotifications()
 
     const UpdateRoleForUser = async (newRole: string) => {
         const res = await fetch(`/api/users/${user.id}`, {
@@ -20,7 +19,7 @@ export const RoleUpdater = ({ user }: { user: User }) => {
             body: JSON.stringify({ role: newRole }),
         })
         if (res.status === 200)
-            notifications.showNotification({
+            notifications.show({
                 title: 'Rol modificado',
                 message: 'Se actualizo el rol del usuario correctamente',
                 color: 'teal',
@@ -31,7 +30,7 @@ export const RoleUpdater = ({ user }: { user: User }) => {
                 },
             })
         else if (res.status === 400 || res.status === 500)
-            notifications.showNotification({
+            notifications.show({
                 title: 'Error',
                 message: 'Ocurrio un error al actualizar el rol del usuario',
                 color: 'red',

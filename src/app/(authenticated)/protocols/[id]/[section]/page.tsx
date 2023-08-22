@@ -5,9 +5,8 @@ import { canExecute } from '@utils/scopes'
 import { ACTION, STATE } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { findProtocolById } from 'repositories/protocol'
-
 
 export default async function Page({
     params,
@@ -43,12 +42,5 @@ export default async function Page({
     )
         redirect('/protocols')
 
-    return (
-        <>
-            <div className="mr-3 mt-1 flex items-center justify-end gap-2">
-                <PublishButton userId={session.user.id} protocol={protocol} />
-            </div>
-            <ProtocolForm protocol={protocol} />
-        </>
-    )
+    return <ProtocolForm protocol={protocol} />
 }

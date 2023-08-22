@@ -1,12 +1,18 @@
 'use client'
-import { useNotifications } from '@mantine/notifications'
+import { Button } from '@elements/button'
+import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
 let timeout: NodeJS.Timeout
 
-export function DeleteUserButton({ userId }: { userId: string }) {
-    const notification = useNotifications()
+export function DeleteUserButton({
+    userId,
+    className,
+}: {
+    userId: string
+    className?: string
+}) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
@@ -16,14 +22,14 @@ export function DeleteUserButton({ userId }: { userId: string }) {
             method: 'DELETE',
         })
         if (res.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Usuario eliminado',
                 message: 'El usuario ha sido eliminado con éxito.',
                 color: 'green',
             })
             return startTransition(() => router.refresh())
         }
-        notification.showNotification({
+        notifications.show({
             title: 'No se pudo eliminar usuario',
             message:
                 'El usuario esta vinculado con algún protocolo y no se puede eliminar.',
@@ -31,16 +37,17 @@ export function DeleteUserButton({ userId }: { userId: string }) {
         })
         setDeleting(false)
         return startTransition(() => router.refresh())
-    }, [notification, router, userId])
+    }, [router, userId])
 
     return deleting ? (
-        <button
+        <Button
             onClick={() => {
                 clearTimeout(timeout)
                 setDeleting(false)
             }}
             disabled={isPending}
-            className="-mr-2 flex w-full items-center justify-end gap-1 text-error-600/60 transition duration-150 hover:text-error-600"
+            className={className}
+            intent="destructive"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -67,9 +74,9 @@ export function DeleteUserButton({ userId }: { userId: string }) {
                 </path>
             </svg>
             Cancelar
-        </button>
+        </Button>
     ) : (
-        <button
+        <Button
             onClick={() => {
                 setDeleting(true)
                 timeout = setTimeout(() => {
@@ -77,9 +84,10 @@ export function DeleteUserButton({ userId }: { userId: string }) {
                 }, 3000)
             }}
             disabled={isPending}
-            className="transition duration-150 hover:text-black/70"
+            intent="destructive"
+            className={className}
         >
             Eliminar
-        </button>
+        </Button>
     )
 }

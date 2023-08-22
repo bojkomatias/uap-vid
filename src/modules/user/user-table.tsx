@@ -1,65 +1,122 @@
-import type { User } from '@prisma/client'
+'use client'
+import type { Prisma, User } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
+import TanStackTable from '@elements/tan-stack-table'
+import { useMemo } from 'react'
+import { type ColumnDef } from '@tanstack/react-table'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 
-export default function UserTable({ users }: { users: User[] }) {
+type UsersWithCount = Prisma.UserGetPayload<{
+    include: { _count: true }
+}>
+/**
+ * This component is meant to handle business logic
+ * What are the values needed, and what the actions performed
+ */
+
+export default function UserTable({
+    users,
+    totalRecords,
+    loggedInUser,
+}: {
+    users: UsersWithCount[]
+    totalRecords: number
+    loggedInUser: User
+}) {
+    const columns = useMemo<ColumnDef<UsersWithCount>[]>(
+        () => [
+            {
+                accessorKey: 'id',
+                header: 'Id',
+                cell: ({ row }) => (
+                    <span className="text-xs text-gray-600">
+                        {row.original.id}
+                    </span>
+                ),
+                enableSorting: false,
+            },
+            {
+                accessorKey: 'name',
+                header: 'Nombre',
+                enableHiding: false,
+            },
+            {
+                accessorKey: 'email',
+                header: 'Email',
+                enableHiding: false,
+            },
+            {
+                accessorKey: 'password',
+                header: 'Origen',
+                cell: ({ cell }) =>
+                    cell.getValue() ? <>Microsoft 365</> : <>Usuario local</>,
+            },
+            {
+                accessorKey: '_count.protocols',
+                id: 'protocols',
+                header: 'Protocolos',
+                cell: ({ row }) => (
+                    <div className="w-20 text-right">
+                        {row.original._count.protocols}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: '_count.Review',
+                id: 'Review',
+                header: 'Evaluaciones',
+                cell: ({ row }) => (
+                    <div className="w-20 text-right">
+                        {row.original._count.Review}
+                    </div>
+                ),
+            },
+            {
+                accessorKey: 'role',
+                header: 'Rol',
+                // Guard for not changing your own role.
+                cell: ({ row }) =>
+                    row.original.id === loggedInUser.id ? (
+                        <></>
+                    ) : (
+                        <RoleUpdater user={row.original} />
+                    ),
+            },
+            {
+                accessorKey: 'delete',
+                header: 'Acciones',
+                cell: ({ row }) =>
+                    row.original.role === 'ADMIN' ? (
+                        <></>
+                    ) : (
+                        <DeleteUserButton
+                            userId={row.original.id}
+                            className="px-2.5 py-1 text-xs"
+                        />
+                    ),
+                enableHiding: false,
+                enableSorting: false,
+            },
+        ],
+        [loggedInUser.id]
+    )
+    /** Explicitly announce initial state of hidden columns. */
+    const initialVisible = { id: false, protocols: false, Review: false }
+
     return (
-        <div className="mx-auto max-w-7xl">
-            <table className="-mx-4 mt-8 min-w-full divide-y divide-gray-300 sm:-mx-0">
-                <thead>
-                    <tr>
-                        <th
-                            scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-0"
-                        >
-                            Nombre
-                        </th>
-                        <th
-                            scope="col"
-                            className="hidden px-3 py-3.5 text-left text-sm text-gray-900 sm:table-cell"
-                        >
-                            Email
-                        </th>
-                        <th
-                            scope="col"
-                            className="max-w-md px-3 py-3.5 text-center text-sm text-gray-900"
-                        >
-                            Rol
-                        </th>
-                        <th scope="col" className="relative py-3.5 sm:pr-0">
-                            <span className="sr-only">Delete</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                    {users?.map((user) => (
-                        <tr key={user.email}>
-                            <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                                {user.name}
-                                <dl className="font-normal lg:hidden">
-                                    <dt className="sr-only sm:hidden">Email</dt>
-                                    <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                                        {user.email}
-                                    </dd>
-                                </dl>
-                            </td>
-                            <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                                {user.email}
-                            </td>
-                            <td className="max-w-[8rem] px-3 py-2 text-sm text-gray-500">
-                                <RoleUpdater
-                                    user={JSON.parse(JSON.stringify(user))}
-                                />
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-right text-sm font-medium text-gray-500">
-                                {user.role === 'ADMIN' ? null : (
-                                    <DeleteUserButton userId={user.id} />
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <>
+            <TanStackTable
+                data={users}
+                columns={columns}
+                totalRecords={totalRecords}
+                initialVisibility={initialVisible}
+                filterableByKey={{
+                    filter: 'role',
+                    values: Object.entries(RolesDictionary),
+                }}
+                searchBarPlaceholder="Buscar por: Nombre, Email"
+            />
+        </>
     )
 }

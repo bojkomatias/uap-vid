@@ -2,7 +2,7 @@
 import type { Protocol, Role } from '@prisma/client'
 import { State } from '@prisma/client'
 import { ACTION } from '@utils/zod'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
@@ -12,7 +12,6 @@ import { FileCertificate } from 'tabler-icons-react'
 type ActionButtonTypes = { role: Role; protocol: Protocol }
 
 const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
-    const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -28,14 +27,14 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             body: JSON.stringify({ id: protocol.id }),
         })
         if (approved.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Protocolo aprobado',
                 message: 'El protocolo ha sido aprobado, ahora está en curso',
                 color: 'green',
             })
             return startTransition(() => router.refresh())
         }
-        return notification.showNotification({
+        return notifications.show({
             title: 'No hemos podido aprobar el protocolo',
             message: 'Lo lamentamos, ha ocurrido un error',
             color: 'red',
@@ -49,7 +48,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             disabled={protocol.state !== State.ACCEPTED}
             loading={isPending}
         >
-            <FileCertificate className="mr-2 h-5" />
+            <FileCertificate className="h-5 text-current" />
             Aprobar: En curso
         </Button>
     )

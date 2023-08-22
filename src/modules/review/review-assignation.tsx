@@ -3,6 +3,8 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
+import { UserSearch } from 'tabler-icons-react'
+import { Badge } from '@elements/badge'
 
 interface ReviewAssignProps {
     protocolId: string
@@ -95,16 +97,33 @@ const ReviewAssignation = async ({
                     (review) => review.type === ReviewType.SCIENTIFIC_THIRD
                 ) ?? null,
         },
-    ].filter((r) => r.enabled)
+    ]
 
     return reviewAssignSelectsData.map((data) => (
-        <div key={data.type} className="mb-4 px-2">
-            <label className="label">{EvaluatorsByReviewType[data.type]}</label>
-            <ReviewAssignSelect
-                {...data}
-                protocolId={protocolId}
-                protocolState={protocolState}
-            />
+        <div key={data.type} className="flex items-baseline gap-4">
+            <div className="flex flex-grow items-center gap-2">
+                <UserSearch className="h-4 text-gray-600" />
+                <div className="min-w-[16rem] font-medium">
+                    {data.review?.reviewer.name ?? (
+                        <span className="text-sm text-gray-500">-</span>
+                    )}
+                    <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
+                        {data.review?.reviewer.email ?? (
+                            <span className="invisible">-</span>
+                        )}
+                    </div>
+                </div>
+                <Badge className="ml-4">
+                    {EvaluatorsByReviewType[data.type]}
+                </Badge>
+            </div>
+            {data.enabled && (
+                <ReviewAssignSelect
+                    {...data}
+                    protocolId={protocolId}
+                    protocolState={protocolState}
+                />
+            )}
         </div>
     ))
 }

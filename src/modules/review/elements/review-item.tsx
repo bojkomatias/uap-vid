@@ -1,14 +1,14 @@
 'use client'
 import type { Review, User } from '@prisma/client'
 import { ReviewVerdict, Role } from '@prisma/client'
-import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useCallback, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight } from 'tabler-icons-react'
+import ReviewVerdictBadge from './review-verdict-badge'
 
 export default function ReviewItem({
     review,
@@ -35,51 +35,18 @@ export default function ReviewItem({
             <div className="min-w-0 flex-1">
                 <dt className="label">{ReviewTypesDictionary[review.type]}</dt>
                 <div
-                    className={clsx('rounded border', {
-                        'bg-gray-50 opacity-70': review.revised,
-                        'bg-white opacity-100': !review.revised,
-                    })}
+                    className={cx(
+                        'rounded border',
+                        review.revised
+                            ? 'bg-gray-50 opacity-70'
+                            : 'bg-white opacity-100'
+                    )}
                 >
                     <button
-                        className="-mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
+                        className="group -mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
                         onClick={() => setShowReviewQuestions((prv) => !prv)}
                     >
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-light text-gray-600">
-                                Veredicto:
-                            </span>
-                            <span
-                                className={clsx(
-                                    'flex items-center gap-1 rounded bg-white px-2 py-px text-xs font-light uppercase',
-                                    {
-                                        'ring-1 ring-warning-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED_WITH_CHANGES,
-                                        'ring-1 ring-success-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED,
-                                        'ring-1 ring-error-500/50':
-                                            review.verdict ===
-                                            ReviewVerdict.REJECTED,
-                                    }
-                                )}
-                            >
-                                {ReviewVerdictsDictionary[review.verdict]}
-                                <div
-                                    className={clsx('h-2 w-2 rounded', {
-                                        'bg-warning-500 ':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED_WITH_CHANGES,
-                                        'bg-success-600':
-                                            review.verdict ===
-                                            ReviewVerdict.APPROVED,
-                                        'bg-error-600':
-                                            review.verdict ===
-                                            ReviewVerdict.REJECTED,
-                                    })}
-                                />
-                            </span>
-                        </div>
+                        <ReviewVerdictBadge verdict={review.verdict} />
 
                         {review.verdict ===
                         ReviewVerdict.APPROVED_WITH_CHANGES ? (
@@ -96,11 +63,15 @@ export default function ReviewItem({
                                 </label>
                             )
                         ) : null}
-                        <ChevronRight
-                            className={clsx('h-4 w-4 transition', {
-                                'rotate-90': showReviewQuestions,
-                            })}
-                        />
+                        <span className="flex text-xs font-semibold text-gray-600 group-hover:underline">
+                            Ver detalles
+                            <ChevronRight
+                                className={cx(
+                                    'h-4 w-4 transition',
+                                    showReviewQuestions && 'rotate-90'
+                                )}
+                            />
+                        </span>
                     </button>
 
                     {showReviewQuestions && (
@@ -158,7 +129,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
                 name={`revised-${id}`}
                 type="checkbox"
                 defaultChecked={revised}
-                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md border-gray-300 text-primary focus:ring-primary"
+                className="mb-0.5 mr-1 h-3.5 w-3.5 rounded-md  text-primary focus:ring-primary"
                 onChange={(e) => updateRevised(e.target.checked)}
             />
 

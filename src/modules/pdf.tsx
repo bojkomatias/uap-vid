@@ -9,7 +9,6 @@ import {
     PDFDownloadLink,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
-import { Download } from 'tabler-icons-react'
 
 const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
     return (
@@ -714,7 +713,7 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
         document: PDFDocument({ protocol }),
     })
 
-    if (instance.loading) return <Button>Cargando PDF</Button>
+    if (instance.loading) return <Button intent="outline">Cargando PDF</Button>
     else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
 
     return (
@@ -722,9 +721,8 @@ export const PDF = ({ protocol }: { protocol: Protocol }) => {
             fileName={`proyecto-${protocol.id}`}
             document={PDFDocument({ protocol })}
         >
-            <Button>
-                <Download className="mr-2 h-5" />
-                <span className="text-xs">Descargar PDF</span>
+            <Button intent="outline" className="float-right mr-3 mt-8">
+                Descargar PDF
             </Button>
         </PDFDownloadLink>
     )

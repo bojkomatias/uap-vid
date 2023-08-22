@@ -1,10 +1,10 @@
-import type { Role, State } from '@prisma/client'
-import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
+import type { Role } from '@prisma/client'
+import { State } from '@prisma/client'
+import { canAccess, canExecute } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'
-import ReviewAssignation from './review-assignation'
 import ReviewFormTemplate from './review-form-template'
-import ReviewAssignationWrapper from './review-assignation-wrapper'
+import { cx } from '@utils/cx'
 
 // Component serves as Semaphore for reviews (Assign/Create, AddReview, Visualize)
 export default async function ReviewsTemplate({
@@ -21,41 +21,21 @@ export default async function ReviewsTemplate({
     userRole: Role
 }) {
     return (
-        <aside className="relative">
-            <div className="sticky top-4 mb-4 space-y-3">
-                {canExecuteActions(
-                    userId === researcherId
-                        ? []
-                        : [
-                              ACTION.ASSIGN_TO_METHODOLOGIST,
-                              ACTION.ASSIGN_TO_SCIENTIFIC,
-                              ACTION.ACCEPT,
-                          ],
-                    userRole,
-                    state
-                ) && (
-                    <ReviewAssignationWrapper>
-                        {/* @ts-expect-error Server Component */}
-                        <ReviewAssignation
-                            protocolId={id}
-                            researcherId={researcherId}
-                            protocolState={state}
-                        />
-                    </ReviewAssignationWrapper>
+        <aside
+            className={cx(
+                'min-w-fit space-y-3 overflow-y-auto py-3 pl-4 pr-1 lg:sticky lg:top-0 lg:h-screen lg:pl-0',
+                (state === State.DRAFT || state === State.PUBLISHED) && 'hidden'
+            )}
+        >
+            {userId !== researcherId &&
+                canExecute(ACTION.COMMENT, userRole, state) && (
+                    <ReviewFormTemplate protocolId={id} userId={userId} />
                 )}
 
-                {userId !== researcherId &&
-                    canExecute(ACTION.COMMENT, userRole, state) && (
-                        // @ts-expect-error
-                        <ReviewFormTemplate protocolId={id} userId={userId} />
-                    )}
-
-                {(userId === researcherId ||
+            {(userId === researcherId ||
                     canAccess(ACCESS.REVIEWS, userRole)) && (
-                    // @ts-expect-error
                     <ReviewList role={userRole} state={state} id={id} />
-                )}
-            </div>
+                ))}
         </aside>
     )
 }

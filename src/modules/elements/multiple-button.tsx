@@ -2,9 +2,10 @@
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import Link from 'next/link'
 import { Button } from './button'
+import { buttonStyle } from './button/styles'
 
 export default function MultipleButton({
     defaultValue,
@@ -23,28 +24,26 @@ export default function MultipleButton({
                     <div className="inline-flex rounded-md shadow-sm">
                         <Link
                             href={selected.href}
-                            className="hover:z-10"
+                            className={cx(
+                                'hover:z-10 focus-visible:z-10',
+                                buttonStyle('secondary'),
+                                'rounded-r-none'
+                            )}
                             passHref
                         >
-                            <Button
-                                intent={'tertiary'}
-                                className="rounded-r-none"
-                            >
-                                <FilePlus className="mr-2 h-5" /> Crear en{' '}
-                                {selected.title}
-                            </Button>
+                            <FilePlus className="h-5 text-current" /> Crear en{' '}
+                            {selected.title}
                         </Link>
                         <Listbox.Button
                             as={Button}
-                            intent={'tertiary'}
+                            intent="secondary"
                             className="border-l-none ml-px rounded-l-none"
-                            // className="inline-flex items-center rounded-l-none rounded-r-md bg-primary p-2 ring-primary ring-offset-2 ring-offset-white hover:bg-primary hover:ring-2 focus:outline-none focus:ring-2"
                         >
                             <span className="sr-only">
                                 Change published status
                             </span>
                             <ChevronDown
-                                className="h-5 w-5 text-primary"
+                                className="h-5 w-5 text-current"
                                 aria-hidden="true"
                             />
                         </Listbox.Button>
@@ -57,16 +56,16 @@ export default function MultipleButton({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Listbox.Options className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-gray-200 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Listbox.Options className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y  overflow-hidden rounded-md bg-white shadow-lg ring-1  focus:outline-none">
                             {options.map((option) => (
                                 <Listbox.Option
                                     key={option.title}
                                     className={({ active }) =>
-                                        clsx(
+                                        cx(
+                                            'cursor-default select-none px-5 pb-3 pt-4 text-sm',
                                             active
-                                                ? 'bg-primary text-white'
-                                                : 'text-gray-900',
-                                            'cursor-default select-none px-5 pb-3 pt-4 text-sm'
+                                                ? 'bg-gray-100 text-gray-900'
+                                                : 'text-gray-700'
                                         )
                                     }
                                     value={option}
@@ -87,8 +86,8 @@ export default function MultipleButton({
                                                     <span
                                                         className={
                                                             active
-                                                                ? 'text-white'
-                                                                : 'text-primary'
+                                                                ? 'text-gray-700'
+                                                                : 'text-gray-600'
                                                         }
                                                     >
                                                         <Check
@@ -99,11 +98,11 @@ export default function MultipleButton({
                                                 ) : null}
                                             </div>
                                             <p
-                                                className={clsx(
+                                                className={cx(
+                                                    'mt-1 text-xs font-light',
                                                     active
-                                                        ? 'text-gray-300'
-                                                        : 'text-gray-500',
-                                                    'mt-1 text-xs font-light'
+                                                        ? 'text-gray-700'
+                                                        : 'text-gray-500'
                                                 )}
                                             >
                                                 {option.description}

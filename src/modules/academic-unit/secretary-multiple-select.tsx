@@ -1,8 +1,8 @@
 'use client'
 import { Combobox } from '@headlessui/react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import type { User } from '@prisma/client'
-import clsx from 'clsx'
+import { cx } from '@utils/cx'
 import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 
@@ -17,7 +17,6 @@ export function SecretaryMultipleSelect({
     secretaries: User[]
     currentSecretaries: string[]
 }) {
-    const notifications = useNotifications()
     const [selected, setSelected] = useState(currentSecretaries)
 
     const updateSecretaries = useCallback(
@@ -27,7 +26,7 @@ export function SecretaryMultipleSelect({
                 body: JSON.stringify(secretaries),
             })
             if (res.status === 200)
-                return notifications.showNotification({
+                return notifications.show({
                     title: 'Secretarios modificados',
                     message:
                         'Se actualizo la lista de secretarios para la unidad académica.',
@@ -38,7 +37,7 @@ export function SecretaryMultipleSelect({
                         marginBottom: '.8rem',
                     },
                 })
-            notifications.showNotification({
+            notifications.show({
                 title: 'Error',
                 message: 'Ocurrió un error al actualizar los secretarios',
                 color: 'red',
@@ -49,7 +48,7 @@ export function SecretaryMultipleSelect({
                 },
             })
         },
-        [notifications]
+        []
     )
 
     return (
@@ -83,28 +82,28 @@ export function SecretaryMultipleSelect({
 
                     <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                         <Selector
-                            className="h-5 text-primary transition-all duration-200 hover:text-base-400"
+                            className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
                             aria-hidden="true"
                         />
                     </div>
                 </Combobox.Button>
 
-                <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white py-1 shadow focus:outline-none sm:text-sm">
+                <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 shadow focus:outline-none sm:text-sm">
                     {secretaries.map((secretary, index) => (
                         <Combobox.Option
                             key={index}
                             value={secretary.id}
                             className={({ active }) =>
-                                clsx(
-                                    'relative cursor-default select-none py-2 pl-8 pr-4',
-                                    active ? 'bg-gray-100' : 'text-base-600'
+                                cx(
+                                    active ? 'bg-gray-100' : 'text-gray-600',
+                                    'relative cursor-default select-none py-2 pl-8 pr-4'
                                 )
                             }
                         >
                             {({ active, selected }) => (
                                 <>
                                     <span
-                                        className={clsx(
+                                        className={cx(
                                             'block truncate',
                                             selected &&
                                                 'font-semibold text-primary'
@@ -115,9 +114,9 @@ export function SecretaryMultipleSelect({
 
                                     {selected && (
                                         <span
-                                            className={clsx(
+                                            className={cx(
                                                 'absolute inset-y-0 left-0 flex items-center pl-1.5 text-primary',
-                                                active ? 'text-white' : ''
+                                                active && 'text-white'
                                             )}
                                         >
                                             <Check

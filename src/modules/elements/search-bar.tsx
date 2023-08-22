@@ -1,45 +1,37 @@
 'use client'
 import { Button } from './button'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 export default function SearchBar({
     placeholderMessage,
-    url,
 }: {
     placeholderMessage: string
-    url: string
-
 }) {
+    const update = useUpdateQuery()
+
     const [searchQuery, setSearchQuery] = useState('')
-    const router = useRouter()
 
     return (
-        <div className="mx-auto mt-3 flex max-w-4xl flex-grow items-center gap-2 rounded-md">
+        <div className="flex max-w-4xl flex-grow items-center gap-2 rounded-md">
             <input
                 onKeyUpCapture={(e) => {
-                    if (e.key === 'Enter')
-                        router.push(`${url}?search=${searchQuery}`)
+                    if (e.key === 'Enter') update({ search: searchQuery })
                 }}
                 onChange={(e) => {
                     setSearchQuery(e.target.value)
                     //If searchQuery is empty, goes back to the normal paginated page
-                    if (e.target.value === '') {
-                        router.push(url)
-                    }
+                    if (e.target.value === '') update({ search: '' })
                 }}
                 className="input"
                 placeholder={placeholderMessage}
             />
             <Button
                 onClick={() => {
-                    if (searchQuery == '') {
-                        router.push(url)
-                    } else {
-                        router.push(`${url}?search=${searchQuery}`)
-                    }
+                    if (searchQuery == '') update({ search: '' })
+                    else update({ search: searchQuery })
                 }}
-                intent="secondary"
+                intent="outline"
             >
                 Buscar
             </Button>

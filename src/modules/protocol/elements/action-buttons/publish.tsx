@@ -5,7 +5,7 @@ import { State } from '@prisma/client'
 import type { Protocol as ProtocolZod } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
-import { useNotifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import InfoTooltip from '../tooltip'
 import { Upload } from 'tabler-icons-react'
@@ -13,7 +13,6 @@ import { Upload } from 'tabler-icons-react'
 type ActionButtonTypes = { userId: string; protocol: Protocol | ProtocolZod }
 
 export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
-    const notification = useNotifications()
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -26,14 +25,14 @@ export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
             body: JSON.stringify({ id: protocol.id }),
         })
         if (published.ok) {
-            notification.showNotification({
+            notifications.show({
                 title: 'Protocolo publicado',
                 message: 'El protocolo ha sido publicado con éxito',
                 color: 'green',
             })
             return startTransition(() => router.refresh())
         }
-        return notification.showNotification({
+        return notifications.show({
             title: 'No hemos podido publicar el protocolo',
             message: 'Lo lamentamos, ha ocurrido un error',
             color: 'red',
@@ -73,7 +72,7 @@ export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
                     </InfoTooltip>
                 </div>
                 <Button intent={'secondary'} disabled={!isValid}>
-                    <Upload className="mr-2 h-5" />
+                    <Upload className="h-5 text-current" />
                     Publicar
                     <div className="w-4" />
                 </Button>
@@ -85,7 +84,7 @@ export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
             intent={'primary'}
             loading={isPending}
         >
-            <Upload className="mr-2 h-5" />
+            <Upload className="h-5 text-current" />
             Publicar
         </Button>
     )

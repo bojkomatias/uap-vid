@@ -1,13 +1,13 @@
 import { ConvocatoryTable } from '@convocatory/convocatory-table'
-import { Button } from '@elements/button'
 import { PageHeading } from '@layout/page-heading'
 import { canAccess } from '@utils/scopes'
 import { ACCESS } from '@utils/zod'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { CalendarPlus } from 'tabler-icons-react'
+import { buttonStyle } from '@elements/button/styles'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
@@ -19,14 +19,15 @@ export default async function Page() {
         <>
             <PageHeading title="Lista de convocatorias" />
             <div className="flex flex-row-reverse">
-                <Link href={'/convocatories/new'} passHref>
-                    <Button intent="secondary">
-                        <CalendarPlus className="h-5 w-5" />
-                        <span className="ml-3"> Nueva convocatoria</span>
-                    </Button>
+                <Link
+                    href={'/convocatories/new'}
+                    className={buttonStyle('secondary')}
+                    passHref
+                >
+                    <CalendarPlus className="h-5 w-5" />
+                    <span className="ml-3"> Nueva convocatoria</span>
                 </Link>
             </div>
-            {/* @ts-expect-error */}
             <ConvocatoryTable />
         </>
     )
