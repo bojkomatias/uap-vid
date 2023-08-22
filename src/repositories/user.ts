@@ -105,13 +105,13 @@ const getUsers = cache(
         }
     }
 )
-
-const getAllResearchers = async () => {
+/** Posible protocol owners */
+const getAllOwners = async () => {
     try {
         const users = await prisma.user.findMany({
             where: {
                 role: {
-                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY'],
+                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY', 'ADMIN'],
                 },
             },
         })
@@ -247,7 +247,7 @@ const deleteUserById = async (id: string) => {
 
 export {
     getUsers,
-    getAllResearchers,
+    getAllOwners,
     getAllUsersWithoutResearchers,
     getAllSecretaries,
     findUserById,

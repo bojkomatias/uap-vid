@@ -179,11 +179,12 @@ export const HistoricTeamMemberCategorySchema = z.object({
 /////////////////////////////////////////
 
 export const TeamMemberSchema = z.object({
-    id: z.string(),
-    UserSchema: UserSchema.optional(),
+    id: z.string().optional(),
+    user: UserSchema.optional(),
+    userId: z.string().optional(),
     name: z.string().optional(),
-    categories: TeamMemberCategorySchema.array(),
-    obrero: z.boolean(),
+    categories: HistoricTeamMemberCategorySchema.array().optional(),
+    obrero: z.boolean().optional(),
 })
 
 /////////////////////////////////////////
