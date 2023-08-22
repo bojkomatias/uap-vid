@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== Role.ADMIN) return
 
-    const member = params.id === 'new' ? {} : {}
+    const member = params.id === 'new' ? { categories: [] } : { categories: [] }
 
     const researchers = await getAllOwners()
 

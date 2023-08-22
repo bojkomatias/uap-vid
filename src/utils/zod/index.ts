@@ -170,7 +170,7 @@ export const HistoricTeamMemberCategorySchema = z.object({
     id: z.string().optional(),
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
-    teamMemberId: z.string(),
+    teamMemberId: z.string().optional(),
     categoryId: z.string(),
 })
 
@@ -183,7 +183,7 @@ export const TeamMemberSchema = z.object({
     user: UserSchema.optional(),
     userId: z.string().optional(),
     name: z.string().optional(),
-    categories: HistoricTeamMemberCategorySchema.array().optional(),
+    categories: HistoricTeamMemberCategorySchema.array(),
     obrero: z.boolean().optional(),
 })
 

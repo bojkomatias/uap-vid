@@ -13,8 +13,20 @@ import type { z } from 'zod'
 
 const fakeCategories: TeamMemberCategory[] = [
     {
-        id: 'adbcsd',
+        id: '1',
         name: 'Categoria V',
+        price: [
+            {
+                from: new Date('27/02/1996'),
+                price: 1250,
+                currrency: 'ARS',
+                to: new Date('27/05/2023'),
+            },
+        ],
+    },
+    {
+        id: '2',
+        name: 'Categoria IV',
         price: [
             {
                 from: new Date('27/02/1996'),
@@ -206,107 +218,130 @@ export default function TeamMemberForm({
                         className="input"
                         name="name"
                         disabled={form.getInputProps('userId').value}
+                        {...form.getInputProps('name')}
                     />
                 </div>
 
                 <div className="flex items-center gap-6">
                     <div className="flex-grow">
-                        <label htmlFor="category" className="label">
+                        <label htmlFor="categories" className="label">
                             Seleccione una categoría
                         </label>
                         <Listbox
-                            value={form.getInputProps('category').value}
+                            value={form.getInputProps('categories').value}
                             onChange={(e) => {
-                                console.log(e)
+                                if (form.isDirty('categories'))
+                                    form.removeListItem(
+                                        'categories',
+                                        form.getInputProps('categories').value
+                                            .length - 1
+                                    )
+                                form.insertListItem('categories', {
+                                    categoryId: e,
+                                    from: new Date(),
+                                    to: null,
+                                })
                             }}
                         >
-                            {({ open }) => (
-                                <>
-                                    <div className="relative mt-1 w-full max-w-xs">
-                                        <Listbox.Button className="input text-left">
-                                            <span className="">
-                                                {
-                                                    form.values?.categories?.at(
-                                                        -1
-                                                    )?.categoryId
-                                                }
-                                            </span>
-                                            <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
-                                                <Selector
-                                                    className="h-5 text-gray-600 "
-                                                    aria-hidden="true"
-                                                />
-                                            </span>
-                                        </Listbox.Button>
+                            <div className="relative mt-1 w-full">
+                                <Listbox.Button className="input text-left">
+                                    <span className="block truncate">
+                                        {form.values.categories.at(-1)
+                                            ?.categoryId
+                                            ? fakeCategories.find(
+                                                  (e) =>
+                                                      e.id ===
+                                                      form.values.categories.at(
+                                                          -1
+                                                      )?.categoryId
+                                              )?.name
+                                            : '-'}
+                                    </span>
+                                    <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+                                        <Selector
+                                            className="h-5 text-gray-600 "
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                </Listbox.Button>
 
-                                        <Transition
-                                            show={open}
-                                            as={Fragment}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
+                                <Listbox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                                    {fakeCategories.map((value) => (
+                                        <Listbox.Option
+                                            key={value.id}
+                                            value={value.id}
+                                            className={({ active }) =>
+                                                cx(
+                                                    'relative cursor-default select-none py-2 pl-8 pr-2',
+                                                    active
+                                                        ? 'bg-gray-100'
+                                                        : 'text-gray-600'
+                                                )
+                                            }
                                         >
-                                            <Listbox.Options className="max-h-50 absolute z-10 mt-1 w-full overflow-auto bg-white py-1 text-base text-gray-600 shadow-lg ring-1  focus:outline-none sm:text-sm">
-                                                {fakeCategories.map((value) => (
-                                                    <Listbox.Option
-                                                        key={value.id}
-                                                        className={({
-                                                            active,
-                                                        }) =>
-                                                            cx(
-                                                                'relative cursor-pointer select-none py-2 pl-3 pr-9',
-                                                                active
-                                                                    ? 'bg-gray-100'
-                                                                    : ''
-                                                            )
-                                                        }
-                                                        value={value}
-                                                    >
-                                                        {({
-                                                            selected,
-                                                            active,
-                                                        }) => (
-                                                            <>
-                                                                <span
-                                                                    className={cx(
-                                                                        'block truncate',
-                                                                        selected
-                                                                            ? 'font-bold'
-                                                                            : ''
-                                                                    )}
-                                                                >
-                                                                    {value.name}
-                                                                </span>
+                                            {({ active, selected }) => (
+                                                <>
+                                                    <span className="block truncate font-medium">
+                                                        <span
+                                                            className={cx(
+                                                                active &&
+                                                                    'text-gray-800',
+                                                                selected &&
+                                                                    'text-primary'
+                                                            )}
+                                                        >
+                                                            {value.name}
+                                                        </span>
 
-                                                                {selected ? (
-                                                                    <span
-                                                                        className={cx(
-                                                                            'absolute inset-y-0 right-0 flex items-center pr-4',
-                                                                            active
-                                                                                ? 'text-primary'
-                                                                                : ''
-                                                                        )}
-                                                                    >
-                                                                        <Check
-                                                                            className="h-5  text-primary"
-                                                                            aria-hidden="true"
-                                                                        />
-                                                                    </span>
-                                                                ) : null}
-                                                            </>
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                </>
-                            )}
+                                                        <span
+                                                            className={cx(
+                                                                'ml-3 truncate text-xs font-light',
+                                                                active
+                                                                    ? 'text-gray-700'
+                                                                    : 'text-gray-500'
+                                                            )}
+                                                        >
+                                                            {
+                                                                value.price[0]
+                                                                    .price
+                                                            }
+                                                        </span>
+                                                    </span>
+
+                                                    {selected && (
+                                                        <span
+                                                            className={cx(
+                                                                'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
+                                                                active
+                                                                    ? 'text-white'
+                                                                    : ''
+                                                            )}
+                                                        >
+                                                            <Check
+                                                                className="h-4 w-4 text-gray-500"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </span>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                            </div>
                         </Listbox>
                     </div>
                     <div className="mt-4 text-sm font-semibold">
-                        Categoría previa:{' '}
-                        {form.values?.categories?.at(-2)?.categoryId}
+                        Categoría previa:
+                        <div className="font-regular">
+                            {member.categories.at(-1)?.categoryId
+                                ? fakeCategories.find(
+                                      (e) =>
+                                          e.id ===
+                                          member.categories.at(-1)?.categoryId
+                                  )?.name
+                                : '-'}
+                        </div>
                     </div>
                 </div>
 
@@ -316,7 +351,7 @@ export default function TeamMemberForm({
                         name="obrero"
                         type="checkbox"
                         className="h-4 w-4 rounded-md  text-primary focus:ring-primary"
-                        {...form.getInputProps('obrero' + 'humanAnimalOrDb', {
+                        {...form.getInputProps('obrero', {
                             type: 'checkbox',
                         })}
                     />
