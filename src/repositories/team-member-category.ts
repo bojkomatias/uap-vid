@@ -1,4 +1,8 @@
-import type { HistoricCategoryPrice, User } from '@prisma/client'
+import type {
+    HistoricCategoryPrice,
+    TeamMemberCategory,
+    User,
+} from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -88,7 +92,7 @@ const getCategories = cache(
     }
 )
 
-const updateUserById = async (id: string, data: User) => {
+const updateCategoryById = async (id: string, data: TeamMemberCategory) => {
     try {
         const user = await prisma.user.update({
             where: {
@@ -102,10 +106,7 @@ const updateUserById = async (id: string, data: User) => {
     }
 }
 
-const createCategory = async (data: {
-    name: string
-    price: HistoricCategoryPrice[]
-}) => {
+const createCategory = async (data: TeamMemberCategory) => {
     try {
         const category = await prisma.teamMemberCategory.create({
             data,
@@ -129,4 +130,4 @@ const deleteUserById = async (id: string) => {
     }
 }
 
-export { getCategories, updateUserById, createCategory, deleteUserById }
+export { getCategories, updateCategoryById, createCategory, deleteUserById }

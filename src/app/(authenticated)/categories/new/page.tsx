@@ -5,6 +5,7 @@ import { notifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'
 import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
+import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 
 export default function CategoryForm() {
     const router = useRouter()
@@ -81,20 +82,19 @@ export default function CategoryForm() {
                 <label htmlFor="price" className="label">
                     Precio hora
                 </label>
-                <input
-                    id="price"
-                    required
-                    className="input"
-                    type="number"
-                    name="price"
-                    placeholder="$2300.00"
-                    onChange={(e) =>
+
+                <CurrencyInput
+                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setCategory({
                             ...category,
                             [e.target.name]: [
                                 {
                                     from: new Date(),
-                                    price: Number(e.target.value),
+                                    price:
+                                        parseLocaleNumber(
+                                            e.target.value,
+                                            'de-DE'
+                                        ) * 10,
                                     //No le paso la currency porque está por default en ARS.
                                 },
                             ] as HistoricCategoryPrice[],
@@ -114,6 +114,7 @@ export default function CategoryForm() {
                     'Crear categoría'
                 )}
             </Button>
+            <pre>{JSON.stringify(category)}</pre>
         </form>
     )
 }

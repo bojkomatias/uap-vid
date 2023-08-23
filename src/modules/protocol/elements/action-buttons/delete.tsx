@@ -8,12 +8,12 @@ import { useCallback, useState, useTransition } from 'react'
 let timeout: NodeJS.Timeout
 
 export function DeleteButton({
-    protocolId,
-    protocolState,
+    id,
+    State,
     className,
 }: {
-    protocolId: string
-    protocolState: State
+    id: string
+    State: State
     className?: string
 }) {
     const router = useRouter()
@@ -21,9 +21,9 @@ export function DeleteButton({
     const [deleting, setDeleting] = useState(false)
 
     const deleteProtocol = useCallback(async () => {
-        const res = await fetch(`/api/protocol/${protocolId}`, {
+        const res = await fetch(`/api/protocol/${id}`, {
             method: 'DELETE',
-            body: JSON.stringify({ state: protocolState }),
+            body: JSON.stringify({ state: State }),
         })
 
         if (res.ok) {
@@ -37,9 +37,9 @@ export function DeleteButton({
                 router.refresh()
             })
         }
-    }, [protocolId, protocolState, router])
+    }, [id, State, router])
 
-    return protocolState !== 'DELETED' ? (
+    return State !== 'DELETED' ? (
         deleting ? (
             <Button
                 onClick={() => {

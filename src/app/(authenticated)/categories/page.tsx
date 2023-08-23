@@ -19,36 +19,6 @@ export default async function Page({
 
     const [totalRecords, categories] = await getCategories(searchParams)
 
-    const dummydata = [
-        {
-            id: 1,
-            name: 'Categoría 1',
-            price: [
-                { from: '2020', to: '2021', price: 200.5, currency: 'ARS' },
-                { from: '2021', to: '2022', price: 320.5, currency: 'ARS' },
-                { from: '2022', to: '2023', price: 500.5, currency: 'ARS' },
-            ],
-        },
-        {
-            id: 2,
-            name: 'Categoría 2',
-            price: [
-                { from: '2020', to: '2021', price: 200.5, currency: 'USD' },
-                { from: '2021', to: '2022', price: 320.5, currency: 'ARS' },
-                { from: '2022', to: '2023', price: 500.5, currency: 'ARS' },
-            ],
-        },
-        {
-            id: 3,
-            name: 'Categoría 3',
-            price: [
-                { from: '2020', to: '2021', price: 200.5, currency: 'ARS' },
-                { from: '2021', to: '2022', price: 320.5, currency: 'USD' },
-                { from: '2022', to: '2023', price: 500.5, currency: 'USD' },
-            ],
-        },
-    ]
-
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
     return (

@@ -251,8 +251,8 @@ export default function ProtocolTable({
                         </Link>
                         {user.role === 'ADMIN' ? (
                             <DeleteButton
-                                protocolId={row.original.id}
-                                protocolState={row.original.state}
+                                id={row.original.id}
+                                State={row.original.state}
                                 className={'px-2.5 py-1 text-xs'}
                             />
                         ) : (
