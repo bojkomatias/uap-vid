@@ -30,7 +30,7 @@ export default async function UserList({
                     passHref
                 >
                     <UserPlus className="h-5 text-current" />
-                    <span> Nuevo usuario</span>
+                    Nuevo usuario
                 </Link>
             </div>
 

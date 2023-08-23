@@ -24,8 +24,8 @@ export default async function Page() {
                     className={buttonStyle('secondary')}
                     passHref
                 >
-                    <CalendarPlus className="h-5 w-5" />
-                    <span className="ml-3"> Nueva convocatoria</span>
+                    <CalendarPlus className="h-5 w-5 text-current" />
+                    Nueva convocatoria
                 </Link>
             </div>
             <ConvocatoryTable />
