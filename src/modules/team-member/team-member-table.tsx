@@ -1,7 +1,7 @@
 'use client'
 import type { Prisma } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import Link from 'next/link'
@@ -52,9 +52,37 @@ export default function TeamMemberTable({
                 header: 'Obrero',
             },
             {
-                id: 'categories_0.category.name',
-                accessorFn: (row) => row.categories[0]?.category.name,
+                id: 'points',
+                header: 'Puntos',
+            },
+            {
+                id: 'category.name',
+                accessorFn: (row) => row.categories.at(-1)?.category.name,
                 header: 'Categoría',
+                enableSorting: false,
+            },
+            {
+                id: 'category.price',
+                accessorFn: (row) =>
+                    row.categories.at(-1)?.category.price.at(-1),
+                header: 'Valor hora',
+                cell: ({ row }) => (
+                    <span className='ml-4 before:content-["$"]'>
+                        {
+                            row.original.categories
+                                .at(-1)
+                                ?.category.price.at(-1)?.price
+                        }
+                        <span className="mx-1 text-xs text-gray-500">
+                            {
+                                row.original.categories
+                                    .at(-1)
+                                    ?.category.price.at(-1)?.currrency
+                            }
+                        </span>
+                    </span>
+                ),
+                enableSorting: false,
             },
             {
                 accessorKey: 'actions',
@@ -87,11 +115,7 @@ export default function TeamMemberTable({
                 columns={columns}
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
-                filterableByKey={{
-                    filter: 'role',
-                    values: Object.entries(RolesDictionary),
-                }}
-                searchBarPlaceholder="Buscar por: Nombre, Email"
+                searchBarPlaceholder="Buscar por: Nombre, etc"
             />
         </>
     )

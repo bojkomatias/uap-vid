@@ -80,16 +80,7 @@ export const getTeamMembers = async ({
             },
             where: search
                 ? {
-                      OR: [
-                          { name: { contains: search, mode: 'insensitive' } },
-                          {
-                              categories: {
-                                  some: {
-                                      category: { name: { contains: search } },
-                                  },
-                              },
-                          },
-                      ],
+                      OR: [{ name: { contains: search, mode: 'insensitive' } }],
                   }
                 : {},
 
