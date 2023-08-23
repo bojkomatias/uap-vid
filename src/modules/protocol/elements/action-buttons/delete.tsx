@@ -10,10 +10,12 @@ let timeout: NodeJS.Timeout
 export function DeleteButton({
     id,
     State,
+    apiPath,
     className,
 }: {
     id: string
     State: State
+    apiPath: string
     className?: string
 }) {
     const router = useRouter()
@@ -21,7 +23,7 @@ export function DeleteButton({
     const [deleting, setDeleting] = useState(false)
 
     const deleteProtocol = useCallback(async () => {
-        const res = await fetch(`/api/protocol/${id}`, {
+        const res = await fetch(`/api${apiPath}/${id}`, {
             method: 'DELETE',
             body: JSON.stringify({ state: State }),
         })

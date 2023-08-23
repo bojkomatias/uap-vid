@@ -253,6 +253,7 @@ export default function ProtocolTable({
                             <DeleteButton
                                 id={row.original.id}
                                 State={row.original.state}
+                                apiPath="/protocol"
                                 className={'px-2.5 py-1 text-xs'}
                             />
                         ) : (
