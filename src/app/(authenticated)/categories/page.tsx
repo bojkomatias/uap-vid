@@ -21,9 +21,10 @@ export default async function Page({
 
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+    console.log(categories)
     return (
         <>
-            <pre>{JSON.stringify(categories)}</pre>
+            <div className="w-[80vw]">{JSON.stringify(categories)}</div>
 
             <PageHeading title="Categorías de miembros de equipo de investigación" />
             <p className="ml-2 text-sm text-gray-500">

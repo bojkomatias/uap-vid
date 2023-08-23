@@ -4,10 +4,7 @@ import type { TeamMemberCategory } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import Link from 'next/link'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-import { buttonStyle } from '@elements/button/styles'
-import { cx } from '@utils/cx'
 
 export default function CategoriesTable({
     categories,
@@ -34,6 +31,11 @@ export default function CategoriesTable({
                 enableHiding: false,
             },
             {
+                accessorKey: 'state',
+                header: 'Estado',
+                enableHiding: false,
+            },
+            {
                 accessorKey: 'price',
                 header: 'Precio hora',
                 enableHiding: false,
@@ -44,26 +46,20 @@ export default function CategoriesTable({
                     </span>
                 ),
             },
+
             {
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-between gap-1">
-                        <Link
-                            href={`/protocols/${row.original.id}`}
-                            passHref
-                            className={cx(
-                                buttonStyle('secondary'),
-                                'px-2.5 py-1 text-xs'
-                            )}
-                        >
-                            Ver
-                        </Link>
-
                         <DeleteButton
-                            protocolId={row.original.id}
-                            protocolState={row.original.state}
+                            id={row.original.id}
+                            State={false}
+                            data={row.original}
+                            apiPath="/categories"
                             className={'px-2.5 py-1 text-xs'}
+                            notificationTitle="Categoría eliminada"
+                            notificationMessage="La categoría fue eliminada con éxito"
                         />
                     </div>
                 ),

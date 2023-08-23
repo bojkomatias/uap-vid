@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'
-import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
+import type { HistoricCategoryPrice } from '@prisma/client'
 import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 
 export default function CategoryForm() {
     const router = useRouter()
-    const [category, setCategory] = useState({})
+    const [category, setCategory] = useState({ state: true })
 
     const [loading, setLoading] = useState(false)
 

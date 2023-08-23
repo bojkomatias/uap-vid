@@ -255,6 +255,8 @@ export default function ProtocolTable({
                                 State={row.original.state}
                                 apiPath="/protocol"
                                 className={'px-2.5 py-1 text-xs'}
+                                notificationTitle="Protocolo eliminado"
+                                notificationMessage="El protocolo fue eliminado con éxito."
                             />
                         ) : (
                             <></>

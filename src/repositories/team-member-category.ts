@@ -1,8 +1,4 @@
-import type {
-    HistoricCategoryPrice,
-    TeamMemberCategory,
-    User,
-} from '@prisma/client'
+import type { TeamMemberCategory } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -60,6 +56,7 @@ const getCategories = cache(
                     // Grab the model, and  bring relational data
                     select: {
                         id: true,
+                        state: true,
                         name: true,
                         price: true,
                     },
@@ -94,7 +91,7 @@ const getCategories = cache(
 
 const updateCategoryById = async (id: string, data: TeamMemberCategory) => {
     try {
-        const user = await prisma.user.update({
+        const user = await prisma.teamMemberCategory.update({
             where: {
                 id,
             },
@@ -117,17 +114,4 @@ const createCategory = async (data: TeamMemberCategory) => {
     }
 }
 
-const deleteUserById = async (id: string) => {
-    try {
-        const user = await prisma.user.delete({
-            where: {
-                id,
-            },
-        })
-        return user.id
-    } catch (error) {
-        return null
-    }
-}
-
-export { getCategories, updateCategoryById, createCategory, deleteUserById }
+export { getCategories, updateCategoryById, createCategory }

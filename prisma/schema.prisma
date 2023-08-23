@@ -89,7 +89,7 @@ model HistoricTeamMemberCategory {
 model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
-  state                      Boolean
+  state                      Boolean?
   price                      HistoricCategoryPrice[]
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
 }

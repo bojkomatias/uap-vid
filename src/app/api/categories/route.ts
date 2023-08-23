@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await request.json()
+
     const created = await createCategory({
         ...data,
     })

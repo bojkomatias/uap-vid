@@ -161,6 +161,7 @@ export const HistoricCategoryPriceSchema = z.object({
 export const TeamMemberCategorySchema = z.object({
     id: z.string(),
     name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+    state: z.boolean(),
     price: HistoricCategoryPriceSchema.array(),
 })
 

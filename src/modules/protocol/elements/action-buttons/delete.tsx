@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
@@ -10,28 +11,34 @@ let timeout: NodeJS.Timeout
 export function DeleteButton({
     id,
     State,
+    data,
     apiPath,
     className,
+    notificationTitle,
+    notificationMessage,
 }: {
     id: string
-    State: State
+    State: State | boolean
     apiPath: string
+    data?: object
     className?: string
+    notificationTitle: string
+    notificationMessage: string
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
 
-    const deleteProtocol = useCallback(async () => {
+    const deleteRecord = useCallback(async () => {
         const res = await fetch(`/api${apiPath}/${id}`, {
             method: 'DELETE',
-            body: JSON.stringify({ state: State }),
+            body: JSON.stringify({ ...data, state: State }),
         })
 
         if (res.ok) {
             notifications.show({
-                title: 'Protocolo eliminado',
-                message: 'El protocolo ha sido eliminado con éxito.',
+                title: notificationTitle,
+                message: notificationMessage,
                 color: 'green',
             })
             return startTransition(() => {
@@ -39,7 +46,7 @@ export function DeleteButton({
                 router.refresh()
             })
         }
-    }, [id, State, router])
+    }, [id, State, router, data])
 
     return State !== 'DELETED' ? (
         deleting ? (
@@ -83,7 +90,7 @@ export function DeleteButton({
                 onClick={() => {
                     setDeleting(true)
                     timeout = setTimeout(() => {
-                        deleteProtocol()
+                        deleteRecord()
                     }, 3000)
                 }}
                 disabled={isPending}
