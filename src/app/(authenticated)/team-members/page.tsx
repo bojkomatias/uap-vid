@@ -17,15 +17,20 @@ export default async function Page() {
         return (
             <>
                 <PageHeading title={'Miembros del equipo de investigación'} />
-                <Link
-                    href={'/team-members/new'}
-                    className={buttonStyle('secondary')}
-                    passHref
-                >
-                    <UserPlus className="h-5 w-5 text-current" />
-                    Nuevo miembro
-                </Link>
-
+                <p className="ml-2 mt-2 text-sm text-gray-500">
+                    Lista de todos los docentes, técnicos y becarios que son
+                    parte del equipo de investigación y sus categorías.
+                </p>
+                <div className="flex flex-row-reverse">
+                    <Link
+                        href={'/team-members/new'}
+                        className={buttonStyle('secondary')}
+                        passHref
+                    >
+                        <UserPlus className="h-5 w-5 text-current" />
+                        Nuevo miembro
+                    </Link>
+                </div>
                 <pre className="text-xs">
                     {JSON.stringify(teamMembers, null, 2)}
                 </pre>

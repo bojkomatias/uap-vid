@@ -55,7 +55,7 @@ export default function TeamMemberForm({
                         : 'Miembro creado',
                     message:
                         'El miembro de investigación fue creado correctamente',
-                    color: 'success',
+                    color: 'teal',
                     icon: <Check />,
                     radius: 0,
                     style: {
@@ -122,10 +122,7 @@ export default function TeamMemberForm({
                                 )
                             }
                         }}
-                        disabled={
-                            form.getInputProps('name').value &&
-                            !form.getInputProps('userId').value
-                        }
+                        disabled={!!form.values.name && !form.values.userId}
                         className="relative z-10"
                     >
                         <Combobox.Button className="relative w-full">
@@ -153,7 +150,6 @@ export default function TeamMemberForm({
                                             : ''
                                     )}
                                     onClick={(e) => {
-                                        form.setFieldValue('name', null)
                                         form.setFieldValue('userId', null)
                                         e.stopPropagation()
                                     }}
@@ -263,7 +259,7 @@ export default function TeamMemberForm({
                         className="input disabled:bg-gray-100 disabled:text-gray-500"
                         placeholder="Nombre completo"
                         name="name"
-                        disabled={form.getInputProps('userId').value}
+                        disabled={!!form.values.userId}
                         {...form.getInputProps('name')}
                     />
                 </div>

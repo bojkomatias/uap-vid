@@ -2,14 +2,13 @@
 
 import { Button } from '@elements/button'
 import { Listbox } from '@headlessui/react'
-import { useForm, zodResolver } from '@mantine/form'
+import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import type {
     HistoricTeamMemberCategory,
     TeamMemberCategory,
 } from '@prisma/client'
 import { cx } from '@utils/cx'
-import { HistoricTeamMemberCategorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
@@ -72,7 +71,7 @@ export default function CategorizationForm({
                     title: 'Categoría actualizada',
                     message:
                         'La categoría del miembro de investigación fue actualizada con éxito',
-                    color: 'success',
+                    color: 'teal',
                     icon: <Check />,
                     radius: 0,
                     style: {
@@ -80,7 +79,10 @@ export default function CategorizationForm({
                     },
                 })
 
-                return startTransition(() => router.refresh())
+                return startTransition(() => {
+                    router.refresh()
+                    form.reset()
+                })
             }
             notifications.show({
                 title: 'Ha ocurrido un error',
@@ -94,7 +96,7 @@ export default function CategorizationForm({
                 },
             })
         },
-        [currentCategory?.id, memberId, router]
+        [currentCategory?.id, form, memberId, router]
     )
 
     return (
@@ -177,7 +179,16 @@ export default function CategorizationForm({
                                                                 : 'text-gray-500'
                                                         )}
                                                     >
-                                                        {value.price[0].price}
+                                                        ${' '}
+                                                        {
+                                                            value.price.at(-1)!
+                                                                .price
+                                                        }{' '}
+                                                        {
+                                                            value.price.at(-1)!
+                                                                .currrency
+                                                        }{' '}
+                                                        / hora
                                                     </span>
                                                 </span>
 
@@ -204,14 +215,14 @@ export default function CategorizationForm({
                         </div>
                     </Listbox>
                 </div>
-                <div className={cx("mt-4 w-48 text-sm font-semibold",!form.isDirty() && 'hidden')}>
-                    Categoría actual:
-                    <div className="font-medium">
+                <div className={cx(!form.isDirty() && 'hidden')}>
+                    <div className="label">Categoría anterior</div>
+                    <div className="ml-1 font-medium">
                         {currentCategory
                             ? fakeCategories.find(
                                   (e) => e.id === currentCategory.categoryId
                               )?.name
-                            : '-'}
+                            : null}
                     </div>
                 </div>
             </div>
