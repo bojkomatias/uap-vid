@@ -50,6 +50,7 @@ const AccessSchema = z.enum([
     'REVIEWS',
     'CONVOCATORIES',
     'ACADEMIC_UNITS',
+    'TEAM_MEMBERS',
 ])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
@@ -167,7 +168,7 @@ export const TeamMemberCategorySchema = z.object({
 // HISTORIC TEAM MEMBER CATEGORY SCHEMA
 /////////////////////////////////////////
 export const HistoricTeamMemberCategorySchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
     teamMemberId: z.string(),
@@ -180,9 +181,8 @@ export const HistoricTeamMemberCategorySchema = z.object({
 
 export const TeamMemberSchema = z.object({
     id: z.string(),
-    UserSchema: UserSchema.optional(),
-    name: z.string().optional(),
-    categories: TeamMemberCategorySchema.array(),
+    userId: z.string().nullable(),
+    name: z.string().nullable(),
     obrero: z.boolean(),
 })
 

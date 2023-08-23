@@ -73,7 +73,7 @@ model TeamMember {
   userId     String?                      @unique @db.ObjectId
   name       String?
   categories HistoricTeamMemberCategory[]
-  obrero     Boolean
+  obrero     Boolean                      @default(false)
 }
 
 model HistoricTeamMemberCategory {

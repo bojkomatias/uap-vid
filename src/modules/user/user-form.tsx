@@ -27,7 +27,7 @@ export default function UserForm() {
             notifications.show({
                 title: 'Usuario creado',
                 message: 'El usuario fue creado correctamente',
-                color: 'success',
+                color: 'teal',
                 icon: <Check />,
                 radius: 0,
                 style: {
