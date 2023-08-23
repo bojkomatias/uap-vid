@@ -64,9 +64,10 @@ export default function TeamMemberForm({
                 })
                 if (teamMember.id) {
                     const { id } = await res.json()
-                    return startTransition(() =>
+                    return startTransition(() => {
+                        router.refresh()
                         router.push(`/team-members/${id}`)
-                    )
+                    })
                 }
                 return startTransition(() => router.refresh())
             }

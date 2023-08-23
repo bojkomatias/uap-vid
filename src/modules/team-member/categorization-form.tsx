@@ -80,8 +80,8 @@ export default function CategorizationForm({
                 })
 
                 return startTransition(() => {
-                    router.refresh()
                     form.reset()
+                    router.refresh()
                 })
             }
             notifications.show({

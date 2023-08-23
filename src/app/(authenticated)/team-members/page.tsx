@@ -3,16 +3,21 @@ import { PageHeading } from '@layout/page-heading'
 import { getTeamMembers } from '@repositories/team-member'
 import { canAccess } from '@utils/scopes'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import TeamMemberTable from 'modules/team-member/team-member-table'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { UserPlus } from 'tabler-icons-react'
 
-export default async function Page() {
+export default async function Page({
+    searchParams,
+}: {
+    searchParams: { [key: string]: string }
+}) {
     const session = await getServerSession(authOptions)
 
     if (session && canAccess('TEAM_MEMBERS', session.user.role)) {
-        const teamMembers = await getTeamMembers()
+        const [totalRecords, teamMembers] = await getTeamMembers(searchParams)
 
         return (
             <>
@@ -31,9 +36,10 @@ export default async function Page() {
                         Nuevo miembro
                     </Link>
                 </div>
-                <pre className="text-xs">
-                    {JSON.stringify(teamMembers, null, 2)}
-                </pre>
+                <TeamMemberTable
+                    teamMembers={teamMembers}
+                    totalRecords={totalRecords}
+                />
             </>
         )
     }

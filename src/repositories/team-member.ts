@@ -1,5 +1,6 @@
-import type { HistoricTeamMemberCategory, TeamMember } from '@prisma/client'
+import type { TeamMember } from '@prisma/client'
 import { prisma } from '../utils/bd'
+import { orderByQuery } from '@utils/query-helper/orderBy'
 
 export const createTeamMember = async (data: TeamMember) =>
     await prisma.teamMember.create({
@@ -53,10 +54,46 @@ export const getTeamMemberById = async (id: string) =>
         include: { categories: true, user: true },
     })
 
-export const getTeamMembers = async () =>
-    await prisma.teamMember.findMany({
-        include: {
-            user: { select: { id: true, name: true, email: true, role: true } },
-            categories: { include: { category: true } },
-        },
-    })
+export const getTeamMembers = async ({
+    records = '5',
+    page = '1',
+    search,
+    sort,
+    order,
+    filter,
+    values,
+}: {
+    [key: string]: string
+}) => {
+    const orderBy = order && sort ? orderByQuery(sort, order) : {}
+
+    return await prisma.$transaction([
+        prisma.teamMember.count(),
+        prisma.teamMember.findMany({
+            skip: Number(records) * (Number(page) - 1),
+            take: Number(records),
+            include: {
+                user: {
+                    select: { id: true, name: true, email: true, role: true },
+                },
+                categories: { include: { category: true } },
+            },
+            where: search
+                ? {
+                      OR: [
+                          { name: { contains: search, mode: 'insensitive' } },
+                          {
+                              categories: {
+                                  some: {
+                                      category: { name: { contains: search } },
+                                  },
+                              },
+                          },
+                      ],
+                  }
+                : {},
+
+            orderBy,
+        }),
+    ])
+}
