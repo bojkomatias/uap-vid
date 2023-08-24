@@ -95,7 +95,6 @@ const updatePriceCategoryById = async (
     id: string,
     data: TeamMemberCategory
 ) => {
-    console.log(data)
     try {
         const category = await prisma.teamMemberCategory.update({
             where: {
