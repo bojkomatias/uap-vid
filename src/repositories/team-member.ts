@@ -88,3 +88,5 @@ export const getTeamMembers = async ({
         }),
     ])
 }
+
+export const getAllTeamMembers = async () => await prisma.teamMember.findMany()
