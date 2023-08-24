@@ -91,11 +91,8 @@ export default function Pagination({
                     </>
                 )}
 
-                {Math.ceil(totalRecords / shownRecords) > 1 &&
-                shownRecords * Number(searchParams?.get('page') || 1) -
-                    shownRecords +
-                    1 <
-                    totalRecords
+                {Math.ceil(totalRecords / shownRecords) >= 1 &&
+                allPages.length != 1
                     ? displayedPages.map((page: number) => (
                           <Button
                               key={page}
