@@ -31,6 +31,7 @@ const getCategories = cache(
             return await prisma.$transaction([
                 prisma.teamMemberCategory.count({
                     where: {
+                        state: { not: false },
                         AND: [
                             search
                                 ? {
@@ -62,6 +63,7 @@ const getCategories = cache(
                     },
                     // Add all the globally searchable fields
                     where: {
+                        state: { not: false },
                         AND: [
                             search
                                 ? {
@@ -90,16 +92,17 @@ const getCategories = cache(
 )
 
 const updateCategoryById = async (id: string, data: TeamMemberCategory) => {
+    console.log(data)
     try {
         const user = await prisma.teamMemberCategory.update({
             where: {
                 id,
             },
-            data,
+            data: { state: data.state },
         })
         return user
     } catch (error) {
-        return null
+        return new Error(`${error}`)
     }
 }
 

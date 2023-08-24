@@ -30,11 +30,7 @@ export default function CategoriesTable({
                 header: 'Categoría',
                 enableHiding: false,
             },
-            {
-                accessorKey: 'state',
-                header: 'Estado',
-                enableHiding: false,
-            },
+
             {
                 accessorKey: 'price',
                 header: 'Precio hora',
@@ -61,7 +57,6 @@ export default function CategoriesTable({
                             notificationTitle="Categoría eliminada"
                             notificationMessage="La categoría fue eliminada con éxito"
                         />
-                        <pre>{JSON.stringify(row.original)}</pre>
                     </div>
                 ),
                 enableHiding: false,
