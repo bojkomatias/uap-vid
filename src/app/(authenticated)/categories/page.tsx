@@ -24,8 +24,6 @@ export default async function Page({
 
     return (
         <>
-            <div className="w-[80vw]">{JSON.stringify(categories)}</div>
-
             <PageHeading title="Categorías de miembros de equipo de investigación" />
             <p className="ml-2 text-sm text-gray-500">
                 Lista de las categorías asignables a los miembros de equipo de
@@ -33,7 +31,7 @@ export default async function Page({
             </p>
             <Link
                 href={'/categories/new'}
-                className={cx(buttonStyle('secondary'), 'w-fit')}
+                className={cx(buttonStyle('secondary'), 'mt-2 w-fit')}
             >
                 Crear categoría
             </Link>

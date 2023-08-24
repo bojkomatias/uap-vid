@@ -114,7 +114,6 @@ export default function CategoryForm() {
                     'Crear categoría'
                 )}
             </Button>
-            <pre>{JSON.stringify(category)}</pre>
         </form>
     )
 }

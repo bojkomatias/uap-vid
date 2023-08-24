@@ -4,9 +4,11 @@ import React, { useRef, useState } from 'react'
 const CurrencyInput = ({
     defaultPrice,
     priceSetter,
+    className,
 }: {
     defaultPrice?: number
     priceSetter: Function
+    className?: string
 }) => {
     const formatCurrency = (value: string) => {
         const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
@@ -40,7 +42,7 @@ const CurrencyInput = ({
                     priceSetter(e)
                 }}
                 placeholder="3400.00"
-                className="input pl-5"
+                className={`${className} input pl-5`}
             />
         </div>
     )

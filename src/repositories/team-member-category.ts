@@ -91,8 +91,25 @@ const getCategories = cache(
     }
 )
 
-const updateCategoryById = async (id: string, data: TeamMemberCategory) => {
+const updatePriceCategoryById = async (
+    id: string,
+    data: TeamMemberCategory
+) => {
     console.log(data)
+    try {
+        const category = await prisma.teamMemberCategory.update({
+            where: {
+                id,
+            },
+            data: { price: data.price },
+        })
+        return category
+    } catch (error) {
+        return new Error(`${error}`)
+    }
+}
+
+const deleteCategoryById = async (id: string, data: TeamMemberCategory) => {
     try {
         const user = await prisma.teamMemberCategory.update({
             where: {
@@ -117,4 +134,9 @@ const createCategory = async (data: TeamMemberCategory) => {
     }
 }
 
-export { getCategories, updateCategoryById, createCategory }
+export {
+    getCategories,
+    updatePriceCategoryById,
+    createCategory,
+    deleteCategoryById,
+}
