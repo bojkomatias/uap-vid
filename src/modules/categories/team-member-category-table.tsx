@@ -61,6 +61,7 @@ export default function CategoriesTable({
                             notificationTitle="Categoría eliminada"
                             notificationMessage="La categoría fue eliminada con éxito"
                         />
+                        <pre>{JSON.stringify(row.original)}</pre>
                     </div>
                 ),
                 enableHiding: false,

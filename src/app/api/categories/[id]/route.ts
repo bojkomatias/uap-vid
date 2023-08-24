@@ -58,7 +58,7 @@ export async function DELETE(
     const id = params.id
     const { data } = await request.json()
 
-    console.log(data)
+    console.log(await request.json())
 
     if (!id || !data) {
         return new Response('We cannot update your category: Invalid Data', {

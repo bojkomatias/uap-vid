@@ -30,6 +30,8 @@ export function DeleteButton({
     const [deleting, setDeleting] = useState(false)
 
     const deleteRecord = useCallback(async () => {
+        console.log(`${apiPath}/${id}`)
+        console.log({ ...data, state: State })
         const res = await fetch(`/api${apiPath}/${id}`, {
             method: 'DELETE',
             body: JSON.stringify({ ...data, state: State }),

@@ -21,7 +21,7 @@ export default async function Page({
 
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
-    console.log(categories)
+
     return (
         <>
             <div className="w-[80vw]">{JSON.stringify(categories)}</div>
