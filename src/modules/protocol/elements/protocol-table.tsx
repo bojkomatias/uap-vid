@@ -290,7 +290,6 @@ export default function ProtocolTable({
     }
     return (
         <>
-            <>{JSON.stringify(protocols)}</>
             <TanStackTable
                 data={protocols}
                 columns={columns}
