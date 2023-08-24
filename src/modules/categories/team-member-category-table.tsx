@@ -135,7 +135,7 @@ export default function CategoriesTable({
                                             from: new Date(),
                                             price: price,
                                             currency: 'ARS',
-                                        } as HistoricCategoryPrice
+                                        }
 
                                         // Update the old price to set the 'to' property
                                         const oldPrice = {
