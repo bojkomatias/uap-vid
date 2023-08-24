@@ -14,7 +14,7 @@ export default function EnumFilterOptions({
 }) {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const currentValues = searchParams.get('values')?.split('-')
+    const currentValues = searchParams?.get('values')?.split('-')
     return (
         <div>
             <div className="relative mt-4 flex flex-col items-start text-sm">

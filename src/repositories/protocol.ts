@@ -18,7 +18,7 @@ const findProtocolById = cache(async (id: string) => {
             },
         })
     } catch (e) {
-        return new Error('Error en la query findProtocolById')
+        return null
     }
 })
 
@@ -37,7 +37,7 @@ const getResearcherEmailByProtocolId = cache(async (id: string) => {
             },
         })
     } catch (e) {
-        return new Error('Error en la query getResearcherEmailByProtocolId')
+        return null
     }
 })
 
@@ -51,7 +51,7 @@ const updateProtocolById = async (id: string, data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        return new Error('Error en la query updateProtocolById')
+        return null
     }
 }
 
@@ -67,7 +67,7 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
         })
         return protocol
     } catch (e) {
-        return new Error('Error en la query updateProtocolStateById')
+        return null
     }
 }
 
@@ -78,7 +78,7 @@ const createProtocol = async (data: Protocol) => {
         })
         return protocol
     } catch (e) {
-        return new Error('Error en la query createProtocol')
+        return null
     }
 }
 
@@ -86,7 +86,7 @@ const getAllProtocols = cache(async () => {
     try {
         return await prisma.protocol.findMany()
     } catch (e) {
-        return new Error('Error en la query getAllProtocols')
+        return null
     }
 })
 
