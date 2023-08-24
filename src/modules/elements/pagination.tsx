@@ -55,7 +55,6 @@ export default function Pagination({
     }, [totalRecords, shownRecords, numberOfDisplayedPages, currentPage])
 
     useEffect(() => {
-        console.log(Math.ceil(totalRecords / shownRecords), currentPage)
         if (totalRecords <= shownRecords) update({ page: 1 })
         if (Math.ceil(totalRecords / shownRecords) < currentPage)
             update({ page: currentPage - 1 })
