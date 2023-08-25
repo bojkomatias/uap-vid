@@ -58,11 +58,10 @@ export default function Pagination({
         if (totalRecords <= shownRecords) update({ page: 1 })
         if (Math.ceil(totalRecords / shownRecords) < currentPage)
             update({ page: currentPage - 1 })
-    })
+    }, [])
 
     return (
         <div className="flex flex-col items-center gap-2">
-            {}
             <div className="mx-auto mt-12 flex w-fit gap-2">
                 {numberOfDisplayedPages >=
                 Math.ceil(totalRecords / shownRecords) ? null : (
