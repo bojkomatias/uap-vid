@@ -100,7 +100,7 @@ export default function CategoriesTable({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <span className="flex min-w-[500px] gap-2 text-xs text-gray-600">
-                        {row.original.price.map((p, idx: number) => {
+                        {row.original.price.map((p: any, idx: number) => {
                             return <span key={idx}>{p.price}</span>
                         })}
                     </span>

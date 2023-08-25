@@ -29,12 +29,17 @@ export default async function Page({
                 Lista de las categorías asignables a los miembros de equipo de
                 un proyecto de investigación.
             </p>
-            <Link
-                href={'/categories/new'}
-                className={cx(buttonStyle('secondary'), 'mt-2 w-fit')}
-            >
-                Crear categoría
-            </Link>
+            <div className="flex flex-row-reverse">
+                <Link
+                    href={'/categories/new'}
+                    className={cx(
+                        buttonStyle('secondary'),
+                        'float-right mt-2 w-fit'
+                    )}
+                >
+                    Crear categoría
+                </Link>
+            </div>
             <CategoriesTable
                 categories={categories}
                 totalRecords={totalRecords}
