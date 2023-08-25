@@ -21,10 +21,8 @@ export async function PUT(
 
     const id = params.id
     const protocol = await request.json()
-    console.log(protocol)
     if (protocol) delete protocol.id
     const updated = await updateProtocolById(id, protocol)
-    console.log(updated)
     if (!updated) {
         return new Response('We cannot update the protocol', {
             status: 500,
