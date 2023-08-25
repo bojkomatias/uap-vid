@@ -3,7 +3,7 @@ import { Popover, Transition } from '@headlessui/react'
 
 import { buttonStyle } from './button/styles'
 
-export default function PopoverButton({
+export default function PopoverComponent({
     children,
     title,
     className,

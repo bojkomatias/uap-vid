@@ -5,7 +5,7 @@ import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-import PopoverButton from '@elements/popover'
+import PopoverComponent from '@elements/popover'
 import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
@@ -130,7 +130,7 @@ export default function CategoriesTable({
                 header: 'Acciones',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-between gap-1">
-                        <PopoverButton title="Actualizar precio">
+                        <PopoverComponent title="Actualizar precio">
                             <div className="flex items-center gap-2">
                                 <p className="text-xs font-semibold">
                                     Precio actualizado:
@@ -204,7 +204,7 @@ export default function CategoriesTable({
                                     Actualizar
                                 </Button>
                             </div>
-                        </PopoverButton>
+                        </PopoverComponent>
                         <DeleteButton
                             id={row.original.id}
                             State={false}

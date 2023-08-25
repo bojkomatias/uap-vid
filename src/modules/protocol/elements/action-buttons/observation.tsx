@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import PopoverButton from '@elements/popover'
+import PopoverComponent from '@elements/popover'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import React, { startTransition } from 'react'
@@ -30,7 +30,7 @@ export default function Observation({ id }: { id: string }) {
         })
     }
     return (
-        <PopoverButton
+        <PopoverComponent
             title="Agregar observación"
             className="absolute left-0 top-2 min-w-[400px] rounded-md bg-gray-50 p-3 shadow-md"
         >
@@ -59,6 +59,6 @@ export default function Observation({ id }: { id: string }) {
                     Guardar
                 </Button>
             </form>
-        </PopoverButton>
+        </PopoverComponent>
     )
 }
