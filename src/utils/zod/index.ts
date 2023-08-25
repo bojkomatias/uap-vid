@@ -186,7 +186,7 @@ export const TeamMemberSchema = z.object({
     userId: z.string().nullable(),
     name: z.string().nullable(),
     obrero: z.boolean(),
-    pointsObrero: z.number().nullable(),
+    pointsObrero: z.coerce.number().nullable(),
 })
 
 /////////////////////////////////////////

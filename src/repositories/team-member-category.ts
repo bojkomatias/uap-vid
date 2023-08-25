@@ -133,9 +133,12 @@ const createCategory = async (data: TeamMemberCategory) => {
     }
 }
 
+const getAllCategories = async () => await prisma.teamMemberCategory.findMany()
+
 export {
     getCategories,
     updatePriceCategoryById,
     createCategory,
     deleteCategoryById,
+    getAllCategories
 }

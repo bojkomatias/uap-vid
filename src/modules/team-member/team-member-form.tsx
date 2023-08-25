@@ -6,6 +6,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import type {
     HistoricTeamMemberCategory,
     TeamMember,
+    TeamMemberCategory,
     User,
 } from '@prisma/client'
 import { cx } from '@utils/cx'
@@ -21,6 +22,7 @@ import { useRouter } from 'next/navigation'
 export default function TeamMemberForm({
     member,
     researchers,
+    categories,
 }: {
     member:
         | (TeamMember & {
@@ -28,6 +30,7 @@ export default function TeamMemberForm({
           } & { user: User | null })
         | null
     researchers: User[]
+    categories: TeamMemberCategory[]
 }) {
     const router = useRouter()
     const form = useForm({
@@ -95,7 +98,10 @@ export default function TeamMemberForm({
     return (
         <div>
             <form
-                onSubmit={form.onSubmit((values) => saveTeamMember(values))}
+                onSubmit={form.onSubmit(
+                    (values) => saveTeamMember(values),
+                    (errors) => console.log(errors)
+                )}
                 className="mx-auto mt-10 max-w-5xl space-y-6"
             >
                 <div>
@@ -258,7 +264,7 @@ export default function TeamMemberForm({
                         {...form.getInputProps('name')}
                     />
                 </div>
-                <div className=" grid grid-cols-4 gap-8">
+                <div className="grid grid-cols-4 gap-8">
                     <div className="ml-2 flex h-20 items-center">
                         <input
                             id="obrero"
@@ -279,18 +285,25 @@ export default function TeamMemberForm({
                         </div>
                     </div>
                     <div
-                        className={
+                        className={cx(
+                            'place-self-end text-right',
                             form.getInputProps('obrero').value ? '' : 'hidden'
-                        }
+                        )}
                     >
-                        <label htmlFor="points" className="label">
+                        <label htmlFor="pointsObrero" className="label">
                             Puntos de obrero
                         </label>
                         <input
-                            type="text"
-                            className="input"
-                            name="points"
-                            {...form.getInputProps('points')}
+                            type="number"
+                            className="input w-36 text-right"
+                            name="pointsObrero"
+                            {...form.getInputProps('pointsObrero')}
+                            onBlur={() =>
+                                form.setFieldValue(
+                                    'pointsObrero',
+                                    Number(form.values.pointsObrero)
+                                )
+                            }
                         />
                     </div>
                 </div>
@@ -307,7 +320,8 @@ export default function TeamMemberForm({
             </form>
             {member ? (
                 <CategorizationForm
-                    categories={member.categories}
+                    categories={categories}
+                    historicCategories={member.categories}
                     memberId={member.id}
                 />
             ) : null}

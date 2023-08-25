@@ -120,11 +120,14 @@ const getAllOwners = async () => {
         return []
     }
 }
-const getAllNonTeamMembers = async () => {
+const getAllNonTeamMembers = async (teamMemberId?: string) => {
     try {
         const users = await prisma.user.findMany({
             where: {
-                memberDetails: null,
+                OR: [
+                    { memberDetails: null },
+                    teamMemberId ? { memberDetails: { id: teamMemberId } } : {},
+                ],
             },
         })
         return users

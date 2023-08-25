@@ -76,7 +76,7 @@ export default function TeamMemberTable({
                             {
                                 row.original.categories
                                     .at(-1)
-                                    ?.category.price.at(-1)?.currrency
+                                    ?.category.price.at(-1)?.currency
                             }
                         </span>
                     </span>

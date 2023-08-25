@@ -12,43 +12,18 @@ import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 
-const fakeCategories: TeamMemberCategory[] = [
-    {
-        id: '64e50b5ac2dfc1274a001a63',
-        name: 'Categoria V',
-        price: [
-            {
-                from: new Date('27/02/1996'),
-                price: 1250,
-                currrency: 'ARS',
-                to: new Date('27/05/2023'),
-            },
-        ],
-    },
-    {
-        id: '64e50b7cc2dfc1274a001a64',
-        name: 'Categoria IV',
-        price: [
-            {
-                from: new Date('27/02/1996'),
-                price: 1250,
-                currrency: 'ARS',
-                to: new Date('27/05/2023'),
-            },
-        ],
-    },
-]
-
 export default function CategorizationForm({
     categories,
+    historicCategories,
     memberId,
 }: {
-    categories: HistoricTeamMemberCategory[]
+    categories: TeamMemberCategory[]
+    historicCategories: HistoricTeamMemberCategory[]
     memberId: string
 }) {
     const router = useRouter()
 
-    const currentCategory = categories.at(-1)
+    const currentCategory = historicCategories.at(-1)
     const form = useForm({
         initialValues: { categoryId: currentCategory?.categoryId ?? '' },
     })
@@ -122,7 +97,7 @@ export default function CategorizationForm({
                             <Listbox.Button className="input text-left">
                                 <span className="block truncate">
                                     {form.values.categoryId
-                                        ? fakeCategories.find(
+                                        ? categories.find(
                                               (e) =>
                                                   e.id ===
                                                   form.values.categoryId
@@ -138,7 +113,7 @@ export default function CategorizationForm({
                             </Listbox.Button>
 
                             <Listbox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
-                                {fakeCategories.map((value) => (
+                                {categories.map((value) => (
                                     <Listbox.Option
                                         key={value.id}
                                         value={value.id}
@@ -180,7 +155,7 @@ export default function CategorizationForm({
                                                         }{' '}
                                                         {
                                                             value.price.at(-1)!
-                                                                .currrency
+                                                                .currency
                                                         }{' '}
                                                         / hora
                                                     </span>
@@ -213,7 +188,7 @@ export default function CategorizationForm({
                     <div className="label">Categoría anterior</div>
                     <div className="ml-1 font-medium">
                         {currentCategory
-                            ? fakeCategories.find(
+                            ? categories.find(
                                   (e) => e.id === currentCategory.categoryId
                               )?.name
                             : null}
