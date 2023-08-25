@@ -18,13 +18,13 @@ export default function RecordsDropdown({
     const update = useUpdateQuery()
 
     return (
-        <Menu as="div" className="relative float-right text-left">
+        <Menu as="div" className="relative text-left">
             <div>
                 <Menu.Button as={Button} intent="outline">
                     Cantidad de registros
                     {': ' + shownRecords}
                     <ChevronDown
-                        className="-mr-1 h-5 w-5 text-gray-500"
+                        className="-mr-1 w-4 text-gray-500"
                         aria-hidden="true"
                     />
                 </Menu.Button>
@@ -40,7 +40,7 @@ export default function RecordsDropdown({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1  focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1 focus:outline-none"
                     static
                 >
                     <div className="py-1">

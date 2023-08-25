@@ -35,7 +35,10 @@ export const useUpdateQuery = () => {
         const values =
             e.values !== undefined ? e.values : searchParams?.get('values')
 
-        const newUrl = new URL(path as string, process.env.NEXT_PUBLIC_URL)
+        const newUrl = new URL(
+            path as string,
+            process.env.NEXT_PUBLIC_URL ?? 'http:localhost:3000'
+        )
         if (page) newUrl.searchParams.set('page', page.toString())
         if (records) newUrl.searchParams.set('records', records.toString())
         if (search) newUrl.searchParams.set('search', search)
@@ -48,6 +51,6 @@ export const useUpdateQuery = () => {
             newUrl.searchParams.set('values', values)
         }
 
-        router.push(newUrl.href, { scroll: false })
+        router.push(newUrl.pathname + newUrl.search, { scroll: false })
     }
 }
