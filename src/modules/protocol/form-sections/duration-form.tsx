@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
-import { InputList } from '@protocol/elements/inputs/input-list'
 import { cache } from 'react'
+import { ChronogramList } from '@protocol/elements/inputs/chronogram-list-form'
 
 export function DurationForm() {
     const form = useProtocolContext()
@@ -41,18 +41,7 @@ export function DurationForm() {
                         )
                     }}
                 />
-                <InputList
-                    path={path + 'chronogram'}
-                    label="cronograma de tareas"
-                    // When preprocessKey, means nested, so the shape of the Inserted, is the LEAF one.
-                    newLeafItemValue={{
-                        task: '',
-                    }}
-                    preprocessKey={'semester'}
-                    headers={[
-                        { x: 'task', label: 'Tarea', class: 'flex-grow' },
-                    ]}
-                />
+                <ChronogramList />
             </>
         </motion.div>
     )

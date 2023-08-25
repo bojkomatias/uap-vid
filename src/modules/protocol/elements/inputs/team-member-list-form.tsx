@@ -78,7 +78,13 @@ export default function TeamMemberListForm() {
 
                 <Button
                     onClick={() => {
-                        form.insertListItem(path, {})
+                        form.insertListItem(path, {
+                            hours: 0,
+                            last_name: '',
+                            name: '',
+                            role: '',
+                            teamMemberId: null,
+                        })
 
                         setTimeout(() => {
                             document
