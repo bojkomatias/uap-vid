@@ -51,6 +51,7 @@ const AccessSchema = z.enum([
     'CONVOCATORIES',
     'ACADEMIC_UNITS',
     'TEAM_MEMBERS',
+    'MEMBER_CATEGORIES',
 ])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
@@ -107,7 +108,7 @@ export const ProtocolSchema = z.object({
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
-    observations: z.string().nullable().optional(),
+    observations: z.string().array().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -161,6 +162,7 @@ export const HistoricCategoryPriceSchema = z.object({
 export const TeamMemberCategorySchema = z.object({
     id: z.string(),
     name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+    state: z.boolean(),
     price: HistoricCategoryPriceSchema.array(),
 })
 

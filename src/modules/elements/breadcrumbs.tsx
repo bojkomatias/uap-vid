@@ -12,6 +12,7 @@ const newLinkMap: MapLink = {
     protocols: 'Lista de protocolos',
     convocatories: 'Lista de convocatorias',
     'team-members': 'Lista de miembros de investigación',
+    categories: 'Lista de categorías',
 }
 
 export const Breadcrumbs = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
@@ -8,28 +9,38 @@ import { useCallback, useState, useTransition } from 'react'
 let timeout: NodeJS.Timeout
 
 export function DeleteButton({
-    protocolId,
-    protocolState,
+    id,
+    State,
+    data,
+    apiPath,
     className,
+    notificationTitle,
+    notificationMessage,
 }: {
-    protocolId: string
-    protocolState: State
+    id: string
+    State: State | boolean
+    apiPath: string
+    data?: object
     className?: string
+    notificationTitle: string
+    notificationMessage: string
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
 
-    const deleteProtocol = useCallback(async () => {
-        const res = await fetch(`/api/protocol/${protocolId}`, {
+    const deleteRecord = useCallback(async () => {
+        console.log(`${apiPath}/${id}`)
+        console.log({ ...data, state: State })
+        const res = await fetch(`/api${apiPath}/${id}`, {
             method: 'DELETE',
-            body: JSON.stringify({ state: protocolState }),
+            body: JSON.stringify({ ...data, state: State }),
         })
 
         if (res.ok) {
             notifications.show({
-                title: 'Protocolo eliminado',
-                message: 'El protocolo ha sido eliminado con éxito.',
+                title: notificationTitle,
+                message: notificationMessage,
                 color: 'green',
             })
             return startTransition(() => {
@@ -37,9 +48,9 @@ export function DeleteButton({
                 router.refresh()
             })
         }
-    }, [protocolId, protocolState, router])
+    }, [id, State, router, data])
 
-    return protocolState !== 'DELETED' ? (
+    return State !== 'DELETED' ? (
         deleting ? (
             <Button
                 onClick={() => {
@@ -81,7 +92,7 @@ export function DeleteButton({
                 onClick={() => {
                     setDeleting(true)
                     timeout = setTimeout(() => {
-                        deleteProtocol()
+                        deleteRecord()
                     }, 3000)
                 }}
                 disabled={isPending}

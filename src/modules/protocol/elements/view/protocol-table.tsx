@@ -251,9 +251,12 @@ export default function ProtocolTable({
                         </Link>
                         {user.role === 'ADMIN' ? (
                             <DeleteButton
-                                protocolId={row.original.id}
-                                protocolState={row.original.state}
+                                id={row.original.id}
+                                State={row.original.state}
+                                apiPath="/protocol"
                                 className={'px-2.5 py-1 text-xs'}
+                                notificationTitle="Protocolo eliminado"
+                                notificationMessage="El protocolo fue eliminado con éxito."
                             />
                         ) : (
                             <></>
@@ -286,20 +289,22 @@ export default function ProtocolTable({
         'reviews_3.reviewer.name': false,
     }
     return (
-        <TanStackTable
-            data={protocols}
-            columns={columns}
-            totalRecords={totalRecords}
-            initialVisibility={initialVisible}
-            filterableByKey={{
-                filter: 'state',
-                // Slice to avoid NOT_CREATED
-                values: Object.entries(ProtocolStatesDictionary).slice(
-                    1,
-                    user.role === 'ADMIN' ? undefined : -1
-                ),
-            }}
-            searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-        />
+        <>
+            <TanStackTable
+                data={protocols}
+                columns={columns}
+                totalRecords={totalRecords}
+                initialVisibility={initialVisible}
+                filterableByKey={{
+                    filter: 'state',
+                    // Slice to avoid NOT_CREATED
+                    values: Object.entries(ProtocolStatesDictionary).slice(
+                        1,
+                        user.role === 'ADMIN' ? undefined : -1
+                    ),
+                }}
+                searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
+            />
+        </>
     )
 }

@@ -49,7 +49,7 @@ model Protocol {
   sections      ProtocolSections
   convocatory   Convocatory      @relation(fields: [convocatoryId], references: [id])
   convocatoryId String           @db.ObjectId
-  observations  String?
+  observations  String[]
 }
 
 model User {
@@ -90,6 +90,7 @@ model HistoricTeamMemberCategory {
 model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
+  state                      Boolean?
   price                      HistoricCategoryPrice[]
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
 }
@@ -98,7 +99,7 @@ type HistoricCategoryPrice {
   from      DateTime
   to        DateTime?
   price     Float
-  currrency String    @default("ARS")
+  currency String    @default("ARS")
 }
 
 model Review {

@@ -11,6 +11,7 @@ import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
+import { Mouse } from 'tabler-icons-react'
 
 export default function TanStackTable({
     data,
@@ -53,7 +54,7 @@ export default function TanStackTable({
                 />
             )}
 
-            {data.length >= 1 ? (
+            {data?.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
                     <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
                         <thead>
@@ -100,6 +101,14 @@ export default function TanStackTable({
                     </p>
                 </div>
             )}
+            <div className="-mb-16 mt-6 flex items-center justify-end text-xs font-light text-gray-400">
+                <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
+                    Shift
+                </kbd>
+                +
+                <Mouse className="mx-0.5 h-5 text-gray-400" />
+                para navegar lateralmente.
+            </div>
             <Pagination totalRecords={totalRecords} />
         </>
     )

@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation'
 import UserTable from '@user/user-table'
 import { buttonStyle } from '@elements/button/styles'
 
-export default async function UserList({
+export default async function Page({
     searchParams,
 }: {
     searchParams: { [key: string]: string }
@@ -33,12 +33,12 @@ export default async function UserList({
                     Nuevo usuario
                 </Link>
             </div>
-
             <UserTable
                 loggedInUser={session.user}
                 users={users}
                 totalRecords={totalRecords}
             />
+            <></>
         </>
     )
 }
