@@ -49,6 +49,7 @@ async function Layout({
                     state={protocol.state}
                     researcher={protocol.researcher}
                     convocatory={protocol.convocatory}
+                    observations={protocol.observations}
                 />
                 <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
                     <ApproveButton

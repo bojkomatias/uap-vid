@@ -49,7 +49,7 @@ model Protocol {
   sections      ProtocolSections
   convocatory   Convocatory      @relation(fields: [convocatoryId], references: [id])
   convocatoryId String           @db.ObjectId
-  observations  String?
+  observations  String[]
 }
 
 model User {

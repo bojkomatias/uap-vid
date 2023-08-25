@@ -3,12 +3,14 @@ import { Popover, Transition } from '@headlessui/react'
 
 import { buttonStyle } from './button/styles'
 
-export default function PopoverButton({
+export default function PopoverComponent({
     children,
     title,
+    className,
 }: {
     children: React.ReactNode
     title: string
+    className?: string
 }) {
     return (
         <Popover>
@@ -29,7 +31,13 @@ export default function PopoverButton({
                 leaveFrom="transform scale-100 opacity-100"
                 leaveTo="transform scale-95 opacity-0"
             >
-                <Popover.Panel className="absolute -top-9 right-0 z-30 rounded-md bg-success-50 px-2 py-2 shadow-md">
+                <Popover.Panel
+                    className={`${
+                        !className
+                            ? 'absolute -top-9 right-0 z-30 rounded-md bg-success-50 px-2 py-2 shadow-md'
+                            : className
+                    }`}
+                >
                     {children}
                 </Popover.Panel>
             </Transition>
