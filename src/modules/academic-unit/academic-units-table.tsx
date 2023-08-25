@@ -1,59 +1,72 @@
-import type { AcademicUnit } from '@prisma/client'
+'use client'
+import type { AcademicUnit, User } from '@prisma/client'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
-import { getAllSecretaries } from '@repositories/user'
+import type { ColumnDef } from '@tanstack/react-table'
+import TanStackTable from '@elements/tan-stack-table'
+import Link from 'next/link'
+import { buttonStyle } from '@elements/button/styles'
+import { cx } from '@utils/cx'
 
 export default async function AcademicUnitsTable({
     academicUnits,
+    secretaries,
 }: {
     academicUnits: AcademicUnit[]
+    secretaries: User[]
 }) {
-    const secretaries = await getAllSecretaries()
-    if (!secretaries)
-        return <div>No hay secretarios cargados en el sistema</div>
+    const columns: ColumnDef<AcademicUnit>[] = [
+        {
+            accessorKey: 'name',
+            header: 'Unidad Academica',
+            enableHiding: false,
+            enableSorting: true,
+        },
+        {
+            accessorKey: 'secretariesIds',
+            header: 'Secretarios/as',
+            enableHiding: false,
+            enableSorting: false,
+            cell: ({ row }) => (
+                <SecretaryMultipleSelect
+                    className="w-96 max-w-lg text-gray-500"
+                    currentSecretaries={row.original.secretariesIds}
+                    secretaries={secretaries}
+                    unitId={row.id}
+                />
+            ),
+        },
+        // {
+        //     accessorKey: 'actions',
+        //     header: 'Acciones',
+        //     cell: ({ row }) => (
+        //         <div className="flex items-center justify-between gap-1">
+        //             <Link
+        //                 href={`/protocols/${row.original.id}`}
+        //                 passHref
+        //                 className={cx(
+        //                     buttonStyle('secondary'),
+        //                     'px-2.5 py-1 text-xs'
+        //                 )}
+        //             >
+        //                 Ver
+        //             </Link>
+        //         </div>
+        //     ),
+        //     enableHiding: true,
+        //     enableSorting: false,
+        // },
+    ]
 
     return (
-        <div className="mx-auto max-w-7xl">
-            <table className="-mx-4 mt-8 min-w-full divide-y-2 sm:-mx-0">
-                <thead>
-                    <tr>
-                        <th
-                            scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-0"
-                        >
-                            Unidad Académica
-                        </th>
-                        <th
-                            scope="col"
-                            className="max-w-md px-3 py-3.5 text-left text-sm text-gray-900"
-                        >
-                            Secretarios/as
-                        </th>
-                        <th
-                            scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                        >
-                            <span className="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y  bg-white">
-                    {academicUnits?.map((unit) => (
-                        <tr key={unit.id}>
-                            <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                                {unit.name}
-                            </td>
-
-                            <td className="w-1/2 px-3 py-2 text-sm text-gray-500">
-                                <SecretaryMultipleSelect
-                                    currentSecretaries={unit.secretariesIds}
-                                    secretaries={secretaries}
-                                    unitId={unit.id}
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <TanStackTable
+            data={academicUnits}
+            columns={columns}
+            totalRecords={academicUnits.length}
+            initialVisibility={{
+                name: true,
+                secretariesIds: true,
+            }}
+            searchBarPlaceholder="Buscar por nombre de categoría"
+        />
     )
 }
