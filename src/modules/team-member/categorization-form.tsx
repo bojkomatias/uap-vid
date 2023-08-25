@@ -5,6 +5,7 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import type {
     HistoricTeamMemberCategory,
+    TeamMember,
     TeamMemberCategory,
 } from '@prisma/client'
 import { cx } from '@utils/cx'
@@ -15,11 +16,11 @@ import { Check, Selector, X } from 'tabler-icons-react'
 export default function CategorizationForm({
     categories,
     historicCategories,
-    memberId,
+    member,
 }: {
     categories: TeamMemberCategory[]
     historicCategories: HistoricTeamMemberCategory[]
-    memberId: string
+    member: TeamMember
 }) {
     const router = useRouter()
 
@@ -33,9 +34,9 @@ export default function CategorizationForm({
             const data = {
                 newCategory,
                 expireId: currentCategory?.id,
-                memberId,
+                memberId: member.id,
             }
-            const res = await fetch(`/api/team-members/${memberId}`, {
+            const res = await fetch(`/api/team-members/${data.memberId}`, {
                 method: 'PATCH',
                 body: JSON.stringify(data),
             })
@@ -65,7 +66,7 @@ export default function CategorizationForm({
                 },
             })
         },
-        [currentCategory?.id, memberId, router]
+        [currentCategory?.id, member, router]
     )
 
     return (
@@ -78,8 +79,9 @@ export default function CategorizationForm({
             <div className="mb-2 text-sm font-medium">
                 Categorize al docente según corresponda.
                 <div className="font-light italic text-gray-700">
-                    Recuerde que si es obrero, ese dato será utilizado para el
-                    calculo de sus honorarios.
+                    Recuerde que si es obrero, el calculo de sus puntos por el
+                    valor de la categoría FMR será lo que determine sus
+                    honorarios.
                 </div>
             </div>
             <div className="flex items-center gap-6">
@@ -92,10 +94,16 @@ export default function CategorizationForm({
                         onChange={(e) => {
                             form.setFieldValue('categoryId', e)
                         }}
+                        disabled={member.obrero}
                     >
                         <div className="relative mt-1 w-full">
-                            <Listbox.Button className="input text-left">
-                                <span className="block truncate">
+                            <Listbox.Button
+                                className={cx(
+                                    'input text-left',
+                                    member.obrero && 'bg-gray-100'
+                                )}
+                            >
+                                <span className={'block truncate'}>
                                     {form.values.categoryId
                                         ? categories.find(
                                               (e) =>

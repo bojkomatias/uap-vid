@@ -322,7 +322,7 @@ export default function TeamMemberForm({
                 <CategorizationForm
                     categories={categories}
                     historicCategories={member.categories}
-                    memberId={member.id}
+                    member={member}
                 />
             ) : null}
         </div>
