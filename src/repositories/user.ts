@@ -120,6 +120,19 @@ const getAllOwners = async () => {
         return []
     }
 }
+const getAllNonTeamMembers = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                memberDetails: null,
+            },
+        })
+        return users
+    } catch (error) {
+        return []
+    }
+}
+
 const getAllUsersWithoutResearchers = async () => {
     try {
         const users = await prisma.user.findMany({
@@ -249,6 +262,7 @@ export {
     getUsers,
     getAllOwners,
     getAllUsersWithoutResearchers,
+    getAllNonTeamMembers,
     getAllSecretaries,
     findUserById,
     findUserByEmail,

@@ -11,7 +11,7 @@ import type {
 import { cx } from '@utils/cx'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { TeamMemberSchema } from '@utils/zod'
-import { useCallback, useState, useTransition } from 'react'
+import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import type { z } from 'zod'
 import CategorizationForm from './categorization-form'
@@ -30,7 +30,6 @@ export default function TeamMemberForm({
     researchers: User[]
 }) {
     const router = useRouter()
-    const [isPending, startTransition] = useTransition()
     const form = useForm({
         initialValues: {
             id: member ? member.id : '',
@@ -62,14 +61,11 @@ export default function TeamMemberForm({
                         marginBottom: '.8rem',
                     },
                 })
-                if (teamMember.id) {
-                    const { id } = await res.json()
-                    return startTransition(() => {
-                        router.refresh()
-                        router.push(`/team-members/${id}`)
-                    })
-                }
-                return startTransition(() => router.refresh())
+
+                const { id } = await res.json()
+                router.push(`/team-members/${id}`)
+
+                return router.refresh()
             }
             notifications.show({
                 title: 'Ha ocurrido un error',
@@ -301,7 +297,6 @@ export default function TeamMemberForm({
                     intent="secondary"
                     type="submit"
                     disabled={!form.isDirty()}
-                    loading={isPending}
                     className="float-right"
                 >
                     {member

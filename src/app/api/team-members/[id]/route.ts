@@ -14,9 +14,9 @@ export async function PUT(
 ) {
     const session = await getServerSession(authOptions)
     if (session && canAccess('TEAM_MEMBERS', session.user.role)) {
-        const teamMember = await request.json()
-        const { id } = params
-        const updated = await updateTeamMember(id, teamMember)
+        const { id, ...teamMember } = await request.json()
+
+        const updated = await updateTeamMember(params.id, teamMember)
         if (!updated)
             return new Response('Failed to create Team Member', { status: 500 })
         return NextResponse.json(updated)

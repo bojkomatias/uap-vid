@@ -1,5 +1,4 @@
 'use client'
-
 import { Button } from '@elements/button'
 import { Listbox } from '@headlessui/react'
 import { useForm } from '@mantine/form'
@@ -10,7 +9,7 @@ import type {
 } from '@prisma/client'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
-import { useCallback, useTransition } from 'react'
+import { useCallback } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 
 const fakeCategories: TeamMemberCategory[] = [
@@ -48,7 +47,6 @@ export default function CategorizationForm({
     memberId: string
 }) {
     const router = useRouter()
-    const [isPending, startTransition] = useTransition()
 
     const currentCategory = categories.at(-1)
     const form = useForm({
@@ -78,11 +76,7 @@ export default function CategorizationForm({
                         marginBottom: '.8rem',
                     },
                 })
-
-                return startTransition(() => {
-                    form.reset()
-                    router.refresh()
-                })
+                return router.refresh()
             }
             notifications.show({
                 title: 'Ha ocurrido un error',
@@ -96,7 +90,7 @@ export default function CategorizationForm({
                 },
             })
         },
-        [currentCategory?.id, form, memberId, router]
+        [currentCategory?.id, memberId, router]
     )
 
     return (
@@ -230,7 +224,6 @@ export default function CategorizationForm({
                 intent="secondary"
                 type="submit"
                 className="float-right"
-                loading={isPending}
                 disabled={!form.isDirty()}
             >
                 Actualizar categoría
