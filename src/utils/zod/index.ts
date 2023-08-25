@@ -107,7 +107,7 @@ export const ProtocolSchema = z.object({
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
-    observations: z.string().nullable().optional(),
+    observations: z.string().array().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
