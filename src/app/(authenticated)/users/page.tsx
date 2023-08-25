@@ -38,6 +38,7 @@ export default async function Page({
                 users={users}
                 totalRecords={totalRecords}
             />
+            <></>
         </>
     )
 }
