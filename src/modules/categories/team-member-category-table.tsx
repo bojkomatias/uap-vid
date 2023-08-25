@@ -11,6 +11,8 @@ import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { Check, X } from 'tabler-icons-react'
+import { Badge } from '@elements/badge'
+import { dateFormatter } from '@utils/formatters'
 
 export default function CategoriesTable({
     categories,
@@ -80,7 +82,8 @@ export default function CategoriesTable({
                 enableHiding: false,
                 enableSorting: false,
                 cell: ({ row }) => (
-                    <span className="min-w-[500px] text-xs text-gray-600">
+                    <Badge className=" text-xs text-gray-600">
+                        $
                         {
                             row.original.price[row.original.price.length - 1]
                                 ?.price
@@ -89,7 +92,7 @@ export default function CategoriesTable({
                             row.original.price[row.original.price.length - 1]
                                 ?.currency
                         }
-                    </span>
+                    </Badge>
                 ),
             },
 
@@ -100,9 +103,24 @@ export default function CategoriesTable({
                 enableSorting: false,
                 cell: ({ row }) => (
                     <span className="flex min-w-[500px] gap-2 text-xs text-gray-600">
-                        {row.original.price.map((p: any, idx: number) => {
-                            return <span key={idx}>{p.price}</span>
-                        })}
+                        {row.original.price
+                            .slice(0, row.original.price.length - 1)
+                            .reverse()
+                            .map((p: any, idx: number) => {
+                                return (
+                                    <Badge key={idx}>
+                                        <span
+                                            title={`Desde ${dateFormatter.format(
+                                                p.from
+                                            )} hasta el ${dateFormatter.format(
+                                                p.to
+                                            )}`}
+                                        >
+                                            ${p.price} {p.currency}
+                                        </span>
+                                    </Badge>
+                                )
+                            })}
                     </span>
                 ),
             },
