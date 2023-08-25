@@ -1,8 +1,8 @@
 import type { ProtocolSectionsPublication } from '@prisma/client'
-import RichViewer from '@protocol/elements/text-item-view'
+import RichViewer from '@protocol/elements/view/text-item-view'
 
-import SectionViewer from '../elements/section-viewer'
-import ItemView from '@protocol/elements/item-view'
+import SectionViewer from '../elements/view/section-viewer'
+import ItemView from '@protocol/elements/view/item-view'
 
 interface PublicationViewProps {
     data: ProtocolSectionsPublication

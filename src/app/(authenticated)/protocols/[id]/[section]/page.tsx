@@ -1,4 +1,3 @@
-import PublishButton from '@protocol/elements/action-buttons/publish'
 import ProtocolForm from '@protocol/protocol-form-template'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'

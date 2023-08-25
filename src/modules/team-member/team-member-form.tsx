@@ -98,10 +98,7 @@ export default function TeamMemberForm({
     return (
         <div>
             <form
-                onSubmit={form.onSubmit(
-                    (values) => saveTeamMember(values),
-                    (errors) => console.log(errors)
-                )}
+                onSubmit={form.onSubmit((values) => saveTeamMember(values))}
                 className="mx-auto mt-10 max-w-5xl space-y-6"
             >
                 <div>

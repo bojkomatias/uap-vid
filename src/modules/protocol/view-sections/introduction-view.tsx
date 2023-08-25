@@ -1,7 +1,7 @@
 import type { ProtocolSectionsIntroduction } from '@prisma/client'
-import TextItemView from '@protocol/elements/text-item-view'
+import TextItemView from '@protocol/elements/view/text-item-view'
 
-import SectionViewer from '../elements/section-viewer'
+import SectionViewer from '../elements/view/section-viewer'
 
 interface IntroductionViewProps {
     data: ProtocolSectionsIntroduction

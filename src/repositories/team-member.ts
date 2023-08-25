@@ -43,7 +43,6 @@ export const updateCategoryHistory = async (data: {
             }),
         ])
     } catch (error) {
-        console.log(error)
         return null
     }
 }
@@ -88,3 +87,5 @@ export const getTeamMembers = async ({
         }),
     ])
 }
+
+export const getAllTeamMembers = async () => await prisma.teamMember.findMany()
