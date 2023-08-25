@@ -2,7 +2,6 @@ import { PageHeading } from '@layout/page-heading'
 import { canExecute, canExecuteActions } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import type { ReactNode } from 'react'
-import { findProtocolById } from 'repositories/protocol'
 import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
@@ -14,6 +13,7 @@ import EditButton from '@protocol/elements/action-buttons/edit'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ACTION } from '@utils/zod'
 import ReviewAssignation from '@review/review-assignation'
+import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 
 async function Layout({
     params,
@@ -34,7 +34,7 @@ async function Layout({
             </>
         )
     }
-    const protocol = await findProtocolById(params.id)
+    const protocol = await findProtocolByIdWithResearcher(params.id)
     if (!protocol) redirect('/protocols')
     const reviews = await getReviewsByProtocol(protocol.id)
 

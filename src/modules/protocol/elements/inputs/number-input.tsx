@@ -12,7 +12,7 @@ const NumberInput = ({
     const form = useProtocolContext()
 
     return (
-        <div className="max-w-[8rem]">
+        <div className="max-w-[6rem]">
             <label
                 className={cx(
                     'label required',
