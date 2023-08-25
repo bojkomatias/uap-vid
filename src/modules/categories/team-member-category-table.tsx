@@ -78,6 +78,7 @@ export default function CategoriesTable({
                 accessorKey: 'price',
                 header: 'Precio hora',
                 enableHiding: false,
+                enableSorting: false,
                 cell: ({ row }) => (
                     <span className="min-w-[500px] text-xs text-gray-600">
                         {
@@ -88,6 +89,20 @@ export default function CategoriesTable({
                             row.original.price[row.original.price.length - 1]
                                 ?.currency
                         }
+                    </span>
+                ),
+            },
+
+            {
+                id: 'historic-prices',
+                header: 'Precios históricos',
+                enableHiding: false,
+                enableSorting: false,
+                cell: ({ row }) => (
+                    <span className="flex min-w-[500px] gap-2 text-xs text-gray-600">
+                        {row.original.price.map((p, idx: number) => {
+                            return <span key={idx}>{p.price}</span>
+                        })}
                     </span>
                 ),
             },
