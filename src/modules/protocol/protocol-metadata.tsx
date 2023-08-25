@@ -19,6 +19,7 @@ export async function ProtocolMetadata({
     state,
     researcher,
     convocatory,
+    observations,
 }: {
     currentUser: User
     id: string
@@ -26,6 +27,7 @@ export async function ProtocolMetadata({
     state: State
     researcher: { id: string; name: string; email: string }
     convocatory: { id: string; name: string }
+    observations?: string[]
 }) {
     let researcherList: User[] = []
     if (currentUser.role === 'ADMIN') {
@@ -65,7 +67,7 @@ export async function ProtocolMetadata({
                 <Badge className="text-sm">
                     {ProtocolStatesDictionary[state]}
                 </Badge>
-                <Observation id={id} />
+                <Observation id={id} observations={observations} />
             </div>
         </div>
     )

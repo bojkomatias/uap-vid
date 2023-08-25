@@ -16,7 +16,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <pre>{JSON.stringify(protocol.observations, null, 2)}</pre>
             <PDF protocol={protocol} />
             <View sections={protocol.sections} role={session.user.role} />
         </>
