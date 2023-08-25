@@ -11,6 +11,7 @@ const newLinkMap: MapLink = {
     users: 'Lista de usuarios',
     protocols: 'Lista de protocolos',
     convocatories: 'Lista de convocatorias',
+    categories: 'Lista de categorías',
 }
 
 export const Breadcrumbs = () => {
