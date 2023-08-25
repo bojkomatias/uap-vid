@@ -4,6 +4,7 @@ import {
     CalendarEvent,
     List,
     Users,
+    Category,
 } from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
@@ -80,6 +81,12 @@ export const navigation = [
         name: 'Lista de usuarios',
         icon: Users,
         href: '/users',
+        scope: ACCESS.USERS,
+    },
+    {
+        name: 'Categorías de miembros de equipo de investigación',
+        icon: Category,
+        href: '/categories',
         scope: ACCESS.USERS,
     },
 ]

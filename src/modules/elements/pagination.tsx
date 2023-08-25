@@ -1,5 +1,5 @@
 'use client'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
@@ -54,6 +54,12 @@ export default function Pagination({
         return { allPages, displayedPages }
     }, [totalRecords, shownRecords, numberOfDisplayedPages, currentPage])
 
+    useEffect(() => {
+        if (totalRecords <= shownRecords) update({ page: 1 })
+        if (Math.ceil(totalRecords / shownRecords) < currentPage)
+            update({ page: currentPage - 1 })
+    })
+
     return (
         <div className="flex flex-col items-center gap-2">
             <div className="mx-auto mt-12 flex w-fit gap-2">
@@ -84,11 +90,8 @@ export default function Pagination({
                     </>
                 )}
 
-                {Math.ceil(totalRecords / shownRecords) > 1 &&
-                shownRecords * Number(searchParams?.get('page') || 1) -
-                    shownRecords +
-                    1 <
-                    totalRecords
+                {Math.ceil(totalRecords / shownRecords) >= 1 &&
+                allPages.length != 1
                     ? displayedPages.map((page: number) => (
                           <Button
                               key={page}

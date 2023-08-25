@@ -89,6 +89,7 @@ model HistoricTeamMemberCategory {
 model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String
+  state                      Boolean?
   price                      HistoricCategoryPrice[]
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
 }
@@ -97,7 +98,7 @@ type HistoricCategoryPrice {
   from      DateTime
   to        DateTime?
   price     Float
-  currrency String    @default("ARS")
+  currency String    @default("ARS")
 }
 
 model Review {
