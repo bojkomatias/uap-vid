@@ -56,7 +56,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 ? JSON.parse(localStorage.getItem('temp-protocol')!)
                 : protocol,
         validate: zodResolver(ProtocolSchema),
-        validateInputOnChange: true,
+        validateInputOnBlur: true,
     })
 
     useEffect(() => {
