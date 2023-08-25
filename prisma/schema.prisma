@@ -98,7 +98,7 @@ type HistoricCategoryPrice {
   from      DateTime
   to        DateTime?
   price     Float
-  currtency String    @default("ARS")
+  currency String    @default("ARS")
 }
 
 model Review {

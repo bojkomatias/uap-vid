@@ -35,6 +35,8 @@ export async function PATCH(
 
     const updated = await updatePriceCategoryById(id, data)
 
+    console.log(updated)
+
     if (!updated) {
         return new Response('We cannot update your category', { status: 500 })
     }
