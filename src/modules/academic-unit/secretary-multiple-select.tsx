@@ -8,15 +8,19 @@ import { Check, Selector, X } from 'tabler-icons-react'
 
 let timeout: NodeJS.Timeout
 
+type Props = {
+    unitId: string
+    secretaries: User[]
+    currentSecretaries: string[]
+    className?: string
+}
+
 export function SecretaryMultipleSelect({
     unitId,
     secretaries,
     currentSecretaries,
-}: {
-    unitId: string
-    secretaries: User[]
-    currentSecretaries: string[]
-}) {
+    className,
+}: Props) {
     const [selected, setSelected] = useState(currentSecretaries)
 
     const updateSecretaries = useCallback(
@@ -53,6 +57,7 @@ export function SecretaryMultipleSelect({
 
     return (
         <Combobox
+            className={className}
             value={selected}
             onChange={(e) => {
                 setSelected(e)
@@ -67,7 +72,7 @@ export function SecretaryMultipleSelect({
                 <Combobox.Button className="relative w-full">
                     <Combobox.Input
                         autoComplete="off"
-                        className={'input text-sm'}
+                        className={'input pr-8 text-sm'}
                         placeholder="Secretarios..."
                         displayValue={(e: string[]) =>
                             e
@@ -76,6 +81,7 @@ export function SecretaryMultipleSelect({
                                         secretaries.find((x) => x.id === j)
                                             ?.name
                                 )
+                                .filter(Boolean)
                                 .join(', ')
                         }
                     />
