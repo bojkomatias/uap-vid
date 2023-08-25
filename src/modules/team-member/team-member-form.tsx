@@ -36,6 +36,7 @@ export default function TeamMemberForm({
             userId: member ? member.userId : null,
             name: member ? member.name : null,
             obrero: member ? member.obrero : false,
+            pointsObrero: member ? member.pointsObrero : null,
         },
         validate: zodResolver(TeamMemberSchema),
     })
