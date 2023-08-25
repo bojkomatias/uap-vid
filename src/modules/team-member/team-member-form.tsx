@@ -37,7 +37,7 @@ export default function TeamMemberForm({
         initialValues: {
             id: member ? member.id : '',
             userId: member ? member.userId : null,
-            name: member ? member.name : null,
+            name: member ? member.name : '',
             obrero: member ? member.obrero : false,
             pointsObrero: member ? member.pointsObrero : null,
         },
@@ -263,6 +263,11 @@ export default function TeamMemberForm({
                         disabled={!!form.values.userId}
                         {...form.getInputProps('name')}
                     />
+                    {form.getInputProps('name').error ? (
+                        <p className="error">
+                            *{form.getInputProps('name').error}
+                        </p>
+                    ) : null}
                 </div>
                 <div className="grid grid-cols-4 gap-8">
                     <div className="ml-2 flex h-20 items-center">
@@ -305,6 +310,11 @@ export default function TeamMemberForm({
                                 )
                             }
                         />
+                        {form.getInputProps('pointsObrero').error ? (
+                            <p className="error">
+                                *{form.getInputProps('pointsObrero').error}
+                            </p>
+                        ) : null}
                     </div>
                 </div>
                 <Button

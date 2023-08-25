@@ -13,7 +13,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions)
     if (session && canAccess('TEAM_MEMBERS', session.user.role)) {
-        const teamMember = await request.json()
+        const { id, ...teamMember } = await request.json()
         const created = await createTeamMember(teamMember)
         if (!created)
             return new Response('Failed to create Team Member', { status: 500 })

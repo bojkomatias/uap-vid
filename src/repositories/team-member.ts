@@ -4,7 +4,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 
 export const createTeamMember = async (data: TeamMember) =>
     await prisma.teamMember.create({
-        data: { userId: data.userId, name: data.name, obrero: data.obrero },
+        data,
     })
 
 export const updateTeamMember = async (id: string, data: TeamMember) =>

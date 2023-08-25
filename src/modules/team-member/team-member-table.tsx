@@ -6,6 +6,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
+import { Check, Minus } from 'tabler-icons-react'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
     include: {
@@ -49,10 +50,19 @@ export default function TeamMemberTable({
             {
                 accessorKey: 'obrero',
                 header: 'Obrero',
+                cell: ({ row }) =>
+                    row.original.obrero ? (
+                        <Check className="ml-4 h-4 text-gray-600" />
+                    ) : (
+                        <Minus className="ml-4 h-4 text-gray-600" />
+                    ),
             },
             {
-                id: 'points',
+                accessorKey: 'pointsObrero',
                 header: 'Puntos',
+                cell: ({ row }) => (
+                    <span className="ml-4">{row.original.pointsObrero}</span>
+                ),
             },
             {
                 id: 'category.name',

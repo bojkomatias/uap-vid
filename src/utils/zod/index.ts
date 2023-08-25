@@ -181,13 +181,26 @@ export const HistoricTeamMemberCategorySchema = z.object({
 // TEAM MEMBER SCHEMA
 /////////////////////////////////////////
 
-export const TeamMemberSchema = z.object({
-    id: z.string(),
-    userId: z.string().nullable(),
-    name: z.string().nullable(),
-    obrero: z.boolean(),
-    pointsObrero: z.coerce.number().nullable(),
-})
+export const TeamMemberSchema = z
+    .object({
+        id: z.string(),
+        userId: z.string().nullable(),
+        name: z.string().min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        }),
+        obrero: z.boolean(),
+        pointsObrero: z.coerce.number().nullable(),
+    })
+    .refine(
+        (value) => {
+            if (value.obrero) {
+                if (value.pointsObrero) return true
+                return false
+            } else return true
+        },
+        { message: 'Campo obligatorio para obreros', path: ['pointsObrero'] }
+    )
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS SCHEMA
