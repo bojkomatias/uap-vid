@@ -7,7 +7,7 @@ import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
 import MultipleSelect from '@protocol/elements/inputs/multiple-select'
 import SectionTitle from '@protocol/elements/form-section-title'
-import TeamMemberListForm from '@protocol/elements/team-member-list-form'
+import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
 
 export function IdentificationForm() {
     const form = useProtocolContext()

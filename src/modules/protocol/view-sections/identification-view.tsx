@@ -1,8 +1,8 @@
 import type { ProtocolSectionsIdentification } from '@prisma/client'
-import type { ListRowValues } from '@protocol/elements/item-list-view'
-import ItemListView from '@protocol/elements/item-list-view'
-import SectionViewer from '../elements/section-viewer'
-import ItemView from '@protocol/elements/item-view'
+import type { ListRowValues } from '@protocol/elements/view/item-list-view'
+import ItemListView from '@protocol/elements/view/item-list-view'
+import SectionViewer from '../elements/view/section-viewer'
+import ItemView from '@protocol/elements/view/item-view'
 interface IdentificationProps {
     data: ProtocolSectionsIdentification
 }
