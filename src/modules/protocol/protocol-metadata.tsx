@@ -34,15 +34,15 @@ export async function ProtocolMetadata({
                         {dateFormatter.format(createdAt)}
                     </div>
                 </div>
-                <Badge>{convocatory.name}</Badge>
+                <Badge>{convocatory?.name}</Badge>
             </div>
             <div className="mt-2 flex items-baseline">
                 <div className="flex items-center gap-2">
                     <UserIcon className="h-4 text-gray-600" />
                     <div className="font-medium">
-                        {researcher.name}
+                        {researcher?.name}
                         <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
-                            {researcher.email}
+                            {researcher?.email}
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ export async function ProtocolMetadata({
                     {currentUser.role === 'ADMIN' && (
                         <ResearcherReassignation
                             protocolId={id}
-                            researcherId={researcher.id}
+                            researcherId={researcher?.id}
                             researchers={researcherList}
                         />
                     )}
