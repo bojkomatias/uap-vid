@@ -31,7 +31,9 @@ export default function PriceUpdate({ row }: { row: any }) {
             })
 
             router.refresh()
-            router.push('/categories')
+            setTimeout(() => {
+                document.getElementById('main-element')?.click()
+            }, 500)
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',
@@ -46,19 +48,8 @@ export default function PriceUpdate({ row }: { row: any }) {
         }
     }
     return (
-        <PopoverComponent title="Actualizar precio">
-            <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold">Precio actualizado:</p>
-                <CurrencyInput
-                    defaultPrice={
-                        row.original.price[row.original.price.length - 1]?.price
-                    }
-                    className="min-w-[7rem] rounded-md py-1 text-xs"
-                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        //Esta función es obligatoria y la verdad me dió fiaca modificar el componente original
-                        return e
-                    }}
-                />
+        <PopoverComponent
+            actionButton={
                 <Button
                     className="py-1.5 text-xs shadow-sm"
                     intent="secondary"
@@ -109,6 +100,21 @@ export default function PriceUpdate({ row }: { row: any }) {
                 >
                     Actualizar
                 </Button>
+            }
+            title="Actualizar precio"
+        >
+            <div className="flex items-center gap-2">
+                <p className="text-xs font-semibold">Precio actualizado:</p>
+                <CurrencyInput
+                    defaultPrice={
+                        row.original.price[row.original.price.length - 1]?.price
+                    }
+                    className="min-w-[7rem] rounded-md py-1 text-xs"
+                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        //Esta función es obligatoria y la verdad me dió fiaca modificar el componente original
+                        return e
+                    }}
+                />
             </div>
         </PopoverComponent>
     )

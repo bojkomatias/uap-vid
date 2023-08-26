@@ -25,7 +25,7 @@ export default async function Page({
     return (
         <>
             <PageHeading title="Categorías de miembros de equipo de investigación" />
-            <p className="ml-2 text-sm text-gray-500">
+            <p className="ml-2 text-sm text-gray-500" id="page-description">
                 Lista de las categorías asignables a los miembros de equipo de
                 un proyecto de investigación.
             </p>
