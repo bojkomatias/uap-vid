@@ -4,7 +4,7 @@ import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictiona
 import { dateFormatter } from '@utils/formatters'
 import { Calendar, User as UserIcon } from 'tabler-icons-react'
 import { ResearcherReassignation } from './elements/action-buttons/researcher-reassignation'
-import { getAllResearchers } from '@repositories/user'
+import { getAllOwners } from '@repositories/user'
 import PopoverComponent from '@elements/popover'
 import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
@@ -31,7 +31,7 @@ export async function ProtocolMetadata({
 }) {
     let researcherList: User[] = []
     if (currentUser.role === 'ADMIN') {
-        researcherList = await getAllResearchers()
+        researcherList = await getAllOwners()
     }
 
     return (

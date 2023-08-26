@@ -50,6 +50,7 @@ const AccessSchema = z.enum([
     'REVIEWS',
     'CONVOCATORIES',
     'ACADEMIC_UNITS',
+    'TEAM_MEMBERS',
     'MEMBER_CATEGORIES',
 ])
 export const ACCESS = AccessSchema.Enum
@@ -169,7 +170,7 @@ export const TeamMemberCategorySchema = z.object({
 // HISTORIC TEAM MEMBER CATEGORY SCHEMA
 /////////////////////////////////////////
 export const HistoricTeamMemberCategorySchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
     teamMemberId: z.string(),
@@ -180,13 +181,26 @@ export const HistoricTeamMemberCategorySchema = z.object({
 // TEAM MEMBER SCHEMA
 /////////////////////////////////////////
 
-export const TeamMemberSchema = z.object({
-    id: z.string(),
-    UserSchema: UserSchema.optional(),
-    name: z.string().optional(),
-    categories: TeamMemberCategorySchema.array(),
-    obrero: z.boolean(),
-})
+export const TeamMemberSchema = z
+    .object({
+        id: z.string(),
+        userId: z.string().nullable(),
+        name: z.string().min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        }),
+        obrero: z.boolean(),
+        pointsObrero: z.coerce.number().nullable(),
+    })
+    .refine(
+        (value) => {
+            if (value.obrero) {
+                if (value.pointsObrero) return true
+                return false
+            } else return true
+        },
+        { message: 'Campo obligatorio para obreros', path: ['pointsObrero'] }
+    )
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS SCHEMA
@@ -354,14 +368,8 @@ export const IdentificationSchema = z.object({
                     .max(400, {
                         message: 'No se pueden asignar tantas horas',
                     }),
-                last_name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
-                name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
+                last_name: z.string().nullable(),
+                name: z.string().nullable(),
                 role: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),

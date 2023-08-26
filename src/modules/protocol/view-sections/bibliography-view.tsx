@@ -1,7 +1,7 @@
 import type { ProtocolSectionsBibliography } from '@prisma/client'
-import type { ListRowValues } from '@protocol/elements/item-list-view'
-import ItemListView from '@protocol/elements/item-list-view'
-import SectionViewer from '../elements/section-viewer'
+import type { ListRowValues } from '@protocol/elements/view/item-list-view'
+import ItemListView from '@protocol/elements/view/item-list-view'
+import SectionViewer from '../elements/view/section-viewer'
 
 interface BibliographyViewProps {
     data: ProtocolSectionsBibliography

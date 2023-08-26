@@ -61,7 +61,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
     useEffect(() => {
         // Validate if not existing path goes to section 0
-
         if (
             path &&
             !['0', '1', '2', '3', '4', '5', '6', '7'].includes(

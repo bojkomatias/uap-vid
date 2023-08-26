@@ -3,6 +3,7 @@ import {
     BuildingCommunity,
     CalendarEvent,
     List,
+    UserSearch,
     Users,
     Category,
 } from 'tabler-icons-react'
@@ -76,6 +77,12 @@ export const navigation = [
         icon: BuildingCommunity,
         href: '/academic-units',
         scope: ACCESS.ACADEMIC_UNITS,
+    },
+    {
+        name: 'Miembros de investigación',
+        icon: UserSearch,
+        href: '/team-members',
+        scope: ACCESS.TEAM_MEMBERS,
     },
     {
         name: 'Lista de usuarios',

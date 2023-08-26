@@ -105,13 +105,13 @@ const getUsers = cache(
         }
     }
 )
-
-const getAllResearchers = async () => {
+/** Posible protocol owners */
+const getAllOwners = async () => {
     try {
         const users = await prisma.user.findMany({
             where: {
                 role: {
-                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY'],
+                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY', 'ADMIN'],
                 },
             },
         })
@@ -120,6 +120,22 @@ const getAllResearchers = async () => {
         return []
     }
 }
+const getAllNonTeamMembers = async (teamMemberId?: string) => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    { memberDetails: null },
+                    teamMemberId ? { memberDetails: { id: teamMemberId } } : {},
+                ],
+            },
+        })
+        return users
+    } catch (error) {
+        return []
+    }
+}
+
 const getAllUsersWithoutResearchers = async () => {
     try {
         const users = await prisma.user.findMany({
@@ -247,8 +263,9 @@ const deleteUserById = async (id: string) => {
 
 export {
     getUsers,
-    getAllResearchers,
+    getAllOwners,
     getAllUsersWithoutResearchers,
+    getAllNonTeamMembers,
     getAllSecretaries,
     findUserById,
     findUserByEmail,
