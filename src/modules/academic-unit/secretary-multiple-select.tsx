@@ -25,7 +25,7 @@ export function SecretaryMultipleSelect({
 
     const updateSecretaries = useCallback(
         async (id: string, secretaries: string[]) => {
-            const res = await fetch(`/api/academic-units/${id}`, {
+            const res = await fetch(`/api/academic-units/secretaries/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(secretaries),
             })

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-server-import-in-page */
-import { updateAcademicUnit, updateAcademicUnitSecretaries } from '@repositories/academic-unit'
+import { updateAcademicUnitSecretaries } from '@repositories/academic-unit'
 import { getServerSession } from 'next-auth'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
@@ -10,7 +10,7 @@ export async function PUT(
     { params }: { params: { id: string } }
 ) {
     const id = params.id
-    const academicUnit = await request.json()
+    const secretariesIds = await request.json()
 
     const session = await getServerSession(authOptions)
 
@@ -24,7 +24,7 @@ export async function PUT(
         return new Response('Unauthorized', { status: 401 })
     }
 
-    if (!id || !academicUnit) {
+    if (!id || !secretariesIds) {
         return new Response(
             'We cannot update your academic unit: Invalid Data',
             {
@@ -33,7 +33,7 @@ export async function PUT(
         )
     }
 
-    const updated = await updateAcademicUnit(id, academicUnit)
+    const updated = await updateAcademicUnitSecretaries(id, secretariesIds)
 
     if (!updated) {
         return new Response('We cannot update your academic unit', {

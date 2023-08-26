@@ -1,3 +1,4 @@
+import type { AcademicUnit } from '@prisma/client'
 import { prisma } from '../utils/bd'
 
 export const getAllAcademicUnits = async () => {
@@ -26,7 +27,21 @@ export const getAcademicUnitsByUserId = async (id: string) => {
     }
 }
 
-export const updateAcademicUnit = async (
+export const updateAcademicUnit = async (id: string, academicUnit: AcademicUnit) => {
+    try {
+        const unit = await prisma.academicUnit.update({
+            where: {
+                id,
+            },
+            data: academicUnit,
+        })
+        return unit
+    } catch (error) {
+        return null
+    }
+}
+
+export const updateAcademicUnitSecretaries = async (
     id: string,
     secretariesIds: string[]
 ) => {
