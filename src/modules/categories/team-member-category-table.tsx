@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
+import type { TeamMemberCategory } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-import PopoverComponent from '@elements/popover'
-import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
-import { Button } from '@elements/button'
 
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
