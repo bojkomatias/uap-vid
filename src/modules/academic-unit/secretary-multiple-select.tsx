@@ -76,6 +76,7 @@ export function SecretaryMultipleSelect({
                                         secretaries.find((x) => x.id === j)
                                             ?.name
                                 )
+                                .filter((n) => n)
                                 .join(', ')
                         }
                     />
