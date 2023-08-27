@@ -28,7 +28,7 @@ export default async function ReviewsTemplate({
             )}
         >
             {userId !== researcherId &&
-            canExecute(ACTION.COMMENT, userRole, state) ? (
+            canExecute(ACTION.REVIEW, userRole, state) ? (
                 <ReviewFormTemplate protocolId={id} userId={userId} />
             ) : null}
 

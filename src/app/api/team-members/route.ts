@@ -10,10 +10,12 @@ export async function GET() {
     if (!teamMembers) return new Response('Failed to fetch', { status: 500 })
     return NextResponse.json(teamMembers)
 }
+
 export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions)
     if (session && canAccess('TEAM_MEMBERS', session.user.role)) {
         const { id, ...teamMember } = await request.json()
+
         const created = await createTeamMember(teamMember)
         if (!created)
             return new Response('Failed to create Team Member', { status: 500 })

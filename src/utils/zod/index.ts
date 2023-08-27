@@ -37,7 +37,7 @@ const ActionSchema = z.enum([
     'EDIT_BY_OWNER',
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
-    'COMMENT',
+    'REVIEW',
     'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
     'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
 ])

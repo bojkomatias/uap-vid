@@ -13,7 +13,7 @@ export default async function Navigation({
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) return redirect('/')
+    if (!session) redirect('/')
 
     const currentConvocatory = await getCurrentConvocatory()
 

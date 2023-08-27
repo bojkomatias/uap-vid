@@ -11,8 +11,7 @@ import { buttonStyle } from '@elements/button/styles'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess(ACCESS.CONVOCATORIES, session.user.role))
+    if (!session || !canAccess(ACCESS.CONVOCATORIES, session.user.role))
         redirect('/protocols')
 
     return (

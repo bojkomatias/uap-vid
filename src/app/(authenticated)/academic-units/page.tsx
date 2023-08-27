@@ -8,8 +8,8 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+    if (!session || !canAccess('USERS', session.user.role))
+        redirect('/protocols')
 
     const academicUnits = await getAllAcademicUnits()
 

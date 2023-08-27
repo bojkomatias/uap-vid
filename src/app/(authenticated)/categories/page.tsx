@@ -16,11 +16,10 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
+    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
+        redirect('/protocols')
 
     const [totalRecords, categories] = await getCategories(searchParams)
-
-    if (!session) return
-    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
     return (
         <>
