@@ -21,7 +21,6 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
     if (
         !protocol.id ||
         !canExecute(ACTION.ACCEPT, role, protocol.state) ||
-        protocol.state !== State.SCIENTIFIC_EVALUATION ||
         reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED)
     )
         return <></>
@@ -32,7 +31,7 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: protocol.id }),
+            body: JSON.stringify({ id: protocol.id, state: protocol.state }),
         })
         if (accepted.ok) {
             notifications.show({

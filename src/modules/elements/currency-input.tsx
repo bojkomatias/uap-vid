@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 const CurrencyInput = ({
     defaultPrice,

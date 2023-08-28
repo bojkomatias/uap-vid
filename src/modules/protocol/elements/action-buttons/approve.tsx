@@ -24,7 +24,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: protocol.id }),
+            body: JSON.stringify({ id: protocol.id, state: protocol.state }),
         })
         if (approved.ok) {
             notifications.show({

@@ -1,5 +1,4 @@
 import { PageHeading } from '@layout/page-heading'
-import { Role } from '@prisma/client'
 import { getTeamMemberById } from '@repositories/team-member'
 import { getAllCategories } from '@repositories/team-member-category'
 import { getAllNonTeamMembers } from '@repositories/user'

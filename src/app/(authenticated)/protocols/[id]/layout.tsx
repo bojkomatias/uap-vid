@@ -81,7 +81,6 @@ async function Layout({
                     : [
                           ACTION.ASSIGN_TO_METHODOLOGIST,
                           ACTION.ASSIGN_TO_SCIENTIFIC,
-                          ACTION.ACCEPT,
                       ],
                 session.user.role,
                 protocol.state

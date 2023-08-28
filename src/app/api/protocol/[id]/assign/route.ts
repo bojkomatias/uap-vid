@@ -5,12 +5,13 @@ import {
     assignReviewerToProtocol,
     reassignReviewerToProtocol,
 } from '@repositories/review'
-import { type Review, Role } from '@prisma/client'
+import { type Review } from '@prisma/client'
 import { ReviewType, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { canExecuteActions } from '@utils/scopes'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -23,24 +24,23 @@ export async function PUT(
     { params }: { params: { id: string } }
 ) {
     const session = await getServerSession(authOptions)
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
+    const data = (await request.json()) as {
+        protocolState: State
+        review: Review
+        reviewerId: string
+        type: ReviewType
     }
-    const sessionRole = session.user.role
-
-    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
-        const data = (await request.json()) as {
-            review: Review
-            reviewerId: string
-            type: ReviewType
-        }
-        if (!data) {
-            return NextResponse.json(
-                { error: 'No data provided' },
-                { status: 400 }
-            )
-        }
-
+    if (!data) {
+        return NextResponse.json({ error: 'No data provided' }, { status: 400 })
+    }
+    if (
+        session &&
+        canExecuteActions(
+            ['ASSIGN_TO_METHODOLOGIST', 'ASSIGN_TO_SCIENTIFIC'],
+            session.user.role,
+            data.protocolState
+        )
+    ) {
         //If is new review, create it
         if (!data.review) {
             const newReview = await assignReviewerToProtocol(
