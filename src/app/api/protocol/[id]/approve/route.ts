@@ -6,6 +6,7 @@ import { logProtocolUpdate } from '@utils/logger'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { canExecute } from '@utils/scopes'
+import { State } from '@prisma/client'
 
 export async function PUT(
     request: NextRequest,

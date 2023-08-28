@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import type { Protocol, User } from '@prisma/client'
-import type { Protocol as ProtocolZod } from '@utils/zod'
+import type { State, User } from '@prisma/client'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
 import { notifications } from '@mantine/notifications'
@@ -10,7 +9,10 @@ import InfoTooltip from '../tooltip'
 import { Upload } from 'tabler-icons-react'
 import { canExecute } from '@utils/scopes'
 
-type ActionButtonTypes = { user: User; protocol: Protocol | ProtocolZod }
+type ActionButtonTypes = {
+    user: User
+    protocol: { id: string; state: State; researcherId: string }
+}
 
 export default function PublishButton({ user, protocol }: ActionButtonTypes) {
     const router = useRouter()

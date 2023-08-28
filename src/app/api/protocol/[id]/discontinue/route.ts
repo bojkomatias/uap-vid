@@ -15,12 +15,15 @@ export async function PUT(
     const session = await getServerSession(authOptions)
     const id = params.id
     const protocol = await request.json()
-    if (session && canExecute('ACCEPT', session.user.role, protocol.state)) {
-        const updated = await updateProtocolStateById(id, State.ACCEPTED)
+    if (
+        session &&
+        canExecute('DISCONTINUE', session.user.role, protocol.state)
+    ) {
+        const updated = await updateProtocolStateById(id, State.DISCONTINUED)
 
         await logProtocolUpdate({
-            fromState: State.SCIENTIFIC_EVALUATION,
-            toState: State.ACCEPTED,
+            fromState: protocol.state,
+            toState: State.DISCONTINUED,
             protocolId: id,
         })
 

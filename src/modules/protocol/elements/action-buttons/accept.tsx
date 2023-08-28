@@ -1,5 +1,5 @@
 'use client'
-import type { Protocol, Review, Role } from '@prisma/client'
+import type { Review, Role } from '@prisma/client'
 import { ReviewVerdict, State } from '@prisma/client'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ import { FileCheck } from 'tabler-icons-react'
 
 type ActionButtonTypes = {
     role: Role
-    protocol: Protocol
+    protocol: { id: string; state: State }
     reviews: Review[]
 }
 

@@ -14,6 +14,8 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { ACTION } from '@utils/zod'
 import ReviewAssignation from '@review/review-assignation'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
+import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
+import { FinishButton } from '@protocol/elements/action-buttons/finish'
 
 async function Layout({
     params,
@@ -54,23 +56,43 @@ async function Layout({
                 <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
                     <ApproveButton
                         role={session.user.role}
-                        protocol={protocol}
+                        protocol={{ id: protocol.id, state: protocol.state }}
                     />
                     <AcceptButton
                         role={session.user.role}
-                        protocol={protocol}
+                        protocol={{ id: protocol.id, state: protocol.state }}
                         reviews={reviews}
                     />
                     <PublishButton
-                        userId={session.user.id}
-                        protocol={protocol}
+                        user={session.user}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                            researcherId: protocol.researcherId,
+                        }}
                     />
                     <EditButton
                         user={session.user}
-                        researcherId={protocol.researcherId}
-                        state={protocol.state}
-                        id={protocol.id}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                            researcherId: protocol.researcherId,
+                        }}
                         reviews={reviews}
+                    />
+                    <DiscontinueButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
+                    />
+                    <FinishButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
                     />
                 </div>
             </div>
@@ -81,6 +103,7 @@ async function Layout({
                     : [
                           ACTION.ASSIGN_TO_METHODOLOGIST,
                           ACTION.ASSIGN_TO_SCIENTIFIC,
+                          ACTION.ACCEPT,
                       ],
                 session.user.role,
                 protocol.state

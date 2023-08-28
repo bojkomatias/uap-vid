@@ -15,17 +15,17 @@ export async function PUT(
     const session = await getServerSession(authOptions)
     const id = params.id
     const protocol = await request.json()
-    if (session && canExecute('ACCEPT', session.user.role, protocol.state)) {
-        const updated = await updateProtocolStateById(id, State.ACCEPTED)
+    if (session && canExecute('FINISH', session.user.role, protocol.state)) {
+        const updated = await updateProtocolStateById(id, State.FINISHED)
 
         await logProtocolUpdate({
-            fromState: State.SCIENTIFIC_EVALUATION,
-            toState: State.ACCEPTED,
+            fromState: protocol.state,
+            toState: State.FINISHED,
             protocolId: id,
         })
 
         if (!updated) {
-            return new Response('We cannot accept this protocol', {
+            return new Response('We cannot finish this protocol', {
                 status: 500,
             })
         }
