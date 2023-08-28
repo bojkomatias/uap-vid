@@ -26,21 +26,29 @@ const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
 
 /** Role Action Scope
  * - Check if action can be performed according to user role
+ * - EDIT_BY_OWNER & PUBLISH can only be done for users that are protocol owners.
  */
 const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
-    [ROLE.RESEARCHER]: [ACTION.CREATE, ACTION.EDIT_BY_OWNER],
+    [ROLE.RESEARCHER]: [ACTION.CREATE, ACTION.EDIT_BY_OWNER, ACTION.PUBLISH],
     [ROLE.SECRETARY]: [
         ACTION.ACCEPT,
         ACTION.CREATE,
         ACTION.EDIT,
         ACTION.EDIT_BY_OWNER,
+        ACTION.PUBLISH,
     ],
-    [ROLE.METHODOLOGIST]: [ACTION.REVIEW, ACTION.CREATE, ACTION.EDIT_BY_OWNER],
+    [ROLE.METHODOLOGIST]: [
+        ACTION.REVIEW,
+        ACTION.CREATE,
+        ACTION.EDIT_BY_OWNER,
+        ACTION.PUBLISH,
+    ],
     [ROLE.SCIENTIST]: [ACTION.REVIEW],
     [ROLE.ADMIN]: [
         ACTION.CREATE,
         ACTION.EDIT,
         ACTION.EDIT_BY_OWNER,
+        ACTION.PUBLISH,
         ACTION.ACCEPT,
         ACTION.REVIEW,
         ACTION.APPROVE,
@@ -57,7 +65,7 @@ const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
  */
 const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
     [STATE.NOT_CREATED]: [ACTION.CREATE],
-    [STATE.DRAFT]: [ACTION.EDIT_BY_OWNER],
+    [STATE.DRAFT]: [ACTION.EDIT_BY_OWNER, ACTION.PUBLISH],
     [STATE.PUBLISHED]: [
         ACTION.ASSIGN_TO_METHODOLOGIST,
         ACTION.EDIT,
