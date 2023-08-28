@@ -9,6 +9,7 @@ export const getReviewsByProtocol = cache(async (protocolId: string) => {
             reviewer: true,
         },
         where: { protocolId },
+        orderBy: { createdAt: 'desc' },
     })
     return reviews
 })

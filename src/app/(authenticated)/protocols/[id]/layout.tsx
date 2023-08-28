@@ -1,5 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
-import { canExecute, canExecuteActions } from '@utils/scopes'
+import { canAccess, canExecute, canExecuteActions } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
@@ -97,19 +97,10 @@ async function Layout({
                 </div>
             </div>
 
-            {canExecuteActions(
-                session.user.id === protocol.researcherId
-                    ? []
-                    : [
-                          ACTION.ASSIGN_TO_METHODOLOGIST,
-                          ACTION.ASSIGN_TO_SCIENTIFIC,
-                          ACTION.ACCEPT,
-                      ],
-                session.user.role,
-                protocol.state
-            ) ? (
+            {canAccess('EVALUATORS', session.user.role) && protocol.state !== 'DRAFT' ? (
                 <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
+                        role={session.user.role}
                         protocolId={protocol.id}
                         researcherId={protocol.researcherId}
                         protocolState={protocol.state}
@@ -119,13 +110,13 @@ async function Layout({
 
             <div className="flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
                 <div className="w-full">{children}</div>
-                <Reviews
-                    id={protocol.id}
-                    researcherId={protocol.researcherId}
-                    state={protocol.state}
-                    userId={session.user.id}
-                    userRole={session.user.role}
-                />
+                    <Reviews
+                        id={protocol.id}
+                        researcherId={protocol.researcherId}
+                        state={protocol.state}
+                        userId={session.user.id}
+                        userRole={session.user.role}
+                    />
             </div>
         </>
     )
