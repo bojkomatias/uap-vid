@@ -11,7 +11,7 @@ export default function PopoverComponent({
     actionButton,
 }: {
     children: React.ReactNode
-    title: string
+    title: string | React.ReactNode
     className?: string
     actionButton: React.ReactNode
 }) {
@@ -19,10 +19,14 @@ export default function PopoverComponent({
         <Popover>
             <>
                 <Popover.Button
-                    className={` ${buttonStyle(
-                        'secondary',
-                        false
-                    )} px-2 py-1 text-xs`}
+                    className={
+                        typeof title == 'string'
+                            ? ` ${buttonStyle(
+                                  'secondary',
+                                  false
+                              )} px-2 py-1 text-xs`
+                            : ''
+                    }
                 >
                     {title}
                 </Popover.Button>
