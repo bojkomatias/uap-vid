@@ -16,6 +16,7 @@ import ReviewAssignation from '@review/review-assignation'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
+import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 
 async function Layout({
     params,
@@ -54,6 +55,13 @@ async function Layout({
                     observations={protocol.observations}
                 />
                 <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
+                    <FinishButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
+                    />
                     <ApproveButton
                         role={session.user.role}
                         protocol={{ id: protocol.id, state: protocol.state }}
@@ -87,7 +95,7 @@ async function Layout({
                             state: protocol.state,
                         }}
                     />
-                    <FinishButton
+                    <DeleteButton
                         role={session.user.role}
                         protocol={{
                             id: protocol.id,
@@ -97,7 +105,8 @@ async function Layout({
                 </div>
             </div>
 
-            {canAccess('EVALUATORS', session.user.role) && protocol.state !== 'DRAFT' ? (
+            {canAccess('EVALUATORS', session.user.role) &&
+            protocol.state !== 'DRAFT' ? (
                 <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
                         role={session.user.role}
@@ -110,13 +119,13 @@ async function Layout({
 
             <div className="flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
                 <div className="w-full">{children}</div>
-                    <Reviews
-                        id={protocol.id}
-                        researcherId={protocol.researcherId}
-                        state={protocol.state}
-                        userId={session.user.id}
-                        userRole={session.user.role}
-                    />
+                <Reviews
+                    id={protocol.id}
+                    researcherId={protocol.researcherId}
+                    state={protocol.state}
+                    userId={session.user.id}
+                    userRole={session.user.role}
+                />
             </div>
         </>
     )

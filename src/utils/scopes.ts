@@ -66,11 +66,12 @@ const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
  */
 const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
     [STATE.NOT_CREATED]: [ACTION.CREATE],
-    [STATE.DRAFT]: [ACTION.EDIT_BY_OWNER, ACTION.PUBLISH],
+    [STATE.DRAFT]: [ACTION.EDIT_BY_OWNER, ACTION.PUBLISH, ACTION.DELETE],
     [STATE.PUBLISHED]: [
         ACTION.ASSIGN_TO_METHODOLOGIST,
         ACTION.EDIT,
         ACTION.DISCONTINUE,
+        ACTION.DELETE,
     ],
     [STATE.METHODOLOGICAL_EVALUATION]: [
         ACTION.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation

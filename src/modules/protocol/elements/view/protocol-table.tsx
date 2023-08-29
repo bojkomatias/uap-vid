@@ -238,27 +238,16 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-between gap-1">
-                        <Link
-                            href={`/protocols/${row.original.id}`}
-                            passHref
-                            className={cx(
-                                buttonStyle('secondary'),
-                                'px-2.5 py-1 text-xs'
-                            )}
-                        >
-                            Ver
-                        </Link>
-                        {user.role === 'ADMIN' ? (
-                            <DeleteButton
-                                className={'px-2.5 py-1 text-xs'}
-                                protocolId={row.original.id}
-                                protocolState={row.original.state}
-                            />
-                        ) : (
-                            <></>
+                    <Link
+                        href={`/protocols/${row.original.id}`}
+                        passHref
+                        className={cx(
+                            buttonStyle('secondary'),
+                            'px-2.5 py-1 text-xs'
                         )}
-                    </div>
+                    >
+                        Ver
+                    </Link>
                 ),
                 enableHiding: false,
                 enableSorting: false,
