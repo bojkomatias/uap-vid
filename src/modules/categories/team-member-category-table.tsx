@@ -90,7 +90,7 @@ export default function CategoriesTable({
                 cell: ({ row }) => (
                     <div className="flex items-center justify-between gap-1">
                         <PriceUpdate row={row} />
-                        <DeleteButton
+                        {/* <DeleteButton
                             id={row.original.id}
                             State={false}
                             data={row.original}
@@ -98,7 +98,7 @@ export default function CategoriesTable({
                             className={'px-2.5 py-1 text-xs'}
                             notificationTitle="Categoría eliminada"
                             notificationMessage="La categoría fue eliminada con éxito"
-                        />
+                        /> */}
                     </div>
                 ),
                 enableHiding: false,
