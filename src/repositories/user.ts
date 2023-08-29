@@ -229,7 +229,6 @@ const updateUserByEmail = async (id: string, role: Role) => {
         return null
     }
 }
-updateUserByEmail
 
 const updateUserEmailById = async (id: string, email: string) => {
     try {

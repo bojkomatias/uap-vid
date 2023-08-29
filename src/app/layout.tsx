@@ -24,9 +24,7 @@ export default async function RootLayout({
             <Providers>
                 <body className="subpixel-antialiased">
                     <Header />
-                    <main id="main-element" className="relative min-h-[90vh]">
-                        {children}
-                    </main>
+                    <main className="relative min-h-[90vh]">{children}</main>
                     <Footer />
                 </body>
             </Providers>
