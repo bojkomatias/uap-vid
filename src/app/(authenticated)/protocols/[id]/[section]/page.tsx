@@ -16,8 +16,7 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
-    if (!searchParams.convocatory && params.id === 'new')
-        return redirect('/protocols')
+    if (!searchParams.convocatory && params.id === 'new') redirect('/protocols')
 
     const protocol =
         params.id === 'new'

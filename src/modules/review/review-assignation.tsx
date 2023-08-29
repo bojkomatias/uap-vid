@@ -1,17 +1,21 @@
-import { ReviewType, ReviewVerdict, Role, State } from '@prisma/client'
+import type { State } from '@prisma/client'
+import { ReviewType, ReviewVerdict, Role } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
 import { UserSearch } from 'tabler-icons-react'
 import { Badge } from '@elements/badge'
+import { canExecute } from '@utils/scopes'
 
 interface ReviewAssignProps {
+    role: Role
     protocolId: string
     protocolState: State
     researcherId: string
 }
 const ReviewAssignation = async ({
+    role,
     protocolId,
     protocolState,
     researcherId,
@@ -27,15 +31,17 @@ const ReviewAssignation = async ({
         (r) => r.type === 'SCIENTIFIC_EXTERNAL'
     )?.reviewerId
 
+    const methodologicalVerdict = reviews.find(
+        (x) => x.type === ReviewType.METHODOLOGICAL
+    )?.verdict
+
     const reviewAssignSelectsData = [
         {
             type: ReviewType.METHODOLOGICAL,
             users: users.filter(
                 (u) => u.role === Role.METHODOLOGIST && u.id !== researcherId
             ),
-            enabled:
-                protocolState === State.PUBLISHED ||
-                protocolState === State.METHODOLOGICAL_EVALUATION,
+            enabled: canExecute('ASSIGN_TO_METHODOLOGIST', role, protocolState),
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.METHODOLOGICAL
@@ -47,12 +53,10 @@ const ReviewAssignation = async ({
                 (u) => u.role === Role.SCIENTIST && assignedExternal !== u.id
             ),
             enabled:
-                (protocolState === State.METHODOLOGICAL_EVALUATION &&
-                    reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                        ?.verdict === ReviewVerdict.APPROVED) ||
-                reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
-                protocolState === State.SCIENTIFIC_EVALUATION,
+                canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&
+                (methodologicalVerdict === ReviewVerdict.APPROVED ||
+                    methodologicalVerdict ===
+                        ReviewVerdict.APPROVED_WITH_CHANGES),
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_INTERNAL
@@ -64,12 +68,10 @@ const ReviewAssignation = async ({
                 (u) => u.role === Role.SCIENTIST && assignedInternal !== u.id
             ),
             enabled:
-                (protocolState === State.METHODOLOGICAL_EVALUATION &&
-                    reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                        ?.verdict === ReviewVerdict.APPROVED) ||
-                reviews.find((x) => x.type === ReviewType.METHODOLOGICAL)
-                    ?.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ||
-                protocolState === State.SCIENTIFIC_EVALUATION,
+                canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&
+                (methodologicalVerdict === ReviewVerdict.APPROVED ||
+                    methodologicalVerdict ===
+                        ReviewVerdict.APPROVED_WITH_CHANGES),
             review:
                 reviews.find(
                     (review) => review.type === ReviewType.SCIENTIFIC_EXTERNAL
@@ -84,7 +86,7 @@ const ReviewAssignation = async ({
                     assignedExternal !== u.id
             ),
             enabled:
-                protocolState === State.SCIENTIFIC_EVALUATION &&
+                canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&
                 reviews.filter(
                     (e) =>
                         (e.type === ReviewType.SCIENTIFIC_EXTERNAL ||
@@ -97,7 +99,8 @@ const ReviewAssignation = async ({
                     (review) => review.type === ReviewType.SCIENTIFIC_THIRD
                 ) ?? null,
         },
-    ]
+    ].filter((r) => r.enabled || r.review)
+    // Checks if enabled to assign or re-assign, and if has review, it's data is visible (But not necessarily the action)
 
     return reviewAssignSelectsData.map((data) => (
         <div key={data.type} className="flex items-baseline gap-4">

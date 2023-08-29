@@ -1,5 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
-import { canExecute, canExecuteActions } from '@utils/scopes'
+import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
@@ -11,9 +11,11 @@ import AcceptButton from '@protocol/elements/action-buttons/accept'
 import PublishButton from '@protocol/elements/action-buttons/publish'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import { getReviewsByProtocol } from '@repositories/review'
-import { ACTION } from '@utils/zod'
 import ReviewAssignation from '@review/review-assignation'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
+import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
+import { FinishButton } from '@protocol/elements/action-buttons/finish'
+import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 
 async function Layout({
     params,
@@ -52,42 +54,61 @@ async function Layout({
                     observations={protocol.observations}
                 />
                 <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
+                    <FinishButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
+                    />
                     <ApproveButton
                         role={session.user.role}
-                        protocol={protocol}
+                        protocol={{ id: protocol.id, state: protocol.state }}
                     />
                     <AcceptButton
                         role={session.user.role}
-                        protocol={protocol}
+                        protocol={{ id: protocol.id, state: protocol.state }}
                         reviews={reviews}
                     />
                     <PublishButton
-                        userId={session.user.id}
-                        protocol={protocol}
+                        user={session.user}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                            researcherId: protocol.researcherId,
+                        }}
                     />
                     <EditButton
                         user={session.user}
-                        researcherId={protocol.researcherId}
-                        state={protocol.state}
-                        id={protocol.id}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                            researcherId: protocol.researcherId,
+                        }}
                         reviews={reviews}
+                    />
+                    <DiscontinueButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
+                    />
+                    <DeleteButton
+                        role={session.user.role}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
                     />
                 </div>
             </div>
 
-            {canExecuteActions(
-                session.user.id === protocol.researcherId
-                    ? []
-                    : [
-                          ACTION.ASSIGN_TO_METHODOLOGIST,
-                          ACTION.ASSIGN_TO_SCIENTIFIC,
-                          ACTION.ACCEPT,
-                      ],
-                session.user.role,
-                protocol.state
-            ) ? (
+            {canAccess('EVALUATORS', session.user.role) &&
+            protocol.state !== 'DRAFT' ? (
                 <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
+                        role={session.user.role}
                         protocolId={protocol.id}
                         researcherId={protocol.researcherId}
                         protocolState={protocol.state}

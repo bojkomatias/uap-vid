@@ -5,11 +5,7 @@ import { dateFormatter } from '@utils/formatters'
 import { Calendar, User as UserIcon } from 'tabler-icons-react'
 import { ResearcherReassignation } from './elements/action-buttons/researcher-reassignation'
 import { getAllOwners } from '@repositories/user'
-import PopoverComponent from '@elements/popover'
-import { Button } from '@elements/button'
-import { notifications } from '@mantine/notifications'
-import { startTransition } from 'react'
-import { useRouter } from 'next/navigation'
+
 import Observation from './elements/action-buttons/observation'
 
 export async function ProtocolMetadata({

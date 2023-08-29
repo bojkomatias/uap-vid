@@ -3,7 +3,6 @@ import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
-import { DeleteButton } from '../action-buttons/delete'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -238,30 +237,16 @@ export default function ProtocolTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-between gap-1">
-                        <Link
-                            href={`/protocols/${row.original.id}`}
-                            passHref
-                            className={cx(
-                                buttonStyle('secondary'),
-                                'px-2.5 py-1 text-xs'
-                            )}
-                        >
-                            Ver
-                        </Link>
-                        {user.role === 'ADMIN' ? (
-                            <DeleteButton
-                                id={row.original.id}
-                                State={row.original.state}
-                                apiPath="/protocol"
-                                className={'px-2.5 py-1 text-xs'}
-                                notificationTitle="Protocolo eliminado"
-                                notificationMessage="El protocolo fue eliminado con éxito."
-                            />
-                        ) : (
-                            <></>
+                    <Link
+                        href={`/protocols/${row.original.id}`}
+                        passHref
+                        className={cx(
+                            buttonStyle('secondary'),
+                            'px-2.5 py-1 text-xs'
                         )}
-                    </div>
+                    >
+                        Ver
+                    </Link>
                 ),
                 enableHiding: false,
                 enableSorting: false,

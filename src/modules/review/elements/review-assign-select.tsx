@@ -25,6 +25,7 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
+    protocolState,
 }: ReviewAssignSelectProps) => {
     const router = useRouter()
 
@@ -37,9 +38,10 @@ const ReviewAssignSelect = ({
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                protocolState,
                 review: review ?? null,
-                reviewerId: reviewerId,
-                type: type,
+                reviewerId,
+                type,
             }),
         })
         if (assigned.ok) {

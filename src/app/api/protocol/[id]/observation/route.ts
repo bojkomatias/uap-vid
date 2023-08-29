@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { Role, State } from '@prisma/client'
+import { Role } from '@prisma/client'
 import { newObservation } from '@repositories/protocol'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'

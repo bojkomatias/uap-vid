@@ -70,7 +70,7 @@ export default function CategoriesTable({
                             />
                         )}
                         <PriceUpdate row={row} />
-                        <DeleteButton
+                        {/* <DeleteButton
                             id={row.original.id}
                             State={false}
                             data={row.original}
@@ -78,7 +78,7 @@ export default function CategoriesTable({
                             className={'px-2.5 py-1 text-xs'}
                             notificationTitle="Categoría eliminada"
                             notificationMessage="La categoría fue eliminada con éxito"
-                        />
+                        /> */}
                     </div>
                 ),
                 enableHiding: false,
