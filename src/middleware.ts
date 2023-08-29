@@ -13,6 +13,7 @@ export default withAuth(
                 return NextResponse.redirect(new URL('/protocols', req.url))
             return null
         }
+
         if (!token) {
             if (req.nextUrl.pathname.startsWith('/api'))
                 return new Response('Unauthorized', { status: 401 })
@@ -59,6 +60,8 @@ export default withAuth(
                 return NextResponse.redirect(new URL('/protocols', req.url))
             }
         }
+
+        return NextResponse.next()
     },
     {
         callbacks: {
@@ -69,5 +72,13 @@ export default withAuth(
 )
 
 export const config = {
-    matcher: ['/api/:path*', '/protocols/:path*', '/convocatories/:path*', '/'],
+    matcher: [
+        '/',
+        '/api/:path*',
+        '/protocols/:path*',
+        '/convocatories/:path*',
+        '/team-members/:path*',
+        '/users/:path*',
+        '/academic-units/:path*',
+    ],
 }

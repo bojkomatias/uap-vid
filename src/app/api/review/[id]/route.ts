@@ -10,6 +10,7 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(review)
 }
 
+// Researcher (Owner) marks as revised
 export async function PATCH(
     request: NextRequest,
     { params }: { params: { id: string } }
