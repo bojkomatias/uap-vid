@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@mantine/notifications'
@@ -9,36 +8,28 @@ import { useCallback, useState, useTransition } from 'react'
 let timeout: NodeJS.Timeout
 
 export function DeleteButton({
-    id,
-    State,
-    data,
-    apiPath,
+    protocolId,
+    protocolState,
     className,
-    notificationTitle,
-    notificationMessage,
 }: {
-    id: string
-    State: State | boolean
-    apiPath: string
-    data?: object
+    protocolId: string
+    protocolState: State
     className?: string
-    notificationTitle: string
-    notificationMessage: string
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
 
-    const deleteRecord = useCallback(async () => {
-        const res = await fetch(`/api${apiPath}/${id}`, {
+    const deleteProtocol = useCallback(async () => {
+        const res = await fetch(`/api/protocol/${protocolId}`, {
             method: 'DELETE',
-            body: JSON.stringify({ ...data, state: State }),
+            body: JSON.stringify({ state: protocolState }),
         })
 
         if (res.ok) {
             notifications.show({
-                title: notificationTitle,
-                message: notificationMessage,
+                title: 'Protocolo eliminado',
+                message: 'El protocolo ha sido eliminado con éxito.',
                 color: 'green',
             })
             return startTransition(() => {
@@ -46,9 +37,9 @@ export function DeleteButton({
                 router.refresh()
             })
         }
-    }, [id, State, router, data])
+    }, [protocolId, protocolState, router])
 
-    return State !== 'DELETED' ? (
+    return protocolState !== 'DELETED' ? (
         deleting ? (
             <Button
                 onClick={() => {
@@ -90,7 +81,7 @@ export function DeleteButton({
                 onClick={() => {
                     setDeleting(true)
                     timeout = setTimeout(() => {
-                        deleteRecord()
+                        deleteProtocol()
                     }, 3000)
                 }}
                 disabled={isPending}
