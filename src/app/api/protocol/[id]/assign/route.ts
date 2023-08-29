@@ -35,20 +35,10 @@ export async function PUT(
     }
     // Not allowed by state or role to assign
     if (
-        data.type === 'METHODOLOGICAL' &&
         !canExecute(
-            'ASSIGN_TO_METHODOLOGIST',
-            token!.user.role,
-            data.protocolState
-        )
-    )
-        return new Response('Not allowed', { status: 406 })
-
-    // Not allowed by state or role to assign
-    if (
-        data.type !== 'METHODOLOGICAL' &&
-        !canExecute(
-            'ASSIGN_TO_SCIENTIFIC',
+            data.type === 'METHODOLOGICAL'
+                ? 'ASSIGN_TO_METHODOLOGIST'
+                : 'ASSIGN_TO_SCIENTIFIC',
             token!.user.role,
             data.protocolState
         )
