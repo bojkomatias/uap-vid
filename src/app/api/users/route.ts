@@ -1,22 +1,8 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import { updateUserEmailById } from '@repositories/user'
-import { getServerSession } from 'next-auth'
 import { NextResponse, type NextRequest } from 'next/server'
-import { authOptions } from '../auth/[...nextauth]/route'
 
 export async function PATCH(request: NextRequest) {
-    const session = await getServerSession(authOptions)
-
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-
-    const sessionRole = session.user.role
-
-    if (sessionRole.toLocaleLowerCase() !== 'admin') {
-        return new Response('Unauthorized', { status: 401 })
-    }
-
     const res = await request.json()
 
     const id = res.id

@@ -13,22 +13,51 @@ export default withAuth(
                 return NextResponse.redirect(new URL('/protocols', req.url))
             return null
         }
-
         if (!token) {
+            if (req.nextUrl.pathname.startsWith('/api'))
+                return new Response('Unauthorized', { status: 401 })
             return NextResponse.redirect(new URL('/', req.url))
         }
 
-        if (req.nextUrl.pathname.startsWith('/users')) {
-            if (!canAccess('USERS', token.user.role))
+        // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
+        if (req.nextUrl.pathname.includes('/users')) {
+            if (!canAccess('USERS', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
+            }
         }
 
         if (req.nextUrl.pathname.includes('/convocatories')) {
-            if (!canAccess('CONVOCATORIES', token.user.role))
-                return NextResponse.redirect(new URL('/protocols', req.url), {
-                    status: 401,
-                    statusText: 'Unauthorized',
-                })
+            if (!canAccess('CONVOCATORIES', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
+                return NextResponse.redirect(new URL('/protocols', req.url))
+            }
+        }
+
+        if (req.nextUrl.pathname.includes('/academic-units')) {
+            if (!canAccess('ACADEMIC_UNITS', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
+                return NextResponse.redirect(new URL('/protocols', req.url))
+            }
+        }
+
+        if (req.nextUrl.pathname.includes('/categories')) {
+            if (!canAccess('MEMBER_CATEGORIES', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
+                return NextResponse.redirect(new URL('/protocols', req.url))
+            }
+        }
+
+        if (req.nextUrl.pathname.includes('/team-members')) {
+            if (!canAccess('TEAM_MEMBERS', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
+                return NextResponse.redirect(new URL('/protocols', req.url))
+            }
         }
     },
     {
