@@ -229,6 +229,22 @@ const updateUserByEmail = async (email: string, data: User) => {
         return null
     }
 }
+const updateUserEmailById = async (id: string, email: string) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                email: email,
+            },
+        })
+
+        return user
+    } catch (error) {
+        return null
+    }
+}
 
 const saveUser = async (data: {
     name: string
@@ -274,4 +290,5 @@ export {
     updateUserByEmail,
     saveUser,
     deleteUserById,
+    updateUserEmailById,
 }

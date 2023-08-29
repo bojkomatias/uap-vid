@@ -39,23 +39,44 @@ export default function Observation({
         <PopoverComponent
             title="Agregar observación"
             className="absolute left-0 top-2  rounded-md bg-gray-50 p-3 shadow-md"
+            column={true}
+            actionButton={
+                <Button
+                    onClick={() => {
+                        const observation = (
+                            document.getElementById(
+                                'observation'
+                            ) as HTMLInputElement
+                        ).value
+
+                        if (observation.length > 1)
+                            createObservation(id, observation)
+                    }}
+                    className="float-right px-2.5 py-1 text-xs"
+                    intent="outline"
+                >
+                    Agregar nueva observación
+                </Button>
+            }
         >
-            <div className="flex gap-3">
-                <div className="flex min-w-[150px] flex-grow flex-col gap-2 text-xs">
-                    {observations?.map((obs, idx) => {
-                        return (
-                            <div
-                                className="22bg-gray-100 min-w-[100px] rounded-md border border-gray-100 p-1"
-                                key={idx}
-                            >
-                                {obs}
-                            </div>
-                        )
-                    })}
+            <div>
+                <div className="flex max-h-36 min-w-[150px] flex-grow flex-col gap-2 overflow-y-auto  p-2 text-xs shadow-inner">
+                    {observations
+                        ?.filter((p) => p)
+                        .map((obs, idx) => {
+                            return (
+                                <div
+                                    className="22bg-gray-100 min-w-[100px] rounded-md border border-gray-100 p-1"
+                                    key={idx}
+                                >
+                                    {obs}
+                                </div>
+                            )
+                        })}
                 </div>
                 <form className="min-w-[200px] flex-grow">
                     <label
-                        className=" text-xs text-gray-500"
+                        className="text-xs text-gray-500"
                         htmlFor="observation"
                     >
                         Nueva observación
@@ -65,21 +86,6 @@ export default function Observation({
                         className="input rounded-md text-xs"
                         id="observation"
                     ></textarea>
-                    <Button
-                        onClick={() => {
-                            const observation = (
-                                document.getElementById(
-                                    'observation'
-                                ) as HTMLInputElement
-                            ).value
-
-                            createObservation(id, observation)
-                        }}
-                        className="float-right px-2.5 py-1 text-xs"
-                        intent="outline"
-                    >
-                        Agregar nueva observación
-                    </Button>
                 </form>
             </div>
         </PopoverComponent>

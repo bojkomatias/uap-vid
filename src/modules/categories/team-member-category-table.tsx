@@ -7,8 +7,9 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 
 import { Badge } from '@elements/badge'
-import { dateFormatter } from '@utils/formatters'
+import { formatCurrency } from '@utils/formatters'
 import PriceUpdate from './price-update'
+import TeamMemberCategoryView from './team-member-category-view'
 
 export default function CategoriesTable({
     categories,
@@ -37,16 +38,19 @@ export default function CategoriesTable({
 
             {
                 accessorKey: 'price',
-                header: 'Precio hora',
+                header: 'Valor hora',
                 enableHiding: false,
                 enableSorting: false,
                 cell: ({ row }) => (
                     <Badge className=" text-xs text-gray-600">
                         $
-                        {
-                            row.original.price[row.original.price.length - 1]
-                                ?.price
-                        }{' '}
+                        {formatCurrency(
+                            (
+                                row.original.price[
+                                    row.original.price.length - 1
+                                ]?.price * 100
+                            ).toString()
+                        )}{' '}
                         {
                             row.original.price[row.original.price.length - 1]
                                 ?.currency
@@ -56,39 +60,15 @@ export default function CategoriesTable({
             },
 
             {
-                id: 'historic-prices',
-                header: 'Precios históricos',
-                enableHiding: false,
-                enableSorting: false,
-                cell: ({ row }) => (
-                    <span className="flex min-w-[500px] gap-2 text-xs text-gray-600">
-                        {row.original.price
-                            .slice(0, row.original.price.length - 1)
-                            .reverse()
-                            .map((p: any, idx: number) => {
-                                return (
-                                    <Badge key={idx}>
-                                        <span
-                                            title={`Desde ${dateFormatter.format(
-                                                p.from
-                                            )} hasta el ${dateFormatter.format(
-                                                p.to
-                                            )}`}
-                                        >
-                                            ${p.price} {p.currency}
-                                        </span>
-                                    </Badge>
-                                )
-                            })}
-                    </span>
-                ),
-            },
-
-            {
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-between gap-1">
+                    <div className="relative flex items-center justify-end gap-1">
+                        {row.original.price.length > 1 && (
+                            <TeamMemberCategoryView
+                                teamMemberCategory={row.original}
+                            />
+                        )}
                         <PriceUpdate row={row} />
                         <DeleteButton
                             id={row.original.id}

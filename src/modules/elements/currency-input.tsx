@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useState } from 'react'
+import { formatCurrency } from '@utils/formatters'
+import React, { useState } from 'react'
 
 const CurrencyInput = ({
     defaultPrice,
@@ -10,15 +11,6 @@ const CurrencyInput = ({
     priceSetter: Function
     className?: string
 }) => {
-    const formatCurrency = (value: string) => {
-        const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
-        const numberValue = Number(formattedValue)
-        return new Intl.NumberFormat('de-DE', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(numberValue / 100) // Convert back to number before formatting
-    }
-
     const [amount, setAmount] = useState(
         (defaultPrice && formatCurrency(defaultPrice.toString() + ',00')) || ''
     )

@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    overflow-x: hidden;
+}
+
 @layer base {
     html {
-        @apply overflow-x-hidden subpixel-antialiased;
+        @apply subpixel-antialiased;
     }
     input[type='number']::-webkit-inner-spin-button,
     input[type='number']::-webkit-outer-spin-button {
