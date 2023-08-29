@@ -11,7 +11,7 @@ import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
-import { canExecuteActions } from '@utils/scopes'
+import { canExecute } from '@utils/scopes'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -35,8 +35,8 @@ export async function PUT(
     }
     if (
         session &&
-        canExecuteActions(
-            ['ASSIGN_TO_METHODOLOGIST', 'ASSIGN_TO_SCIENTIFIC'],
+        canExecute(
+            'ASSIGN_TO_METHODOLOGIST',
             session.user.role,
             data.protocolState
         )

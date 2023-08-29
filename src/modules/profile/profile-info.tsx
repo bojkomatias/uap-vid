@@ -6,8 +6,6 @@ import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { Edit } from 'tabler-icons-react'
 import PopoverComponent from '@elements/popover'
 import { Button } from '@elements/button'
-import { emailer } from '@utils/emailer'
-import { useCases } from '@utils/emailer'
 
 export default async function ProfileInfo({ user }: { user: User }) {
     const updateUserEmail = async ({

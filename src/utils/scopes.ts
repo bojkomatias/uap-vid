@@ -115,11 +115,3 @@ export const canExecute = (
     role: RoleType,
     state: StateType
 ) => ROLE_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
-
-export const canExecuteActions = (
-    actions: ActionType[],
-    role: RoleType,
-    state: StateType
-) =>
-    actions.some((a) => ROLE_SCOPE[role].includes(a)) &&
-    actions.some((a) => STATE_SCOPE[state].includes(a))

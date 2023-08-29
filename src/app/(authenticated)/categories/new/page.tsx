@@ -7,7 +7,7 @@ import React from 'react'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
+        redirect('/protocols')
     return <CategoryForm />
 }
