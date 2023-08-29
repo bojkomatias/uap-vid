@@ -9,11 +9,13 @@ export default function PopoverComponent({
     title,
     className,
     actionButton,
+    column,
 }: {
     children: React.ReactNode
     title: string | React.ReactNode
     className?: string
     actionButton: React.ReactNode
+    column?: boolean
 }) {
     return (
         <Popover>
@@ -47,7 +49,13 @@ export default function PopoverComponent({
                         }`}
                     >
                         {({ close }) => (
-                            <div className="flex items-center gap-2">
+                            <div
+                                className={`${
+                                    column
+                                        ? 'flex flex-col items-end justify-start gap-2'
+                                        : 'flex items-center gap-2'
+                                }`}
+                            >
                                 {children}
                                 <div
                                     onClick={async () => {
