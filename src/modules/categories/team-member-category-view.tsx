@@ -36,11 +36,16 @@ export default function TeamMemberCategoryView({
                                 $
                                 {formatCurrency(
                                     (
-                                        teamMemberCategory.price.at(-1)?.price *
-                                        100
+                                        teamMemberCategory.price[
+                                            teamMemberCategory.price.length - 1
+                                        ].price * 100
                                     ).toString()
                                 )}{' '}
-                                {teamMemberCategory.price.at(-1)?.currency}
+                                {
+                                    teamMemberCategory.price[
+                                        teamMemberCategory.price.length - 1
+                                    ].currency
+                                }
                             </Badge>
                         </div>
                     </div>{' '}

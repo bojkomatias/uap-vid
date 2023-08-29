@@ -39,6 +39,23 @@ export default function Observation({
         <PopoverComponent
             title="Agregar observación"
             className="absolute left-0 top-2  rounded-md bg-gray-50 p-3 shadow-md"
+            actionButton={
+                <Button
+                    onClick={() => {
+                        const observation = (
+                            document.getElementById(
+                                'observation'
+                            ) as HTMLInputElement
+                        ).value
+
+                        createObservation(id, observation)
+                    }}
+                    className="float-right px-2.5 py-1 text-xs"
+                    intent="outline"
+                >
+                    Agregar nueva observación
+                </Button>
+            }
         >
             <div className="flex gap-3">
                 <div className="flex min-w-[150px] flex-grow flex-col gap-2 text-xs">
@@ -65,21 +82,6 @@ export default function Observation({
                         className="input rounded-md text-xs"
                         id="observation"
                     ></textarea>
-                    <Button
-                        onClick={() => {
-                            const observation = (
-                                document.getElementById(
-                                    'observation'
-                                ) as HTMLInputElement
-                            ).value
-
-                            createObservation(id, observation)
-                        }}
-                        className="float-right px-2.5 py-1 text-xs"
-                        intent="outline"
-                    >
-                        Agregar nueva observación
-                    </Button>
                 </form>
             </div>
         </PopoverComponent>
