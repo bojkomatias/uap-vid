@@ -28,7 +28,7 @@ export function ConvocatoryForm({
     const upsertConvocatory = useCallback(
         async (convocatory: Convocatory) => {
             if (isNew) {
-                const res = await fetch(`/api/convocatory`, {
+                const res = await fetch(`/api/convocatories`, {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
@@ -52,7 +52,7 @@ export function ConvocatoryForm({
                 router.refresh()
                 return router.push(`/convocatories`)
             }
-            const res = await fetch(`/api/convocatory/${convocatory.id}`, {
+            const res = await fetch(`/api/convocatories/${convocatory.id}`, {
                 method: 'PUT',
                 mode: 'cors',
                 headers: {

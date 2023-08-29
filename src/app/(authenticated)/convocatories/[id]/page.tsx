@@ -1,21 +1,13 @@
 import { ConvocatoryForm } from '@convocatory/convocatory-form'
 import { PageHeading } from '@layout/page-heading'
-
 import {
     getConvocatoryById,
     getCurrentConvocatory,
 } from '@repositories/convocatory'
-import { canAccess } from '@utils/scopes'
-import { ACCESS } from '@utils/zod'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
-import { getServerSession } from 'next-auth'
+
 import { redirect } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions)
-    if (!session || !canAccess(ACCESS.CONVOCATORIES, session.user.role))
-        redirect('/protocols')
-
     const convocatory =
         params.id === 'new'
             ? {

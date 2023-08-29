@@ -175,18 +175,14 @@ const findUserById = cache(async (id: string) => {
     }
 })
 
-const findUserByEmail = cache(async (email: string) => {
-    try {
-        const user = await prisma.user.findUnique({
+const findUserByEmail = cache(
+    async (email: string) =>
+        await prisma.user.findUnique({
             where: {
                 email,
             },
         })
-        return user
-    } catch (error) {
-        return null
-    }
-})
+)
 
 const updateUserById = async (id: string, data: User) => {
     try {
