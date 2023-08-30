@@ -4,6 +4,7 @@ import PopoverComponent from '@elements/popover'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import React, { startTransition } from 'react'
+import { Message } from 'tabler-icons-react'
 
 export default function Observation({
     id,
@@ -37,8 +38,8 @@ export default function Observation({
     }
     return (
         <PopoverComponent
-            title="Agregar observación"
-            className="absolute left-0 top-2  rounded-md bg-gray-50 p-3 shadow-md"
+            title={<Message className="h-4 text-gray-500" />}
+            className="absolute left-0 top-1 rounded-md bg-gray-50 p-2 shadow-md"
             column={true}
             actionButton={
                 <Button
@@ -55,18 +56,28 @@ export default function Observation({
                     className="float-right px-2.5 py-1 text-xs"
                     intent="outline"
                 >
-                    Agregar nueva observación
+                    Guardar
                 </Button>
             }
         >
-            <div>
-                <div className="flex max-h-36 min-w-[150px] flex-grow flex-col gap-2 overflow-y-auto  p-2 text-xs shadow-inner">
+            <div className="flex gap-2">
+                <form className="flex flex-grow flex-col">
+                    <label className="label" htmlFor="observation">
+                        Nueva observación
+                    </label>
+                    <textarea
+                        rows={3}
+                        className="input rounded-md text-xs"
+                        id="observation"
+                    />
+                </form>
+                <div className="flex max-h-36 flex-grow flex-col gap-2 overflow-y-auto p-2 text-xs">
                     {observations
                         ?.filter((p) => p)
                         .map((obs, idx) => {
                             return (
                                 <div
-                                    className="22bg-gray-100 min-w-[100px] rounded-md border border-gray-100 p-1"
+                                    className="min-w-[100px] rounded-md border border-gray-100 bg-gray-100 p-1"
                                     key={idx}
                                 >
                                     {obs}
@@ -74,19 +85,6 @@ export default function Observation({
                             )
                         })}
                 </div>
-                <form className="min-w-[200px] flex-grow">
-                    <label
-                        className="text-xs text-gray-500"
-                        htmlFor="observation"
-                    >
-                        Nueva observación
-                    </label>
-                    <textarea
-                        rows={3}
-                        className="input rounded-md text-xs"
-                        id="observation"
-                    ></textarea>
-                </form>
             </div>
         </PopoverComponent>
     )

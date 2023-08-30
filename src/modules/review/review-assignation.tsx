@@ -2,11 +2,11 @@ import type { State } from '@prisma/client'
 import { ReviewType, ReviewVerdict, Role } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
-import EvaluatorsByReviewType from '@utils/dictionaries/ReviewTypesDictionary'
 import ReviewAssignSelect from './elements/review-assign-select'
 import { UserSearch } from 'tabler-icons-react'
 import { Badge } from '@elements/badge'
 import { canExecute } from '@utils/scopes'
+import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 
 interface ReviewAssignProps {
     role: Role
@@ -106,7 +106,7 @@ const ReviewAssignation = async ({
         <div key={data.type} className="flex items-baseline gap-4">
             <div className="flex flex-grow items-center gap-2">
                 <UserSearch className="h-4 text-gray-600" />
-                <div className="min-w-[16rem] font-medium">
+                <div className="min-w-[16rem] text-sm font-medium">
                     {data.review?.reviewer.name ?? (
                         <span className="text-sm text-gray-500">-</span>
                     )}
