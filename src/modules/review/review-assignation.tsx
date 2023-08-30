@@ -103,20 +103,18 @@ const ReviewAssignation = async ({
     // Checks if enabled to assign or re-assign, and if has review, it's data is visible (But not necessarily the action)
 
     return reviewAssignSelectsData.map((data) => (
-        <div key={data.type} className="flex items-baseline gap-4">
-            <div className="flex flex-grow items-center gap-2">
+        <div
+            key={data.type}
+            className="flex items-center justify-between gap-4"
+        >
+            <div className="flex items-center gap-2">
                 <UserSearch className="h-4 text-gray-600" />
-                <div className="min-w-[16rem] text-sm font-medium">
+                <div className="flex-grow text-sm font-medium">
                     {data.review?.reviewer.name ?? (
                         <span className="text-sm text-gray-500">-</span>
                     )}
-                    <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
-                        {data.review?.reviewer.email ?? (
-                            <span className="invisible">-</span>
-                        )}
-                    </div>
                 </div>
-                <Badge className="ml-4">
+                <Badge className="my-1 ml-4">
                     {EvaluatorsByReviewType[data.type]}
                 </Badge>
             </div>

@@ -16,7 +16,6 @@ import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-import Observation from '@protocol/elements/action-buttons/observation'
 
 async function Layout({
     params,
@@ -44,7 +43,7 @@ async function Layout({
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
-            <div className="flex w-full gap-3">
+            <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
                     currentUser={session.user}
                     id={protocol.id}
@@ -54,7 +53,7 @@ async function Layout({
                     convocatory={protocol.convocatory}
                 />
 
-                <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
+                <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1">
                     <FinishButton
                         role={session.user.role}
                         protocol={{
@@ -107,7 +106,7 @@ async function Layout({
 
             {canAccess('EVALUATORS', session.user.role) &&
             protocol.state !== 'DRAFT' ? (
-                <div className="relative z-10 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+                <div className="relative z-10 my-1 ml-2 max-w-3xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
                         role={session.user.role}
                         protocolId={protocol.id}
