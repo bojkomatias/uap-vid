@@ -29,9 +29,9 @@ export default async function Page({
                 investigación{' '}
                 <Link
                     className="transition hover:underline"
-                    href="/protocols?page=1&filter=state&values=ON_GOING"
+                    href="/protocols?page=1&filter=state&values=ACCEPTED"
                 >
-                    en curso
+                    aceptados
                 </Link>
                 .
             </p>
