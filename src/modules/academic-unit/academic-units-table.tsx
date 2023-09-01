@@ -118,7 +118,7 @@ export default async function AcademicUnitsTable({
                               )} hasta el ${dateFormatter.format(
                                   row.original.budgets[
                                       row.original.budgets.length - 1
-                                  ].to
+                                  ].to ?? new Date()
                               )}`
                             : undefined
                     }
@@ -134,7 +134,10 @@ export default async function AcademicUnitsTable({
             header: 'Acciones',
             cell: ({ row }) => (
                 <div className="flex items-center justify-between gap-1">
-                    <PopoverButton title="Actualizar presupuesto">
+                    <PopoverButton
+                        title="Actualizar presupuesto"
+                        actionButton={undefined}
+                    >
                         <div className="flex items-center gap-2">
                             <p className="text-xs font-semibold">
                                 Presupuesto actualizado:

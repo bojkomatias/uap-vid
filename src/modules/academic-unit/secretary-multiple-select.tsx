@@ -57,6 +57,8 @@ export function SecretaryMultipleSelect({
 
     return (
         <Combobox
+            //@ts-ignore
+            multiple
             className={className}
             value={selected}
             onChange={(e) => {
@@ -66,7 +68,6 @@ export function SecretaryMultipleSelect({
                     updateSecretaries(unitId, e)
                 }, 1500)
             }}
-            multiple
         >
             <div className="relative">
                 <Combobox.Button className="relative w-full">
