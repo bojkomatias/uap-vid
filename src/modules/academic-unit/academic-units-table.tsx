@@ -34,10 +34,16 @@ export default async function AcademicUnitsTable({
         }
 
         // Update the old price to set the 'to' property
-        const oldBudget = {
-            ...academicUnit.budgets[academicUnit.budgets.length - 1],
-        }
-        oldBudget.to = new Date()
+        const oldBudget = academicUnit.budgets[academicUnit.budgets.length - 1]
+            ? {
+                  ...academicUnit.budgets[academicUnit.budgets.length - 1],
+                  to: new Date(),
+              }
+            : {
+                  amount: 0,
+                  from: new Date(0),
+                  to: new Date(),
+              }
 
         // Create a new array of prices with the updated old price and new price
         const updatedBudgets = [
@@ -62,8 +68,8 @@ export default async function AcademicUnitsTable({
         })
         if (res.status === 200) {
             notifications.show({
-                title: 'Precio actualizado',
-                message: 'El precio fue actualizado correctamente',
+                title: 'Presupuesto actualizado',
+                message: 'El presupuesto fue actualizado correctamente',
                 color: 'success',
                 icon: <Check />,
                 radius: 0,
@@ -73,7 +79,6 @@ export default async function AcademicUnitsTable({
             })
 
             router.refresh()
-            router.push('/categories')
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',

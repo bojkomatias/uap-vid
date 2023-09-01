@@ -19,7 +19,7 @@ export default async function Page() {
 
     return (
         <>
-            <PageHeading title="Asignación de Secretarios de Investigación" />
+            <PageHeading title="Unidades Academicas" />
 
             {academicUnits && academicUnits.length > 0 ? (
                 <AcademicUnitsTable

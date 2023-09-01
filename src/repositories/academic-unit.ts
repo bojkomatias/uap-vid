@@ -28,12 +28,18 @@ export const getAcademicUnitsByUserId = async (id: string) => {
 }
 
 export const updateAcademicUnit = async (id: string, academicUnit: AcademicUnit) => {
+    const { id: _, ...academicUnitWithoutId } = academicUnit;
+
     try {
         const unit = await prisma.academicUnit.update({
             where: {
                 id,
             },
-            data: academicUnit,
+            data: {
+                budgets: academicUnitWithoutId.budgets,
+                name: academicUnitWithoutId.name,
+                secretariesIds: academicUnitWithoutId.secretariesIds,
+            },
         })
         return unit
     } catch (error) {

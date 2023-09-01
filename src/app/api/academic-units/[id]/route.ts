@@ -33,7 +33,7 @@ export async function PUT(
         )
     }
 
-    const updated = await updateAcademicUnit(id, academicUnit)
+        const updated = await updateAcademicUnit(id, academicUnit)
 
     if (!updated) {
         return new Response('We cannot update your academic unit', {
