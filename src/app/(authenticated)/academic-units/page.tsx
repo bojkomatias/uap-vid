@@ -7,12 +7,18 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getAllSecretaries } from '@repositories/user'
 
-export default async function Page() {
+export default async function Page({
+    searchParams,
+}: {
+    searchParams: { [key: string]: string }
+}) {
     const session = await getServerSession(authOptions)
     if (!session) return
     if (!canAccess('USERS', session.user.role)) redirect('/protocols')
 
-    const academicUnits = await getAllAcademicUnits()
+    const [totalRecords, academicUnits] = await getAllAcademicUnits(
+        searchParams
+    )
     const secretaries = await getAllSecretaries()
     if (!secretaries)
         return <div>No hay secretarios cargados en el sistema</div>
@@ -25,6 +31,7 @@ export default async function Page() {
                 <AcademicUnitsTable
                     academicUnits={academicUnits}
                     secretaries={secretaries}
+                    totalRecords={totalRecords}
                 />
             ) : (
                 'No se encontraron unidades académicas'

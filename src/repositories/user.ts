@@ -45,6 +45,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
+                                                  mode: 'insensitive'
                                               },
                                           },
                                       ],
@@ -86,6 +87,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
+                                                  mode: 'insensitive'
                                               },
                                           },
                                       ],

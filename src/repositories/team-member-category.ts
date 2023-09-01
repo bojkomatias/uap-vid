@@ -39,6 +39,7 @@ const getCategories = cache(
                                           {
                                               name: {
                                                   contains: search,
+                                                  mode: 'insensitive'
                                               },
                                           },
                                       ],
@@ -71,6 +72,7 @@ const getCategories = cache(
                                           {
                                               name: {
                                                   contains: search,
+                                                  mode: 'insensitive'
                                               },
                                           },
                                       ],

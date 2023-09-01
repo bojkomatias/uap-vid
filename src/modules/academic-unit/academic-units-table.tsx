@@ -14,9 +14,11 @@ import { Check, X } from 'tabler-icons-react'
 export default async function AcademicUnitsTable({
     academicUnits,
     secretaries,
+    totalRecords,
 }: {
     academicUnits: AcademicUnit[]
     secretaries: User[]
+    totalRecords: number
 }) {
     const router = useRouter()
 
@@ -100,9 +102,9 @@ export default async function AcademicUnitsTable({
             enableSorting: true,
         },
         {
-            accessorKey: 'price',
+            accessorKey: 'budgets',
             header: 'Presupuesto',
-            enableHiding: false,
+            enableHiding: true,
             enableSorting: false,
             cell: ({ row }) => (
                 <Badge
@@ -159,7 +161,7 @@ export default async function AcademicUnitsTable({
                     </PopoverButton>
                 </div>
             ),
-            enableHiding: false,
+            enableHiding: true,
             enableSorting: false,
         },
         {
@@ -182,7 +184,7 @@ export default async function AcademicUnitsTable({
         <TanStackTable
             data={academicUnits}
             columns={columns}
-            totalRecords={academicUnits.length}
+            totalRecords={totalRecords}
             initialVisibility={{
                 name: true,
                 secretariesIds: true,

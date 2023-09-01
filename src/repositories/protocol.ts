@@ -159,6 +159,7 @@ const getProtocolsByRol = cache(
                                       is: {
                                           title: {
                                               contains: search,
+                                              mode: 'insensitive',
                                           },
                                       },
                                   },
@@ -172,13 +173,15 @@ const getProtocolsByRol = cache(
                                       is: {
                                           modality: {
                                               contains: search,
+                                              mode: 'insensitive'
+
                                           },
                                       },
                                   },
                               },
                           },
                       },
-                      { researcher: { name: { contains: search } } },
+                      { researcher: { name: { contains: search, mode: 'insensitive' } } },
                   ],
               }
             : {}
