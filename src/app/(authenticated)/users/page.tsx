@@ -15,8 +15,8 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+    if (!session || !canAccess('USERS', session.user.role))
+        redirect('/protocols')
 
     const [totalRecords, users] = await getUsers(searchParams)
 
@@ -30,7 +30,7 @@ export default async function Page({
                     passHref
                 >
                     <UserPlus className="h-5 text-current" />
-                    <span> Nuevo usuario</span>
+                    Nuevo usuario
                 </Link>
             </div>
             <UserTable

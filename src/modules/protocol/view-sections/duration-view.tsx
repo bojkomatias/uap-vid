@@ -1,8 +1,8 @@
 import type { ProtocolSectionsDuration } from '@prisma/client'
-import SectionViewer from '@protocol/elements/section-viewer'
-import type { ListRowValues } from '@protocol/elements/item-list-view'
-import ItemListView from '@protocol/elements/item-list-view'
-import ItemView from '@protocol/elements/item-view'
+import SectionViewer from '@protocol/elements/view/section-viewer'
+import type { ListRowValues } from '@protocol/elements/view/item-list-view'
+import ItemListView from '@protocol/elements/view/item-list-view'
+import ItemView from '@protocol/elements/view/item-view'
 
 interface DurationViewProps {
     data: ProtocolSectionsDuration

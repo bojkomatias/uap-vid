@@ -1,4 +1,3 @@
-import PublishButton from '@protocol/elements/action-buttons/publish'
 import ProtocolForm from '@protocol/protocol-form-template'
 import { initialSectionValues } from '@utils/createContext'
 import { canExecute } from '@utils/scopes'
@@ -17,8 +16,7 @@ export default async function Page({
 }) {
     const session = await getServerSession(authOptions)
     if (!session) return
-    if (!searchParams.convocatory && params.id === 'new')
-        return redirect('/protocols')
+    if (!searchParams.convocatory && params.id === 'new') redirect('/protocols')
 
     const protocol =
         params.id === 'new'

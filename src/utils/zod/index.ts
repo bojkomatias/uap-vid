@@ -35,11 +35,15 @@ const ActionSchema = z.enum([
     'CREATE',
     'EDIT',
     'EDIT_BY_OWNER',
+    'PUBLISH',
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
-    'COMMENT',
+    'REVIEW',
     'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
     'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+    'DISCONTINUE',
+    'FINISH',
+    'DELETE',
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -47,9 +51,11 @@ export type ActionType = `${z.infer<typeof ActionSchema>}`
 const AccessSchema = z.enum([
     'PROTOCOLS',
     'USERS',
+    'EVALUATORS',
     'REVIEWS',
     'CONVOCATORIES',
     'ACADEMIC_UNITS',
+    'TEAM_MEMBERS',
     'MEMBER_CATEGORIES',
 ])
 export const ACCESS = AccessSchema.Enum
@@ -107,7 +113,7 @@ export const ProtocolSchema = z.object({
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
-    observations: z.string().nullable().optional(),
+    observations: z.string().array().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -169,7 +175,7 @@ export const TeamMemberCategorySchema = z.object({
 // HISTORIC TEAM MEMBER CATEGORY SCHEMA
 /////////////////////////////////////////
 export const HistoricTeamMemberCategorySchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
     teamMemberId: z.string(),
@@ -180,13 +186,26 @@ export const HistoricTeamMemberCategorySchema = z.object({
 // TEAM MEMBER SCHEMA
 /////////////////////////////////////////
 
-export const TeamMemberSchema = z.object({
-    id: z.string(),
-    UserSchema: UserSchema.optional(),
-    name: z.string().optional(),
-    categories: TeamMemberCategorySchema.array(),
-    obrero: z.boolean(),
-})
+export const TeamMemberSchema = z
+    .object({
+        id: z.string(),
+        userId: z.string().nullable(),
+        name: z.string().min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        }),
+        obrero: z.boolean(),
+        pointsObrero: z.coerce.number().nullable(),
+    })
+    .refine(
+        (value) => {
+            if (value.obrero) {
+                if (value.pointsObrero) return true
+                return false
+            } else return true
+        },
+        { message: 'Campo obligatorio para obreros', path: ['pointsObrero'] }
+    )
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS SCHEMA
@@ -354,14 +373,8 @@ export const IdentificationSchema = z.object({
                     .max(400, {
                         message: 'No se pueden asignar tantas horas',
                     }),
-                last_name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
-                name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
+                last_name: z.string().nullable(),
+                name: z.string().nullable(),
                 role: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),

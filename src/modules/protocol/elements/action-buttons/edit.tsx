@@ -1,8 +1,7 @@
 'use client'
 import { buttonStyle } from '@elements/button/styles'
-import type { Review, User } from '@prisma/client'
+import type { Review, State, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
-import type { StateType } from '@utils/zod'
 import { ACTION } from '@utils/zod'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -10,31 +9,32 @@ import { Edit } from 'tabler-icons-react'
 
 type ActionButtonTypes = {
     user: User
-    researcherId: string
-    state: StateType
-    id: string
+    protocol: { researcherId: string; state: State; id: string }
     reviews: Review[]
 }
 
-export default function EditButton(props: ActionButtonTypes) {
+export default function EditButton({
+    user,
+    protocol,
+    reviews,
+}: ActionButtonTypes) {
     const path = usePathname()
 
     if (path?.split('/')[3]) return <></>
     if (
         !canExecute(
-            props.user.id === props.researcherId
+            user.id === protocol.researcherId
                 ? ACTION.EDIT_BY_OWNER
                 : ACTION.EDIT,
-            props.user.role,
-            props.state
+            user.role,
+            protocol.state
         ) ||
-        (props.reviews.length > 2 &&
-            props.reviews.every((r) => r.verdict === 'APPROVED'))
+        (reviews.length > 2 && reviews.every((r) => r.verdict === 'APPROVED'))
     )
         return <></>
     return (
         <Link
-            href={`/protocols/${props.id}/0`}
+            href={`/protocols/${protocol.id}/0`}
             className={buttonStyle('secondary')}
             passHref
         >

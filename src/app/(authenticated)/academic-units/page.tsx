@@ -13,8 +13,8 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess('USERS', session.user.role)) redirect('/protocols')
+    if (!session || !canAccess('USERS', session.user.role))
+        redirect('/protocols')
 
     const [totalRecords, academicUnits] = await getAllAcademicUnits(
         searchParams

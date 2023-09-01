@@ -6,9 +6,9 @@ import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 
-const findProtocolById = cache(async (id: string) => {
-    try {
-        return await prisma.protocol.findUnique({
+const findProtocolByIdWithResearcher = cache(
+    async (id: string) =>
+        await prisma.protocol.findUnique({
             where: {
                 id,
             },
@@ -17,10 +17,15 @@ const findProtocolById = cache(async (id: string) => {
                 convocatory: { select: { id: true, name: true } },
             },
         })
-    } catch (e) {
-        return null
-    }
-})
+)
+const findProtocolById = cache(
+    async (id: string) =>
+        await prisma.protocol.findUnique({
+            where: {
+                id,
+            },
+        })
+)
 
 const getResearcherEmailByProtocolId = cache(async (id: string) => {
     try {
@@ -41,19 +46,13 @@ const getResearcherEmailByProtocolId = cache(async (id: string) => {
     }
 })
 
-const updateProtocolById = async (id: string, data: Protocol) => {
-    try {
-        const protocol = await prisma.protocol.update({
-            where: {
-                id,
-            },
-            data,
-        })
-        return protocol
-    } catch (e) {
-        return null
-    }
-}
+const updateProtocolById = async (id: string, data: Protocol) =>
+    await prisma.protocol.update({
+        where: {
+            id,
+        },
+        data,
+    })
 
 const updateProtocolStateById = async (id: string, state: StateType) => {
     try {
@@ -77,6 +76,30 @@ const createProtocol = async (data: Protocol) => {
             data,
         })
         return protocol
+    } catch (e) {
+        return null
+    }
+}
+
+const newObservation = async (id: string, observation: string) => {
+    try {
+        const protocol = await prisma.protocol.findUnique({
+            where: {
+                id,
+            },
+        })
+
+        protocol?.observations.push(observation)
+
+        const res = await prisma.protocol.update({
+            where: {
+                id,
+            },
+            data: {
+                observations: protocol?.observations,
+            },
+        })
+        return res
     } catch (e) {
         return null
     }
@@ -421,10 +444,12 @@ const getProtocolsByRol = cache(
 
 export {
     findProtocolById,
+    findProtocolByIdWithResearcher,
     updateProtocolById,
     createProtocol,
     getAllProtocols,
     updateProtocolStateById,
     getProtocolsByRol,
     getResearcherEmailByProtocolId,
+    newObservation,
 }

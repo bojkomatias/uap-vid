@@ -11,8 +11,7 @@ import { buttonStyle } from '@elements/button/styles'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)
-    if (!session) return
-    if (!canAccess(ACCESS.CONVOCATORIES, session.user.role))
+    if (!session || !canAccess(ACCESS.CONVOCATORIES, session.user.role))
         redirect('/protocols')
 
     return (
@@ -24,8 +23,8 @@ export default async function Page() {
                     className={buttonStyle('secondary')}
                     passHref
                 >
-                    <CalendarPlus className="h-5 w-5" />
-                    <span className="ml-3"> Nueva convocatoria</span>
+                    <CalendarPlus className="h-5 w-5 text-current" />
+                    Nueva convocatoria
                 </Link>
             </div>
             <ConvocatoryTable />
