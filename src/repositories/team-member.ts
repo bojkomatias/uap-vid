@@ -53,6 +53,16 @@ export const getTeamMemberById = async (id: string) =>
         include: { categories: true, user: true },
     })
 
+    export const getTeamMemberCategoriesById = async (teamMemberIds: string[]) =>
+    await prisma.teamMember.findFirstOrThrow({
+        where: { id: {
+            in: teamMemberIds
+        } },
+        include: { categories: {
+            include: { category: true }
+        } },
+    })
+
 export const getTeamMembers = async ({
     records = '5',
     page = '1',
