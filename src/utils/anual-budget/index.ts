@@ -74,7 +74,7 @@ const calculateRemainingABTM = async (
         )?.category
         if (category) {
             const lastPrice = getPriceByCalculationType(category.price, calculationType)
-            acc += item.remainingHours * lastPrice
+            acc += item.remainingHours * lastPrice!
         }
         return acc
     }, 0)
@@ -92,13 +92,13 @@ const getPriceByCalculationType = (
   if (!prices || prices.length === 0) return 0
     switch (calculationType) {
         case RemainingTypeCalculation.Last:
-          return prices[prices.length - 1]
+          return prices[prices.length - 1].price
         case RemainingTypeCalculation.Current:
-          return prices.find((p) => !p.to)
+          return prices.find((p) => !p.to)?.price
         case RemainingTypeCalculation.Moment:
-          return prices.find((p) => p.from <= new Date() && (!p.to || p.to >= new Date()))
+          return prices.find((p) => p.from <= new Date() && (!p.to || p.to >= new Date()))?.price
         default:
-          return prices[prices.length - 1]
+          return prices[prices.length - 1].price
     }
 }
 
