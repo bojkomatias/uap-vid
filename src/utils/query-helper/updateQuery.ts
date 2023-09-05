@@ -22,7 +22,7 @@ export const useUpdateQuery = () => {
     const searchParams = useSearchParams()
 
     return (e: UpdateEvent) => {
-        const page = e.page !== undefined ? e.page : searchParams?.get('page')
+        const page = e.page !== undefined ? e.page : 1
         const records =
             e.records !== undefined ? e.records : searchParams?.get('records')
         const search =
