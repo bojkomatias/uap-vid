@@ -4,7 +4,7 @@ import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@elements/tan-stack-table'
 import { Badge } from '@elements/badge'
-import { dateFormatter } from '@utils/formatters'
+import { dateFormatter, formatCurrency } from '@utils/formatters'
 import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import PopoverButton from '@elements/popover'
@@ -12,6 +12,7 @@ import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 import { useRouter } from 'next/navigation'
 import { Check, X } from 'tabler-icons-react'
 import Currency from '@elements/currency'
+import AcademicUnitView from './academic-unit-view'
 export default async function AcademicUnitsTable({
     academicUnits,
     secretaries,
@@ -130,19 +131,27 @@ export default async function AcademicUnitsTable({
                 </>
             ),
         },
+
         {
             accessorKey: 'actions',
             header: 'Acciones',
             cell: ({ row }) => (
                 <div className="flex items-center justify-between gap-1">
-                    <PopoverButton
-                        title="Actualizar presupuesto"
-                        actionButton={undefined}
-                    >
-                        <div className="flex items-center gap-2">
-                            <p className="text-xs font-semibold">
-                                Presupuesto actualizado:
-                            </p>
+                    <AcademicUnitView academicUnit={row.original}>
+                        {' '}
+                        <p className="text-sm text-gray-600">
+                            Editar secretarios/as
+                        </p>
+                        <SecretaryMultipleSelect
+                            className=" max-w-lg text-gray-500"
+                            currentSecretaries={row.original.secretariesIds}
+                            secretaries={secretaries}
+                            unitId={row.original.id}
+                        />
+                        <p className="text-sm text-gray-600">
+                            Actualizar presupuesto:
+                        </p>
+                        <div className="flex  items-center gap-2">
                             <CurrencyInput
                                 defaultPrice={
                                     row.original.budgets[
@@ -152,6 +161,7 @@ export default async function AcademicUnitsTable({
                                 className="min-w-[7rem] rounded-md py-1 text-xs"
                                 priceSetter={() => {}}
                             />
+
                             <Button
                                 className="py-1.5 text-xs shadow-sm"
                                 intent="secondary"
@@ -162,25 +172,54 @@ export default async function AcademicUnitsTable({
                                 Actualizar
                             </Button>
                         </div>
-                    </PopoverButton>
+                        <p className="text-sm text-gray-600">
+                            Presupuestos históricos:
+                        </p>
+                        <table className="table-auto text-sm text-gray-600">
+                            <thead>
+                                <tr className="text-left ">
+                                    <th className="font-semibold">
+                                        Presupuesto
+                                    </th>
+                                    <th className="font-semibold">Desde</th>
+                                    <th className="font-semibold">Hasta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row.original.budgets
+                                    .slice(0, row.original.budgets.length - 1)
+                                    .reverse()
+                                    .map((budget, idx) => {
+                                        return (
+                                            <>
+                                                <tr key={idx}>
+                                                    <td className="pt-2">
+                                                        $
+                                                        {formatCurrency(
+                                                            (
+                                                                budget.amount *
+                                                                100
+                                                            ).toString()
+                                                        )}{' '}
+                                                        ARS
+                                                    </td>
+                                                    <td>
+                                                        {budget.from.toLocaleDateString()}
+                                                    </td>
+                                                    <td>
+                                                        {budget.to?.toLocaleDateString()}
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })}
+                            </tbody>
+                        </table>
+                    </AcademicUnitView>
                 </div>
             ),
             enableHiding: true,
             enableSorting: false,
-        },
-        {
-            accessorKey: 'secretariesIds',
-            header: 'Secretarios/as',
-            enableHiding: true,
-            enableSorting: false,
-            cell: ({ row }) => (
-                <SecretaryMultipleSelect
-                    className="w-96 max-w-lg text-gray-500"
-                    currentSecretaries={row.original.secretariesIds}
-                    secretaries={secretaries}
-                    unitId={row.original.id}
-                />
-            ),
         },
     ]
 
