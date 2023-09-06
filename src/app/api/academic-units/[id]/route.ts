@@ -9,7 +9,7 @@ export async function PUT(
 ) {
     const id = params.id
     const academicUnit = await request.json()
-
+    console.log(id, academicUnit)
     if (!id || !academicUnit) {
         return new Response(
             'We cannot update your academic unit: Invalid Data',

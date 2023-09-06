@@ -54,20 +54,16 @@ export default async function AcademicUnitsTable({
             newBudget,
         ]
 
-        // Create a new object with updated price information
-        const academicUnitUpdated = {
-            ...academicUnit,
-            budgets: updatedBudgets,
-        }
-
         const res = await fetch(`/api/academic-units/${academicUnit.id}`, {
             method: 'PUT',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(academicUnitUpdated),
+            // Pass the updated budget
+            body: JSON.stringify({ budgets: updatedBudgets }),
         })
+
         if (res.status === 200) {
             notifications.show({
                 title: 'Presupuesto actualizado',
@@ -177,7 +173,7 @@ export default async function AcademicUnitsTable({
                     className="w-96 max-w-lg text-gray-500"
                     currentSecretaries={row.original.secretariesIds}
                     secretaries={secretaries}
-                    unitId={row.id}
+                    unitId={row.original.id}
                 />
             ),
         },

@@ -99,7 +99,12 @@ export const getAcademicUnitsByUserId = async (id: string) => {
         return null
     }
 }
-
+/**
+ *
+ * @param id
+ * @param academicUnit can be any shape of academic Units (partials) only pass secretariesIds or only pass budgets works.
+ * @returns
+ */
 export const updateAcademicUnit = async (id: string, academicUnit: any) => {
     try {
         const unit = await prisma.academicUnit.update({

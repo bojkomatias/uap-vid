@@ -25,9 +25,9 @@ export function SecretaryMultipleSelect({
 
     const updateSecretaries = useCallback(
         async (id: string, secretaries: string[]) => {
-            const res = await fetch(`/api/academic-units/secretaries/${id}`, {
+            const res = await fetch(`/api/academic-units/${id}`, {
                 method: 'PUT',
-                body: JSON.stringify(secretaries),
+                body: JSON.stringify({ secretariesIds: secretaries }),
             })
             if (res.status === 200)
                 return notifications.show({
