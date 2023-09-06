@@ -9,6 +9,7 @@ type UpdateEvent = {
     order?: 'asc' | 'desc' | null
     filter?: string
     values?: string
+    units?: string
 }
 /**
  * Priority in query updates:
@@ -34,6 +35,8 @@ export const useUpdateQuery = () => {
             e.filter !== undefined ? e.filter : searchParams?.get('filter')
         const values =
             e.values !== undefined ? e.values : searchParams?.get('values')
+        const units =
+            e.units !== undefined ? e.units : searchParams?.get('units')
 
         const newUrl = new URL(
             path,
@@ -50,6 +53,7 @@ export const useUpdateQuery = () => {
             newUrl.searchParams.set('filter', filter)
             newUrl.searchParams.set('values', values)
         }
+        if (units) newUrl.searchParams.set('units', units)
 
         router.push(newUrl.pathname + newUrl.search, { scroll: false })
     }
