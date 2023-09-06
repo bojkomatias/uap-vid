@@ -11,6 +11,7 @@ import PopoverButton from '@elements/popover'
 import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 import { useRouter } from 'next/navigation'
 import { Check, X } from 'tabler-icons-react'
+import Currency from '@elements/currency'
 export default async function AcademicUnitsTable({
     academicUnits,
     secretaries,
@@ -103,26 +104,30 @@ export default async function AcademicUnitsTable({
             enableHiding: true,
             enableSorting: false,
             cell: ({ row }) => (
-                <Badge
-                    className=" text-xs text-gray-600"
-                    title={
-                        row.original.budgets[row.original.budgets.length - 1]
-                            ? `Desde ${dateFormatter.format(
-                                  row.original.budgets[
-                                      row.original.budgets.length - 1
-                                  ].from
-                              )} hasta el ${dateFormatter.format(
-                                  row.original.budgets[
-                                      row.original.budgets.length - 1
-                                  ].to ?? new Date()
-                              )}`
-                            : undefined
-                    }
-                >
-                    $
-                    {row.original.budgets[row.original.budgets.length - 1]
-                        ?.amount ?? 0}
-                </Badge>
+                <>
+                    <Currency
+                        title={
+                            row.original.budgets[
+                                row.original.budgets.length - 1
+                            ]
+                                ? `Desde ${dateFormatter.format(
+                                      row.original.budgets[
+                                          row.original.budgets.length - 1
+                                      ].from
+                                  )} hasta el ${dateFormatter.format(
+                                      row.original.budgets[
+                                          row.original.budgets.length - 1
+                                      ].to ?? new Date()
+                                  )}`
+                                : undefined
+                        }
+                        amount={
+                            row.original.budgets[
+                                row.original.budgets.length - 1
+                            ]?.amount
+                        }
+                    />
+                </>
             ),
         },
         {
