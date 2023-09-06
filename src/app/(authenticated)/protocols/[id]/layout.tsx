@@ -97,7 +97,7 @@ async function Layout({
                 </div>
             ) : null}
 
-            <div className="flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
+            <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
                 <div className="w-full">{children}</div>
                 <Reviews
                     id={protocol.id}
