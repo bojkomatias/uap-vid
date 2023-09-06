@@ -9,6 +9,7 @@ import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight } from 'tabler-icons-react'
 import ReviewVerdictBadge from './review-verdict-badge'
+import { emailer, useCases } from '@utils/emailer'
 
 export default function ReviewItem({
     review,
@@ -110,13 +111,14 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
     const router = useRouter()
     const updateRevised = useCallback(
         async (revised: boolean) => {
-            await fetch(`/api/review/${id}`, {
+            const res = await fetch(`/api/review/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(revised),
             })
-            startTransition(() => {
-                router.refresh()
-            })
+            if (res.status === 200)
+                startTransition(() => {
+                    router.refresh()
+                })
         },
         [id, router]
     )
