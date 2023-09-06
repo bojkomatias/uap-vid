@@ -3,13 +3,14 @@ import { updateAcademicUnit } from '@repositories/academic-unit'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
+// already secured endpoint through middleware
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
     const id = params.id
     const academicUnit = await request.json()
-    console.log(id, academicUnit)
+
     if (!id || !academicUnit) {
         return new Response(
             'We cannot update your academic unit: Invalid Data',
@@ -18,6 +19,7 @@ export async function PUT(
             }
         )
     }
+
 
     const updated = await updateAcademicUnit(id, academicUnit)
 
