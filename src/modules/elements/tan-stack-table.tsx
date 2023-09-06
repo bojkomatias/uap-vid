@@ -20,6 +20,7 @@ export default function TanStackTable({
     initialVisibility,
     filterableByKey,
     searchBarPlaceholder,
+    customFilterSlot,
 }: {
     data: unknown[]
     columns: ColumnDef<any, unknown>[]
@@ -27,6 +28,7 @@ export default function TanStackTable({
     initialVisibility: VisibilityState
     filterableByKey?: { filter: string; values: any[][] }
     searchBarPlaceholder: string
+    customFilterSlot?: React.ReactNode
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -47,6 +49,8 @@ export default function TanStackTable({
 
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
             </div>
+            {customFilterSlot}
+
             {filterableByKey && (
                 <EnumFilterOptions
                     filter={filterableByKey.filter}

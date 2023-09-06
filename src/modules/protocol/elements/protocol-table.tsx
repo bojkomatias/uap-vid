@@ -12,6 +12,9 @@ import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
+import { Button } from '@elements/button'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { useSearchParams } from 'next/navigation'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
@@ -115,6 +118,7 @@ export default function ProtocolTable({
                         )}
                     </ul>
                 ),
+                enableSorting: false,
             },
             {
                 accessorKey: 'sections.identification.career',
@@ -299,7 +303,61 @@ export default function ProtocolTable({
                     user.role === 'ADMIN' ? undefined : -1
                 ),
             }}
+            customFilterSlot={
+                user.role === 'ADMIN' || user.role === 'SECRETARY' ? (
+                    <AcademicUnitFilter />
+                ) : null
+            }
             searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
         />
+    )
+}
+/**
+ * Academic unit filter, specific to business in protocol table
+ * @returns
+ */
+const AcademicUnitFilter = () => {
+    const update = useUpdateQuery()
+    const searchParams = useSearchParams()
+    const currentValues = searchParams.get('units')?.split('-')
+
+    const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
+
+    return (
+        <div className="relative mt-4 flex flex-col items-start text-sm">
+            <div className="relative flex flex-wrap gap-2">
+                {values.map((value, i) => {
+                    return (
+                        <Button
+                            onClick={() => {
+                                update({
+                                    units: currentValues
+                                        ? currentValues.includes(value)
+                                            ? currentValues
+                                                  .filter((e) => e !== value)
+                                                  .join('-')
+                                            : currentValues
+                                                  .join('-')
+                                                  .concat('-', value)
+                                        : value,
+                                })
+                            }}
+                            intent="unset"
+                            key={i}
+                        >
+                            <Badge
+                                className={cx(
+                                    'cursor-pointer transition hover:bg-gray-200',
+                                    currentValues?.includes(value) &&
+                                        'bg-gray-300'
+                                )}
+                            >
+                                {value}
+                            </Badge>
+                        </Button>
+                    )
+                })}
+            </div>
+        </div>
     )
 }
