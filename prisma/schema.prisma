@@ -18,7 +18,7 @@ model AcademicUnit {
 type Budget {
   amount Float
   from   DateTime
-  to     DateTime
+  to     DateTime?
 }
 
 model Convocatory {
@@ -98,9 +98,9 @@ model TeamMemberCategory {
 }
 
 type HistoricCategoryPrice {
-  from      DateTime
-  to        DateTime?
-  price     Float
+  from     DateTime
+  to       DateTime?
+  price    Float
   currency String    @default("ARS")
 }
 
