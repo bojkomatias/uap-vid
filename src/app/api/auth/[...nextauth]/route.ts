@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
         strategy: 'jwt',
         maxAge: 7 * 24 * 60 * 60,
     },
+    pages: { signIn: '/' },
     providers: [
         AzureADProvider({
             clientId: process.env.AZURE_AD_CLIENT_ID!,
@@ -81,7 +82,7 @@ export const authOptions: NextAuthOptions = {
         jwt: async ({ token, user }) => {
             if (user && user.email) {
                 const userFromDb = await findUserByEmail(user.email)
-                token.user = userFromDb
+                if (userFromDb) token.user = userFromDb
             }
             return token
         },

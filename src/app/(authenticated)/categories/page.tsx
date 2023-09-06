@@ -1,9 +1,4 @@
 import { PageHeading } from '@layout/page-heading'
-import React from 'react'
-import { canAccess } from '@utils/scopes'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
-import { redirect } from 'next/navigation'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
 import Link from 'next/link'
@@ -15,10 +10,6 @@ export default async function Page({
 }: {
     searchParams: { [key: string]: string }
 }) {
-    const session = await getServerSession(authOptions)
-    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
-        redirect('/protocols')
-
     const [totalRecords, categories] = await getCategories(searchParams)
 
     return (

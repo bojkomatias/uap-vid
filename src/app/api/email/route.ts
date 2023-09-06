@@ -1,18 +1,11 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import { getResearcherEmailByProtocolId } from '@repositories/protocol'
 import { findUserById } from '@repositories/user'
-import { getServerSession } from 'next-auth'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
-    const session = await getServerSession()
-
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-
     const { subject, message, html, protocolId, toUserId } =
         await request.json()
 

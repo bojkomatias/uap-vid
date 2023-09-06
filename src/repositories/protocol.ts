@@ -140,6 +140,7 @@ const getProtocolsByRol = cache(
             id: true,
             state: true,
             createdAt: true,
+            observations: true,
             convocatory: { select: { id: true, name: true, year: true } },
             researcher: {
                 select: { id: true, name: true, role: true, email: true },

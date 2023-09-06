@@ -4,23 +4,20 @@ import { NextResponse } from 'next/server'
 import { State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { getToken } from 'next-auth/jwt'
 
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const session = await getServerSession(authOptions)
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
+    const token = await getToken({ req: request })
     const id = params.id
     const protocol = await request.json()
     if (protocol) delete protocol.id
     const updated = await updateProtocolStateById(id, State.PUBLISHED)
 
     await logProtocolUpdate({
+        user: token!.user,
         fromState: State.DRAFT,
         toState: State.PUBLISHED,
         protocolId: id,

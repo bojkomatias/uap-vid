@@ -1,5 +1,5 @@
 'use client'
-import type { Prisma, User } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
@@ -18,11 +18,9 @@ type UsersWithCount = Prisma.UserGetPayload<{
 export default function UserTable({
     users,
     totalRecords,
-    loggedInUser,
 }: {
     users: UsersWithCount[]
     totalRecords: number
-    loggedInUser: User
 }) {
     const columns = useMemo<ColumnDef<UsersWithCount>[]>(
         () => [
@@ -76,30 +74,22 @@ export default function UserTable({
                 accessorKey: 'role',
                 header: 'Rol',
                 // Guard for not changing your own role.
-                cell: ({ row }) =>
-                    row.original.id === loggedInUser.id ? (
-                        <></>
-                    ) : (
-                        <RoleUpdater user={row.original} />
-                    ),
+                cell: ({ row }) => <RoleUpdater user={row.original} />,
             },
             {
                 accessorKey: 'delete',
                 header: 'Acciones',
-                cell: ({ row }) =>
-                    row.original.role === 'ADMIN' ? (
-                        <></>
-                    ) : (
-                        <DeleteUserButton
-                            userId={row.original.id}
-                            className="px-2.5 py-1 text-xs"
-                        />
-                    ),
+                cell: ({ row }) => (
+                    <DeleteUserButton
+                        userId={row.original.id}
+                        className="px-2.5 py-1 text-xs"
+                    />
+                ),
                 enableHiding: false,
                 enableSorting: false,
             },
         ],
-        [loggedInUser.id]
+        []
     )
     /** Explicitly announce initial state of hidden columns. */
     const initialVisible = { id: false, protocols: false, Review: false }
