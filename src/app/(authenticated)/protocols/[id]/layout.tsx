@@ -88,7 +88,7 @@ async function Layout({
                 session.user.role,
                 protocol.state
             ) ? (
-                <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+                <div className="relative z-10 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
                         protocolId={protocol.id}
                         researcherId={protocol.researcherId}
