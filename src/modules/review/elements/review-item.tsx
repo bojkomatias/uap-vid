@@ -9,14 +9,15 @@ import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight } from 'tabler-icons-react'
 import ReviewVerdictBadge from './review-verdict-badge'
-import { emailer, useCases } from '@utils/emailer'
 
 export default function ReviewItem({
     review,
     role,
+    isOwner,
 }: {
     review: Review & { reviewer: User }
     role: Role
+    isOwner: boolean
 }) {
     function getDuration(milliseconds: number) {
         const minutes = Math.floor(milliseconds / 60000)
@@ -51,7 +52,7 @@ export default function ReviewItem({
 
                         {review.verdict ===
                         ReviewVerdict.APPROVED_WITH_CHANGES ? (
-                            role === Role.RESEARCHER ? (
+                            isOwner ? (
                                 <ReviseCheckbox
                                     id={review.id}
                                     revised={review.revised}
@@ -126,7 +127,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
     return (
         <span>
             <input
-                disabled={isPending}
+                disabled={isPending || revised}
                 id={`revised-${id}`}
                 name={`revised-${id}`}
                 type="checkbox"

@@ -253,8 +253,6 @@ export async function emailer({ useCase, email, protocolId }: Emailer) {
         html: html,
     }
 
-    console.log('SENDING EMAIL!', emailObject)
-
     transporter.sendMail(emailObject, (err) => {
         if (err) {
             return new Response('Error sending email', { status: 500 })
