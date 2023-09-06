@@ -7,8 +7,9 @@ type ReviewStateProps = {
     id: string
     role: Role
     state: State
+    isOwner: boolean
 }
-async function ReviewList({ id, role, state }: ReviewStateProps) {
+async function ReviewList({ id, role, state, isOwner }: ReviewStateProps) {
     const reviews = await getReviewsByProtocol(id)
 
     if (
@@ -44,14 +45,24 @@ async function ReviewList({ id, role, state }: ReviewStateProps) {
             {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ? (
                 <ul role="list" className="space-y-3 px-1">
                     {reviewsInState.map((r, i) => (
-                        <ReviewItem key={i} review={r} role={role} />
+                        <ReviewItem
+                            key={i}
+                            review={r}
+                            role={role}
+                            isOwner={isOwner}
+                        />
                     ))}
                 </ul>
             ) : null}
             {reviewsNotInState.length > 0 && (
                 <ul role="list" className="space-y-3 px-1 pt-3">
                     {reviewsNotInState.map((r, i) => (
-                        <ReviewItem key={i} review={r} role={role} />
+                        <ReviewItem
+                            key={i}
+                            review={r}
+                            role={role}
+                            isOwner={isOwner}
+                        />
                     ))}
                 </ul>
             )}

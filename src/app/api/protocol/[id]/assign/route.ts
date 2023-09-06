@@ -11,6 +11,7 @@ import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { emailer, useCases } from '@utils/emailer'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -54,6 +55,11 @@ export async function PUT(
                     { status: 500 }
                 )
             }
+            emailer({
+                useCase: useCases.onAssignation,
+                email: newReview.reviewer.email,
+                protocolId: newReview.protocolId,
+            })
 
             const protocol =
                 data.type === ReviewType.SCIENTIFIC_THIRD
@@ -83,7 +89,11 @@ export async function PUT(
             data.reviewerId,
             data.type
         )
-
+        emailer({
+            useCase: useCases.onAssignation,
+            email: updatedReview.reviewer.email,
+            protocolId: updatedReview.protocolId,
+        })
         return NextResponse.json({ updatedReview }, { status: 200 })
     }
     return new Response('Unauthorized', { status: 401 })

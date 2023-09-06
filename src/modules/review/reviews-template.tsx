@@ -33,7 +33,7 @@ export default async function ReviewsTemplate({
             ) : null}
 
             {userId === researcherId || canAccess(ACCESS.REVIEWS, userRole) ? (
-                <ReviewList role={userRole} state={state} id={id} />
+                <ReviewList role={userRole} state={state} id={id} isOwner={userId===researcherId} />
             ) : null}
         </aside>
     )

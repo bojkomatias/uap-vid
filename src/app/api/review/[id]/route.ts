@@ -5,6 +5,7 @@ import { markRevised, updateReview } from '@repositories/review'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { Role } from '@prisma/client'
+import { emailer, useCases } from '@utils/emailer'
 
 export async function PUT(request: NextRequest) {
     const session = await getServerSession(authOptions)
@@ -18,6 +19,13 @@ export async function PUT(request: NextRequest) {
     const data = await request.json()
     const review = await updateReview(data)
 
+    if (review) {
+        emailer({
+            useCase: useCases.onReview,
+            email: review.protocol.researcher.email,
+            protocolId: review.protocolId,
+        })
+    }
     return NextResponse.json(review)
 }
 
@@ -30,7 +38,15 @@ export async function PATCH(
         return new Response('Unauthorized', { status: 401 })
     }
 
-    const data = await request.json()
-    const review = await markRevised(params.id, data)
-    return NextResponse.json(review)
+    const revised = await request.json()
+    const review = await markRevised(params.id, revised)
+    if (review) {
+        emailer({
+            useCase: useCases.onRevised,
+            email: review.reviewer.email,
+            protocolId: review.protocolId,
+        })
+        return NextResponse.json(review)
+    }
+    return new Response('Error revising the review', { status: 500 })
 }

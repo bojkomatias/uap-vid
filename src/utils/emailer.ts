@@ -1,24 +1,32 @@
+import { getResearcherEmailByProtocolId } from '@repositories/protocol'
+import { findUserById } from '@repositories/user'
+import nodemailer from 'nodemailer'
+
 export enum useCases {
     onReview,
+    onRevised,
     onAssignation,
 }
 
 const messages = {
     [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
-
+    [useCases.onRevised]:
+        'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
 }
 
 const subjects = {
     [useCases.onReview]: 'Proyecto evaluado',
+    [useCases.onRevised]: 'Correcciones revisadas',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
 }
+type Emailer = {
+    useCase: useCases
+    email: string
+    protocolId: string
+}
 
-export async function emailer(
-    useCase: useCases,
-    protocolId: string,
-    toUserId?: string
-) {
+export async function emailer({ useCase, email, protocolId }: Emailer) {
     // Variable used in template to redirect (hardcoded cause process.env failed.)
     const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
     const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -230,22 +238,36 @@ export async function emailer(
     
     </html>`
 
-    const dataObject = {
-        subject: subjects[useCase],
-        message: messages[useCase],
-        html: html,
-        protocolId: protocolId,
-        toUserId: toUserId,
-    }
-
-    const res = await fetch('/api/email', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataObject),
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
     })
 
-    return res.json()
+    const emailObject = {
+        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
+        to: email,
+        subject: subjects[useCase],
+        text: messages[useCase],
+        html: html,
+    }
+
+    transporter.sendMail(emailObject, (err) => {
+        if (err) {
+            return new Response('Error sending email', { status: 500 })
+        } else {
+            return new Response('Successfully sent email', { status: 250 })
+        }
+    })
+
+    transporter.verify(function (error, success) {
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.log(`Error sending the email: ${error}`)
+        } else {
+            // eslint-disable-next-line no-console
+            console.log(`Email sent: ${success}`)
+        }
+    })
 }
