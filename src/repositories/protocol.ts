@@ -8,7 +8,6 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 
-
 const findProtocolByIdWithResearcher = cache(
     async (id: string) =>
         await prisma.protocol.findUnique({
@@ -386,6 +385,7 @@ const getProtocolsByRol = cache(
                                 },
                                 whereSearch,
                                 whereFilter,
+                                whereUnits,
                             ],
 
                             NOT: { state: 'DELETED' },
@@ -425,6 +425,7 @@ const getProtocolsByRol = cache(
                                 },
                                 whereSearch,
                                 whereFilter,
+                                whereUnits,
                             ],
 
                             NOT: { state: 'DELETED' },
