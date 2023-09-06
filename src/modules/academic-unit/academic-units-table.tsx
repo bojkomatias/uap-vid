@@ -27,7 +27,7 @@ export default async function AcademicUnitsTable({
         const priceInput = document.getElementById(
             'price-input'
         ) as HTMLInputElement
-        const newAmount = parseLocaleNumber(priceInput.value, 'de-DE')
+        const newAmount = parseLocaleNumber(priceInput.value, 'es-AR')
 
         // Create a new budget object
         const newBudget = {
@@ -97,7 +97,7 @@ export default async function AcademicUnitsTable({
     const columns: ColumnDef<AcademicUnit>[] = [
         {
             accessorKey: 'name',
-            header: 'Unidad Academica',
+            header: 'Unidad Académica',
             enableHiding: false,
             enableSorting: true,
         },

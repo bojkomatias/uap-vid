@@ -9,7 +9,7 @@ export const relativeTimeFormatter = new Intl.RelativeTimeFormat('es-AR')
 export const formatCurrency = (value: string) => {
     const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
     const numberValue = Number(formattedValue)
-    return new Intl.NumberFormat('de-DE', {
+    return new Intl.NumberFormat('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     }).format(numberValue / 100) // Convert back to number before formatting
