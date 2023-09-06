@@ -6,6 +6,7 @@ import {
     UserSearch,
     Users,
     Category,
+    CurrencyDollar,
 } from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
@@ -94,6 +95,12 @@ export const navigation = [
         name: 'Categorías de miembros de equipo de investigación',
         icon: Category,
         href: '/categories',
-        scope: ACCESS.USERS,
+        scope: ACCESS.TEAM_MEMBERS,
+    },
+    {
+        name: 'Presupuestos anuales',
+        icon: CurrencyDollar,
+        href: '/anual-budget',
+        scope: ACCESS.TEAM_MEMBERS,
     },
 ]

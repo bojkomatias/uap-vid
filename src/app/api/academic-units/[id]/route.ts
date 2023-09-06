@@ -8,9 +8,9 @@ export async function PUT(
     { params }: { params: { id: string } }
 ) {
     const id = params.id
-    const secretariesIds = await request.json()
+    const academicUnit = await request.json()
 
-    if (!id || !secretariesIds) {
+    if (!id || !academicUnit) {
         return new Response(
             'We cannot update your academic unit: Invalid Data',
             {
@@ -19,7 +19,7 @@ export async function PUT(
         )
     }
 
-    const updated = await updateAcademicUnit(id, secretariesIds)
+    const updated = await updateAcademicUnit(id, academicUnit)
 
     if (!updated) {
         return new Response('We cannot update your academic unit', {

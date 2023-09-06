@@ -5,6 +5,7 @@ import type { Protocol } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { Prisma } from '@prisma/client'
 
 const findProtocolByIdWithResearcher = cache(
     async (id: string) =>
@@ -183,6 +184,8 @@ const getProtocolsByRol = cache(
                                       is: {
                                           title: {
                                               contains: search,
+                                              mode: Prisma.QueryMode
+                                                  .insensitive,
                                           },
                                       },
                                   },
