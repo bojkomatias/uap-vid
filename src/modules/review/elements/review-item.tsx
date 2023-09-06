@@ -88,7 +88,7 @@ export default function ReviewItem({
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
                         <span className="font-semibold text-gray-700">
-                            {role === Role.ADMIN || Role.SECRETARY
+                            {role === Role.ADMIN || role === Role.SECRETARY
                                 ? review.reviewer.name
                                 : null}
                         </span>
