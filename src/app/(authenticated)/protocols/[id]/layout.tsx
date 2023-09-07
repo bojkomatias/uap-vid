@@ -16,6 +16,7 @@ import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
+import GenerateAnualBudgetButton from '@protocol/elements/action-buttons/generate-anual-budget'
 
 async function Layout({
     params,
@@ -77,6 +78,11 @@ async function Layout({
                             state: protocol.state,
                             researcherId: protocol.researcherId,
                         }}
+                    />
+                    <GenerateAnualBudgetButton
+                        user={session.user}
+                        protocol={protocol}
+                        reviews={reviews}
                     />
                     <EditButton
                         user={session.user}
