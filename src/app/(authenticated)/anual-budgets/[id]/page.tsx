@@ -1,3 +1,4 @@
+import { PageHeading } from '@layout/page-heading'
 import type { AnualBudget } from '@prisma/client'
 import AnualBudgetForm from 'modules/anual-budget/anual-budget-form'
 
@@ -25,5 +26,10 @@ export default function Page() {
             },
         ],
     }
-    return <AnualBudgetForm protocolBudget={ProtocolAnualBudget} />
+    return (
+        <>
+            <PageHeading title={'Presupuesto anual'} />
+            <AnualBudgetForm protocolBudget={ProtocolAnualBudget} />
+        </>
+    )
 }
