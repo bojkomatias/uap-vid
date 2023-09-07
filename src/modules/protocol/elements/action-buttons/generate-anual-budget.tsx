@@ -2,6 +2,7 @@
 'use client'
 
 import type {
+    AnualBudget,
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
@@ -13,6 +14,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
 import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
+import Currency from '@elements/currency'
 
 type ActionButtonTypes = {
     id: string
@@ -29,7 +31,24 @@ export default function GenerateAnualBudgetButton({
 
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
 
-    console.log(protocolBudgetToAnualBudget(id, budgetItems, teamMembers))
+    const formattedBudget = protocolBudgetToAnualBudget(
+        id,
+        budgetItems,
+        teamMembers
+    )
+
+    const generateAnualBudget = async (budget: AnualBudget) => {
+        return await fetch(`/api/anual-budget/`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(budget),
+        }).then((res) => {
+            console.log(res)
+        })
+    }
 
     return (
         <>
@@ -89,14 +108,14 @@ export default function GenerateAnualBudgetButton({
                                     <span>Item</span>
                                     <span>Monto total</span>
                                 </div>
-                                {budgetItems['expenses'].map((d, idx) => {
+                                {formattedBudget.budgetItems.map((i, idx) => {
                                     return (
                                         <div
                                             key={idx}
                                             className="flex  justify-between"
                                         >
-                                            <span>Item del budget</span>
-                                            <span>$20.000,00</span>
+                                            <div>{i.detail}</div>
+                                            <Currency amount={i.amount} />
                                         </div>
                                     )
                                 })}
@@ -110,7 +129,13 @@ export default function GenerateAnualBudgetButton({
                             Editar miembos de equipo
                         </Link>
                     ) : (
-                        'Generar presupuesto'
+                        <span
+                            onClick={() => {
+                                generateAnualBudget(formattedBudget)
+                            }}
+                        >
+                            Generar presupuesto
+                        </span>
                     )}
                 </Button>
             </Modal>
