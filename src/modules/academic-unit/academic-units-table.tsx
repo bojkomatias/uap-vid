@@ -3,16 +3,17 @@ import type { AcademicUnit, User } from '@prisma/client'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@elements/tan-stack-table'
-import { Badge } from '@elements/badge'
+
 import { dateFormatter, formatCurrency } from '@utils/formatters'
 import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
-import PopoverButton from '@elements/popover'
+
 import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 import { useRouter } from 'next/navigation'
 import { Check, X } from 'tabler-icons-react'
 import Currency from '@elements/currency'
 import AcademicUnitView from './academic-unit-view'
+
 export default async function AcademicUnitsTable({
     academicUnits,
     secretaries,
@@ -165,7 +166,8 @@ export default async function AcademicUnitsTable({
                             <Button
                                 className="py-1.5 text-xs shadow-sm"
                                 intent="secondary"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.preventDefault()
                                     updateBudget(row.original)
                                 }}
                             >
