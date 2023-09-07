@@ -6,8 +6,9 @@ import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import UserView from './user-view'
 
-type UsersWithCount = Prisma.UserGetPayload<{
+type UserWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
 }>
 /**
@@ -19,10 +20,10 @@ export default function UserTable({
     users,
     totalRecords,
 }: {
-    users: UsersWithCount[]
+    users: UserWithCount[]
     totalRecords: number
 }) {
-    const columns = useMemo<ColumnDef<UsersWithCount>[]>(
+    const columns = useMemo<ColumnDef<UserWithCount>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -74,16 +75,25 @@ export default function UserTable({
                 accessorKey: 'role',
                 header: 'Rol',
                 // Guard for not changing your own role.
-                cell: ({ row }) => <RoleUpdater user={row.original} />,
+                cell: ({ row }) => (
+                    <span>{RolesDictionary[row.original.role]} </span>
+                ),
             },
             {
                 accessorKey: 'delete',
                 header: 'Acciones',
                 cell: ({ row }) => (
-                    <DeleteUserButton
-                        userId={row.original.id}
-                        className="px-2.5 py-1 text-xs"
-                    />
+                    <div className="flex gap-2">
+                        <UserView userInfo={row.original}>
+                            {' '}
+                            <p>Cambiar rol del usuario</p>
+                            <RoleUpdater user={row.original} />
+                        </UserView>
+                        <DeleteUserButton
+                            userId={row.original.id}
+                            className="px-2.5 py-1 text-xs"
+                        />
+                    </div>
                 ),
                 enableHiding: false,
                 enableSorting: false,

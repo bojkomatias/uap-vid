@@ -25,7 +25,7 @@ export const RoleSelector = ({
             {({ open }) => (
                 <>
                     <div className="relative mt-1 w-full max-w-xs">
-                        <Listbox.Button className="input text-left">
+                        <Listbox.Button className="input bg-white/90 text-left">
                             <span className="">
                                 {RolesDictionary[user.role]}
                             </span>
