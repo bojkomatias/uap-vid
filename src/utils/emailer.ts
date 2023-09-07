@@ -1,27 +1,30 @@
+import nodemailer from 'nodemailer'
+
 export enum useCases {
-    emailUpdate,
     onReview,
+    onRevised,
     onAssignation,
 }
 
 const messages = {
     [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
-    [useCases.emailUpdate]: 'Código para actualizar tu email: ',
+    [useCases.onRevised]:
+        'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
 }
 
 const subjects = {
     [useCases.onReview]: 'Proyecto evaluado',
+    [useCases.onRevised]: 'Correcciones revisadas',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
-    [useCases.emailUpdate]: 'Actualización de email',
+}
+type Emailer = {
+    useCase: useCases
+    email: string
+    protocolId: string
 }
 
-export async function emailer(
-    useCase: useCases,
-    protocolId?: string,
-    toUserId?: string,
-    emailCode?: string
-) {
+export async function emailer({ useCase, email, protocolId }: Emailer) {
     // Variable used in template to redirect (hardcoded cause process.env failed.)
     const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
     const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -399,9 +402,7 @@ export async function emailer(
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${
-          (messages[useCase], emailCode)
-      }</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}</h1>
     
           </td>
         </tr>
@@ -441,22 +442,36 @@ export async function emailer(
     
     </html>`
 
-    const dataObject = {
-        subject: subjects[useCase],
-        message: messages[useCase],
-        html: emailCode ? htmlEmailUpdate : html,
-        protocolId: protocolId,
-        toUserId: toUserId,
-    }
-
-    const res = await fetch('/api/email', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataObject),
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
     })
 
-    return res.json()
+    const emailObject = {
+        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
+        to: email,
+        subject: subjects[useCase],
+        text: messages[useCase],
+        html: html,
+    }
+
+    transporter.sendMail(emailObject, (err) => {
+        if (err) {
+            return new Response('Error sending email', { status: 500 })
+        } else {
+            return new Response('Successfully sent email', { status: 250 })
+        }
+    })
+
+    transporter.verify(function (error, success) {
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.log(`Error sending the email: ${error}`)
+        } else {
+            // eslint-disable-next-line no-console
+            console.log(`Email sent: ${success}`)
+        }
+    })
 }

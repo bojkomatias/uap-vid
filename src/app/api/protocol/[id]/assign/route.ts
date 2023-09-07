@@ -11,6 +11,7 @@ import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
 import { canExecute } from '@utils/scopes'
+import { emailer, useCases } from '@utils/emailer'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
@@ -45,8 +46,8 @@ export async function PUT(
     )
         return new Response('Not allowed', { status: 406 })
 
+    //If is new review, create it
     if (!data.review) {
-        //If is new review, create it
         const newReview = await assignReviewerToProtocol(
             params.id,
             data.reviewerId,
@@ -58,6 +59,11 @@ export async function PUT(
                 { status: 500 }
             )
         }
+        emailer({
+            useCase: useCases.onAssignation,
+            email: newReview.reviewer.email,
+            protocolId: newReview.protocolId,
+        })
 
         const protocol =
             data.type === ReviewType.SCIENTIFIC_THIRD
@@ -84,10 +90,15 @@ export async function PUT(
     //If is existing review, update it
     const updatedReview = await reassignReviewerToProtocol(
         data.review.id,
+
         params.id,
         data.reviewerId,
         data.type
     )
-
+    emailer({
+        useCase: useCases.onAssignation,
+        email: updatedReview.reviewer.email,
+        protocolId: updatedReview.protocolId,
+    })
     return NextResponse.json({ updatedReview }, { status: 200 })
 }
