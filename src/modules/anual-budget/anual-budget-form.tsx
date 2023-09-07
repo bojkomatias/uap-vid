@@ -1,14 +1,36 @@
 'use client'
 import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
-import type { AnualBudget } from '@prisma/client'
+import type { AnualBudget, Prisma } from '@prisma/client'
 import { ProtocolAnualBudgetSchema } from '@utils/zod'
 import React from 'react'
 
+type AnualBudgetWithRelations = Prisma.AnualBudgetGetPayload<{
+    select: {
+        id: true
+        protocolId: true
+        createdAt: true
+        updatedAt: true
+        year: true
+        budgetTeamMembers: { select: { teamMember: true } }
+        budgetItems: true
+        protocol: {
+            select: {
+                sections: {
+                    select: {
+                        identification: {
+                            select: { title: true; sponsor: true }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}>
 export default function AnualBudgetForm({
     protocolBudget,
 }: {
-    protocolBudget: AnualBudget
+    protocolBudget: AnualBudgetWithRelations
 }) {
     const form = useForm({
         initialValues: protocolBudget,
@@ -29,7 +51,7 @@ export default function AnualBudgetForm({
                 </pre>
                 <div>
                     {form.values.budgetTeamMembers.map((tm, i) => (
-                        <div key={i}>{tm.teamMemberId}</div>
+                        <div key={i}>{tm.teamMember.id}</div>
                     ))}
                 </div>
             </div>
