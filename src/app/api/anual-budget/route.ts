@@ -8,6 +8,7 @@ export async function POST(request: NextRequest) {
     const created = await createAnualBudget({
         ...data,
     })
+    console.log(created)
 
     if (!created) {
         return new Response('Problema al crear la categoría', {

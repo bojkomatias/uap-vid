@@ -29,15 +29,11 @@ export const getAnualBudgetById = cache(
         })
 )
 
-export const createAnualBudget = async (data: AnualBudget) => {
-    try {
-        return await prisma.anualBudget.create({
-            data,
-        })
-    } catch (e) {
-        return null
-    }
-}
+export const createAnualBudget = async (data: AnualBudget) =>
+    await prisma.anualBudget.create({
+        data,
+    })
+
 export const updateAnualBudget = async (data: AnualBudget) => {
     const { id, ...rest } = data
     try {
