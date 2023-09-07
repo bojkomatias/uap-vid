@@ -1,10 +1,10 @@
-import type { Budget } from '@prisma/client'
+import type { AnualBudget } from '@prisma/client'
 import React from 'react'
 
 export default function AnualBudgetForm({
-    ProtocolBudget,
+    protocolBudget,
 }: {
-    ProtocolBudget: Budget
+    protocolBudget: AnualBudget
 }) {
-    return <div>{JSON.stringify(ProtocolBudget, null, 2)}</div>
+    return <div>{JSON.stringify(protocolBudget, null, 2)}</div>
 }
