@@ -5,6 +5,7 @@ import type { Protocol } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { Prisma } from '@prisma/client'
 
 const findProtocolByIdWithResearcher = cache(
     async (id: string) =>
@@ -139,6 +140,7 @@ const getProtocolsByRol = cache(
             id: true,
             state: true,
             createdAt: true,
+            observations: true,
             convocatory: { select: { id: true, name: true, year: true } },
             researcher: {
                 select: { id: true, name: true, role: true, email: true },
@@ -182,6 +184,8 @@ const getProtocolsByRol = cache(
                                       is: {
                                           title: {
                                               contains: search,
+                                              mode: Prisma.QueryMode
+                                                  .insensitive,
                                           },
                                       },
                                   },
@@ -195,13 +199,22 @@ const getProtocolsByRol = cache(
                                       is: {
                                           modality: {
                                               contains: search,
+                                              mode: Prisma.QueryMode
+                                                  .insensitive,
                                           },
                                       },
                                   },
                               },
                           },
                       },
-                      { researcher: { name: { contains: search } } },
+                      {
+                          researcher: {
+                              name: {
+                                  contains: search,
+                                  mode: Prisma.QueryMode.insensitive,
+                              },
+                          },
+                      },
                   ],
               }
             : {}

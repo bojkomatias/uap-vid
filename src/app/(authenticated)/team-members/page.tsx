@@ -1,12 +1,8 @@
 import { buttonStyle } from '@elements/button/styles'
 import { PageHeading } from '@layout/page-heading'
 import { getTeamMembers } from '@repositories/team-member'
-import { canAccess } from '@utils/scopes'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import TeamMemberTable from 'modules/team-member/team-member-table'
-import { getServerSession } from 'next-auth'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { UserPlus } from 'tabler-icons-react'
 
 export default async function Page({
@@ -14,10 +10,6 @@ export default async function Page({
 }: {
     searchParams: { [key: string]: string }
 }) {
-    const session = await getServerSession(authOptions)
-    if (!session || !canAccess('TEAM_MEMBERS', session.user.role))
-        redirect('/protocols')
-
     const [totalRecords, teamMembers] = await getTeamMembers(searchParams)
 
     return (

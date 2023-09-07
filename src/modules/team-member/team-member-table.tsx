@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
 import { Check, Minus } from 'tabler-icons-react'
+import Currency from '@elements/currency'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
     include: {
@@ -76,20 +77,18 @@ export default function TeamMemberTable({
                     row.categories.at(-1)?.category.price.at(-1),
                 header: 'Valor hora',
                 cell: ({ row }) => (
-                    <span className='ml-4 before:content-["$"]'>
-                        {
+                    <Currency
+                        amount={
                             row.original.categories
                                 .at(-1)
                                 ?.category.price.at(-1)?.price
                         }
-                        <span className="mx-1 text-xs text-gray-500">
-                            {
-                                row.original.categories
-                                    .at(-1)
-                                    ?.category.price.at(-1)?.currency
-                            }
-                        </span>
-                    </span>
+                        currency={
+                            row.original.categories
+                                .at(-1)
+                                ?.category.price.at(-1)?.currency
+                        }
+                    />
                 ),
                 enableSorting: false,
             },

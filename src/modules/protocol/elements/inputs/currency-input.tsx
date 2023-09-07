@@ -1,6 +1,7 @@
 import { cx } from '@utils/cx'
 import type { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../../../utils/createContext'
+import CurrencyInputElement from '@elements/currency-input'
 
 const CurrencyInput = ({
     path,
@@ -27,13 +28,9 @@ const CurrencyInput = ({
             <div className="pointer-events-none absolute right-3 top-8 mt-1 flex items-center">
                 <span className="text-sm text-gray-400">ARS</span>
             </div>
-            <input
-                value={form
-                    .getInputProps(path)
-                    .value.toString()
-                    .replace(/\D/g, '')
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                onChange={(e) => {
+            <CurrencyInputElement
+                defaultPrice={form.getInputProps(path).value}
+                priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (isNaN(form.getInputProps(path).value)) {
                         return form.setFieldValue(path, 0)
                     }
@@ -46,15 +43,8 @@ const CurrencyInput = ({
                         )
                     )
                 }}
-                onBlur={() => {
-                    if (isNaN(form.getInputProps(path).value)) {
-                        form.setFieldValue(path, 0)
-                    }
-                }}
-                className="input pl-6"
-                placeholder={label}
-                autoComplete="off"
             />
+
             {form.getInputProps(path).error ? (
                 <p className="error">*{form.getInputProps(path).error}</p>
             ) : null}

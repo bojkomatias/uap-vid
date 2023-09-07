@@ -11,12 +11,14 @@ import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
+import Observation from '../action-buttons/observation'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
         id: true
         state: true
         createdAt: true
+        observations: true
         convocatory: { select: { id: true; name: true } }
         researcher: {
             select: { id: true; name: true; role: true; email: true }
@@ -60,6 +62,17 @@ export default function ProtocolTable({
                         <UserIcon className="h-4 w-4 text-gray-600" />
                     ),
                 enableHiding: false,
+                enableSorting: false,
+            },
+            {
+                accessorKey: 'observation',
+                header: '',
+                cell: ({ row }) => (
+                    <Observation
+                        id={row.original.id}
+                        observations={row.original.observations}
+                    />
+                ),
                 enableSorting: false,
             },
             {
@@ -233,6 +246,7 @@ export default function ProtocolTable({
                     user.role === 'SECRETARY' ||
                     user.role === 'RESEARCHER',
             },
+
             {
                 accessorKey: 'actions',
                 header: 'Acciones',
