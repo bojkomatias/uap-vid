@@ -80,8 +80,9 @@ async function Layout({
                         }}
                     />
                     <GenerateAnualBudgetButton
-                        user={session.user}
-                        protocol={protocol}
+                        id={protocol.id}
+                        budgetItems={protocol.sections.budget}
+                        teamMembers={protocol.sections.identification.team}
                         reviews={reviews}
                     />
                     <EditButton
