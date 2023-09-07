@@ -8,14 +8,14 @@ datasource db {
 }
 
 model AcademicUnit {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String               @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  secretaries    User[]   @relation(fields: [secretariesIds], references: [id])
-  secretariesIds String[] @db.ObjectId
-  budgets        Budget[]
+  secretaries    User[]               @relation(fields: [secretariesIds], references: [id])
+  secretariesIds String[]             @db.ObjectId
+  budgets        AcademicUnitBudget[]
 }
 
-type Budget {
+type AcademicUnitBudget {
   amount Float
   from   DateTime
   to     DateTime?
@@ -121,8 +121,8 @@ model Review {
 
 model AnualBudget {
   id                String                  @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @default(now())
+  createdAt         DateTime?               @default(now())
+  updatedAt         DateTime?               @default(now())
   budgetItems       AnualBudgetItem[]
   budgetTeamMembers AnualBudgetTeamMember[]
   year              Int
