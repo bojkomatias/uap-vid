@@ -199,13 +199,22 @@ const getProtocolsByRol = cache(
                                       is: {
                                           modality: {
                                               contains: search,
+                                              mode: Prisma.QueryMode
+                                                  .insensitive,
                                           },
                                       },
                                   },
                               },
                           },
                       },
-                      { researcher: { name: { contains: search } } },
+                      {
+                          researcher: {
+                              name: {
+                                  contains: search,
+                                  mode: Prisma.QueryMode.insensitive,
+                              },
+                          },
+                      },
                   ],
               }
             : {}
