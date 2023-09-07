@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
-import { buttonStyle } from '@elements/button/styles'
+
 import type {
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
-    Review,
-    User,
 } from '@prisma/client'
 
 import { TeamMemberRelation } from '@utils/zod'
@@ -13,23 +12,24 @@ import { FileDollar } from 'tabler-icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
+import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
 
 type ActionButtonTypes = {
     id: string
     budgetItems: ProtocolSectionsBudget
     teamMembers: ProtocolSectionsIdentificationTeam[]
-    reviews: Review[]
 }
 
 export default function GenerateAnualBudgetButton({
     id,
     budgetItems,
     teamMembers,
-    reviews,
 }: ActionButtonTypes) {
     const [opened, { open, close }] = useDisclosure(false)
 
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
+
+    console.log(protocolBudgetToAnualBudget(id, budgetItems, teamMembers))
 
     return (
         <>

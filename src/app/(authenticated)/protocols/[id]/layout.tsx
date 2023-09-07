@@ -83,7 +83,6 @@ async function Layout({
                         id={protocol.id}
                         budgetItems={protocol.sections.budget}
                         teamMembers={protocol.sections.identification.team}
-                        reviews={reviews}
                     />
                     <EditButton
                         user={session.user}
