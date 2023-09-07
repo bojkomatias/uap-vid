@@ -5,10 +5,8 @@ import { createAnualBudget } from '@repositories/anual-budget'
 
 export async function POST(request: NextRequest) {
     const data = await request.json()
-    const created = await createAnualBudget({
-        ...data,
-    })
-    console.log(created)
+
+    const created = await createAnualBudget(data)
 
     if (!created) {
         return new Response('Problema al crear la categoría', {
