@@ -50,7 +50,10 @@ const ReviewAssignation = async ({
         {
             type: ReviewType.SCIENTIFIC_INTERNAL,
             users: users.filter(
-                (u) => u.role === Role.SCIENTIST && assignedExternal !== u.id
+                (u) =>
+                    u.role === Role.SCIENTIST &&
+                    assignedExternal !== u.id &&
+                    u.id !== researcherId
             ),
             enabled:
                 canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&
@@ -65,7 +68,10 @@ const ReviewAssignation = async ({
         {
             type: ReviewType.SCIENTIFIC_EXTERNAL,
             users: users.filter(
-                (u) => u.role === Role.SCIENTIST && assignedInternal !== u.id
+                (u) =>
+                    u.role === Role.SCIENTIST &&
+                    assignedInternal !== u.id &&
+                    u.id !== researcherId
             ),
             enabled:
                 canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&
@@ -83,7 +89,8 @@ const ReviewAssignation = async ({
                 (u) =>
                     u.role === Role.SCIENTIST &&
                     assignedInternal !== u.id &&
-                    assignedExternal !== u.id
+                    assignedExternal !== u.id &&
+                    u.id !== researcherId
             ),
             enabled:
                 canExecute('ASSIGN_TO_SCIENTIFIC', role, protocolState) &&

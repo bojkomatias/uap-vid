@@ -6,6 +6,7 @@ import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma } from '@prisma/client'
+import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 
 const findProtocolByIdWithResearcher = cache(
     async (id: string) =>
@@ -126,6 +127,7 @@ const getProtocolsByRol = cache(
             order,
             filter,
             values,
+            units, // - separated string (FACEA-FCS)
         }: { [key: string]: string }
     ) => {
         if (!id) throw Error('No ID passed')
@@ -222,9 +224,29 @@ const getProtocolsByRol = cache(
         const whereFilter =
             filter && values ? { [filter]: { in: values.split('-') } } : {}
 
+        const whereUnits = units
+            ? {
+                  sections: {
+                      is: {
+                          identification: {
+                              is: {
+                                  sponsor: {
+                                      hasSome: units
+                                          .split('-')
+                                          .map(
+                                              (e) => AcademicUnitsDictionary[e]
+                                          ),
+                                  },
+                              },
+                          },
+                      },
+                  },
+              }
+            : {}
+
         const queryBuilder = async () => {
-            const query = {
-                [ROLE.RESEARCHER]: prisma.$transaction([
+            if (role === ROLE.RESEARCHER)
+                return prisma.$transaction([
                     prisma.protocol.count({
                         where: {
                             AND: [
@@ -253,8 +275,9 @@ const getProtocolsByRol = cache(
                             NOT: { state: 'DELETED' },
                         },
                     }),
-                ]),
-                [ROLE.METHODOLOGIST]: prisma.$transaction([
+                ])
+            if (role === ROLE.METHODOLOGIST || role === ROLE.SCIENTIST)
+                return prisma.$transaction([
                     prisma.protocol.count({
                         where: {
                             AND: [
@@ -305,63 +328,7 @@ const getProtocolsByRol = cache(
                             NOT: { state: 'DELETED' },
                         },
                     }),
-                ]),
-                [ROLE.SCIENTIST]: prisma.$transaction([
-                    prisma.protocol.count({
-                        where: {
-                            AND: [
-                                // Business logic
-                                {
-                                    reviews: {
-                                        some: { reviewerId: id },
-                                    },
-                                },
-                                whereSearch,
-                                whereFilter,
-                            ],
-
-                            NOT: { state: 'DELETED' },
-                        },
-                    }),
-                    prisma.protocol.findMany({
-                        skip,
-                        take,
-                        select,
-                        orderBy,
-                        where: {
-                            AND: [
-                                // Business logic
-                                {
-                                    reviews: {
-                                        some: { reviewerId: id },
-                                    },
-                                },
-                                whereSearch,
-                                whereFilter,
-                            ],
-
-                            NOT: { state: 'DELETED' },
-                        },
-                    }),
-                ]),
-                [ROLE.ADMIN]: prisma.$transaction([
-                    prisma.protocol.count({
-                        where: {
-                            AND: [whereSearch, whereFilter],
-                        },
-                    }),
-                    prisma.protocol.findMany({
-                        skip,
-                        take,
-                        select,
-                        where: {
-                            AND: [whereSearch, whereFilter],
-                        },
-                        orderBy,
-                    }),
-                ]),
-            }
-
+                ])
             if (role === ROLE.SECRETARY) {
                 const academicUnits = await getAcademicUnitsByUserId(id)
                 return prisma.$transaction([
@@ -395,6 +362,7 @@ const getProtocolsByRol = cache(
                                 },
                                 whereSearch,
                                 whereFilter,
+                                whereUnits,
                             ],
 
                             NOT: { state: 'DELETED' },
@@ -434,6 +402,7 @@ const getProtocolsByRol = cache(
                                 },
                                 whereSearch,
                                 whereFilter,
+                                whereUnits,
                             ],
 
                             NOT: { state: 'DELETED' },
@@ -441,7 +410,23 @@ const getProtocolsByRol = cache(
                     }),
                 ])
             }
-            return query[role]
+            // else admin
+            return prisma.$transaction([
+                prisma.protocol.count({
+                    where: {
+                        AND: [whereSearch, whereFilter, whereUnits],
+                    },
+                }),
+                prisma.protocol.findMany({
+                    skip,
+                    take,
+                    select,
+                    where: {
+                        AND: [whereSearch, whereFilter, whereUnits],
+                    },
+                    orderBy,
+                }),
+            ])
         }
 
         try {

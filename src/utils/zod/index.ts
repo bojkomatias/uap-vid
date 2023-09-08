@@ -208,6 +208,32 @@ export const TeamMemberSchema = z
     )
 
 /////////////////////////////////////////
+// PROTOCOL ANUAL BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const ProtocolAnualBudgetSchema = z.object({
+    id: z.string(),
+    protocolId: z.string(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    year: z.number(),
+    budgetItems: z
+        .object({
+            type: z.string(),
+            amount: z.number(),
+            detail: z.string(),
+        })
+        .array(),
+    budgetTeamMembers: z
+        .object({
+            teamMemberId: z.string(),
+            hours: z.number(),
+            remainingHours: z.number(),
+        })
+        .array(),
+})
+
+/////////////////////////////////////////
 // PROTOCOL SECTIONS SCHEMA
 /////////////////////////////////////////
 

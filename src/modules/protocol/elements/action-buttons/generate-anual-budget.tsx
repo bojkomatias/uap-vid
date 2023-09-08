@@ -2,6 +2,7 @@
 'use client'
 import type {
     AnualBudget,
+    AnualBudgetTeamMember,
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
@@ -35,7 +36,7 @@ export default function GenerateAnualBudgetButton({
         teamMembers
     )
 
-    const generateAnualBudget = async (budget: AnualBudget) => {
+    const generateAnualBudget = async (budget: any) => {
         return await fetch(`/api/anual-budget/`, {
             method: 'POST',
             mode: 'cors',

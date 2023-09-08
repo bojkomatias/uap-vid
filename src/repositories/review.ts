@@ -38,6 +38,7 @@ export const assignReviewerToProtocol = async (
             questions: getInitialQuestionsByType(type),
             type: type,
         },
+        include: { reviewer: { select: { email: true } } },
     })
     return review
 }
@@ -58,6 +59,7 @@ export const reassignReviewerToProtocol = async (
             questions: getInitialQuestionsByType(type),
             type: type,
         },
+        include: { reviewer: { select: { email: true } } },
     })
     return review
 }
@@ -70,6 +72,11 @@ export const updateReview = async (data: Review) => {
                 id,
             },
             data: rest,
+            include: {
+                protocol: {
+                    select: { researcher: { select: { email: true } } },
+                },
+            },
         })
         return review
     } catch (error) {
@@ -85,6 +92,7 @@ export const markRevised = async (reviewId: string, revised: boolean) => {
         data: {
             revised,
         },
+        include: { reviewer: { select: { email: true } } },
     })
     return review
 }

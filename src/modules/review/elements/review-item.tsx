@@ -13,9 +13,11 @@ import ReviewVerdictBadge from './review-verdict-badge'
 export default function ReviewItem({
     review,
     role,
+    isOwner,
 }: {
     review: Review & { reviewer: User }
     role: Role
+    isOwner: boolean
 }) {
     function getDuration(milliseconds: number) {
         const minutes = Math.floor(milliseconds / 60000)
@@ -50,7 +52,7 @@ export default function ReviewItem({
 
                         {review.verdict ===
                         ReviewVerdict.APPROVED_WITH_CHANGES ? (
-                            role === Role.RESEARCHER ? (
+                            isOwner ? (
                                 <ReviseCheckbox
                                     id={review.id}
                                     revised={review.revised}
@@ -88,7 +90,7 @@ export default function ReviewItem({
 
                     <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
                         <span className="font-semibold text-gray-700">
-                            {role === Role.ADMIN || Role.SECRETARY
+                            {role === Role.ADMIN || role === Role.SECRETARY
                                 ? review.reviewer.name
                                 : null}
                         </span>
@@ -110,13 +112,14 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
     const router = useRouter()
     const updateRevised = useCallback(
         async (revised: boolean) => {
-            await fetch(`/api/review/${id}`, {
+            const res = await fetch(`/api/review/${id}`, {
                 method: 'PATCH',
                 body: JSON.stringify(revised),
             })
-            startTransition(() => {
-                router.refresh()
-            })
+            if (res.status === 200)
+                startTransition(() => {
+                    router.refresh()
+                })
         },
         [id, router]
     )
@@ -124,7 +127,7 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
     return (
         <span>
             <input
-                disabled={isPending}
+                disabled={isPending || revised}
                 id={`revised-${id}`}
                 name={`revised-${id}`}
                 type="checkbox"
