@@ -1,7 +1,5 @@
 import type {
-    AnualBudget,
     AnualBudgetItem,
-    AnualBudgetTeamMember,
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
@@ -23,26 +21,19 @@ export const protocolBudgetToAnualBudget = (
             })
         })
         .flat()
-    const teamMembers: AnualBudgetTeamMember[] = protocolTeamMembers.map(
-        (t) => {
-            return {
-                id: '',
-                teamMemberId: t.teamMemberId as string,
-                hours: t.hours,
-                remainingHours: t.hours,
-                anualBudgetId: null,
-                executions: [],
-            }
+    // Removed the type cause it's a creation, needs less data than actual schema.
+    const teamMembers = protocolTeamMembers.map((t) => {
+        return {
+            teamMemberId: t.teamMemberId as string,
+            role: t.role,
+            hours: t.hours,
         }
-    )
+    })
 
     return {
-        id: '',
-        createdAt: null,
-        updatedAt: null,
         year: new Date().getFullYear(),
         protocolId: id,
         budgetItems: budgetItems,
         budgetTeamMembers: teamMembers,
-    } as AnualBudget
+    }
 }
