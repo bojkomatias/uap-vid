@@ -3,7 +3,7 @@ import { Button } from '@elements/button'
 import Currency from '@elements/currency'
 import { useForm, zodResolver } from '@mantine/form'
 import type { Prisma } from '@prisma/client'
-import { dateFormatter } from '@utils/formatters'
+import { currencyFormatter, dateFormatter } from '@utils/formatters'
 import { ProtocolAnualBudgetSchema } from '@utils/zod'
 import React from 'react'
 
@@ -114,7 +114,10 @@ export default function AnualBudgetForm({
                 )}
             </div>
             <div className="flex flex-row-reverse">
-                <span>Total: $ 500.000</span>
+                <span>
+                    Total:
+                    <Currency amount={500000} />
+                </span>
             </div>
 
             <div className="w-full border-t border-gray-200" />
@@ -133,11 +136,11 @@ export default function AnualBudgetForm({
                         </span>
                         <span className="flex flex-col items-end">
                             <label className="label">Monto solicitado</label>
-                            <Currency amount={amount} />
+                            <span>$ {currencyFormatter.format(amount)}</span>
                         </span>
                         <span className="flex flex-col items-end">
                             <label className="label">Monto restante</label>
-                            <Currency amount={amount} />
+                            <span>$ {currencyFormatter.format(amount)}</span>
                         </span>
                     </div>
                 ))}
