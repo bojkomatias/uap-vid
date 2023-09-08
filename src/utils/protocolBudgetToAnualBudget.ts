@@ -25,6 +25,7 @@ export const protocolBudgetToAnualBudget = (
     const teamMembers = protocolTeamMembers.map((t) => {
         return {
             teamMemberId: t.teamMemberId as string,
+            role: t.role,
             hours: t.hours,
         }
     })
