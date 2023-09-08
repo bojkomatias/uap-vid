@@ -3,7 +3,7 @@ import { Button } from '@elements/button'
 import Currency from '@elements/currency'
 import { useForm, zodResolver } from '@mantine/form'
 import type { Prisma } from '@prisma/client'
-import { dateFormatter, formatCurrency } from '@utils/formatters'
+import { dateFormatter } from '@utils/formatters'
 import { ProtocolAnualBudgetSchema } from '@utils/zod'
 import React from 'react'
 

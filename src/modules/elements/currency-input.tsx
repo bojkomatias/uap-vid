@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { formatCurrency } from '@utils/formatters'
+import { currencyFormatter } from '@utils/formatters'
 import React, { useState } from 'react'
 
 const CurrencyInput = ({
@@ -55,4 +54,10 @@ export function parseLocaleNumber(stringNumber: string, locale: string) {
             .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
             .replace(new RegExp('\\' + decimalSeparator), '.')
     )
+}
+
+const formatCurrency = (value: string) => {
+    const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
+    const numberValue = Number(formattedValue)
+    return currencyFormatter.format(numberValue / 100) // Convert back to number before formatting
 }

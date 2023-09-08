@@ -1,6 +1,6 @@
 import React from 'react'
 import { Badge } from './badge'
-import { currencyFormatter, formatCurrency } from '@utils/formatters'
+import { currencyFormatter } from '@utils/formatters'
 
 export default function Currency({
     amount = 0,

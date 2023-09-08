@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import type { TeamMemberCategory } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-
-import { Badge } from '@elements/badge'
-import { formatCurrency } from '@utils/formatters'
 import PriceUpdate from './price-update'
 import TeamMemberCategoryView from './team-member-category-view'
 import Currency from '@elements/currency'
