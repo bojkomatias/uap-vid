@@ -40,7 +40,7 @@ const CurrencyInput = ({
                             e.target.value
                                 .replace(/\./g, '')
                                 .replace(/\^$/, '0')
-                        )
+                        ) * 10
                     )
                 }}
             />

@@ -100,7 +100,7 @@ export const navigation = [
     {
         name: 'Presupuestos anuales',
         icon: CurrencyDollar,
-        href: '/anual-budget',
+        href: '/anual-budgets',
         scope: ACCESS.TEAM_MEMBERS,
     },
 ]
