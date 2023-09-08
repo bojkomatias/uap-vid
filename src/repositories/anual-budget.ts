@@ -2,9 +2,9 @@ import type { AnualBudget } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 
-export const getAnualBudgetById = cache(
-    async (id: string) =>
-        await prisma.anualBudget.findFirstOrThrow({
+export const getAnualBudgetById = cache(async (id: string) => {
+    try {
+        return await prisma.anualBudget.findFirst({
             where: { id },
             select: {
                 id: true,
@@ -12,7 +12,17 @@ export const getAnualBudgetById = cache(
                 createdAt: true,
                 updatedAt: true,
                 year: true,
-                budgetTeamMembers: { select: { teamMember: true } },
+                budgetTeamMembers: {
+                    select: {
+                        teamMember: {
+                            include: {
+                                categories: { include: { category: true } },
+                            },
+                        },
+                        hours: true,
+                        remainingHours: true,
+                    },
+                },
                 budgetItems: true,
                 protocol: {
                     select: {
@@ -27,7 +37,10 @@ export const getAnualBudgetById = cache(
                 },
             },
         })
-)
+    } catch (error) {
+        return null
+    }
+})
 
 export const createAnualBudget = async (data: AnualBudget) => {
     try {
