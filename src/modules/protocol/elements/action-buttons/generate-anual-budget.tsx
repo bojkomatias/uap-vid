@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
-
 import type {
     AnualBudget,
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
-
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'
 import { FileDollar } from 'tabler-icons-react'
@@ -58,7 +56,7 @@ export default function GenerateAnualBudgetButton({
                 onClose={close}
                 title="Previsualización del presupuesto anual"
             >
-                <section className="mb-5 max-w-[30vw]">
+                <section className="mb-5 min-w-[30vw]">
                     {parsedObject.success == false ? (
                         <div className=" w-fit  rounded-md bg-error-400 p-2 text-sm text-white">
                             <p className="my-2 text-[1rem] font-bold">
@@ -80,42 +78,44 @@ export default function GenerateAnualBudgetButton({
                         </div>
                     ) : (
                         <div>
-                            <div
-                                className="rounded-md bg-success-200
-                        p-2 text-sm"
-                            >
+                            <div className="rounded-md bg-success-200 p-2 text-sm">
                                 Todo ready para generar el presupuesto rey!
                             </div>
-                            <div className="my-2 w-96  rounded-md border p-2 text-sm">
-                                <div className="flex  justify-between">
-                                    <span>Miembo de equipo</span>
+                            <div className="my-2  rounded-md border p-2 text-sm">
+                                <div className="flex justify-around font-semibold text-gray-600">
+                                    <span className="self-center">
+                                        Miembro de equipo
+                                    </span>
+                                    <span>Rol</span>
                                     <span>Horas asignadas</span>
                                 </div>
                                 {parsedObject.data.map((d, idx) => {
                                     return (
                                         <div
                                             key={idx}
-                                            className="flex  justify-between"
+                                            className="flex justify-around"
                                         >
                                             <span>{d.teamMemberId}</span>
+                                            <span>{d.role}</span>
                                             <span>{d.hours}</span>
                                         </div>
                                     )
                                 })}
                             </div>
-                            <div className="my-2 w-96  rounded-md border p-2 text-sm">
-                                <div className="flex  justify-between">
+                            <div className="my-2 rounded-md border p-2 text-sm">
+                                <div className="flex font-semibold text-gray-600">
                                     <span>Item</span>
+                                    <span>Tipo</span>
                                     <span>Monto total</span>
                                 </div>
                                 {formattedBudget.budgetItems.map((i, idx) => {
                                     return (
-                                        <div
-                                            key={idx}
-                                            className="flex  justify-between"
-                                        >
-                                            <div>{i.detail}</div>
-                                            <Currency amount={i.amount} />
+                                        <div key={idx} className="flex ">
+                                            <span>{i.detail}</span>
+                                            <span>{i.type}</span>
+                                            <span>
+                                                <Currency amount={i.amount} />
+                                            </span>
                                         </div>
                                     )
                                 })}
