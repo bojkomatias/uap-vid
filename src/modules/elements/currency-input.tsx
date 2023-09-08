@@ -56,6 +56,8 @@ export function parseLocaleNumber(stringNumber: string, locale: string) {
     )
 }
 
+// Local porque solo acá se usa! Solo en inputs recibo string y paso a number...
+// El resto del formatting es de number => number lindo, nada más (eso de (* 100 / 100).toString() no me va)
 const formatCurrency = (value: string) => {
     const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
     const numberValue = Number(formattedValue)
