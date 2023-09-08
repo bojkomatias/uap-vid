@@ -1,21 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 import type {
-    AnualBudget,
-    AnualBudgetTeamMember,
     ProtocolSectionsBudget,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'
-import {
-    AlertCircle,
-    Check,
-    Checks,
-    CheckupList,
-    CircleCheck,
-    FileDollar,
-} from 'tabler-icons-react'
+import { AlertCircle, CircleCheck, FileDollar } from 'tabler-icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
