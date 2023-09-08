@@ -4,7 +4,7 @@ import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@elements/tan-stack-table'
 
-import { dateFormatter, formatCurrency } from '@utils/formatters'
+import { dateFormatter } from '@utils/formatters'
 import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 
@@ -196,14 +196,11 @@ export default async function AcademicUnitsTable({
                                             <>
                                                 <tr key={idx}>
                                                     <td className="pt-2">
-                                                        $
-                                                        {formatCurrency(
-                                                            (
-                                                                budget.amount *
-                                                                100
-                                                            ).toString()
-                                                        )}{' '}
-                                                        ARS
+                                                        <Currency
+                                                            amount={
+                                                                budget.amount
+                                                            }
+                                                        />
                                                     </td>
                                                     <td>
                                                         {budget.from.toLocaleDateString()}

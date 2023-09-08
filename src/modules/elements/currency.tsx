@@ -1,6 +1,6 @@
 import React from 'react'
 import { Badge } from './badge'
-import { formatCurrency } from '@utils/formatters'
+import { currencyFormatter } from '@utils/formatters'
 
 export default function Currency({
     amount = 0,
@@ -17,7 +17,7 @@ export default function Currency({
                 <>No se especificó</>
             ) : (
                 <>
-                    ${formatCurrency((amount * 100).toString())} {currency}
+                    ${currencyFormatter.format(amount)} {currency}
                 </>
             )}
         </Badge>
