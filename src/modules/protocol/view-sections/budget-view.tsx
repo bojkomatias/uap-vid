@@ -2,6 +2,7 @@ import type { ProtocolSectionsBudget } from '@prisma/client'
 import type { ListRowValues } from '@protocol/elements/view/item-list-view'
 import ItemListView from '@protocol/elements/view/item-list-view'
 import SectionViewer from '../elements/view/section-viewer'
+import { currencyFormatter } from '@utils/formatters'
 
 interface BudgetViewProps {
     data: ProtocolSectionsBudget
@@ -28,10 +29,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                         },
                         {
                             up: 'Monto',
-                            down: `$${item.amount}`.replace(
-                                /\B(?=(\d{3})+(?!\d))/g,
-                                '.'
-                            ),
+                            down: `$${currencyFormatter.format(item.amount)}`,
                             inverted: true,
                         },
                     ])
@@ -51,8 +49,8 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                 footer={
                     <div className="ml-auto mr-4 flex w-fit gap-2 py-4 text-xl">
                         <p className="text-gray-400">Total: </p> $
-                        {data.expenses
-                            .reduce((acc, val) => {
+                        {currencyFormatter.format(
+                            data.expenses.reduce((acc, val) => {
                                 return (
                                     acc +
                                     val.data.reduce((prev, curr) => {
@@ -62,8 +60,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                                     }, 0)
                                 )
                             }, 0)
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                        )}
                     </div>
                 }
             />

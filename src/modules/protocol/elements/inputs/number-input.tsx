@@ -22,10 +22,13 @@ const NumberInput = ({
                 {label}
             </label>
             <input
-                value={form.getInputProps(path).value}
                 type="number"
-                onChange={(e) =>
-                    form.setFieldValue(path, Number(e.target.value))
+                {...form.getInputProps(path)}
+                onBlur={() =>
+                    form.setFieldValue(
+                        path,
+                        Number(form.getInputProps(path).value)
+                    )
                 }
                 className="input text-right placeholder:text-left"
                 placeholder={label}

@@ -60,7 +60,7 @@ export default function PriceUpdate({ row }: { row: any }) {
                         ) as HTMLInputElement
                         const price = parseLocaleNumber(
                             priceInput.value,
-                            'de-DE'
+                            'es-AR'
                         )
 
                         // Create a new price object

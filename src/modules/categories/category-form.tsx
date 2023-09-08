@@ -93,8 +93,8 @@ export default function CategoryForm() {
                                     price:
                                         parseLocaleNumber(
                                             e.target.value,
-                                            'de-DE'
-                                        ) * 10,
+                                            'es-AR'
+                                        ) * 100,
                                     //No le paso la currency porque está por default en ARS.
                                 },
                             ] as HistoricCategoryPrice[],

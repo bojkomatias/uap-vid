@@ -35,7 +35,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                 body: JSON.stringify(review),
             })
 
-            if (res.status == 200) {
+            if (res.status == 200)
                 notifications.show({
                     title: notifcationTitle,
                     message: notificationText,
@@ -46,8 +46,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                         marginBottom: '.8rem',
                     },
                 })
-                emailer(useCases.onReview, review.protocolId)
-            } else {
+            else {
                 notifications.show({
                     title: 'Ocurrió un error',
                     message: 'Hubo un problema al publicar tu revisión.',
@@ -73,7 +72,11 @@ export default function ReviewForm({ review }: { review: Review }) {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
-                        addReview({ ...form.values, updatedAt: new Date() })
+                        addReview({
+                            ...form.values,
+                            revised: false,
+                            updatedAt: new Date(),
+                        })
                     }}
                 >
                     <div className="space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">

@@ -16,6 +16,7 @@ import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
+import GenerateAnualBudgetButton from '@protocol/elements/action-buttons/generate-anual-budget'
 
 async function Layout({
     params,
@@ -43,7 +44,7 @@ async function Layout({
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
-            <div className="flex w-full gap-3">
+            <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
                     currentUser={session.user}
                     id={protocol.id}
@@ -51,9 +52,9 @@ async function Layout({
                     state={protocol.state}
                     researcher={protocol.researcher}
                     convocatory={protocol.convocatory}
-                    observations={protocol.observations}
                 />
-                <div className="flew-row-reverse flex flex-grow flex-wrap items-center justify-end gap-2 p-1">
+
+                <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1">
                     <FinishButton
                         role={session.user.role}
                         protocol={{
@@ -77,6 +78,11 @@ async function Layout({
                             state: protocol.state,
                             researcherId: protocol.researcherId,
                         }}
+                    />
+                    <GenerateAnualBudgetButton
+                        id={protocol.id}
+                        budgetItems={protocol.sections.budget}
+                        teamMembers={protocol.sections.identification.team}
                     />
                     <EditButton
                         user={session.user}
@@ -106,7 +112,7 @@ async function Layout({
 
             {canAccess('EVALUATORS', session.user.role) &&
             protocol.state !== 'DRAFT' ? (
-                <div className="relative z-0 my-1 ml-2 max-w-4xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+                <div className="relative z-10 my-1 ml-2 max-w-3xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
                     <ReviewAssignation
                         role={session.user.role}
                         protocolId={protocol.id}
@@ -116,7 +122,7 @@ async function Layout({
                 </div>
             ) : null}
 
-            <div className="flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
+            <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
                 <div className="w-full">{children}</div>
                 <Reviews
                     id={protocol.id}

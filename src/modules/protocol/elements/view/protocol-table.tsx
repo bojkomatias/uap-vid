@@ -11,12 +11,17 @@ import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
+import Observation from '../action-buttons/observation'
+import { Button } from '@elements/button'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { useSearchParams } from 'next/navigation'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
         id: true
         state: true
         createdAt: true
+        observations: true
         convocatory: { select: { id: true; name: true } }
         researcher: {
             select: { id: true; name: true; role: true; email: true }
@@ -60,6 +65,17 @@ export default function ProtocolTable({
                         <UserIcon className="h-4 w-4 text-gray-600" />
                     ),
                 enableHiding: false,
+                enableSorting: false,
+            },
+            {
+                accessorKey: 'observation',
+                header: '',
+                cell: ({ row }) => (
+                    <Observation
+                        id={row.original.id}
+                        observations={row.original.observations}
+                    />
+                ),
                 enableSorting: false,
             },
             {
@@ -114,6 +130,7 @@ export default function ProtocolTable({
                         )}
                     </ul>
                 ),
+                enableSorting: false,
             },
             {
                 accessorKey: 'sections.identification.career',
@@ -233,6 +250,7 @@ export default function ProtocolTable({
                     user.role === 'SECRETARY' ||
                     user.role === 'RESEARCHER',
             },
+
             {
                 accessorKey: 'actions',
                 header: 'Acciones',
@@ -274,22 +292,74 @@ export default function ProtocolTable({
         'reviews_3.reviewer.name': false,
     }
     return (
-        <>
-            <TanStackTable
-                data={protocols}
-                columns={columns}
-                totalRecords={totalRecords}
-                initialVisibility={initialVisible}
-                filterableByKey={{
-                    filter: 'state',
-                    // Slice to avoid NOT_CREATED
-                    values: Object.entries(ProtocolStatesDictionary).slice(
-                        1,
-                        user.role === 'ADMIN' ? undefined : -1
-                    ),
-                }}
-                searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-            />
-        </>
+        <TanStackTable
+            data={protocols}
+            columns={columns}
+            totalRecords={totalRecords}
+            initialVisibility={initialVisible}
+            filterableByKey={{
+                filter: 'state',
+                // Slice to avoid NOT_CREATED
+                values: Object.entries(ProtocolStatesDictionary).slice(
+                    1,
+                    user.role === 'ADMIN' ? undefined : -1
+                ),
+            }}
+            customFilterSlot={
+                user.role === 'ADMIN' || user.role === 'SECRETARY' ? (
+                    <AcademicUnitFilter />
+                ) : null
+            }
+            searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
+        />
+    )
+}
+/**
+ * Academic unit filter, specific to business in protocol table
+ * @returns
+ */
+const AcademicUnitFilter = () => {
+    const update = useUpdateQuery()
+    const searchParams = useSearchParams()
+    const currentValues = searchParams.get('units')?.split('-')
+
+    const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
+
+    return (
+        <div className="relative mt-4 flex flex-col items-start text-sm">
+            <div className="relative flex flex-wrap gap-2">
+                {values.map((value, i) => {
+                    return (
+                        <Button
+                            onClick={() => {
+                                update({
+                                    units: currentValues
+                                        ? currentValues.includes(value)
+                                            ? currentValues
+                                                  .filter((e) => e !== value)
+                                                  .join('-')
+                                            : currentValues
+                                                  .join('-')
+                                                  .concat('-', value)
+                                        : value,
+                                })
+                            }}
+                            intent="unset"
+                            key={i}
+                        >
+                            <Badge
+                                className={cx(
+                                    'cursor-pointer transition hover:bg-gray-200',
+                                    currentValues?.includes(value) &&
+                                        'bg-gray-300'
+                                )}
+                            >
+                                {value}
+                            </Badge>
+                        </Button>
+                    )
+                })}
+            </div>
+        </div>
     )
 }

@@ -6,8 +6,6 @@ import { Calendar, User as UserIcon } from 'tabler-icons-react'
 import { ResearcherReassignation } from './elements/action-buttons/researcher-reassignation'
 import { getAllOwners } from '@repositories/user'
 
-import Observation from './elements/action-buttons/observation'
-
 export async function ProtocolMetadata({
     currentUser,
     id,
@@ -15,7 +13,6 @@ export async function ProtocolMetadata({
     state,
     researcher,
     convocatory,
-    observations,
 }: {
     currentUser: User
     id: string
@@ -23,7 +20,6 @@ export async function ProtocolMetadata({
     state: State
     researcher: { id: string; name: string; email: string }
     convocatory: { id: string; name: string }
-    observations?: string[]
 }) {
     let researcherList: User[] = []
     if (currentUser.role === 'ADMIN') {
@@ -31,7 +27,7 @@ export async function ProtocolMetadata({
     }
 
     return (
-        <div className="z-10 my-1 ml-2  max-w-4xl flex-grow gap-2 rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+        <div className="z-10 my-1 ml-2 max-w-3xl flex-grow gap-2 rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
                     <Calendar className="h-4 text-gray-600" />
@@ -39,15 +35,15 @@ export async function ProtocolMetadata({
                         {dateFormatter.format(createdAt)}
                     </div>
                 </div>
-                <Badge>{convocatory.name}</Badge>
+                <Badge>{convocatory?.name}</Badge>
             </div>
             <div className="mt-2 flex items-baseline gap-4">
                 <div className="flex items-center gap-2">
                     <UserIcon className="h-4 text-gray-600" />
                     <div className="font-medium">
-                        {researcher.name}
+                        {researcher?.name}
                         <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
-                            {researcher.email}
+                            {researcher?.email}
                         </div>
                     </div>
                 </div>
@@ -55,7 +51,7 @@ export async function ProtocolMetadata({
                     {currentUser.role === 'ADMIN' && (
                         <ResearcherReassignation
                             protocolId={id}
-                            researcherId={researcher.id}
+                            researcherId={researcher?.id}
                             researchers={researcherList}
                         />
                     )}
@@ -63,7 +59,6 @@ export async function ProtocolMetadata({
                 <Badge className="text-sm">
                     {ProtocolStatesDictionary[state]}
                 </Badge>
-                <Observation id={id} observations={observations} />
             </div>
         </div>
     )

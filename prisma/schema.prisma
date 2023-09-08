@@ -8,17 +8,17 @@ datasource db {
 }
 
 model AcademicUnit {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String               @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  secretaries    User[]   @relation(fields: [secretariesIds], references: [id])
-  secretariesIds String[] @db.ObjectId
-  budgets        Budget[]
+  secretaries    User[]               @relation(fields: [secretariesIds], references: [id])
+  secretariesIds String[]             @db.ObjectId
+  budgets        AcademicUnitBudget[]
 }
 
-type Budget {
+type AcademicUnitBudget {
   amount Float
   from   DateTime
-  to     DateTime
+  to     DateTime?
 }
 
 model Convocatory {
@@ -70,13 +70,14 @@ model User {
 }
 
 model TeamMember {
-  id           String                       @id @default(auto()) @map("_id") @db.ObjectId
-  user         User?                        @relation(fields: [userId], references: [id])
-  userId       String?                      @unique @db.ObjectId
-  name         String
-  categories   HistoricTeamMemberCategory[]
-  obrero       Boolean                      @default(false)
-  pointsObrero Int?
+  id                    String                       @id @default(auto()) @map("_id") @db.ObjectId
+  user                  User?                        @relation(fields: [userId], references: [id])
+  userId                String?                      @unique @db.ObjectId
+  name                  String
+  categories            HistoricTeamMemberCategory[]
+  obrero                Boolean                      @default(false)
+  pointsObrero          Int?
+  AnualBudgetTeamMember AnualBudgetTeamMember[]
 }
 
 model HistoricTeamMemberCategory {
@@ -133,15 +134,18 @@ type AnualBudgetItem {
   type       String
   detail     String
   amount     Float
-  remaining  Float
   executions Execution[]
 }
 
-type AnualBudgetTeamMember {
-  teamMemberId   String
+model AnualBudgetTeamMember {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  teamMemberId   String       @db.ObjectId
+  teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
   hours          Float
-  remainingHours Float
+  remainingHours Float?
   executions     Execution[]
+  AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
+  anualBudgetId  String?      @db.ObjectId
 }
 
 type Execution {

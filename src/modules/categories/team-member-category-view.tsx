@@ -4,7 +4,8 @@ import { Drawer, Group } from '@mantine/core'
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
-import { formatCurrency } from '@utils/formatters'
+import Currency from '@elements/currency'
+import { currencyFormatter } from '@utils/formatters'
 
 export default function TeamMemberCategoryView({
     teamMemberCategory,
@@ -32,23 +33,11 @@ export default function TeamMemberCategoryView({
                         </div>
                         <div className="flex  items-center gap-2">
                             <p className="text-sm text-gray-600">Valor hora:</p>
-                            <Badge className="text-sm">
-                                $
-                                {formatCurrency(
-                                    (
-                                        teamMemberCategory.price[
-                                            teamMemberCategory.price.length - 1
-                                        ].price * 100
-                                    ).toString()
-                                )}{' '}
-                                {
-                                    teamMemberCategory.price[
-                                        teamMemberCategory.price.length - 1
-                                    ].currency
-                                }
-                            </Badge>
+                            <Currency
+                                amount={teamMemberCategory.price.at(-1)?.price}
+                            />
                         </div>
-                    </div>{' '}
+                    </div>
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
                         <p className="text-xs">Valores históricos:</p>
                         <table className="table-auto text-sm text-gray-600">
@@ -74,11 +63,8 @@ export default function TeamMemberCategoryView({
                                                 <tr key={idx}>
                                                     <td className="pt-2">
                                                         $
-                                                        {formatCurrency(
-                                                            (
-                                                                price.price *
-                                                                100
-                                                            ).toString()
+                                                        {currencyFormatter.format(
+                                                            price.price
                                                         )}{' '}
                                                         {price.currency}
                                                     </td>

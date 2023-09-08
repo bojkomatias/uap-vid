@@ -208,6 +208,32 @@ export const TeamMemberSchema = z
     )
 
 /////////////////////////////////////////
+// PROTOCOL ANUAL BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const ProtocolAnualBudgetSchema = z.object({
+    id: z.string(),
+    protocolId: z.string(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    year: z.number(),
+    budgetItems: z
+        .object({
+            type: z.string(),
+            amount: z.number(),
+            detail: z.string(),
+        })
+        .array(),
+    budgetTeamMembers: z
+        .object({
+            teamMemberId: z.string(),
+            hours: z.number(),
+            remainingHours: z.number(),
+        })
+        .array(),
+})
+
+/////////////////////////////////////////
 // PROTOCOL SECTIONS SCHEMA
 /////////////////////////////////////////
 
@@ -450,6 +476,33 @@ export const MethodologySchema = z.object({
     type: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     humanAnimalOrDb: z.boolean().nullable(),
 })
+
+export const TeamMemberRelation = z
+    .object({
+        hours: z
+            .number({
+                invalid_type_error: 'Este campo debe ser numérico',
+            })
+            .min(1, {
+                message: 'Debe ser un numero positivo',
+            })
+            .max(400, {
+                message: 'No se pueden asignar tantas horas',
+            }),
+        last_name: z.string().nullable(),
+        name: z.string().nullable(),
+        role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        teamMemberId: z
+            .string({
+                invalid_type_error:
+                    'Faltan relacionar miembros del equipo de investigación',
+            })
+            .min(1, {
+                message:
+                    'Faltan relacionar miembros del equipo de investigación',
+            }),
+    })
+    .array()
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS PUBLICATION SCHEMA

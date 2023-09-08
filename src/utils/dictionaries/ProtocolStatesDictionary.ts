@@ -6,7 +6,7 @@ export default {
     [State.PUBLISHED]: 'Publicado',
     [State.METHODOLOGICAL_EVALUATION]: 'Evaluación metodológica',
     [State.SCIENTIFIC_EVALUATION]: 'Evaluación científica',
-    [State.ACCEPTED]: 'Aceptado para evaluación en comisión',
+    [State.ACCEPTED]: 'Aceptado',
     [State.ON_GOING]: 'En curso',
     [State.FINISHED]: 'Finalizado',
     [State.DISCONTINUED]: 'Discontinuado',

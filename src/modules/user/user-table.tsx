@@ -1,13 +1,14 @@
 'use client'
-import type { Prisma, User } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import UserView from './user-view'
 
-type UsersWithCount = Prisma.UserGetPayload<{
+type UserWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
 }>
 /**
@@ -18,13 +19,11 @@ type UsersWithCount = Prisma.UserGetPayload<{
 export default function UserTable({
     users,
     totalRecords,
-    loggedInUser,
 }: {
-    users: UsersWithCount[]
+    users: UserWithCount[]
     totalRecords: number
-    loggedInUser: User
 }) {
-    const columns = useMemo<ColumnDef<UsersWithCount>[]>(
+    const columns = useMemo<ColumnDef<UserWithCount>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -76,30 +75,31 @@ export default function UserTable({
                 accessorKey: 'role',
                 header: 'Rol',
                 // Guard for not changing your own role.
-                cell: ({ row }) =>
-                    row.original.id === loggedInUser.id ? (
-                        <></>
-                    ) : (
-                        <RoleUpdater user={row.original} />
-                    ),
+                cell: ({ row }) => (
+                    <span>{RolesDictionary[row.original.role]} </span>
+                ),
             },
             {
                 accessorKey: 'delete',
                 header: 'Acciones',
-                cell: ({ row }) =>
-                    row.original.role === 'ADMIN' ? (
-                        <></>
-                    ) : (
+                cell: ({ row }) => (
+                    <div className="flex gap-2">
+                        <UserView userInfo={row.original}>
+                            {' '}
+                            <p>Cambiar rol del usuario</p>
+                            <RoleUpdater user={row.original} />
+                        </UserView>
                         <DeleteUserButton
                             userId={row.original.id}
                             className="px-2.5 py-1 text-xs"
                         />
-                    ),
+                    </div>
+                ),
                 enableHiding: false,
                 enableSorting: false,
             },
         ],
-        [loggedInUser.id]
+        []
     )
     /** Explicitly announce initial state of hidden columns. */
     const initialVisible = { id: false, protocols: false, Review: false }

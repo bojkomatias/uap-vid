@@ -1,15 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import type { TeamMemberCategory } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-
-import { Badge } from '@elements/badge'
-import { formatCurrency } from '@utils/formatters'
 import PriceUpdate from './price-update'
 import TeamMemberCategoryView from './team-member-category-view'
+import Currency from '@elements/currency'
 
 export default function CategoriesTable({
     categories,
@@ -42,20 +38,16 @@ export default function CategoriesTable({
                 enableHiding: false,
                 enableSorting: false,
                 cell: ({ row }) => (
-                    <Badge className=" text-xs text-gray-600">
-                        $
-                        {formatCurrency(
-                            (
-                                row.original.price[
-                                    row.original.price.length - 1
-                                ]?.price * 100
-                            ).toString()
-                        )}{' '}
-                        {
+                    <Currency
+                        amount={
+                            row.original.price[row.original.price.length - 1]
+                                ?.price
+                        }
+                        currency={
                             row.original.price[row.original.price.length - 1]
                                 ?.currency
                         }
-                    </Badge>
+                    />
                 ),
             },
 
