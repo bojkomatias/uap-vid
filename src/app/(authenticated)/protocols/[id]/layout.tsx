@@ -80,7 +80,7 @@ async function Layout({
                         }}
                     />
                     <GenerateAnualBudgetButton
-                        id={protocol.id}
+                        protocolId={protocol.id}
                         budgetItems={protocol.sections.budget}
                         teamMembers={protocol.sections.identification.team}
                     />

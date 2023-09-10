@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 import type {
     ProtocolSectionsBudget,
@@ -12,40 +11,57 @@ import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
 import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
 import Currency from '@elements/currency'
+import { generateAnualBudget } from '@actions/anual-budget/action'
+import { useRouter } from 'next/navigation'
 
 type ActionButtonTypes = {
-    id: string
+    protocolId: string
     budgetItems: ProtocolSectionsBudget
     teamMembers: ProtocolSectionsIdentificationTeam[]
 }
 
 export default function GenerateAnualBudgetButton({
-    id,
+    protocolId,
     budgetItems,
     teamMembers,
 }: ActionButtonTypes) {
     const [opened, { open, close }] = useDisclosure(false)
-
+    const router = useRouter()
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
 
+    const actionButton = () => {
+        if (parsedObject.success == false) {
+            return (
+                <Button
+                    intent="secondary"
+                    onClick={() => {
+                        router.push(`/protocols/${protocolId}/0`)
+                    }}
+                >
+                    Editar miembos de equipo
+                </Button>
+            )
+        } else {
+            return (
+                <Button
+                    intent="secondary"
+                    onClick={() => {
+                        generateAnualBudget(protocolId, currentYear)
+                        close()
+                    }}
+                >
+                    Generar presupuesto
+                </Button>
+            )
+        }
+    }
+
+    const currentYear = new Date().getFullYear().toString()
     const formattedBudget = protocolBudgetToAnualBudget(
-        id,
+        protocolId,
         budgetItems,
         teamMembers
     )
-
-    const generateAnualBudget = async (budget: any) => {
-        return await fetch(`/api/anual-budget/`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(budget),
-        }).then((res) => {
-            console.log(res)
-        })
-    }
 
     return (
         <>
@@ -91,7 +107,7 @@ export default function GenerateAnualBudgetButton({
                                         <Link
                                             target="_blank"
                                             className="font-bold transition hover:text-gray-700"
-                                            href={`/protocols/${id}`}
+                                            href={`/protocols/${protocolId}`}
                                         >
                                             {' '}
                                             protocolo{' '}
@@ -165,21 +181,7 @@ export default function GenerateAnualBudgetButton({
                         </div>
                     )}
                 </section>
-                <Button onClick={close} intent="secondary">
-                    {parsedObject.success == false ? (
-                        <Link href={`/protocols/${id}/0`}>
-                            Editar miembos de equipo
-                        </Link>
-                    ) : (
-                        <span
-                            onClick={() => {
-                                generateAnualBudget(formattedBudget)
-                            }}
-                        >
-                            Generar presupuesto
-                        </span>
-                    )}
-                </Button>
+                {actionButton()}
             </Modal>
 
             <Group position="center">
