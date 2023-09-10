@@ -135,6 +135,7 @@ type AnualBudgetItem {
   detail     String
   amount     Float
   executions Execution[]
+  remaining  Float
 }
 
 model AnualBudgetTeamMember {
@@ -142,7 +143,7 @@ model AnualBudgetTeamMember {
   teamMemberId   String       @db.ObjectId
   teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
   hours          Float
-  remainingHours Float?
+  remainingHours Float
   executions     Execution[]
   AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
   anualBudgetId  String?      @db.ObjectId
