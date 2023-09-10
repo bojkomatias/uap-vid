@@ -1,55 +1,27 @@
 import type {
-  AnualBudget,
-    AnualBudgetTeamMember,
+    AnualBudget,
     Execution,
-    ProtocolSectionsBudget,
-    ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
-import { generateAnualBudgetExecutions } from '@repositories/anual-budget'
-import { findProtocolById } from '@repositories/protocol'
-import {
-    getTeamMemberCategoriesById,
-} from '@repositories/team-member'
 
-type AnualBudgetItemWithoutExecutions = Omit<AnualBudgetItem, 'executions'>
-const generateAnualBudgetItems = (
-    protocolBudgetSection: ProtocolSectionsBudget,
-    year: string
-): AnualBudgetItemWithoutExecutions[] => {
-    return protocolBudgetSection.expenses.reduce((acc, item) => {
-        const budgetItems = item.data
-            .filter((d) => d.year === year)
-            .map((d) => {
-                return {
-                    type: item.type,
-                    amount: d.amount,
-                    detail: d.detail,
-                    remaining: d.amount
-                }
-            })
-        acc.push(...budgetItems)
-        return acc
-    }, [] as AnualBudgetItemWithoutExecutions[])
-}
-
-type AnualBudgetTeamMemberItemWithoutExecutions = Omit<
-    AnualBudgetTeamMember,
-    'executions'
->
-const generateAnualBudgetTeamMembersItems = (
-    protocolTeam: ProtocolSectionsIdentificationTeam[]
-): AnualBudgetTeamMemberItemWithoutExecutions[] => {
-    return protocolTeam.map((item) => {
-        return {
-            teamMemberId: item.teamMemberId,
-            hours: item.hours,
-            remainingHours: item.hours,
-        } as AnualBudgetTeamMemberItemWithoutExecutions
+// Utils for calculating the total budget or intermediate values once the annual budget is created.
+// I must create a type using the Prisma validator to mantain consistency if
+//the schema changes and also use the relations in the utils methods
+const anualBudgetTeamMemberWithAllRelations =
+    Prisma.validator<Prisma.AnualBudgetTeamMemberDefaultArgs>()({
+        include: {
+            teamMember: {
+                include: { categories: { include: { category: true } } },
+            },
+        },
     })
-}
+type AnualBudgetTeamMemberWithAllRelations =
+    Prisma.AnualBudgetTeamMemberGetPayload<
+        typeof anualBudgetTeamMemberWithAllRelations
+    >
 
-const totalExcecution = (ex: Execution[]): number => {
+const totalExecution = (ex: Execution[]): number => {
     return ex.reduce((acc, item) => {
         acc += item.amount
         return acc
@@ -64,80 +36,43 @@ const calculateRemainingABI = (abi: AnualBudgetItem[]): number => {
 }
 
 const calculateRemainingABTM = async (
-    abtm: AnualBudgetTeamMember[],
-    calculationType: RemainingTypeCalculation
+    abtm: AnualBudgetTeamMemberWithAllRelations[]
 ): Promise<number> => {
-    const { categories } = await getTeamMemberCategoriesByIds(abtm) // Could be improved querying only the categories needed
     return abtm.reduce((acc, item) => {
-        const category = categories.find(
-            (tm) => tm.id === item.teamMemberId
-        )?.category
-        if (category) {
-            const lastPrice = getPriceByCalculationType(category.price, calculationType)
-            acc += item.remainingHours * lastPrice!
-        }
+        acc += item.remainingHours * getLastCategoryPrice(item)
         return acc
     }, 0)
 }
 
-const getPriceByCalculationType = (
-    prices: {
-        from: Date
-        to: Date | null
-        price: number
-        currency: string
-    }[],
-    calculationType:RemainingTypeCalculation = RemainingTypeCalculation.Current
+const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
+    const category = abtm.teamMember.categories.find((c) => !c.to)
+    if (!category) return 0
+    const lastPrice = category.category.price.find((p) => !p.to)
+    return lastPrice?.price || 0
+}
+
+export const calculateTotalBudget = async (
+    anualBudget: AnualBudget & {
+        budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+    }
 ) => {
-  if (!prices || prices.length === 0) return 0
-    switch (calculationType) {
-        case RemainingTypeCalculation.Last:
-          return prices[prices.length - 1].price
-        case RemainingTypeCalculation.Current:
-          return prices.find((p) => !p.to)?.price
-        case RemainingTypeCalculation.Moment:
-          return prices.find((p) => p.from <= new Date() && (!p.to || p.to >= new Date()))?.price
-        default:
-          return prices[prices.length - 1].price
+    //Executions
+    const ABIe = totalExecution(
+        anualBudget.budgetItems.map((item) => item.executions).flat()
+    )
+    const ABTe = totalExecution(
+        anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
+    )
+
+    //Remainings
+    const ABIr = calculateRemainingABI(anualBudget.budgetItems)
+    const ABTr = await calculateRemainingABTM(anualBudget.budgetTeamMembers)
+
+    return {
+        ABIe,
+        ABTe,
+        ABIr,
+        ABTr,
+        total: ABIe + ABTe + ABIr + ABTr,
     }
 }
-
-const getTeamMemberCategoriesByIds = (abtm: AnualBudgetTeamMember[]) => {
-    const ids = abtm.map((item) => item.teamMemberId)
-    return getTeamMemberCategoriesById(ids)
-}
-
-enum RemainingTypeCalculation {
-  Last,
-  Current,
-  Moment
-}
-
-const calculateTotalBudget = async (anualBudget : AnualBudget, calculationType: RemainingTypeCalculation) => {
-  const ABIe = totalExcecution(anualBudget.budgetItems.map(item => item.executions).flat())
-  const ABTe = totalExcecution(anualBudget.budgetTeamMembers.map(item => item.executions).flat())
-
-  const ABIr = calculateRemainingABI(anualBudget.budgetItems)
-  const ABTr = await calculateRemainingABTM(anualBudget.budgetTeamMembers, calculationType) //Here we can pass the attribute to choose the last price, current price or price at the moment of the execution
-
-  return {
-    ABIe,
-    ABTe,
-    ABIr,
-    ABTr,
-    total: ABIe + ABTe + ABIr + ABTr
-}
-}
-
-export const generateAnualBudget = async (protocolId:string, year:string) => {
-    const protocol = await findProtocolById(protocolId)
-    if (!protocol) return null
-    const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
-    const ABT = generateAnualBudgetTeamMembersItems(protocol.sections.identification.team)
-
-    await generateAnualBudgetExecutions(protocolId, ABI, ABT, year)
-}
-
-
-
-
