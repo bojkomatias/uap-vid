@@ -16,6 +16,7 @@
         "incremental": true,
         "baseUrl": "./src",
         "paths": {
+            "@actions/*": ["./app/actions/*"],
             "@elements/*": ["./modules/elements/*"],
             "@layout/*": ["./modules/layout/*"],
             "@auth/*": ["./modules/auth/*"],
