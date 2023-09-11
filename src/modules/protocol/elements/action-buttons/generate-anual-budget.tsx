@@ -26,7 +26,7 @@ type ActionButtonTypes = {
     teamMembers: ProtocolSectionsIdentificationTeam[]
 }
 
-export default async function GenerateAnualBudgetButton({
+export default function GenerateAnualBudgetButton({
     budgetPreview,
     teamMembers,
 }: ActionButtonTypes) {
