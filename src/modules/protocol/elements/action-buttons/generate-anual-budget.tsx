@@ -52,7 +52,10 @@ export default async function GenerateAnualBudgetButton({
                 <Button
                     intent="secondary"
                     onClick={() => {
-                        generateAnualBudget(protocolId, currentYear)
+                        generateAnualBudget(
+                            budgetPreview.protocolId,
+                            currentYear
+                        )
                         close()
                     }}
                 >

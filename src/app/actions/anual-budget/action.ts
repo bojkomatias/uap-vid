@@ -92,7 +92,7 @@ export const protocolToAnualBudgetPreview = async (protocolId: string,
                 teamMember
             }
         }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
-        
+            
         return {
             year: new Date().getFullYear().toString(),
             protocolId: protocolId,
