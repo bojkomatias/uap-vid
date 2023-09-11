@@ -4,7 +4,9 @@ import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import InfoTooltip from '@protocol/elements/tooltip'
+
+import { buttonStyle } from '@elements/button/styles'
+import { cx } from '@utils/cx'
 
 export default function AnualBudgetTable({
     anualBudgets,
@@ -59,6 +61,28 @@ export default function AnualBudgetTable({
                 accessorKey: 'year',
                 header: 'Año',
                 enableHiding: true,
+            },
+
+            {
+                accessorKey: 'actions',
+                header: 'Acciones',
+                enableHiding: false,
+                cell: ({ row }) => {
+                    return (
+                        <div className="flex gap-2">
+                            <Link
+                                passHref
+                                className={cx(
+                                    buttonStyle('secondary'),
+                                    'px-2.5 py-1 text-xs'
+                                )}
+                                href={`/anual-budgets/${row.original.id}`}
+                            >
+                                Ver
+                            </Link>
+                        </div>
+                    )
+                },
             },
         ],
         []
