@@ -1,9 +1,7 @@
 'use client'
 import type {
     AnualBudgetItem,
-    AnualBudgetTeamMember,
     ProtocolSectionsIdentificationTeam,
-    TeamMember,
 } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'

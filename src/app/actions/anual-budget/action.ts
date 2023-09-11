@@ -1,13 +1,11 @@
 'use server'
-
 import type { AnualBudget, ProtocolSectionsBudget, AnualBudgetItem, Execution, ProtocolSectionsIdentificationTeam, AnualBudgetTeamMember } from '@prisma/client'
 import {
     createAnualBudgetV2,
     createManyAnualBudgetTeamMember,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
-import { getTeamMembers, getTeamMembersByIds } from '@repositories/team-member'
-import { prisma } from '../../../utils/bd'
+import { getTeamMembersByIds } from '@repositories/team-member'
 import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 
 /**
