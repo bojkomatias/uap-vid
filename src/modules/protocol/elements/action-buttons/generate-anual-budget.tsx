@@ -43,7 +43,7 @@ export default function GenerateAnualBudgetButton({
                     intent="secondary"
                     onClick={() => {
                         router.push(`/protocols/${budgetPreview.protocolId}/0`)
-                        close()
+                        close() 
                     }}
                 >
                     Editar miembos de equipo
