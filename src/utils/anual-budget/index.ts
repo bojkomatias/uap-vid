@@ -16,7 +16,7 @@ const anualBudgetTeamMemberWithAllRelations =
             },
         },
     })
-type AnualBudgetTeamMemberWithAllRelations =
+export type AnualBudgetTeamMemberWithAllRelations =
     Prisma.AnualBudgetTeamMemberGetPayload<
         typeof anualBudgetTeamMemberWithAllRelations
     >

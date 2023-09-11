@@ -1,7 +1,9 @@
 'use client'
 import type {
-    ProtocolSectionsBudget,
+    AnualBudgetItem,
+    AnualBudgetTeamMember,
     ProtocolSectionsIdentificationTeam,
+    TeamMember,
 } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'
@@ -9,25 +11,29 @@ import { AlertCircle, CircleCheck, FileDollar } from 'tabler-icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
-import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
 import Currency from '@elements/currency'
 import { generateAnualBudget } from '@actions/anual-budget/action'
 import { useRouter } from 'next/navigation'
+import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 
 type ActionButtonTypes = {
-    protocolId: string
-    budgetItems: ProtocolSectionsBudget
+    budgetPreview: {
+        year: string
+        protocolId: string
+        budgetItems: AnualBudgetItem[]
+        budgetTeamMembers: Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
+    }
     teamMembers: ProtocolSectionsIdentificationTeam[]
 }
 
-export default function GenerateAnualBudgetButton({
-    protocolId,
-    budgetItems,
+export default async function GenerateAnualBudgetButton({
+    budgetPreview,
     teamMembers,
 }: ActionButtonTypes) {
     const [opened, { open, close }] = useDisclosure(false)
     const router = useRouter()
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
+    const currentYear = new Date().getFullYear().toString()
 
     const actionButton = () => {
         if (parsedObject.success == false) {
@@ -35,7 +41,7 @@ export default function GenerateAnualBudgetButton({
                 <Button
                     intent="secondary"
                     onClick={() => {
-                        router.push(`/protocols/${protocolId}/0`)
+                        router.push(`/protocols/${budgetPreview.protocolId}/0`)
                     }}
                 >
                     Editar miembos de equipo
@@ -55,13 +61,6 @@ export default function GenerateAnualBudgetButton({
             )
         }
     }
-
-    const currentYear = new Date().getFullYear().toString()
-    const formattedBudget = protocolBudgetToAnualBudget(
-        protocolId,
-        budgetItems,
-        teamMembers
-    )
 
     return (
         <>
@@ -107,7 +106,7 @@ export default function GenerateAnualBudgetButton({
                                         <Link
                                             target="_blank"
                                             className="font-bold transition hover:text-gray-700"
-                                            href={`/protocols/${protocolId}`}
+                                            href={`/protocols/${budgetPreview.protocolId}`}
                                         >
                                             {' '}
                                             protocolo{' '}
@@ -135,20 +134,33 @@ export default function GenerateAnualBudgetButton({
                                         <span>Horas asignadas</span>
                                     </div>
                                 </div>
-                                {parsedObject.data.map((d, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="my-2 grid grid-cols-3"
-                                    >
-                                        <span>{d.teamMemberId}</span>
-                                        <span className="text-center">
-                                            {d.role}
-                                        </span>
-                                        <span className="text-right">
-                                            {d.hours}
-                                        </span>
-                                    </div>
-                                ))}
+                                {budgetPreview.budgetTeamMembers.map(
+                                    (teamMemberBudget, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="my-2 grid grid-cols-3"
+                                        >
+                                            <span>
+                                                {
+                                                    teamMemberBudget.teamMember
+                                                        ?.name
+                                                }
+                                            </span>
+                                            <span className="text-center">
+                                                {
+                                                    parsedObject.data.find(
+                                                        (x) =>
+                                                            x.teamMemberId ==
+                                                            teamMemberBudget.teamMemberId
+                                                    )?.role //This is the only thing that I didn't like and add it to the preview will generate type conflict and inconsistencies
+                                                }
+                                            </span>
+                                            <span className="text-right">
+                                                {teamMemberBudget.hours}
+                                            </span>
+                                        </div>
+                                    )
+                                )}
                             </div>
                             <div className="my-2 rounded-md border px-6 py-2 text-sm shadow">
                                 <div className="grid grid-cols-3 ">
@@ -163,7 +175,7 @@ export default function GenerateAnualBudgetButton({
                                     </div>
                                 </div>
 
-                                {formattedBudget.budgetItems.map((i, idx) => (
+                                {budgetPreview.budgetItems.map((i, idx) => (
                                     <div
                                         key={idx}
                                         className="my-2 grid grid-cols-3"

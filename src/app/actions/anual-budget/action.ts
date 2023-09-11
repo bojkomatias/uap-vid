@@ -6,6 +6,9 @@ import {
     createManyAnualBudgetTeamMember,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
+import { getTeamMembers, getTeamMembersByIds } from '@repositories/team-member'
+import { prisma } from '../../../utils/bd'
+import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -71,3 +74,29 @@ const generateAnualBudgetTeamMembersItems = (
         }
     })
 }
+
+export const protocolToAnualBudgetPreview = async (protocolId: string,
+    protocolBudgetItems: ProtocolSectionsBudget,
+    protocolTeamMembers: ProtocolSectionsIdentificationTeam[]) => {
+        const ABI = generateAnualBudgetItems(protocolBudgetItems, new Date().getFullYear().toString())
+        const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null)
+
+        const thereAreTeamMembers = ABT.map(x=>x.teamMemberId).filter(Boolean).length > 0
+
+        const teamMembers = thereAreTeamMembers ? await getTeamMembersByIds(ABT.map((t) => t.teamMemberId)) : []
+
+        const ABTWithTeamMemberAndUserData = ABT.map((t) => {
+            const teamMember = teamMembers.find((tm) => tm.id === t.teamMemberId)
+            return {
+                ...t,
+                teamMember
+            }
+        }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
+        
+        return {
+            year: new Date().getFullYear().toString(),
+            protocolId: protocolId,
+            budgetItems: ABI,
+            budgetTeamMembers: ABTWithTeamMemberAndUserData
+        }
+    }
