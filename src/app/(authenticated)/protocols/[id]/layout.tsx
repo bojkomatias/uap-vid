@@ -17,6 +17,7 @@ import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 import GenerateAnualBudgetButton from '@protocol/elements/action-buttons/generate-anual-budget'
+import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 
 async function Layout({
     params,
@@ -40,6 +41,11 @@ async function Layout({
     const protocol = await findProtocolByIdWithResearcher(params.id)
     if (!protocol) redirect('/protocols')
     const reviews = await getReviewsByProtocol(protocol.id)
+    const budgetPreview = await protocolToAnualBudgetPreview(
+        protocol.id,
+        protocol.sections.budget,
+        protocol.sections.identification.team
+    )
 
     return (
         <>
@@ -80,8 +86,7 @@ async function Layout({
                         }}
                     />
                     <GenerateAnualBudgetButton
-                        id={protocol.id}
-                        budgetItems={protocol.sections.budget}
+                        budgetPreview={budgetPreview}
                         teamMembers={protocol.sections.identification.team}
                     />
                     <EditButton

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 import type {
-    ProtocolSectionsBudget,
+    AnualBudgetItem,
     ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
@@ -10,41 +9,58 @@ import { AlertCircle, CircleCheck, FileDollar } from 'tabler-icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
-import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
 import Currency from '@elements/currency'
+import { generateAnualBudget } from '@actions/anual-budget/action'
+import { useRouter } from 'next/navigation'
+import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 
 type ActionButtonTypes = {
-    id: string
-    budgetItems: ProtocolSectionsBudget
+    budgetPreview: {
+        year: string
+        protocolId: string
+        budgetItems: AnualBudgetItem[]
+        budgetTeamMembers: Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
+    }
     teamMembers: ProtocolSectionsIdentificationTeam[]
 }
 
 export default function GenerateAnualBudgetButton({
-    id,
-    budgetItems,
+    budgetPreview,
     teamMembers,
 }: ActionButtonTypes) {
     const [opened, { open, close }] = useDisclosure(false)
-
+    const router = useRouter()
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
+    const currentYear = new Date().getFullYear().toString()
 
-    const formattedBudget = protocolBudgetToAnualBudget(
-        id,
-        budgetItems,
-        teamMembers
-    )
-
-    const generateAnualBudget = async (budget: any) => {
-        return await fetch(`/api/anual-budget/`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(budget),
-        }).then((res) => {
-            console.log(res)
-        })
+    const actionButton = () => {
+        if (parsedObject.success == false) {
+            return (
+                <Button
+                    intent="secondary"
+                    onClick={() => {
+                        router.push(`/protocols/${budgetPreview.protocolId}/0`)
+                    }}
+                >
+                    Editar miembos de equipo
+                </Button>
+            )
+        } else {
+            return (
+                <Button
+                    intent="secondary"
+                    onClick={() => {
+                        generateAnualBudget(
+                            budgetPreview.protocolId,
+                            currentYear
+                        )
+                        close()
+                    }}
+                >
+                    Generar presupuesto
+                </Button>
+            )
+        }
     }
 
     return (
@@ -91,7 +107,7 @@ export default function GenerateAnualBudgetButton({
                                         <Link
                                             target="_blank"
                                             className="font-bold transition hover:text-gray-700"
-                                            href={`/protocols/${id}`}
+                                            href={`/protocols/${budgetPreview.protocolId}`}
                                         >
                                             {' '}
                                             protocolo{' '}
@@ -119,20 +135,33 @@ export default function GenerateAnualBudgetButton({
                                         <span>Horas asignadas</span>
                                     </div>
                                 </div>
-                                {parsedObject.data.map((d, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="my-2 grid grid-cols-3"
-                                    >
-                                        <span>{d.teamMemberId}</span>
-                                        <span className="text-center">
-                                            {d.role}
-                                        </span>
-                                        <span className="text-right">
-                                            {d.hours}
-                                        </span>
-                                    </div>
-                                ))}
+                                {budgetPreview.budgetTeamMembers.map(
+                                    (teamMemberBudget, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="my-2 grid grid-cols-3"
+                                        >
+                                            <span>
+                                                {
+                                                    teamMemberBudget.teamMember
+                                                        ?.name
+                                                }
+                                            </span>
+                                            <span className="text-center">
+                                                {
+                                                    parsedObject.data.find(
+                                                        (x) =>
+                                                            x.teamMemberId ==
+                                                            teamMemberBudget.teamMemberId
+                                                    )?.role //This is the only thing that I didn't like and add it to the preview will generate type conflict and inconsistencies
+                                                }
+                                            </span>
+                                            <span className="text-right">
+                                                {teamMemberBudget.hours}
+                                            </span>
+                                        </div>
+                                    )
+                                )}
                             </div>
                             <div className="my-2 rounded-md border px-6 py-2 text-sm shadow">
                                 <div className="grid grid-cols-3 ">
@@ -147,7 +176,7 @@ export default function GenerateAnualBudgetButton({
                                     </div>
                                 </div>
 
-                                {formattedBudget.budgetItems.map((i, idx) => (
+                                {budgetPreview.budgetItems.map((i, idx) => (
                                     <div
                                         key={idx}
                                         className="my-2 grid grid-cols-3"
@@ -165,21 +194,7 @@ export default function GenerateAnualBudgetButton({
                         </div>
                     )}
                 </section>
-                <Button onClick={close} intent="secondary">
-                    {parsedObject.success == false ? (
-                        <Link href={`/protocols/${id}/0`}>
-                            Editar miembos de equipo
-                        </Link>
-                    ) : (
-                        <span
-                            onClick={() => {
-                                generateAnualBudget(formattedBudget)
-                            }}
-                        >
-                            Generar presupuesto
-                        </span>
-                    )}
-                </Button>
+                {actionButton()}
             </Modal>
 
             <Group position="center">

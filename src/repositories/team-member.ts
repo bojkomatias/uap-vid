@@ -53,6 +53,32 @@ export const getTeamMemberById = async (id: string) =>
         include: { categories: true, user: true },
     })
 
+export const getTeamMemberCategoriesById = async (teamMemberIds: string[]) =>
+    await prisma.teamMember.findFirstOrThrow({
+        where: {
+            id: {
+                in: teamMemberIds,
+            },
+        },
+        include: {
+            categories: {
+                include: { category: true },
+            },
+        },
+    })
+
+export const getTeamMembersByIds = async (teamMemberIds: string[]) =>
+    await prisma.teamMember.findMany({
+        where: {
+            id: {
+                in: teamMemberIds
+            }
+        },
+        include: {
+            user: true
+        }
+    })
+
 export const getTeamMembers = async ({
     records = '5',
     page = '1',
@@ -79,8 +105,8 @@ export const getTeamMembers = async ({
             },
             where: search
                 ? {
-                      OR: [{ name: { contains: search, mode: 'insensitive' } }],
-                  }
+                    OR: [{ name: { contains: search, mode: 'insensitive' } }],
+                }
                 : {},
 
             orderBy,
