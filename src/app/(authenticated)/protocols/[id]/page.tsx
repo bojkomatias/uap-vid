@@ -10,8 +10,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         redirect('/protocols')
     }
 
-    console.log(protocol.anualBudgets)
-
     return (
         <>
             <PDF protocol={protocol} />

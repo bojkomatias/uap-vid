@@ -1,5 +1,5 @@
 'use client'
-import type { AnualBudget } from '@prisma/client'
+import type { AnualBudget, Prisma } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -8,11 +8,19 @@ import Link from 'next/link'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
 
+type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
+    select: {
+        id: true
+        year: true
+        protocol: true
+    }
+}>
+
 export default function AnualBudgetTable({
     anualBudgets,
     totalRecords,
 }: {
-    anualBudgets: AnualBudget[]
+    anualBudgets: CustomAnualBudget[]
     totalRecords: number
 }) {
     const columns = useMemo<ColumnDef<any>[]>(
