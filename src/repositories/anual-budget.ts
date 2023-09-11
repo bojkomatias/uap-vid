@@ -1,6 +1,99 @@
-import type { AnualBudget, AnualBudgetTeamMember } from '@prisma/client'
+import {
+    Prisma,
+    type AnualBudget,
+    type AnualBudgetTeamMember,
+} from '@prisma/client'
+import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
+
+export const getAnualBudgets = cache(
+    async ({
+        records = '5',
+        page = '1',
+        search,
+        sort,
+        order,
+        filter,
+        values,
+    }: {
+        [key: string]: string
+    }) => {
+        try {
+            const orderBy = order && sort ? orderByQuery(sort, order) : {}
+
+            return await prisma.$transaction([
+                prisma.anualBudget.count({
+                    where: {
+                        AND: [
+                            search
+                                ? {
+                                      OR: [
+                                          {
+                                              protocolId: {
+                                                  contains: search,
+                                                  mode: Prisma.QueryMode
+                                                      .insensitive,
+                                              },
+                                          },
+                                      ],
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
+                    },
+                }),
+
+                prisma.anualBudget.findMany({
+                    skip: Number(records) * (Number(page) - 1),
+                    take: Number(records),
+
+                    where: {
+                        AND: [
+                            search
+                                ? {
+                                      protocol: {
+                                          is: {
+                                              sections: {
+                                                  is: {
+                                                      identification: {
+                                                          is: {
+                                                              title: {
+                                                                  contains:
+                                                                      search,
+                                                                  mode: Prisma
+                                                                      .QueryMode
+                                                                      .insensitive,
+                                                              },
+                                                          },
+                                                      },
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
+                    },
+                    select: {
+                        id: true,
+                        year: true,
+                        protocol: true,
+                    },
+
+                    orderBy,
+                }),
+            ])
+        } catch (error) {
+            return []
+        }
+    }
+)
 
 export const getAnualBudgetById = cache(async (id: string) => {
     try {
