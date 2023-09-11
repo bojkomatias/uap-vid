@@ -105,17 +105,17 @@ export const getAnualBudgetById = cache(async (id: string) => {
                 createdAt: true,
                 updatedAt: true,
                 year: true,
-                budgetTeamMembers: {
-                    select: {
-                        teamMember: {
-                            include: {
-                                categories: { include: { category: true } },
-                            },
-                        },
-                        hours: true,
-                        remainingHours: true,
-                    },
-                },
+                // budgetTeamMembers: {
+                //     select: {
+                //         teamMember: {
+                //             include: {
+                //                 categories: { include: { category: true } },
+                //             },
+                //         },
+                //         hours: true,
+                //         remainingHours: true,
+                //     },
+                // },
                 budgetItems: true,
                 protocol: {
                     select: {

@@ -12,6 +12,7 @@ import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
 import { protocolBudgetToAnualBudget } from '@utils/protocolBudgetToAnualBudget'
 import Currency from '@elements/currency'
+import InfoTooltip from '../tooltip'
 
 type ActionButtonTypes = {
     id: string
@@ -20,10 +21,11 @@ type ActionButtonTypes = {
 }
 
 export default function GenerateAnualBudgetButton({
+    hasBudgetCurrentYear,
     id,
     budgetItems,
     teamMembers,
-}: ActionButtonTypes) {
+}: { hasBudgetCurrentYear: boolean } & ActionButtonTypes) {
     const [opened, { open, close }] = useDisclosure(false)
 
     const parsedObject = TeamMemberRelation.safeParse(teamMembers)
@@ -183,10 +185,33 @@ export default function GenerateAnualBudgetButton({
             </Modal>
 
             <Group position="center">
-                <Button intent="secondary" onClick={open}>
-                    <FileDollar />
-                    Generar presupuesto
-                </Button>
+                <>
+                    {hasBudgetCurrentYear ? (
+                        <div className="relative h-fit w-fit">
+                            <div className="absolute inset-0 z-[1] mr-3">
+                                <InfoTooltip>
+                                    <h4>
+                                        El protocolo ya tiene generado un
+                                        presupuesto en el corriente año.
+                                    </h4>
+                                </InfoTooltip>
+                            </div>
+                            <Button
+                                intent={'secondary'}
+                                disabled={hasBudgetCurrentYear}
+                            >
+                                <FileDollar />
+                                Generar presupuesto
+                                <div className="w-4" />
+                            </Button>
+                        </div>
+                    ) : (
+                        <Button intent="secondary" onClick={open}>
+                            <FileDollar />
+                            Generar presupuesto
+                        </Button>
+                    )}
+                </>
             </Group>
         </>
     )

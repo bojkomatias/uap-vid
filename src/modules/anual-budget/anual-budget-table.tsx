@@ -67,6 +67,7 @@ export default function AnualBudgetTable({
                 accessorKey: 'actions',
                 header: 'Acciones',
                 enableHiding: false,
+                enableSorting: false,
                 cell: ({ row }) => {
                     return (
                         <div className="flex gap-2">
@@ -79,6 +80,16 @@ export default function AnualBudgetTable({
                                 href={`/anual-budgets/${row.original.id}`}
                             >
                                 Ver
+                            </Link>
+                            <Link
+                                passHref
+                                className={cx(
+                                    buttonStyle('secondary'),
+                                    'px-2.5 py-1 text-xs'
+                                )}
+                                href={`/anual-budgets/${row.original.id}`}
+                            >
+                                Otra acción
                             </Link>
                         </div>
                     )

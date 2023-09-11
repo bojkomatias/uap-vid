@@ -41,6 +41,12 @@ async function Layout({
     if (!protocol) redirect('/protocols')
     const reviews = await getReviewsByProtocol(protocol.id)
 
+    const hasBudgetCurrentYear = protocol.anualBudgets
+        .map((b) => {
+            return b.year == new Date().getFullYear()
+        })
+        .some((s) => s == true)
+
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
@@ -80,6 +86,7 @@ async function Layout({
                         }}
                     />
                     <GenerateAnualBudgetButton
+                        hasBudgetCurrentYear={hasBudgetCurrentYear}
                         id={protocol.id}
                         budgetItems={protocol.sections.budget}
                         teamMembers={protocol.sections.identification.team}
