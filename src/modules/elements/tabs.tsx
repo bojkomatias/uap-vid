@@ -19,7 +19,7 @@ export default function Tabs({
     iconOrWhateverYouWant?: React.ReactNode
 }) {
     return (
-        <div>
+        <div className="mb-12">
             <div className="sm:hidden">
                 <label htmlFor="tabs" className="sr-only">
                     Select a tab
@@ -43,10 +43,11 @@ export default function Tabs({
                                 key={tab.title}
                                 href={tab.href}
                                 className={classNames(
-                                    tab.title == params.name
-                                        ? 'border-indigo-500 text-indigo-600'
-                                        : 'border-transparent text-gray-500 hover:border-gray-200 hover:text-gray-700',
-                                    'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium'
+                                    tab.extendedTitle ==
+                                        decodeURIComponent(params.name)
+                                        ? 'border-indigo-500 border-primary text-primary'
+                                        : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500',
+                                    'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200'
                                 )}
                             >
                                 {tab.title}
