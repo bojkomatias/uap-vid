@@ -4,10 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
 import AnualBudgetTable from 'modules/anual-budget/anual-budget-table'
-import {
-    getAnualBudgets,
-    getAnualBudgetsByAcademicUnit,
-} from '@repositories/anual-budget'
+import { getAnualBudgetsByAcademicUnit } from '@repositories/anual-budget'
 
 export default async function Page({
     params,
