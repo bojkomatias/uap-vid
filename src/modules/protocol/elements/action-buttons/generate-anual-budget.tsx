@@ -10,11 +10,13 @@ import { useDisclosure } from '@mantine/hooks'
 import { Modal, Group } from '@mantine/core'
 import { Button } from '@elements/button'
 import Currency from '@elements/currency'
+import InfoTooltip from '../tooltip'
 import { generateAnualBudget } from '@actions/anual-budget/action'
 import { useRouter } from 'next/navigation'
 import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 
 type ActionButtonTypes = {
+    hasBudgetCurrentYear: boolean
     budgetPreview: {
         year: string
         protocolId: string
@@ -25,6 +27,7 @@ type ActionButtonTypes = {
 }
 
 export default function GenerateAnualBudgetButton({
+    hasBudgetCurrentYear,
     budgetPreview,
     teamMembers,
 }: ActionButtonTypes) {
@@ -40,6 +43,7 @@ export default function GenerateAnualBudgetButton({
                     intent="secondary"
                     onClick={() => {
                         router.push(`/protocols/${budgetPreview.protocolId}/0`)
+                        close() 
                     }}
                 >
                     Editar miembos de equipo
@@ -198,10 +202,33 @@ export default function GenerateAnualBudgetButton({
             </Modal>
 
             <Group position="center">
-                <Button intent="secondary" onClick={open}>
-                    <FileDollar />
-                    Generar presupuesto
-                </Button>
+                <>
+                    {hasBudgetCurrentYear ? (
+                        <div className="relative h-fit w-fit">
+                            <div className="absolute inset-0 z-[1] mr-3">
+                                <InfoTooltip>
+                                    <h4>
+                                        El protocolo ya tiene generado un
+                                        presupuesto en el corriente año.
+                                    </h4>
+                                </InfoTooltip>
+                            </div>
+                            <Button
+                                intent={'secondary'}
+                                disabled={hasBudgetCurrentYear}
+                            >
+                                <FileDollar />
+                                Generar presupuesto
+                                <div className="w-4" />
+                            </Button>
+                        </div>
+                    ) : (
+                        <Button intent="secondary" onClick={open}>
+                            <FileDollar />
+                            Generar presupuesto
+                        </Button>
+                    )}
+                </>
             </Group>
         </>
     )

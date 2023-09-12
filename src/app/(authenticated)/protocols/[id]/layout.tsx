@@ -47,6 +47,12 @@ async function Layout({
         protocol.sections.identification.team
     )
 
+    const hasBudgetCurrentYear = protocol.anualBudgets
+        .map((b) => {
+            return b.year == new Date().getFullYear()
+        })
+        .some((s) => s == true)
+
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
@@ -86,6 +92,7 @@ async function Layout({
                         }}
                     />
                     <GenerateAnualBudgetButton
+                        hasBudgetCurrentYear={hasBudgetCurrentYear}
                         budgetPreview={budgetPreview}
                         teamMembers={protocol.sections.identification.team}
                     />
