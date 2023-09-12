@@ -28,15 +28,25 @@ export const getAnualBudgets = cache(
                         AND: [
                             search
                                 ? {
-                                      OR: [
-                                          {
-                                              protocolId: {
-                                                  contains: search,
-                                                  mode: Prisma.QueryMode
-                                                      .insensitive,
+                                      protocol: {
+                                          is: {
+                                              sections: {
+                                                  is: {
+                                                      identification: {
+                                                          is: {
+                                                              title: {
+                                                                  contains:
+                                                                      search,
+                                                                  mode: Prisma
+                                                                      .QueryMode
+                                                                      .insensitive,
+                                                              },
+                                                          },
+                                                      },
+                                                  },
                                               },
                                           },
-                                      ],
+                                      },
                                   }
                                 : {},
                             filter && values
@@ -135,13 +145,18 @@ export const getAnualBudgetById = cache(async (id: string) => {
     }
 })
 
-export const createAnualBudgetV2 = async (data: Omit<AnualBudget, 'id'| 'createdAt' | 'updatedAt'>) => {
-    const newAnualBudget = await prisma.anualBudget.create({data})
+export const createAnualBudgetV2 = async (
+    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt'>
+) => {
+    const newAnualBudget = await prisma.anualBudget.create({ data })
     return newAnualBudget
 }
 
-export const createManyAnualBudgetTeamMember = async (data: Omit<AnualBudgetTeamMember,'id'>[]) => {
-    const newAnualBudgetTeamMember = await prisma.anualBudgetTeamMember.createMany({data})
+export const createManyAnualBudgetTeamMember = async (
+    data: Omit<AnualBudgetTeamMember, 'id'>[]
+) => {
+    const newAnualBudgetTeamMember =
+        await prisma.anualBudgetTeamMember.createMany({ data })
     return newAnualBudgetTeamMember
 }
 
