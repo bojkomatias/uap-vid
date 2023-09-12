@@ -4,25 +4,44 @@ import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
-
 import Link from 'next/link'
-import AnualBudgetTable from 'modules/anual-budget/anual-budget-table'
-
-import { getAnualBudgets } from '@repositories/anual-budget'
+import Tabs from '@elements/tabs'
+import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 
 export default async function Page({
-    searchParams,
+    params,
+    children,
 }: {
-    searchParams: { [key: string]: string }
+    params: { name: string }
+    children: React.ReactNode
 }) {
     const session = await getServerSession(authOptions)
     if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
         redirect('/protocols')
 
-    const [totalRecords, anualBudgets] = await getAnualBudgets(searchParams)
+    const academicUnitsTabs = () => {
+        const academicUnits: {
+            title: string
+            extendedTitle?: string
+            href: string
+            count?: string
+        }[] = []
+        Object.keys(AcademicUnitsDictionary).forEach(function (key) {
+            academicUnits.push({
+                title: key,
+                extendedTitle: AcademicUnitsDictionary[key],
+                href: `/anual-budgets/ac_unit/${key}`,
+            })
+        })
+
+        return academicUnits
+    }
+
+    const tabs = academicUnitsTabs()
 
     return (
         <>
+            <>{JSON.stringify(params)}</>
             <PageHeading title="Presupuestos anuales" />
             <p className="ml-2 text-sm text-gray-500">
                 Lista de los presupuestos anuales de los distintos proyectos de
@@ -35,10 +54,8 @@ export default async function Page({
                 </Link>
                 .
             </p>
-            <AnualBudgetTable
-                anualBudgets={anualBudgets}
-                totalRecords={totalRecords}
-            />
+            <Tabs params={params} tabs={tabs} />
+            {children}
         </>
     )
 }

@@ -13,6 +13,7 @@ const newLinkMap: MapLink = {
     convocatories: 'Lista de convocatorias',
     'team-members': 'Lista de miembros de investigación',
     categories: 'Lista de categorías',
+    anualBudgets: 'Lista de presupuestos',
 }
 
 export const Breadcrumbs = () => {

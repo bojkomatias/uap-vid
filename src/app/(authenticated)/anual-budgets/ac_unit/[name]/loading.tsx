@@ -1,15 +1,12 @@
 export default function Loading() {
     return (
-        <div className="mx-auto mt-20 w-full max-w-[1600px] animate-pulse">
-            <h2 className="mb-3 h-8 w-1/3 rounded bg-gray-100" />
-            <h3 className="h-5 w-2/3 rounded bg-gray-100" />
-
-            <div className="flex flex-row-reverse">
-                <div className="h-10 w-40 rounded bg-gray-100" />
-            </div>
-            <div className="mx-12 mt-20 space-y-4">
-                <div className="h-12 w-full rounded bg-gray-100" />
-                <div className="space-y-3 px-2">
+        <div className="mx-auto w-full  animate-pulse">
+            <div className=" mt-8 space-y-4">
+                <div className="flex gap-2">
+                    <div className="h-12 w-[50%] rounded bg-gray-100" />
+                    <div className="h-12 w-[10%] rounded bg-gray-100" />
+                </div>
+                <div className="space-y-3 ">
                     <div className="h-8 w-full rounded bg-gray-100" />
                     <div className="h-8 w-full rounded bg-gray-100" />
                     <div className="h-8 w-full rounded bg-gray-100" />
