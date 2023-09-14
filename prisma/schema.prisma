@@ -123,6 +123,7 @@ model AnualBudget {
   id                String                  @id @default(auto()) @map("_id") @db.ObjectId
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @default(now())
+  approved          Boolean                 @default(false)
   budgetItems       AnualBudgetItem[]
   budgetTeamMembers AnualBudgetTeamMember[]
   year              Int
@@ -142,6 +143,7 @@ model AnualBudgetTeamMember {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
   teamMemberId   String       @db.ObjectId
   teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
+  memberRole     String
   hours          Float
   remainingHours Float
   executions     Execution[]

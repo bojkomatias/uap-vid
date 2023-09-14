@@ -1,7 +1,4 @@
-import type {
-    AnualBudget,
-    Execution,
-} from '@prisma/client'
+import type { AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 
@@ -16,6 +13,7 @@ const anualBudgetTeamMemberWithAllRelations =
             },
         },
     })
+
 export type AnualBudgetTeamMemberWithAllRelations =
     Prisma.AnualBudgetTeamMemberGetPayload<
         typeof anualBudgetTeamMemberWithAllRelations
@@ -76,3 +74,7 @@ export const calculateTotalBudget = async (
         total: ABIe + ABTe + ABIr + ABTr,
     }
 }
+
+export type TotalBudgetCalculation = Awaited<
+    ReturnType<typeof calculateTotalBudget>
+>

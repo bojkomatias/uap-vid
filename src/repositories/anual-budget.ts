@@ -109,31 +109,12 @@ export const getAnualBudgetById = cache(async (id: string) => {
     try {
         return await prisma.anualBudget.findFirst({
             where: { id },
-            select: {
-                id: true,
-                protocolId: true,
-                createdAt: true,
-                updatedAt: true,
-                year: true,
+            include: {
                 budgetTeamMembers: {
-                    select: {
+                    include: {
                         teamMember: {
                             include: {
                                 categories: { include: { category: true } },
-                            },
-                        },
-                        hours: true,
-                        remainingHours: true,
-                    },
-                },
-                budgetItems: true,
-                protocol: {
-                    select: {
-                        sections: {
-                            select: {
-                                identification: {
-                                    select: { title: true, sponsor: true },
-                                },
                             },
                         },
                     },
@@ -146,7 +127,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
 })
 
 export const createAnualBudgetV2 = async (
-    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt'>
+    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
     return newAnualBudget
@@ -172,6 +153,7 @@ export const createAnualBudget = async (
             return {
                 teamMemberId: t.teamMemberId,
                 hours: t.hours,
+                memberRole: t.memberRole,
                 remainingHours: t.hours,
                 anualBudgetId: newAnualBudget.id,
                 executions: [],

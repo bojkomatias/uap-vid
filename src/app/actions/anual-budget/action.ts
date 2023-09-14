@@ -1,5 +1,12 @@
 'use server'
-import type { AnualBudget, ProtocolSectionsBudget, AnualBudgetItem, Execution, ProtocolSectionsIdentificationTeam, AnualBudgetTeamMember } from '@prisma/client'
+import type {
+    AnualBudget,
+    ProtocolSectionsBudget,
+    AnualBudgetItem,
+    Execution,
+    ProtocolSectionsIdentificationTeam,
+    AnualBudgetTeamMember,
+} from '@prisma/client'
 import {
     createAnualBudgetV2,
     createManyAnualBudgetTeamMember,
@@ -20,7 +27,10 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
 
     // Create the annual budget with all the items listed in the protocol budget section.
     const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
-    const data: Omit<AnualBudget, 'id'| 'createdAt' | 'updatedAt'>  = {
+    const data: Omit<
+        AnualBudget,
+        'id' | 'createdAt' | 'updatedAt' | 'approved'
+    > = {
         protocolId: protocol.id,
         year: Number(year),
         budgetItems: ABI,
@@ -66,6 +76,7 @@ const generateAnualBudgetTeamMembersItems = (
         return {
             anualBudgetId: anualBudgetId,
             teamMemberId: item.teamMemberId!,
+            memberRole: item.role,
             hours: item.hours,
             remainingHours: item.hours,
             executions: [] as Execution[],
@@ -73,28 +84,36 @@ const generateAnualBudgetTeamMembersItems = (
     })
 }
 
-export const protocolToAnualBudgetPreview = async (protocolId: string,
+export const protocolToAnualBudgetPreview = async (
+    protocolId: string,
     protocolBudgetItems: ProtocolSectionsBudget,
-    protocolTeamMembers: ProtocolSectionsIdentificationTeam[]) => {
-        const ABI = generateAnualBudgetItems(protocolBudgetItems, new Date().getFullYear().toString())
-        const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null)
+    protocolTeamMembers: ProtocolSectionsIdentificationTeam[]
+) => {
+    const ABI = generateAnualBudgetItems(
+        protocolBudgetItems,
+        new Date().getFullYear().toString()
+    )
+    const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null)
 
-        const thereAreTeamMembers = ABT.map(x=>x.teamMemberId).filter(Boolean).length > 0
+    const thereAreTeamMembers =
+        ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
 
-        const teamMembers = thereAreTeamMembers ? await getTeamMembersByIds(ABT.map((t) => t.teamMemberId)) : []
+    const teamMembers = thereAreTeamMembers
+        ? await getTeamMembersByIds(ABT.map((t) => t.teamMemberId))
+        : []
 
-        const ABTWithTeamMemberAndUserData = ABT.map((t) => {
-            const teamMember = teamMembers.find((tm) => tm.id === t.teamMemberId)
-            return {
-                ...t,
-                teamMember
-            }
-        }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
-            
+    const ABTWithTeamMemberAndUserData = ABT.map((t) => {
+        const teamMember = teamMembers.find((tm) => tm.id === t.teamMemberId)
         return {
-            year: new Date().getFullYear().toString(),
-            protocolId: protocolId,
-            budgetItems: ABI,
-            budgetTeamMembers: ABTWithTeamMemberAndUserData
+            ...t,
+            teamMember,
         }
+    }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
+
+    return {
+        year: new Date().getFullYear().toString(),
+        protocolId: protocolId,
+        budgetItems: ABI,
+        budgetTeamMembers: ABTWithTeamMemberAndUserData,
     }
+}
