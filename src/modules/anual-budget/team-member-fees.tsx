@@ -1,5 +1,5 @@
 'use client'
-import { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
+import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 
 export function TeamMemberFees({
@@ -23,10 +23,12 @@ export function TeamMemberFees({
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
                 <table className="min-w-full">
                     <colgroup>
-                        <col className="w-full sm:w-1/2" />
-                        <col className="sm:w-1/6" />
-                        <col className="sm:w-1/6" />
-                        <col className="sm:w-1/6" />
+                        <col className="w-full sm:w-[40%]" />
+                        <col className="sm:w-[12%]" />
+                        <col className="sm:w-[12%]" />
+                        <col className="sm:w-[12%]" />
+                        <col className="sm:w-[12%]" />
+                        <col className="sm:w-[12%]" />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -38,7 +40,7 @@ export function TeamMemberFees({
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                             >
                                 Horas
                             </th>
@@ -46,7 +48,19 @@ export function TeamMemberFees({
                                 scope="col"
                                 className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
                             >
+                                Horas restantes
+                            </th>
+                            <th
+                                scope="col"
+                                className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                            >
                                 Valor / hora
+                            </th>
+                            <th
+                                scope="col"
+                                className="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
+                            >
+                                Restante
                             </th>
                             <th
                                 scope="col"
@@ -66,6 +80,7 @@ export function TeamMemberFees({
                                     categories,
                                     pointsObrero,
                                 },
+                                memberRole,
                                 hours,
                                 remainingHours,
                             }) => (
@@ -78,11 +93,22 @@ export function TeamMemberFees({
                                             {name}
                                         </div>
                                         <div className="mt-1 truncate text-gray-500">
-                                            {categories.at(-1)?.category.name}
+                                            {memberRole} -
+                                            {obrero ? (
+<i>{}</i>
+                                            ) : (
+                                                <i>{
+                                                    categories.at(-1)?.category
+                                                    .name}
+                                                </i>
+                                            )}
                                         </div>
                                     </td>
-                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
+                                    <td className="table-cell px-3 py-5 text-right text-sm text-gray-500">
                                         {hours}
+                                    </td>
+                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
+                                        {remainingHours}
                                     </td>
                                     <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
                                         {currencyFormatter.format(
@@ -101,6 +127,15 @@ export function TeamMemberFees({
                                                 ?.price ?? 0 * hours
                                         )}
                                     </td>
+                                    <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
+                                        $
+                                        {currencyFormatter.format(
+                                            categories
+                                                .at(-1)
+                                                ?.category.price.at(-1)
+                                                ?.price ?? 0 * remainingHours
+                                        )}
+                                    </td>
                                 </tr>
                             )
                         )}
@@ -109,7 +144,7 @@ export function TeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={3}
+                                colSpan={5}
                                 className="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                             >
                                 Subtotal
@@ -127,7 +162,7 @@ export function TeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={3}
+                                colSpan={5}
                                 className="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
                             >
                                 Ejecutado
@@ -145,7 +180,7 @@ export function TeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={3}
+                                colSpan={5}
                                 className="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0"
                             >
                                 Total

@@ -8,7 +8,7 @@ import type {
     AnualBudgetTeamMember,
 } from '@prisma/client'
 import {
-    createAnualBudgetV2,
+    createAnualBudget,
     createManyAnualBudgetTeamMember,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
@@ -35,7 +35,7 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         year: Number(year),
         budgetItems: ABI,
     }
-    const newAnualBudget = await createAnualBudgetV2(data)
+    const newAnualBudget = await createAnualBudget(data)
 
     // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
     const ABT = generateAnualBudgetTeamMembersItems(

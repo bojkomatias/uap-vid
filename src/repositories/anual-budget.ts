@@ -126,7 +126,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
     }
 })
 
-export const createAnualBudgetV2 = async (
+export const createAnualBudget = async (
     data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
@@ -139,28 +139,6 @@ export const createManyAnualBudgetTeamMember = async (
     const newAnualBudgetTeamMember =
         await prisma.anualBudgetTeamMember.createMany({ data })
     return newAnualBudgetTeamMember
-}
-
-export const createAnualBudget = async (
-    data: AnualBudget & { budgetTeamMembers: AnualBudgetTeamMember[] }
-) => {
-    const { budgetTeamMembers, ...rest } = data
-    const newAnualBudget = await prisma.anualBudget.create({
-        data: rest,
-    })
-    await prisma.anualBudgetTeamMember.createMany({
-        data: budgetTeamMembers.map((t) => {
-            return {
-                teamMemberId: t.teamMemberId,
-                hours: t.hours,
-                memberRole: t.memberRole,
-                remainingHours: t.hours,
-                anualBudgetId: newAnualBudget.id,
-                executions: [],
-            }
-        }),
-    })
-    return newAnualBudget
 }
 
 export const updateAnualBudget = async (data: AnualBudget) => {
