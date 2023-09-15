@@ -3,7 +3,7 @@ import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 
-export function TeamMemberFees({
+export function BudgetTeamMemberFees({
     approved,
     budgetTeamMembers,
     ABTe,
@@ -23,6 +23,7 @@ export function TeamMemberFees({
                     </h1>
                 </div>
             </div>
+
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
                 <table className="min-w-full">
                     <colgroup>
@@ -32,9 +33,9 @@ export function TeamMemberFees({
                                 approved ? ' sm:w-[40%]' : ' sm:w-1/3'
                             )}
                         />
-                        <col className={approved ? 'sm:w-[12%]' : 'w-1/6'} />
-                        <col className={approved ? 'sm:w-[12%]' : 'w-1/6'} />
-                        <col className={approved ? 'sm:w-[12%]' : 'w-1/6'} />
+                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
+                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
+                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
                         <col hidden={!approved} className="sm:w-[12%]" />
                         <col hidden={!approved} className="sm:w-[12%]" />
                     </colgroup>
@@ -55,7 +56,7 @@ export function TeamMemberFees({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 ',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
                                     approved && 'sm:table-cell'
                                 )}
                             >
@@ -70,7 +71,7 @@ export function TeamMemberFees({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
                                     approved && 'sm:table-cell'
                                 )}
                             >
@@ -107,31 +108,36 @@ export function TeamMemberFees({
                                             {name}
                                         </div>
                                         <div className="mt-1 truncate text-gray-500">
-                                            {memberRole} -
+                                            {memberRole}
+                                            {' - '}
                                             {obrero ? (
-                                                <i>Obrero: {pointsObrero}</i>
+                                                <span className="font-medium text-gray-700">
+                                                    Puntos de obrero:{' '}
+                                                    {pointsObrero}
+                                                </span>
                                             ) : (
-                                                <i>
+                                                <span className="font-medium text-gray-700">
                                                     {
                                                         categories.at(-1)
                                                             ?.category.name
                                                     }
-                                                </i>
+                                                </span>
                                             )}
                                         </div>
                                     </td>
-                                    <td className="table-cell px-3 py-5 text-right text-sm text-gray-500">
+                                    <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
                                         {hours}
                                     </td>
                                     <td
                                         className={cx(
-                                            'hidden px-3 py-5 text-right text-sm text-gray-500',
+                                            'hidden px-3 py-5 text-right text-sm text-gray-600',
                                             approved && 'sm:table-cell'
                                         )}
                                     >
                                         {remainingHours}
                                     </td>
-                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-500 sm:table-cell">
+                                    <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
+                                        $
                                         {currencyFormatter.format(
                                             categories
                                                 .at(-1)
@@ -141,25 +147,25 @@ export function TeamMemberFees({
                                     </td>
                                     <td
                                         className={cx(
-                                            'hidden px-3 py-5 text-right text-sm text-gray-500',
+                                            'hidden px-3 py-5 text-right text-sm text-gray-600',
                                             approved && 'sm:table-cell'
                                         )}
                                     >
                                         $
                                         {currencyFormatter.format(
-                                            categories
+                                            (categories
                                                 .at(-1)
                                                 ?.category.price.at(-1)
-                                                ?.price ?? 0 * remainingHours
+                                                ?.price ?? 0) * remainingHours
                                         )}
                                     </td>
-                                    <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-500 sm:pr-0">
+                                    <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-600 sm:pr-0">
                                         $
                                         {currencyFormatter.format(
-                                            categories
+                                            (categories
                                                 .at(-1)
                                                 ?.category.price.at(-1)
-                                                ?.price ?? 0 * hours
+                                                ?.price ?? 0) * hours
                                         )}
                                     </td>
                                 </tr>

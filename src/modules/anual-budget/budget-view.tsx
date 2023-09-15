@@ -1,11 +1,11 @@
-import Currency from '@elements/currency'
 import type { AnualBudgetItem } from '@prisma/client'
 import type {
     AnualBudgetTeamMemberWithAllRelations,
     TotalBudgetCalculation,
 } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
-import { TeamMemberFees } from './team-member-fees'
+import { BudgetTeamMemberFees } from './budget-team-member-fees'
+import { BudgetItems } from './budget-items'
 
 export function BudgetView({
     approved,
@@ -19,50 +19,26 @@ export function BudgetView({
     calculations: TotalBudgetCalculation
 }) {
     return (
-        <div
-            // onSubmit={form.onSubmit((values) => console.log(values))}
-            className="mx-auto mt-10 max-w-7xl space-y-6"
-        >
-            <TeamMemberFees
-            approved={approved}
+        <div className="mx-auto mt-10 max-w-7xl space-y-6">
+            <BudgetTeamMemberFees
+                approved={approved}
                 budgetTeamMembers={budgetTeamMembers}
                 ABTe={calculations.ABTe}
                 ABTr={calculations.ABTr}
             />
 
-            <div className="font-medium">Gastos directos</div>
-            <div>
-                {budgetItems.map(({ type, detail, amount }, i) => (
-                    <div key={i} className="grid grid-cols-4 gap-3 space-y-2">
-                        <span className="flex flex-col">
-                            <label className="label">Tipo</label>
-                            <span>{type}</span>
-                        </span>
-                        <span className="flex flex-col">
-                            <label className="label">Detalle</label>
-                            <span>{detail}</span>
-                        </span>
-                        <span className="flex flex-col items-end">
-                            <label className="label">Monto solicitado</label>
-                        </span>
-                        <span className="flex flex-col items-end">
-                            <label className="label">Monto restante</label>
-                            <span>$ {currencyFormatter.format(amount)}</span>
-                        </span>
-                    </div>
-                ))}
-            </div>
+            <BudgetItems
+                approved={approved}
+                budgetItems={budgetItems}
+                ABIe={calculations.ABIe}
+                ABIr={calculations.ABIr}
+            />
 
-            {/* <Button
-                intent="secondary"
-                type="submit"
-                disabled={!form.isDirty()}
-                className="float-right"
-            >
-                Guardar
-            </Button> */}
-            <div className="mt-8 flex flex-row-reverse">
-                <Currency amount={calculations.total} size="md" />
+            <div className="flex justify-between text-lg font-medium">
+                <span>Total de presupuesto (ARS):</span>
+                <span className="font-semibold">
+                    ${currencyFormatter.format(calculations.total)}
+                </span>
             </div>
         </div>
     )
