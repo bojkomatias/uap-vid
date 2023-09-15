@@ -110,6 +110,17 @@ export const getAnualBudgetById = cache(async (id: string) => {
         return await prisma.anualBudget.findFirst({
             where: { id },
             include: {
+                protocol: {
+                    select: {
+                        sections: {
+                            select: {
+                                identification: {
+                                    select: { title: true, sponsor: true },
+                                },
+                            },
+                        },
+                    },
+                },
                 budgetTeamMembers: {
                     include: {
                         teamMember: {

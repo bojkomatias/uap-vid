@@ -1,20 +1,19 @@
 import Currency from '@elements/currency'
-import type { AnualBudget, AnualBudgetItem } from '@prisma/client'
+import type { AnualBudgetItem } from '@prisma/client'
 import type {
     AnualBudgetTeamMemberWithAllRelations,
     TotalBudgetCalculation,
 } from '@utils/anual-budget'
-
-import { currencyFormatter, dateFormatter } from '@utils/formatters'
+import { currencyFormatter } from '@utils/formatters'
 import { TeamMemberFees } from './team-member-fees'
 
-export default function AnualBudgetView({
-    meta,
+export function BudgetView({
+    approved,
     budgetItems,
     budgetTeamMembers,
     calculations,
 }: {
-    meta: Omit<AnualBudget, 'budgetItems'>
+    approved: boolean
     budgetItems: AnualBudgetItem[]
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     calculations: TotalBudgetCalculation
@@ -24,31 +23,12 @@ export default function AnualBudgetView({
             // onSubmit={form.onSubmit((values) => console.log(values))}
             className="mx-auto mt-10 max-w-7xl space-y-6"
         >
-            <div>
-                <div>
-                    Presupuesto anual{' '}
-                    <span className="font-medium">{meta.year}</span> de
-                    <span className="ml-1 truncate italic">
-                        {/* {protocolBudget.protocol.sections.identification.title} */}
-                    </span>
-                </div>
-                <div className="space-x-6 text-sm font-light">
-                    <span>Creado: {dateFormatter.format(meta.createdAt)}</span>
-                    <span>
-                        Ultima edición: {dateFormatter.format(meta.updatedAt)}
-                    </span>
-                </div>
-            </div>
-
-            <div className="w-full border-t border-gray-200" />
-
             <TeamMemberFees
+            approved={approved}
                 budgetTeamMembers={budgetTeamMembers}
                 ABTe={calculations.ABTe}
                 ABTr={calculations.ABTr}
             />
-
-            <div className="w-full border-t border-gray-200" />
 
             <div className="font-medium">Gastos directos</div>
             <div>

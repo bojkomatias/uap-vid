@@ -3,7 +3,7 @@ import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
-import AnualBudgetTable from 'modules/anual-budget/anual-budget-table'
+import AnualBudgetTable from 'modules/anual-budget/budget-table'
 import { getAnualBudgets } from '@repositories/anual-budget'
 
 export default async function Page({
