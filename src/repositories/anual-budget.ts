@@ -211,7 +211,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
     ) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
-            console.log(decodeURIComponent(ac_unit))
+
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
