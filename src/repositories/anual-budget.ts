@@ -192,3 +192,138 @@ export const updateAnualBudget = async (data: AnualBudget) => {
         return null
     }
 }
+
+export const getAnualBudgetsByAcademicUnit = cache(
+    async (
+        ac_unit: string,
+        {
+            records = '5',
+            page = '1',
+            search,
+            sort,
+            order,
+            filter,
+            values,
+        }: {
+            [key: string]: string
+        }
+    ) => {
+        try {
+            const orderBy = order && sort ? orderByQuery(sort, order) : {}
+
+            return await prisma.$transaction([
+                prisma.anualBudget.count({
+                    where: {
+                        protocol: {
+                            is: {
+                                sections: {
+                                    is: {
+                                        identification: {
+                                            is: {
+                                                sponsor: {
+                                                    has: decodeURIComponent(
+                                                        ac_unit
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        AND: [
+                            search
+                                ? {
+                                      protocol: {
+                                          is: {
+                                              sections: {
+                                                  is: {
+                                                      identification: {
+                                                          is: {
+                                                              title: {
+                                                                  contains:
+                                                                      search,
+                                                                  mode: Prisma
+                                                                      .QueryMode
+                                                                      .insensitive,
+                                                              },
+                                                          },
+                                                      },
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
+                    },
+                }),
+
+                prisma.anualBudget.findMany({
+                    skip: Number(records) * (Number(page) - 1),
+                    take: Number(records),
+
+                    where: {
+                        protocol: {
+                            is: {
+                                sections: {
+                                    is: {
+                                        identification: {
+                                            is: {
+                                                sponsor: {
+                                                    has: decodeURIComponent(
+                                                        ac_unit
+                                                    ),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        AND: [
+                            search
+                                ? {
+                                      protocol: {
+                                          is: {
+                                              sections: {
+                                                  is: {
+                                                      identification: {
+                                                          is: {
+                                                              title: {
+                                                                  contains:
+                                                                      search,
+                                                                  mode: Prisma
+                                                                      .QueryMode
+                                                                      .insensitive,
+                                                              },
+                                                          },
+                                                      },
+                                                  },
+                                              },
+                                          },
+                                      },
+                                  }
+                                : {},
+                            filter && values
+                                ? { [filter]: { in: values.split('-') } }
+                                : {},
+                        ],
+                    },
+                    select: {
+                        id: true,
+                        year: true,
+                        protocol: true,
+                    },
+
+                    orderBy,
+                }),
+            ])
+        } catch (error) {
+            return []
+        }
+    }
+)

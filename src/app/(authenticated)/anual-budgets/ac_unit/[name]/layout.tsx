@@ -30,7 +30,7 @@ export default async function Page({
             academicUnits.push({
                 title: key,
                 extendedTitle: AcademicUnitsDictionary[key],
-                href: `/anual-budgets/ac_unit/${key}`,
+                href: `/anual-budgets/ac_unit/${AcademicUnitsDictionary[key]}`,
             })
         })
 
@@ -41,7 +41,6 @@ export default async function Page({
 
     return (
         <>
-            <>{JSON.stringify(params)}</>
             <PageHeading title="Presupuestos anuales" />
             <p className="ml-2 text-sm text-gray-500">
                 Lista de los presupuestos anuales de los distintos proyectos de
