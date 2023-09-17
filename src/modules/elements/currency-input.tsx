@@ -7,7 +7,7 @@ const CurrencyInput = ({
     className,
 }: {
     defaultPrice?: number
-    priceSetter: Function
+    priceSetter?: Function
     className?: string
 }) => {
     const [amount, setAmount] = useState(
@@ -30,7 +30,7 @@ const CurrencyInput = ({
                 value={amount}
                 onChange={(e) => {
                     handleChange(e)
-                    priceSetter(e)
+                    priceSetter && priceSetter(e)
                 }}
                 placeholder="3400.00"
                 className={`${className} input pl-5`}

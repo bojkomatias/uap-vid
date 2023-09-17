@@ -110,10 +110,6 @@ export default function PriceUpdate({ row }: { row: any }) {
                         row.original.price[row.original.price.length - 1]?.price
                     }
                     className="min-w-[7rem] rounded-md py-1 text-xs"
-                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        //Esta función es obligatoria y la verdad me dió fiaca modificar el componente original
-                        return e
-                    }}
                 />
             </div>
         </PopoverComponent>

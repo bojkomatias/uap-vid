@@ -160,7 +160,6 @@ export default async function AcademicUnitsTable({
                                     ]?.amount ?? 0
                                 }
                                 className="min-w-[7rem] rounded-md py-1 text-xs"
-                                priceSetter={() => {}}
                             />
 
                             <Button
