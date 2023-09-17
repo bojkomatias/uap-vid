@@ -30,6 +30,19 @@ const CurrencyInput = ({
             </div>
             <CurrencyInputElement
                 defaultPrice={form.getInputProps(path).value}
+                priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (isNaN(form.getInputProps(path).value)) {
+                        return form.setFieldValue(path, 0)
+                    }
+                    form.setFieldValue(
+                        path,
+                        parseInt(
+                            e.target.value
+                                .replace(/\./g, '')
+                                .replace(/\^$/, '0')
+                        ) * 10
+                    )
+                }}
             />
 
             {form.getInputProps(path).error ? (
