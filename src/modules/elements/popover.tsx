@@ -4,6 +4,16 @@ import { Popover, Transition } from '@headlessui/react'
 import { buttonStyle } from './button/styles'
 import React from 'react'
 
+/**
+ * This popover is meant to be used when clicking over an editable field, but it has been made extensible enough to be used in other cases, such other cases, need to specify some Tailwind classes so that the popover won't appear on top of the field/button that it's being called uppon.
+ * @param children React component or html element.
+ * @param title shown in the button that opens the popover.
+ * @param className CSS classes.
+ * @param actionButton this is the button that appears inside the popover, this button is necessary to close the popover, but it can also perform any action that the developer wants.
+ * @param column is a boolean to put the children of the popover in a column (flex column, if false, flex row).
+ * @summary the actual types of these parameters are shown by Typescript.
+ */
+
 export default function PopoverComponent({
     children,
     title,
@@ -58,6 +68,7 @@ export default function PopoverComponent({
                             >
                                 {children}
                                 <div
+                                    /* This is the function that closes the popover, it gets triggered once the action button is clicked. The timeout is for ux purposes */
                                     onClick={async () => {
                                         setTimeout(() => {
                                             close()
