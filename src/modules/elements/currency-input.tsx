@@ -23,14 +23,18 @@ const CurrencyInput = ({
                 id="price-input"
                 type="text"
                 value={amount}
-                onChange={(e) =>
+                onChange={(e) => {
+                    e.preventDefault()
                     setAmount(
                         formatCurrency(e.target.value) === '0,00'
                             ? ''
                             : formatCurrency(e.target.value)
                     )
-                }
-                onBlur={() => priceSetter(parseLocaleNumber(amount, 'es-AR'))}
+                }}
+                onBlur={(e) => {
+                    e.preventDefault()
+                    priceSetter(parseLocaleNumber(amount, 'es-AR'))
+                }}
                 placeholder="3499.00"
                 className={cx('input pl-5', className)}
             />

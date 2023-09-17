@@ -61,7 +61,7 @@ export default function CategoriesTable({
                                 teamMemberCategory={row.original}
                             />
                         )}
-                        <PriceUpdate row={row} />
+                        <PriceUpdate category={row.original} />
                     </div>
                 ),
                 enableHiding: false,

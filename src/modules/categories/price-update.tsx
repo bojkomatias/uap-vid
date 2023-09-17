@@ -4,11 +4,18 @@ import PopoverComponent from '@elements/popover'
 import { notifications } from '@mantine/notifications'
 import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { Check, X } from 'tabler-icons-react'
 
-export default function PriceUpdate({ row }: { row: any }) {
+export default function PriceUpdate({
+    category,
+}: {
+    category: TeamMemberCategory
+}) {
     const router = useRouter()
+    // Atomic price[last].price
+    const [price, setPrice] = useState(category.price.at(-1)!.price)
+
     const updatePrice = async (id: string, data: TeamMemberCategory) => {
         const res = await fetch(`/api/categories/${id}`, {
             method: 'PATCH',
@@ -54,14 +61,8 @@ export default function PriceUpdate({ row }: { row: any }) {
                     className="py-1.5 text-xs shadow-sm"
                     intent="secondary"
                     onClick={() => {
-                        // Get the input value and parse the price
-                        const priceInput = document.getElementById(
-                            'price-input'
-                        ) as HTMLInputElement
-                        const price = parseLocaleNumber(
-                            priceInput.value,
-                            'es-AR'
-                        )
+                        // If not change return do nothing ...
+                        if (category.price.at(-1)!.price === price) return
 
                         // Create a new price object
                         const newPrice = {
@@ -72,17 +73,15 @@ export default function PriceUpdate({ row }: { row: any }) {
 
                         // Update the old price to set the 'to' property
                         const oldPrice = {
-                            ...row.original.price[
-                                row.original.price.length - 1
-                            ],
+                            ...category.price[category.price.length - 1],
                         }
                         oldPrice.to = new Date()
 
                         // Create a new array of prices with the updated old price and new price
                         const updatedPrices = [
-                            ...row.original.price.slice(
+                            ...category.price.slice(
                                 0,
-                                row.original.price.length - 1
+                                category.price.length - 1
                             ),
                             oldPrice,
                             newPrice,
@@ -90,12 +89,12 @@ export default function PriceUpdate({ row }: { row: any }) {
 
                         // Create a new object with updated price information
                         const categoryUpdated = {
-                            ...row.original,
+                            ...category,
                             price: updatedPrices,
                         }
 
                         // Call the updatePrice function with the updated category information
-                        updatePrice(row.original.id, categoryUpdated)
+                        updatePrice(category.id, categoryUpdated)
                     }}
                 >
                     Actualizar
@@ -107,13 +106,10 @@ export default function PriceUpdate({ row }: { row: any }) {
                 <p className="text-xs font-semibold">Precio actualizado:</p>
                 <CurrencyInput
                     defaultPrice={
-                        row.original.price[row.original.price.length - 1]?.price
+                        category.price[category.price.length - 1]?.price
                     }
                     className="min-w-[7rem] rounded-md py-1 text-xs"
-                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        //Esta función es obligatoria y la verdad me dió fiaca modificar el componente original
-                        return e
-                    }}
+                    priceSetter={(e) => setPrice(e)}
                 />
             </div>
         </PopoverComponent>
