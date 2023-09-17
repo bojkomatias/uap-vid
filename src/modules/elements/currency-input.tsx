@@ -36,7 +36,7 @@ const CurrencyInput = ({
                     priceSetter(parseLocaleNumber(amount, 'es-AR'))
                 }}
                 placeholder="3499.00"
-                className={cx('input pl-5', className)}
+                className={cx('input pl-5 text-right', className)}
             />
         </div>
     )

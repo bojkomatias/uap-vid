@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <PageHeading title={`Presupuesto ${meta.year}`} />
             <BudgetMetadata {...meta} />
             <BudgetView
+                budgetId={meta.id}
                 approved={meta.approved}
                 budgetItems={budgetItems}
                 budgetTeamMembers={budgetTeamMembers}

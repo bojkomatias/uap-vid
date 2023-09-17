@@ -3,21 +3,46 @@ import { Button } from '@elements/button'
 import type { AnualBudgetItem } from '@prisma/client'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
-import { UpdateABI } from './update-ABI'
+import { useForm } from '@mantine/form'
+import CurrencyInput from '@elements/currency-input'
+import { updateAnualBudgetItems } from '@repositories/anual-budget'
+import { notifications } from '@mantine/notifications'
+import { Check } from 'tabler-icons-react'
 
 export function BudgetItems({
+    budgetId,
     approved,
     budgetItems,
     ABIe,
     ABIr,
 }: {
+    budgetId: string
     approved: boolean
     budgetItems: AnualBudgetItem[]
     ABIe: number
     ABIr: number
 }) {
+    const form = useForm({ initialValues: budgetItems })
+
     return (
-        <div>
+        <form
+            onSubmit={form.onSubmit(async (values) => {
+                if (approved) return
+                const res = await updateAnualBudgetItems(budgetId, values)
+                if (res)
+                    return notifications.show({
+                        title: 'Valores actualizados',
+                        message:
+                            'Los montos a aprobar fueron actualizados con éxito',
+                        color: 'teal',
+                        icon: <Check />,
+                        radius: 0,
+                        style: {
+                            marginBottom: '.8rem',
+                        },
+                    })
+            })}
+        >
             <div className="flex items-center">
                 <div className="flex-auto">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -25,14 +50,25 @@ export function BudgetItems({
                     </h1>
                 </div>
             </div>
+
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
+                {!approved ? (
+                    <Button
+                        type="submit"
+                        intent="secondary"
+                        disabled={form.values === budgetItems}
+                        className="float-right px-2 py-1.5 text-xs"
+                    >
+                        Guardar valores actualizados
+                    </Button>
+                ) : null}
                 <table className="min-w-full">
                     <colgroup>
-                        <col className={cx(approved ? 'w-[45%]' : 'w-[40%]')} />
+                        <col className={cx(approved ? 'w-[45%]' : 'w-[50%]')} />
                         <col className={cx(approved ? 'w-[15%]' : 'w-[20%]')} />
                         <col className={cx(approved ? 'w-[15%]' : 'w-[20%]')} />
                         <col className={cx(approved ? 'w-[15%]' : 'hidden')} />
-                        <col className="w-[10%]" />
+                        <col className={cx(approved ? 'w-[10%]' : 'hidden')} />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -78,15 +114,16 @@ export function BudgetItems({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'table-cell py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0'
+                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
+                                    approved && 'table-cell'
                                 )}
                             >
-                                {approved ? 'Ejecuciones' : 'Editar'}
+                                Ejecuciones
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {budgetItems.map(
+                        {form.values.map(
                             (
                                 { detail, type, amount, remaining, executions },
                                 i
@@ -125,34 +162,52 @@ export function BudgetItems({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
-                                            !approved && 'table-cell'
+                                            !approved &&
+                                                'float-right table-cell'
                                         )}
                                     >
-                                        ${currencyFormatter.format(amount)}
+                                        <CurrencyInput
+                                            defaultPrice={
+                                                form.getInputProps(
+                                                    `${i}.amount`
+                                                ).value
+                                            }
+                                            priceSetter={(e) =>
+                                                form.setFieldValue(
+                                                    `${i}.amount`,
+                                                    e
+                                                )
+                                            }
+                                            className={cx(
+                                                'w-32 text-xs',
+                                                amount !==
+                                                    budgetItems.at(i)?.amount &&
+                                                    'border-warning-200 bg-warning-50'
+                                            )}
+                                        />
                                     </td>
 
                                     <td className="table-cell px-3 py-5 text-right text-sm">
                                         ${currencyFormatter.format(amount)}
                                     </td>
-                                    <td>
-                                        {approved ? (
-                                            <Button
-                                                intent={'secondary'}
-                                                className="float-right px-2 py-0.5 text-xs"
-                                            >
-                                                Ver
-                                            </Button>
-                                        ) : (
-                                            <UpdateABI
-                                                budgetId="1"
-                                                amount={amount}
-                                            />
+                                    <td
+                                        className={cx(
+                                            'hidden',
+                                            approved && 'table-cell'
                                         )}
+                                    >
+                                        <Button
+                                            intent={'secondary'}
+                                            className="float-right px-2 py-0.5 text-xs"
+                                        >
+                                            Ver
+                                        </Button>
                                     </td>
                                 </tr>
                             )
                         )}
                     </tbody>
+
                     <tfoot>
                         <tr>
                             <th
@@ -197,6 +252,6 @@ export function BudgetItems({
                     </tfoot>
                 </table>
             </div>
-        </div>
+        </form>
     )
 }

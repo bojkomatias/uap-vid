@@ -8,11 +8,13 @@ import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
 
 export function BudgetView({
+    budgetId,
     approved,
     budgetItems,
     budgetTeamMembers,
     calculations,
 }: {
+    budgetId: string
     approved: boolean
     budgetItems: AnualBudgetItem[]
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
@@ -28,6 +30,7 @@ export function BudgetView({
             />
 
             <BudgetItems
+                budgetId={budgetId}
                 approved={approved}
                 budgetItems={budgetItems}
                 ABIe={calculations.ABIe}

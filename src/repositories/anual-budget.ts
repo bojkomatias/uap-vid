@@ -1,7 +1,9 @@
-import {
-    Prisma,
-    type AnualBudget,
-    type AnualBudgetTeamMember,
+'use server'
+import { Prisma } from '@prisma/client'
+import type {
+    AnualBudget,
+    AnualBudgetTeamMember,
+    AnualBudgetItem,
 } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
@@ -152,14 +154,16 @@ export const createManyAnualBudgetTeamMember = async (
     return newAnualBudgetTeamMember
 }
 
-export const updateAnualBudget = async (data: AnualBudget) => {
-    const { id, ...rest } = data
+export const updateAnualBudgetItems = async (
+    id: string,
+    budgetItems: AnualBudgetItem[]
+) => {
     try {
         return await prisma.anualBudget.update({
             where: { id },
-            data: rest,
+            data: { budgetItems },
         })
-    } catch (e) {
+    } catch (error) {
         return null
     }
 }
