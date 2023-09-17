@@ -167,3 +167,21 @@ export const updateAnualBudgetItems = async (
         return null
     }
 }
+
+export const updateAnualBudgetTeamMemberHours = async (
+    batch: Omit<
+        AnualBudgetTeamMember,
+        'teamMemberId' | 'executions' | 'anualBudgetId' | 'memberRole'
+    >[]
+) => {
+    try {
+        return await prisma.$transaction(
+            batch.map(({ id, ...data }) =>
+                prisma.anualBudgetTeamMember.update({ where: { id }, data })
+            )
+        )
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}

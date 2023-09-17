@@ -1,7 +1,12 @@
+'use client'
 import { Button } from '@elements/button'
+import { useForm } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
+import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
 import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
+import { Check } from 'tabler-icons-react'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -14,8 +19,35 @@ export function BudgetTeamMemberFees({
     ABTe: number
     ABTr: number
 }) {
+    const form = useForm({ initialValues: budgetTeamMembers })
     return (
-        <div>
+        <form
+            onSubmit={form.onSubmit(async (values) => {
+                if (approved) return
+
+                const res = await updateAnualBudgetTeamMemberHours(
+                    values.map((e) => {
+                        return {
+                            id: e.id,
+                            hours: e.hours,
+                            remainingHours: e.hours,
+                        }
+                    })
+                )
+                if (res)
+                    return notifications.show({
+                        title: 'Valores actualizados',
+                        message:
+                            'Las horas de los miembros de equipo fueron actualizadas con éxito',
+                        color: 'teal',
+                        icon: <Check />,
+                        radius: 0,
+                        style: {
+                            marginBottom: '.8rem',
+                        },
+                    })
+            })}
+        >
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -25,17 +57,27 @@ export function BudgetTeamMemberFees({
             </div>
 
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
+                {!approved ? (
+                    <Button
+                        type="submit"
+                        intent="secondary"
+                        disabled={!form.isDirty()}
+                        className="float-right px-2 py-1.5 text-xs"
+                    >
+                        Guardar valores actualizados
+                    </Button>
+                ) : null}
                 <table className="min-w-full">
                     <colgroup>
                         <col
-                            className={cx(approved ? ' w-[30%]' : ' w-[34%]')}
+                            className={cx(approved ? ' w-[30%]' : ' w-[38%]')}
                         />
-                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
-                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
-                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
+                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
+                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
+                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
                         <col className={approved ? 'w-[12%]' : 'hidden'} />
                         <col className={approved ? 'w-[12%]' : 'hidden'} />
-                        <col className="sm:w-[10%]" />
+                        <col className={approved ? 'w-[10%]' : 'hidden'} />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -84,27 +126,31 @@ export function BudgetTeamMemberFees({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'table-cell py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0'
+                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
+                                    approved && 'table-cell'
                                 )}
                             >
-                                {approved ? 'Ejecuciones' : 'Editar'}
+                                Ejecuciones
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {budgetTeamMembers.map(
-                            ({
-                                teamMember: {
-                                    id,
-                                    name,
-                                    obrero,
-                                    categories,
-                                    pointsObrero,
+                        {form.values.map(
+                            (
+                                {
+                                    teamMember: {
+                                        id,
+                                        name,
+                                        obrero,
+                                        categories,
+                                        pointsObrero,
+                                    },
+                                    memberRole,
+                                    hours,
+                                    remainingHours,
                                 },
-                                memberRole,
-                                hours,
-                                remainingHours,
-                            }) => (
+                                i
+                            ) => (
                                 <tr
                                     key={id}
                                     className="border-b border-gray-200"
@@ -132,7 +178,24 @@ export function BudgetTeamMemberFees({
                                         </div>
                                     </td>
                                     <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                                        {hours}
+                                        <input
+                                            type="number"
+                                            {...form.getInputProps(
+                                                `${i}.hours`
+                                            )}
+                                            onBlur={(e) =>
+                                                form.setFieldValue(
+                                                    `${i}.hours`,
+                                                    Number(e.target.value)
+                                                )
+                                            }
+                                            className={cx(
+                                                'input w-16 text-right text-xs',
+                                                form.isDirty(`${i}.hours`) &&
+                                                    'border-warning-200 bg-warning-50'
+                                            )}
+                                            placeholder="24"
+                                        />
                                     </td>
                                     <td
                                         className={cx(
@@ -174,12 +237,17 @@ export function BudgetTeamMemberFees({
                                                 ?.price ?? 0) * hours
                                         )}
                                     </td>
-                                    <td>
+                                    <td
+                                        className={cx(
+                                            'hidden',
+                                            approved && 'table-cell'
+                                        )}
+                                    >
                                         <Button
                                             intent={'secondary'}
                                             className="float-right px-2 py-0.5 text-xs"
                                         >
-                                            {approved ? 'Ver' : 'Actualizar'}
+                                            Ver
                                         </Button>
                                     </td>
                                 </tr>
@@ -231,6 +299,6 @@ export function BudgetTeamMemberFees({
                     </tfoot>
                 </table>
             </div>
-        </div>
+        </form>
     )
 }

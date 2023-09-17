@@ -56,7 +56,7 @@ export function BudgetItems({
                     <Button
                         type="submit"
                         intent="secondary"
-                        disabled={form.values === budgetItems}
+                        disabled={!form.isDirty()}
                         className="float-right px-2 py-1.5 text-xs"
                     >
                         Guardar valores actualizados
@@ -180,8 +180,7 @@ export function BudgetItems({
                                             }
                                             className={cx(
                                                 'w-32 text-xs',
-                                                amount !==
-                                                    budgetItems.at(i)?.amount &&
+                                                form.isDirty(`${i}.amount`) &&
                                                     'border-warning-200 bg-warning-50'
                                             )}
                                         />
