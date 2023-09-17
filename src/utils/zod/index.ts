@@ -156,7 +156,7 @@ export const UserSchema = z.object({
 export const HistoricCategoryPriceSchema = z.object({
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
-    price: z.number().min(1, { message: 'El campo no puede estar vacío' }),
+    price: z.number().min(1, { message: 'El valor debe ser mayor a 1' }),
     currency: z.string().default('ARS').nullable(),
 })
 
@@ -165,10 +165,12 @@ export const HistoricCategoryPriceSchema = z.object({
 // Contiene el array histórico de categorías
 /////////////////////////////////////////
 export const TeamMemberCategorySchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
     state: z.boolean(),
-    price: HistoricCategoryPriceSchema.array(),
+    price: HistoricCategoryPriceSchema.array().min(1, {
+        message: 'Configure un precio',
+    }),
 })
 
 /////////////////////////////////////////

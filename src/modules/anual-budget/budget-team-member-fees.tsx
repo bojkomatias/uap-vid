@@ -1,4 +1,4 @@
-'use client'
+import { Button } from '@elements/button'
 import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
@@ -28,16 +28,14 @@ export function BudgetTeamMemberFees({
                 <table className="min-w-full">
                     <colgroup>
                         <col
-                            className={cx(
-                                'w-full',
-                                approved ? ' sm:w-[40%]' : ' sm:w-1/3'
-                            )}
+                            className={cx(approved ? ' w-[30%]' : ' w-[34%]')}
                         />
-                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
-                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
-                        <col className={approved ? 'sm:w-[12%]' : 'sm:w-1/6'} />
-                        <col hidden={!approved} className="sm:w-[12%]" />
-                        <col hidden={!approved} className="sm:w-[12%]" />
+                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
+                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
+                        <col className={approved ? 'w-[12%]' : 'w-[18%]'} />
+                        <col className={approved ? 'w-[12%]' : 'hidden'} />
+                        <col className={approved ? 'w-[12%]' : 'hidden'} />
+                        <col className="sm:w-[10%]" />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -79,9 +77,17 @@ export function BudgetTeamMemberFees({
                             </th>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900 sm:pr-0"
+                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                             >
                                 Total
+                            </th>
+                            <th
+                                scope="col"
+                                className={cx(
+                                    'table-cell py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0'
+                                )}
+                            >
+                                {approved ? 'Ejecuciones' : 'Editar'}
                             </th>
                         </tr>
                     </thead>
@@ -159,7 +165,7 @@ export function BudgetTeamMemberFees({
                                                 ?.price ?? 0) * remainingHours
                                         )}
                                     </td>
-                                    <td className="py-5 pl-3 pr-4 text-right text-sm text-gray-600 sm:pr-0">
+                                    <td className="px-3 py-5 text-right text-sm text-gray-600 ">
                                         $
                                         {currencyFormatter.format(
                                             (categories
@@ -167,6 +173,14 @@ export function BudgetTeamMemberFees({
                                                 ?.category.price.at(-1)
                                                 ?.price ?? 0) * hours
                                         )}
+                                    </td>
+                                    <td>
+                                        <Button
+                                            intent={'secondary'}
+                                            className="float-right px-2 py-0.5 text-xs"
+                                        >
+                                            {approved ? 'Ver' : 'Actualizar'}
+                                        </Button>
                                     </td>
                                 </tr>
                             )
@@ -177,18 +191,11 @@ export function BudgetTeamMemberFees({
                             <th
                                 scope="row"
                                 colSpan={approved ? 5 : 3}
-                                className="hidden pl-4 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                                className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Ejecutado
                             </th>
-                            <th
-                                scope="row"
-                                colSpan={2}
-                                className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden"
-                            >
-                                Ejecutado
-                            </th>
-                            <td className="pl-3 pr-4 pt-6 text-right text-sm text-gray-500 sm:pr-0">
+                            <td className="px-3 pt-6 text-right text-sm text-gray-500">
                                 {approved ? (
                                     <> ${currencyFormatter.format(ABTe)}</>
                                 ) : (
@@ -200,18 +207,11 @@ export function BudgetTeamMemberFees({
                             <th
                                 scope="row"
                                 colSpan={approved ? 5 : 3}
-                                className="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell sm:pl-0"
+                                className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Restante
                             </th>
-                            <th
-                                scope="row"
-                                colSpan={2}
-                                className="pl-4 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden"
-                            >
-                                Restante
-                            </th>
-                            <td className="pl-3 pr-4 pt-4 text-right text-sm text-gray-500 sm:pr-0">
+                            <td className="px-3 pt-4 text-right text-sm text-gray-500">
                                 ${currencyFormatter.format(ABTr)}
                             </td>
                         </tr>
@@ -219,18 +219,12 @@ export function BudgetTeamMemberFees({
                             <th
                                 scope="row"
                                 colSpan={approved ? 5 : 3}
-                                className="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0"
+                                className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Total
                             </th>
-                            <th
-                                scope="row"
-                                colSpan={2}
-                                className="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
-                            >
-                                Total
-                            </th>
-                            <td className="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-0">
+
+                            <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-900">
                                 ${currencyFormatter.format(ABTr + ABTe)}
                             </td>
                         </tr>

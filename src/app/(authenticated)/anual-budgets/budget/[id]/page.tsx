@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         sponsor: protocol.sections.identification.sponsor,
     }
     const calculations = await calculateTotalBudget(anualBudget)
-
+    meta.approved = false
     return (
         <>
             <PageHeading title={`Presupuesto ${meta.year}`} />
