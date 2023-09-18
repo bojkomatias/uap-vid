@@ -14,12 +14,6 @@ const CurrencyInput = ({
         (defaultPrice && formatCurrency(defaultPrice.toString() + ',00')) || ''
     )
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value
-        const formattedValue = formatCurrency(inputValue)
-        setAmount(formattedValue === '0,00' ? '' : formattedValue)
-    }
-
     return (
         <div className="relative flex items-center">
             <span className=" absolute ml-2 text-sm text-gray-400">$</span>
@@ -29,8 +23,17 @@ const CurrencyInput = ({
                 type="text"
                 value={amount}
                 onChange={(e) => {
-                    handleChange(e)
-                    priceSetter && priceSetter(e)
+                    setAmount(
+                        formatCurrency(e.target.value) === '0,00'
+                            ? ''
+                            : formatCurrency(e.target.value)
+                    )
+                    if (priceSetter)
+                        priceSetter(parseLocaleNumber(amount, 'es-AR'))
+                }}
+                onBlur={(e) => {
+                    if (priceSetter)
+                        priceSetter(parseLocaleNumber(amount, 'es-AR'))
                 }}
                 placeholder="3400.00"
                 className={`${className} input pl-5`}

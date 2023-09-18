@@ -78,15 +78,26 @@ export default function PriceUpdate({ row }: { row: any }) {
                         }
                         oldPrice.to = new Date()
 
+                        console.log('oldPriceeeee', oldPrice.price)
+
                         // Create a new array of prices with the updated old price and new price
-                        const updatedPrices = [
-                            ...row.original.price.slice(
-                                0,
-                                row.original.price.length - 1
-                            ),
-                            oldPrice,
-                            newPrice,
-                        ] as HistoricCategoryPrice[]
+                        const updatedPrices = oldPrice.price
+                            ? ([
+                                  ...row.original.price.slice(
+                                      0,
+                                      row.original.price.length - 1
+                                  ),
+                                  oldPrice,
+                                  newPrice,
+                              ] as HistoricCategoryPrice[])
+                            : ([
+                                  ...row.original.price.slice(
+                                      0,
+                                      row.original.price.length - 1
+                                  ),
+
+                                  newPrice,
+                              ] as HistoricCategoryPrice[])
 
                         // Create a new object with updated price information
                         const categoryUpdated = {
