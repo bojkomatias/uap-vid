@@ -32,7 +32,12 @@ const CurrencyInput = ({
             </div>
             <CurrencyInputElement
                 defaultPrice={form.getInputProps(path).value}
-                priceSetter={(e) => form.setFieldValue(path, e)}
+                priceSetter={(e) =>
+                    form.setFieldValue(
+                        path,
+                        parseLocaleNumber(e.target.value, 'es-AR')
+                    )
+                }
             />
 
             {form.getInputProps(path).error ? (

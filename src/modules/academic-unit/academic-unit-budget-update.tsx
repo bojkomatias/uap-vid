@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import CurrencyInput from '@elements/currency-input'
+import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
 import { notifications } from '@mantine/notifications'
 import type { AcademicUnitBudget } from '@prisma/client'
 import { useRouter } from 'next/navigation'
@@ -83,7 +83,9 @@ export const AcademicUnitBudgetUpdate = ({
             <CurrencyInput
                 defaultPrice={ACBudgets.at(-1)?.amount ?? 0}
                 className="min-w-[7rem] rounded-md py-1 text-xs"
-                priceSetter={(e) => setNewAmount(e)}
+                priceSetter={(e) =>
+                    setNewAmount(parseLocaleNumber(e.target.value, 'es-AR'))
+                }
             />
 
             <Button
