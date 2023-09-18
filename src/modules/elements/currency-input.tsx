@@ -6,7 +6,8 @@ import React, { useState } from 'react'
  * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). e can be used to access the value of the input.
  * @param className CSS clases for the input field
  */
-const CurrencyInput = ({
+
+export default function CurrencyInput({
     defaultPrice,
     priceSetter,
     className,
@@ -14,7 +15,7 @@ const CurrencyInput = ({
     defaultPrice?: number
     priceSetter?: React.ChangeEventHandler<HTMLInputElement>
     className?: string
-}) => {
+}) {
     const [amount, setAmount] = useState(
         defaultPrice && formatCurrency((defaultPrice * 100).toString())
     )
@@ -45,8 +46,6 @@ const CurrencyInput = ({
     )
 }
 
-export default CurrencyInput
-
 export function parseLocaleNumber(stringNumber: string, locale: string) {
     const thousandSeparator = Intl.NumberFormat(locale)
         .format(11111)
@@ -62,15 +61,8 @@ export function parseLocaleNumber(stringNumber: string, locale: string) {
     )
 }
 
-// Local porque solo acá se usa! Solo en inputs recibo string y paso a number...
-// El resto del formatting es de number => number lindo, nada más (eso de (* 100 / 100).toString() no me va)
 const formatCurrency = (value: string) => {
-    console.log('formatted value', value.replace(/\D/g, ''))
     const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
     const numberValue = Number(formattedValue)
-    console.log(
-        'currency formatter',
-        currencyFormatter.format(numberValue / 100)
-    )
     return currencyFormatter.format(numberValue / 100) // Convert back to number before formatting
 }
