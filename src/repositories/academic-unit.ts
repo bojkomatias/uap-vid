@@ -48,6 +48,7 @@ export const getAllAcademicUnits = cache(
                     select: {
                         id: true,
                         name: true,
+                        shortname: true,
                         budgets: true,
                         secretariesIds: true,
                     },
