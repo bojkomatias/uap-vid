@@ -1,7 +1,9 @@
-import {
-    Prisma,
-    type AnualBudget,
-    type AnualBudgetTeamMember,
+'use server'
+import { Prisma } from '@prisma/client'
+import type {
+    AnualBudget,
+    AnualBudgetTeamMember,
+    AnualBudgetItem,
 } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
@@ -109,24 +111,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
     try {
         return await prisma.anualBudget.findFirst({
             where: { id },
-            select: {
-                id: true,
-                protocolId: true,
-                createdAt: true,
-                updatedAt: true,
-                year: true,
-                budgetTeamMembers: {
-                    select: {
-                        teamMember: {
-                            include: {
-                                categories: { include: { category: true } },
-                            },
-                        },
-                        hours: true,
-                        remainingHours: true,
-                    },
-                },
-                budgetItems: true,
+            include: {
                 protocol: {
                     select: {
                         sections: {
@@ -138,6 +123,15 @@ export const getAnualBudgetById = cache(async (id: string) => {
                         },
                     },
                 },
+                budgetTeamMembers: {
+                    include: {
+                        teamMember: {
+                            include: {
+                                categories: { include: { category: true } },
+                            },
+                        },
+                    },
+                },
             },
         })
     } catch (error) {
@@ -145,8 +139,8 @@ export const getAnualBudgetById = cache(async (id: string) => {
     }
 })
 
-export const createAnualBudgetV2 = async (
-    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt'>
+export const createAnualBudget = async (
+    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
     return newAnualBudget
@@ -160,35 +154,34 @@ export const createManyAnualBudgetTeamMember = async (
     return newAnualBudgetTeamMember
 }
 
-export const createAnualBudget = async (
-    data: AnualBudget & { budgetTeamMembers: AnualBudgetTeamMember[] }
+export const updateAnualBudgetItems = async (
+    id: string,
+    budgetItems: AnualBudgetItem[]
 ) => {
-    const { budgetTeamMembers, ...rest } = data
-    const newAnualBudget = await prisma.anualBudget.create({
-        data: rest,
-    })
-    await prisma.anualBudgetTeamMember.createMany({
-        data: budgetTeamMembers.map((t) => {
-            return {
-                teamMemberId: t.teamMemberId,
-                hours: t.hours,
-                remainingHours: t.hours,
-                anualBudgetId: newAnualBudget.id,
-                executions: [],
-            }
-        }),
-    })
-    return newAnualBudget
-}
-
-export const updateAnualBudget = async (data: AnualBudget) => {
-    const { id, ...rest } = data
     try {
         return await prisma.anualBudget.update({
             where: { id },
-            data: rest,
+            data: { budgetItems },
         })
-    } catch (e) {
+    } catch (error) {
+        return null
+    }
+}
+
+export const updateAnualBudgetTeamMemberHours = async (
+    batch: Omit<
+        AnualBudgetTeamMember,
+        'teamMemberId' | 'executions' | 'anualBudgetId' | 'memberRole'
+    >[]
+) => {
+    try {
+        return await prisma.$transaction(
+            batch.map(({ id, ...data }) =>
+                prisma.anualBudgetTeamMember.update({ where: { id }, data })
+            )
+        )
+    } catch (error) {
+        console.log(error)
         return null
     }
 }

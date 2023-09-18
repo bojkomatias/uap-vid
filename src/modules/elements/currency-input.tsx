@@ -1,3 +1,4 @@
+import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import React, { useState } from 'react'
 
@@ -7,33 +8,35 @@ const CurrencyInput = ({
     className,
 }: {
     defaultPrice?: number
-    priceSetter: Function
+    priceSetter: (value: number) => void
     className?: string
 }) => {
     const [amount, setAmount] = useState(
-        (defaultPrice && formatCurrency(defaultPrice.toString() + ',00')) || ''
+        (defaultPrice && formatCurrency((defaultPrice * 100).toString())) || ''
     )
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value
-        const formattedValue = formatCurrency(inputValue)
-        setAmount(formattedValue === '0,00' ? '' : formattedValue)
-    }
 
     return (
         <div className="relative flex items-center">
-            <span className=" absolute ml-2 text-sm text-gray-400">$</span>
+            <span className="absolute ml-2 text-sm text-gray-400">$</span>
             <input
                 name="price"
                 id="price-input"
                 type="text"
                 value={amount}
                 onChange={(e) => {
-                    handleChange(e)
-                    priceSetter(e)
+                    e.preventDefault()
+                    setAmount(
+                        formatCurrency(e.target.value) === '0,00'
+                            ? ''
+                            : formatCurrency(e.target.value)
+                    )
                 }}
-                placeholder="3400.00"
-                className={`${className} input pl-5`}
+                onBlur={(e) => {
+                    e.preventDefault()
+                    priceSetter(parseLocaleNumber(amount, 'es-AR'))
+                }}
+                placeholder="3499.00"
+                className={cx('input pl-5 text-right', className)}
             />
         </div>
     )
