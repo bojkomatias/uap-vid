@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 /**
  * @param defaultPrice will be set to the number value passed as an argument. Eg: default price is $1.000,00, the argument should be 1000
- * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). e can be used to access the value of the input.
+ * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). The argument it receives is "price" which is a number.
  * @param className CSS clases for the input field
  */
 
