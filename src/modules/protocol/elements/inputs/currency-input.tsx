@@ -43,7 +43,6 @@ const CurrencyInput = ({
                 }}
             />
 
-            <>{JSON.stringify(form.getInputProps(path).value)}</>
             {form.getInputProps(path).error ? (
                 <p className="error">*{form.getInputProps(path).error}</p>
             ) : null}

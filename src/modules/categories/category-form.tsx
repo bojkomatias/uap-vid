@@ -59,7 +59,6 @@ export default function CategoryForm() {
             }}
             className="mx-auto mt-28 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
-            <>{JSON.stringify(category)}</>
             <div className="m-3 p-1">
                 <label htmlFor="name" className="label">
                     Nombre
