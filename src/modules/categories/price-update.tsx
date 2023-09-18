@@ -47,6 +47,7 @@ export default function PriceUpdate({ row }: { row: any }) {
             })
         }
     }
+
     return (
         <PopoverComponent
             actionButton={

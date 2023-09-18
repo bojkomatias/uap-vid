@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
         ...data,
     })
 
+    console.log(data)
+
     if (!created) {
         return new Response('Problema al crear la categoría', {
             status: 500,

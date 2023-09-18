@@ -59,6 +59,7 @@ export default function CategoryForm() {
             }}
             className="mx-auto mt-28 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
         >
+            <>{JSON.stringify(category)}</>
             <div className="m-3 p-1">
                 <label htmlFor="name" className="label">
                     Nombre
@@ -70,12 +71,12 @@ export default function CategoryForm() {
                     type="text"
                     name="name"
                     placeholder="Nombre de la categoría"
-                    onChange={(e) =>
+                    onChange={(e) => {
                         setCategory({
                             ...category,
                             [e.target.name]: e.target.value,
                         })
-                    }
+                    }}
                 />
             </div>
             <div className="m-3 p-1">
@@ -84,22 +85,21 @@ export default function CategoryForm() {
                 </label>
 
                 <CurrencyInput
-                    priceSetter={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    priceSetter={(e) => {
                         setCategory({
                             ...category,
                             [e.target.name]: [
                                 {
                                     from: new Date(),
-                                    price:
-                                        parseLocaleNumber(
-                                            e.target.value,
-                                            'es-AR'
-                                        ) * 100,
+                                    price: parseLocaleNumber(
+                                        e.target.value,
+                                        'es-AR'
+                                    ),
                                     //No le paso la currency porque está por default en ARS.
                                 },
                             ] as HistoricCategoryPrice[],
                         })
-                    }
+                    }}
                 />
             </div>
 

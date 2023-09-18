@@ -13,6 +13,8 @@ export async function PATCH(
     const id = params.id
     const data = await request.json()
 
+    console.log(data)
+
     if (!id || !data) {
         return new Response('We cannot update your category: Invalid Data', {
             status: 500,

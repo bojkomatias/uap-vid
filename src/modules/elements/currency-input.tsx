@@ -7,11 +7,11 @@ const CurrencyInput = ({
     className,
 }: {
     defaultPrice?: number
-    priceSetter?: Function
+    priceSetter?: React.ChangeEventHandler<HTMLInputElement>
     className?: string
 }) => {
     const [amount, setAmount] = useState(
-        (defaultPrice && formatCurrency(defaultPrice.toString() + ',00')) || ''
+        defaultPrice && formatCurrency((defaultPrice * 100).toString())
     )
 
     return (
@@ -28,12 +28,9 @@ const CurrencyInput = ({
                             ? ''
                             : formatCurrency(e.target.value)
                     )
-                    if (priceSetter)
-                        priceSetter(parseLocaleNumber(amount, 'es-AR'))
                 }}
                 onBlur={(e) => {
-                    if (priceSetter)
-                        priceSetter(parseLocaleNumber(amount, 'es-AR'))
+                    priceSetter && priceSetter(e)
                 }}
                 placeholder="3400.00"
                 className={`${className} input pl-5`}
@@ -54,7 +51,7 @@ export function parseLocaleNumber(stringNumber: string, locale: string) {
 
     return parseFloat(
         stringNumber
-            .replace(new RegExp('\\' + thousandSeparator, 'g'), '')
+            ?.replace(new RegExp('\\' + thousandSeparator, 'g'), '')
             .replace(new RegExp('\\' + decimalSeparator), '.')
     )
 }
@@ -62,7 +59,12 @@ export function parseLocaleNumber(stringNumber: string, locale: string) {
 // Local porque solo acá se usa! Solo en inputs recibo string y paso a number...
 // El resto del formatting es de number => number lindo, nada más (eso de (* 100 / 100).toString() no me va)
 const formatCurrency = (value: string) => {
+    console.log('formatted value', value.replace(/\D/g, ''))
     const formattedValue = value.replace(/\D/g, '') // Remove non-numeric characters
     const numberValue = Number(formattedValue)
+    console.log(
+        'currency formatter',
+        currencyFormatter.format(numberValue / 100)
+    )
     return currencyFormatter.format(numberValue / 100) // Convert back to number before formatting
 }
