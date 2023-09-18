@@ -10,6 +10,7 @@ datasource db {
 model AcademicUnit {
   id             String               @id @default(auto()) @map("_id") @db.ObjectId
   name           String
+  shortname      String
   secretaries    User[]               @relation(fields: [secretariesIds], references: [id])
   secretariesIds String[]             @db.ObjectId
   budgets        AcademicUnitBudget[]
