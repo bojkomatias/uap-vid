@@ -1,18 +1,20 @@
 'use client'
 import { useDisclosure } from '@mantine/hooks'
 import { Drawer, Group } from '@mantine/core'
-import type { AcademicUnit } from '@prisma/client'
+import type { AcademicUnit, User } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 
 import Currency from '@elements/currency'
+import { SecretaryMultipleSelect } from './secretary-multiple-select'
+import { AcademicUnitBudgetUpdate } from './academic-unit-budget-update'
 
 export default function AcademicUnitView({
     academicUnit,
-    children,
+    secretaries,
 }: {
     academicUnit: AcademicUnit
-    children: React.ReactNode
+    secretaries: User[]
 }) {
     const [opened, { open, close }] = useDisclosure(false)
 
@@ -24,7 +26,10 @@ export default function AcademicUnitView({
                 opened={opened}
                 onClose={close}
             >
-                <section className="flex flex-col gap-4">
+                <section
+                    className="flex flex-col gap-4"
+                    onClick={(e) => e.preventDefault()}
+                >
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
                         <div className="flex  items-center gap-1">
                             <Badge className="text-sm">
@@ -43,9 +48,65 @@ export default function AcademicUnitView({
                                 }
                             />
                         </div>
-                    </div>{' '}
+                    </div>
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
-                        {children}
+                        <p className="text-sm text-gray-600">
+                            Editar secretarios/as
+                        </p>
+                        <SecretaryMultipleSelect
+                            className=" max-w-lg text-gray-500"
+                            currentSecretaries={academicUnit.secretariesIds}
+                            secretaries={secretaries}
+                            unitId={academicUnit.id}
+                        />
+                        <p className="text-sm text-gray-600">
+                            Actualizar presupuesto:
+                        </p>
+                        <AcademicUnitBudgetUpdate
+                            academicUnitId={academicUnit.id}
+                            ACBudgets={academicUnit.budgets}
+                        />
+
+                        <p className="text-sm text-gray-600">
+                            Presupuestos históricos:
+                        </p>
+                        <table className="table-auto text-sm text-gray-600">
+                            <thead>
+                                <tr className="text-left ">
+                                    <th className="font-semibold">
+                                        Presupuesto
+                                    </th>
+                                    <th className="font-semibold">Desde</th>
+                                    <th className="font-semibold">Hasta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {academicUnit.budgets
+                                    .slice(0, academicUnit.budgets.length - 1)
+                                    .reverse()
+                                    .map((budget, idx) => {
+                                        return (
+                                            <>
+                                                <tr key={idx}>
+                                                    <td className="pt-2">
+                                                        <Currency
+                                                            amount={
+                                                                budget.amount
+                                                            }
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        {budget.from.toLocaleDateString()}
+                                                    </td>
+                                                    <td>
+                                                        {budget.to?.toLocaleDateString()}
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })}
+                            </tbody>
+                        </table>
                     </div>
                 </section>
             </Drawer>

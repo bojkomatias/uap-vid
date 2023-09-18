@@ -61,16 +61,7 @@ export default function CategoriesTable({
                                 teamMemberCategory={row.original}
                             />
                         )}
-                        <PriceUpdate row={row} />
-                        {/* <DeleteButton
-                            id={row.original.id}
-                            State={false}
-                            data={row.original}
-                            apiPath="/categories"
-                            className={'px-2.5 py-1 text-xs'}
-                            notificationTitle="Categoría eliminada"
-                            notificationMessage="La categoría fue eliminada con éxito"
-                        /> */}
+                        <PriceUpdate category={row.original} />
                     </div>
                 ),
                 enableHiding: false,

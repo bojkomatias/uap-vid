@@ -3,19 +3,24 @@ import { canAccess } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { redirect } from 'next/navigation'
-import AnualBudgetTable from 'modules/anual-budget/anual-budget-table'
-import { getAnualBudgets } from '@repositories/anual-budget'
+import { getAnualBudgetsByAcademicUnit } from '@repositories/anual-budget'
+import AnualBudgetTable from 'modules/anual-budget/budget-table'
 
 export default async function Page({
+    params,
     searchParams,
 }: {
+    params: { name: string }
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
     if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
         redirect('/protocols')
 
-    const [totalRecords, anualBudgets] = await getAnualBudgets(searchParams)
+    const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
+        params.name,
+        searchParams
+    )
 
     return (
         <>

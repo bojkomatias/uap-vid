@@ -1,3 +1,4 @@
+import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import React, { useState } from 'react'
 
@@ -22,7 +23,7 @@ export default function CurrencyInput({
 
     return (
         <div className="relative flex items-center">
-            <span className=" absolute ml-2 text-sm text-gray-400">$</span>
+            <span className="absolute ml-2 text-sm text-gray-400">$</span>
             <input
                 name="price"
                 id="price-input"
@@ -39,8 +40,8 @@ export default function CurrencyInput({
                 onBlur={(e) => {
                     priceSetter && priceSetter(e)
                 }}
-                placeholder="3400.00"
-                className={`${className} input pl-5`}
+                placeholder="3499.00"
+                className={cx('input pl-5 text-right', className)}
             />
         </div>
     )
