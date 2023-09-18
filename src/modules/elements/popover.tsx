@@ -1,6 +1,5 @@
 'use client'
 import { Popover, Transition } from '@headlessui/react'
-
 import { buttonStyle } from './button/styles'
 import React from 'react'
 import { cx } from '@utils/cx'
@@ -14,6 +13,8 @@ import { cx } from '@utils/cx'
  * @param column is a boolean to put the children of the popover in a column (flex column, if false, flex row).
  * @summary the actual types of these parameters are shown by Typescript.
  */
+
+//The "column" prop only affects the action button + the children. That is to say, the children element will be column 1 and the action button will be column 2. If the prop is set to false, children = row 1, action button = row 2.
 
 export default function PopoverComponent({
     children,
