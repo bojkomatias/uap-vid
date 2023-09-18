@@ -80,7 +80,7 @@ export default function PriceUpdate({ row }: { row: any }) {
 
                         console.log('oldPriceeeee', oldPrice.price)
 
-                        // Create a new array of prices with the updated old price and new price
+                        // Create a new array of prices with the updated old price and new price. Although no one should ever create a new category without a value (price), if for some reason there's a category without an specified value, I made the logic to support that scenario.
                         const updatedPrices = oldPrice.price
                             ? ([
                                   ...row.original.price.slice(
