@@ -1,6 +1,11 @@
 import { currencyFormatter } from '@utils/formatters'
 import React, { useState } from 'react'
 
+/**
+ * @param defaultPrice will be set to the number value passed as an argument. Eg: default price is $1.000,00, the argument should be 1000
+ * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). e can be used to access the value of the input.
+ * @param className CSS clases for the input field
+ */
 const CurrencyInput = ({
     defaultPrice,
     priceSetter,
@@ -22,6 +27,7 @@ const CurrencyInput = ({
                 id="price-input"
                 type="text"
                 value={amount}
+                //I'm calling the setAmount here to format the value shown in the input field everytime the user types a new number.
                 onChange={(e) => {
                     setAmount(
                         formatCurrency(e.target.value) === '0,00'
