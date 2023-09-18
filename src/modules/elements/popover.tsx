@@ -75,7 +75,7 @@ export default function PopoverComponent({
                                     onClick={async () => {
                                         setTimeout(() => {
                                             close()
-                                        }, 800)
+                                        }, 500)
                                     }}
                                 >
                                     {actionButton}

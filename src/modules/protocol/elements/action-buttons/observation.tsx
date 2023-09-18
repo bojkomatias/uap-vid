@@ -39,7 +39,7 @@ export default function Observation({
     return (
         <PopoverComponent
             title={<Message className="h-4 text-gray-500" />}
-            className="absolute left-0 top-1 rounded-md bg-gray-50 p-2 shadow-md"
+            className="absolute left-0 top-1 flex rounded-md bg-gray-50 p-2 shadow-md"
             column={true}
             actionButton={
                 <Button
@@ -60,7 +60,7 @@ export default function Observation({
                 </Button>
             }
         >
-            <div className="flex gap-2">
+            <div className="">
                 <form className="flex flex-grow flex-col">
                     <label className="label" htmlFor="observation">
                         Nueva observación
