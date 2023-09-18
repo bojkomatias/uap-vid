@@ -1,10 +1,9 @@
 'use client'
-import type { AnualBudget, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
 
@@ -85,7 +84,7 @@ export default function AnualBudgetTable({
                                     buttonStyle('secondary'),
                                     'px-2.5 py-1 text-xs'
                                 )}
-                                href={`/anual-budgets/${row.original.id}`}
+                                href={`/anual-budgets/budget/${row.original.id}`}
                             >
                                 Ver
                             </Link>

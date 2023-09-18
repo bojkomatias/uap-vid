@@ -1,3 +1,4 @@
+import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import React, { useState } from 'react'
 
@@ -13,16 +14,16 @@ export default function CurrencyInput({
     className,
 }: {
     defaultPrice?: number
-    priceSetter?: React.ChangeEventHandler<HTMLInputElement>
+    priceSetter: (value: number) => void
     className?: string
 }) {
     const [amount, setAmount] = useState(
-        defaultPrice && formatCurrency((defaultPrice * 100).toString())
+        (defaultPrice && formatCurrency((defaultPrice * 100).toString())) || ''
     )
 
     return (
         <div className="relative flex items-center">
-            <span className=" absolute ml-2 text-sm text-gray-400">$</span>
+            <span className="absolute ml-2 text-sm text-gray-400">$</span>
             <input
                 name="price"
                 id="price-input"
@@ -30,6 +31,7 @@ export default function CurrencyInput({
                 value={amount}
                 //I'm calling the setAmount here to format the value shown in the input field everytime the user types a new number.
                 onChange={(e) => {
+                    e.preventDefault()
                     setAmount(
                         formatCurrency(e.target.value) === '0,00'
                             ? ''
@@ -37,10 +39,11 @@ export default function CurrencyInput({
                     )
                 }}
                 onBlur={(e) => {
-                    priceSetter && priceSetter(e)
+                    e.preventDefault()
+                    priceSetter(parseLocaleNumber(amount, 'es-AR'))
                 }}
-                placeholder="3400.00"
-                className={`${className} input pl-5`}
+                placeholder="3499.00"
+                className={cx('input pl-5 text-right', className)}
             />
         </div>
     )

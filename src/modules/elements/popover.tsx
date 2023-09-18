@@ -31,60 +31,56 @@ export default function PopoverComponent({
 }) {
     return (
         <Popover>
-            <>
-                <Popover.Button
-                    /*I'm checking the type of the title to be a string because if it isn't (let's say you want to show an icon instead of a title), it should take the classes of the element/component being passed. Otherwise, the title will be styled automatically.*/
-                    className={cx(
-                        typeof title == 'string' &&
-                            `${buttonStyle(
-                                'secondary',
-                                false
-                            )} px-2 py-1 text-xs`
-                    )}
-                >
-                    {title}
-                </Popover.Button>
+            <Popover.Button
+                className={
+                    typeof title == 'string'
+                        ? ` ${buttonStyle(
+                              'secondary',
+                              false
+                          )} px-2 py-1 text-xs`
+                        : ''
+                }
+            >
+                {title}
+            </Popover.Button>
 
-                <Transition
-                    enter="transition duration-100 ease-out"
-                    enterFrom="transform scale-95 opacity-0"
-                    enterTo="transform scale-100 opacity-100"
-                    leave="transition duration-75 ease-out"
-                    leaveFrom="transform scale-100 opacity-100"
-                    leaveTo="transform scale-95 opacity-0"
+            <Transition
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+            >
+                <Popover.Panel
+                    className={`${
+                        !className
+                            ? 'absolute -top-9 right-0 z-30 rounded-md bg-success-50 px-2 py-2 shadow-md'
+                            : className
+                    }`}
                 >
-                    <Popover.Panel
-                        /*If no classes are passed as an argument, the panel where the children are being rendered, will be styled automatically to be shown on top of the button being called upon. If classes are being passed, the developer can specify where it wants the panel to appear. */
-                        className={cx(
-                            !className &&
-                                'absolute -top-9 right-0 z-30 rounded-md bg-success-50 px-2 py-2 shadow-md',
-                            className
-                        )}
-                    >
-                        {({ close }) => (
+                    {({ close }) => (
+                        <div
+                            className={`${
+                                column
+                                    ? 'flex flex-col items-end justify-start gap-2'
+                                    : 'flex items-center gap-2'
+                            }`}
+                        >
+                            {children}
                             <div
-                                className={cx(
-                                    column
-                                        ? 'flex flex-col items-end justify-start gap-2'
-                                        : 'flex items-center gap-2'
-                                )}
+                                onClick={async () => {
+                                    setTimeout(() => {
+                                        close()
+                                    }, 800)
+                                }}
                             >
-                                {children}
-                                <div
-                                    /* This is the function that closes the popover, it gets triggered once the action button is clicked. The timeout is for ux purposes */
-                                    onClick={async () => {
-                                        setTimeout(() => {
-                                            close()
-                                        }, 500)
-                                    }}
-                                >
-                                    {actionButton}
-                                </div>
+                                {actionButton}
                             </div>
-                        )}
-                    </Popover.Panel>
-                </Transition>
-            </>
+                        </div>
+                    )}
+                </Popover.Panel>
+            </Transition>
         </Popover>
     )
 }

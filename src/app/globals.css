@@ -21,7 +21,7 @@ body {
         @apply w-full self-start rounded border border-gray-200 p-3 py-2 pl-3 pr-4 transition placeholder:text-xs placeholder:uppercase placeholder:text-gray-400/80 focus:border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-0 disabled:pointer-events-none disabled:select-none;
     }
     .label {
-        @apply pointer-events-none select-none p-1 text-xs font-normal uppercase text-gray-600;
+        @apply select-none p-1 text-xs font-normal uppercase text-gray-600;
     }
     .required {
         @apply after:pl-0.5 after:text-gray-400 after:content-['*'];
