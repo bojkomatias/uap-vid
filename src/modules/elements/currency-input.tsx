@@ -14,7 +14,10 @@ export default function CurrencyInput({
     className,
 }: {
     defaultPrice?: number
-    priceSetter?: React.ChangeEventHandler<HTMLInputElement>
+    /** This is a callback function, it takes as an argument the price that's in the input field.
+     * @param price number
+     */
+    priceSetter?: Function
     className?: string
 }) {
     const [amount, setAmount] = useState(
@@ -38,7 +41,8 @@ export default function CurrencyInput({
                     )
                 }}
                 onBlur={(e) => {
-                    priceSetter && priceSetter(e)
+                    priceSetter &&
+                        priceSetter(parseLocaleNumber(e.target.value, 'es-AR'))
                 }}
                 placeholder="3499.00"
                 className={cx('input pl-5 text-right', className)}

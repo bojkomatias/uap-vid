@@ -6,9 +6,6 @@ import TanStackTable from '@elements/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
 import Currency from '@elements/currency'
 import AcademicUnitView from './academic-unit-view'
-import { SecretaryMultipleSelect } from './secretary-multiple-select'
-import { Button } from '@elements/button'
-import CurrencyInput from '@elements/currency-input'
 
 export default async function AcademicUnitsTable({
     academicUnits,

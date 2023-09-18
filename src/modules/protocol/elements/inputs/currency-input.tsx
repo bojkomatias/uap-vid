@@ -1,9 +1,7 @@
 import { cx } from '@utils/cx'
 import type { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../../../utils/createContext'
-import CurrencyInputElement, {
-    parseLocaleNumber,
-} from '@elements/currency-input'
+import CurrencyInputElement from '@elements/currency-input'
 
 const CurrencyInput = ({
     path,
@@ -32,12 +30,7 @@ const CurrencyInput = ({
             </div>
             <CurrencyInputElement
                 defaultPrice={form.getInputProps(path).value}
-                priceSetter={(e) =>
-                    form.setFieldValue(
-                        path,
-                        parseLocaleNumber(e.target.value, 'es-AR')
-                    )
-                }
+                priceSetter={(price: number) => form.setFieldValue(path, price)}
             />
 
             {form.getInputProps(path).error ? (
