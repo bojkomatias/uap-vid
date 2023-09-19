@@ -12,7 +12,8 @@ const messages = {
     [useCases.onRevised]:
         'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
-    [useCases.onPublish]: 'Un nuevo protocolo fue publicado.',
+    [useCases.onPublish]:
+        'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
 }
 
 const subjects = {
