@@ -4,6 +4,7 @@ export enum useCases {
     onReview,
     onRevised,
     onAssignation,
+    onPublish,
 }
 
 const messages = {
@@ -11,12 +12,14 @@ const messages = {
     [useCases.onRevised]:
         'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
+    [useCases.onPublish]: 'Un nuevo protocolo fue publicado.',
 }
 
 const subjects = {
     [useCases.onReview]: 'Proyecto evaluado',
     [useCases.onRevised]: 'Correcciones revisadas',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
+    [useCases.onPublish]: 'Nuevo protocolo publicado.',
 }
 type Emailer = {
     useCase: useCases
@@ -442,11 +445,22 @@ export async function emailer({ useCase, email, protocolId }: Emailer) {
     
     </html>`
 
+    // const transporter = nodemailer.createTransport({
+    //     host: process.env.SMTP_ADDRESS,
+    //     port: Number(process.env.SMTP_PORT),
+    //     secure: false,
+    //     ignoreTLS: true,
+    // })
+
+    //This transporter can be used for developing.
     const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_ADDRESS,
-        port: Number(process.env.SMTP_PORT),
+        host: 'smtp.gmail.com',
+        port: 587,
         secure: false,
-        ignoreTLS: true,
+        auth: {
+            user: 'nicoskate000@gmail.com',
+            pass: 'luqj vdtt kqgp mbof',
+        },
     })
 
     const emailObject = {

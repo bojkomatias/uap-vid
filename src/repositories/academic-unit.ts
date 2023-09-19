@@ -118,3 +118,25 @@ export const updateAcademicUnit = async (id: string, academicUnit: any) => {
         return null
     }
 }
+
+export const getSecretariesEmailsByAcademicUnit = async (name: string) => {
+    try {
+        const academicUnits = prisma.academicUnit.findMany({
+            where: {
+                name: {
+                    contains: name,
+                },
+            },
+            select: {
+                secretaries: {
+                    select: {
+                        email: true,
+                    },
+                },
+            },
+        })
+        return academicUnits
+    } catch (error) {
+        return null
+    }
+}

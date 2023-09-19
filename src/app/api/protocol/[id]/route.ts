@@ -9,6 +9,7 @@ import { State } from '@prisma/client'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
 import { canExecute } from '@utils/scopes'
+import { getSecretariesEmailsByAcademicUnit } from '@repositories/academic-unit'
 
 export async function PUT(
     request: NextRequest,
@@ -29,6 +30,7 @@ export async function PUT(
     ) {
         if (protocol) delete protocol.id
         const updated = await updateProtocolById(id, protocol)
+
         if (!updated) {
             return new Response('We cannot update the protocol', {
                 status: 500,
