@@ -6,6 +6,7 @@ import { logProtocolUpdate } from '@utils/logger'
 import { canExecute } from '@utils/scopes'
 import { State } from '@prisma/client'
 import { getToken } from 'next-auth/jwt'
+import { emailer, useCases } from '@utils/emailer'
 
 export async function PUT(
     request: NextRequest,
