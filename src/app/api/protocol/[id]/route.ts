@@ -9,7 +9,6 @@ import { State } from '@prisma/client'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
 import { canExecute } from '@utils/scopes'
-import { getSecretariesEmailsByAcademicUnit } from '@repositories/academic-unit'
 
 export async function PUT(
     request: NextRequest,
