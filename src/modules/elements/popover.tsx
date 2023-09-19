@@ -34,8 +34,8 @@ export default function PopoverComponent({
             <Popover.Button
                 /*I'm checking the type of the title to be a string because if it isn't (let's say you want to show an icon instead of a title), it should take the classes of the element/component being passed. Otherwise, the title will be styled automatically.*/
                 className={cx(
-                    typeof title == 'string' &&
-                        `${buttonStyle('secondary', false)} px-2 py-1 text-xs`
+                    typeof title == 'string' && buttonStyle('secondary', false),
+                    'px-2 py-1 text-xs'
                 )}
             >
                 {title}
@@ -68,7 +68,7 @@ export default function PopoverComponent({
                             {children}
                             <div
                                 /* This is the function that closes the popover, it gets triggered once the action button is clicked. The timeout is for ux purposes */
-                                onClick={async () => {
+                                onClick={() => {
                                     setTimeout(() => {
                                         close()
                                     }, 500)
