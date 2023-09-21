@@ -12,6 +12,7 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
+import { Protocol } from '@prisma/client'
 
 export default function TanStackTable({
     data,
@@ -30,6 +31,15 @@ export default function TanStackTable({
     searchBarPlaceholder: string
     customFilterSlot?: React.ReactNode
 }) {
+    const columnsToExport = columns.map((c) => {
+        return (c as any).accessorKey
+    })
+    console.log(columnsToExport)
+    console.log(
+        data.map((d) => {
+            return (d as any).researcher.name
+        })
+    )
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
 
@@ -42,6 +52,7 @@ export default function TanStackTable({
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
     })
+
     return (
         <>
             <div className="mx-auto mt-6 flex items-center justify-between gap-4">
