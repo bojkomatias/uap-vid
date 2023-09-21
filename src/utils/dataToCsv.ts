@@ -21,7 +21,7 @@ export default function dataToCsv(
     const extractedData = () => {
         const results: any[] = []
 
-        data.forEach((d) => {
+        data?.forEach((d) => {
             const rowData: any = {} // Create an object for each row of data
 
             columnsToExport.forEach((c) => {
