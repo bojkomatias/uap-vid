@@ -17,7 +17,6 @@ import dataToCsv from '@utils/dataToCsv'
 import { CSVLink } from 'react-csv'
 import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
-import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 export default function TanStackTable({
     data,
