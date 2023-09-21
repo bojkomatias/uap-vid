@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 'use client'
 import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
 import {
@@ -12,7 +13,7 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
-import { Protocol } from '@prisma/client'
+import dataToCsv from '@utils/dataToCsv'
 
 export default function TanStackTable({
     data,
@@ -31,15 +32,6 @@ export default function TanStackTable({
     searchBarPlaceholder: string
     customFilterSlot?: React.ReactNode
 }) {
-    const columnsToExport = columns.map((c) => {
-        return (c as any).accessorKey
-    })
-    console.log(columnsToExport)
-    console.log(
-        data.map((d) => {
-            return (d as any).researcher.name
-        })
-    )
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
 
@@ -52,6 +44,8 @@ export default function TanStackTable({
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
     })
+
+    console.log(dataToCsv(columns, data))
 
     return (
         <>
