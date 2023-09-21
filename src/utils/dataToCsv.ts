@@ -35,7 +35,7 @@ export default function dataToCsv(
                 }
 
                 // Assign the extracted data to the corresponding key in the row object
-                rowData[c] = result.toString()
+                rowData[c] = result?.toString()
             })
 
             results.push(rowData) // Push the row object to the results array
