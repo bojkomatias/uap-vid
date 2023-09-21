@@ -18,7 +18,7 @@ const styles = {
  * Base class + styles
  */
 
-// Added a buttonSize parameter/property to the function because in some cases I couldn't modify the size of the button externaly. In any case, it's initialized as true, so none of the already defined buttons are affected, but now there's an option to turn it off and give a size externally. Nico.
+// Added a buttonSize parameter/property to the function because in some cases I couldn't modify the size of the button externally. In any case, it's initialized as true, so none of the already defined buttons are affected, but now there's an option to turn it off and give a size externally. Nico.
 export const buttonStyle = (
     intent: 'primary' | 'secondary' | 'outline' | 'destructive' | 'unset',
     buttonSize: boolean = true

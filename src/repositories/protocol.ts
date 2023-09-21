@@ -66,6 +66,7 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
             data: {
                 state: state,
             },
+            include: { researcher: { select: { email: true } } },
         })
         return protocol
     } catch (e) {

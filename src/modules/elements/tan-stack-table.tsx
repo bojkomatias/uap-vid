@@ -49,6 +49,7 @@ export default function TanStackTable({
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
     })
+
     const totalRecordsCheck = !(
         Number(useSearchParams().get('records')) == totalRecords
     )
