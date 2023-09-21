@@ -14,6 +14,8 @@ import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
 import dataToCsv from '@utils/dataToCsv'
+import { CSVLink } from 'react-csv'
+import { Button } from './button'
 
 export default function TanStackTable({
     data,
@@ -45,7 +47,7 @@ export default function TanStackTable({
         getCoreRowModel: getCoreRowModel(),
     })
 
-    console.log(dataToCsv(columns, data))
+    dataToCsv(columns, data)
 
     return (
         <>
@@ -53,6 +55,14 @@ export default function TanStackTable({
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
 
                 <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
+                <Button intent="outline">
+                    <CSVLink
+                        filename="data.csv"
+                        data={dataToCsv(columns, data)}
+                    >
+                        CSV
+                    </CSVLink>
+                </Button>
             </div>
             {customFilterSlot}
 
