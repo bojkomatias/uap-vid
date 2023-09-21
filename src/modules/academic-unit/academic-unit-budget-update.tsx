@@ -83,7 +83,7 @@ export const AcademicUnitBudgetUpdate = ({
             <CurrencyInput
                 defaultPrice={ACBudgets.at(-1)?.amount ?? 0}
                 className="min-w-[7rem] rounded-md py-1 text-xs"
-                priceSetter={(e) => setNewAmount(e)}
+                priceSetter={(price: number) => setNewAmount(price)}
             />
 
             <Button
