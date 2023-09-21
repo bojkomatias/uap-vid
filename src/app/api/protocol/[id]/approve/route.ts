@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
@@ -6,6 +7,7 @@ import { logProtocolUpdate } from '@utils/logger'
 import { canExecute } from '@utils/scopes'
 import { State } from '@prisma/client'
 import { getToken } from 'next-auth/jwt'
+import { emailer, useCases } from '@utils/emailer'
 
 export async function PUT(
     request: NextRequest,
@@ -17,6 +19,15 @@ export async function PUT(
     if (token && canExecute('APPROVE', token.user.role, protocol.state)) {
         const updated = await updateProtocolStateById(id, State.ON_GOING)
 
+        if (updated) {
+            emailer({
+                useCase: useCases.onApprove,
+                email: updated.researcher.email,
+                protocolId: updated.id,
+            })
+        } else {
+            console.log('No se envió el email al investigador')
+        }
         await logProtocolUpdate({
             user: token.user,
             fromState: State.ACCEPTED,

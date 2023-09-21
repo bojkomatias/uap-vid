@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 'use client'
 import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
 import {
@@ -42,6 +43,7 @@ export default function TanStackTable({
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
     })
+
     return (
         <>
             <div className="mx-auto mt-6 flex items-center justify-between gap-4">
