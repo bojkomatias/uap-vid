@@ -15,6 +15,7 @@ export default function dataToCsv(
                 //Remove self-indicator and actions keys, which are not useful for a spreadsheet, and also remove the undefined (at least for now).
                 accessorKey !== 'self-indicator' &&
                 accessorKey !== 'actions' &&
+                accessorKey !== 'password' &&
                 accessorKey
         )
 
