@@ -2,6 +2,7 @@
 import TanStackTable from '@elements/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
+import { dateFormatter } from '@utils/formatters'
 
 export async function ConvocatoryTable({
     convocatories,
@@ -39,6 +40,7 @@ export async function ConvocatoryTable({
 
             enableHiding: true,
             enableSorting: false,
+            cell: ({ row }) => <>{dateFormatter.format(row.original.from)}</>,
         },
         {
             accessorKey: 'to',
@@ -46,6 +48,7 @@ export async function ConvocatoryTable({
 
             enableHiding: true,
             enableSorting: false,
+            cell: ({ row }) => <>{dateFormatter.format(row.original.to)}</>,
         },
         {
             accessorKey: 'isCurrent',
