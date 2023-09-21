@@ -36,7 +36,6 @@ export default function TanStackTable({
     searchBarPlaceholder: string
     customFilterSlot?: React.ReactNode
 }) {
-    const update = useUpdateQuery()
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
 
