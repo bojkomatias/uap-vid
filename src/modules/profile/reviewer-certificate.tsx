@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 'use client'
 import type { Review, User } from '@prisma/client'
 import {
@@ -5,6 +6,7 @@ import {
     Page,
     View,
     Text,
+    Image,
     usePDF,
     PDFDownloadLink,
 } from '@react-pdf/renderer'
@@ -19,12 +21,47 @@ const PDFDocument = ({ reviews, user }: { reviews: Review[]; user: User }) => {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 12,
-                        padding: 30,
-                        paddingHorizontal: 42,
                     }}
                 >
-                    <View>
-                        <Text>{user.name}</Text>
+                    <View
+                        style={{
+                            padding: 20,
+                            backgroundColor: '#003C71',
+                            paddingHorizontal: 42,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Image
+                            style={{ width: 150 }}
+                            src={'/UAP-logo-home.png'}
+                        />
+                        <Text
+                            style={{
+                                color: 'white',
+                                fontSize: 8,
+                            }}
+                        >
+                            Vicerrectoría de Investigación y Desarrollo
+                        </Text>
+                    </View>
+
+                    <View
+                        style={{
+                            padding: 20,
+                            paddingHorizontal: 42,
+                        }}
+                    >
+                        <Text style={{ marginBottom: 10 }}>
+                            Certificado de Evaluador
+                        </Text>
+                        <Text style={{ fontSize: 10 }}>
+                            Se certifica que {user.name} ha realizado la labor
+                            de evaluar proyectos de investigación para la
+                            Universidad Adventista del Plata
+                        </Text>
                     </View>
                 </Page>
             </Document>
@@ -43,22 +80,29 @@ export const ReviewerCertificatePDF = ({
         document: PDFDocument({ reviews, user }),
     })
 
-    if (instance.loading) return <Button intent="outline">Cargando PDF</Button>
+    if (instance.loading)
+        return (
+            <Button disabled={true} intent="outline">
+                Cargando PDF
+            </Button>
+        )
     else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
 
     //Check if the user has made reviews. If not, the component will return nothing. If it does, it will show a button where he or her can download the reviewer certificate.
     if (reviews.length == 0) return
 
     return (
-        <PDFDownloadLink
-            fileName={`CERTIFICADO-${user.name
-                .replaceAll(' ', '_')
-                .toLowerCase()}`}
-            document={PDFDocument({ reviews, user })}
-        >
-            <Button intent="outline" className="float-right mr-3 mt-8">
-                Descargar certificado de evaluación
-            </Button>
-        </PDFDownloadLink>
+        <>
+            <PDFDownloadLink
+                fileName={`CERTIFICADO_${user.name
+                    .replaceAll(' ', '_')
+                    .toLowerCase()}`}
+                document={PDFDocument({ reviews, user })}
+            >
+                <Button intent="outline" className="float-right mr-3 mt-8">
+                    Descargar certificado de evaluación
+                </Button>
+            </PDFDownloadLink>
+        </>
     )
 }
