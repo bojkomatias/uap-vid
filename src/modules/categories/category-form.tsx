@@ -52,7 +52,7 @@ export default function CategoryForm({
                 },
             })
             setLoading(false)
-            router.refresh()
+
             closeInterceptingDrawer
                 ? //Agregué un timeout porque era demasiado rápido el close
                   setTimeout(() => {
