@@ -9,10 +9,11 @@ import {
     Image,
     usePDF,
     PDFDownloadLink,
+    PDFViewer,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
 
-const PDFDocument = ({ reviews, user }: { reviews: Review[]; user: User }) => {
+const PDFDocument = ({ user }: { user: User }) => {
     return (
         <>
             <Document>
@@ -47,7 +48,6 @@ const PDFDocument = ({ reviews, user }: { reviews: Review[]; user: User }) => {
                             Vicerrectoría de Investigación y Desarrollo
                         </Text>
                     </View>
-
                     <View
                         style={{
                             padding: 20,
@@ -76,17 +76,7 @@ export const ReviewerCertificatePDF = ({
     reviews: Review[]
     user: User
 }) => {
-    const [instance] = usePDF({
-        document: PDFDocument({ reviews, user }),
-    })
-
-    if (instance.loading)
-        return (
-            <Button disabled={true} intent="outline">
-                Cargando PDF
-            </Button>
-        )
-    else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
+    //Since this is a very small PDF, I removed the logic to wait until it was ready to download.
 
     //Check if the user has made reviews. If not, the component will return nothing. If it does, it will show a button where he or her can download the reviewer certificate.
     if (reviews.length == 0) return
@@ -94,10 +84,10 @@ export const ReviewerCertificatePDF = ({
     return (
         <>
             <PDFDownloadLink
-                fileName={`CERTIFICADO_${user.name
+                fileName={`CERTIFICADO-${user.name
                     .replaceAll(' ', '_')
                     .toLowerCase()}`}
-                document={PDFDocument({ reviews, user })}
+                document={PDFDocument({ user })}
             >
                 <Button intent="outline" className="float-right mr-3 mt-8">
                     Descargar certificado de evaluación
