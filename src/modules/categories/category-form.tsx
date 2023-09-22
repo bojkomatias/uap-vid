@@ -11,7 +11,13 @@ import type { z } from 'zod'
 import { cx } from '@utils/cx'
 
 /**The prop column is to set the content as columns instead of rows */
-export default function CategoryForm({ column = false }: { column?: boolean }) {
+export default function CategoryForm({
+    closeInterceptingDrawer,
+    column = false,
+}: {
+    closeInterceptingDrawer?: Function
+    column?: boolean
+}) {
     const router = useRouter()
 
     const form = useForm({
@@ -47,7 +53,12 @@ export default function CategoryForm({ column = false }: { column?: boolean }) {
             })
             setLoading(false)
             router.refresh()
-            router.push('/categories')
+            closeInterceptingDrawer
+                ? //Agregué un timeout porque era demasiado rápido el close
+                  setTimeout(() => {
+                      closeInterceptingDrawer(router)
+                  }, 500)
+                : router.push('/categories')
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',
