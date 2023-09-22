@@ -55,7 +55,7 @@ async function Layout({
 
     return (
         <>
-            {JSON.stringify(protocol.sections.identification.sponsor)}
+            
             <PageHeading title={protocol.sections.identification.title} />
             <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
