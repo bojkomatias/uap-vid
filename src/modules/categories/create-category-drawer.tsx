@@ -1,8 +1,6 @@
 'use client'
-
 import { Drawer } from '@mantine/core'
 import { usePathname, useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
 import CategoryForm from './category-form'
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
@@ -21,33 +19,27 @@ export default function CreateCategoryDrawer() {
     }
 
     return (
-        <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+        <Drawer.Root
+            closeOnEscape
+            position="right"
+            opened={path == '/categories/new'}
+            onClose={() => closeFn(router)}
         >
-            <Drawer.Root
-                closeOnEscape
-                position="right"
-                opened={path == '/categories/new'}
-                onClose={() => closeFn(router)}
-            >
-                <Drawer.Overlay id="drawer-overlay" className="fade-in" />
-                <Drawer.Content id="drawer-content" className="fade-in-right">
-                    <Drawer.Header>
-                        <Drawer.Title className="font-semibold text-gray-600">
-                            Crear Categoría
-                        </Drawer.Title>
-                        <Drawer.CloseButton />
-                    </Drawer.Header>
-                    <Drawer.Body className="mx-3 rounded-md bg-gray-50 p-4 shadow-md">
-                        <CategoryForm
-                            closeInterceptingDrawer={() => closeFn(router)}
-                            column={true}
-                        />
-                    </Drawer.Body>
-                </Drawer.Content>
-            </Drawer.Root>
-        </motion.span>
+            <Drawer.Overlay id="drawer-overlay" className="fade-in" />
+            <Drawer.Content id="drawer-content" className="fade-in-right">
+                <Drawer.Header>
+                    <Drawer.Title className="font-semibold text-gray-600">
+                        Crear Categoría
+                    </Drawer.Title>
+                    <Drawer.CloseButton />
+                </Drawer.Header>
+                <Drawer.Body className="mx-3 rounded-md bg-gray-50 p-4 shadow-md">
+                    <CategoryForm
+                        closeInterceptingDrawer={() => closeFn(router)}
+                        column={true}
+                    />
+                </Drawer.Body>
+            </Drawer.Content>
+        </Drawer.Root>
     )
 }
