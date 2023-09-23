@@ -415,7 +415,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]} ${randomString}</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
     
           </td>
         </tr>
@@ -455,20 +455,27 @@ export async function emailer({
     
     </html>`
 
+    // const transporter = nodemailer.createTransport({
+    //     host: process.env.SMTP_ADDRESS,
+    //     port: Number(process.env.SMTP_PORT),
+    //     secure: false,
+    //     ignoreTLS: true,
+    // })
     const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_ADDRESS,
-        port: Number(process.env.SMTP_PORT),
+        host: 'smtp.gmail.com',
+        port: 587,
         secure: false,
-        ignoreTLS: true,
+        auth: {
+            user: 'nicoskate000@gmail.com',
+            pass: 'luqj vdtt kqgp mbof',
+        },
     })
 
     const emailObject = {
         from: '"Portal VID - UAP" no-reply@uap.edu.ar',
         to: email,
-        subject: randomString ? 'Código para cambiar email' : subjects[useCase],
-        text: randomString
-            ? 'Este es el código para cambiar tu email'
-            : messages[useCase],
+        subject: subjects[useCase],
+        text: messages[useCase],
         html: randomString ? htmlEmailUpdate : html,
     }
 

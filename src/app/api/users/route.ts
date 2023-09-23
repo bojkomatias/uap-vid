@@ -20,5 +20,5 @@ export async function PATCH(request: NextRequest) {
         return new Response('We cannot update your email', { status: 500 })
     }
 
-    return NextResponse.json({ message: 'success' })
+    return NextResponse.json({ message: 'success', status: 200 })
 }

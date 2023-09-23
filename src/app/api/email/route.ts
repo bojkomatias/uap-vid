@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { emailer, type Emailer } from '@utils/emailer'
+import { emailer, useCases } from '@utils/emailer'
 export async function POST(request: NextRequest) {
-    const emailData: Emailer = await request.json()
+    const data = await request.json()
+    const emailData = { ...data, useCase: useCases.changeUserEmail }
+    const email = await emailer(emailData)
 
-    const email = emailer(emailData)
-
-    console.log(email)
-
-    return NextResponse.json(email)
+    return NextResponse.json({ email: email }, { status: 200 })
 }

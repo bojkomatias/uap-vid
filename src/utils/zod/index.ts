@@ -514,3 +514,20 @@ export const PublicationSchema = z.object({
     title: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     result: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
+
+export const UserEmailChangeSchema = z
+    .object({
+        previousEmail: z.string().email(),
+        newEmail: z.string().email({ message: 'Ingrese un email válido' }),
+        emailCode: z
+            .string()
+            .min(5, {
+                message: 'El código debe contener al menos 5 caracteres',
+            }),
+    })
+    .refine(
+        (value) => {
+            value.previousEmail == value.newEmail
+        },
+        { message: 'No puede ser el email actual', path: ['emailsNotEqual'] }
+    )
