@@ -21,7 +21,11 @@ export default withAuth(
         }
 
         // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
-        if (req.nextUrl.pathname.includes('/users')) {
+        //To make able for users to edit their own email, I edited this conditions to also have to check that the pathname is not /api/users/edit-email.
+        if (
+            req.nextUrl.pathname.includes('/users') &&
+            req.nextUrl.pathname !== '/api/users/edit-email'
+        ) {
             if (!canAccess('USERS', token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })

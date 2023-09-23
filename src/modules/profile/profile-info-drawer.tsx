@@ -41,7 +41,7 @@ function ProfileInfo({ user }: { user: User }) {
         id: string
         email: string
     }) => {
-        fetch(`/api/users`, {
+        fetch(`/api/users/edit-email`, {
             method: 'PATCH',
             mode: 'cors',
             headers: {
