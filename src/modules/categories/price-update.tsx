@@ -54,7 +54,6 @@ export default function PriceUpdate({
             })
         }
     }
-
     return (
         <PopoverComponent
             actionButton={
@@ -110,7 +109,9 @@ export default function PriceUpdate({
                         category.price[category.price.length - 1]?.price
                     }
                     className="min-w-[7rem] rounded-md py-1 text-xs"
+
                     priceSetter={(e) => setPrice(e)}
+
                 />
             </div>
         </PopoverComponent>

@@ -30,7 +30,9 @@ export default async function Page({
             academicUnits.push({
                 title: key,
                 extendedTitle: AcademicUnitsDictionary[key],
+
                 href: `/anual-budgets/${AcademicUnitsDictionary[key]}`,
+
             })
         })
 

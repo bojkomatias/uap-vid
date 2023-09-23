@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 /**
  * @param defaultPrice will be set to the number value passed as an argument. Eg: default price is $1.000,00, the argument should be 1000
- * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). e can be used to access the value of the input.
+ * @param priceSetter this is a callback function, it's triggered onBlur (from the input field). The argument it receives is "price" which is a number.
  * @param className CSS clases for the input field
  */
 
@@ -14,7 +14,12 @@ export default function CurrencyInput({
     className,
 }: {
     defaultPrice?: number
+
+        /** This is a callback function, it takes as an argument the price that's in the input field.
+     * @param value number
+     */
     priceSetter: (value: number) => void
+
     className?: string
 }) {
     const [amount, setAmount] = useState(
@@ -40,7 +45,9 @@ export default function CurrencyInput({
                 }}
                 onBlur={(e) => {
                     e.preventDefault()
-                    priceSetter(parseLocaleNumber(amount, 'es-AR'))
+                    priceSetter &&
+                        priceSetter(parseLocaleNumber(e.target.value, 'es-AR'))
+
                 }}
                 placeholder="3499.00"
                 className={cx('input pl-5 text-right', className)}

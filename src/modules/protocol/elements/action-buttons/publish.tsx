@@ -32,6 +32,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
                 message: 'El protocolo ha sido publicado con éxito',
                 color: 'green',
             })
+
             return startTransition(() => router.refresh())
         }
         return notifications.show({

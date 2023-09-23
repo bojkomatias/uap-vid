@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 'use client'
 import type { AcademicUnit, User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'

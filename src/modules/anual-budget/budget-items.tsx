@@ -172,6 +172,7 @@ export function BudgetItems({
                                                     `${i}.amount`
                                                 ).value
                                             }
+
                                             priceSetter={(e) =>
                                                 form.setFieldValue(
                                                     `${i}.amount`,

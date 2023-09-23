@@ -90,6 +90,7 @@ export default function CategoryForm() {
                         // Always delete the prior since only one exists on creation
                         form.insertListItem('price', {
                             price: e,
+
                             from: new Date(),
                             to: null,
                         })

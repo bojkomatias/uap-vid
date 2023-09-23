@@ -4,19 +4,22 @@ export enum useCases {
     onReview,
     onRevised,
     onAssignation,
+    onApprove,
 }
-
 const messages = {
     [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
     [useCases.onRevised]:
         'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
+    [useCases.onApprove]:
+        'Tu protocolo de investigación fue aprobado por la Vicerrectoría de Investigación y Desarrollo',
 }
 
 const subjects = {
     [useCases.onReview]: 'Proyecto evaluado',
     [useCases.onRevised]: 'Correcciones revisadas',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
+    [useCases.onApprove]: 'Proyecto aprobado',
 }
 type Emailer = {
     useCase: useCases
