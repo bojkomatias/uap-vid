@@ -4,6 +4,10 @@ import { buttonStyle } from '@elements/button/styles'
 import Link from 'next/link'
 import CategoriesTable from 'modules/categories/team-member-category-table'
 import { getCategories } from '@repositories/team-member-category'
+import { canAccess } from '@utils/scopes'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { redirect } from 'next/navigation'
 
 export default async function Page({
     searchParams,
@@ -11,6 +15,10 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const [totalRecords, categories] = await getCategories(searchParams)
+
+    const session = await getServerSession(authOptions)
+    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
+        redirect('/protocols')
 
     return (
         <>

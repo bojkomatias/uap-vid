@@ -14,7 +14,7 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
-    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
+    if (!session || !canAccess('ANUAL_BUDGETS', session.user.role))
         redirect('/protocols')
 
     const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
