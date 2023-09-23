@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-server-import-in-page */
 import { canAccess } from '@utils/scopes'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
 import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
@@ -7,6 +9,8 @@ import { NextResponse } from 'next/server'
 export default withAuth(
     async function middleware(req) {
         const token = await getToken({ req })
+
+        const session = await getServerSession(authOptions)
 
         if (req.nextUrl.pathname === '/') {
             if (token)
@@ -22,7 +26,10 @@ export default withAuth(
 
         // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
         if (req.nextUrl.pathname.includes('/users')) {
-            if (!canAccess('USERS', token.user.role)) {
+            if (
+                !canAccess('USERS', token.user.role) ||
+                session?.user.email == token.user.email
+            ) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
