@@ -6,6 +6,7 @@ import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { Edit } from 'tabler-icons-react'
 import PopoverComponent from '@elements/popover'
 import { Button } from '@elements/button'
+import { Emailer, useCases } from '@utils/emailer'
 
 export default async function ProfileInfo({ user }: { user: User }) {
     const updateUserEmail = async ({
@@ -22,6 +23,19 @@ export default async function ProfileInfo({ user }: { user: User }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ id, email }),
+        })
+    }
+
+    const sendEmail = async (emailData: Emailer) => {
+        fetch(`/api/users`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                emailData,
+            }),
         })
     }
 
@@ -60,26 +74,23 @@ export default async function ProfileInfo({ user }: { user: User }) {
                     className="absolute right-0 rounded-md border border-gray-100 bg-white p-3 py-2 shadow-md"
                     actionButton={
                         <Button
-                            onClick={() => {
-                                const email = (
-                                    document.getElementById(
-                                        'newEmail'
-                                    ) as HTMLInputElement
-                                ).value
-                                const id = user.id
-
+                            onClick={async () => {
+                                // const email = (
+                                //     document.getElementById(
+                                //         'newEmail'
+                                //     ) as HTMLInputElement
+                                // ).value
+                                // const id = user.id
                                 // const randomString = (Math.random() + 1)
                                 //     .toString(36)
                                 //     .substring(7)
-                                // console.log('random', randomString)
-
-                                // emailer(
-                                //     useCases.emailUpdate,
-                                //     undefined,
-                                //     undefined,
-                                //     randomString
-                                // )
-                                updateUserEmail({ id, email })
+                                // console.log('randomString', randomString)
+                                // await sendEmail({
+                                //     useCase: useCases.changeUserEmail,
+                                //     email: user.email,
+                                //     randomString: randomString,
+                                // })
+                                // updateUserEmail({ id, email })
                             }}
                             className="py-2 text-xs"
                             intent="secondary"

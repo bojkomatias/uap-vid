@@ -5,6 +5,7 @@ export enum useCases {
     onRevised,
     onAssignation,
     onApprove,
+    changeUserEmail,
 }
 const messages = {
     [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
@@ -13,6 +14,8 @@ const messages = {
     [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
     [useCases.onApprove]:
         'Tu protocolo de investigación fue aprobado por la Vicerrectoría de Investigación y Desarrollo',
+    [useCases.changeUserEmail]:
+        'Este es el código de confirmación para cambiar tu email',
 }
 
 const subjects = {
@@ -20,14 +23,21 @@ const subjects = {
     [useCases.onRevised]: 'Correcciones revisadas',
     [useCases.onAssignation]: 'Nuevo proyecto asignado',
     [useCases.onApprove]: 'Proyecto aprobado',
+    [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
 }
-type Emailer = {
+export type Emailer = {
     useCase: useCases
     email: string
-    protocolId: string
+    protocolId?: string
+    randomString?: string
 }
 
-export async function emailer({ useCase, email, protocolId }: Emailer) {
+export async function emailer({
+    useCase,
+    email,
+    protocolId,
+    randomString,
+}: Emailer) {
     // Variable used in template to redirect (hardcoded cause process.env failed.)
     const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
     const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -405,7 +415,7 @@ export async function emailer({ useCase, email, protocolId }: Emailer) {
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
             
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]} ${randomString}</h1>
     
           </td>
         </tr>
@@ -455,16 +465,20 @@ export async function emailer({ useCase, email, protocolId }: Emailer) {
     const emailObject = {
         from: '"Portal VID - UAP" no-reply@uap.edu.ar',
         to: email,
-        subject: subjects[useCase],
-        text: messages[useCase],
-        html: html,
+        subject: randomString ? 'Código para cambiar email' : subjects[useCase],
+        text: randomString
+            ? 'Este es el código para cambiar tu email'
+            : messages[useCase],
+        html: randomString ? htmlEmailUpdate : html,
     }
 
     transporter.sendMail(emailObject, (err) => {
         if (err) {
             return new Response('Error sending email', { status: 500 })
         } else {
-            return new Response('Successfully sent email', { status: 250 })
+            return new Response(`Successfully sent email to ${email}`, {
+                status: 250,
+            })
         }
     })
 
