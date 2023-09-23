@@ -41,7 +41,7 @@ export default function CustomDrawer({
                     </Drawer.Title>
                     <Drawer.CloseButton />
                 </Drawer.Header>
-                <Drawer.Body className="mx-3 rounded-md bg-gray-50 p-10 shadow-md">
+                <Drawer.Body className="mx-3 rounded-md border border-gray-100 bg-gray-50 shadow-md">
                     {children}
                 </Drawer.Body>
             </Drawer.Content>
