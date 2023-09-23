@@ -30,6 +30,7 @@ function ProfileInfo({ user }: { user: User }) {
         validateInputOnBlur: true,
     })
 
+    // I'm using useState because at some point it might be useful to change the random code. For now, it changes every time the drawer is rendered.
     const [random, setRandom] = useState(
         (Math.random() + 1).toString(36).substring(7)
     )
@@ -236,9 +237,6 @@ function ProfileInfo({ user }: { user: User }) {
                             className="float-right mt-1 h-8 w-fit shadow-sm"
                             intent="primary"
                             onClick={async () => {
-                                console.log(
-                                    form.getInputProps('newEmail').value
-                                )
                                 if (!form.getInputProps('emailCode').error) {
                                     await updateUserEmail({
                                         id: user.id,
