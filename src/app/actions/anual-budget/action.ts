@@ -7,6 +7,7 @@ import type {
     ProtocolSectionsIdentificationTeam,
     AnualBudgetTeamMember,
 } from '@prisma/client'
+import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import {
     createAnualBudget,
     createManyAnualBudgetTeamMember,
@@ -27,6 +28,10 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
 
     // Create the annual budget with all the items listed in the protocol budget section.
     const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
+    // Create the relation between AC and AnualBudgets
+    const academicUnitsIds = await generateAnualBudgetAcademicUnitRelation(
+        protocol.sections.identification.sponsor
+    )
     const data: Omit<
         AnualBudget,
         'id' | 'createdAt' | 'updatedAt' | 'approved'
@@ -34,6 +39,7 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         protocolId: protocol.id,
         year: Number(year),
         budgetItems: ABI,
+        academicUnitsIds,
     }
     const newAnualBudget = await createAnualBudget(data)
 
@@ -82,6 +88,15 @@ const generateAnualBudgetTeamMembersItems = (
             executions: [] as Execution[],
         }
     })
+}
+
+const generateAnualBudgetAcademicUnitRelation = async (sponsors: string[]) => {
+    const parsedSponsors = sponsors.map((s) => s.split(' - ')[1])
+    const academicUnits = await getAcademicUnitsTabs()
+
+    return academicUnits
+        .filter((e) => parsedSponsors.includes(e.shortname))
+        .map((e) => e.id)
 }
 
 export const protocolToAnualBudgetPreview = async (
