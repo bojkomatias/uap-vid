@@ -1,11 +1,11 @@
+'use client'
 import { cx } from '@utils/cx'
 import Link from 'next/link'
+import { useSelectedLayoutSegment } from 'next/navigation'
 
 export default function Tabs({
-    params,
     tabs,
 }: {
-    params: { name: string }
     tabs: {
         id: string
         name: string
@@ -13,6 +13,8 @@ export default function Tabs({
         _count: number
     }[]
 }) {
+    const segment = useSelectedLayoutSegment()
+
     return (
         <div className="mb-12">
             <div className="sm:hidden">
@@ -33,6 +35,18 @@ export default function Tabs({
             <div className="hidden sm:block">
                 <div className="border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+                        <Link
+                            href={`/anual-budgets`}
+                            title={'Mostrar todos los presupuestos'}
+                            className={cx(
+                                'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
+                                segment == null
+                                    ? 'border-indigo-500 border-primary text-primary'
+                                    : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
+                            )}
+                        >
+                            TODOS
+                        </Link>
                         {tabs.map(({ id, name, shortname, _count }) => (
                             <Link
                                 key={id}
@@ -40,7 +54,7 @@ export default function Tabs({
                                 title={name}
                                 className={cx(
                                     'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
-                                    id == params.name
+                                    segment == id
                                         ? 'border-indigo-500 border-primary text-primary'
                                         : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
                                 )}
@@ -50,7 +64,7 @@ export default function Tabs({
                                     <span
                                         className={cx(
                                             'ml-3 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block',
-                                            id == params.name
+                                            segment == id
                                                 ? 'bg-gray-100 text-primary'
                                                 : 'bg-gray-50 text-gray-500'
                                         )}

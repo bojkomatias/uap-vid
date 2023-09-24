@@ -187,7 +187,6 @@ export const updateAnualBudgetTeamMemberHours = async (
 
 export const getAnualBudgetsByAcademicUnit = cache(
     async (
-        academicUnitId: string,
         {
             records = '5',
             page = '1',
@@ -198,7 +197,8 @@ export const getAnualBudgetsByAcademicUnit = cache(
             values,
         }: {
             [key: string]: string
-        }
+        },
+        academicUnitId?: string
     ) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
@@ -207,8 +207,9 @@ export const getAnualBudgetsByAcademicUnit = cache(
                 prisma.anualBudget.count({
                     where: {
                         AND: [
-                            { academicUnitsIds: { has: academicUnitId } },
-
+                            academicUnitId
+                                ? { academicUnitsIds: { has: academicUnitId } }
+                                : {},
                             search
                                 ? {
                                       protocol: {
@@ -244,7 +245,9 @@ export const getAnualBudgetsByAcademicUnit = cache(
                     take: Number(records),
                     where: {
                         AND: [
-                            { academicUnitsIds: { has: academicUnitId } },
+                            academicUnitId
+                                ? { academicUnitsIds: { has: academicUnitId } }
+                                : {},
                             search
                                 ? {
                                       protocol: {

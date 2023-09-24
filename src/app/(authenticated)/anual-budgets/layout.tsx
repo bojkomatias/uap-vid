@@ -3,16 +3,14 @@ import Link from 'next/link'
 import Tabs from '@elements/tabs'
 import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 
-export default async function Page({
-    params,
+export default async function AnualBudgetsLayout({
     children,
 }: {
-    params: { name: string }
     children: React.ReactNode
 }) {
-    const dbAcademicUnits = await getAcademicUnitsTabs()
+    const academicUnits = await getAcademicUnitsTabs()
 
-    const tabs = dbAcademicUnits.map((ac) => {
+    const tabs = academicUnits.map((ac) => {
         return {
             ...ac,
             _count: ac._count.AcademicUnitAnualBudgets,
@@ -33,7 +31,7 @@ export default async function Page({
                 </Link>
                 .
             </p>
-            <Tabs params={params} tabs={tabs} />
+            <Tabs tabs={tabs} />
             {children}
         </>
     )
