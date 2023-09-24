@@ -14,6 +14,13 @@ export const getReviewsByProtocol = cache(async (protocolId: string) => {
     return reviews
 })
 
+export const getReviewsByReviewerId = cache(async (reviewerId: string) => {
+    const reviews = await prisma.review.findMany({
+        where: { reviewerId },
+    })
+    return reviews
+})
+
 export const getProtocolReviewByReviewer = cache(
     async (protocolId: string, reviewerId: string) => {
         const review = await prisma.review.findFirst({
