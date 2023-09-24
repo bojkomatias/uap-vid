@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@elements/button'
-import type { State, User } from '@prisma/client'
+import type { User } from '@prisma/client'
+import type { Protocol } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
 import { notifications } from '@mantine/notifications'
@@ -11,7 +12,7 @@ import { canExecute } from '@utils/scopes'
 
 type ActionButtonTypes = {
     user: User
-    protocol: { id: string; state: State; researcherId: string }
+    protocol: Protocol
 }
 
 export default function PublishButton({ user, protocol }: ActionButtonTypes) {
