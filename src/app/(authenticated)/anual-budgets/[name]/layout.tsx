@@ -1,9 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
 import React from 'react'
-import { canAccess } from '@utils/scopes'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Tabs from '@elements/tabs'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
@@ -15,10 +11,6 @@ export default async function Page({
     params: { name: string }
     children: React.ReactNode
 }) {
-    const session = await getServerSession(authOptions)
-    if (!session || !canAccess('MEMBER_CATEGORIES', session.user.role))
-        redirect('/protocols')
-
     const academicUnitsTabs = () => {
         const academicUnits: {
             title: string

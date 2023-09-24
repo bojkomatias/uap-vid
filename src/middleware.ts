@@ -61,6 +61,14 @@ export default withAuth(
             }
         }
 
+        if (req.nextUrl.pathname.includes('/anual-budgets')) {
+            if (!canAccess('ANUAL_BUDGETS', token.user.role)) {
+                if (req.nextUrl.pathname.startsWith('/api'))
+                    return new Response('Unauthorized', { status: 401 })
+                return NextResponse.redirect(new URL('/protocols', req.url))
+            }
+        }
+
         return NextResponse.next()
     },
     {

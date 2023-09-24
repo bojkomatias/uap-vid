@@ -45,7 +45,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
         <Button
             onClick={approveProtocol}
             intent={'secondary'}
-            disabled={protocol.state !== State.ACCEPTED}
+            disabled={protocol.state! !== State.ACCEPTED}
             loading={isPending}
         >
             <FileCertificate className="h-5 text-current" />

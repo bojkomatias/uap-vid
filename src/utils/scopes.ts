@@ -10,6 +10,7 @@ import { ROLE, STATE, ACTION, ACCESS } from './zod'
  */
 const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
     [ROLE.RESEARCHER]: [ACCESS.PROTOCOLS, ACCESS.REVIEWS],
+    //Does a secretary have access to anual budgets?
     [ROLE.SECRETARY]: [ACCESS.PROTOCOLS, ACCESS.REVIEWS, ACCESS.EVALUATORS],
     [ROLE.METHODOLOGIST]: [ACCESS.PROTOCOLS],
     [ROLE.SCIENTIST]: [ACCESS.PROTOCOLS],
@@ -22,6 +23,7 @@ const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
         ACCESS.ACADEMIC_UNITS,
         ACCESS.TEAM_MEMBERS,
         ACCESS.MEMBER_CATEGORIES,
+        ACCESS.ANUAL_BUDGETS,
     ],
 }
 

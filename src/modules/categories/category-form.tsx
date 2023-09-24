@@ -85,11 +85,11 @@ export default function CategoryForm() {
                     Precio hora
                 </label>
                 <CurrencyInput
-                    priceSetter={(e) => {
+                    priceSetter={(price: number) => {
                         form.removeListItem('price', 0)
                         // Always delete the prior since only one exists on creation
                         form.insertListItem('price', {
-                            price: e,
+                            price: price,
                             from: new Date(),
                             to: null,
                         })
