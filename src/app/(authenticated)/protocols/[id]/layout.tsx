@@ -55,7 +55,7 @@ async function Layout({
 
     return (
         <>
-            {JSON.stringify(protocol.sections.identification.sponsor)}
+            
             <PageHeading title={protocol.sections.identification.title} />
             <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
@@ -84,14 +84,8 @@ async function Layout({
                         protocol={{ id: protocol.id, state: protocol.state }}
                         reviews={reviews}
                     />
-                    <PublishButton
-                        user={session.user}
-                        protocol={{
-                            id: protocol.id,
-                            state: protocol.state,
-                            researcherId: protocol.researcherId,
-                        }}
-                    />
+                    {/* I need to pass the whole protocol to check validity! */}
+                    <PublishButton user={session.user} protocol={protocol} />
                     <GenerateAnualBudgetButton
                         hasBudgetCurrentYear={hasBudgetCurrentYear}
                         budgetPreview={budgetPreview}

@@ -58,6 +58,7 @@ const AccessSchema = z.enum([
     'ACADEMIC_UNITS',
     'TEAM_MEMBERS',
     'MEMBER_CATEGORIES',
+    'ANUAL_BUDGETS',
 ])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`

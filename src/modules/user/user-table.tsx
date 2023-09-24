@@ -49,7 +49,7 @@ export default function UserTable({
                 accessorKey: 'password',
                 header: 'Origen',
                 cell: ({ cell }) =>
-                    cell.getValue() ? <>Microsoft 365</> : <>Usuario local</>,
+                    cell.getValue() ? <>Usuario local</> : <>Microsoft 365</>,
             },
             {
                 accessorKey: '_count.protocols',

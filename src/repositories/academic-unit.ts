@@ -48,6 +48,7 @@ export const getAllAcademicUnits = cache(
                     select: {
                         id: true,
                         name: true,
+                        shortname: true,
                         budgets: true,
                         secretariesIds: true,
                     },
@@ -114,6 +115,28 @@ export const updateAcademicUnit = async (id: string, academicUnit: any) => {
             data: academicUnit,
         })
         return unit
+    } catch (error) {
+        return null
+    }
+}
+
+export const getSecretariesEmailsByAcademicUnit = async (name: string) => {
+    try {
+        const academicUnits = prisma.academicUnit.findMany({
+            where: {
+                name: {
+                    contains: name,
+                },
+            },
+            select: {
+                secretaries: {
+                    select: {
+                        email: true,
+                    },
+                },
+            },
+        })
+        return academicUnits
     } catch (error) {
         return null
     }

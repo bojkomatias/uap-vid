@@ -13,6 +13,10 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
+import dataToCsv from '@utils/dataToCsv'
+import { CSVLink } from 'react-csv'
+import { Button } from './button'
+import { useSearchParams } from 'next/navigation'
 
 export default function TanStackTable({
     data,
@@ -44,12 +48,75 @@ export default function TanStackTable({
         getCoreRowModel: getCoreRowModel(),
     })
 
+    const totalRecordsCheck = !(
+        Number(useSearchParams().get('records')) == totalRecords
+    )
+
+    // dataToCsv(columns, data)
+
     return (
         <>
             <div className="mx-auto mt-6 flex items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
 
-                <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
+                <div className="flex gap-2">
+                    <ColumnVisibilityDropdown
+                        columns={table.getAllLeafColumns()}
+                    />
+
+                    <div className="group relative z-50">
+                        {/*Tried using Tooltip component but couldn't make it work as intended, so I copied the styles from the tooltip to mantain the style */}
+                        {totalRecordsCheck && (
+                            <div className="pointer-events-none absolute left-0 top-10   bg-white  text-xs text-gray-500 opacity-0 transition delay-300 group-hover:pointer-events-auto group-hover:opacity-100">
+                                <div className="prose prose-zinc inset-auto mt-2  cursor-default  rounded  border p-3 px-3 py-2 text-xs shadow-md ring-1 ring-inset prose-p:pl-2 ">
+                                    Para descargar la hoja de datos, seleccione{' '}
+                                    <br />
+                                    <span
+                                        className="font-bold transition hover:text-gray-700"
+                                        onMouseEnter={() => {
+                                            document
+                                                .getElementById(
+                                                    'records-selector'
+                                                )
+                                                ?.classList.add('animate-ping')
+                                            setTimeout(() => {
+                                                document
+                                                    .getElementById(
+                                                        'records-selector'
+                                                    )
+                                                    ?.classList.remove(
+                                                        'animate-ping'
+                                                    )
+                                            }, 1800)
+                                        }}
+                                        onClick={() => {
+                                            document
+                                                .getElementById(
+                                                    'records-selector'
+                                                )
+                                                ?.click()
+                                        }}
+                                    >
+                                        Cantidad de registros: Todos los
+                                        registros
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                        <Button
+                            className="group z-10"
+                            disabled={totalRecordsCheck}
+                            intent="outline"
+                        >
+                            <CSVLink
+                                filename="data.csv"
+                                data={dataToCsv(columns, data)}
+                            >
+                                Descargar hoja de datos
+                            </CSVLink>
+                        </Button>
+                    </div>
+                </div>
             </div>
             {customFilterSlot}
 

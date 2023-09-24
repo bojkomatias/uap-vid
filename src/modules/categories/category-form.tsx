@@ -8,8 +8,16 @@ import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import type { z } from 'zod'
+import { cx } from '@utils/cx'
 
-export default function CategoryForm() {
+/**The prop column is to set the content as columns instead of rows */
+export default function CategoryForm({
+    closeInterceptingDrawer,
+    column = false,
+}: {
+    closeInterceptingDrawer?: Function
+    column?: boolean
+}) {
     const router = useRouter()
 
     const form = useForm({
@@ -44,8 +52,13 @@ export default function CategoryForm() {
                 },
             })
             setLoading(false)
-            router.refresh()
-            router.push('/categories')
+
+            closeInterceptingDrawer
+                ? //Agregué un timeout porque era demasiado rápido el close
+                  setTimeout(() => {
+                      closeInterceptingDrawer(router)
+                  }, 500)
+                : router.push('/categories')
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',
@@ -64,7 +77,10 @@ export default function CategoryForm() {
     return (
         <form
             onSubmit={form.onSubmit((values) => createCategory(values))}
-            className="mx-auto mt-28 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
+            className={cx(
+                !column && 'mt-28 place-items-stretch lg:grid lg:grid-cols-2 ',
+                'mx-auto  max-w-5xl pt-4 '
+            )}
         >
             <div className="m-3 p-1">
                 <label htmlFor="name" className="label">
@@ -85,11 +101,12 @@ export default function CategoryForm() {
                     Precio hora
                 </label>
                 <CurrencyInput
-                    priceSetter={(price: number) => {
+                    priceSetter={(e) => {
                         form.removeListItem('price', 0)
                         // Always delete the prior since only one exists on creation
                         form.insertListItem('price', {
-                            price: price,
+                            price: e,
+
                             from: new Date(),
                             to: null,
                         })
@@ -107,7 +124,10 @@ export default function CategoryForm() {
             <Button
                 intent="secondary"
                 type="submit"
-                className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
+                className={cx(
+                    column && 'mt-6',
+                    ' m-4 ml-auto lg:col-start-2 lg:col-end-3 lg:place-self-end'
+                )}
                 loading={loading}
             >
                 Crear categoría

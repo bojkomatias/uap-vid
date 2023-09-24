@@ -3,8 +3,21 @@ import { PageHeading } from '@layout/page-heading'
 import Link from 'next/link'
 import { CalendarPlus } from 'tabler-icons-react'
 import { buttonStyle } from '@elements/button/styles'
+import {
+    getAllConvocatories,
+    getCurrentConvocatory,
+} from '@repositories/convocatory'
 
-export default async function Page() {
+export default async function Page({
+    searchParams,
+}: {
+    searchParams: { [key: string]: string }
+}) {
+    const [totalRecords, convocatories] = await getAllConvocatories(
+        searchParams
+    )
+    const currentConvocatory = await getCurrentConvocatory()
+
     return (
         <>
             <PageHeading title="Lista de convocatorias" />
@@ -18,7 +31,11 @@ export default async function Page() {
                     Nueva convocatoria
                 </Link>
             </div>
-            <ConvocatoryTable />
+            <ConvocatoryTable
+                totalRecords={totalRecords}
+                convocatories={convocatories}
+                currentConvocatory={currentConvocatory!}
+            />
         </>
     )
 }

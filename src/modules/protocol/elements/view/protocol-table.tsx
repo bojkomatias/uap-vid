@@ -68,7 +68,7 @@ export default function ProtocolTable({
                 enableSorting: false,
             },
             {
-                accessorKey: 'observation',
+                accessorKey: 'observations',
                 header: '',
                 cell: ({ row }) => (
                     <Observation

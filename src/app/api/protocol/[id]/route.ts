@@ -29,6 +29,7 @@ export async function PUT(
     ) {
         if (protocol) delete protocol.id
         const updated = await updateProtocolById(id, protocol)
+
         if (!updated) {
             return new Response('We cannot update the protocol', {
                 status: 500,

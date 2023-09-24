@@ -27,6 +27,7 @@ const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
         ACCESS.ACADEMIC_UNITS,
         ACCESS.TEAM_MEMBERS,
         ACCESS.MEMBER_CATEGORIES,
+        ACCESS.ANUAL_BUDGETS,
     ],
 }
 

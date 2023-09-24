@@ -1,4 +1,3 @@
-
 import { Button } from '@elements/button'
 import { buttonStyle } from '@elements/button/styles'
 import MultipleButton from '@elements/multiple-button'
@@ -13,7 +12,7 @@ import { FilePlus } from 'tabler-icons-react'
 
 export default async function CreateButton({ role }: { role: RoleType }) {
     if (role === Role.ADMIN) {
-        const convocatories = await getAllConvocatories()
+        const [, convocatories] = await getAllConvocatories({})
         if (!convocatories || convocatories.length === 0) return null
         const current = await getCurrentConvocatory()
         return (
