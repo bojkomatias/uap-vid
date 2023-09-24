@@ -1,8 +1,7 @@
 import { PageHeading } from '@layout/page-heading'
-import React from 'react'
 import Link from 'next/link'
 import Tabs from '@elements/tabs'
-import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
+import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 
 export default async function Page({
     params,
@@ -11,27 +10,14 @@ export default async function Page({
     params: { name: string }
     children: React.ReactNode
 }) {
-    const academicUnitsTabs = () => {
-        const academicUnits: {
-            title: string
-            extendedTitle?: string
-            href: string
-            count?: string
-        }[] = []
-        Object.keys(AcademicUnitsDictionary).forEach(function (key) {
-            academicUnits.push({
-                title: key,
-                extendedTitle: AcademicUnitsDictionary[key],
+    const dbAcademicUnits = await getAcademicUnitsTabs()
 
-                href: `/anual-budgets/${AcademicUnitsDictionary[key]}`,
-
-            })
-        })
-
-        return academicUnits
-    }
-
-    const tabs = academicUnitsTabs()
+    const tabs = dbAcademicUnits.map((ac) => {
+        return {
+            ...ac,
+            _count: ac._count.AcademicUnitAnualBudgets,
+        }
+    })
 
     return (
         <>

@@ -1,4 +1,3 @@
-import React from 'react'
 import { getAnualBudgetsByAcademicUnit } from '@repositories/anual-budget'
 import AnualBudgetTable from 'modules/anual-budget/budget-table'
 
@@ -15,11 +14,9 @@ export default async function Page({
     )
 
     return (
-        <>
-            <AnualBudgetTable
-                anualBudgets={anualBudgets}
-                totalRecords={totalRecords}
-            />
-        </>
+        <AnualBudgetTable
+            anualBudgets={anualBudgets}
+            totalRecords={totalRecords}
+        />
     )
 }

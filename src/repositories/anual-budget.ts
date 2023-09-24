@@ -181,14 +181,13 @@ export const updateAnualBudgetTeamMemberHours = async (
             )
         )
     } catch (error) {
-        console.log(error)
         return null
     }
 }
 
 export const getAnualBudgetsByAcademicUnit = cache(
     async (
-        ac_unit: string,
+        academicUnitId: string,
         {
             records = '5',
             page = '1',
@@ -207,24 +206,9 @@ export const getAnualBudgetsByAcademicUnit = cache(
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
-                        protocol: {
-                            is: {
-                                sections: {
-                                    is: {
-                                        identification: {
-                                            is: {
-                                                sponsor: {
-                                                    has: decodeURIComponent(
-                                                        ac_unit
-                                                    ),
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
                         AND: [
+                            { academicUnitsIds: { has: academicUnitId } },
+
                             search
                                 ? {
                                       protocol: {
@@ -258,26 +242,9 @@ export const getAnualBudgetsByAcademicUnit = cache(
                 prisma.anualBudget.findMany({
                     skip: Number(records) * (Number(page) - 1),
                     take: Number(records),
-
                     where: {
-                        protocol: {
-                            is: {
-                                sections: {
-                                    is: {
-                                        identification: {
-                                            is: {
-                                                sponsor: {
-                                                    has: decodeURIComponent(
-                                                        ac_unit
-                                                    ),
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
                         AND: [
+                            { academicUnitsIds: { has: academicUnitId } },
                             search
                                 ? {
                                       protocol: {
