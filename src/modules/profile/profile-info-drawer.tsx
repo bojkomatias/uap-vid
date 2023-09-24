@@ -20,7 +20,7 @@ export default async function ProfileDrawer({ user }: { user: User }) {
     )
 }
 
-function ProfileInfo({ user }: { user: User }) {
+export function ProfileInfo({ user }: { user: User }) {
     const emailForm = useForm({
         initialValues: {
             currentEmail: user.email,

@@ -1,9 +1,9 @@
 import { PageHeading } from '@layout/page-heading'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
-import ProfileInfo from 'modules/profile/profile-info'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
+import { ProfileInfo } from 'modules/profile/profile-info-drawer'
 
 export default async function Page() {
     const session = await getServerSession(authOptions)

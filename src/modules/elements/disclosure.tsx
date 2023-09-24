@@ -13,7 +13,7 @@ export default function DisclosureComponent({
 }) {
     return (
         <div className="w-full">
-            <div className="mx-auto w-full max-w-md  rounded-md  bg-white ">
+            <div className="mx-auto w-full  rounded-md  bg-white ">
                 <Disclosure>
                     {({ open }) => (
                         <>
