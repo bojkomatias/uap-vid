@@ -47,7 +47,6 @@ export const authOptions: NextAuthOptions = {
                     credentials!.password,
                     result.password!
                 )
-                console.log('RESULT PASSWORD', result.password)
 
                 if (!checkPassword) {
                     throw new Error("Password doesn't match")
