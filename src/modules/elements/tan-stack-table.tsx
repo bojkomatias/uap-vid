@@ -52,7 +52,7 @@ export default function TanStackTable({
         Number(useSearchParams().get('records')) == totalRecords
     )
 
-    dataToCsv(columns, data)
+    // dataToCsv(columns, data)
 
     return (
         <>

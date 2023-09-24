@@ -9,11 +9,14 @@ export default function dataToCsv(
     data: unknown[]
 ) {
     const columnsToExport = columns
-        .map((c: any) => c.accessorKey)
+        .map((c: any) => {
+            return { accessorKey: c.accessorKey, label: c.header }
+        })
         .filter(
-            (accessorKey) =>
+            ({ accessorKey }) =>
                 //Remove self-indicator and actions keys, which are not useful for a spreadsheet, and also remove the undefined (at least for now).
                 accessorKey !== 'self-indicator' &&
+                accessorKey !== 'observations' &&
                 accessorKey !== 'actions' &&
                 accessorKey !== 'password' &&
                 accessorKey
@@ -27,7 +30,7 @@ export default function dataToCsv(
 
             columnsToExport.forEach((c) => {
                 const object = d // Use the current data row
-                const nestedKeyString = c
+                const nestedKeyString = c.accessorKey
 
                 const keys = nestedKeyString.split('.')
                 let result: any = object
@@ -36,7 +39,7 @@ export default function dataToCsv(
                 }
 
                 // Assign the extracted data to the corresponding key in the row object
-                rowData[c] = result?.toString()
+                rowData[c.accessorKey] = result?.toString()
             })
 
             results.push(rowData) // Push the row object to the results array
@@ -45,5 +48,5 @@ export default function dataToCsv(
         return results.map((r) => Object.values(r))
     }
 
-    return [columnsToExport, ...extractedData()]
+    return [columnsToExport.map((e) => e.label), ...extractedData()]
 }
