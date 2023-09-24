@@ -89,7 +89,7 @@ export const ReviewerCertificatePDF = ({
                     .toLowerCase()}`}
                 document={PDFDocument({ user })}
             >
-                <Button intent="outline" className="float-right mr-3 mt-8">
+                <Button intent="outline" className="float-right mt-4">
                     Descargar certificado de evaluación
                 </Button>
             </PDFDownloadLink>

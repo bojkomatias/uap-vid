@@ -14,15 +14,27 @@ import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
 import DisclosureComponent from '@elements/disclosure'
 import Link from 'next/link'
 
-export default async function ProfileDrawer({ user }: { user: User }) {
+export default async function ProfileDrawer({
+    certificate,
+    user,
+}: {
+    certificate: React.ReactNode
+    user: User
+}) {
     return (
         <CustomDrawer title="Perfil de usuario" path="/profile">
-            <ProfileInfo user={user} />
+            <ProfileInfo certificate={certificate} user={user} />
         </CustomDrawer>
     )
 }
 
-export function ProfileInfo({ user }: { user: User }) {
+export function ProfileInfo({
+    certificate,
+    user,
+}: {
+    certificate?: React.ReactNode
+    user: User
+}) {
     const emailForm = useForm({
         initialValues: {
             currentEmail: user.email,
@@ -485,6 +497,7 @@ export function ProfileInfo({ user }: { user: User }) {
                     </DisclosureComponent>
                 </>
             )}
+            {certificate}
         </div>
     )
 }
