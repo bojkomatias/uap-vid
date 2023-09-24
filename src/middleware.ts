@@ -21,7 +21,7 @@ export default withAuth(
         }
 
         // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
-        //To make able for users to edit their own email, I edited this conditions to also have to check that the pathname is not /api/users/edit-email.
+        //To make able for users to edit their own email and password, I edited this conditions to also have to check that the pathname is not /api/users/edit-email and /api/users/edit-password.
         if (
             req.nextUrl.pathname.includes('/users') &&
             req.nextUrl.pathname !== '/api/users/edit-email'

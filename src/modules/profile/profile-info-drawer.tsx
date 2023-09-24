@@ -1,15 +1,16 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 import React, { useState } from 'react'
 import Image from 'next/image'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import CustomDrawer from '@elements/custom-drawer'
 import type { User } from '@prisma/client'
-import { Check, UserCircle } from 'tabler-icons-react'
-
+import { Check, Mail, Password, UserCircle, X } from 'tabler-icons-react'
 import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
-import { UserEmailChangeSchema } from '@utils/zod'
+import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
+import DisclosureComponent from '@elements/disclosure'
 
 export default async function ProfileDrawer({ user }: { user: User }) {
     return (
@@ -20,13 +21,23 @@ export default async function ProfileDrawer({ user }: { user: User }) {
 }
 
 function ProfileInfo({ user }: { user: User }) {
-    const form = useForm({
+    const emailForm = useForm({
         initialValues: {
-            previousEmail: user.email,
+            currentEmail: user.email,
             newEmail: '',
             emailCode: '',
         },
         validate: zodResolver(UserEmailChangeSchema),
+        validateInputOnBlur: true,
+    })
+
+    const passwordForm = useForm({
+        initialValues: {
+            currentPassword: '',
+            newPassword: '',
+            newPasswordConfirm: '',
+        },
+        validate: zodResolver(UserPasswordChangeSchema),
         validateInputOnBlur: true,
     })
 
@@ -42,7 +53,7 @@ function ProfileInfo({ user }: { user: User }) {
         id: string
         email: string
     }) => {
-        fetch(`/api/users/edit-email`, {
+        fetch(`/api/users/change-email`, {
             method: 'PATCH',
             mode: 'cors',
             headers: {
@@ -66,9 +77,59 @@ function ProfileInfo({ user }: { user: User }) {
                 notifications.show({
                     title: 'Ocurrió un error',
                     message: 'No se pudo actualizar el Email',
+                    color: 'error',
+                    icon: <X />,
+                    radius: 20,
+                    style: {
+                        marginBottom: '.8rem',
+                    },
+                })
+            }
+            return res
+        })
+    }
+    const updateUserPassword = async ({
+        id,
+        currentPasswordHash,
+        currentPassword,
+        newPassword,
+    }: {
+        id: string
+        currentPasswordHash: string
+        currentPassword: string
+        newPassword: string
+    }) => {
+        fetch(`/api/users/change-password`, {
+            method: 'PATCH',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id,
+                currentPasswordHash,
+                currentPassword,
+                newPassword,
+            }),
+        }).then((res) => {
+            if (res.status == 200) {
+                notifications.show({
+                    title: 'Se cambió tu contraseña',
+                    message: 'Se actualizó tu contraseña con éxito',
                     color: 'success',
                     icon: <Check />,
                     radius: 0,
+                    style: {
+                        marginBottom: '.8rem',
+                    },
+                })
+            } else {
+                notifications.show({
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo actualizar la contraseña',
+                    color: 'error',
+                    icon: <X />,
+                    radius: 20,
                     style: {
                         marginBottom: '.8rem',
                     },
@@ -98,10 +159,11 @@ function ProfileInfo({ user }: { user: User }) {
             if (res.status == 200) {
                 notifications.show({
                     title: 'Se envió un código a tu Email',
-                    message: 'Revisá tu bandeja de entrada y copiá el código',
+                    message:
+                        'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
                     color: 'success',
                     icon: <Check />,
-                    radius: 0,
+                    radius: 8,
                     style: {
                         marginBottom: '.8rem',
                     },
@@ -143,10 +205,16 @@ function ProfileInfo({ user }: { user: User }) {
                     {user.email}
                 </p>
             </div>
-            <div className="py-2 text-sm">
-                <p className="border-b">Editar cuenta</p>{' '}
+            <h3 className="border-b">Editar cuenta</h3>{' '}
+            <DisclosureComponent
+                title={
+                    <div className="flex items-center gap-2 font-semibold">
+                        <Mail height={20} /> Cambiar Email
+                    </div>
+                }
+            >
                 <form>
-                    <div className="my-2">
+                    <div>
                         <label htmlFor="newEmail" className="label">
                             Nuevo email
                         </label>
@@ -156,35 +224,27 @@ function ProfileInfo({ user }: { user: User }) {
                                     className="input h-8 text-sm placeholder:lowercase"
                                     placeholder="ejemplo@uap.edu.ar"
                                     id="newEmail"
-                                    {...form.getInputProps('newEmail')}
+                                    {...emailForm.getInputProps('newEmail')}
                                 />
 
-                                {form.getInputProps('newEmail').error ? (
+                                {emailForm.getInputProps('newEmail').error ? (
                                     <p className="error">
-                                        *{form.getInputProps('newEmail').error}
+                                        *
+                                        {
+                                            emailForm.getInputProps('newEmail')
+                                                .error
+                                        }
                                     </p>
                                 ) : null}
-
-                                {
-                                    //This shit isn't working, I'll leave it like this for now and I'll fix it later
-                                    form.getInputProps('emailsNotEqual')
-                                        .error ? (
-                                        <p className="error">
-                                            *
-                                            {
-                                                form.getInputProps(
-                                                    'emailsNotEqual'
-                                                ).error
-                                            }
-                                        </p>
-                                    ) : null
-                                }
                             </div>
                             <Button
                                 className="h-8 w-fit shadow-sm"
                                 intent="secondary"
                                 onClick={async () => {
-                                    if (!form.getInputProps('newEmail').error) {
+                                    if (
+                                        !emailForm.getInputProps('newEmail')
+                                            .error
+                                    ) {
                                         await sendEmail({
                                             email: user.email,
                                             randomString: random!,
@@ -218,15 +278,19 @@ function ProfileInfo({ user }: { user: User }) {
                                         className="input h-8 text-sm placeholder:lowercase"
                                         placeholder="Ejemplo: 1qyzy"
                                         id="emailCode"
-                                        {...form.getInputProps('emailCode')}
+                                        {...emailForm.getInputProps(
+                                            'emailCode'
+                                        )}
                                     />
 
-                                    {form.getInputProps('emailCode').error ? (
+                                    {emailForm.getInputProps('emailCode')
+                                        .error ? (
                                         <p className="error">
                                             *
                                             {
-                                                form.getInputProps('emailCode')
-                                                    .error
+                                                emailForm.getInputProps(
+                                                    'emailCode'
+                                                ).error
                                             }
                                         </p>
                                     ) : null}
@@ -234,14 +298,17 @@ function ProfileInfo({ user }: { user: User }) {
                             </div>
                         </div>
                         <Button
-                            className="float-right mt-1 h-8 w-fit shadow-sm"
+                            className=" ml-auto mt-3 h-8 w-fit shadow-sm"
                             intent="primary"
                             onClick={async () => {
-                                if (!form.getInputProps('emailCode').error) {
+                                if (
+                                    !emailForm.getInputProps('emailCode').error
+                                ) {
                                     await updateUserEmail({
                                         id: user.id,
-                                        email: form.getInputProps('newEmail')
-                                            .value,
+                                        email: emailForm.getInputProps(
+                                            'newEmail'
+                                        ).value,
                                     })
                                 }
                             }}
@@ -250,7 +317,132 @@ function ProfileInfo({ user }: { user: User }) {
                         </Button>
                     </div>
                 </form>
-            </div>
+            </DisclosureComponent>
+            <DisclosureComponent
+                title={
+                    <div className="flex items-center gap-2 font-semibold">
+                        <Password width={20} />
+                        Cambiar Contraseña
+                    </div>
+                }
+            >
+                <form className="flex flex-col gap-6">
+                    {' '}
+                    <div>
+                        {' '}
+                        <label htmlFor="currentPassword" className="label">
+                            Contraseña actual
+                        </label>
+                        <div className="flex w-full gap-2">
+                            <div className="flex-grow">
+                                <input
+                                    type="password"
+                                    className="input h-8 text-sm placeholder:lowercase"
+                                    placeholder="••••••••••••••"
+                                    id="currentPassword"
+                                    {...passwordForm.getInputProps(
+                                        'currentPassword'
+                                    )}
+                                />
+
+                                {passwordForm.getInputProps('currentPassword')
+                                    .error ? (
+                                    <p className="error">
+                                        *
+                                        {
+                                            passwordForm.getInputProps(
+                                                'currentPassword'
+                                            ).error
+                                        }
+                                    </p>
+                                ) : null}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        {' '}
+                        <label htmlFor="newPassword" className="label">
+                            Nueva contraseña
+                        </label>
+                        <div className="flex w-full gap-2">
+                            <div className="flex-grow">
+                                <input
+                                    type="password"
+                                    className="input h-8 text-sm placeholder:lowercase"
+                                    placeholder="••••••••••••••"
+                                    id="newPassword"
+                                    {...passwordForm.getInputProps(
+                                        'newPassword'
+                                    )}
+                                />
+
+                                {passwordForm.getInputProps('newPassword')
+                                    .error ? (
+                                    <p className="error">
+                                        *
+                                        {
+                                            passwordForm.getInputProps(
+                                                'newPassword'
+                                            ).error
+                                        }
+                                    </p>
+                                ) : null}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        {' '}
+                        <label htmlFor="newPasswordConfirm" className="label">
+                            Confirmar nueva contraseña
+                        </label>
+                        <div className="flex w-full gap-2">
+                            <div className="flex-grow">
+                                <input
+                                    type="password"
+                                    className="input h-8 text-sm placeholder:lowercase"
+                                    placeholder="••••••••••••••"
+                                    id="newPasswordConfirm"
+                                    {...passwordForm.getInputProps(
+                                        'newPasswordConfirm'
+                                    )}
+                                />
+
+                                {passwordForm.getInputProps(
+                                    'newPasswordConfirm'
+                                ).error ? (
+                                    <p className="error">
+                                        *
+                                        {
+                                            passwordForm.getInputProps(
+                                                'newPasswordConfirm'
+                                            ).error
+                                        }
+                                    </p>
+                                ) : null}
+                            </div>
+                        </div>
+                    </div>
+                    <Button
+                        className=" ml-auto h-8 w-fit shadow-sm"
+                        intent="primary"
+                        onClick={async () => {
+                            await updateUserPassword({
+                                id: user.id,
+                                currentPasswordHash: user.password!,
+                                currentPassword:
+                                    passwordForm.getInputProps(
+                                        'currentPassword'
+                                    ).value,
+                                newPassword:
+                                    passwordForm.getInputProps('newPassword')
+                                        .value,
+                            })
+                        }}
+                    >
+                        Cambiar contraseña
+                    </Button>
+                </form>
+            </DisclosureComponent>
         </div>
     )
 }
