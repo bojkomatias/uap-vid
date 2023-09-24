@@ -68,7 +68,7 @@ function ProfileInfo({ user }: { user: User }) {
                         'Vas a ver los cambios cuando vuelvas a iniciar sesión',
                     color: 'success',
                     icon: <Check />,
-                    radius: 0,
+                    radius: 8,
                     style: {
                         marginBottom: '.8rem',
                     },
@@ -79,7 +79,7 @@ function ProfileInfo({ user }: { user: User }) {
                     message: 'No se pudo actualizar el Email',
                     color: 'error',
                     icon: <X />,
-                    radius: 20,
+                    radius: 8,
                     style: {
                         marginBottom: '.8rem',
                     },
@@ -118,7 +118,7 @@ function ProfileInfo({ user }: { user: User }) {
                     message: 'Se actualizó tu contraseña con éxito',
                     color: 'success',
                     icon: <Check />,
-                    radius: 0,
+                    radius: 8,
                     style: {
                         marginBottom: '.8rem',
                     },
@@ -129,7 +129,7 @@ function ProfileInfo({ user }: { user: User }) {
                     message: 'No se pudo actualizar la contraseña',
                     color: 'error',
                     icon: <X />,
-                    radius: 20,
+                    radius: 8,
                     style: {
                         marginBottom: '.8rem',
                     },
