@@ -2,8 +2,6 @@
 import { Drawer } from '@mantine/core'
 import { usePathname, useRouter } from 'next/navigation'
 
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-
 export default function CustomDrawer({
     path,
     title,
@@ -16,7 +14,7 @@ export default function CustomDrawer({
     const pathname = usePathname()
     const router = useRouter()
 
-    const closeFn = (router: AppRouterInstance) => {
+    const closeFn = () => {
         document.getElementById('drawer-overlay')?.classList.add('fade-out')
         document
             .getElementById('drawer-content')
@@ -31,7 +29,7 @@ export default function CustomDrawer({
             closeOnEscape
             position="right"
             opened={pathname == path}
-            onClose={() => closeFn(router)}
+            onClose={() => closeFn()}
         >
             <Drawer.Overlay id="drawer-overlay" className="fade-in" />
             <Drawer.Content id="drawer-content" className="fade-in-right">
