@@ -1,5 +1,5 @@
 import { Button } from '@elements/button'
-import CurrencyInput, { parseLocaleNumber } from '@elements/currency-input'
+import CurrencyInput from '@elements/currency-input'
 import PopoverComponent from '@elements/popover'
 import { notifications } from '@mantine/notifications'
 import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
@@ -109,7 +109,9 @@ export default function PriceUpdate({
                         category.price[category.price.length - 1]?.price
                     }
                     className="min-w-[7rem] rounded-md py-1 text-xs"
-                    priceSetter={(price: number) => setPrice(price)}
+
+                    priceSetter={(e) => setPrice(e)}
+
                 />
             </div>
         </PopoverComponent>

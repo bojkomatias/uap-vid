@@ -30,7 +30,7 @@ const CurrencyInput = ({
             </div>
             <CurrencyInputElement
                 defaultPrice={form.getInputProps(path).value}
-                priceSetter={(price: number) => form.setFieldValue(path, price)}
+                priceSetter={(e) => form.setFieldValue(path, e)}
             />
 
             {form.getInputProps(path).error ? (

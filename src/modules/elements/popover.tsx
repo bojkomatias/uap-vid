@@ -32,11 +32,13 @@ export default function PopoverComponent({
     return (
         <Popover>
             <Popover.Button
+
                 /*I'm checking the type of the title to be a string because if it isn't (let's say you want to show an icon instead of a title), it should take the classes of the element/component being passed. Otherwise, the title will be styled automatically.*/
                 className={cx(
                     typeof title == 'string' && buttonStyle('secondary', false),
                     'px-2 py-1 text-xs'
                 )}
+
             >
                 {title}
             </Popover.Button>
@@ -50,6 +52,7 @@ export default function PopoverComponent({
                 leaveTo="transform scale-95 opacity-0"
             >
                 <Popover.Panel
+
                     /*If no classes are passed as an argument, the panel where the children are being rendered, will be styled automatically to be shown on top of the button being called upon. If classes are being passed, the developer can specify where it wants the panel to appear. */
                     className={cx(
                         !className &&
@@ -72,6 +75,7 @@ export default function PopoverComponent({
                                     setTimeout(() => {
                                         close()
                                     }, 500)
+
                                 }}
                             >
                                 {actionButton}

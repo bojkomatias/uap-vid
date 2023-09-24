@@ -172,10 +172,11 @@ export function BudgetItems({
                                                     `${i}.amount`
                                                 ).value
                                             }
-                                            priceSetter={(price: number) =>
+
+                                            priceSetter={(e) =>
                                                 form.setFieldValue(
                                                     `${i}.amount`,
-                                                    price
+                                                    e
                                                 )
                                             }
                                             className={cx(
