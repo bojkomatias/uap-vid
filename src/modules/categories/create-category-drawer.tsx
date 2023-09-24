@@ -2,13 +2,12 @@
 import { Drawer } from '@mantine/core'
 import { usePathname, useRouter } from 'next/navigation'
 import CategoryForm from './category-form'
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 export default function CreateCategoryDrawer() {
     const path = usePathname()
     const router = useRouter()
 
-    const closeFn = (router: AppRouterInstance) => {
+    const closeFn = () => {
         document.getElementById('drawer-overlay')?.classList.add('fade-out')
         document
             .getElementById('drawer-content')
@@ -23,7 +22,7 @@ export default function CreateCategoryDrawer() {
             closeOnEscape
             position="right"
             opened={path == '/categories/new'}
-            onClose={() => closeFn(router)}
+            onClose={() => closeFn()}
         >
             <Drawer.Overlay id="drawer-overlay" className="fade-in" />
             <Drawer.Content id="drawer-content" className="fade-in-right">
@@ -35,7 +34,7 @@ export default function CreateCategoryDrawer() {
                 </Drawer.Header>
                 <Drawer.Body className="mx-3 rounded-md bg-gray-50 p-4 shadow-md">
                     <CategoryForm
-                        closeInterceptingDrawer={() => closeFn(router)}
+                        closeInterceptingDrawer={() => closeFn()}
                         column={true}
                     />
                 </Drawer.Body>
