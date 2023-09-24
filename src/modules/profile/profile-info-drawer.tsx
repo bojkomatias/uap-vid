@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 import React, { useState } from 'react'
@@ -11,6 +12,7 @@ import { Button } from '@elements/button'
 import { useForm, zodResolver } from '@mantine/form'
 import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
 import DisclosureComponent from '@elements/disclosure'
+import Link from 'next/link'
 
 export default async function ProfileDrawer({ user }: { user: User }) {
     return (
@@ -206,243 +208,283 @@ export function ProfileInfo({ user }: { user: User }) {
                 </p>
             </div>
             <h3 className="border-b">Editar cuenta</h3>{' '}
-            <DisclosureComponent
-                title={
-                    <div className="flex items-center gap-2 font-semibold">
-                        <Mail height={20} /> Cambiar Email
-                    </div>
-                }
-            >
-                <form>
-                    <div>
-                        <label htmlFor="newEmail" className="label">
-                            Nuevo email
-                        </label>
-                        <div className="flex w-full gap-2">
-                            <div className="flex-grow">
-                                <input
-                                    className="input h-8 text-sm placeholder:lowercase"
-                                    placeholder="ejemplo@uap.edu.ar"
-                                    id="newEmail"
-                                    {...emailForm.getInputProps('newEmail')}
-                                />
-
-                                {emailForm.getInputProps('newEmail').error ? (
-                                    <p className="error">
-                                        *
-                                        {
-                                            emailForm.getInputProps('newEmail')
-                                                .error
-                                        }
-                                    </p>
-                                ) : null}
+            {!user.password ? (
+                <Button className="h-10" intent="outline">
+                    <Link
+                        className="flex-gap flex items-center"
+                        href={'https://www.office.com/'}
+                    >
+                        Editar cuenta en{' '}
+                        <Image
+                            className=""
+                            src={'/whitebackgroundmicrosoft.png'}
+                            alt="Microsoft Logo"
+                            width={100}
+                            height={100}
+                        />
+                    </Link>
+                </Button>
+            ) : (
+                <>
+                    <DisclosureComponent
+                        title={
+                            <div className="flex items-center gap-2 font-semibold">
+                                <Mail height={20} /> Cambiar Email
                             </div>
-                            <Button
-                                className="h-8 w-fit shadow-sm"
-                                intent="secondary"
-                                onClick={async () => {
-                                    if (
-                                        !emailForm.getInputProps('newEmail')
-                                            .error
-                                    ) {
-                                        await sendEmail({
-                                            email: user.email,
-                                            randomString: random!,
-                                        })
+                        }
+                    >
+                        <form>
+                            <div>
+                                <label htmlFor="newEmail" className="label">
+                                    Nuevo email
+                                </label>
+                                <div className="flex w-full gap-2">
+                                    <div className="flex-grow">
+                                        <input
+                                            className="input h-8 text-sm placeholder:lowercase"
+                                            placeholder="ejemplo@uap.edu.ar"
+                                            id="newEmail"
+                                            {...emailForm.getInputProps(
+                                                'newEmail'
+                                            )}
+                                        />
 
-                                        document
-                                            .getElementById(
-                                                'emailCodeConfirmation'
-                                            )
-                                            ?.classList.remove('hidden')
-                                        document
-                                            .getElementById(
-                                                'emailCodeConfirmation'
-                                            )
-                                            ?.classList.add('fade-in')
-                                    }
-                                }}
-                            >
-                                Confirmar
-                            </Button>
-                        </div>
-                    </div>
-                    <div id="emailCodeConfirmation" className="hidden">
-                        <div className="my-2">
-                            <label htmlFor="emailCode" className="label">
-                                Código
-                            </label>
-                            <div className="flex w-full flex-col gap-2">
-                                <div className="flex-grow">
-                                    <input
-                                        className="input h-8 text-sm placeholder:lowercase"
-                                        placeholder="Ejemplo: 1qyzy"
-                                        id="emailCode"
-                                        {...emailForm.getInputProps(
-                                            'emailCode'
-                                        )}
-                                    />
-
-                                    {emailForm.getInputProps('emailCode')
-                                        .error ? (
-                                        <p className="error">
-                                            *
-                                            {
-                                                emailForm.getInputProps(
-                                                    'emailCode'
+                                        {emailForm.getInputProps('newEmail')
+                                            .error ? (
+                                            <p className="error">
+                                                *
+                                                {
+                                                    emailForm.getInputProps(
+                                                        'newEmail'
+                                                    ).error
+                                                }
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                    <Button
+                                        className="h-8 w-fit shadow-sm"
+                                        intent="secondary"
+                                        onClick={async () => {
+                                            if (
+                                                !emailForm.getInputProps(
+                                                    'newEmail'
                                                 ).error
+                                            ) {
+                                                await sendEmail({
+                                                    email: user.email,
+                                                    randomString: random!,
+                                                })
+
+                                                document
+                                                    .getElementById(
+                                                        'emailCodeConfirmation'
+                                                    )
+                                                    ?.classList.remove('hidden')
+                                                document
+                                                    .getElementById(
+                                                        'emailCodeConfirmation'
+                                                    )
+                                                    ?.classList.add('fade-in')
                                             }
-                                        </p>
-                                    ) : null}
+                                        }}
+                                    >
+                                        Confirmar
+                                    </Button>
                                 </div>
                             </div>
-                        </div>
-                        <Button
-                            className=" ml-auto mt-3 h-8 w-fit shadow-sm"
-                            intent="primary"
-                            onClick={async () => {
-                                if (
-                                    !emailForm.getInputProps('emailCode').error
-                                ) {
-                                    await updateUserEmail({
-                                        id: user.id,
-                                        email: emailForm.getInputProps(
-                                            'newEmail'
-                                        ).value,
-                                    })
-                                }
-                            }}
-                        >
-                            Cambiar email
-                        </Button>
-                    </div>
-                </form>
-            </DisclosureComponent>
-            <DisclosureComponent
-                title={
-                    <div className="flex items-center gap-2 font-semibold">
-                        <Password width={20} />
-                        Cambiar Contraseña
-                    </div>
-                }
-            >
-                <form className="flex flex-col gap-6">
-                    {' '}
-                    <div>
-                        {' '}
-                        <label htmlFor="currentPassword" className="label">
-                            Contraseña actual
-                        </label>
-                        <div className="flex w-full gap-2">
-                            <div className="flex-grow">
-                                <input
-                                    type="password"
-                                    className="input h-8 text-sm placeholder:lowercase"
-                                    placeholder="••••••••••••••"
-                                    id="currentPassword"
-                                    {...passwordForm.getInputProps(
-                                        'currentPassword'
-                                    )}
-                                />
+                            <div id="emailCodeConfirmation" className="hidden">
+                                <div className="my-2">
+                                    <label
+                                        htmlFor="emailCode"
+                                        className="label"
+                                    >
+                                        Código
+                                    </label>
+                                    <div className="flex w-full flex-col gap-2">
+                                        <div className="flex-grow">
+                                            <input
+                                                className="input h-8 text-sm placeholder:lowercase"
+                                                placeholder="Ejemplo: 1qyzy"
+                                                id="emailCode"
+                                                {...emailForm.getInputProps(
+                                                    'emailCode'
+                                                )}
+                                            />
 
-                                {passwordForm.getInputProps('currentPassword')
-                                    .error ? (
-                                    <p className="error">
-                                        *
-                                        {
+                                            {emailForm.getInputProps(
+                                                'emailCode'
+                                            ).error ? (
+                                                <p className="error">
+                                                    *
+                                                    {
+                                                        emailForm.getInputProps(
+                                                            'emailCode'
+                                                        ).error
+                                                    }
+                                                </p>
+                                            ) : null}
+                                        </div>
+                                    </div>
+                                </div>
+                                <Button
+                                    className=" ml-auto mt-3 h-8 w-fit shadow-sm"
+                                    intent="primary"
+                                    onClick={async () => {
+                                        if (
+                                            !emailForm.getInputProps(
+                                                'emailCode'
+                                            ).error
+                                        ) {
+                                            await updateUserEmail({
+                                                id: user.id,
+                                                email: emailForm.getInputProps(
+                                                    'newEmail'
+                                                ).value,
+                                            })
+                                        }
+                                    }}
+                                >
+                                    Cambiar email
+                                </Button>
+                            </div>
+                        </form>
+                    </DisclosureComponent>
+                    <DisclosureComponent
+                        title={
+                            <div className="flex items-center gap-2 font-semibold">
+                                <Password width={20} />
+                                Cambiar Contraseña
+                            </div>
+                        }
+                    >
+                        <form className="flex flex-col gap-6">
+                            {' '}
+                            <div>
+                                {' '}
+                                <label
+                                    htmlFor="currentPassword"
+                                    className="label"
+                                >
+                                    Contraseña actual
+                                </label>
+                                <div className="flex w-full gap-2">
+                                    <div className="flex-grow">
+                                        <input
+                                            type="password"
+                                            className="input h-8 text-sm placeholder:lowercase"
+                                            placeholder="••••••••••••••"
+                                            id="currentPassword"
+                                            {...passwordForm.getInputProps(
+                                                'currentPassword'
+                                            )}
+                                        />
+
+                                        {passwordForm.getInputProps(
+                                            'currentPassword'
+                                        ).error ? (
+                                            <p className="error">
+                                                *
+                                                {
+                                                    passwordForm.getInputProps(
+                                                        'currentPassword'
+                                                    ).error
+                                                }
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                {' '}
+                                <label htmlFor="newPassword" className="label">
+                                    Nueva contraseña
+                                </label>
+                                <div className="flex w-full gap-2">
+                                    <div className="flex-grow">
+                                        <input
+                                            type="password"
+                                            className="input h-8 text-sm placeholder:lowercase"
+                                            placeholder="••••••••••••••"
+                                            id="newPassword"
+                                            {...passwordForm.getInputProps(
+                                                'newPassword'
+                                            )}
+                                        />
+
+                                        {passwordForm.getInputProps(
+                                            'newPassword'
+                                        ).error ? (
+                                            <p className="error">
+                                                *
+                                                {
+                                                    passwordForm.getInputProps(
+                                                        'newPassword'
+                                                    ).error
+                                                }
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                {' '}
+                                <label
+                                    htmlFor="newPasswordConfirm"
+                                    className="label"
+                                >
+                                    Confirmar nueva contraseña
+                                </label>
+                                <div className="flex w-full gap-2">
+                                    <div className="flex-grow">
+                                        <input
+                                            type="password"
+                                            className="input h-8 text-sm placeholder:lowercase"
+                                            placeholder="••••••••••••••"
+                                            id="newPasswordConfirm"
+                                            {...passwordForm.getInputProps(
+                                                'newPasswordConfirm'
+                                            )}
+                                        />
+
+                                        {passwordForm.getInputProps(
+                                            'newPasswordConfirm'
+                                        ).error ? (
+                                            <p className="error">
+                                                *
+                                                {
+                                                    passwordForm.getInputProps(
+                                                        'newPasswordConfirm'
+                                                    ).error
+                                                }
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </div>
+                            <Button
+                                className=" ml-auto h-8 w-fit shadow-sm"
+                                intent="primary"
+                                onClick={async () => {
+                                    await updateUserPassword({
+                                        id: user.id,
+                                        currentPasswordHash: user.password!,
+                                        currentPassword:
                                             passwordForm.getInputProps(
                                                 'currentPassword'
-                                            ).error
-                                        }
-                                    </p>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        {' '}
-                        <label htmlFor="newPassword" className="label">
-                            Nueva contraseña
-                        </label>
-                        <div className="flex w-full gap-2">
-                            <div className="flex-grow">
-                                <input
-                                    type="password"
-                                    className="input h-8 text-sm placeholder:lowercase"
-                                    placeholder="••••••••••••••"
-                                    id="newPassword"
-                                    {...passwordForm.getInputProps(
-                                        'newPassword'
-                                    )}
-                                />
-
-                                {passwordForm.getInputProps('newPassword')
-                                    .error ? (
-                                    <p className="error">
-                                        *
-                                        {
+                                            ).value,
+                                        newPassword:
                                             passwordForm.getInputProps(
                                                 'newPassword'
-                                            ).error
-                                        }
-                                    </p>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        {' '}
-                        <label htmlFor="newPasswordConfirm" className="label">
-                            Confirmar nueva contraseña
-                        </label>
-                        <div className="flex w-full gap-2">
-                            <div className="flex-grow">
-                                <input
-                                    type="password"
-                                    className="input h-8 text-sm placeholder:lowercase"
-                                    placeholder="••••••••••••••"
-                                    id="newPasswordConfirm"
-                                    {...passwordForm.getInputProps(
-                                        'newPasswordConfirm'
-                                    )}
-                                />
-
-                                {passwordForm.getInputProps(
-                                    'newPasswordConfirm'
-                                ).error ? (
-                                    <p className="error">
-                                        *
-                                        {
-                                            passwordForm.getInputProps(
-                                                'newPasswordConfirm'
-                                            ).error
-                                        }
-                                    </p>
-                                ) : null}
-                            </div>
-                        </div>
-                    </div>
-                    <Button
-                        className=" ml-auto h-8 w-fit shadow-sm"
-                        intent="primary"
-                        onClick={async () => {
-                            await updateUserPassword({
-                                id: user.id,
-                                currentPasswordHash: user.password!,
-                                currentPassword:
-                                    passwordForm.getInputProps(
-                                        'currentPassword'
-                                    ).value,
-                                newPassword:
-                                    passwordForm.getInputProps('newPassword')
-                                        .value,
-                            })
-                        }}
-                    >
-                        Cambiar contraseña
-                    </Button>
-                </form>
-            </DisclosureComponent>
+                                            ).value,
+                                    })
+                                }}
+                            >
+                                Cambiar contraseña
+                            </Button>
+                        </form>
+                    </DisclosureComponent>
+                </>
+            )}
         </div>
     )
 }
