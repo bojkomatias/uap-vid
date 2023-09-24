@@ -449,23 +449,23 @@ export async function emailer({ useCase, email, protocolId }: Emailer) {
     
     </html>`
 
-    // const transporter = nodemailer.createTransport({
-    //     host: process.env.SMTP_ADDRESS,
-    //     port: Number(process.env.SMTP_PORT),
-    //     secure: false,
-    //     ignoreTLS: true,
-    // })
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
+    })
 
     //This transporter can be used for developing.
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: 'nicoskate000@gmail.com',
-            pass: 'luqj vdtt kqgp mbof',
-        },
-    })
+    // const transporter = nodemailer.createTransport({
+    //     host: 'smtp.gmail.com',
+    //     port: 587,
+    //     secure: false,
+    //     auth: {
+    //         user: 'nicoskate000@gmail.com',
+    //         pass: 'luqj vdtt kqgp mbof',
+    //     },
+    // })
 
     const emailObject = {
         from: '"Portal VID - UAP" no-reply@uap.edu.ar',
