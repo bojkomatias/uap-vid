@@ -547,8 +547,12 @@ export const UserPasswordChangeSchema = z
         message: 'Las contraseñas no son iguales',
         path: ['newPasswordConfirm'],
     })
-    .refine((values) => values.newPassword !== values.currentPassword, {
-        message: 'No puede ser la misma contraseña que la actual',
-        path: ['newPassword'],
-    })
+    .refine(
+        (values) => values.newPassword !== values.currentPassword,
+
+        {
+            message: 'No puede ser la misma contraseña que la actual',
+            path: ['newPassword'],
+        }
+    )
 //This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.
