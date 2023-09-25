@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { UserCircle } from 'tabler-icons-react'
+import { Logout, Settings, UserCircle } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -19,18 +19,15 @@ export const UserDropdown = () => {
         return (
             <>
                 <span className="hidden flex-col items-end lg:flex">
-                    <span className="text-sm font-semibold">
-                        {session.user.email}
-                    </span>
-                    <span className="text-xs italic">
-                        {RolesDictionary[session.user.role]}
+                    <span className="text-xs font-medium">
+                        {session.user.name}
                     </span>
                 </span>
                 <Menu as="div" className="relative ml-1">
                     <div>
                         <Menu.Button
                             disabled={loading}
-                            className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-white focus:ring-offset-primary"
+                            className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 focus:ring-offset-primary"
                         >
                             <span className="sr-only">Open user menu</span>
                             {session.user.image ? (
@@ -52,7 +49,16 @@ export const UserDropdown = () => {
                                     <span className="loader h-8 w-8"></span>
                                 </div>
                             ) : (
-                                <UserCircle className="h-10 w-10 stroke-[1.5px]" />
+                                // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
+                                    {session.user.name
+                                        .split(' ')[0]
+                                        .substring(0, 1) +
+                                        session.user.name
+                                            .split(' ')
+                                            .at(-1)
+                                            ?.substring(0, 1)}
+                                </div>
                             )}
                         </Menu.Button>
                     </div>
@@ -65,6 +71,7 @@ export const UserDropdown = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
+
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right space-y-1 overflow-hidden rounded bg-white py-1 shadow-lg ring-1  focus:outline-none">
                             <Menu.Item>
                                 {({ active }) => (
@@ -97,6 +104,7 @@ export const UserDropdown = () => {
                                     </button>
                                 )}
                             </Menu.Item>
+
                         </Menu.Items>
                     </Transition>
                 </Menu>

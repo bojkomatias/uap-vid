@@ -8,15 +8,14 @@ datasource db {
 }
 
 model AcademicUnit {
-  id             String               @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  shortname      String?
-  secretaries    User[]               @relation(fields: [secretariesIds], references: [id])
-  secretariesIds String[]             @db.ObjectId
-  budgets        AcademicUnitBudget[]
-  AnualBudgetsOnAcademicUnits AnualBudgetsOnAcademicUnits[]
-
-
+  id                          String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                        String
+  shortname                   String
+  secretaries                 User[]               @relation(fields: [secretariesIds], references: [id])
+  secretariesIds              String[]             @db.ObjectId
+  budgets                     AcademicUnitBudget[]
+  AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [AcademicUnitAnualBudgetsIds], references: [id])
+  AcademicUnitAnualBudgetsIds String[]             @db.ObjectId
 }
 
 type AcademicUnitBudget {
@@ -133,18 +132,8 @@ model AnualBudget {
   year              Int
   protocolId        String                  @db.ObjectId
   protocol          Protocol                @relation(fields: [protocolId], references: [id])
-  AnualBudgetsOnAcademicUnits AnualBudgetsOnAcademicUnits[]
- 
-}
-
-model AnualBudgetsOnAcademicUnits {
-  //Had to add an id cause it didn't let me create a compound id. This issue should be checked.
-  id                String                  @id @default(auto()) @map("_id") @db.ObjectId
-  academicUnit      AcademicUnit            @relation(fields: [academicUnitId], references: [id])
-  academicUnitId    String                  @db.ObjectId
-  anualBudget       AnualBudget             @relation(fields: [anualBudgetId], references: [id])
-  anualBudgetId     String                  @db.ObjectId
-
+  AcademicUnits     AcademicUnit[]          @relation(fields: [academicUnitsIds], references: [id])
+  academicUnitsIds  String[]                @db.ObjectId
 }
 
 type AnualBudgetItem {
