@@ -327,7 +327,7 @@ export default function ProtocolTable({
 const AcademicUnitFilter = () => {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const currentValues = searchParams.get('units')?.split('-')
+    const currentValues = searchParams?.get('units')?.split('-')
 
     const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
 
