@@ -1,7 +1,18 @@
-import type { AcademicUnit } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+
+export const getAcademicUnitsTabs = cache(
+    async () =>
+        await prisma.academicUnit.findMany({
+            select: {
+                id: true,
+                name: true,
+                shortname: true,
+                _count: { select: { AcademicUnitAnualBudgets: true } },
+            },
+        })
+)
 
 export const getAllAcademicUnits = cache(
     async ({
@@ -51,6 +62,7 @@ export const getAllAcademicUnits = cache(
                         shortname: true,
                         budgets: true,
                         secretariesIds: true,
+                        AcademicUnitAnualBudgetsIds: true,
                     },
                     // Add all the globally searchable fields
                     where: {
