@@ -8,10 +8,13 @@ import { cx } from '@utils/cx'
 import Image from 'next/image'
 import { useState } from 'react'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { usePathname } from 'next/navigation'
 
 export const UserDropdown = () => {
     const [loading, setLoading] = useState(false)
     const { data: session } = useSession()
+
+    const path = usePathname()
     if (session?.user) {
         return (
             <>
@@ -69,7 +72,9 @@ export const UserDropdown = () => {
                                         href={'/profile'}
                                         className={cx(
                                             'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
-                                            active && 'bg-gray-100'
+                                            active && 'bg-gray-100',
+                                            path == '/profile' &&
+                                                'pointer-events-none bg-gray-100 font-bold'
                                         )}
                                     >
                                         Perfil
