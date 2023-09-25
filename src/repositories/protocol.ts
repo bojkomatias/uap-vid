@@ -1,3 +1,4 @@
+'use server'
 import { prisma } from '../utils/bd'
 import type { RoleType, StateType } from '@utils/zod'
 import { ROLE } from '@utils/zod'
@@ -74,6 +75,13 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
     }
 }
 
+const patchProtocolNumber = async (id: string, protocolNumber: string) =>
+    await prisma.protocol.update({
+        where: { id },
+        data: { protocolNumber },
+        select: { protocolNumber: true },
+    })
+
 const createProtocol = async (data: Protocol) => {
     try {
         const protocol = await prisma.protocol.create({
@@ -142,6 +150,7 @@ const getProtocolsByRol = cache(
         // Select model reusable
         const select = {
             id: true,
+            protocolNumber: true,
             state: true,
             createdAt: true,
             observations: true,
@@ -449,4 +458,5 @@ export {
     getProtocolsByRol,
     getResearcherEmailByProtocolId,
     newObservation,
+    patchProtocolNumber,
 }

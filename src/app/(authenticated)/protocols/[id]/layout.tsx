@@ -55,12 +55,12 @@ async function Layout({
 
     return (
         <>
-            
             <PageHeading title={protocol.sections.identification.title} />
             <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
                     currentUser={session.user}
                     id={protocol.id}
+                    protocolNumber={protocol.protocolNumber}
                     createdAt={protocol.createdAt}
                     state={protocol.state}
                     researcher={protocol.researcher}

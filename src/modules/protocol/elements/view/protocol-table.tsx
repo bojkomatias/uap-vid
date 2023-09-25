@@ -3,7 +3,7 @@ import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
-import { User as UserIcon } from 'tabler-icons-react'
+import { Number, User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
@@ -19,6 +19,7 @@ import { useSearchParams } from 'next/navigation'
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
         id: true
+        protocolNumber: true
         state: true
         createdAt: true
         observations: true
@@ -92,9 +93,13 @@ export default function ProtocolTable({
                 header: 'Creación',
                 cell: ({ row }) => (
                     <span className="text-xs text-gray-600">
-                        {dateFormatter.format(row.original.createdAt)}
+                        {dateFormatter.format(row.original.createdAt!)}
                     </span>
                 ),
+            },
+            {
+                accessorKey: 'protocolNumber',
+                header: () => <Number className="h-4 w-6" />,
             },
             {
                 accessorKey: 'convocatory.year',
@@ -276,6 +281,7 @@ export default function ProtocolTable({
     const initialVisible = {
         id: false,
         createdAt: false,
+        convocatory_year: false,
         convocatory_name: false,
         researcher_name: false,
         'sections_identification.career': false,

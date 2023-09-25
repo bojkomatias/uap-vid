@@ -109,7 +109,7 @@ export type Convocatory = z.infer<typeof ConvocatorySchema>
 
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
-    createdAt: z.coerce.date().optional(),
+    createdAt: z.coerce.date().nullable().optional(),
     state: StateSchema,
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),

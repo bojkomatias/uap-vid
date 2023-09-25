@@ -75,7 +75,10 @@ export const getAllConvocatories = cache(
 )
 export const getConvocatoryById = cache(async (id: string) => {
     try {
-        return await prisma.convocatory.findFirst({ where: { id } })
+        return await prisma.convocatory.findFirst({
+            where: { id },
+            include: { _count: { select: { protocols: true } } },
+        })
     } catch (e) {
         return null
     }
