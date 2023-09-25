@@ -142,6 +142,7 @@ const getProtocolsByRol = cache(
         // Select model reusable
         const select = {
             id: true,
+            protocolNumber: true,
             state: true,
             createdAt: true,
             observations: true,

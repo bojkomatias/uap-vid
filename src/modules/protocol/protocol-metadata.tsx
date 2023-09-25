@@ -2,13 +2,14 @@ import { Badge } from '@elements/badge'
 import type { State, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
-import { Calendar, User as UserIcon } from 'tabler-icons-react'
+import { Calendar, Number, User as UserIcon } from 'tabler-icons-react'
 import { ResearcherReassignation } from './elements/action-buttons/researcher-reassignation'
 import { getAllOwners } from '@repositories/user'
 
 export async function ProtocolMetadata({
     currentUser,
     id,
+    protocolNumber,
     createdAt,
     state,
     researcher,
@@ -16,6 +17,7 @@ export async function ProtocolMetadata({
 }: {
     currentUser: User
     id: string
+    protocolNumber: string | null
     createdAt: Date
     state: State
     researcher: { id: string; name: string; email: string }
@@ -29,11 +31,19 @@ export async function ProtocolMetadata({
     return (
         <div className="z-10 my-1 ml-2 max-w-3xl flex-grow gap-2 rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
             <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                    <Calendar className="h-4 text-gray-600" />
-                    <div className="mt-0.5 text-xs text-gray-600">
-                        {dateFormatter.format(createdAt)}
-                    </div>
+                <div className="flex items-center gap-6">
+                    <span>
+                        <Number className="ml-0.5 mr-2 inline h-[1.1rem] text-gray-600" />
+                        <span className="mt-0.5 text-xs font-medium text-gray-600">
+                            {protocolNumber}
+                        </span>
+                    </span>
+                    <span>
+                        <Calendar className="mr-2 inline h-4 text-gray-600" />
+                        <span className="mt-0.5 text-xs text-gray-600">
+                            {dateFormatter.format(createdAt)}
+                        </span>
+                    </span>
                 </div>
                 <Badge>{convocatory?.name}</Badge>
             </div>
