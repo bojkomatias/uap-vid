@@ -81,6 +81,7 @@ const createProtocol = async (data: Protocol) => {
         })
         return protocol
     } catch (e) {
+        console.log(e)
         return null
     }
 }

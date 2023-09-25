@@ -45,7 +45,7 @@ model Logs {
 model Protocol {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   protocolNumber String?
-  createdAt      DateTime         @db.Date
+  createdAt      DateTime?        @default(now()) @db.Date
   researcherId   String           @db.ObjectId
   researcher     User             @relation(fields: [researcherId], references: [id])
   state          State            @default(DRAFT)
