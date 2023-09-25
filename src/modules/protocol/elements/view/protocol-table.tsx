@@ -93,7 +93,7 @@ export default function ProtocolTable({
                 header: 'Creación',
                 cell: ({ row }) => (
                     <span className="text-xs text-gray-600">
-                        {dateFormatter.format(row.original.createdAt)}
+                        {dateFormatter.format(row.original.createdAt!)}
                     </span>
                 ),
             },
