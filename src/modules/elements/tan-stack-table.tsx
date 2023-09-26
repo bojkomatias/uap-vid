@@ -64,10 +64,10 @@ export default function TanStackTable({
                         columns={table.getAllLeafColumns()}
                     />
 
-                    <div className="group relative z-50">
+                    <div className="group relative">
                         {/*Tried using Tooltip component but couldn't make it work as intended, so I copied the styles from the tooltip to mantain the style */}
                         {totalRecordsCheck && (
-                            <div className="pointer-events-none absolute left-0 top-10   bg-white  text-xs text-gray-500 opacity-0 transition delay-300 group-hover:pointer-events-auto group-hover:opacity-100">
+                            <div className="pointer-events-none absolute left-0 top-10  z-20 bg-white  text-xs text-gray-500 opacity-0 transition delay-300 group-hover:pointer-events-auto group-hover:opacity-100">
                                 <div className="prose prose-zinc inset-auto mt-2  cursor-default  rounded  border p-3 px-3 py-2 text-xs shadow-md ring-1 ring-inset prose-p:pl-2 ">
                                     Para descargar la hoja de datos, seleccione{' '}
                                     <br />
