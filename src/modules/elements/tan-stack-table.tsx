@@ -54,8 +54,7 @@ export default function TanStackTable({
         <>
             <div className="mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
-
-                <div className="flex w-full flex-col items-center gap-2 sm:flex-row sm:items-start">
+                <div className="flex flex-wrap gap-2">
                     <ColumnVisibilityDropdown
                         columns={table.getAllLeafColumns()}
                     />
@@ -67,6 +66,7 @@ export default function TanStackTable({
                     />
                 </div>
             </div>
+
             {customFilterSlot}
 
             {filterableByKey && (
@@ -123,7 +123,7 @@ export default function TanStackTable({
                     </p>
                 </div>
             )}
-            <div className="md:flex mb-6 mt-6 hidden items-center justify-end text-xs font-light text-gray-400">
+            <div className="mb-6 mt-6 hidden items-center justify-end text-xs font-light text-gray-400 md:flex">
                 <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
                     Shift
                 </kbd>
