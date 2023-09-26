@@ -13,9 +13,6 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
-import dataToCsv from '@utils/dataToCsv'
-import { CSVLink } from 'react-csv'
-import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 
@@ -50,7 +47,7 @@ export default function TanStackTable({
     })
 
     const totalRecordsCheck = !(
-        Number(useSearchParams().get('records')) == totalRecords
+        Number(useSearchParams()?.get('records')) == totalRecords
     )
 
     return (
@@ -81,7 +78,7 @@ export default function TanStackTable({
 
             {data?.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
-                    <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
+                    <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
@@ -116,7 +113,7 @@ export default function TanStackTable({
                     </table>
                 </div>
             ) : (
-                <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center  gap-4 text-gray-500">
+                <div className="fade-in mx-auto mt-8 flex flex-col items-center justify-center gap-4  text-gray-500 sm:min-h-[400px]">
                     <h1 className="font-semibold">
                         No se encontraron registros con los criterios de
                         búsqueda especificados

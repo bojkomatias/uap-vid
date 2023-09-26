@@ -117,7 +117,7 @@ export default function ProtocolTable({
                 accessorKey: 'sections.identification.title',
                 header: 'Titulo',
                 cell: ({ row }) => (
-                    <div className="min-w-[24rem] whitespace-normal font-medium">
+                    <div className="whitespace-normal font-medium sm:min-w-[24rem]">
                         {row.original.sections.identification.title}
                     </div>
                 ),
@@ -327,7 +327,7 @@ export default function ProtocolTable({
 const AcademicUnitFilter = () => {
     const update = useUpdateQuery()
     const searchParams = useSearchParams()
-    const currentValues = searchParams.get('units')?.split('-')
+    const currentValues = searchParams?.get('units')?.split('-')
 
     const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
 
