@@ -174,7 +174,7 @@ export default function TanStackTable({
                     </p>
                 </div>
             )}
-            <div className="-mb-16 mt-6 flex items-center justify-end text-xs font-light text-gray-400">
+            <div className="mb-3 mt-6 hidden items-center justify-end text-xs font-light text-gray-400 md:flex">
                 <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
                     Shift
                 </kbd>
