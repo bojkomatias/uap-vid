@@ -33,9 +33,9 @@ const calculateRemainingABI = (abi: AnualBudgetItem[]): number => {
     }, 0)
 }
 
-const calculateRemainingABTM = async (
+const calculateRemainingABTM = (
     abtm: AnualBudgetTeamMemberWithAllRelations[]
-): Promise<number> => {
+): number => {
     return abtm.reduce((acc, item) => {
         acc += item.remainingHours * getLastCategoryPrice(item)
         return acc
@@ -49,7 +49,7 @@ const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
     return lastPrice?.price || 0
 }
 
-export const calculateTotalBudget = async (
+export const calculateTotalBudget = (
     anualBudget: AnualBudget & {
         budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     }
@@ -64,7 +64,7 @@ export const calculateTotalBudget = async (
 
     //Remainings
     const ABIr = calculateRemainingABI(anualBudget.budgetItems)
-    const ABTr = await calculateRemainingABTM(anualBudget.budgetTeamMembers)
+    const ABTr = calculateRemainingABTM(anualBudget.budgetTeamMembers)
 
     return {
         ABIe,
@@ -75,6 +75,28 @@ export const calculateTotalBudget = async (
     }
 }
 
-export type TotalBudgetCalculation = Awaited<
-    ReturnType<typeof calculateTotalBudget>
->
+export const calculateTotalBudgetAggregated = (
+    anualBudgets: (AnualBudget & {budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]})[]
+) => {
+    const result = anualBudgets
+        .map((anualBudget) => calculateTotalBudget(anualBudget))
+        .reduce((acc, item) => {
+            acc.ABIe += item.ABIe
+            acc.ABTe += item.ABTe
+            acc.ABIr += item.ABIr
+            acc.ABTr += item.ABTr
+            acc.total += item.total
+            return acc
+        }
+        , {
+            ABIe: 0,
+            ABTe: 0,
+            ABIr: 0,
+            ABTr: 0,
+            total: 0,
+        })
+    return result
+}
+
+export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>
+

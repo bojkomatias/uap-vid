@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         title: protocol.sections.identification.title,
         sponsor: protocol.sections.identification.sponsor,
     }
-    const calculations = await calculateTotalBudget(anualBudget)
+    const calculations = calculateTotalBudget(anualBudget)
     meta.approved = false
     return (
         <>
