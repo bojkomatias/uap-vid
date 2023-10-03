@@ -1,6 +1,6 @@
 import { getBudgetSummary } from '@actions/anual-budget/action'
 import { getAnualBudgetsByAcademicUnit } from '@repositories/anual-budget'
-import { BudgetSummary } from 'modules/anual-budget/budget-summary'
+import { BudgetSummary } from 'modules/anual-budget/budget-summary/budget-summary-template'
 import AnualBudgetTable from 'modules/anual-budget/budget-table'
 
 export default async function AllAnualBudgetPage({
