@@ -117,7 +117,7 @@ export default function ProtocolTable({
                 accessorKey: 'sections.identification.title',
                 header: 'Titulo',
                 cell: ({ row }) => (
-                    <div className="min-w-[24rem] whitespace-normal font-medium">
+                    <div className="whitespace-normal font-medium sm:min-w-[24rem]">
                         {row.original.sections.identification.title}
                     </div>
                 ),

@@ -13,10 +13,8 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
-import dataToCsv from '@utils/dataToCsv'
-import { CSVLink } from 'react-csv'
-import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
+import DownloadCSVButton from './download-csv-button'
 
 export default function TanStackTable({
     data,
@@ -52,72 +50,23 @@ export default function TanStackTable({
         Number(useSearchParams()?.get('records')) == totalRecords
     )
 
-    // dataToCsv(columns, data)
-
     return (
         <>
-            <div className="mx-auto mt-6 flex items-center justify-between gap-4">
+            <div className="mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
-
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     <ColumnVisibilityDropdown
                         columns={table.getAllLeafColumns()}
                     />
 
-                    <div className="group relative z-50">
-                        {/*Tried using Tooltip component but couldn't make it work as intended, so I copied the styles from the tooltip to mantain the style */}
-                        {totalRecordsCheck && (
-                            <div className="pointer-events-none absolute left-0 top-10   bg-white  text-xs text-gray-500 opacity-0 transition delay-300 group-hover:pointer-events-auto group-hover:opacity-100">
-                                <div className="prose prose-zinc inset-auto mt-2  cursor-default  rounded  border p-3 px-3 py-2 text-xs shadow-md ring-1 ring-inset prose-p:pl-2 ">
-                                    Para descargar la hoja de datos, seleccione{' '}
-                                    <br />
-                                    <span
-                                        className="font-bold transition hover:text-gray-700"
-                                        onMouseEnter={() => {
-                                            document
-                                                .getElementById(
-                                                    'records-selector'
-                                                )
-                                                ?.classList.add('animate-ping')
-                                            setTimeout(() => {
-                                                document
-                                                    .getElementById(
-                                                        'records-selector'
-                                                    )
-                                                    ?.classList.remove(
-                                                        'animate-ping'
-                                                    )
-                                            }, 1800)
-                                        }}
-                                        onClick={() => {
-                                            document
-                                                .getElementById(
-                                                    'records-selector'
-                                                )
-                                                ?.click()
-                                        }}
-                                    >
-                                        Cantidad de registros: Todos los
-                                        registros
-                                    </span>
-                                </div>
-                            </div>
-                        )}
-                        <Button
-                            className="group z-10"
-                            disabled={totalRecordsCheck}
-                            intent="outline"
-                        >
-                            <CSVLink
-                                filename="data.csv"
-                                data={dataToCsv(columns, data)}
-                            >
-                                Descargar hoja de datos
-                            </CSVLink>
-                        </Button>
-                    </div>
+                    <DownloadCSVButton
+                        totalRecordsCheck={totalRecordsCheck}
+                        data={data}
+                        columns={columns}
+                    />
                 </div>
             </div>
+
             {customFilterSlot}
 
             {filterableByKey && (
@@ -129,7 +78,7 @@ export default function TanStackTable({
 
             {data?.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
-                    <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
+                    <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
@@ -164,7 +113,7 @@ export default function TanStackTable({
                     </table>
                 </div>
             ) : (
-                <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center  gap-4 text-gray-500">
+                <div className="fade-in mx-auto mt-8 flex flex-col items-center justify-center gap-4  text-gray-500 sm:min-h-[400px]">
                     <h1 className="font-semibold">
                         No se encontraron registros con los criterios de
                         búsqueda especificados
@@ -174,7 +123,7 @@ export default function TanStackTable({
                     </p>
                 </div>
             )}
-            <div className="-mb-16 mt-6 flex items-center justify-end text-xs font-light text-gray-400">
+            <div className="mb-6 mt-6 hidden items-center justify-end text-xs font-light text-gray-400 md:flex">
                 <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
                     Shift
                 </kbd>
