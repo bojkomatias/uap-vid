@@ -21,6 +21,7 @@ export default withAuth(
         }
 
         // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
+
         if (req.nextUrl.pathname.includes('/users')) {
             if (!canAccess('USERS', token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
