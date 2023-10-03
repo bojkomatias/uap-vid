@@ -6,6 +6,8 @@ import type {
     Execution,
     ProtocolSectionsIdentificationTeam,
     AnualBudgetTeamMember,
+    AcademicUnit,
+    AcademicUnitBudget,
 } from '@prisma/client'
 import {
     getAcademicUnitById,
@@ -21,6 +23,7 @@ import {
     calculateTotalBudgetAggregated,
     type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
+import { dateDifferenceInDays, relativeTimeFormatter } from '@utils/formatters'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -139,32 +142,88 @@ export const protocolToAnualBudgetPreview = async (
     }
 }
 
-export const getBudgetSummary = async (academicUnitId?: string) => {
-    const academicUnits = await getAcademicUnitById(
-        academicUnitId
-    )
+const getRelativeDateOfLastBudget = (budgets: AcademicUnitBudget[]) => {
+    // The 'to' property of the last budget in the array is the date of the last budget change
+    const lastBudgetWithTo = budgets.filter((b) => b.to).at(-1)
+    const deltaChangeDate = lastBudgetWithTo ? lastBudgetWithTo.from : null
+    const deltaChangeFormated = deltaChangeDate ? relativeTimeFormatter.format(
+        dateDifferenceInDays(deltaChangeDate),
+        'days'
+    ) : ''
+    return deltaChangeFormated
+}
 
-    if (!academicUnits) return {
-        totalBudget: 0,
-        projectedBudget: 0,
-        spendedBudget: 0
-    }
-
-    const anualBudgets = academicUnits
-        .map((ac) => ac.AcademicUnitAnualBudgets)
+const getAcademicUnitBudgetSummary = (
+    academicUnits: AcademicUnit[],
+    year: number
+) => {
+    // Filter the academic unit budgets for the given year
+    const academicUnitBudgetForYear = academicUnits
+        .map((ac) => ac.budgets)
         .flat()
+        .filter((b) => b.from.getFullYear() === year)
 
-    const budgetSummary = calculateTotalBudgetAggregated(anualBudgets)
+    // Calculate the sum of academic unit budget for the given year
+    const sumAcademicUnitBudget = academicUnitBudgetForYear
+        .filter((b) => !b.to)
+        .map((b) => b.amount)
+        .reduce((acc, item) => acc + item, 0)
 
-    const sumAcademicUnitBudget = academicUnits.reduce((acc, item) => {
-        acc += item.budgets.find((b) => !b.to)?.amount || 0
-        return acc
-    }, 0)
+    // Filter the last the academic unit that have budget changes in the given year
+    const academicUnitWithLastBudgetChange = academicUnits.filter((ac) => ac.budgets.some((b) => b.to)).sort((a, b) => {
+        const aLastBudgetChange = a.budgets.filter((b) => b.from.getFullYear() === year).filter((b) => b.to).at(-1)
+        const bLastBudgetChange = b.budgets.filter((b) => b.from.getFullYear() === year).filter((b) => b.to).at(-1)
+        if (!aLastBudgetChange || !bLastBudgetChange) return 0
+        return aLastBudgetChange.from > bLastBudgetChange.from ? -1 : 1
+    }).at(-1)
+
+    // Get the actual and the previous budget in the same year for the academic unit with the last budget change
+    const [before, actual] = academicUnitWithLastBudgetChange 
+        ? [academicUnitWithLastBudgetChange.budgets.at(-2)?.amount, academicUnitWithLastBudgetChange.budgets.at(-1)?.amount] 
+        : [0,0]
+
+    // Calculate a delta value between the actual and the previous budget in the same year
+    const deltaValue =  actual && before ? (actual - before) : 0
+
+    // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
+    const delta = deltaValue ? ((sumAcademicUnitBudget / (sumAcademicUnitBudget - (deltaValue))) -1 )* 100 : 0
+
+
+    const changeDate = getRelativeDateOfLastBudget(academicUnitWithLastBudgetChange?.budgets || [])
 
     return {
-        totalBudget: sumAcademicUnitBudget,
-        projectedBudget: budgetSummary.total,
-        spendedBudget: budgetSummary.ABIe + budgetSummary.ABTe,
+        value: sumAcademicUnitBudget,
+        delta,
+        changeDate,
+    }
+}
+
+export const getBudgetSummary = async (
+    academicUnitId?: string,
+    year: number = new Date().getFullYear()
+) => {
+    // TODO: There is a bug here, the query do not return the anual budgets for some reason
+    const academicUnits = await getAcademicUnitById(academicUnitId)
+    
+    if (!academicUnits)
+        return {
+            academicUnitBudgetSummary: { value: 0, delta: 0, changeDate: '' },
+            projectedBudget: 0,
+            spendedBudget: 0,
+        }
+    
+    const anualBudgets = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
+
+    // This summary is related to protocols budgets
+    const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets)
+
+    // This summary is related to academic unit budgets
+    const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(academicUnits, year)
+
+    return {
+        academicUnitBudgetSummary,
+        projectedBudget: protocolBudgetSummary.total,
+        spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
     }
 }
 
