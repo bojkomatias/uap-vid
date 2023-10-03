@@ -7,14 +7,20 @@ import type {
     ProtocolSectionsIdentificationTeam,
     AnualBudgetTeamMember,
 } from '@prisma/client'
-import { getAcademicUnitsTabs } from '@repositories/academic-unit'
+import {
+    getAcademicUnitById,
+    getAcademicUnitsTabs,
+} from '@repositories/academic-unit'
 import {
     createAnualBudget,
     createManyAnualBudgetTeamMember,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
-import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
+import {
+    calculateTotalBudgetAggregated,
+    type AnualBudgetTeamMemberWithAllRelations,
+} from '@utils/anual-budget'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -132,3 +138,34 @@ export const protocolToAnualBudgetPreview = async (
         budgetTeamMembers: ABTWithTeamMemberAndUserData,
     }
 }
+
+export const getBudgetSummary = async (academicUnitId?: string) => {
+    const academicUnits = await getAcademicUnitById(
+        academicUnitId
+    )
+
+    if (!academicUnits) return {
+        totalBudget: 0,
+        projectedBudget: 0,
+        spendedBudget: 0
+    }
+
+    const anualBudgets = academicUnits
+        .map((ac) => ac.AcademicUnitAnualBudgets)
+        .flat()
+
+    const budgetSummary = calculateTotalBudgetAggregated(anualBudgets)
+
+    const sumAcademicUnitBudget = academicUnits.reduce((acc, item) => {
+        acc += item.budgets.find((b) => !b.to)?.amount || 0
+        return acc
+    }, 0)
+
+    return {
+        totalBudget: sumAcademicUnitBudget,
+        projectedBudget: budgetSummary.total,
+        spendedBudget: budgetSummary.ABIe + budgetSummary.ABTe,
+    }
+}
+
+export type BudgetSummaryType = Awaited<ReturnType<typeof getBudgetSummary>>

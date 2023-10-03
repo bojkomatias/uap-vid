@@ -20,26 +20,26 @@ export type AnualBudgetTeamMemberWithAllRelations =
     >
 
 const totalExecution = (ex: Execution[]): number => {
-    return ex.reduce((acc, item) => {
+    return ex ? ex.reduce((acc, item) => {
         acc += item.amount
         return acc
-    }, 0)
+    }, 0) : 0
 }
 
 const calculateRemainingABI = (abi: AnualBudgetItem[]): number => {
-    return abi.reduce((acc, item) => {
+    return abi ? abi.reduce((acc, item) => {
         acc += item.remaining
         return acc
-    }, 0)
+    }, 0) : 0
 }
 
 const calculateRemainingABTM = (
     abtm: AnualBudgetTeamMemberWithAllRelations[]
 ): number => {
-    return abtm.reduce((acc, item) => {
+    return abtm ? abtm.reduce((acc, item) => {
         acc += item.remainingHours * getLastCategoryPrice(item)
         return acc
-    }, 0)
+    }, 0) : 0
 }
 
 const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
@@ -56,10 +56,10 @@ export const calculateTotalBudget = (
 ) => {
     //Executions
     const ABIe = totalExecution(
-        anualBudget.budgetItems.map((item) => item.executions).flat()
+        anualBudget.budgetItems?.map((item) => item.executions).flat()
     )
     const ABTe = totalExecution(
-        anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
+        anualBudget.budgetTeamMembers?.map((item) => item.executions).flat()
     )
 
     //Remainings

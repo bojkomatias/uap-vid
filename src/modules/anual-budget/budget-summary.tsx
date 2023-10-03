@@ -1,50 +1,37 @@
-import type { TotalBudgetCalculation } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 import { ArrowNarrowDown, ArrowNarrowUp } from 'tabler-icons-react'
+import type { BudgetSummaryType } from '@actions/anual-budget/action'
+import clsx from 'clsx'
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
-export const BudgetSummary = ({
-    ABIe,
-    ABTe,
-    ABIr,
-    ABTr,
-    total,
-}: TotalBudgetCalculation) => {
+export const BudgetSummary = (
+    summary: BudgetSummaryType,
+    allAcademicUnits?: Boolean
+) => {
     const stats = [
         {
-            name: 'Total Subscribers',
-            stat: '71,897',
-            previousStat: '70,946',
+            name: allAcademicUnits
+                ? 'Presupuesto total'
+                : 'Presupuesto de la UA',
+            stat: summary?.totalBudget ?? 0,
             change: '12%',
             changeType: 'increase',
         },
         {
-            name: 'Avg. Open Rate',
-            stat: '58.16%',
-            previousStat: '56.14%',
+            name: 'Presupuesto proyectado',
+            stat: summary?.projectedBudget ?? 0,
             change: '2.02%',
             changeType: 'increase',
         },
         {
-            name: 'Avg. Click Rate',
-            stat: '24.57%',
-            previousStat: '28.62%',
-            change: '4.05%',
-            changeType: 'decrease',
-        },
-        {
-            name: 'Avg. Click Rate',
-            stat: '24.57%',
-            previousStat: '28.62%',
+            name: 'Presupuesto Ejecutado',
+            stat: summary?.spendedBudget ?? 0,
             change: '4.05%',
             changeType: 'decrease',
         },
     ]
     return (
         <div>
-            <dl className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-4">
+            <dl className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
                 {stats.map((item) => (
                     <div
                         key={item.name}
@@ -55,14 +42,15 @@ export const BudgetSummary = ({
                         </dt>
                         <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
                             <div className="text-indigo-600 flex items-baseline text-2xl font-semibold">
-                                {item.stat}
+                                {currencyFormatter.format(item.stat)}
+
                                 <span className="ml-2 text-sm font-medium text-gray-500">
-                                    from {item.previousStat}
+                                    de 123123
                                 </span>
                             </div>
 
                             <div
-                                className={classNames(
+                                className={clsx(
                                     item.changeType === 'increase'
                                         ? 'bg-green-100 text-green-800'
                                         : 'bg-red-100 text-red-800',
