@@ -49,7 +49,7 @@ export default function TanStackTable({
     })
 
     const totalRecordsCheck = !(
-        Number(useSearchParams().get('records')) == totalRecords
+        Number(useSearchParams()?.get('records')) == totalRecords
     )
 
     // dataToCsv(columns, data)
