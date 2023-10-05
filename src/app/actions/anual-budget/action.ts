@@ -215,6 +215,7 @@ export const getBudgetSummary = async (
     const anualBudgets = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
 
     // This summary is related to protocols budgets
+    // TODO: Calculate the detla in the projected budget
     const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets)
 
     // This summary is related to academic unit budgets

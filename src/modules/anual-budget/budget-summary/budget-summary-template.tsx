@@ -11,7 +11,7 @@ export const BudgetSummary = (
         {
             name: allAcademicUnits
                 ? 'Presupuesto total'
-                : 'Presupuesto de la UA',
+                : 'Presupuesto de la Unidad Académica',
             total: summary?.academicUnitBudgetSummary.value ?? 0,
             delta: summary?.academicUnitBudgetSummary.delta,
             date: summary?.academicUnitBudgetSummary.changeDate,
@@ -44,7 +44,7 @@ export const BudgetSummary = (
                             {item.name}
                         </dt>
                         <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
-                            <div className="text-indigo-600 flex items-baseline text-2xl font-semibold">
+                            <div className="flex items-baseline text-2xl font-semibold text-black/70">
                                 ${currencyFormatter.format(item.total)}
                                 {item.of ? (
                                     <span className="ml-2 text-sm font-medium text-gray-500">
