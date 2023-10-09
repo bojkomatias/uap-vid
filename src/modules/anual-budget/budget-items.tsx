@@ -8,6 +8,7 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
+import BudgetExcecutionView from './budget-excecution-view'
 
 export function BudgetItems({
     budgetId,
@@ -172,7 +173,6 @@ export function BudgetItems({
                                                     `${i}.amount`
                                                 ).value
                                             }
-
                                             priceSetter={(e) =>
                                                 form.setFieldValue(
                                                     `${i}.amount`,
@@ -196,12 +196,12 @@ export function BudgetItems({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <Button
-                                            intent={'secondary'}
-                                            className="float-right px-2 py-0.5 text-xs"
-                                        >
-                                            Ver
-                                        </Button>
+                                        <BudgetExcecutionView
+                                            title={detail}
+                                            teamMember={true}
+                                            itemName={type}
+                                            excecutions={executions}
+                                        />
                                     </td>
                                 </tr>
                             )

@@ -7,6 +7,7 @@ import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
+import BudgetExcecutionView from './budget-excecution-view'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -145,6 +146,7 @@ export function BudgetTeamMemberFees({
                                         categories,
                                         pointsObrero,
                                     },
+                                    executions,
                                     memberRole,
                                     hours,
                                     remainingHours,
@@ -243,12 +245,29 @@ export function BudgetTeamMemberFees({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <Button
-                                            intent={'secondary'}
-                                            className="float-right px-2 py-0.5 text-xs"
-                                        >
-                                            Ver
-                                        </Button>
+                                        <BudgetExcecutionView
+                                            title={name}
+                                            teamMember={true}
+                                            itemName={
+                                                categories.at(-1)?.category
+                                                    .name ?? 'Sin Categoría'
+                                            }
+                                            excecutions={executions}
+                                            obrero={
+                                                obrero
+                                                    ? {
+                                                          pointsObrero:
+                                                              pointsObrero ?? 0,
+                                                          pointPrice:
+                                                              categories
+                                                                  .at(-1)
+                                                                  ?.category.price.at(
+                                                                      -1
+                                                                  )?.price ?? 0,
+                                                      }
+                                                    : undefined
+                                            }
+                                        />
                                     </td>
                                 </tr>
                             )
