@@ -16,6 +16,9 @@ import {
 import {
     createAnualBudget,
     createManyAnualBudgetTeamMember,
+    getAnualBudgetById,
+    newBudgetItemExcecution,
+    newTeamMemberExcecution,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
@@ -142,14 +145,56 @@ export const protocolToAnualBudgetPreview = async (
     }
 }
 
+export const saveNewTeamMemberExcecution = async (
+    amount: number,
+    anualBudgetTeamMemberId: string
+) => {
+    const updated = await newTeamMemberExcecution(
+        anualBudgetTeamMemberId,
+        amount
+    )
+    return updated
+    // await newBudgetItemExcecution(id, amount, excecutions)
+}
+
+export const saveNewItemExcecution = async (
+    budgetItemIndex: number,
+    anualBudgetId: string,
+    amount: number,
+) => {
+    const anualBudget = await getAnualBudgetById(anualBudgetId)
+
+    if (!anualBudget) return null
+
+    // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
+    // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
+    const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
+        if (index === budgetItemIndex) {
+            item.executions.push({
+                amount,
+                date: new Date(),
+            })
+        }
+        return item
+    })
+    
+    const updated = await newBudgetItemExcecution(
+        anualBudgetId,
+        updatedBudgetItem
+    )
+    return updated
+}
+
 const getRelativeDateOfLastBudget = (budgets: AcademicUnitBudget[]) => {
     // The 'to' property of the last budget in the array is the date of the last budget change
     const lastBudgetWithTo = budgets.filter((b) => b.to).at(-1)
     const deltaChangeDate = lastBudgetWithTo ? lastBudgetWithTo.from : null
-    const deltaChangeFormated = deltaChangeDate ? relativeTimeFormatter.format(
-        dateDifferenceInDays(deltaChangeDate),
-        'days'
-    ) : ''
+    const deltaChangeFormated = deltaChangeDate
+        ? relativeTimeFormatter.format(
+              dateDifferenceInDays(deltaChangeDate),
+              'days'
+          )
+        : ''
     return deltaChangeFormated
 }
 
@@ -170,26 +215,42 @@ const getAcademicUnitBudgetSummary = (
         .reduce((acc, item) => acc + item, 0)
 
     // Filter the last the academic unit that have budget changes in the given year
-    const academicUnitWithLastBudgetChange = academicUnits.filter((ac) => ac.budgets.some((b) => b.to)).sort((a, b) => {
-        const aLastBudgetChange = a.budgets.filter((b) => b.from.getFullYear() === year).filter((b) => b.to).at(-1)
-        const bLastBudgetChange = b.budgets.filter((b) => b.from.getFullYear() === year).filter((b) => b.to).at(-1)
-        if (!aLastBudgetChange || !bLastBudgetChange) return 0
-        return aLastBudgetChange.from > bLastBudgetChange.from ? -1 : 1
-    }).at(-1)
+    const academicUnitWithLastBudgetChange = academicUnits
+        .filter((ac) => ac.budgets.some((b) => b.to))
+        .sort((a, b) => {
+            const aLastBudgetChange = a.budgets
+                .filter((b) => b.from.getFullYear() === year)
+                .filter((b) => b.to)
+                .at(-1)
+            const bLastBudgetChange = b.budgets
+                .filter((b) => b.from.getFullYear() === year)
+                .filter((b) => b.to)
+                .at(-1)
+            if (!aLastBudgetChange || !bLastBudgetChange) return 0
+            return aLastBudgetChange.from > bLastBudgetChange.from ? -1 : 1
+        })
+        .at(-1)
 
     // Get the actual and the previous budget in the same year for the academic unit with the last budget change
-    const [before, actual] = academicUnitWithLastBudgetChange 
-        ? [academicUnitWithLastBudgetChange.budgets.at(-2)?.amount, academicUnitWithLastBudgetChange.budgets.at(-1)?.amount] 
-        : [0,0]
+    const [before, actual] = academicUnitWithLastBudgetChange
+        ? [
+              academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
+              academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+          ]
+        : [0, 0]
 
     // Calculate a delta value between the actual and the previous budget in the same year
-    const deltaValue =  actual && before ? (actual - before) : 0
+    const deltaValue = actual && before ? actual - before : 0
 
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
-    const delta = deltaValue ? ((sumAcademicUnitBudget / (sumAcademicUnitBudget - (deltaValue))) -1 )* 100 : 0
+    const delta = deltaValue
+        ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
+          100
+        : 0
 
-
-    const changeDate = getRelativeDateOfLastBudget(academicUnitWithLastBudgetChange?.budgets || [])
+    const changeDate = getRelativeDateOfLastBudget(
+        academicUnitWithLastBudgetChange?.budgets || []
+    )
 
     return {
         value: sumAcademicUnitBudget,
@@ -204,22 +265,27 @@ export const getBudgetSummary = async (
 ) => {
     // TODO: There is a bug here, the query do not return the anual budgets for some reason
     const academicUnits = await getAcademicUnitById(academicUnitId)
-    
+
     if (!academicUnits)
         return {
             academicUnitBudgetSummary: { value: 0, delta: 0, changeDate: '' },
             projectedBudget: 0,
             spendedBudget: 0,
         }
-    
-    const anualBudgets = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
+
+    const anualBudgets = academicUnits
+        .map((ac) => ac.AcademicUnitAnualBudgets)
+        .flat()
 
     // This summary is related to protocols budgets
     // TODO: Calculate the detla in the projected budget
     const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets)
 
     // This summary is related to academic unit budgets
-    const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(academicUnits, year)
+    const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(
+        academicUnits,
+        year
+    )
 
     return {
         academicUnitBudgetSummary,

@@ -7,19 +7,24 @@ import { Badge } from '@elements/badge'
 
 import Currency from '@elements/currency'
 import BudgetNewExcecution from './budget-new-excecution'
+import { ExcecutionType } from '@utils/anual-budget'
 
 export default function BudgetExcecutionView({
     title,
     itemName,
     excecutions,
     obrero,
-    teamMember,
+    positionIndex,
+    anualBudgetTeamMemberId,
+    excecutionType,
 }: {
     title: string
     itemName: string
     excecutions: Execution[]
+    positionIndex: number
+    excecutionType: ExcecutionType
     obrero?: { pointsObrero: number; pointPrice: number }
-    teamMember: boolean
+    anualBudgetTeamMemberId?: string
 }) {
     const [opened, { open, close }] = useDisclosure(false)
 
@@ -40,7 +45,7 @@ export default function BudgetExcecutionView({
                             <Badge className="text-sm">{title}</Badge>
                         </div>
                         <div className="flex items-center gap-2">
-                            {teamMember ? (
+                            {excecutionType === ExcecutionType.TeamMember ? (
                                 <p className="text-sm text-gray-600">
                                     <b>Categoría: </b>
                                 </p>
@@ -64,7 +69,11 @@ export default function BudgetExcecutionView({
                         <p className="text-sm text-gray-600">
                             Nueva Ejecución:
                         </p>
-                        <BudgetNewExcecution />
+                        <BudgetNewExcecution
+                            anualBudgetTeamMemmberId={anualBudgetTeamMemberId}
+                            excecutionType={excecutionType}
+                            budgetItemPositionIndex={positionIndex}
+                        />
                         {excecutions.length > 0 ? (
                             <>
                                 <p className="text-sm text-gray-600">

@@ -290,3 +290,17 @@ export const getAnualBudgetsByAcademicUnit = cache(
         }
     }
 )
+
+export const newTeamMemberExcecution = (anualBudgetTeamMemberId:string, amount:number) => {
+    return prisma.anualBudgetTeamMember.update({
+        where: { id: anualBudgetTeamMemberId },
+        data: { executions: { push: { amount, date:new Date() } } },
+    })
+}
+
+export const newBudgetItemExcecution = (id:string, budgetItems:AnualBudgetItem[]) => {
+    return prisma.anualBudget.update({
+        where: { id },
+        data: { budgetItems: budgetItems },
+    })
+}

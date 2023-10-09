@@ -3,11 +3,14 @@ import { Button } from '@elements/button'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
-import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
+import {
+    ExcecutionType,
+    type AnualBudgetTeamMemberWithAllRelations,
+} from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
-import BudgetExcecutionView from './budget-excecution-view'
+import BudgetExcecutionView from './excecution/budget-excecution-view'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -146,6 +149,7 @@ export function BudgetTeamMemberFees({
                                         categories,
                                         pointsObrero,
                                     },
+                                    id: anualBudgetTeamMemberId,
                                     executions,
                                     memberRole,
                                     hours,
@@ -246,13 +250,19 @@ export function BudgetTeamMemberFees({
                                         )}
                                     >
                                         <BudgetExcecutionView
+                                            positionIndex={i}
+                                            excecutions={executions}
+                                            anualBudgetTeamMemberId={
+                                                anualBudgetTeamMemberId
+                                            }
                                             title={name}
-                                            teamMember={true}
+                                            excecutionType={
+                                                ExcecutionType.TeamMember
+                                            }
                                             itemName={
                                                 categories.at(-1)?.category
                                                     .name ?? 'Sin Categoría'
                                             }
-                                            excecutions={executions}
                                             obrero={
                                                 obrero
                                                     ? {

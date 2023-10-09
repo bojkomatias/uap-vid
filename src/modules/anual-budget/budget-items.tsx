@@ -8,7 +8,8 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
-import BudgetExcecutionView from './budget-excecution-view'
+import BudgetExcecutionView from './excecution/budget-excecution-view'
+import { ExcecutionType } from '@utils/anual-budget'
 
 export function BudgetItems({
     budgetId,
@@ -197,8 +198,9 @@ export function BudgetItems({
                                         )}
                                     >
                                         <BudgetExcecutionView
+                                            positionIndex={i}
                                             title={detail}
-                                            teamMember={true}
+                                            excecutionType={ExcecutionType.Item}
                                             itemName={type}
                                             excecutions={executions}
                                         />
