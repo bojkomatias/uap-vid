@@ -23,7 +23,7 @@ export function BudgetView({
     return (
         <div className="mx-auto mt-10 max-w-7xl space-y-6">
             <BudgetTeamMemberFees
-                approved={approved}
+                approved={true}
                 budgetTeamMembers={budgetTeamMembers}
                 ABTe={calculations.ABTe}
                 ABTr={calculations.ABTr}
@@ -31,7 +31,7 @@ export function BudgetView({
 
             <BudgetItems
                 budgetId={budgetId}
-                approved={approved}
+                approved={true}
                 budgetItems={budgetItems}
                 ABIe={calculations.ABIe}
                 ABIr={calculations.ABIr}

@@ -41,26 +41,34 @@ export default function BudgetExcecutionView({
                     onClick={(e) => e.preventDefault()}
                 >
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                        <h1 className="text-xl font-semibold">
+                            {excecutionType === ExcecutionType.TeamMember
+                                ? 'Honorario de equipo'
+                                : 'Gasto Directo'}
+                        </h1>
                         <div className="flex  items-center gap-1">
-                            <Badge className="text-sm">{title}</Badge>
+                            <p className="text-sm font-semibold text-gray-600">
+                                {excecutionType === ExcecutionType.TeamMember
+                                    ? 'Nombre y Apellido:'
+                                    : 'Detalle:'}
+                            </p>
+                            <p className="text-sm">{title}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            {excecutionType === ExcecutionType.TeamMember ? (
-                                <p className="text-sm text-gray-600">
-                                    <b>Categoría: </b>
-                                </p>
-                            ) : null}
+                            <p className="text-sm font-semibold text-gray-600">
+                                Categoría:
+                            </p>
                             <p className="text-sm">
                                 {obrero ? 'Obrero' : itemName}
                             </p>
                         </div>
                         {obrero && (
                             <div className="flex flex-col items-start gap-2">
-                                <p className="text-sm text-gray-600">
-                                    <b>Puntos:</b> {obrero.pointsObrero}
+                                <p className="text-sm font-semibold text-gray-600">
+                                    Puntos: {obrero.pointsObrero}
                                 </p>
-                                <p className="text-sm text-gray-600">
-                                    <b>Precio Punto:</b> ${obrero.pointPrice}
+                                <p className="text-sm font-semibold text-gray-600">
+                                    Precio Punto: ${obrero.pointPrice}
                                 </p>
                             </div>
                         )}
