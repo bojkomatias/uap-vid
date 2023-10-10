@@ -150,19 +150,25 @@ export const saveNewTeamMemberExcecution = async (
     amount: number,
     anualBudgetTeamMemberId: string
 ) => {
-    const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(anualBudgetTeamMemberId)
+    const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(
+        anualBudgetTeamMemberId
+    )
 
     if (!anualBudgetTeamMember) return null
 
-    const hourlyRate = anualBudgetTeamMember.teamMember.categories.at(-1)?.category.price.at(-1)?.price || 0
+    const hourlyRate =
+        anualBudgetTeamMember.teamMember.categories
+            .at(-1)
+            ?.category.price.at(-1)?.price || 0
 
-    const amountExcecutedInHours = !hourlyRate ? amount / hourlyRate : 0
+    const amountExcecutedInHours = hourlyRate ? amount / hourlyRate : 0
 
-    const remainingHours = anualBudgetTeamMember.remainingHours - amountExcecutedInHours
+    const remainingHours =
+        anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
     const updated = await newTeamMemberExcecution(
         anualBudgetTeamMemberId,
-        amount, 
+        amount,
         remainingHours
     )
     return updated
@@ -172,7 +178,7 @@ export const saveNewTeamMemberExcecution = async (
 export const saveNewItemExcecution = async (
     budgetItemIndex: number,
     anualBudgetId: string,
-    amount: number,
+    amount: number
 ) => {
     const anualBudget = await getAnualBudgetById(anualBudgetId)
 
@@ -186,29 +192,18 @@ export const saveNewItemExcecution = async (
                 amount,
                 date: new Date(),
             })
-            item.remaining = item.amount - item.executions.reduce((acc, item) => acc + item.amount, 0)
+            item.remaining =
+                item.amount -
+                item.executions.reduce((acc, item) => acc + item.amount, 0)
         }
         return item
     })
-    
+
     const updated = await newBudgetItemExcecution(
         anualBudgetId,
         updatedBudgetItem
     )
     return updated
-}
-
-const getRelativeDateOfLastBudget = (budgets: AcademicUnitBudget[]) => {
-    // The 'to' property of the last budget in the array is the date of the last budget change
-    const lastBudgetWithTo = budgets.filter((b) => b.to).at(-1)
-    const deltaChangeDate = lastBudgetWithTo ? lastBudgetWithTo.from : null
-    const deltaChangeFormated = deltaChangeDate
-        ? relativeTimeFormatter.format(
-              dateDifferenceInDays(deltaChangeDate),
-              'days'
-          )
-        : ''
-    return deltaChangeFormated
 }
 
 const getAcademicUnitBudgetSummary = (
@@ -251,26 +246,62 @@ const getAcademicUnitBudgetSummary = (
               academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
           ]
         : [0, 0]
-    
-    if(!actual) return { value: 0, delta: 0, changeDate: '' }
+
+    if (!actual) return { value: 0, delta: 0, changeDate: '' }
 
     // Calculate a delta value between the actual and the previous budget in the same year
     const deltaValue = actual && before ? actual - before : actual
-    
+
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
     const delta = deltaValue
-        ? ((sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue)) -1) *
+        ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
           100
         : 0
-
-    const changeDate = getRelativeDateOfLastBudget(
-        academicUnitWithLastBudgetChange?.budgets || []
-    )
 
     return {
         value: sumAcademicUnitBudget,
         delta,
-        changeDate,
+    }
+}
+
+const getProjectedBudgetSummary = (
+    total: number,
+    anualBudgets: Array<
+        AnualBudget & {
+            budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+        }
+    >,
+    year: number
+) => {
+    const lastCategoryWithPriceChange = anualBudgets
+        .filter((b) => b.year === year)
+        .map((b) => b.budgetTeamMembers)
+        .flat()
+        .map((b) => b.teamMember.categories)
+        .flat()
+        .filter((c) => c.category.price.some((p) => p.to))
+        .sort((a, b) => {
+            const aLastPriceChange = a.category.price
+                .filter((p) => p.to)
+                .at(-1)
+            const bLastPriceChange = b.category.price
+                .filter((p) => p.to)
+                .at(-1)
+            if (!aLastPriceChange || !bLastPriceChange) return 0
+            return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
+        })
+        .at(-1)
+    const [before, actual] = [lastCategoryWithPriceChange?.category.price.at(-2), lastCategoryWithPriceChange?.category.price.at(-1)]
+
+    const deltaValue = actual && before ? actual.price - before.price : actual?.price
+
+    const delta = deltaValue
+        ? (total / (total - deltaValue) - 1) * 100
+        : 0
+
+    return {
+        value: total,
+        delta: delta,
     }
 }
 
@@ -283,8 +314,8 @@ export const getBudgetSummary = async (
 
     if (!academicUnits)
         return {
-            academicUnitBudgetSummary: { value: 0, delta: 0, changeDate: '' },
-            projectedBudget: 0,
+            academicUnitBudgetSummary: { value: 0, delta: 0 },
+            projectedBudgetSummary: { value: 0, delta: 0 },
             spendedBudget: 0,
         }
 
@@ -302,9 +333,15 @@ export const getBudgetSummary = async (
         year
     )
 
+    const projectedBudgetSummary = getProjectedBudgetSummary(
+        protocolBudgetSummary.total,
+        anualBudgets,
+        year
+    )
+
     return {
         academicUnitBudgetSummary,
-        projectedBudget: protocolBudgetSummary.total,
+        projectedBudgetSummary,
         spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
     }
 }

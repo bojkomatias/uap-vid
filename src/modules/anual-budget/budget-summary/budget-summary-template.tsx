@@ -19,16 +19,18 @@ export const BudgetSummary = (
         },
         {
             name: 'Consumo Proyectado',
-            total: summary?.projectedBudget ?? 0,
+            total: summary?.projectedBudgetSummary?.value ?? 0,
             of: summary?.academicUnitBudgetSummary.value ?? 0,
-            delta: 2,
+            delta: summary.projectedBudgetSummary.delta ?? 0,
             indicator: 'number',
         },
         {
             name: 'Consumo Ejecutado',
             total: summary?.spendedBudget ?? 0,
-            of: summary?.projectedBudget ?? 0,
-            delta: summary?.spendedBudget / summary?.projectedBudget ?? 0,
+            of: summary?.projectedBudgetSummary?.value ?? 0,
+            delta:
+                summary?.spendedBudget /
+                    summary?.projectedBudgetSummary?.value ?? 0,
             indicator: 'graph',
         },
     ]
