@@ -56,7 +56,7 @@ export default function Pagination({
 
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className="mx-auto mt-12 flex w-fit gap-2">
+            <div className="mx-auto mt-8 flex w-fit gap-2">
                 {numberOfDisplayedPages >=
                 Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
