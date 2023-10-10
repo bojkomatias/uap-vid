@@ -4,6 +4,7 @@ import { calculateTotalBudget } from '@utils/anual-budget'
 import { BudgetView } from 'modules/anual-budget/budget-view'
 import { BudgetMetadata } from 'modules/anual-budget/budget-metadata'
 import { redirect } from 'next/navigation'
+import { ApproveAnualBudget } from 'modules/anual-budget/approve-budget'
 
 export default async function Page({ params }: { params: { id: string } }) {
     const anualBudget = await getAnualBudgetById(params.id)
@@ -17,11 +18,14 @@ export default async function Page({ params }: { params: { id: string } }) {
         sponsor: protocol.sections.identification.sponsor,
     }
     const calculations = calculateTotalBudget(anualBudget)
-    meta.approved = false
+
     return (
         <>
             <PageHeading title={`Presupuesto ${meta.year}`} />
-            <BudgetMetadata {...meta} />
+            <div className="flex w-full flex-col items-end justify-between gap-3 sm:flex-row">
+                <BudgetMetadata {...meta} />
+                {meta.approved ? null : <ApproveAnualBudget id={meta.id} />}
+            </div>
             <BudgetView
                 budgetId={meta.id}
                 approved={meta.approved}

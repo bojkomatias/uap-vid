@@ -322,17 +322,34 @@ export const getAnualBudgetsByAcademicUnit = cache(
     }
 )
 
-export const newTeamMemberExcecution = (anualBudgetTeamMemberId:string, amount:number, remainingHours:number) => {
+export const newTeamMemberExcecution = (
+    anualBudgetTeamMemberId: string,
+    amount: number,
+    remainingHours: number
+) => {
     return prisma.anualBudgetTeamMember.update({
         where: { id: anualBudgetTeamMemberId },
-        data: { executions: { push: { amount, date:new Date() } }
-        , remainingHours: remainingHours },
+        data: {
+            executions: { push: { amount, date: new Date() } },
+            remainingHours: remainingHours,
+        },
     })
 }
 
-export const newBudgetItemExcecution = (id:string, budgetItems:AnualBudgetItem[]) => {
+export const newBudgetItemExcecution = (
+    id: string,
+    budgetItems: AnualBudgetItem[]
+) => {
     return prisma.anualBudget.update({
         where: { id },
         data: { budgetItems: budgetItems },
+    })
+}
+
+export const approveAnualBudget = async (id: string) => {
+    return prisma.anualBudget.update({
+        where: { id },
+        data: { approved: true },
+        select: { approved: true },
     })
 }
