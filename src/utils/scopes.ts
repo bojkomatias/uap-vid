@@ -60,6 +60,7 @@ const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
         ACTION.DELETE,
         ACTION.DISCONTINUE,
         ACTION.FINISH,
+        ACTION.GENERATE_ANUAL_BUDGET,
     ],
 }
 
@@ -89,7 +90,12 @@ const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
         ACTION.ACCEPT,
         ACTION.DISCONTINUE,
     ],
-    [STATE.ACCEPTED]: [ACTION.APPROVE, ACTION.DISCONTINUE, ACTION.EDIT],
+    [STATE.ACCEPTED]: [
+        ACTION.APPROVE,
+        ACTION.DISCONTINUE,
+        ACTION.EDIT,
+        ACTION.GENERATE_ANUAL_BUDGET,
+    ],
     [STATE.ON_GOING]: [ACTION.FINISH, ACTION.DISCONTINUE],
     [STATE.FINISHED]: [],
     [STATE.DISCONTINUED]: [],
