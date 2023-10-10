@@ -17,6 +17,7 @@ import {
     createAnualBudget,
     createManyAnualBudgetTeamMember,
     getAnualBudgetById,
+    getAnualBudgetTeamMemberById,
     newBudgetItemExcecution,
     newTeamMemberExcecution,
 } from '@repositories/anual-budget'
@@ -149,9 +150,20 @@ export const saveNewTeamMemberExcecution = async (
     amount: number,
     anualBudgetTeamMemberId: string
 ) => {
+    const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(anualBudgetTeamMemberId)
+
+    if (!anualBudgetTeamMember) return null
+
+    const hourlyRate = anualBudgetTeamMember.teamMember.categories.at(-1)?.category.price.at(-1)?.price || 0
+
+    const amountExcecutedInHours = !hourlyRate ? amount / hourlyRate : 0
+
+    const remainingHours = anualBudgetTeamMember.remainingHours - amountExcecutedInHours
+
     const updated = await newTeamMemberExcecution(
         anualBudgetTeamMemberId,
-        amount
+        amount, 
+        remainingHours
     )
     return updated
     // await newBudgetItemExcecution(id, amount, excecutions)
@@ -174,6 +186,7 @@ export const saveNewItemExcecution = async (
                 amount,
                 date: new Date(),
             })
+            item.remaining = item.amount - item.executions.reduce((acc, item) => acc + item.amount, 0)
         }
         return item
     })
@@ -227,7 +240,7 @@ const getAcademicUnitBudgetSummary = (
                 .filter((b) => b.to)
                 .at(-1)
             if (!aLastBudgetChange || !bLastBudgetChange) return 0
-            return aLastBudgetChange.from > bLastBudgetChange.from ? -1 : 1
+            return aLastBudgetChange.from < bLastBudgetChange.from ? -1 : 1
         })
         .at(-1)
 
@@ -238,13 +251,15 @@ const getAcademicUnitBudgetSummary = (
               academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
           ]
         : [0, 0]
+    
+    if(!actual) return { value: 0, delta: 0, changeDate: '' }
 
     // Calculate a delta value between the actual and the previous budget in the same year
-    const deltaValue = actual && before ? actual - before : 0
-
+    const deltaValue = actual && before ? actual - before : actual
+    
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
     const delta = deltaValue
-        ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
+        ? ((sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue)) -1) *
           100
         : 0
 

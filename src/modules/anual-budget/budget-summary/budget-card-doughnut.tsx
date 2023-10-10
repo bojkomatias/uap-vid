@@ -1,11 +1,9 @@
 import React from 'react'
 
-// convertToDegrees(28) => 101
-
-const BudgetCardDoughnut = ({ percentage }: { percentage: number }) => {
+const BudgetCardDoughnut = ({ percentage }: { percentage: string }) => {
     const strokeDasharray = `${percentage} 100`
     return (
-        <div className="relative h-8 w-8">
+        <div className="relative h-12 w-12">
             <svg
                 className="absolute left-0 top-0 h-full w-full"
                 viewBox="0 0 24 24"
@@ -32,7 +30,7 @@ const BudgetCardDoughnut = ({ percentage }: { percentage: number }) => {
                     y="50%"
                     textAnchor="middle"
                     dy=".3em"
-                    fontSize=".5rem"
+                    fontSize=".35rem"
                     fill="#333" // Color of the text
                 >
                     {percentage}%

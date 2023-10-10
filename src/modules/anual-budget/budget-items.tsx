@@ -125,7 +125,7 @@ export function BudgetItems({
                         </tr>
                     </thead>
                     <tbody>
-                        {form.values.map(
+                        {budgetItems.map(
                             (
                                 { detail, type, amount, remaining, executions },
                                 i

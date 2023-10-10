@@ -38,9 +38,9 @@ export const BudgetSummary = (
                 {stats.map((item) => (
                     <div
                         key={item.name}
-                        className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+                        className="flex flex-col overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
                     >
-                        <dt className="text-base font-normal text-gray-900">
+                        <dt className="flex-grow text-base font-normal text-gray-900">
                             {item.name}
                         </dt>
                         <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
@@ -62,7 +62,12 @@ export const BudgetSummary = (
                             {item.indicator === 'graph' ? (
                                 <BudgetCardDoughnut
                                     percentage={
-                                        item.of ? item.of / item.total : 0
+                                        item.of
+                                            ? (
+                                                  (item.total / item.of) *
+                                                  100
+                                              ).toFixed(1)
+                                            : '0'
                                     }
                                 />
                             ) : null}

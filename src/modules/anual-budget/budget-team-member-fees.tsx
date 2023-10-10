@@ -139,7 +139,7 @@ export function BudgetTeamMemberFees({
                         </tr>
                     </thead>
                     <tbody>
-                        {form.values.map(
+                        {budgetTeamMembers.map(
                             (
                                 {
                                     teamMember: {
@@ -184,24 +184,30 @@ export function BudgetTeamMemberFees({
                                         </div>
                                     </td>
                                     <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                                        <input
-                                            type="number"
-                                            {...form.getInputProps(
-                                                `${i}.hours`
-                                            )}
-                                            onBlur={(e) =>
-                                                form.setFieldValue(
-                                                    `${i}.hours`,
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                            className={cx(
-                                                'input w-16 text-right text-xs',
-                                                form.isDirty(`${i}.hours`) &&
-                                                    'border-warning-200 bg-warning-50'
-                                            )}
-                                            placeholder="24"
-                                        />
+                                        {approved ? (
+                                            hours
+                                        ) : (
+                                            <input
+                                                type="number"
+                                                {...form.getInputProps(
+                                                    `${i}.hours`
+                                                )}
+                                                onBlur={(e) =>
+                                                    form.setFieldValue(
+                                                        `${i}.hours`,
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className={cx(
+                                                    'input w-16 text-right text-xs',
+                                                    form.isDirty(
+                                                        `${i}.hours`
+                                                    ) &&
+                                                        'border-warning-200 bg-warning-50'
+                                                )}
+                                                placeholder="24"
+                                            />
+                                        )}
                                     </td>
                                     <td
                                         className={cx(

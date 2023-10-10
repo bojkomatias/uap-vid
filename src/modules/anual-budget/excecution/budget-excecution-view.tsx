@@ -3,7 +3,6 @@ import { useDisclosure } from '@mantine/hooks'
 import { Drawer } from '@mantine/core'
 import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
-import { Badge } from '@elements/badge'
 
 import Currency from '@elements/currency'
 import BudgetNewExcecution from './budget-new-excecution'
