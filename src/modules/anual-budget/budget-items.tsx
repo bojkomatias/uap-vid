@@ -30,7 +30,14 @@ export function BudgetItems({
         <form
             onSubmit={form.onSubmit(async (values) => {
                 if (approved) return
-                const res = await updateAnualBudgetItems(budgetId, values)
+                const itemsWithRemainingUpdated = values.map((item, i) => {
+                    const remaining = item.amount
+                    return { ...item, remaining }
+                })
+                const res = await updateAnualBudgetItems(
+                    budgetId,
+                    itemsWithRemainingUpdated
+                )
                 if (res)
                     return notifications.show({
                         title: 'Valores actualizados',
@@ -199,6 +206,7 @@ export function BudgetItems({
                                     >
                                         <BudgetExcecutionView
                                             positionIndex={i}
+                                            remaining={remaining}
                                             title={detail}
                                             excecutionType={ExcecutionType.Item}
                                             itemName={type}
