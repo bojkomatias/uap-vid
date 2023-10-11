@@ -11,7 +11,6 @@ import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
-import Observation from '../action-buttons/observation'
 import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
@@ -22,7 +21,6 @@ type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
         protocolNumber: true
         state: true
         createdAt: true
-        observations: true
         convocatory: { select: { id: true; name: true } }
         researcher: {
             select: { id: true; name: true; role: true; email: true }
@@ -69,14 +67,9 @@ export default function ProtocolTable({
                 enableSorting: false,
             },
             {
-                accessorKey: 'observations',
+                accessorKey: 'logs',
                 header: '',
-                cell: ({ row }) => (
-                    <Observation
-                        id={row.original.id}
-                        observations={row.original.observations}
-                    />
-                ),
+                cell: ({ row }) => <span>Logs?</span>,
                 enableSorting: false,
             },
             {
