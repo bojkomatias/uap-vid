@@ -112,7 +112,7 @@ export const getAllAcademicUnits = cache(
                         shortname: true,
                         budgets: true,
                         secretariesIds: true,
-                        AcademicUnitAnualBudgetsIds: true,
+                        academicUnitAnualBudgetsIds: true,
                     },
                     // Add all the globally searchable fields
                     where: {
