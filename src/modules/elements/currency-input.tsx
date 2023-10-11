@@ -15,12 +15,13 @@ export default function CurrencyInput({
 }: {
     defaultPrice?: number
 
-        /** This is a callback function, it takes as an argument the price that's in the input field.
+    /** This is a callback function, it takes as an argument the price that's in the input field.
      * @param value number
      */
     priceSetter: (value: number) => void
 
     className?: string
+    maxAmount?: number
 }) {
     const [amount, setAmount] = useState(
         (defaultPrice && formatCurrency((defaultPrice * 100).toString())) || ''
@@ -47,7 +48,6 @@ export default function CurrencyInput({
                     e.preventDefault()
                     priceSetter &&
                         priceSetter(parseLocaleNumber(e.target.value, 'es-AR'))
-
                 }}
                 placeholder="3499.00"
                 className={cx('input pl-5 text-right', className)}

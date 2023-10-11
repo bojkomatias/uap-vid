@@ -10,10 +10,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import React, { useState, useTransition } from 'react'
 
 const BudgetNewExcecution = ({
+    maxAmount,
     budgetItemPositionIndex,
     anualBudgetTeamMemmberId,
     excecutionType,
 }: {
+    maxAmount: number
     budgetItemPositionIndex: number
     anualBudgetTeamMemmberId?: string
     excecutionType: ExcecutionType
@@ -43,8 +45,9 @@ const BudgetNewExcecution = ({
     }
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-baseline gap-2">
             <CurrencyInput
+                maxAmount={maxAmount}
                 defaultPrice={0}
                 className="min-w-[7rem] rounded-md py-1 text-xs"
                 priceSetter={setNewAmount}
@@ -54,7 +57,7 @@ const BudgetNewExcecution = ({
                 className="py-1.5 text-xs shadow-sm"
                 intent="secondary"
                 // Disabled if it hasn't changed
-                disabled={newAmount === 0}
+                disabled={newAmount === 0 || newAmount >= maxAmount}
                 loading={isPennding}
                 onClick={(e) => {
                     e.preventDefault()
@@ -63,6 +66,7 @@ const BudgetNewExcecution = ({
             >
                 {isPennding ? 'Creando' : 'Crear'}
             </Button>
+            {maxAmount}
         </div>
     )
 }

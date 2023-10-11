@@ -199,6 +199,7 @@ export function BudgetItems({
                                     >
                                         <BudgetExcecutionView
                                             positionIndex={i}
+                                            remaining={remaining}
                                             title={detail}
                                             excecutionType={ExcecutionType.Item}
                                             itemName={type}
