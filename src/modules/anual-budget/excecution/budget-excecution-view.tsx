@@ -11,6 +11,7 @@ import { ExcecutionType } from '@utils/anual-budget'
 export default function BudgetExcecutionView({
     title,
     itemName,
+    remaining,
     excecutions,
     obrero,
     positionIndex,
@@ -19,6 +20,7 @@ export default function BudgetExcecutionView({
 }: {
     title: string
     itemName: string
+    remaining: number
     excecutions: Execution[]
     positionIndex: number
     excecutionType: ExcecutionType
@@ -76,11 +78,16 @@ export default function BudgetExcecutionView({
                         <p className="text-sm text-gray-600">
                             Nueva Ejecución:
                         </p>
-                        <BudgetNewExcecution
-                            anualBudgetTeamMemmberId={anualBudgetTeamMemberId}
-                            excecutionType={excecutionType}
-                            budgetItemPositionIndex={positionIndex}
-                        />
+                        {remaining > 0 ? (
+                            <BudgetNewExcecution
+                                maxAmount={remaining}
+                                anualBudgetTeamMemmberId={
+                                    anualBudgetTeamMemberId
+                                }
+                                excecutionType={excecutionType}
+                                budgetItemPositionIndex={positionIndex}
+                            />
+                        ) : null}
                         {excecutions.length > 0 ? (
                             <>
                                 <p className="text-sm text-gray-600">

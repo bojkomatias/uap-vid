@@ -257,6 +257,13 @@ export function BudgetTeamMemberFees({
                                     >
                                         <BudgetExcecutionView
                                             positionIndex={i}
+                                            remaining={
+                                                (categories
+                                                    .at(-1)
+                                                    ?.category.price.at(-1)
+                                                    ?.price ?? 0) *
+                                                remainingHours
+                                            }
                                             excecutions={executions}
                                             anualBudgetTeamMemberId={
                                                 anualBudgetTeamMemberId
