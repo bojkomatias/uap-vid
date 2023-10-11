@@ -66,7 +66,6 @@ const BudgetNewExcecution = ({
             >
                 {isPennding ? 'Creando' : 'Crear'}
             </Button>
-            {maxAmount}
         </div>
     )
 }
