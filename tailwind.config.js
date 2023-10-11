@@ -7,6 +7,7 @@ module.exports = {
         fontFamily: {
             sans: ['var(--font-sans)'],
         },
+
         colors: {
             current: 'currentColor',
             base: colors.neutral,

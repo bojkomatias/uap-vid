@@ -45,7 +45,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
-                                                  mode: 'insensitive'
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -87,7 +87,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
-                                                  mode: 'insensitive'
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -244,6 +244,23 @@ const updateUserEmailById = async (id: string, email: string) => {
     }
 }
 
+const updateUserPasswordById = async (id: string, password: string) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                password: password,
+            },
+        })
+
+        return user
+    } catch (error) {
+        return null
+    }
+}
+
 const saveUser = async (data: {
     name: string
     email: string
@@ -289,4 +306,5 @@ export {
     saveUser,
     deleteUserById,
     updateUserEmailById,
+    updateUserPasswordById,
 }

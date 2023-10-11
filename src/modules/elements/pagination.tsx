@@ -68,72 +68,78 @@ export default function Pagination({
                         >
                             <ChevronsLeft className="w-4 text-gray-500" />
                         </Button>
+                            <Button
+                                title="Página anterior"
+                                intent="outline"
+                                className="bg-gray-100"
+                                onClick={() =>
+                                    update({
+                                        page:
+                                            currentPage > 1
+                                                ? currentPage - 1
+                                                : 1,
+                                    })
+                                }
+                            >
+                                <ChevronLeft className="w-3.5 text-gray-500" />
+                            </Button>
+                        </>
+                    )}
 
-                        <Button
-                            title="Página anterior"
-                            intent="outline"
-                            className="bg-gray-100"
-                            onClick={() =>
-                                update({
-                                    page: currentPage > 1 ? currentPage - 1 : 1,
-                                })
-                            }
-                        >
-                            <ChevronLeft className="w-3.5 text-gray-500" />
-                        </Button>
-                    </>
-                )}
+                    {Math.ceil(totalRecords / shownRecords) >= 1 &&
+                    allPages.length != 1
+                        ? displayedPages.map((page: number) => (
+                              <Button
+                                  key={page}
+                                  intent="outline"
+                                  className={
+                                      Number(currentPage) === page
+                                          ? 'fade-in ring-2 md:ring-primary'
+                                          : 'fade-in hidden md:block'
+                                  }
+                                  onClick={() => {
+                                      if (Number(currentPage) !== page)
+                                          update({ page: page })
+                                  }}
+                              >
+                                  {page}
+                              </Button>
+                          ))
+                        : null}
+                    {numberOfDisplayedPages >=
+                    Math.ceil(totalRecords / shownRecords) ? null : (
+                        <>
+                            <Button
+                                title="Siguiente página"
+                                intent="outline"
+                                className="bg-gray-100"
+                                onClick={() =>
+                                    update({
+                                        page:
+                                            currentPage < allPages.length
+                                                ? currentPage + 1
+                                                : allPages[allPages.length - 1],
+                                    })
+                                }
+                            >
+                                <ChevronRight className="w-3.5 text-gray-500" />
+                            </Button>
 
-                {Math.ceil(totalRecords / shownRecords) >= 1 &&
-                allPages.length != 1
-                    ? displayedPages.map((page: number) => (
-                          <Button
-                              key={page}
-                              intent="outline"
-                              className={
-                                  Number(currentPage) === page
-                                      ? 'fade-in ring ring-primary'
-                                      : 'fade-in'
-                              }
-                              onClick={() => update({ page: page })}
-                          >
-                              {page}
-                          </Button>
-                      ))
-                    : null}
-                {numberOfDisplayedPages >=
-                Math.ceil(totalRecords / shownRecords) ? null : (
-                    <>
-                        <Button
-                            title="Siguiente página"
-                            intent="outline"
-                            className="bg-gray-100"
-                            onClick={() =>
-                                update({
-                                    page:
-                                        currentPage < allPages.length
-                                            ? currentPage + 1
-                                            : allPages[allPages.length - 1],
-                                })
-                            }
-                        >
-                            <ChevronRight className="w-3.5 text-gray-500" />
-                        </Button>
-
-                        <Button
-                            title="Última página"
-                            intent="outline"
-                            className="bg-gray-100"
-                            onClick={() =>
-                                update({
-                                    page: allPages[allPages.length - 1],
-                                })
-                            }
-                        >
-                            <ChevronsRight className="w-4 text-gray-500" />
-                        </Button>
-                    </>
-                )}
+                            <Button
+                                title="Última página"
+                                intent="outline"
+                                className="bg-gray-100"
+                                onClick={() =>
+                                    update({
+                                        page: allPages[allPages.length - 1],
+                                    })
+                                }
+                            >
+                                <ChevronsRight className="w-4 text-gray-500" />
+                            </Button>
+                        </>
+                    )}
+                </div>
                 <RecordsDropdown
                     options={[5, 10, 15, 20, totalRecords]}
                     shownRecords={shownRecords}

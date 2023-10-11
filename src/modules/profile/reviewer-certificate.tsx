@@ -26,9 +26,8 @@ const PDFDocument = ({ user }: { user: User }) => {
                 >
                     <View
                         style={{
-                            padding: 20,
                             backgroundColor: '#003C71',
-                            paddingHorizontal: 42,
+
                             display: 'flex',
                             flexDirection: 'row',
                             justifyContent: 'space-between',
@@ -36,32 +35,49 @@ const PDFDocument = ({ user }: { user: User }) => {
                         }}
                     >
                         <Image
-                            style={{ width: 150 }}
-                            src={'/UAP-logo-home.png'}
+                            style={{ width: 2480 }}
+                            src={'CertificateHeader.jpg'}
                         />
-                        <Text
-                            style={{
-                                color: 'white',
-                                fontSize: 8,
-                            }}
-                        >
-                            Vicerrectoría de Investigación y Desarrollo
-                        </Text>
                     </View>
                     <View
                         style={{
                             padding: 20,
                             paddingHorizontal: 42,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 15,
                         }}
                     >
-                        <Text style={{ marginBottom: 10 }}>
+                        <Text style={{ marginBottom: 18, fontSize: 25 }}>
                             Certificado de Evaluador
                         </Text>
+
                         <Text style={{ fontSize: 10 }}>
-                            Se certifica que {user.name} ha realizado la labor
-                            de evaluar proyectos de investigación para la
-                            Universidad Adventista del Plata
+                            Por medio de la presente se deja constancia que
                         </Text>
+                        <Text style={{ fontSize: 18 }}>{user.name}</Text>
+                        <Text style={{ fontSize: 10 }}>
+                            participó como evaluador de proyectos de
+                            investigación de la Universidad Adventista del
+                            Plata.
+                        </Text>
+                        <Text style={{ fontSize: 10 }}>
+                            A los fines que diere lugar, se extiende la presente
+                            CONSTANCIA en Libertador San Martín, Entre Ríos,
+                            Argentina, el {new Date().toLocaleDateString()}
+                        </Text>
+                    </View>
+                    <View
+                        style={{
+                            backgroundColor: '#003C71',
+                            marginTop: '40%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Image src={'CertificateFooter.png'} />
                     </View>
                 </Page>
             </Document>
@@ -89,7 +105,7 @@ export const ReviewerCertificatePDF = ({
                     .toLowerCase()}`}
                 document={PDFDocument({ user })}
             >
-                <Button intent="outline" className="float-right mr-3 mt-8">
+                <Button intent="outline" className="float-right mt-4">
                     Descargar certificado de evaluación
                 </Button>
             </PDFDownloadLink>
