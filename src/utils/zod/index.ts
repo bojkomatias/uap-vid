@@ -44,6 +44,7 @@ const ActionSchema = z.enum([
     'DISCONTINUE',
     'FINISH',
     'DELETE',
+    'GENERATE_ANUAL_BUDGET',
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`

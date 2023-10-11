@@ -43,10 +43,10 @@ export default function GenerateAnualBudgetButton({
                     intent="secondary"
                     onClick={() => {
                         router.push(`/protocols/${budgetPreview.protocolId}/0`)
-                        close() 
+                        close()
                     }}
                 >
-                    Editar miembos de equipo
+                    Editar miembros de equipo
                 </Button>
             )
         } else {
@@ -77,13 +77,13 @@ export default function GenerateAnualBudgetButton({
             >
                 <section className="mb-5 max-w-[40vw]">
                     {parsedObject.success == false ? (
-                        <div className="   rounded-md bg-error-400 px-6 py-2 text-sm text-white shadow">
+                        <div className="rounded-md bg-error-400 px-6 py-2 text-sm text-white shadow">
                             <p className="mb-3 mt-2 flex items-center justify-between text-lg font-bold">
                                 {parsedObject.error.issues[0].message}
                                 <AlertCircle />
                             </p>
                             <p className="mb-3 leading-6">
-                                Para solucionar este error, edite los miembos
+                                Para solucionar este error, edite los miembros
                                 del equipo de investigación, asegurándose de que
                                 todos estén relacionados correctamente a un{' '}
                                 <Link

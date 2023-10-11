@@ -80,16 +80,16 @@ export const navigation = [
         scope: ACCESS.ACADEMIC_UNITS,
     },
     {
+        name: 'Presupuestos anuales',
+        icon: CurrencyDollar,
+        href: '/anual-budgets',
+        scope: ACCESS.TEAM_MEMBERS,
+    },
+    {
         name: 'Miembros de investigación',
         icon: UserSearch,
         href: '/team-members',
         scope: ACCESS.TEAM_MEMBERS,
-    },
-    {
-        name: 'Lista de usuarios',
-        icon: Users,
-        href: '/users',
-        scope: ACCESS.USERS,
     },
     {
         name: 'Categorías de miembros de equipo de investigación',
@@ -98,9 +98,9 @@ export const navigation = [
         scope: ACCESS.TEAM_MEMBERS,
     },
     {
-        name: 'Presupuestos anuales',
-        icon: CurrencyDollar,
-        href: '/anual-budgets',
-        scope: ACCESS.TEAM_MEMBERS,
+        name: 'Lista de usuarios',
+        icon: Users,
+        href: '/users',
+        scope: ACCESS.USERS,
     },
 ]
