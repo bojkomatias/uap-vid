@@ -1,8 +1,9 @@
+'use server'
 import type { Logs } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 
-const newLog = async (data: Logs) => {
+const newLog = async (data: Omit<Logs, 'id' | 'createdAt'>) => {
     try {
         const log = await prisma.logs.create({
             data,

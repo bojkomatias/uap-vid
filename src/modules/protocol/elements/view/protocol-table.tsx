@@ -14,6 +14,7 @@ import { cx } from '@utils/cx'
 import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
+import ProtocolLogsDrawer from '../logs/log-drawer'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     select: {
@@ -21,6 +22,9 @@ type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
         protocolNumber: true
         state: true
         createdAt: true
+        logs: {
+            include: { user: { select: { name: true } } }
+        }
         convocatory: { select: { id: true; name: true } }
         researcher: {
             select: { id: true; name: true; role: true; email: true }
@@ -61,7 +65,12 @@ export default function ProtocolTable({
                 header: '',
                 cell: ({ row }) =>
                     user.id === row.original.researcher.id && (
-                        <UserIcon className="h-4 w-4 text-gray-600" />
+                        <div className="group relative">
+                            <div className="pointer-events-none invisible absolute -top-2.5 left-5 z-40 truncate rounded-md bg-gray-50 px-3 py-2 text-sm text-black/70 shadow-sm ring-1 transition-all delay-0 group-hover:visible group-hover:delay-500">
+                                Este protocolo pertenece al usuario
+                            </div>
+                            <UserIcon className="pointer-event-auto h-4 w-4 text-gray-500" />
+                        </div>
                     ),
                 enableHiding: false,
                 enableSorting: false,
@@ -69,7 +78,13 @@ export default function ProtocolTable({
             {
                 accessorKey: 'logs',
                 header: '',
-                cell: ({ row }) => <span>Logs?</span>,
+                cell: ({ row }) => (
+                    <ProtocolLogsDrawer
+                        logs={row.original.logs}
+                        userId={user.id}
+                        protocolId={row.original.id}
+                    />
+                ),
                 enableSorting: false,
             },
             {
