@@ -75,18 +75,20 @@ export default function BudgetExcecutionView({
                         )}
                     </div>
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
-                        <p className="text-sm text-gray-600">
-                            Nueva Ejecución:
-                        </p>
                         {remaining > 0 ? (
-                            <BudgetNewExcecution
-                                maxAmount={remaining}
-                                anualBudgetTeamMemmberId={
-                                    anualBudgetTeamMemberId
-                                }
-                                excecutionType={excecutionType}
-                                budgetItemPositionIndex={positionIndex}
-                            />
+                            <>
+                                <p className="text-md font-semibold text-gray-600">
+                                    Nueva Ejecución:
+                                </p>
+                                <BudgetNewExcecution
+                                    maxAmount={remaining}
+                                    anualBudgetTeamMemmberId={
+                                        anualBudgetTeamMemberId
+                                    }
+                                    excecutionType={excecutionType}
+                                    budgetItemPositionIndex={positionIndex}
+                                />
+                            </>
                         ) : null}
                         {excecutions.length > 0 ? (
                             <>
@@ -129,7 +131,7 @@ export default function BudgetExcecutionView({
                                 </table>
                             </>
                         ) : (
-                            <p className="mt-6 text-sm text-gray-600">
+                            <p className="mt-6 text-center text-sm text-gray-600">
                                 <b>No hay ejecuciones históricas</b>
                             </p>
                         )}
