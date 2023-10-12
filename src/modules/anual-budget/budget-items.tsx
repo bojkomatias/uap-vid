@@ -8,6 +8,8 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
+import BudgetExcecutionView from './excecution/budget-excecution-view'
+import { ExcecutionType } from '@utils/anual-budget'
 
 export function BudgetItems({
     budgetId,
@@ -28,7 +30,14 @@ export function BudgetItems({
         <form
             onSubmit={form.onSubmit(async (values) => {
                 if (approved) return
-                const res = await updateAnualBudgetItems(budgetId, values)
+                const itemsWithRemainingUpdated = values.map((item, i) => {
+                    const remaining = item.amount
+                    return { ...item, remaining }
+                })
+                const res = await updateAnualBudgetItems(
+                    budgetId,
+                    itemsWithRemainingUpdated
+                )
                 if (res)
                     return notifications.show({
                         title: 'Valores actualizados',
@@ -123,7 +132,7 @@ export function BudgetItems({
                         </tr>
                     </thead>
                     <tbody>
-                        {form.values.map(
+                        {budgetItems.map(
                             (
                                 { detail, type, amount, remaining, executions },
                                 i
@@ -172,7 +181,6 @@ export function BudgetItems({
                                                     `${i}.amount`
                                                 ).value
                                             }
-
                                             priceSetter={(e) =>
                                                 form.setFieldValue(
                                                     `${i}.amount`,
@@ -196,12 +204,14 @@ export function BudgetItems({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <Button
-                                            intent={'secondary'}
-                                            className="float-right px-2 py-0.5 text-xs"
-                                        >
-                                            Ver
-                                        </Button>
+                                        <BudgetExcecutionView
+                                            positionIndex={i}
+                                            remaining={remaining}
+                                            title={detail}
+                                            excecutionType={ExcecutionType.Item}
+                                            itemName={type}
+                                            excecutions={executions}
+                                        />
                                     </td>
                                 </tr>
                             )

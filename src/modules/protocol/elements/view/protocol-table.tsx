@@ -3,7 +3,7 @@ import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
-import { Number, User as UserIcon } from 'tabler-icons-react'
+import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@elements/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
@@ -77,11 +77,12 @@ export default function ProtocolTable({
                         observations={row.original.observations}
                     />
                 ),
+                enableHiding: false,
                 enableSorting: false,
             },
             {
                 accessorKey: 'id',
-                header: '#',
+                header: 'ID',
                 cell: ({ row }) => (
                     <span className="text-xs text-gray-600">
                         {row.original.id}
@@ -99,7 +100,7 @@ export default function ProtocolTable({
             },
             {
                 accessorKey: 'protocolNumber',
-                header: () => <Number className="h-4 w-6" />,
+                header: 'Nº',
             },
             {
                 accessorKey: 'convocatory.year',

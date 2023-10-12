@@ -13,8 +13,8 @@ export const BudgetMetadata = ({
     sponsor: string[]
 }) => {
     return (
-        <div className="max-w-4xl rounded-lg bg-gray-50 p-4 text-sm leading-loose">
-            <div className="float-right pb-2">
+        <div className="w-full max-w-3xl rounded-lg bg-gray-50 p-4 text-sm leading-loose">
+            <div>
                 <span className="pr-2 font-medium underline underline-offset-2">
                     Creado:
                 </span>
@@ -24,6 +24,7 @@ export const BudgetMetadata = ({
                 </span>
                 {dateFormatter.format(updatedAt)}
             </div>
+
             <span className="pr-2 font-medium underline underline-offset-2">
                 Protocolo:
             </span>

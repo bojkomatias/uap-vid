@@ -6,15 +6,28 @@ import type {
     Execution,
     ProtocolSectionsIdentificationTeam,
     AnualBudgetTeamMember,
+    AcademicUnit,
+    AcademicUnitBudget,
 } from '@prisma/client'
-import { getAcademicUnitsTabs } from '@repositories/academic-unit'
+import {
+    getAcademicUnitById,
+    getAcademicUnitsTabs,
+} from '@repositories/academic-unit'
 import {
     createAnualBudget,
     createManyAnualBudgetTeamMember,
+    getAnualBudgetById,
+    getAnualBudgetTeamMemberById,
+    newBudgetItemExcecution,
+    newTeamMemberExcecution,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
-import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
+import {
+    calculateTotalBudgetAggregated,
+    type AnualBudgetTeamMemberWithAllRelations,
+} from '@utils/anual-budget'
+import { dateDifferenceInDays, relativeTimeFormatter } from '@utils/formatters'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -132,3 +145,205 @@ export const protocolToAnualBudgetPreview = async (
         budgetTeamMembers: ABTWithTeamMemberAndUserData,
     }
 }
+
+export const saveNewTeamMemberExcecution = async (
+    amount: number,
+    anualBudgetTeamMemberId: string
+) => {
+    const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(
+        anualBudgetTeamMemberId
+    )
+
+    if (!anualBudgetTeamMember) return null
+
+    const hourlyRate =
+        anualBudgetTeamMember.teamMember.categories
+            .at(-1)
+            ?.category.price.at(-1)?.price || 0
+
+    const amountExcecutedInHours = hourlyRate ? amount / hourlyRate : 0
+
+    const remainingHours =
+        anualBudgetTeamMember.remainingHours - amountExcecutedInHours
+
+    const updated = await newTeamMemberExcecution(
+        anualBudgetTeamMemberId,
+        amount,
+        remainingHours
+    )
+    return updated
+    // await newBudgetItemExcecution(id, amount, excecutions)
+}
+
+export const saveNewItemExcecution = async (
+    budgetItemIndex: number,
+    anualBudgetId: string,
+    amount: number
+) => {
+    const anualBudget = await getAnualBudgetById(anualBudgetId)
+
+    if (!anualBudget) return null
+
+    // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
+    // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
+    const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
+        if (index === budgetItemIndex) {
+            item.executions.push({
+                amount,
+                date: new Date(),
+            })
+            item.remaining =
+                item.amount -
+                item.executions.reduce((acc, item) => acc + item.amount, 0)
+        }
+        return item
+    })
+
+    const updated = await newBudgetItemExcecution(
+        anualBudgetId,
+        updatedBudgetItem
+    )
+    return updated
+}
+
+const getAcademicUnitBudgetSummary = (
+    academicUnits: AcademicUnit[],
+    year: number
+) => {
+    // Filter the academic unit budgets for the given year
+    const academicUnitBudgetForYear = academicUnits
+        .map((ac) => ac.budgets)
+        .flat()
+        .filter((b) => b.from.getFullYear() === year)
+
+    // Calculate the sum of academic unit budget for the given year
+    const sumAcademicUnitBudget = academicUnitBudgetForYear
+        .filter((b) => !b.to)
+        .map((b) => b.amount)
+        .reduce((acc, item) => acc + item, 0)
+
+    // Filter the last the academic unit that have budget changes in the given year
+    const academicUnitWithLastBudgetChange = academicUnits
+        .filter((ac) => ac.budgets.some((b) => b.to))
+        .sort((a, b) => {
+            const aLastBudgetChange = a.budgets
+                .filter((b) => b.from.getFullYear() === year)
+                .filter((b) => b.to)
+                .at(-1)
+            const bLastBudgetChange = b.budgets
+                .filter((b) => b.from.getFullYear() === year)
+                .filter((b) => b.to)
+                .at(-1)
+            if (!aLastBudgetChange || !bLastBudgetChange) return 0
+            return aLastBudgetChange.from < bLastBudgetChange.from ? -1 : 1
+        })
+        .at(-1)
+
+    // Get the actual and the previous budget in the same year for the academic unit with the last budget change
+    const [before, actual] = academicUnitWithLastBudgetChange
+        ? [
+              academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
+              academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+          ]
+        : [0, 0]
+
+    if (!actual) return { value: 0, delta: 0, changeDate: '' }
+
+    // Calculate a delta value between the actual and the previous budget in the same year
+    const deltaValue = actual && before ? actual - before : actual
+
+    // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
+    const delta = deltaValue
+        ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
+          100
+        : 0
+
+    return {
+        value: sumAcademicUnitBudget,
+        delta,
+    }
+}
+
+const getProjectedBudgetSummary = (
+    total: number,
+    anualBudgets: Array<
+        AnualBudget & {
+            budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+        }
+    >,
+    year: number
+) => {
+    const lastCategoryWithPriceChange = anualBudgets
+        .filter((b) => b.year === year)
+        .map((b) => b.budgetTeamMembers)
+        .flat()
+        .map((b) => b.teamMember.categories)
+        .flat()
+        .filter((c) => c.category.price.some((p) => p.to))
+        .sort((a, b) => {
+            const aLastPriceChange = a.category.price
+                .filter((p) => p.to)
+                .at(-1)
+            const bLastPriceChange = b.category.price
+                .filter((p) => p.to)
+                .at(-1)
+            if (!aLastPriceChange || !bLastPriceChange) return 0
+            return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
+        })
+        .at(-1)
+    const [before, actual] = [lastCategoryWithPriceChange?.category.price.at(-2), lastCategoryWithPriceChange?.category.price.at(-1)]
+
+    const deltaValue = actual && before ? actual.price - before.price : actual?.price
+
+    const delta = deltaValue
+        ? (total / (total - deltaValue) - 1) * 100
+        : 0
+
+    return {
+        value: total,
+        delta: delta,
+    }
+}
+
+export const getBudgetSummary = async (
+    academicUnitId?: string,
+    year: number = new Date().getFullYear()
+) => {
+    // TODO: There is a bug here, the query do not return the anual budgets for some reason
+    const academicUnits = await getAcademicUnitById(academicUnitId)
+
+    if (!academicUnits)
+        return {
+            academicUnitBudgetSummary: { value: 0, delta: 0 },
+            projectedBudgetSummary: { value: 0, delta: 0 },
+            spendedBudget: 0,
+        }
+
+    const anualBudgets = academicUnits
+        .map((ac) => ac.AcademicUnitAnualBudgets)
+        .flat()
+
+    // This summary is related to protocols budgets
+    // TODO: Calculate the detla in the projected budget
+    const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets)
+
+    // This summary is related to academic unit budgets
+    const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(
+        academicUnits,
+        year
+    )
+
+    const projectedBudgetSummary = getProjectedBudgetSummary(
+        protocolBudgetSummary.total,
+        anualBudgets,
+        year
+    )
+
+    return {
+        academicUnitBudgetSummary,
+        projectedBudgetSummary,
+        spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
+    }
+}
+
+export type BudgetSummaryType = Awaited<ReturnType<typeof getBudgetSummary>>

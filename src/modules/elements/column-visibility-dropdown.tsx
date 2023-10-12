@@ -32,7 +32,7 @@ export default function ColumnVisibilityDropdown({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1  focus:outline-none"
+                    className="absolute right-0 z-10 mt-2 max-h-60 w-56 origin-top-right overflow-y-auto rounded-md bg-white shadow-lg ring-1  focus:outline-none"
                     static
                 >
                     <div className="py-1">
