@@ -17,8 +17,8 @@ import {
     createManyAnualBudgetTeamMember,
     getAnualBudgetById,
     getAnualBudgetTeamMemberById,
-    newBudgetItemExcecution,
-    newTeamMemberExcecution,
+    newBudgetItemExecution,
+    newTeamMemberExecution,
 } from '@repositories/anual-budget'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
@@ -145,7 +145,7 @@ export const protocolToAnualBudgetPreview = async (
     }
 }
 
-export const saveNewTeamMemberExcecution = async (
+export const saveNewTeamMemberExecution = async (
     amount: number,
     anualBudgetTeamMemberId: string
 ) => {
@@ -165,16 +165,16 @@ export const saveNewTeamMemberExcecution = async (
     const remainingHours =
         anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
-    const updated = await newTeamMemberExcecution(
+    const updated = await newTeamMemberExecution(
         anualBudgetTeamMemberId,
         amount,
         remainingHours
     )
     return updated
-    // await newBudgetItemExcecution(id, amount, excecutions)
+    // await newBudgetItemExecution(id, amount, executions)
 }
 
-export const saveNewItemExcecution = async (
+export const saveNewItemExecution = async (
     budgetItemIndex: number,
     anualBudgetId: string,
     amount: number
@@ -198,7 +198,7 @@ export const saveNewItemExcecution = async (
         return item
     })
 
-    const updated = await newBudgetItemExcecution(
+    const updated = await newBudgetItemExecution(
         anualBudgetId,
         updatedBudgetItem
     )

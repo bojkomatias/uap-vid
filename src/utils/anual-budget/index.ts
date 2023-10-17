@@ -99,7 +99,7 @@ export const calculateTotalBudgetAggregated = (
 }
 
 export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>
-export enum ExcecutionType {
+export enum ExecutionType {
     TeamMember,
     Item,
 }

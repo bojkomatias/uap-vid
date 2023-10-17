@@ -5,25 +5,25 @@ import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
-import BudgetNewExcecution from './budget-new-excecution'
-import { ExcecutionType } from '@utils/anual-budget'
+import BudgetNewExecution from './budget-new-execution'
+import { ExecutionType } from '@utils/anual-budget'
 
-export default function BudgetExcecutionView({
+export default function BudgetExecutionView({
     title,
     itemName,
     remaining,
-    excecutions,
+    executions,
     obrero,
     positionIndex,
     anualBudgetTeamMemberId,
-    excecutionType,
+    executionType,
 }: {
     title: string
     itemName: string
     remaining: number
-    excecutions: Execution[]
+    executions: Execution[]
     positionIndex: number
-    excecutionType: ExcecutionType
+    executionType: ExecutionType
     obrero?: { pointsObrero: number; pointPrice: number }
     anualBudgetTeamMemberId?: string
 }) {
@@ -43,13 +43,13 @@ export default function BudgetExcecutionView({
                 >
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
                         <h1 className="text-xl font-semibold">
-                            {excecutionType === ExcecutionType.TeamMember
+                            {executionType === ExecutionType.TeamMember
                                 ? 'Honorario de equipo'
                                 : 'Gasto Directo'}
                         </h1>
                         <div className="flex  items-center gap-1">
                             <p className="text-sm font-semibold text-gray-600">
-                                {excecutionType === ExcecutionType.TeamMember
+                                {executionType === ExecutionType.TeamMember
                                     ? 'Nombre y Apellido:'
                                     : 'Detalle:'}
                             </p>
@@ -80,17 +80,17 @@ export default function BudgetExcecutionView({
                                 <p className="text-md font-semibold text-gray-600">
                                     Nueva Ejecución:
                                 </p>
-                                <BudgetNewExcecution
+                                <BudgetNewExecution
                                     maxAmount={remaining}
-                                    anualBudgetTeamMemmberId={
+                                    anualBudgetTeamMemberId={
                                         anualBudgetTeamMemberId
                                     }
-                                    excecutionType={excecutionType}
+                                    executionType={executionType}
                                     budgetItemPositionIndex={positionIndex}
                                 />
                             </>
                         ) : null}
-                        {excecutions.length > 0 ? (
+                        {executions.length > 0 ? (
                             <>
                                 <p className="text-sm text-gray-600">
                                     Ejecuciones históricas:
@@ -107,7 +107,7 @@ export default function BudgetExcecutionView({
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {excecutions
+                                        {executions
                                             .reverse()
                                             .map((execution, idx) => {
                                                 return (

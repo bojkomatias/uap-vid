@@ -322,7 +322,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
     }
 )
 
-export const newTeamMemberExcecution = (
+export const newTeamMemberExecution = (
     anualBudgetTeamMemberId: string,
     amount: number,
     remainingHours: number
@@ -336,7 +336,7 @@ export const newTeamMemberExcecution = (
     })
 }
 
-export const newBudgetItemExcecution = (
+export const newBudgetItemExecution = (
     id: string,
     budgetItems: AnualBudgetItem[]
 ) => {

@@ -1,28 +1,28 @@
 'use client'
 import {
-    saveNewItemExcecution,
-    saveNewTeamMemberExcecution,
+    saveNewItemExecution,
+    saveNewTeamMemberExecution,
 } from '@actions/anual-budget/action'
 import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
-import { ExcecutionType } from '@utils/anual-budget'
+import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState, useTransition } from 'react'
 import { z } from 'zod'
 
-const BudgetNewExcecution = ({
+const BudgetNewExecution = ({
     maxAmount,
     budgetItemPositionIndex,
-    anualBudgetTeamMemmberId,
-    excecutionType,
+    anualBudgetTeamMemberId,
+    executionType,
 }: {
     maxAmount: number
     budgetItemPositionIndex: number
-    anualBudgetTeamMemmberId?: string
-    excecutionType: ExcecutionType
+    anualBudgetTeamMemberId?: string
+    executionType: ExecutionType
 }) => {
     const [newAmount, setNewAmount] = useState(0)
     const [isPennding, startTransition] = useTransition()
@@ -30,16 +30,16 @@ const BudgetNewExcecution = ({
     const path = usePathname()
     const anualBudgetId = path.split('/')[3]
 
-    const newExcecution = async (amount: number) => {
+    const newExecution = async (amount: number) => {
         if (
-            anualBudgetTeamMemmberId &&
-            excecutionType === ExcecutionType.TeamMember
+            anualBudgetTeamMemberId &&
+            executionType === ExecutionType.TeamMember
         ) {
-            await saveNewTeamMemberExcecution(amount, anualBudgetTeamMemmberId)
+            await saveNewTeamMemberExecution(amount, anualBudgetTeamMemberId)
         }
 
-        if (excecutionType === ExcecutionType.Item) {
-            await saveNewItemExcecution(
+        if (executionType === ExecutionType.Item) {
+            await saveNewItemExecution(
                 budgetItemPositionIndex,
                 anualBudgetId,
                 amount
@@ -94,7 +94,7 @@ const BudgetNewExcecution = ({
                 loading={isPennding}
                 onClick={(e) => {
                     e.preventDefault()
-                    newExcecution(newAmount)
+                    newExecution(newAmount)
                 }}
             >
                 {isPennding ? 'Creando' : 'Crear'}
@@ -103,4 +103,4 @@ const BudgetNewExcecution = ({
     )
 }
 
-export default BudgetNewExcecution
+export default BudgetNewExecution
