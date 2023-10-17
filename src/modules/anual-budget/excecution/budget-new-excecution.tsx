@@ -24,8 +24,8 @@ const BudgetNewExecution = ({
     anualBudgetTeamMemberId?: string
     executionType: ExecutionType
 }) => {
-    const [newAmount, setNewAmount] = useState(0)
-    const [isPennding, startTransition] = useTransition()
+    const [newAmount, ] = useState(0)
+    const [isPending, startTransition] = useTransition()
     const router = useRouter()
     const path = usePathname()
     const anualBudgetId = path.split('/')[3]
@@ -91,13 +91,13 @@ const BudgetNewExecution = ({
                 intent="secondary"
                 // Disabled if it hasn't changed
                 disabled={!form.isValid('amount') || !form.isDirty('amount')}
-                loading={isPennding}
+                loading={isPending}
                 onClick={(e) => {
                     e.preventDefault()
                     newExecution(newAmount)
                 }}
             >
-                {isPennding ? 'Creando' : 'Crear'}
+                {isPending ? 'Creando' : 'Crear'}
             </Button>
         </form>
     )
