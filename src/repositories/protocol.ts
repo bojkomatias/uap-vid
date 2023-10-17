@@ -93,30 +93,6 @@ const createProtocol = async (data: Protocol) => {
     }
 }
 
-const newObservation = async (id: string, observation: string) => {
-    try {
-        const protocol = await prisma.protocol.findUnique({
-            where: {
-                id,
-            },
-        })
-
-        protocol?.observations.push(observation)
-
-        const res = await prisma.protocol.update({
-            where: {
-                id,
-            },
-            data: {
-                observations: protocol?.observations,
-            },
-        })
-        return res
-    } catch (e) {
-        return null
-    }
-}
-
 const getAllProtocols = cache(async () => {
     try {
         return await prisma.protocol.findMany()
@@ -152,8 +128,10 @@ const getProtocolsByRol = cache(
             id: true,
             protocolNumber: true,
             state: true,
+            logs: {
+                include: { user: { select: { name: true } } },
+            },
             createdAt: true,
-            observations: true,
             convocatory: { select: { id: true, name: true, year: true } },
             researcher: {
                 select: { id: true, name: true, role: true, email: true },
@@ -457,6 +435,5 @@ export {
     updateProtocolStateById,
     getProtocolsByRol,
     getResearcherEmailByProtocolId,
-    newObservation,
     patchProtocolNumber,
 }
