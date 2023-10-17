@@ -7,9 +7,7 @@ import {
     View,
     Text,
     Image,
-    usePDF,
     PDFDownloadLink,
-    PDFViewer,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
 

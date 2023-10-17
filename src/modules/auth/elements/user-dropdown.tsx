@@ -3,11 +3,9 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { Logout, Settings } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import Image from 'next/image'
 import { useState } from 'react'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { usePathname } from 'next/navigation'
 
 export const UserDropdown = () => {

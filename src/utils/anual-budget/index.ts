@@ -1,4 +1,4 @@
-import type { AcademicUnitBudget, AnualBudget, Execution } from '@prisma/client'
+import type {  AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 

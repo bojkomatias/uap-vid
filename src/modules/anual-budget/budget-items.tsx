@@ -30,7 +30,7 @@ export function BudgetItems({
         <form
             onSubmit={form.onSubmit(async (values) => {
                 if (approved) return
-                const itemsWithRemainingUpdated = values.map((item, i) => {
+                const itemsWithRemainingUpdated = values.map((item) => {
                     const remaining = item.amount
                     return { ...item, remaining }
                 })

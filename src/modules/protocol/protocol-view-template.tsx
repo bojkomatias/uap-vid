@@ -1,4 +1,4 @@
-import type { ProtocolSections, Role } from '@prisma/client'
+import type { ProtocolSections } from '@prisma/client'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'

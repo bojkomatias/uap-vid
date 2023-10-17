@@ -1,4 +1,3 @@
-import { verifyHashScrypt } from '@utils/hash'
 import { z } from 'zod'
 
 /////////////////////////////////////////

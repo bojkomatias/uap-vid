@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import { updateUserEmailById } from '@repositories/user'
 import { NextResponse, type NextRequest } from 'next/server'
 

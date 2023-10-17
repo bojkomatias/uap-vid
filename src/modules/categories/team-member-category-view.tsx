@@ -1,6 +1,6 @@
 'use client'
 import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
+import { Drawer } from '@mantine/core'
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'

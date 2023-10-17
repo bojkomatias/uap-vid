@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import { createConvocatory } from '@repositories/convocatory'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'

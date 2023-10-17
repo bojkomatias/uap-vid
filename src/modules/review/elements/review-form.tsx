@@ -13,7 +13,6 @@ import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictiona
 import ReviewQuestion from './review-question'
 import { ReviewProvider, useReview } from '@utils/reviewContext'
 import { useRouter } from 'next/navigation'
-import { emailer, useCases } from '@utils/emailer'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({

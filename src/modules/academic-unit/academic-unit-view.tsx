@@ -1,6 +1,6 @@
 'use client'
 import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
+import { Drawer } from '@mantine/core'
 import type { AcademicUnit, User } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
@@ -109,17 +109,13 @@ export default function AcademicUnitView({
                     </div>
                 </section>
             </Drawer>
-
-
-                <Button
-
-                    className="px-2.5 py-1 text-xs"
-                    onClick={open}
-                    intent="secondary"
-                >
-                    Editar
-                </Button>
-
+            <Button
+                className="px-2.5 py-1 text-xs"
+                onClick={open}
+                intent="secondary"
+            >
+                Editar
+            </Button>
         </>
     )
 }

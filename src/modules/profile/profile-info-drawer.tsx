@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/link-passhref */
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 import React, { useState } from 'react'
@@ -14,7 +13,7 @@ import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
 import DisclosureComponent from '@elements/disclosure'
 import Link from 'next/link'
 
-export default async function ProfileDrawer({
+export default function ProfileDrawer({
     certificate,
     user,
 }: {
@@ -56,7 +55,7 @@ export function ProfileInfo({
     })
 
     // I'm using useState because at some point it might be useful to change the random code. For now, it changes every time the drawer is rendered.
-    const [random, setRandom] = useState(
+    const [random, ] = useState(
         (Math.random() + 1).toString(36).substring(7)
     )
 
