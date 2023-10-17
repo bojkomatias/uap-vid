@@ -4,7 +4,6 @@ import { Drawer, Group } from '@mantine/core'
 import type { AcademicUnit, User } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
-
 import Currency from '@elements/currency'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import { AcademicUnitBudgetUpdate } from './academic-unit-budget-update'
@@ -21,7 +20,7 @@ export default function AcademicUnitView({
     return (
         <>
             <Drawer
-                className="absolute "
+                className="absolute"
                 position="right"
                 opened={opened}
                 onClose={close}
@@ -111,16 +110,16 @@ export default function AcademicUnitView({
                 </section>
             </Drawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
                     onClick={open}
                     intent="secondary"
                 >
                     Editar
                 </Button>
-            </Group>
+
         </>
     )
 }

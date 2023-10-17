@@ -50,16 +50,16 @@ export default function UserView({
                 </section>
             </Drawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
                     onClick={open}
                     intent="secondary"
                 >
                     Editar
                 </Button>
-            </Group>
+
         </>
     )
 }

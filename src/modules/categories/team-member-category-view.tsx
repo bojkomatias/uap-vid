@@ -84,16 +84,16 @@ export default function TeamMemberCategoryView({
                 </section>
             </Drawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
                     onClick={open}
                     intent="secondary"
                 >
                     Ver histórico
                 </Button>
-            </Group>
+
         </>
     )
 }

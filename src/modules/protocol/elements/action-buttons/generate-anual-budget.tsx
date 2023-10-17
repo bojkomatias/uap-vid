@@ -201,7 +201,7 @@ export default function GenerateAnualBudgetButton({
                 {actionButton()}
             </Modal>
 
-            <Group position="center">
+            <Group>
                 <>
                     {hasBudgetCurrentYear ? (
                         <div className="relative h-fit w-fit">
