@@ -2,7 +2,8 @@ import './globals.css'
 import { Footer } from '@layout/footer'
 import { Header } from '@layout/header'
 import { Montserrat } from 'next/font/google'
-import Providers from './providers'
+import { MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 
 export const metadata = {
     title: {
@@ -29,13 +30,15 @@ export default async function RootLayout({
                     <div className="bg-transparent pointer-events-none fixed inset-0 z-50 backdrop-hue-rotate-60" />
                 </>
             ) : null}
-            <Providers>
-                <body className="subpixel-antialiased">
+            <body className="subpixel-antialiased">
+                <MantineProvider>
+                    <Notifications />
                     <Header />
+
                     <main className="relative min-h-[90vh]">{children}</main>
                     <Footer />
-                </body>
-            </Providers>
+                </MantineProvider>
+            </body>
         </html>
     )
 }
