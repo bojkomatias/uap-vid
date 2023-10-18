@@ -4,7 +4,7 @@ import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
-import BudgetNewExecution from './budget-new-excecution'
+import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
 import { useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'

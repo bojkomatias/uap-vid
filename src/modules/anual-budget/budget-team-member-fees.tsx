@@ -10,7 +10,7 @@ import {
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
-import BudgetExecutionView from './excecution/budget-excecution-view'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -203,7 +203,7 @@ export function BudgetTeamMemberFees({
                                                     form.isDirty(
                                                         `${i}.hours`
                                                     ) &&
-                                                        'border-warning-200 bg-warning-50'
+                                                    'border-warning-200 bg-warning-50'
                                                 )}
                                                 placeholder="24"
                                             />
@@ -279,15 +279,15 @@ export function BudgetTeamMemberFees({
                                             obrero={
                                                 obrero
                                                     ? {
-                                                          pointsObrero:
-                                                              pointsObrero ?? 0,
-                                                          pointPrice:
-                                                              categories
-                                                                  .at(-1)
-                                                                  ?.category.price.at(
-                                                                      -1
-                                                                  )?.price ?? 0,
-                                                      }
+                                                        pointsObrero:
+                                                            pointsObrero ?? 0,
+                                                        pointPrice:
+                                                            categories
+                                                                .at(-1)
+                                                                ?.category.price.at(
+                                                                    -1
+                                                                )?.price ?? 0,
+                                                    }
                                                     : undefined
                                             }
                                         />

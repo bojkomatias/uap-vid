@@ -9,7 +9,7 @@ import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
 import { ExecutionType } from '@utils/anual-budget'
-import BudgetExecutionView from './excecution/budget-excecution-view'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetItems({
     budgetId,
@@ -172,7 +172,7 @@ export function BudgetItems({
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
                                             !approved &&
-                                                'float-right table-cell'
+                                            'float-right table-cell'
                                         )}
                                     >
                                         <CurrencyInput
@@ -190,7 +190,7 @@ export function BudgetItems({
                                             className={cx(
                                                 'w-32 text-xs',
                                                 form.isDirty(`${i}.amount`) &&
-                                                    'border-warning-200 bg-warning-50'
+                                                'border-warning-200 bg-warning-50'
                                             )}
                                         />
                                     </td>
