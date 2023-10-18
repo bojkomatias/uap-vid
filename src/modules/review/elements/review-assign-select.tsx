@@ -8,8 +8,6 @@ import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
-import { emailer } from '@utils/emailer'
-import { useCases } from '@utils/emailer'
 import { Button } from '@elements/button'
 
 interface ReviewAssignSelectProps {

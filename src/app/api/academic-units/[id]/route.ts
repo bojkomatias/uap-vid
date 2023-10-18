@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import { updateAcademicUnit } from '@repositories/academic-unit'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'

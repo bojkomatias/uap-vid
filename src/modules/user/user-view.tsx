@@ -1,7 +1,7 @@
 'use client'
 import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
-import type { Prisma, User } from '@prisma/client'
+import { Drawer } from '@mantine/core'
+import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
@@ -50,16 +50,16 @@ export default function UserView({
                 </section>
             </Drawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
                     onClick={open}
                     intent="secondary"
                 >
                     Editar
                 </Button>
-            </Group>
+
         </>
     )
 }

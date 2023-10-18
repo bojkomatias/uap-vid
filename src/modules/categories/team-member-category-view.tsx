@@ -1,6 +1,6 @@
 'use client'
 import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
+import { Drawer } from '@mantine/core'
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
@@ -84,16 +84,16 @@ export default function TeamMemberCategoryView({
                 </section>
             </Drawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
                     onClick={open}
                     intent="secondary"
                 >
                     Ver histórico
                 </Button>
-            </Group>
+
         </>
     )
 }

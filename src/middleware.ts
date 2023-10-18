@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import { canAccess } from '@utils/scopes'
 import { getToken } from 'next-auth/jwt'
 import { withAuth } from 'next-auth/middleware'
