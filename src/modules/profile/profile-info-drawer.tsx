@@ -4,7 +4,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import { CustomDrawer2 } from '@elements/custom-drawer'
+import CustomDrawer from '@elements/custom-drawer'
 import type { User } from '@prisma/client'
 import { Check, Mail, Password, UserCircle, X } from 'tabler-icons-react'
 import { notifications } from '@mantine/notifications'
@@ -22,9 +22,9 @@ export default async function ProfileDrawer({
     user: User
 }) {
     return (
-        <CustomDrawer2 title="Perfil de usuario" path="/profile">
+        <CustomDrawer title="Perfil de usuario" path="/profile">
             <ProfileInfo certificate={certificate} user={user} />
-        </CustomDrawer2>
+        </CustomDrawer>
     )
 }
 
@@ -188,7 +188,7 @@ export function ProfileInfo({
     }
 
     return (
-        <div className="mt-4 flex flex-col justify-between gap-4 rounded-md border-gray-200 text-gray-600">
+        <div className="flex flex-col justify-between gap-4 rounded-md border-gray-200 text-gray-600">
             <div>
                 {' '}
                 <div
