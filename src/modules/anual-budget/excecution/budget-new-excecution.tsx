@@ -24,11 +24,11 @@ const BudgetNewExecution = ({
     anualBudgetTeamMemberId?: string
     executionType: ExecutionType
 }) => {
-    const [newAmount, ] = useState(0)
+    const [newAmount] = useState(0)
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
     const path = usePathname()
-    const anualBudgetId = path.split('/')[3]
+    const anualBudgetId = path?.split('/')[3]
 
     const newExecution = async (amount: number) => {
         if (
@@ -41,7 +41,7 @@ const BudgetNewExecution = ({
         if (executionType === ExecutionType.Item) {
             await saveNewItemExecution(
                 budgetItemPositionIndex,
-                anualBudgetId,
+                anualBudgetId!,
                 amount
             )
         }

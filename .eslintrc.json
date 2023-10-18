@@ -24,6 +24,7 @@
         "@typescript-eslint/no-this-alias": "off",
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/ban-ts-comment": "off",
+        "@next/next/no-server-import-in-page": "off",
         "prefer-spread": "off",
         "no-case-declarations": "off",
         "no-console": "warn",

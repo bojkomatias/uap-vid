@@ -5,7 +5,7 @@ import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
-import BudgetNewExecution from './budget-new-execution'
+import BudgetNewExecution from './budget-new-excecution'
 import { ExecutionType } from '@utils/anual-budget'
 
 export default function BudgetExecutionView({

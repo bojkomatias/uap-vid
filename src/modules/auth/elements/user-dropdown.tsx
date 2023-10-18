@@ -84,6 +84,7 @@ export const UserDropdown = () => {
                                 <Menu.Item>
                                     {({ active }) => (
                                         <Link
+                                            scroll={false}
                                             href={'/profile'}
                                             className={cx(
                                                 'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',

@@ -10,7 +10,7 @@ import {
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
-import BudgetExecutionView from './execution/budget-execution-view'
+import BudgetExecutionView from './excecution/budget-excecution-view'
 
 export function BudgetTeamMemberFees({
     approved,

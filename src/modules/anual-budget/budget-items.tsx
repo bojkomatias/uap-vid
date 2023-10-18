@@ -8,8 +8,8 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
-import BudgetExecutionView from './execution/budget-execution-view'
 import { ExecutionType } from '@utils/anual-budget'
+import BudgetExecutionView from './excecution/budget-excecution-view'
 
 export function BudgetItems({
     budgetId,

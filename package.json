@@ -35,7 +35,6 @@
     "dayjs": "^1.11.10",
     "encoding": "^0.1.13",
     "framer-motion": "^10.16.4",
-    "fuzzysort": "^2.0.4",
     "mongodb": "^6.1.0",
     "next": "^13.5.5",
     "next-auth": "^4.23.2",
