@@ -1,5 +1,5 @@
 'use client'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
@@ -9,18 +9,19 @@ import Image from 'next/image'
 import { useState } from 'react'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { usePathname } from 'next/navigation'
+import type { User } from '@prisma/client'
 
-export const UserDropdown = () => {
+export const UserDropdown = ({user}:{user:User}) => {
     const [loading, setLoading] = useState(false)
-    const { data: session } = useSession()
+
 
     const path = usePathname()
-    if (session?.user) {
+    if (user) {
         return (
             <>
                 <span className="hidden flex-col items-end lg:flex">
                     <span className="text-xs font-medium">
-                        {session.user.name}
+                        {user.name}
                     </span>
                 </span>
                 <Menu as="div" className="relative ml-1">
@@ -30,14 +31,14 @@ export const UserDropdown = () => {
                             className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 focus:ring-offset-primary"
                         >
                             <span className="sr-only">Open user menu</span>
-                            {session.user.image ? (
+                            {user.image ? (
                                 loading ? (
                                     <div className="flex h-10 w-10 items-center justify-center">
                                         <span className="loader h-8 w-8"></span>
                                     </div>
                                 ) : (
                                     <Image
-                                        src={session.user.image}
+                                        src={user.image}
                                         className="h-10 w-10 overflow-hidden rounded-full"
                                         alt="Image de usuario"
                                         width={100}
@@ -51,10 +52,10 @@ export const UserDropdown = () => {
                             ) : (
                                 // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
-                                    {session.user.name
+                                    {user.name
                                         .split(' ')[0]
                                         .substring(0, 1) +
-                                        session.user.name
+                                        user.name
                                             .split(' ')
                                             .at(-1)
                                             ?.substring(0, 1)}
@@ -74,10 +75,10 @@ export const UserDropdown = () => {
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="px-4 py-3">
                                 <p className="ml-2 mt-1 text-[0.8rem] font-semibold leading-4 text-gray-800">
-                                    {RolesDictionary[session.user.role]}
+                                    {RolesDictionary[user.role]}
                                 </p>
                                 <p className="ml-2 truncate text-xs font-medium leading-loose text-gray-700">
-                                    {session.user.email}
+                                    {user.email}
                                 </p>
                             </div>
                             <div className="py-1">
