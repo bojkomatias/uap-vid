@@ -1,10 +1,12 @@
 'use client'
-import { useDisclosure } from '@mantine/hooks'
+
 import { Drawer } from '@mantine/core'
 import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { useState } from 'react'
+import CustomDrawer from '@elements/custom-drawer'
 type UserWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
 }>
@@ -16,14 +18,13 @@ export default function UserView({
     userInfo: UserWithCount
     children: React.ReactNode
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
-            <Drawer
-                className="absolute text-sm "
-                position="right"
-                opened={opened}
+            <CustomDrawer
+                title="Usuario"
+                open={opened}
                 onClose={close}
             >
                 <section className="flex flex-col gap-4 text-gray-600">
@@ -48,13 +49,13 @@ export default function UserView({
                         {children}
                     </div>
                 </section>
-            </Drawer>
+            </CustomDrawer>
 
 
                 <Button
 
                     className="px-2.5 py-1 text-xs"
-                    onClick={open}
+                    onClick={()=>{setOpened(true)}}
                     intent="secondary"
                 >
                     Editar

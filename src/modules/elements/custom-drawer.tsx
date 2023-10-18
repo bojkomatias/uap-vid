@@ -2,32 +2,42 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { Dialog } from '@headlessui/react'
 
+
+/**This drawer takes 2 required arguments: title and children, the title will be, well, the title of the drawer and the children can be anything that goes inside it, forms, static elements, etc. The path argument is needed when the drawer will be consumed by an intercepted route (server side), otherwise, an "open" argument will be needed, to open and close the drawer in the client*/
 export default function CustomDrawer({
     path,
     title,
     children,
+    open,
+    onClose
 }: {
-    path: string
+    path?: string
     title: string
     children: React.ReactNode
+    open?: boolean
+    onClose?: React.Dispatch<React.SetStateAction<boolean>>
 }) {
     const pathname = usePathname()
     const router = useRouter()
 
     function closeModal() {
+        
         document.getElementById('drawer-overlay')?.classList.add('fade-out')
         document
             .getElementById('drawer-content')
             ?.classList.add('fade-out-right')
-        setTimeout(() => {
+        path && setTimeout(() => {
             router.back()
         }, 500)
+        onClose && setTimeout(()=>{
+            onClose(false)
+        }, 300)
     }
 
     return (
         <>
             <Dialog
-                open={pathname == path}
+                open={open ? open : pathname == path}
                 as="div"
                 className="fixed z-50 h-screen w-screen"
                 onClose={closeModal}

@@ -1,12 +1,13 @@
 'use client'
-import { useDisclosure } from '@mantine/hooks'
-import { Drawer } from '@mantine/core'
+
 import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
 import BudgetNewExecution from './budget-new-excecution'
 import { ExecutionType } from '@utils/anual-budget'
+import { useState } from 'react'
+import CustomDrawer from '@elements/custom-drawer'
 
 export default function BudgetExecutionView({
     title,
@@ -27,21 +28,16 @@ export default function BudgetExecutionView({
     obrero?: { pointsObrero: number; pointPrice: number }
     anualBudgetTeamMemberId?: string
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
-            <Drawer
-                className="absolute "
-                position="right"
-                opened={opened}
-                onClose={close}
-            >
+            <CustomDrawer title="Ejecuciones" open={opened} onClose={close}>
                 <section
                     className="flex flex-col gap-4"
                     onClick={(e) => e.preventDefault()}
                 >
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <h1 className="text-xl font-semibold">
                             {executionType === ExecutionType.TeamMember
                                 ? 'Honorario de equipo'
@@ -74,7 +70,7 @@ export default function BudgetExecutionView({
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         {remaining > 0 ? (
                             <>
                                 <p className="text-md font-semibold text-gray-600">
@@ -137,11 +133,13 @@ export default function BudgetExecutionView({
                         )}
                     </div>
                 </section>
-            </Drawer>
+            </CustomDrawer>
 
             <Button
                 className="float-right px-2 py-0.5 text-xs"
-                onClick={open}
+                onClick={() => {
+                    setOpened(true)
+                }}
                 intent="secondary"
             >
                 Ver
