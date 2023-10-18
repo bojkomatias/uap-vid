@@ -52,7 +52,7 @@ export default function CustomDrawer({
                     className="fade-in-right fixed inset-0 overflow-y-auto"
                 >
                     <div className="flex items-center justify-end text-center">
-                        <Dialog.Panel className="h-screen w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        <Dialog.Panel className="h-screen w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-md transition-all">
                             <Dialog.Title className="font-semibold text-gray-600">
                                 {title}
                             </Dialog.Title>

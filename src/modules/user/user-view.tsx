@@ -1,6 +1,5 @@
 'use client'
 
-import { Drawer } from '@mantine/core'
 import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
@@ -25,10 +24,10 @@ export default function UserView({
             <CustomDrawer
                 title="Usuario"
                 open={opened}
-                onClose={close}
+                onClose={setOpened}
             >
                 <section className="flex flex-col gap-4 text-gray-600">
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <div className="flex items-end justify-between gap-2">
                             <Badge className="text-sm">{userInfo.name}</Badge>
                             <p>{RolesDictionary[userInfo.role]}</p>
@@ -45,7 +44,7 @@ export default function UserView({
                             </p>
                         </div>
                     </div>{' '}
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         {children}
                     </div>
                 </section>

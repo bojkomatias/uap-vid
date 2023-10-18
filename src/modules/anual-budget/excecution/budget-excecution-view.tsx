@@ -32,7 +32,7 @@ export default function BudgetExecutionView({
 
     return (
         <>
-            <CustomDrawer title="Ejecuciones" open={opened} onClose={close}>
+            <CustomDrawer title="Ejecuciones" open={opened} onClose={setOpened}>
                 <section
                     className="flex flex-col gap-4"
                     onClick={(e) => e.preventDefault()}

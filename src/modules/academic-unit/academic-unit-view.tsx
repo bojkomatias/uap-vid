@@ -24,7 +24,7 @@ export default function AcademicUnitView({
             
                 title='Unidad Académica'
                 open={opened}
-                onClose={close}
+                onClose={setOpened}
             >
                 <section
                     className="flex flex-col gap-4"
