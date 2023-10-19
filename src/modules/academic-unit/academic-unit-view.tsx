@@ -21,7 +21,6 @@ export default function AcademicUnitView({
     return (
         <>
             <CustomDrawer
-            
                 title='Unidad Académica'
                 open={opened}
                 onClose={setOpened}
