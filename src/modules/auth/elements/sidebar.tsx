@@ -3,7 +3,10 @@ import {
     BuildingCommunity,
     CalendarEvent,
     List,
+    UserSearch,
     Users,
+    Category,
+    CurrencyDollar,
 } from 'tabler-icons-react'
 import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
@@ -75,6 +78,24 @@ export const navigation = [
         icon: BuildingCommunity,
         href: '/academic-units',
         scope: ACCESS.ACADEMIC_UNITS,
+    },
+    {
+        name: 'Presupuestos anuales',
+        icon: CurrencyDollar,
+        href: '/anual-budgets',
+        scope: ACCESS.TEAM_MEMBERS,
+    },
+    {
+        name: 'Miembros de investigación',
+        icon: UserSearch,
+        href: '/team-members',
+        scope: ACCESS.TEAM_MEMBERS,
+    },
+    {
+        name: 'Categorías de miembros de equipo de investigación',
+        icon: Category,
+        href: '/categories',
+        scope: ACCESS.TEAM_MEMBERS,
     },
     {
         name: 'Lista de usuarios',

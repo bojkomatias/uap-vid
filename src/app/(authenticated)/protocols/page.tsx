@@ -1,6 +1,6 @@
 import { PageHeading } from '@layout/page-heading'
 import CreateButton from '@protocol/elements/action-buttons/create'
-import ProtocolTable from '@protocol/elements/protocol-table'
+import ProtocolTable from '@protocol/elements/view/protocol-table'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getProtocolsByRol } from 'repositories/protocol'
@@ -27,7 +27,7 @@ export default async function Page({
             <PageHeading title="Lista de proyectos de investigación" />
             <p className="ml-2 mt-2 text-sm text-gray-500">
                 Lista de todos los protocolos cargados en el sistema, haz click
-                en &apos;ver&apos; para más detalles.
+                en &apos;ver&apos; para ver todos los detalles del protocolo.
             </p>
 
             <div className="mt-3 flex justify-end">

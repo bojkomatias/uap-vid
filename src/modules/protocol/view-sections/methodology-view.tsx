@@ -1,7 +1,7 @@
 import type { ProtocolSectionsMethodology } from '@prisma/client'
-import SectionViewer from '../elements/section-viewer'
-import ItemView from '@protocol/elements/item-view'
-import TextItemView from '@protocol/elements/text-item-view'
+import SectionViewer from '../elements/view/section-viewer'
+import ItemView from '@protocol/elements/view/item-view'
+import TextItemView from '@protocol/elements/view/text-item-view'
 
 interface MethodologyViewProps {
     data: ProtocolSectionsMethodology

@@ -1,10 +1,10 @@
 import { ConvocatoryForm } from '@convocatory/convocatory-form'
 import { PageHeading } from '@layout/page-heading'
-
 import {
     getConvocatoryById,
     getCurrentConvocatory,
 } from '@repositories/convocatory'
+
 import { redirect } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               }
             : await getConvocatoryById(params.id)
 
-    if (!convocatory) return redirect('/convocatories')
+    if (!convocatory) redirect('/convocatories')
     const current = await getCurrentConvocatory()
 
     return (

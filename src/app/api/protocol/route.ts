@@ -1,19 +1,24 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createProtocol } from '../../../repositories/protocol'
-import { getServerSession } from 'next-auth'
-export async function POST(request: NextRequest) {
-    const session = await getServerSession()
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
+import { getConvocatoryById } from '@repositories/convocatory'
+import type { Protocol } from '@prisma/client'
 
-    const data = await request.json()
-    const created = await createProtocol({
-        createdAt: new Date(),
-        ...data,
-    })
+export async function POST(request: NextRequest) {
+    const data = (await request.json()) as Protocol
+
+    // Get the convocatory with the protocol count
+    const convocatory = await getConvocatoryById(data.convocatoryId)
+
+    const pNumber =
+        convocatory?.year.toString().substring(2, 4) +
+        '.' +
+        convocatory?._count.protocols.toString()
+
+    data.protocolNumber = pNumber
+
+    const created = await createProtocol(data)
 
     if (!created) {
         return new Response('We cannot create the protocol', { status: 500 })

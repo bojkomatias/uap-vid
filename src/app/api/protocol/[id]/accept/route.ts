@@ -1,29 +1,25 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { Role, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { canExecute } from '@utils/scopes'
+import { State } from '@prisma/client'
+import { getToken } from 'next-auth/jwt'
 
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const session = await getServerSession(authOptions)
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-    const sessionRole = session.user.role
+    const token = await getToken({ req: request })
+    const id = params.id
+    const protocol = await request.json()
 
-    if (sessionRole === Role.ADMIN || sessionRole === Role.SECRETARY) {
-        const id = params.id
-        const protocol = await request.json()
-        if (protocol) delete protocol.id
+    if (token && canExecute('ACCEPT', token.user.role, protocol.state)) {
         const updated = await updateProtocolStateById(id, State.ACCEPTED)
 
         await logProtocolUpdate({
+            user: token.user,
             fromState: State.SCIENTIFIC_EVALUATION,
             toState: State.ACCEPTED,
             protocolId: id,

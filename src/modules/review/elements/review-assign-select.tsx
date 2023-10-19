@@ -8,8 +8,6 @@ import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Selector, Check } from 'tabler-icons-react'
-import { emailer } from '@utils/emailer'
-import { useCases } from '@utils/emailer'
 import { Button } from '@elements/button'
 
 interface ReviewAssignSelectProps {
@@ -25,6 +23,7 @@ const ReviewAssignSelect = ({
     users,
     review,
     protocolId,
+    protocolState,
 }: ReviewAssignSelectProps) => {
     const router = useRouter()
 
@@ -37,9 +36,10 @@ const ReviewAssignSelect = ({
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                protocolState,
                 review: review ?? null,
-                reviewerId: reviewerId,
-                type: type,
+                reviewerId,
+                type,
             }),
         })
         if (assigned.ok) {
@@ -132,7 +132,7 @@ const ReviewAssignSelect = ({
             </Combobox.Button>
 
             {filteredPeople.length > 0 && (
-                <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                <Combobox.Options className="absolute z-40 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
                     {filteredPeople.map((value) => (
                         <Combobox.Option
                             key={value.id}

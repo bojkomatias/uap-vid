@@ -39,7 +39,7 @@ export const useUpdateQuery = () => {
             e.units !== undefined ? e.units : searchParams?.get('units')
 
         const newUrl = new URL(
-            path,
+            path as string,
             process.env.NEXT_PUBLIC_URL ?? 'http:localhost:3000'
         )
         if (page) newUrl.searchParams.set('page', page.toString())

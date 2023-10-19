@@ -1,59 +1,87 @@
-import type { AcademicUnit } from '@prisma/client'
-import { SecretaryMultipleSelect } from './secretary-multiple-select'
-import { getAllSecretaries } from '@repositories/user'
+/* eslint-disable react/jsx-no-undef */
+'use client'
+import type { AcademicUnit, User } from '@prisma/client'
+import type { ColumnDef } from '@tanstack/react-table'
+import TanStackTable from '@elements/tan-stack-table'
+import { dateFormatter } from '@utils/formatters'
+import Currency from '@elements/currency'
+import AcademicUnitView from './academic-unit-view'
 
-export default async function AcademicUnitsTable({
+export default function AcademicUnitsTable({
     academicUnits,
+    secretaries,
+    totalRecords,
 }: {
     academicUnits: AcademicUnit[]
+    secretaries: User[]
+    totalRecords: number
 }) {
-    const secretaries = await getAllSecretaries()
-    if (!secretaries)
-        return <div>No hay secretarios cargados en el sistema</div>
+    const columns: ColumnDef<AcademicUnit>[] = [
+        {
+            accessorKey: 'name',
+            header: 'Unidad Académica',
+            enableHiding: false,
+            enableSorting: true,
+        },
+        {
+            accessorKey: 'budgets',
+            header: 'Presupuesto',
+            enableHiding: true,
+            enableSorting: false,
+            cell: ({ row }) => (
+                <>
+                    <Currency
+                        title={
+                            row.original.budgets[
+                                row.original.budgets.length - 1
+                            ]
+                                ? `Desde ${dateFormatter.format(
+                                      row.original.budgets[
+                                          row.original.budgets.length - 1
+                                      ].from
+                                  )} hasta el ${dateFormatter.format(
+                                      row.original.budgets[
+                                          row.original.budgets.length - 1
+                                      ].to ?? new Date()
+                                  )}`
+                                : undefined
+                        }
+                        amount={
+                            row.original.budgets[
+                                row.original.budgets.length - 1
+                            ]?.amount
+                        }
+                    />
+                </>
+            ),
+        },
+
+        {
+            accessorKey: 'actions',
+            header: 'Acciones',
+            cell: ({ row }) => (
+                <div className="flex items-center justify-between gap-1">
+                    <AcademicUnitView
+                        academicUnit={row.original}
+                        secretaries={secretaries}
+                    />
+                </div>
+            ),
+            enableHiding: true,
+            enableSorting: false,
+        },
+    ]
 
     return (
-        <div className="mx-auto max-w-7xl">
-            <table className="-mx-4 mt-8 min-w-full divide-y-2 sm:-mx-0">
-                <thead>
-                    <tr>
-                        <th
-                            scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm text-gray-900 sm:pl-0"
-                        >
-                            Unidad Académica
-                        </th>
-                        <th
-                            scope="col"
-                            className="max-w-md px-3 py-3.5 text-left text-sm text-gray-900"
-                        >
-                            Secretarios/as
-                        </th>
-                        <th
-                            scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                        >
-                            <span className="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y  bg-white">
-                    {academicUnits?.map((unit) => (
-                        <tr key={unit.id}>
-                            <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                                {unit.name}
-                            </td>
-
-                            <td className="w-1/2 px-3 py-2 text-sm text-gray-500">
-                                <SecretaryMultipleSelect
-                                    currentSecretaries={unit.secretariesIds}
-                                    secretaries={secretaries}
-                                    unitId={unit.id}
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+        <TanStackTable
+            data={academicUnits}
+            columns={columns}
+            totalRecords={totalRecords}
+            initialVisibility={{
+                name: true,
+                secretariesIds: true,
+            }}
+            searchBarPlaceholder="Buscar por nombre de categoría"
+        />
     )
 }

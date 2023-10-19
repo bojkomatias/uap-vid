@@ -31,12 +31,14 @@ export const SignIn = () => {
                 onSubmit={async (e) => {
                     e.preventDefault()
                     setLoading(true)
+
                     const res = await signIn('credentials', {
                         email: email,
                         password: password,
                         redirect: false,
                         callbackUrl: '/protocols',
                     })
+                    
                     if ((res && res.status !== 200) || (res && res.error)) {
                         setLoading(false)
                         notifications.show({

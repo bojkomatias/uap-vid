@@ -1,3 +1,4 @@
+'use server'
 import { prisma } from '../utils/bd'
 import type { RoleType, StateType } from '@utils/zod'
 import { ROLE } from '@utils/zod'
@@ -17,6 +18,7 @@ const findProtocolByIdWithResearcher = cache(
             include: {
                 researcher: { select: { id: true, name: true, email: true } },
                 convocatory: { select: { id: true, name: true } },
+                anualBudgets: { select: { createdAt: true, year: true } },
             },
         })
 )
@@ -65,12 +67,20 @@ const updateProtocolStateById = async (id: string, state: StateType) => {
             data: {
                 state: state,
             },
+            include: { researcher: { select: { email: true } } },
         })
         return protocol
     } catch (e) {
         return null
     }
 }
+
+const patchProtocolNumber = async (id: string, protocolNumber: string) =>
+    await prisma.protocol.update({
+        where: { id },
+        data: { protocolNumber },
+        select: { protocolNumber: true },
+    })
 
 const createProtocol = async (data: Protocol) => {
     try {
@@ -116,7 +126,11 @@ const getProtocolsByRol = cache(
         // Select model reusable
         const select = {
             id: true,
+            protocolNumber: true,
             state: true,
+            logs: {
+                include: { user: { select: { name: true } } },
+            },
             createdAt: true,
             convocatory: { select: { id: true, name: true, year: true } },
             researcher: {
@@ -184,7 +198,14 @@ const getProtocolsByRol = cache(
                               },
                           },
                       },
-                      { researcher: { name: { contains: search } } },
+                      {
+                          researcher: {
+                              name: {
+                                  contains: search,
+                                  mode: Prisma.QueryMode.insensitive,
+                              },
+                          },
+                      },
                   ],
               }
             : {}
@@ -414,4 +435,5 @@ export {
     updateProtocolStateById,
     getProtocolsByRol,
     getResearcherEmailByProtocolId,
+    patchProtocolNumber,
 }

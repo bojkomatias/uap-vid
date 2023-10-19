@@ -1,7 +1,8 @@
 import type { ProtocolSectionsBudget } from '@prisma/client'
-import type { ListRowValues } from '@protocol/elements/item-list-view'
-import ItemListView from '@protocol/elements/item-list-view'
-import SectionViewer from '../elements/section-viewer'
+import type { ListRowValues } from '@protocol/elements/view/item-list-view'
+import ItemListView from '@protocol/elements/view/item-list-view'
+import SectionViewer from '../elements/view/section-viewer'
+import { currencyFormatter } from '@utils/formatters'
 
 interface BudgetViewProps {
     data: ProtocolSectionsBudget
@@ -20,7 +21,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                             down: item.detail,
                             inverted: true,
                         },
-                       
+
                         {
                             up: 'Año',
                             down: item.year,
@@ -28,10 +29,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
                         },
                         {
                             up: 'Monto',
-                            down: `$${item.amount}`.replace(
-                                /\B(?=(\d{3})+(?!\d))/g,
-                                '.'
-                            ),
+                            down: `$${currencyFormatter.format(item.amount)}`,
                             inverted: true,
                         },
                     ])
@@ -46,18 +44,26 @@ const BudgetView = ({ data }: BudgetViewProps) => {
             title="Presupuesto"
             description="Detalles del presupuesto"
         >
-            <ItemListView data={tableData} footer={<div className='flex gap-2 py-4 ml-auto w-fit text-xl mr-4'><p className='text-gray-400'>Total: </p> ${data.expenses.reduce((acc, val) => {
-                        return (
-                            acc +
-                            val.data.reduce((prev, curr) => {
-                                
-                                if(isNaN(curr.amount)) curr.amount = 0
-                                else curr.amount
-                                return prev + curr.amount;
-                            }, 0) 
-                        )
-                    }, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>} />
-            
+            <ItemListView
+                data={tableData}
+                footer={
+                    <div className="ml-auto mr-4 flex w-fit gap-2 py-4 text-xl">
+                        <p className="text-gray-400">Total: </p> $
+                        {currencyFormatter.format(
+                            data.expenses.reduce((acc, val) => {
+                                return (
+                                    acc +
+                                    val.data.reduce((prev, curr) => {
+                                        if (isNaN(curr.amount)) curr.amount = 0
+                                        else curr.amount
+                                        return prev + curr.amount
+                                    }, 0)
+                                )
+                            }, 0)
+                        )}
+                    </div>
+                }
+            />
         </SectionViewer>
     )
 }

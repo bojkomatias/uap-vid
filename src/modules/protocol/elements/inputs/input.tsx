@@ -25,7 +25,10 @@ const Input = ({
             </label>
             <input
                 disabled={disabled}
-                {...form.getInputProps(path)}
+                value={form.getInputProps(path).value}
+                onChange={(e) =>
+                    form.setFieldValue(path, e.target.value.trimStart())
+                }
                 className="input form-input"
                 placeholder={label}
                 autoComplete="off"

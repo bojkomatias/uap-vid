@@ -20,7 +20,7 @@ export default function RecordsDropdown({
     return (
         <Menu as="div" className="relative text-left">
             <div>
-                <Menu.Button as={Button} intent="outline">
+                <Menu.Button id="records-selector" as={Button} intent="outline">
                     Cantidad de registros
                     {': ' + shownRecords}
                     <ChevronDown
@@ -40,7 +40,7 @@ export default function RecordsDropdown({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items
-                    className="absolute right-0 z-10 mt-2 rounded-md bg-white ring-1 focus:outline-none"
+                    className="max-h-30 absolute -top-2 right-0 z-10 mb-2 -translate-y-full transform overflow-y-auto rounded-md bg-white shadow ring-1 focus:outline-none"
                     static
                 >
                     <div className="py-1">
@@ -83,6 +83,7 @@ export default function RecordsDropdown({
                                     onClick={() =>
                                         update({
                                             records: options.at(-1),
+
                                             page: 1,
                                         })
                                     }

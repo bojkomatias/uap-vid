@@ -1,14 +1,11 @@
 'use client'
-import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
-import { InputList } from '@protocol/elements/inputs/input-list'
+
+import { BudgetList } from '@protocol/elements/inputs/budget-list-form'
 
 export function BudgetForm() {
-    const form = useProtocolContext()
-    const path = 'sections.budget.'
-
     return (
         <motion.div
             initial={{ opacity: 0, x: -5 }}
@@ -19,51 +16,7 @@ export function BudgetForm() {
             <SectionTitle title="Presupuesto de gastos directos" />
             <>
                 <Info />
-                <InputList
-                    path={path + 'expenses'}
-                    label="gastos"
-                    newLeafItemValue={{
-                        detail: '',
-                        amount: 0,
-                        year: '',
-                    }}
-                    preprocessKey="type"
-                    headers={[
-                        { x: 'detail', label: 'detalle', class: 'flex-grow' },
-                        {
-                            x: 'amount',
-                            label: 'monto',
-                            currency: true,
-                        },
-                        {
-                            x: 'year',
-                            label: 'año',
-                            options: years(
-                                form.values.sections.duration.duration
-                            ),
-                        },
-                    ]}
-                    footer={
-                        <div className="ml-auto mr-4 flex w-fit gap-2 py-4 text-xl">
-                            <p className="text-gray-400">Total: </p> $
-                            {form.values.sections.budget.expenses
-                                .reduce((acc, val) => {
-                                    return (
-                                        acc +
-                                        val.data.reduce((prev, curr) => {
-                                            if (isNaN(curr.amount))
-                                                curr.amount = 0
-                                            else curr.amount
-                                            return prev + curr.amount
-                                        }, 0)
-                                    )
-                                }, 0)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
-                        </div>
-                    }
-                    isBudget={true}
-                />
+                <BudgetList />
             </>
         </motion.div>
     )
@@ -94,13 +47,3 @@ const Info = () => (
         </p>
     </InfoTooltip>
 )
-
-const years = (v: string) => {
-    const yearQuantity = Number(v.substring(0, 2)) / 12
-    const currentYear = new Date().getFullYear()
-    const years: string[] = [String(currentYear)]
-    for (let i = 0; i < yearQuantity; i++) {
-        years.push(String(currentYear + i + 1))
-    }
-    return years
-}

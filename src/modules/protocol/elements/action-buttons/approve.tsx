@@ -1,5 +1,5 @@
 'use client'
-import type { Protocol, Role } from '@prisma/client'
+import type { Role } from '@prisma/client'
 import { State } from '@prisma/client'
 import { ACTION } from '@utils/zod'
 import { notifications } from '@mantine/notifications'
@@ -9,7 +9,7 @@ import { canExecute } from '@utils/scopes'
 import { useTransition } from 'react'
 import { FileCertificate } from 'tabler-icons-react'
 
-type ActionButtonTypes = { role: Role; protocol: Protocol }
+type ActionButtonTypes = { role: Role; protocol: { id: string; state: State } }
 
 const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
     const router = useRouter()
@@ -24,7 +24,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: protocol.id }),
+            body: JSON.stringify({ id: protocol.id, state: protocol.state }),
         })
         if (approved.ok) {
             notifications.show({
@@ -45,7 +45,7 @@ const ApproveButton = ({ role, protocol }: ActionButtonTypes) => {
         <Button
             onClick={approveProtocol}
             intent={'secondary'}
-            disabled={protocol.state !== State.ACCEPTED}
+            disabled={protocol.state! !== State.ACCEPTED}
             loading={isPending}
         >
             <FileCertificate className="h-5 text-current" />

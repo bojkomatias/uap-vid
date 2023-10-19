@@ -28,12 +28,16 @@ export default async function ReviewsTemplate({
             )}
         >
             {userId !== researcherId &&
-            canExecute(ACTION.COMMENT, userRole, state) ? (
+            canExecute(ACTION.REVIEW, userRole, state) ? (
                 <ReviewFormTemplate protocolId={id} userId={userId} />
             ) : null}
 
             {userId === researcherId || canAccess(ACCESS.REVIEWS, userRole) ? (
-                <ReviewList role={userRole} state={state} id={id} isOwner={userId===researcherId} />
+                <ReviewList
+                    role={userRole}
+                    id={id}
+                    isOwner={userId === researcherId}
+                />
             ) : null}
         </aside>
     )

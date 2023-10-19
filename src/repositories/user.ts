@@ -45,6 +45,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -86,6 +87,7 @@ const getUsers = cache(
                                           {
                                               email: {
                                                   contains: search,
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -105,13 +107,13 @@ const getUsers = cache(
         }
     }
 )
-
-const getAllResearchers = async () => {
+/** Posible protocol owners */
+const getAllOwners = async () => {
     try {
         const users = await prisma.user.findMany({
             where: {
                 role: {
-                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY'],
+                    in: ['RESEARCHER', 'METHODOLOGIST', 'SECRETARY', 'ADMIN'],
                 },
             },
         })
@@ -120,6 +122,22 @@ const getAllResearchers = async () => {
         return []
     }
 }
+const getAllNonTeamMembers = async (teamMemberId?: string) => {
+    try {
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    { memberDetails: null },
+                    teamMemberId ? { memberDetails: { id: teamMemberId } } : {},
+                ],
+            },
+        })
+        return users
+    } catch (error) {
+        return []
+    }
+}
+
 const getAllUsersWithoutResearchers = async () => {
     try {
         const users = await prisma.user.findMany({
@@ -159,18 +177,14 @@ const findUserById = cache(async (id: string) => {
     }
 })
 
-const findUserByEmail = cache(async (email: string) => {
-    try {
-        const user = await prisma.user.findUnique({
+const findUserByEmail = cache(
+    async (email: string) =>
+        await prisma.user.findUnique({
             where: {
                 email,
             },
         })
-        return user
-    } catch (error) {
-        return null
-    }
-})
+)
 
 const updateUserById = async (id: string, data: User) => {
     try {
@@ -213,6 +227,39 @@ const updateUserByEmail = async (email: string, data: User) => {
         return null
     }
 }
+const updateUserEmailById = async (id: string, email: string) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                email: email,
+            },
+        })
+
+        return user
+    } catch (error) {
+        return null
+    }
+}
+
+const updateUserPasswordById = async (id: string, password: string) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                password: password,
+            },
+        })
+
+        return user
+    } catch (error) {
+        return null
+    }
+}
 
 const saveUser = async (data: {
     name: string
@@ -247,8 +294,9 @@ const deleteUserById = async (id: string) => {
 
 export {
     getUsers,
-    getAllResearchers,
+    getAllOwners,
     getAllUsersWithoutResearchers,
+    getAllNonTeamMembers,
     getAllSecretaries,
     findUserById,
     findUserByEmail,
@@ -257,4 +305,6 @@ export {
     updateUserByEmail,
     saveUser,
     deleteUserById,
+    updateUserEmailById,
+    updateUserPasswordById,
 }

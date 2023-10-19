@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
@@ -54,15 +54,9 @@ export default function Pagination({
         return { allPages, displayedPages }
     }, [totalRecords, shownRecords, numberOfDisplayedPages, currentPage])
 
-    useEffect(() => {
-        if (totalRecords <= shownRecords) update({ page: 1 })
-        if (Math.ceil(totalRecords / shownRecords) < currentPage)
-            update({ page: currentPage - 1 })
-    }, [])
-
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className="mx-auto mt-12 flex w-fit gap-2">
+            <div className="mx-auto mt-8 flex w-fit gap-2">
                 {numberOfDisplayedPages >=
                 Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
@@ -74,7 +68,6 @@ export default function Pagination({
                         >
                             <ChevronsLeft className="w-4 text-gray-500" />
                         </Button>
-
                         <Button
                             title="Página anterior"
                             intent="outline"
@@ -98,10 +91,13 @@ export default function Pagination({
                               intent="outline"
                               className={
                                   Number(currentPage) === page
-                                      ? 'fade-in ring ring-primary'
-                                      : 'fade-in'
+                                      ? 'fade-in ring-2 md:ring-primary'
+                                      : 'fade-in hidden md:block'
                               }
-                              onClick={() => update({ page: page })}
+                              onClick={() => {
+                                  if (Number(currentPage) !== page)
+                                      update({ page: page })
+                              }}
                           >
                               {page}
                           </Button>
@@ -140,13 +136,14 @@ export default function Pagination({
                         </Button>
                     </>
                 )}
+
                 <RecordsDropdown
                     options={[5, 10, 15, 20, totalRecords]}
                     shownRecords={shownRecords}
                     currentPage={currentPage}
                 />
             </div>
-            <span className="flex  gap-1 text-xs text-black">
+            <span className="flex gap-1 text-xs text-black">
                 {shownRecords * Number(searchParams?.get('page') || 1) -
                     shownRecords +
                     1 <

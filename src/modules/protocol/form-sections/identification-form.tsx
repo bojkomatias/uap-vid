@@ -7,7 +7,7 @@ import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
 import MultipleSelect from '@protocol/elements/inputs/multiple-select'
 import SectionTitle from '@protocol/elements/form-section-title'
-import { InputList } from '@protocol/elements/inputs/input-list'
+import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
 
 export function IdentificationForm() {
     const form = useProtocolContext()
@@ -40,47 +40,7 @@ export function IdentificationForm() {
                     )}
                 />
                 <TeamInfo />
-                <InputList
-                    path={`${path}team`}
-                    label="miembros de equipo"
-                    newLeafItemValue={{
-                        role: '',
-                        last_name: '',
-                        name: '',
-                        hours: 0,
-                    }}
-                    headers={[
-                        {
-                            x: 'role',
-                            label: 'rol',
-                            options: [
-                                'Director',
-                                'Codirector',
-                                'Investigador UAP',
-                                'Investigador Externo UAP',
-                                'Técnico Asistente',
-                                'Técnico Asociado',
-                                'Técnico Principal',
-                                'Profesional Adjunto',
-                                'Profesional Principal',
-                                'Becario CONICET',
-                                'A definir',
-                            ],
-                        },
-                        {
-                            x: 'last_name',
-                            label: 'apellido',
-                            class: 'flex-grow',
-                        },
-                        { x: 'name', label: 'nombre', class: 'flex-grow' },
-                        {
-                            x: 'hours',
-                            label: 'horas',
-                            class: 'flex-shrink w-32 text-right',
-                            number: true,
-                        },
-                    ]}
-                />
+                <TeamMemberListForm />
                 <MultipleSelect
                     path={path + 'sponsor'}
                     label="ente patrocinante"

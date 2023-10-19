@@ -1,38 +1,45 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { Role, State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { canExecute } from '@utils/scopes'
+import { State } from '@prisma/client'
+import { getToken } from 'next-auth/jwt'
+import { emailer, useCases } from '@utils/emailer'
 
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const session = await getServerSession(authOptions)
-    if (!session) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-    const sessionRole = session.user.role
-    if (sessionRole !== Role.ADMIN) {
-        return new Response('Unauthorized', { status: 401 })
-    }
-
+    const token = await getToken({ req: request })
     const id = params.id
     const protocol = await request.json()
-    if (protocol) delete protocol.id
-    const updated = await updateProtocolStateById(id, State.ON_GOING)
+    if (token && canExecute('APPROVE', token.user.role, protocol.state)) {
+        const updated = await updateProtocolStateById(id, State.ON_GOING)
 
-    await logProtocolUpdate({
-        fromState: State.ACCEPTED,
-        toState: State.ON_GOING,
-        protocolId: id,
-    })
+        if (updated) {
+            emailer({
+                useCase: useCases.onApprove,
+                email: updated.researcher.email,
+                protocolId: updated.id,
+            })
+        } else {
+            console.log('No se envió el email al investigador')
+        }
+        await logProtocolUpdate({
+            user: token.user,
+            fromState: State.ACCEPTED,
+            toState: State.ON_GOING,
+            protocolId: id,
+        })
 
-    if (!updated) {
-        return new Response('We cannot approve this protocol', { status: 500 })
+        if (!updated) {
+            return new Response('We cannot approve this protocol', {
+                status: 500,
+            })
+        }
     }
     return NextResponse.json({ success: true })
 }

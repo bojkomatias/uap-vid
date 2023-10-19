@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 'use client'
 import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
 import {
@@ -12,6 +13,8 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
+import { useSearchParams } from 'next/navigation'
+import DownloadCSVButton from './download-csv-button'
 
 export default function TanStackTable({
     data,
@@ -42,13 +45,28 @@ export default function TanStackTable({
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
     })
+
+    const totalRecordsCheck = !(
+        Number(useSearchParams()?.get('records')) == totalRecords
+    )
+
     return (
         <>
-            <div className="mx-auto mt-6 flex items-center justify-between gap-4">
+            <div className="mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
+                <div className="flex flex-wrap gap-2">
+                    <ColumnVisibilityDropdown
+                        columns={table.getAllLeafColumns()}
+                    />
 
-                <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
+                    <DownloadCSVButton
+                        totalRecordsCheck={totalRecordsCheck}
+                        data={data}
+                        columns={columns}
+                    />
+                </div>
             </div>
+
             {customFilterSlot}
 
             {filterableByKey && (
@@ -60,14 +78,14 @@ export default function TanStackTable({
 
             {data?.length >= 1 ? (
                 <div className="w-full overflow-x-auto">
-                    <table className="fade-in -mx-4 mt-6 min-w-full table-fixed divide-y-2 sm:-mx-0">
+                    <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
                         <thead>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <tr key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <th
                                             key={header.id}
-                                            className="py-2 pr-4 text-left text-sm font-medium uppercase text-gray-600 last:pr-2 last:text-right"
+                                            className="px-2 py-2 text-left text-sm font-medium uppercase text-gray-600 first:pl-4 last:pr-4 last:text-right sm:first:pl-0 sm:last:pr-0"
                                         >
                                             <HeaderSorter header={header} />
                                         </th>
@@ -81,7 +99,7 @@ export default function TanStackTable({
                                     {row.getVisibleCells().map((cell) => (
                                         <td
                                             key={cell.id}
-                                            className="whitespace-nowrap py-3.5 pr-4 text-sm text-gray-800 last:w-16 last:px-2"
+                                            className="whitespace-nowrap px-2 py-3.5 text-sm text-gray-800 first:pl-4 last:w-16 last:pr-4 last:text-right sm:first:pl-0"
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
@@ -95,7 +113,8 @@ export default function TanStackTable({
                     </table>
                 </div>
             ) : (
-                <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center  gap-4 text-gray-500">
+                <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
+
                     <h1 className="font-semibold">
                         No se encontraron registros con los criterios de
                         búsqueda especificados
@@ -105,7 +124,9 @@ export default function TanStackTable({
                     </p>
                 </div>
             )}
-            <div className="-mb-16 mt-6 flex items-center justify-end text-xs font-light text-gray-400">
+            <Pagination totalRecords={totalRecords} />
+            <div className="-mb-12 mt-2 flex items-center justify-end text-xs font-light text-gray-400">
+
                 <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
                     Shift
                 </kbd>
@@ -113,7 +134,6 @@ export default function TanStackTable({
                 <Mouse className="mx-0.5 h-5 text-gray-400" />
                 para navegar lateralmente.
             </div>
-            <Pagination totalRecords={totalRecords} />
         </>
     )
 }

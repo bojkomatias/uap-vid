@@ -35,11 +35,16 @@ const ActionSchema = z.enum([
     'CREATE',
     'EDIT',
     'EDIT_BY_OWNER',
+    'PUBLISH',
     'ASSIGN_TO_METHODOLOGIST',
     'ASSIGN_TO_SCIENTIFIC',
-    'COMMENT',
+    'REVIEW',
     'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
     'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+    'DISCONTINUE',
+    'FINISH',
+    'DELETE',
+    'GENERATE_ANUAL_BUDGET',
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -47,9 +52,13 @@ export type ActionType = `${z.infer<typeof ActionSchema>}`
 const AccessSchema = z.enum([
     'PROTOCOLS',
     'USERS',
+    'EVALUATORS',
     'REVIEWS',
     'CONVOCATORIES',
     'ACADEMIC_UNITS',
+    'TEAM_MEMBERS',
+    'MEMBER_CATEGORIES',
+    'ANUAL_BUDGETS',
 ])
 export const ACCESS = AccessSchema.Enum
 export type AccessType = `${z.infer<typeof AccessSchema>}`
@@ -101,12 +110,11 @@ export type Convocatory = z.infer<typeof ConvocatorySchema>
 
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
-    createdAt: z.coerce.date().optional(),
+    createdAt: z.coerce.date().nullable().optional(),
     state: StateSchema,
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
-    observations: z.string().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)
@@ -149,7 +157,7 @@ export const UserSchema = z.object({
 export const HistoricCategoryPriceSchema = z.object({
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
-    price: z.number().min(1, { message: 'El campo no puede estar vacío' }),
+    price: z.number().min(1, { message: 'El valor debe ser mayor a 1' }),
     currency: z.string().default('ARS').nullable(),
 })
 
@@ -158,16 +166,19 @@ export const HistoricCategoryPriceSchema = z.object({
 // Contiene el array histórico de categorías
 /////////////////////////////////////////
 export const TeamMemberCategorySchema = z.object({
-    id: z.string(),
+    id: z.string().optional(),
     name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
-    price: HistoricCategoryPriceSchema.array(),
+    state: z.boolean(),
+    price: HistoricCategoryPriceSchema.array().min(1, {
+        message: 'Configure un precio',
+    }),
 })
 
 /////////////////////////////////////////
 // HISTORIC TEAM MEMBER CATEGORY SCHEMA
 /////////////////////////////////////////
 export const HistoricTeamMemberCategorySchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
     teamMemberId: z.string(),
@@ -178,12 +189,51 @@ export const HistoricTeamMemberCategorySchema = z.object({
 // TEAM MEMBER SCHEMA
 /////////////////////////////////////////
 
-export const TeamMemberSchema = z.object({
+export const TeamMemberSchema = z
+    .object({
+        id: z.string(),
+        userId: z.string().nullable(),
+        name: z.string().min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        }),
+        obrero: z.boolean(),
+        pointsObrero: z.coerce.number().nullable(),
+    })
+    .refine(
+        (value) => {
+            if (value.obrero) {
+                if (value.pointsObrero) return true
+                return false
+            } else return true
+        },
+        { message: 'Campo obligatorio para obreros', path: ['pointsObrero'] }
+    )
+
+/////////////////////////////////////////
+// PROTOCOL ANUAL BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const ProtocolAnualBudgetSchema = z.object({
     id: z.string(),
-    UserSchema: UserSchema.optional(),
-    name: z.string().optional(),
-    categories: TeamMemberCategorySchema.array(),
-    obrero: z.boolean(),
+    protocolId: z.string(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    year: z.number(),
+    budgetItems: z
+        .object({
+            type: z.string(),
+            amount: z.number(),
+            detail: z.string(),
+        })
+        .array(),
+    budgetTeamMembers: z
+        .object({
+            teamMemberId: z.string(),
+            hours: z.number(),
+            remainingHours: z.number(),
+        })
+        .array(),
 })
 
 /////////////////////////////////////////
@@ -352,14 +402,8 @@ export const IdentificationSchema = z.object({
                     .max(400, {
                         message: 'No se pueden asignar tantas horas',
                     }),
-                last_name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
-                name: z
-                    .string()
-                    .min(1, { message: 'El campo no puede estar vacío' })
-                    .nullable(),
+                last_name: z.string().nullable(),
+                name: z.string().nullable(),
                 role: z
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
@@ -436,6 +480,33 @@ export const MethodologySchema = z.object({
     humanAnimalOrDb: z.boolean().nullable(),
 })
 
+export const TeamMemberRelation = z
+    .object({
+        hours: z
+            .number({
+                invalid_type_error: 'Este campo debe ser numérico',
+            })
+            .min(1, {
+                message: 'Debe ser un numero positivo',
+            })
+            .max(400, {
+                message: 'No se pueden asignar tantas horas',
+            }),
+        last_name: z.string().nullable(),
+        name: z.string().nullable(),
+        role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+        teamMemberId: z
+            .string({
+                invalid_type_error:
+                    'Faltan relacionar miembros del equipo de investigación',
+            })
+            .min(1, {
+                message:
+                    'Faltan relacionar miembros del equipo de investigación',
+            }),
+    })
+    .array()
+
 /////////////////////////////////////////
 // PROTOCOL SECTIONS PUBLICATION SCHEMA
 /////////////////////////////////////////
@@ -444,3 +515,43 @@ export const PublicationSchema = z.object({
     title: z.string().min(1, { message: 'El campo no puede estar vacío' }),
     result: z.string().min(1, { message: 'El campo no puede estar vacío' }),
 })
+
+export const UserEmailChangeSchema = z
+    .object({
+        currentEmail: z.string().email(),
+        newEmail: z.string().email({ message: 'Ingrese un email válido' }),
+        emailCode: z.string().min(5, {
+            message: 'El código debe contener al menos 5 caracteres',
+        }),
+    })
+    .refine(
+        (value) => {
+            if (value.currentEmail !== value.newEmail) return true
+            else return false
+        },
+        { message: 'No puede ser el email actual', path: ['newEmail'] }
+    )
+
+export const UserPasswordChangeSchema = z
+    .object({
+        currentPassword: z
+            .string()
+            .min(1, { message: 'Este campo no puede estar vacío' }),
+        newPassword: z.string().min(4, {
+            message: 'La contraseña debe contener al menos 4 caracteres',
+        }),
+        newPasswordConfirm: z.string(),
+    })
+    .refine((values) => values.newPassword === values.newPasswordConfirm, {
+        message: 'Las contraseñas no son iguales',
+        path: ['newPasswordConfirm'],
+    })
+    .refine(
+        (values) => values.newPassword !== values.currentPassword,
+
+        {
+            message: 'No puede ser la misma contraseña que la actual',
+            path: ['newPassword'],
+        }
+    )
+//This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.

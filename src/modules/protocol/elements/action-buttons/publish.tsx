@@ -1,18 +1,21 @@
 'use client'
 import { Button } from '@elements/button'
-import type { Protocol } from '@prisma/client'
-import { State } from '@prisma/client'
-import type { Protocol as ProtocolZod } from '@utils/zod'
+import type { User } from '@prisma/client'
+import type { Protocol } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import InfoTooltip from '../tooltip'
 import { Upload } from 'tabler-icons-react'
+import { canExecute } from '@utils/scopes'
 
-type ActionButtonTypes = { userId: string; protocol: Protocol | ProtocolZod }
+type ActionButtonTypes = {
+    user: User
+    protocol: Protocol
+}
 
-export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
+export default function PublishButton({ user, protocol }: ActionButtonTypes) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
@@ -30,6 +33,7 @@ export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
                 message: 'El protocolo ha sido publicado con éxito',
                 color: 'green',
             })
+
             return startTransition(() => router.refresh())
         }
         return notifications.show({
@@ -46,8 +50,8 @@ export default function PublishButton({ userId, protocol }: ActionButtonTypes) {
 
     if (
         !protocol.id ||
-        protocol.state !== State.DRAFT ||
-        userId !== protocol.researcherId
+        user.id !== protocol.researcherId ||
+        !canExecute('PUBLISH', user.role, protocol.state)
     )
         return <></>
 

@@ -12,7 +12,7 @@ const NumberInput = ({
     const form = useProtocolContext()
 
     return (
-        <div className="max-w-[8rem]">
+        <div className="max-w-[6rem]">
             <label
                 className={cx(
                     'label required',
@@ -24,13 +24,8 @@ const NumberInput = ({
             <input
                 type="number"
                 {...form.getInputProps(path)}
-                onBlur={() =>
-                    form.setFieldValue(
-                        path,
-                        Number(form.getInputProps(path).value)
-                    )
-                }
-                className="input text-right placeholder:text-left"
+                onBlur={(e) => form.setFieldValue(path, Number(e.target.value))}
+                className="input text-right"
                 placeholder={label}
                 autoComplete="off"
             />
