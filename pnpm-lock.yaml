@@ -23,9 +23,6 @@ dependencies:
   '@mantine/form':
     specifier: ^7.1.3
     version: 7.1.3(react@18.2.0)
-  '@mantine/hooks':
-    specifier: ^7.1.3
-    version: 7.1.3(react@18.2.0)
   '@mantine/notifications':
     specifier: ^7.1.3
     version: 7.1.3(@mantine/core@7.1.3)(@mantine/hooks@7.1.3)(react-dom@18.2.0)(react@18.2.0)
@@ -86,9 +83,6 @@ dependencies:
   framer-motion:
     specifier: ^10.16.4
     version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
-  fuzzysort:
-    specifier: ^2.0.4
-    version: 2.0.4
   mongodb:
     specifier: ^6.1.0
     version: 6.1.0
@@ -2631,10 +2625,6 @@ packages:
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: true
-
-  /fuzzysort@2.0.4:
-    resolution: {integrity: sha512-Api1mJL+Ad7W7vnDZnWq5pGaXJjyencT+iKGia2PlHUcSsSzWwIQ3S1isiMpwpavjYtGd2FzhUIhnnhOULZgDw==}
-    dev: false
 
   /get-intrinsic@1.2.1:
     resolution: {integrity: sha512-2DcsyfABl+gVHEfCOaTrWgyt+tb6MSEGmKq+kI5HwLbIYgjgmMcV8KQ41uaKz1xxUcn9tJtgFbQUEVcEbd0FYw==}
