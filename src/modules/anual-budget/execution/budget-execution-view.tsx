@@ -1,55 +1,51 @@
 'use client'
-import { useDisclosure } from '@mantine/hooks'
-import { Drawer } from '@mantine/core'
+
 import type { Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
-import BudgetNewExcecution from './budget-new-excecution'
-import { ExcecutionType } from '@utils/anual-budget'
+import BudgetNewExecution from './budget-new-execution'
+import { ExecutionType } from '@utils/anual-budget'
+import { useState } from 'react'
+import CustomDrawer from '@elements/custom-drawer'
 
-export default function BudgetExcecutionView({
+export default function BudgetExecutionView({
     title,
     itemName,
     remaining,
-    excecutions,
+    executions,
     obrero,
     positionIndex,
     anualBudgetTeamMemberId,
-    excecutionType,
+    executionType,
 }: {
     title: string
     itemName: string
     remaining: number
-    excecutions: Execution[]
+    executions: Execution[]
     positionIndex: number
-    excecutionType: ExcecutionType
+    executionType: ExecutionType
     obrero?: { pointsObrero: number; pointPrice: number }
     anualBudgetTeamMemberId?: string
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
-            <Drawer
-                className="absolute "
-                position="right"
-                opened={opened}
-                onClose={close}
-            >
+            <CustomDrawer title="Ejecuciones" open={opened} onClose={setOpened}>
                 <section
                     className="flex flex-col gap-4"
                     onClick={(e) => e.preventDefault()}
                 >
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <h1 className="text-xl font-semibold">
-                            {excecutionType === ExcecutionType.TeamMember
+                            {executionType === ExecutionType.TeamMember
                                 ? 'Honorario de equipo'
                                 : 'Gasto Directo'}
                         </h1>
                         <div className="flex  items-center gap-1">
                             <p className="text-sm font-semibold text-gray-600">
-                                {excecutionType === ExcecutionType.TeamMember
+                                {executionType === ExecutionType.TeamMember
                                     ? 'Nombre y Apellido:'
                                     : 'Detalle:'}
                             </p>
@@ -74,23 +70,23 @@ export default function BudgetExcecutionView({
                             </div>
                         )}
                     </div>
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         {remaining > 0 ? (
                             <>
                                 <p className="text-md font-semibold text-gray-600">
                                     Nueva Ejecución:
                                 </p>
-                                <BudgetNewExcecution
+                                <BudgetNewExecution
                                     maxAmount={remaining}
-                                    anualBudgetTeamMemmberId={
+                                    anualBudgetTeamMemberId={
                                         anualBudgetTeamMemberId
                                     }
-                                    excecutionType={excecutionType}
+                                    executionType={executionType}
                                     budgetItemPositionIndex={positionIndex}
                                 />
                             </>
                         ) : null}
-                        {excecutions.length > 0 ? (
+                        {executions.length > 0 ? (
                             <>
                                 <p className="text-sm text-gray-600">
                                     Ejecuciones históricas:
@@ -107,7 +103,7 @@ export default function BudgetExcecutionView({
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {excecutions
+                                        {executions
                                             .reverse()
                                             .map((execution, idx) => {
                                                 return (
@@ -137,11 +133,13 @@ export default function BudgetExcecutionView({
                         )}
                     </div>
                 </section>
-            </Drawer>
+            </CustomDrawer>
 
             <Button
                 className="float-right px-2 py-0.5 text-xs"
-                onClick={open}
+                onClick={() => {
+                    setOpened(true)
+                }}
                 intent="secondary"
             >
                 Ver

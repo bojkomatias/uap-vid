@@ -21,6 +21,7 @@ export default async function Page({
             </p>
             <div className="flex flex-row-reverse">
                 <Link
+                    scroll={false}
                     href={'/categories/new'}
                     className={cx(
                         buttonStyle('secondary'),

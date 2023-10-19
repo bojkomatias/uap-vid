@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import { updateUserPasswordById } from '@repositories/user'
 import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
 import { NextResponse, type NextRequest } from 'next/server'

@@ -1,13 +1,13 @@
 'use client'
-import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
+
 import type { AcademicUnit, User } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
-
 import Currency from '@elements/currency'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import { AcademicUnitBudgetUpdate } from './academic-unit-budget-update'
+import CustomDrawer from '@elements/custom-drawer'
+import { useState } from 'react'
 
 export default function AcademicUnitView({
     academicUnit,
@@ -16,21 +16,21 @@ export default function AcademicUnitView({
     academicUnit: AcademicUnit
     secretaries: User[]
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
-            <Drawer
-                className="absolute "
-                position="right"
-                opened={opened}
-                onClose={close}
+            <CustomDrawer
+            
+                title='Unidad Académica'
+                open={opened}
+                onClose={setOpened}
             >
                 <section
                     className="flex flex-col gap-4"
                     onClick={(e) => e.preventDefault()}
                 >
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <div className="flex  items-center gap-1">
                             <Badge className="text-sm">
                                 {academicUnit.name}
@@ -49,7 +49,7 @@ export default function AcademicUnitView({
                             />
                         </div>
                     </div>
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <p className="text-sm text-gray-600">
                             Editar secretarios/as
                         </p>
@@ -109,18 +109,14 @@ export default function AcademicUnitView({
                         </table>
                     </div>
                 </section>
-            </Drawer>
-
-            <Group position="center">
-                <Button
-                    id="historic-prices-id"
-                    className="px-2.5 py-1 text-xs"
-                    onClick={open}
-                    intent="secondary"
-                >
-                    Editar
-                </Button>
-            </Group>
+            </CustomDrawer>
+            <Button
+                className="px-2.5 py-1 text-xs"
+                onClick={()=>{setOpened(true)}}
+                intent="secondary"
+            >
+                Editar
+            </Button>
         </>
     )
 }

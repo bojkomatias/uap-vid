@@ -8,8 +8,8 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
-import BudgetExcecutionView from './excecution/budget-excecution-view'
-import { ExcecutionType } from '@utils/anual-budget'
+import { ExecutionType } from '@utils/anual-budget'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetItems({
     budgetId,
@@ -30,7 +30,7 @@ export function BudgetItems({
         <form
             onSubmit={form.onSubmit(async (values) => {
                 if (approved) return
-                const itemsWithRemainingUpdated = values.map((item, i) => {
+                const itemsWithRemainingUpdated = values.map((item) => {
                     const remaining = item.amount
                     return { ...item, remaining }
                 })
@@ -172,7 +172,7 @@ export function BudgetItems({
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
                                             !approved &&
-                                                'float-right table-cell'
+                                            'float-right table-cell'
                                         )}
                                     >
                                         <CurrencyInput
@@ -190,7 +190,7 @@ export function BudgetItems({
                                             className={cx(
                                                 'w-32 text-xs',
                                                 form.isDirty(`${i}.amount`) &&
-                                                    'border-warning-200 bg-warning-50'
+                                                'border-warning-200 bg-warning-50'
                                             )}
                                         />
                                     </td>
@@ -204,13 +204,13 @@ export function BudgetItems({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <BudgetExcecutionView
+                                        <BudgetExecutionView
                                             positionIndex={i}
                                             remaining={remaining}
                                             title={detail}
-                                            excecutionType={ExcecutionType.Item}
+                                            executionType={ExecutionType.Item}
                                             itemName={type}
-                                            excecutions={executions}
+                                            executions={executions}
                                         />
                                     </td>
                                 </tr>

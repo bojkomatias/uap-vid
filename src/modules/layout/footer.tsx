@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/link-passhref */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import Link from 'next/link'
 import { JSX, SVGProps } from 'react'

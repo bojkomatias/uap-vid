@@ -1,5 +1,4 @@
 'use client'
-import { Drawer } from '@mantine/core'
 import type { Logs } from '@prisma/client'
 import { dateFormatter } from '@utils/formatters'
 import { useState, useTransition } from 'react'
@@ -7,6 +6,7 @@ import { Button } from '@elements/button'
 import { newLog } from '@repositories/log'
 import { useRouter } from 'next/navigation'
 import { Note } from 'tabler-icons-react'
+import CustomDrawer from '@elements/custom-drawer'
 
 export default function ProtocolLogsDrawer({
     logs,
@@ -19,16 +19,20 @@ export default function ProtocolLogsDrawer({
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
-    const [open, setOpen] = useState(false)
-    const closeFn = () => {
+    const [opened, setOpened] = useState(false)
+
+    function closeFn() {
+        
         document.getElementById('drawer-overlay')?.classList.add('fade-out')
         document
             .getElementById('drawer-content')
             ?.classList.add('fade-out-right')
-        setTimeout(() => {
-            setOpen(false)
+    
+       setTimeout(()=>{
+            setOpened(false)
         }, 300)
     }
+ 
     return (
         <>
             <div className="group pointer-events-none relative">
@@ -36,28 +40,13 @@ export default function ProtocolLogsDrawer({
                     Observaciones
                 </div>
                 <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpened(true)}
                     className="pointer-events-auto -ml-3 mt-1"
                 >
                     <Note className="h-4 w-4 text-gray-500 hover:text-gray-700" />
                 </button>
             </div>
-            <Drawer.Root
-                closeOnEscape
-                position="right"
-                opened={open}
-                onClose={() => closeFn()}
-            >
-                <Drawer.Overlay id="drawer-overlay" className="fade-in" />
-                <Drawer.Content id="drawer-content" className="fade-in-right">
-                    <Drawer.Header>
-                        <Drawer.Title className="font-semibold text-gray-600">
-                            Cambios de estado y Observaciones
-                        </Drawer.Title>
-                        <Drawer.CloseButton />
-                    </Drawer.Header>
-                    <Drawer.Body className="mx-3 flex h-[92svh] flex-col gap-10">
-                        <div className="space-y-2 overflow-y-auto rounded-md bg-gray-50 p-4 shadow">
+           <CustomDrawer title='Observaciones' open={opened} onClose={setOpened}><div className="space-y-2 overflow-y-auto rounded-md bg-gray-50 p-4 ">
                             {logs.length > 0 ? (
                                 logs.map((log) => (
                                     <div key={log.id} className="text-black/70">
@@ -101,7 +90,7 @@ export default function ProtocolLogsDrawer({
                                     }
                                 })
                             }}
-                            className="rounded-md bg-gray-50 p-2 shadow"
+                            className="rounded-md bg-gray-50 p-2 "
                         >
                             <label className="label">Agregar observación</label>
                             <textarea
@@ -118,10 +107,7 @@ export default function ProtocolLogsDrawer({
                             >
                                 Agregar
                             </Button>
-                        </form>
-                    </Drawer.Body>
-                </Drawer.Content>
-            </Drawer.Root>
+                        </form></CustomDrawer>
         </>
     )
 }

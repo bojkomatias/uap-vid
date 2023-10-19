@@ -4,13 +4,13 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
 import {
-    ExcecutionType,
+    ExecutionType,
     type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
-import BudgetExcecutionView from './excecution/budget-excecution-view'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -203,7 +203,7 @@ export function BudgetTeamMemberFees({
                                                     form.isDirty(
                                                         `${i}.hours`
                                                     ) &&
-                                                        'border-warning-200 bg-warning-50'
+                                                    'border-warning-200 bg-warning-50'
                                                 )}
                                                 placeholder="24"
                                             />
@@ -255,7 +255,7 @@ export function BudgetTeamMemberFees({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <BudgetExcecutionView
+                                        <BudgetExecutionView
                                             positionIndex={i}
                                             remaining={
                                                 (categories
@@ -264,13 +264,13 @@ export function BudgetTeamMemberFees({
                                                     ?.price ?? 0) *
                                                 remainingHours
                                             }
-                                            excecutions={executions}
+                                            executions={executions}
                                             anualBudgetTeamMemberId={
                                                 anualBudgetTeamMemberId
                                             }
                                             title={name}
-                                            excecutionType={
-                                                ExcecutionType.TeamMember
+                                            executionType={
+                                                ExecutionType.TeamMember
                                             }
                                             itemName={
                                                 categories.at(-1)?.category
@@ -279,15 +279,15 @@ export function BudgetTeamMemberFees({
                                             obrero={
                                                 obrero
                                                     ? {
-                                                          pointsObrero:
-                                                              pointsObrero ?? 0,
-                                                          pointPrice:
-                                                              categories
-                                                                  .at(-1)
-                                                                  ?.category.price.at(
-                                                                      -1
-                                                                  )?.price ?? 0,
-                                                      }
+                                                        pointsObrero:
+                                                            pointsObrero ?? 0,
+                                                        pointPrice:
+                                                            categories
+                                                                .at(-1)
+                                                                ?.category.price.at(
+                                                                    -1
+                                                                )?.price ?? 0,
+                                                    }
                                                     : undefined
                                             }
                                         />

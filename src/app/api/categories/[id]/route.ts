@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-server-import-in-page */
+
 import {
     updatePriceCategoryById,
     deleteCategoryById,

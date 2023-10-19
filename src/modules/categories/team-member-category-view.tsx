@@ -1,30 +1,30 @@
-'use client'
-import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
+
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import Currency from '@elements/currency'
 import { currencyFormatter } from '@utils/formatters'
+import CustomDrawer from '@elements/custom-drawer'
+
+import { useState } from 'react'
 
 export default function TeamMemberCategoryView({
     teamMemberCategory,
 }: {
     teamMemberCategory: TeamMemberCategory
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false);
 
     return (
         <>
-            <Drawer
-                className="absolute "
-                position="right"
-                opened={opened}
-                onClose={close}
+            <CustomDrawer
+                title='Valores históricos de la categoría'
+                open={opened}
+                onClose={setOpened}
             >
                 <section className="flex flex-col gap-4">
                     {' '}
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <div className="flex  items-center gap-1">
                             <p className="text-sm text-gray-600">Categoría:</p>
                             <Badge className="text-sm">
@@ -38,7 +38,7 @@ export default function TeamMemberCategoryView({
                             />
                         </div>
                     </div>
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <p className="text-xs">Valores históricos:</p>
                         <table className="table-auto text-sm text-gray-600">
                             <thead>
@@ -82,18 +82,18 @@ export default function TeamMemberCategoryView({
                         </table>
                     </div>
                 </section>
-            </Drawer>
+            </CustomDrawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
-                    onClick={open}
+                    onClick={()=>setOpened(true)}
                     intent="secondary"
                 >
                     Ver histórico
                 </Button>
-            </Group>
+
         </>
     )
 }

@@ -1,4 +1,4 @@
-import type { AcademicUnitBudget, AnualBudget, Execution } from '@prisma/client'
+import type {  AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 
@@ -99,7 +99,7 @@ export const calculateTotalBudgetAggregated = (
 }
 
 export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>
-export enum ExcecutionType {
+export enum ExecutionType {
     TeamMember,
     Item,
 }

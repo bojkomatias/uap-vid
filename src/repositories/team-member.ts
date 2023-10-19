@@ -85,8 +85,6 @@ export const getTeamMembers = async ({
     search,
     sort,
     order,
-    filter,
-    values,
 }: {
     [key: string]: string
 }) => {
