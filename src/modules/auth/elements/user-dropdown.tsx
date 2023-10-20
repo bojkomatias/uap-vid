@@ -8,19 +8,18 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { Logout, Settings } from 'tabler-icons-react'
 
-export const UserDropdown = ({user}:{user:User}) => {
+export const UserDropdown = ({ user }: { user: User }) => {
     const [loading, setLoading] = useState(false)
-
 
     const path = usePathname()
     if (user) {
         return (
             <>
                 <span className="hidden flex-col items-end lg:flex">
-                    <span className="text-xs font-medium">
-                        {user.name}
-                    </span>
+                    <span className="text-xs font-medium">{user.name}</span>
                 </span>
                 <Menu as="div" className="relative ml-1">
                     <div>
@@ -50,9 +49,7 @@ export const UserDropdown = ({user}:{user:User}) => {
                             ) : (
                                 // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
-                                    {user.name
-                                        .split(' ')[0]
-                                        .substring(0, 1) +
+                                    {user.name.split(' ')[0].substring(0, 1) +
                                         user.name
                                             .split(' ')
                                             .at(-1)
@@ -70,40 +67,6 @@ export const UserDropdown = ({user}:{user:User}) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-<<<<<<< HEAD
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right space-y-1 overflow-hidden rounded bg-white py-1 shadow-lg ring-1  focus:outline-none">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <Link
-                                        href={'/profile'}
-                                        className={cx(
-                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
-                                            active && 'bg-gray-100',
-                                            path == '/profile' &&
-                                                'pointer-events-none bg-gray-100 font-bold'
-                                        )}
-                                    >
-                                        Perfil
-                                    </Link>
-                                )}
-                            </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={cx(
-                                            'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
-                                            active && 'bg-gray-100'
-                                        )}
-                                        onClick={() => {
-                                            setLoading(true)
-                                            signOut({ callbackUrl: '/' })
-                                        }}
-                                    >
-                                        Cerrar sesión
-                                    </button>
-                                )}
-                            </Menu.Item>
-=======
                         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div className="px-4 py-3">
                                 <p className="ml-2 mt-1 text-[0.8rem] font-semibold leading-4 text-gray-800">
@@ -152,7 +115,6 @@ export const UserDropdown = ({user}:{user:User}) => {
                                     )}
                                 </Menu.Item>
                             </div>
->>>>>>> 0c0aca82ab7fbed5dd500ec8eb1ff8b3a4182aa9
                         </Menu.Items>
                     </Transition>
                 </Menu>

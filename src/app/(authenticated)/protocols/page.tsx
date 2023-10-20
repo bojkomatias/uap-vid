@@ -6,6 +6,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getProtocolsByRol } from 'repositories/protocol'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
+import Notification from '@elements/notification'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -43,6 +44,7 @@ export default async function Page({
                 protocols={protocols}
                 totalRecords={totalRecords}
             />
+            <Notification></Notification>
         </>
     )
 }
