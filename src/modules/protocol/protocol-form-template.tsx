@@ -17,7 +17,6 @@ import type { Protocol as ProtocolZod } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import type { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
-import { SegmentedControl } from '@mantine/core'
 import { motion } from 'framer-motion'
 import {
     IdentificationForm,
@@ -30,6 +29,7 @@ import {
     BibliographyForm,
 } from '@protocol/form-sections'
 import InfoTooltip from './elements/tooltip'
+import { cx } from '@utils/cx'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
     0: <IdentificationForm />,
@@ -126,7 +126,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         [router, section]
     )
 
-    const SegmentLabel = useCallback(
+    const SectionButton = useCallback(
         ({
             path,
             label,
@@ -136,16 +136,17 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             label: string
             value: string
         }) => (
-            <>
-                <span
-                    className={
-                        !form.isValid(path) && section !== value
-                            ? 'opacity-50'
-                            : ''
-                    }
-                >
-                    {label}
-                </span>
+            <Button
+                intent="outline"
+                className={cx(
+                    'px-2 py-1 text-xs font-medium',
+                    section === value && 'font-bold shadow',
+                    !form.isValid(path) && section !== value ? 'opacity-50' : ''
+                )}
+                onClick={() => setSection(value)}
+            >
+                {label}
+
                 {!form.isValid(path) ? (
                     form.isDirty(path) ? (
                         <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
@@ -155,7 +156,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 ) : (
                     <CircleCheck className="h-4 w-4 stroke-success-500/80" />
                 )}
-            </>
+            </Button>
         ),
         [form, section]
     )
@@ -221,99 +222,49 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="mx-auto mb-6 w-fit max-w-full overflow-auto py-2"
+                    className="mx-auto mb-6 flex w-fit max-w-full gap-1 overflow-auto rounded border bg-gray-50 p-1"
                 >
-                    <SegmentedControl
-                        value={section}
-                        onChange={setSection}
-                        data={[
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.identification'}
-                                        label={'Identificación'}
-                                        value={'0'}
-                                    />
-                                ),
-                                value: '0',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.duration'}
-                                        label={'Duración'}
-                                        value={'1'}
-                                    />
-                                ),
-                                value: '1',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.budget'}
-                                        label={'Presupuesto'}
-                                        value={'2'}
-                                    />
-                                ),
-                                value: '2',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.description'}
-                                        label={'Descripción'}
-                                        value={'3'}
-                                    />
-                                ),
-                                value: '3',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.introduction'}
-                                        label={'Introducción'}
-                                        value={'4'}
-                                    />
-                                ),
-                                value: '4',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.methodology'}
-                                        label={'Metodología'}
-                                        value={'5'}
-                                    />
-                                ),
-                                value: '5',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.publication'}
-                                        label={'Publicación'}
-                                        value={'6'}
-                                    />
-                                ),
-                                value: '6',
-                            },
-                            {
-                                label: (
-                                    <SegmentLabel
-                                        path={'sections.bibliography'}
-                                        label={'Bibliografía'}
-                                        value={'7'}
-                                    />
-                                ),
-                                value: '7',
-                            },
-                        ]}
-                        classNames={{
-                            root: 'bg-gray-50 border rounded divide-x-0 gap-1',
-                            label: 'inline-flex items-center gap-2 px-2 py-1 text-xs font-semibold text-gray-600',
-                            indicator: 'rounded-md ring-1 ring-inset',
-                        }}
-                        transitionDuration={300}
+                    <SectionButton
+                        path={'sections.identification'}
+                        label={'Identificación'}
+                        value={'0'}
+                    />
+                    <SectionButton
+                        path={'sections.duration'}
+                        label={'Duración'}
+                        value={'1'}
+                    />
+                    <SectionButton
+                        path={'sections.budget'}
+                        label={'Presupuesto'}
+                        value={'2'}
+                    />
+                    <SectionButton
+                        path={'sections.description'}
+                        label={'Descripción'}
+                        value={'3'}
+                    />
+                    <SectionButton
+                        path={'sections.introduction'}
+                        label={'Introducción'}
+                        value={'4'}
+                    />
+                    <SectionButton
+                        path={'sections.methodology'}
+                        label={'Metodología'}
+                        value={'5'}
+                    />
+
+                    <SectionButton
+                        path={'sections.publication'}
+                        label={'Publicación'}
+                        value={'6'}
+                    />
+
+                    <SectionButton
+                        path={'sections.bibliography'}
+                        label={'Bibliografía'}
+                        value={'7'}
                     />
                 </motion.div>
 
