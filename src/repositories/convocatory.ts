@@ -77,6 +77,16 @@ export const getConvocatoryById = cache(async (id: string) => {
     try {
         return await prisma.convocatory.findFirst({
             where: { id },
+        })
+    } catch (e) {
+        return null
+    }
+})
+
+export const getConvocatoryByIdWithCount = cache(async (id: string) => {
+    try {
+        return await prisma.convocatory.findFirst({
+            where: { id },
             include: { _count: { select: { protocols: true } } },
         })
     } catch (e) {

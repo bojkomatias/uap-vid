@@ -7,8 +7,6 @@ import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Check } from 'tabler-icons-react'
-import { DateTimePicker } from '@mantine/dates'
-import 'dayjs/locale/es'
 
 export function ConvocatoryForm({
     convocatory,
@@ -22,6 +20,11 @@ export function ConvocatoryForm({
     const [isPending, startTransition] = useTransition()
     const form = useForm<Convocatory>({
         initialValues: convocatory,
+        transformValues: (values) => ({
+            ...values,
+            from: new Date(values.from),
+            to: new Date(values.to),
+        }),
         validate: zodResolver(ConvocatorySchema),
     })
 
@@ -115,18 +118,17 @@ export function ConvocatoryForm({
             </div>
 
             <div className="m-3 p-1">
-                <DateTimePicker
-                    firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY HH:mm"
-                    locale="es"
-                    label="Fecha desde"
-                    placeholder="Desde"
-                    classNames={{
-                        input: 'input',
-                        label: 'label',
-                    }}
-                    value={new Date(form.getInputProps('from').value)}
-                    onChange={(e) => form.setFieldValue('from', e!)}
+                <label className="label">
+                    Fecha desde {new Date().toISOString().substring(0, 16)}
+                </label>
+                <input
+                    type="datetime-local"
+                    className="input"
+                    defaultValue={new Date(form.getInputProps('from').value)
+                        .toISOString()
+                        .substring(0, 16)}
+                    // @ts-ignore
+                    onChange={(e) => form.setFieldValue('from', e.target.value)}
                 />
                 {form.getInputProps('from').error && (
                     <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
@@ -135,20 +137,18 @@ export function ConvocatoryForm({
                 )}
             </div>
             <div className="m-3 p-1">
-                <DateTimePicker
-                    minDate={new Date()}
-                    firstDayOfWeek={0}
-                    valueFormat="DD/MM/YYYY HH:mm"
-                    locale="es"
-                    label="Fecha hasta"
-                    placeholder="Hasta"
-                    classNames={{
-                        input: 'input',
-                        label: 'label',
-                    }}
-                    value={new Date(form.getInputProps('to').value)}
-                    onChange={(e) => form.setFieldValue('to', e!)}
+                <label className="label">Fecha hasta</label>
+                <input
+                    type="datetime-local"
+                    className="input"
+                    placeholder="Desde"
+                    defaultValue={new Date(form.getInputProps('to').value)
+                        .toISOString()
+                        .substring(0, 16)}
+                    // @ts-ignore
+                    onChange={(e) => form.setFieldValue('to', e.target.value)}
                 />
+
                 {form.getInputProps('to').error && (
                     <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
                         *{form.getInputProps('to').error}
