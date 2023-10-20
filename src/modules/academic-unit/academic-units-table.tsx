@@ -7,7 +7,7 @@ import { dateFormatter } from '@utils/formatters'
 import Currency from '@elements/currency'
 import AcademicUnitView from './academic-unit-view'
 
-export default async function AcademicUnitsTable({
+export default function AcademicUnitsTable({
     academicUnits,
     secretaries,
     totalRecords,

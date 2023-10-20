@@ -15,12 +15,13 @@ export default function CurrencyInput({
 }: {
     defaultPrice?: number
 
-        /** This is a callback function, it takes as an argument the price that's in the input field.
+    /** This is a callback function, it takes as an argument the price that's in the input field.
      * @param value number
      */
     priceSetter: (value: number) => void
 
     className?: string
+    maxAmount?: number
 }) {
     const [amount, setAmount] = useState(
         (defaultPrice && formatCurrency((defaultPrice * 100).toString())) || ''
@@ -36,7 +37,6 @@ export default function CurrencyInput({
                 value={amount}
                 //I'm calling the setAmount here to format the value shown in the input field everytime the user types a new number.
                 onChange={(e) => {
-                    e.preventDefault()
                     setAmount(
                         formatCurrency(e.target.value) === '0,00'
                             ? ''
@@ -44,10 +44,8 @@ export default function CurrencyInput({
                     )
                 }}
                 onBlur={(e) => {
-                    e.preventDefault()
-                    priceSetter &&
-                        priceSetter(parseLocaleNumber(e.target.value, 'es-AR'))
-
+                    const value = e.target.value === '' ? '0' : e.target.value
+                    priceSetter(parseLocaleNumber(value, 'es-AR'))
                 }}
                 placeholder="3499.00"
                 className={cx('input pl-5 text-right', className)}

@@ -14,6 +14,56 @@ export const getAcademicUnitsTabs = cache(
         })
 )
 
+export const getAcademicUnitById = async (id?: string) => {
+    try {
+        if (!id)
+            return prisma.academicUnit.findMany({
+                include: {
+                    AcademicUnitAnualBudgets: {
+                        include: {
+                            budgetTeamMembers: {
+                                include: {
+                                    teamMember: {
+                                        include: {
+                                            categories: {
+                                                include: { category: true },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            })
+
+        return prisma.academicUnit.findMany({
+            where: {
+                id
+            },
+            include: {
+                AcademicUnitAnualBudgets: {
+                    include: {
+                        budgetTeamMembers: {
+                            include: {
+                                teamMember: {
+                                    include: {
+                                        categories: {
+                                            include: { category: true },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        })
+    } catch (error) {
+        return null
+    }
+}
+
 export const getAllAcademicUnits = cache(
     async ({
         records = '5',
@@ -62,7 +112,7 @@ export const getAllAcademicUnits = cache(
                         shortname: true,
                         budgets: true,
                         secretariesIds: true,
-                        AcademicUnitAnualBudgetsIds: true,
+                        academicUnitAnualBudgetsIds: true,
                     },
                     // Add all the globally searchable fields
                     where: {

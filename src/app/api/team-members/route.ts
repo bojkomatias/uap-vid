@@ -1,4 +1,3 @@
-// eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextResponse, type NextRequest } from 'next/server'
 import { createTeamMember, getAllTeamMembers } from '@repositories/team-member'
 

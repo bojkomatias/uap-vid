@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 'use client'
 import type { Review, User } from '@prisma/client'
 import {
@@ -7,9 +6,7 @@ import {
     View,
     Text,
     Image,
-    usePDF,
     PDFDownloadLink,
-    PDFViewer,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
 
@@ -103,7 +100,7 @@ export const ReviewerCertificatePDF = ({
                 fileName={`CERTIFICADO-${user.name
                     .replaceAll(' ', '_')
                     .toLowerCase()}`}
-                document={PDFDocument({ user })}
+                document={<PDFDocument user={user}/>}
             >
                 <Button intent="outline" className="float-right mt-4">
                     Descargar certificado de evaluación

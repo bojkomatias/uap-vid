@@ -3,10 +3,14 @@ import { Button } from '@elements/button'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
-import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
+import {
+    ExecutionType,
+    type AnualBudgetTeamMemberWithAllRelations,
+} from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Check } from 'tabler-icons-react'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetTeamMemberFees({
     approved,
@@ -135,7 +139,7 @@ export function BudgetTeamMemberFees({
                         </tr>
                     </thead>
                     <tbody>
-                        {form.values.map(
+                        {budgetTeamMembers.map(
                             (
                                 {
                                     teamMember: {
@@ -145,6 +149,8 @@ export function BudgetTeamMemberFees({
                                         categories,
                                         pointsObrero,
                                     },
+                                    id: anualBudgetTeamMemberId,
+                                    executions,
                                     memberRole,
                                     hours,
                                     remainingHours,
@@ -178,24 +184,30 @@ export function BudgetTeamMemberFees({
                                         </div>
                                     </td>
                                     <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                                        <input
-                                            type="number"
-                                            {...form.getInputProps(
-                                                `${i}.hours`
-                                            )}
-                                            onBlur={(e) =>
-                                                form.setFieldValue(
-                                                    `${i}.hours`,
-                                                    Number(e.target.value)
-                                                )
-                                            }
-                                            className={cx(
-                                                'input w-16 text-right text-xs',
-                                                form.isDirty(`${i}.hours`) &&
+                                        {approved ? (
+                                            hours
+                                        ) : (
+                                            <input
+                                                type="number"
+                                                {...form.getInputProps(
+                                                    `${i}.hours`
+                                                )}
+                                                onBlur={(e) =>
+                                                    form.setFieldValue(
+                                                        `${i}.hours`,
+                                                        Number(e.target.value)
+                                                    )
+                                                }
+                                                className={cx(
+                                                    'input w-16 text-right text-xs',
+                                                    form.isDirty(
+                                                        `${i}.hours`
+                                                    ) &&
                                                     'border-warning-200 bg-warning-50'
-                                            )}
-                                            placeholder="24"
-                                        />
+                                                )}
+                                                placeholder="24"
+                                            />
+                                        )}
                                     </td>
                                     <td
                                         className={cx(
@@ -243,12 +255,42 @@ export function BudgetTeamMemberFees({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <Button
-                                            intent={'secondary'}
-                                            className="float-right px-2 py-0.5 text-xs"
-                                        >
-                                            Ver
-                                        </Button>
+                                        <BudgetExecutionView
+                                            positionIndex={i}
+                                            remaining={
+                                                (categories
+                                                    .at(-1)
+                                                    ?.category.price.at(-1)
+                                                    ?.price ?? 0) *
+                                                remainingHours
+                                            }
+                                            executions={executions}
+                                            anualBudgetTeamMemberId={
+                                                anualBudgetTeamMemberId
+                                            }
+                                            title={name}
+                                            executionType={
+                                                ExecutionType.TeamMember
+                                            }
+                                            itemName={
+                                                categories.at(-1)?.category
+                                                    .name ?? 'Sin Categoría'
+                                            }
+                                            obrero={
+                                                obrero
+                                                    ? {
+                                                        pointsObrero:
+                                                            pointsObrero ?? 0,
+                                                        pointPrice:
+                                                            categories
+                                                                .at(-1)
+                                                                ?.category.price.at(
+                                                                    -1
+                                                                )?.price ?? 0,
+                                                    }
+                                                    : undefined
+                                            }
+                                        />
                                     </td>
                                 </tr>
                             )

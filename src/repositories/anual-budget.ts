@@ -139,10 +139,41 @@ export const getAnualBudgetById = cache(async (id: string) => {
     }
 })
 
+export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
+    try {
+        return await prisma.anualBudgetTeamMember.findFirst({
+            where: { id },
+            include: {
+                teamMember: {
+                    include: {
+                        categories: { include: { category: true } },
+                    },
+                },
+            },
+        })
+    } catch (error) {
+        return null
+    }
+})
+
 export const createAnualBudget = async (
     data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
+
+    const promises = data.academicUnitsIds.map(async (id) => {
+        await prisma.academicUnit.update({
+            where: { id },
+            data: {
+                AcademicUnitAnualBudgets: {
+                    connect: { id: newAnualBudget.id },
+                },
+            },
+        })
+    })
+
+    await Promise.all(promises)
+
     return newAnualBudget
 }
 
@@ -290,3 +321,35 @@ export const getAnualBudgetsByAcademicUnit = cache(
         }
     }
 )
+
+export const newTeamMemberExecution = (
+    anualBudgetTeamMemberId: string,
+    amount: number,
+    remainingHours: number
+) => {
+    return prisma.anualBudgetTeamMember.update({
+        where: { id: anualBudgetTeamMemberId },
+        data: {
+            executions: { push: { amount, date: new Date() } },
+            remainingHours: remainingHours,
+        },
+    })
+}
+
+export const newBudgetItemExecution = (
+    id: string,
+    budgetItems: AnualBudgetItem[]
+) => {
+    return prisma.anualBudget.update({
+        where: { id },
+        data: { budgetItems: budgetItems },
+    })
+}
+
+export const approveAnualBudget = async (id: string) => {
+    return prisma.anualBudget.update({
+        where: { id },
+        data: { approved: true },
+        select: { approved: true },
+    })
+}

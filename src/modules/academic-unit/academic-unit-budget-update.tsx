@@ -15,7 +15,7 @@ export const AcademicUnitBudgetUpdate = ({
     ACBudgets: AcademicUnitBudget[]
 }) => {
     const router = useRouter()
-    const [newAmount, setNewAmount] = useState(ACBudgets.at(-1)!.amount)
+    const [newAmount, setNewAmount] = useState(ACBudgets.at(-1)?.amount ?? 0)
     const updateBudget = async (id: string, budgets: AcademicUnitBudget[]) => {
         // Create a new budget object
         const newBudget = {
@@ -83,16 +83,14 @@ export const AcademicUnitBudgetUpdate = ({
             <CurrencyInput
                 defaultPrice={ACBudgets.at(-1)?.amount ?? 0}
                 className="min-w-[7rem] rounded-md py-1 text-xs"
-
                 priceSetter={(e) => setNewAmount(e)}
-
             />
 
             <Button
                 className="py-1.5 text-xs shadow-sm"
                 intent="secondary"
                 // Disabled if it hasn't changed
-                disabled={ACBudgets.at(-1)!.amount === newAmount}
+                disabled={ACBudgets.at(-1)?.amount === newAmount}
                 onClick={(e) => {
                     e.preventDefault()
                     updateBudget(academicUnitId, ACBudgets)

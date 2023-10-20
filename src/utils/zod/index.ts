@@ -1,4 +1,3 @@
-import { verifyHashScrypt } from '@utils/hash'
 import { z } from 'zod'
 
 /////////////////////////////////////////
@@ -45,6 +44,7 @@ const ActionSchema = z.enum([
     'DISCONTINUE',
     'FINISH',
     'DELETE',
+    'GENERATE_ANUAL_BUDGET',
 ])
 export const ACTION = ActionSchema.Enum
 export type ActionType = `${z.infer<typeof ActionSchema>}`
@@ -115,7 +115,6 @@ export const ProtocolSchema = z.object({
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),
-    observations: z.string().array().nullable().optional(),
 })
 
 // .optional() to export type to create a Form (from new object, has no assigned Id yet)

@@ -5,7 +5,6 @@ import {
     Page,
     View,
     Text,
-    usePDF,
     PDFDownloadLink,
 } from '@react-pdf/renderer'
 import { Button } from '@elements/button'
@@ -709,17 +708,11 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
 }
 
 export const PDF = ({ protocol }: { protocol: Protocol }) => {
-    const [instance] = usePDF({
-        document: PDFDocument({ protocol }),
-    })
-
-    if (instance.loading) return <Button intent="outline">Cargando PDF</Button>
-    else if (instance.error) return <p>Ocurrió un error al cargar el PDF</p>
 
     return (
         <PDFDownloadLink
             fileName={`proyecto-${protocol.id}`}
-            document={PDFDocument({ protocol })}
+            document={<PDFDocument protocol={protocol}/>}
         >
             <Button intent="outline" className="float-right mr-3 mt-8">
                 Descargar PDF

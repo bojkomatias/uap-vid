@@ -1,10 +1,11 @@
 'use client'
-import { useDisclosure } from '@mantine/hooks'
-import { Drawer, Group } from '@mantine/core'
-import type { Prisma, User } from '@prisma/client'
+
+import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { useState } from 'react'
+import CustomDrawer from '@elements/custom-drawer'
 type UserWithCount = Prisma.UserGetPayload<{
     include: { _count: true }
 }>
@@ -16,18 +17,17 @@ export default function UserView({
     userInfo: UserWithCount
     children: React.ReactNode
 }) {
-    const [opened, { open, close }] = useDisclosure(false)
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
-            <Drawer
-                className="absolute text-sm "
-                position="right"
-                opened={opened}
-                onClose={close}
+            <CustomDrawer
+                title="Usuario"
+                open={opened}
+                onClose={setOpened}
             >
                 <section className="flex flex-col gap-4 text-gray-600">
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <div className="flex items-end justify-between gap-2">
                             <Badge className="text-sm">{userInfo.name}</Badge>
                             <p>{RolesDictionary[userInfo.role]}</p>
@@ -44,22 +44,22 @@ export default function UserView({
                             </p>
                         </div>
                     </div>{' '}
-                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 p-6 shadow-md">
+                    <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         {children}
                     </div>
                 </section>
-            </Drawer>
+            </CustomDrawer>
 
-            <Group position="center">
+
                 <Button
-                    id="historic-prices-id"
+
                     className="px-2.5 py-1 text-xs"
-                    onClick={open}
+                    onClick={()=>{setOpened(true)}}
                     intent="secondary"
                 >
                     Editar
                 </Button>
-            </Group>
+
         </>
     )
 }

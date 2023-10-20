@@ -8,6 +8,8 @@ import CurrencyInput from '@elements/currency-input'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { notifications } from '@mantine/notifications'
 import { Check } from 'tabler-icons-react'
+import { ExecutionType } from '@utils/anual-budget'
+import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetItems({
     budgetId,
@@ -28,7 +30,14 @@ export function BudgetItems({
         <form
             onSubmit={form.onSubmit(async (values) => {
                 if (approved) return
-                const res = await updateAnualBudgetItems(budgetId, values)
+                const itemsWithRemainingUpdated = values.map((item) => {
+                    const remaining = item.amount
+                    return { ...item, remaining }
+                })
+                const res = await updateAnualBudgetItems(
+                    budgetId,
+                    itemsWithRemainingUpdated
+                )
                 if (res)
                     return notifications.show({
                         title: 'Valores actualizados',
@@ -123,7 +132,7 @@ export function BudgetItems({
                         </tr>
                     </thead>
                     <tbody>
-                        {form.values.map(
+                        {budgetItems.map(
                             (
                                 { detail, type, amount, remaining, executions },
                                 i
@@ -163,7 +172,7 @@ export function BudgetItems({
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
                                             !approved &&
-                                                'float-right table-cell'
+                                            'float-right table-cell'
                                         )}
                                     >
                                         <CurrencyInput
@@ -172,7 +181,6 @@ export function BudgetItems({
                                                     `${i}.amount`
                                                 ).value
                                             }
-
                                             priceSetter={(e) =>
                                                 form.setFieldValue(
                                                     `${i}.amount`,
@@ -182,7 +190,7 @@ export function BudgetItems({
                                             className={cx(
                                                 'w-32 text-xs',
                                                 form.isDirty(`${i}.amount`) &&
-                                                    'border-warning-200 bg-warning-50'
+                                                'border-warning-200 bg-warning-50'
                                             )}
                                         />
                                     </td>
@@ -196,12 +204,14 @@ export function BudgetItems({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        <Button
-                                            intent={'secondary'}
-                                            className="float-right px-2 py-0.5 text-xs"
-                                        >
-                                            Ver
-                                        </Button>
+                                        <BudgetExecutionView
+                                            positionIndex={i}
+                                            remaining={remaining}
+                                            title={detail}
+                                            executionType={ExecutionType.Item}
+                                            itemName={type}
+                                            executions={executions}
+                                        />
                                     </td>
                                 </tr>
                             )

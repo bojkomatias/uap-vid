@@ -86,11 +86,17 @@ async function Layout({
                     />
                     {/* I need to pass the whole protocol to check validity! */}
                     <PublishButton user={session.user} protocol={protocol} />
-                    <GenerateAnualBudgetButton
-                        hasBudgetCurrentYear={hasBudgetCurrentYear}
-                        budgetPreview={budgetPreview}
-                        teamMembers={protocol.sections.identification.team}
-                    />
+                    {canExecute(
+                        'GENERATE_ANUAL_BUDGET',
+                        session.user.role,
+                        protocol.state
+                    ) ? (
+                        <GenerateAnualBudgetButton
+                            hasBudgetCurrentYear={hasBudgetCurrentYear}
+                            budgetPreview={budgetPreview}
+                            teamMembers={protocol.sections.identification.team}
+                        />
+                    ) : null}
                     <EditButton
                         user={session.user}
                         protocol={{
