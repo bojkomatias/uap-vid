@@ -1,9 +1,8 @@
 'use client'
+import { Button } from '@elements/button'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { notifications } from '@mantine/notifications'
-import { Check, X } from 'tabler-icons-react'
-import { Button } from '@elements/button'
 
 import { ROLE } from '@utils/zod'
 import { RoleSelector } from './elements/role-selector'
@@ -27,12 +26,7 @@ export default function UserForm() {
             notifications.show({
                 title: 'Usuario creado',
                 message: 'El usuario fue creado correctamente',
-                color: 'teal',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'success',
             })
             setLoading(false)
             router.refresh()
@@ -41,12 +35,7 @@ export default function UserForm() {
             notifications.show({
                 title: 'Usuario existente',
                 message: 'El usuario ya existe',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
             setLoading(false)
         }

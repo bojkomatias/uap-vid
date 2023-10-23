@@ -1,33 +1,34 @@
 'use client'
-import { ProtocolProvider, useProtocol } from 'utils/createContext'
-import {
-    AlertCircle,
-    Check,
-    ChevronLeft,
-    ChevronRight,
-    CircleCheck,
-    CircleDashed,
-    X,
-} from 'tabler-icons-react'
-import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
-import { useCallback, useEffect, useState, useTransition } from 'react'
+import { notifications } from '@elements/notifications'
+import { SegmentedControl } from '@mantine/core'
 import { zodResolver } from '@mantine/form'
-import type { Protocol as ProtocolZod } from '@utils/zod'
-import { ProtocolSchema } from '@utils/zod'
 import type { Protocol } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
-    IdentificationForm,
-    DurationForm,
+    BibliographyForm,
     BudgetForm,
     DescriptionForm,
+    DurationForm,
+    IdentificationForm,
     IntroductionForm,
     MethodologyForm,
     PublicationForm,
-    BibliographyForm,
 } from '@protocol/form-sections'
+import type { Protocol as ProtocolZod } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
+import { motion } from 'framer-motion'
+import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState, useTransition } from 'react'
+import {
+    AlertCircle,
+    ChevronLeft,
+    ChevronRight,
+    CircleCheck,
+    CircleDashed,
+} from 'tabler-icons-react'
+import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
 
@@ -88,12 +89,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     notifications.show({
                         title: 'Protocolo creado',
                         message: 'El protocolo ha sido creado con éxito',
-                        color: 'teal',
-                        icon: <Check />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'success',
                     })
                 }
                 return router.push(`/protocols/${id}/${section}`)
@@ -111,12 +107,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 notifications.show({
                     title: 'Protocolo guardado',
                     message: 'El protocolo ha sido guardado con éxito',
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
                 startTransition(() => {
                     router.refresh()
@@ -181,12 +172,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             title: 'No se pudo guardar',
                             message:
                                 'Debes completar la sección "Identificación" para poder guardar un borrador',
-                            color: 'red',
-                            icon: <X />,
-                            radius: 0,
-                            style: {
-                                marginBottom: '.8rem',
-                            },
+                            intent: 'error',
                         })
                         return form.validate()
                     }

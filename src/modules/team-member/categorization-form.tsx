@@ -1,8 +1,8 @@
 'use client'
 import { Button } from '@elements/button'
+import { notifications } from '@elements/notifications'
 import { Listbox } from '@headlessui/react'
 import { useForm } from '@mantine/form'
-import { notifications } from '@mantine/notifications'
 import type {
     HistoricTeamMemberCategory,
     TeamMember,
@@ -11,7 +11,7 @@ import type {
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
-import { Check, Selector, X } from 'tabler-icons-react'
+import { Check, Selector } from 'tabler-icons-react'
 
 export default function CategorizationForm({
     categories,
@@ -45,12 +45,7 @@ export default function CategorizationForm({
                     title: 'Categoría actualizada',
                     message:
                         'La categoría del miembro de investigación fue actualizada con éxito',
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
                 return router.refresh()
             }
@@ -58,12 +53,7 @@ export default function CategorizationForm({
                 title: 'Ha ocurrido un error',
                 message:
                     'Hubo un error al actualizar la categoría del miembro de investigación.',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
         },
         [currentCategory?.id, member, router]

@@ -1,7 +1,7 @@
 'use client'
 import type { Review, Role } from '@prisma/client'
 import { ReviewVerdict, State } from '@prisma/client'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
@@ -38,14 +38,14 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
                 title: 'Protocolo aceptado',
                 message:
                     'El protocolo ha sido aceptado para evaluación en comisión.',
-                color: 'green',
+                intent: 'success',
             })
             return startTransition(() => router.refresh())
         }
         return notifications.show({
             title: 'No hemos podido aceptar el protocolo para evaluación en comisión',
             message: 'Lo lamentamos, ha ocurrido un error',
-            color: 'red',
+            intent: 'error',
         })
     }
 

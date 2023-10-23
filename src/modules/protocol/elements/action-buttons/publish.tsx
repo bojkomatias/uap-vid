@@ -4,7 +4,7 @@ import type { User } from '@prisma/client'
 import type { Protocol } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import InfoTooltip from '../tooltip'
 import { Upload } from 'tabler-icons-react'
@@ -31,7 +31,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
             notifications.show({
                 title: 'Protocolo publicado',
                 message: 'El protocolo ha sido publicado con éxito',
-                color: 'green',
+                intent: 'success',
             })
 
             return startTransition(() => router.refresh())
@@ -39,7 +39,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
         return notifications.show({
             title: 'No hemos podido publicar el protocolo',
             message: 'Lo lamentamos, ha ocurrido un error',
-            color: 'red',
+            intent: 'error',
         })
     }
 

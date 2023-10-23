@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/button'
 import { Combobox } from '@headlessui/react'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import type { User } from '@prisma/client'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
@@ -34,7 +34,7 @@ export const ResearcherReassignation = ({
             notifications.show({
                 title: 'Protocolo reasignado',
                 message: 'El protocolo ha sido transferido de dueño con éxito',
-                color: 'green',
+                intent: 'success',
             })
             setShowSelector(false)
             return router.refresh()
@@ -42,7 +42,7 @@ export const ResearcherReassignation = ({
         return notifications.show({
             title: 'Error al reasignar',
             message: 'Lo lamentamos, ha ocurrido un error',
-            color: 'red',
+            intent: 'error',
         })
     }
 

@@ -1,18 +1,17 @@
 'use client'
 import { Button } from '@elements/button'
-import { useCallback, useTransition } from 'react'
-import { zodResolver } from '@mantine/form'
-import { ReviewSchema } from '@utils/zod'
-import { notifications } from '@mantine/notifications'
-import { Check, X } from 'tabler-icons-react'
-import { ReviewType, ReviewVerdict } from '@prisma/client'
-import type { Review } from '@prisma/client'
+import { notifications } from '@elements/notifications'
 import { RadioGroup } from '@headlessui/react'
+import { zodResolver } from '@mantine/form'
+import type { Review } from '@prisma/client'
+import { ReviewType, ReviewVerdict } from '@prisma/client'
 import { cx } from '@utils/cx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
-import ReviewQuestion from './review-question'
 import { ReviewProvider, useReview } from '@utils/reviewContext'
+import { ReviewSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
+import { useCallback, useTransition } from 'react'
+import ReviewQuestion from './review-question'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
@@ -38,23 +37,13 @@ export default function ReviewForm({ review }: { review: Review }) {
                 notifications.show({
                     title: notifcationTitle,
                     message: notificationText,
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
             else {
                 notifications.show({
                     title: 'Ocurrió un error',
                     message: 'Hubo un problema al publicar tu revisión.',
-                    color: 'red',
-                    icon: <X />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'error',
                 })
             }
             startTransition(() => router.refresh())

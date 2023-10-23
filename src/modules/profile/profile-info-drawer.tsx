@@ -1,17 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
-import React, { useState } from 'react'
-import Image from 'next/image'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import CustomDrawer from '@elements/custom-drawer'
-import type { User } from '@prisma/client'
-import { Check, Mail, Password, UserCircle, X } from 'tabler-icons-react'
-import { notifications } from '@mantine/notifications'
 import { Button } from '@elements/button'
-import { useForm, zodResolver } from '@mantine/form'
-import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
+import CustomDrawer from '@elements/custom-drawer'
 import DisclosureComponent from '@elements/disclosure'
+import { notifications } from '@elements/notifications'
+import { useForm, zodResolver } from '@mantine/form'
+import type { User } from '@prisma/client'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
+import Image from 'next/image'
 import Link from 'next/link'
+import React, { useState } from 'react'
+import { Mail, Password, UserCircle } from 'tabler-icons-react'
 
 export default function ProfileDrawer({
     certificate,
@@ -55,9 +55,7 @@ export function ProfileInfo({
     })
 
     // I'm using useState because at some point it might be useful to change the random code. For now, it changes every time the drawer is rendered.
-    const [random, ] = useState(
-        (Math.random() + 1).toString(36).substring(7)
-    )
+    const [random] = useState((Math.random() + 1).toString(36).substring(7))
 
     const updateUserEmail = async ({
         id,
@@ -79,23 +77,13 @@ export function ProfileInfo({
                     title: 'Se cambió tu Email',
                     message:
                         'Vas a ver los cambios cuando vuelvas a iniciar sesión',
-                    color: 'success',
-                    icon: <Check />,
-                    radius: 8,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
             } else {
                 notifications.show({
                     title: 'Ocurrió un error',
                     message: 'No se pudo actualizar el Email',
-                    color: 'error',
-                    icon: <X />,
-                    radius: 8,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'error',
                 })
             }
             return res
@@ -129,23 +117,13 @@ export function ProfileInfo({
                 notifications.show({
                     title: 'Se cambió tu contraseña',
                     message: 'Se actualizó tu contraseña con éxito',
-                    color: 'success',
-                    icon: <Check />,
-                    radius: 8,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
             } else {
                 notifications.show({
                     title: 'Ocurrió un error',
                     message: 'No se pudo actualizar la contraseña',
-                    color: 'error',
-                    icon: <X />,
-                    radius: 8,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'error',
                 })
             }
             return res
@@ -174,12 +152,7 @@ export function ProfileInfo({
                     title: 'Se envió un código a tu Email',
                     message:
                         'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
-                    color: 'success',
-                    icon: <Check />,
-                    radius: 8,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'primary',
                 })
             }
             return res
