@@ -22,17 +22,16 @@ export default function ProtocolLogsDrawer({
     const [opened, setOpened] = useState(false)
 
     function closeFn() {
-        
         document.getElementById('drawer-overlay')?.classList.add('fade-out')
         document
             .getElementById('drawer-content')
             ?.classList.add('fade-out-right')
-    
-       setTimeout(()=>{
+
+        setTimeout(() => {
             setOpened(false)
         }, 300)
     }
- 
+
     return (
         <>
             <div className="group pointer-events-none relative">
@@ -46,68 +45,71 @@ export default function ProtocolLogsDrawer({
                     <Note className="h-4 w-4 text-gray-500 hover:text-gray-700" />
                 </button>
             </div>
-           <CustomDrawer title='Observaciones' open={opened} onClose={setOpened}><div className="space-y-2 overflow-y-auto rounded-md bg-gray-50 p-4 ">
-                            {logs.length > 0 ? (
-                                logs.map((log) => (
-                                    <div key={log.id} className="text-black/70">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm font-medium">
-                                                {log.user.name}
-                                            </span>
-                                            <span className="text-xs font-light">
-                                                {dateFormatter.format(
-                                                    log.createdAt
-                                                )}
-                                            </span>
-                                        </div>
-                                        <span className="border-l-1 pl-3 text-xs">
-                                            {log.message.replace('-->', ' a ')}
-                                        </span>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-center text-sm text-black/60">
-                                    No hay cambios de estado ni observaciones
+            <CustomDrawer
+                title="Observaciones"
+                open={opened}
+                onClose={setOpened}
+            >
+                <div className="max-h-[70svh] min-h-[10svh] overflow-y-auto border-b p-2">
+                    {logs.length > 0 ? (
+                        logs.map((log) => (
+                            <div key={log.id} className="text-black/70">
+                                <div className="flex justify-between">
+                                    <span className="text-sm font-medium">
+                                        {log.user.name}
+                                    </span>
+                                    <span className="text-xs font-light">
+                                        {dateFormatter.format(log.createdAt)}
+                                    </span>
                                 </div>
-                            )}
+                                <span className="border-l-1 pl-3 text-xs">
+                                    {log.message.replace('-->', ' a ')}
+                                </span>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center text-sm text-black/60">
+                            No hay cambios de estado ni observaciones
                         </div>
-                        <span className="flex-grow" />
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                startTransition(async () => {
-                                    const res = await newLog({
-                                        protocolId,
-                                        userId,
-                                        // @ts-ignore
-                                        message: e.target[0].value,
-                                    })
-                                    if (res) {
-                                        router.refresh()
-                                        setTimeout(() => {
-                                            closeFn()
-                                        }, 2000)
-                                    }
-                                })
-                            }}
-                            className="rounded-md bg-gray-50 p-2 "
-                        >
-                            <label className="label">Agregar observación</label>
-                            <textarea
-                                name="message"
-                                className="input text-sm"
-                                placeholder="Escriba sus observaciones ..."
-                                required
-                            />
-                            <Button
-                                loading={isPending}
-                                type="submit"
-                                intent="secondary"
-                                className="float-right"
-                            >
-                                Agregar
-                            </Button>
-                        </form></CustomDrawer>
+                    )}
+                </div>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        startTransition(async () => {
+                            const res = await newLog({
+                                protocolId,
+                                userId,
+                                // @ts-ignore
+                                message: e.target[0].value,
+                            })
+                            if (res) {
+                                router.refresh()
+                                setTimeout(() => {
+                                    closeFn()
+                                }, 2000)
+                            }
+                        })
+                    }}
+                    className="-mb-2 mt-4 rounded-md bg-gray-50 p-2"
+                >
+                    <label className="label">Agregar observación</label>
+                    <textarea
+                        name="message"
+                        className="input text-sm"
+                        placeholder="Escriba sus observaciones ..."
+                        required
+                    />
+                    <Button
+                        loading={isPending}
+                        type="submit"
+                        intent="secondary"
+                        className="ml-auto"
+                    >
+                        Agregar
+                    </Button>
+                </form>
+            </CustomDrawer>
         </>
     )
 }

@@ -14,6 +14,7 @@ export default async function Page({
     searchParams: { [key: string]: string }
 }) {
     const session = await getServerSession(authOptions)
+
     if (!session) return
 
     const [totalRecords, protocols] = await getProtocolsByRol(

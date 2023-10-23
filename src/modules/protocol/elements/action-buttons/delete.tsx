@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import type { Role, State } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
 import { ACTION } from '@utils/zod'
@@ -30,7 +30,7 @@ export function DeleteButton({
             notifications.show({
                 title: 'Protocolo eliminado',
                 message: 'El protocolo ha sido eliminado con éxito.',
-                color: 'green',
+                intent: 'success',
             })
             return startTransition(() => {
                 setDeleting(false)

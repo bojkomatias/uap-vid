@@ -1,7 +1,7 @@
 'use client'
 import type { State, Role } from '@prisma/client'
 import { ACTION } from '@utils/zod'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
@@ -28,14 +28,14 @@ export const FinishButton = ({ role, protocol }: ActionButtonTypes) => {
             notifications.show({
                 title: 'Proyecto finalizado',
                 message: 'El protocolo ha sido marcado como finalizado',
-                color: 'green',
+                intent: 'success',
             })
             return startTransition(() => router.refresh())
         }
         return notifications.show({
             title: 'No hemos podido marcar el protocolo como finalizado',
             message: 'Lo lamentamos, ha ocurrido un error',
-            color: 'red',
+            intent: 'error',
         })
     }
 

@@ -100,7 +100,7 @@ export const ReviewerCertificatePDF = ({
                 fileName={`CERTIFICADO-${user.name
                     .replaceAll(' ', '_')
                     .toLowerCase()}`}
-                document={<PDFDocument user={user}/>}
+                document={<PDFDocument user={user} />}
             >
                 <Button intent="outline" className="float-right mt-4">
                     Descargar certificado de evaluación

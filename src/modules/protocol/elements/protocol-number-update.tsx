@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@elements/button'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import type { Role } from '@prisma/client'
 import { patchProtocolNumber } from '@repositories/protocol'
 import { cx } from '@utils/cx'
@@ -55,12 +55,7 @@ export default function ProtocolNumberUpdate({
                         notifications.show({
                             title: 'Actualizado',
                             message: 'El número del protocolo fue actualizado',
-                            color: 'success',
-                            icon: <Check />,
-                            radius: 0,
-                            style: {
-                                marginBottom: '.8rem',
-                            },
+                            intent: 'success',
                         })
                     }
                 }}

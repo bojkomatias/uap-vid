@@ -1,8 +1,11 @@
 'use client'
+import { buttonStyle } from '@elements/button/styles'
 import TanStackTable from '@elements/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
+import { cx } from '@utils/cx'
 import { dateFormatter } from '@utils/formatters'
+import Link from 'next/link'
 
 export async function ConvocatoryTable({
     convocatories,
@@ -26,11 +29,9 @@ export async function ConvocatoryTable({
             enableHiding: true,
             enableSorting: false,
         },
-
         {
             accessorKey: 'year',
             header: 'Año',
-
             enableHiding: true,
             enableSorting: false,
         },
@@ -65,6 +66,23 @@ export async function ConvocatoryTable({
                     ) : null
                 }
             },
+        },
+        {
+            accessorKey: 'actions',
+            header: 'Ver',
+            enableHiding: false,
+            enableSorting: false,
+            cell: ({ row }) => (
+                <Link
+                    href={`/convocatories/${row.original.id}`}
+                    className={cx(
+                        buttonStyle('secondary'),
+                        'px-2.5 py-1 text-xs'
+                    )}
+                >
+                    Ver
+                </Link>
+            ),
         },
     ]
 
