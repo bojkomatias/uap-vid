@@ -79,6 +79,7 @@ export default function CategoriesTable({
         <>
             <Button
                 onClick={() => {
+                    //Acá est donde estoy testeando el hook. Usando render() me había funcionado, pero como está deprecado y afecta a la performance, no quise ir por ese lado. Probé con createPortal, que funciona de manera similar a render() y no renderiza la notificación.
                     notificationHook({
                         title: 'Hola',
                         message: 'Testeando hook de notificaciones',

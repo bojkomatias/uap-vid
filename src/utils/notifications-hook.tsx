@@ -8,6 +8,7 @@ export type NotificationType = {
     ms_duration: number
 }
 
+//La razón por la cual cree esta variable que devuelve lo mismo que podría devolver el useCustomNotification es porque me jodía con el error "Component definition is missing display name".
 const NotificationComponent = ({
     title,
     message,
