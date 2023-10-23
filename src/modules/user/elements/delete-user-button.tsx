@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
@@ -25,7 +25,7 @@ export function DeleteUserButton({
             notifications.show({
                 title: 'Usuario eliminado',
                 message: 'El usuario ha sido eliminado con éxito.',
-                color: 'green',
+                intent: 'success',
             })
             return startTransition(() => router.refresh())
         }
@@ -33,7 +33,7 @@ export function DeleteUserButton({
             title: 'No se pudo eliminar usuario',
             message:
                 'El usuario esta vinculado con algún protocolo y no se puede eliminar.',
-            color: 'red',
+            intent: 'error',
         })
         setDeleting(false)
         return startTransition(() => router.refresh())

@@ -16,7 +16,7 @@ import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import type { z } from 'zod'
 import CategorizationForm from './categorization-form'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 
 export default function TeamMemberForm({
@@ -58,12 +58,7 @@ export default function TeamMemberForm({
                         : 'Miembro creado',
                     message:
                         'El miembro de investigación fue creado correctamente',
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
 
                 const { id } = await res.json()
@@ -75,12 +70,7 @@ export default function TeamMemberForm({
                 title: 'Ha ocurrido un error',
                 message:
                     'Hubo un error al guardar el miembro de investigación.',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
         },
         [router]

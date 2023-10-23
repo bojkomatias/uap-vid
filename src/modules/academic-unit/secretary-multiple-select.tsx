@@ -1,10 +1,10 @@
 'use client'
+import { notifications } from '@elements/notifications'
 import { Combobox } from '@headlessui/react'
-import { notifications } from '@mantine/notifications'
 import type { User } from '@prisma/client'
 import { cx } from '@utils/cx'
 import { useCallback, useState } from 'react'
-import { Check, Selector, X } from 'tabler-icons-react'
+import { Check, Selector } from 'tabler-icons-react'
 
 let timeout: NodeJS.Timeout
 
@@ -34,22 +34,12 @@ export function SecretaryMultipleSelect({
                     title: 'Secretarios modificados',
                     message:
                         'Se actualizo la lista de secretarios para la unidad académica.',
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
             notifications.show({
                 title: 'Error',
                 message: 'Ocurrió un error al actualizar los secretarios',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
         },
         []

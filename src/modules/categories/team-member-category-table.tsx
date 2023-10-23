@@ -6,8 +6,6 @@ import { type ColumnDef } from '@tanstack/react-table'
 import PriceUpdate from './price-update'
 import TeamMemberCategoryView from './team-member-category-view'
 import Currency from '@elements/currency'
-import { Button } from '@elements/button'
-import { useCustomNotification } from '@utils/notifications-hook'
 
 export default function CategoriesTable({
     categories,
@@ -16,7 +14,6 @@ export default function CategoriesTable({
     categories: TeamMemberCategory[]
     totalRecords: number
 }) {
-    const notificationHook = useCustomNotification()
     const columns = useMemo<ColumnDef<any>[]>(
         () => [
             {
@@ -76,29 +73,12 @@ export default function CategoriesTable({
     const initialVisible = { id: false }
 
     return (
-        <>
-            <Button
-                onClick={() => {
-                    //Acá est donde estoy testeando el hook. Usando render() me había funcionado, pero como está deprecado y afecta a la performance, no quise ir por ese lado. Probé con createPortal, que funciona de manera similar a render() y no renderiza la notificación.
-                    notificationHook({
-                        title: 'Hola',
-                        message: 'Testeando hook de notificaciones',
-                        intent: 'success',
-                        ms_duration: 5000,
-                    })
-                }}
-                intent="primary"
-            >
-                Hola
-            </Button>
-
-            <TanStackTable
-                data={categories}
-                columns={columns}
-                totalRecords={totalRecords}
-                initialVisibility={initialVisible}
-                searchBarPlaceholder="Buscar por nombre de categoría"
-            />
-        </>
+        <TanStackTable
+            data={categories}
+            columns={columns}
+            totalRecords={totalRecords}
+            initialVisibility={initialVisible}
+            searchBarPlaceholder="Buscar por nombre de categoría"
+        />
     )
 }

@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@elements/button'
+import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import { notifications } from '@mantine/notifications'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
 import {
     ExecutionType,
@@ -9,7 +9,6 @@ import {
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
-import { Check } from 'tabler-icons-react'
 import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetTeamMemberFees({
@@ -43,12 +42,7 @@ export function BudgetTeamMemberFees({
                         title: 'Valores actualizados',
                         message:
                             'Las horas de los miembros de equipo fueron actualizadas con éxito',
-                        color: 'teal',
-                        icon: <Check />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'success',
                     })
             })}
         >
@@ -203,7 +197,7 @@ export function BudgetTeamMemberFees({
                                                     form.isDirty(
                                                         `${i}.hours`
                                                     ) &&
-                                                    'border-warning-200 bg-warning-50'
+                                                        'border-warning-200 bg-warning-50'
                                                 )}
                                                 placeholder="24"
                                             />
@@ -279,15 +273,15 @@ export function BudgetTeamMemberFees({
                                             obrero={
                                                 obrero
                                                     ? {
-                                                        pointsObrero:
-                                                            pointsObrero ?? 0,
-                                                        pointPrice:
-                                                            categories
-                                                                .at(-1)
-                                                                ?.category.price.at(
-                                                                    -1
-                                                                )?.price ?? 0,
-                                                    }
+                                                          pointsObrero:
+                                                              pointsObrero ?? 0,
+                                                          pointPrice:
+                                                              categories
+                                                                  .at(-1)
+                                                                  ?.category.price.at(
+                                                                      -1
+                                                                  )?.price ?? 0,
+                                                      }
                                                     : undefined
                                             }
                                         />

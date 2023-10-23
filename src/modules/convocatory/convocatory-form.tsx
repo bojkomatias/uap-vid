@@ -1,14 +1,13 @@
 'use client'
 import { Button } from '@elements/button'
+import { notifications } from '@elements/notifications'
+import { DateTimePicker } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
-import { notifications } from '@mantine/notifications'
 import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
+import 'dayjs/locale/es'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
-import { Check } from 'tabler-icons-react'
-import { DateTimePicker } from '@mantine/dates'
-import 'dayjs/locale/es'
 
 export function ConvocatoryForm({
     convocatory,
@@ -41,12 +40,7 @@ export function ConvocatoryForm({
                     notifications.show({
                         title: 'Convocatoria creada',
                         message: 'La convocatoria ha sido creada con éxito',
-                        color: 'teal',
-                        icon: <Check />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'success',
                     })
                 }
                 router.refresh()
@@ -65,12 +59,7 @@ export function ConvocatoryForm({
                 notifications.show({
                     title: 'Convocatoria guardada',
                     message: 'La convocatoria ha sido guardado con éxito',
-                    color: 'teal',
-                    icon: <Check />,
-                    radius: 0,
-                    style: {
-                        marginBottom: '.8rem',
-                    },
+                    intent: 'success',
                 })
                 startTransition(() => router.refresh())
             }

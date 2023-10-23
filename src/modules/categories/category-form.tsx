@@ -1,15 +1,13 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { notifications } from '@mantine/notifications'
-import { Check, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
+import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
-import { TeamMemberCategorySchema } from '@utils/zod'
-import type { z } from 'zod'
 import { cx } from '@utils/cx'
-import { useCustomNotification } from '@utils/notifications-hook'
+import { TeamMemberCategorySchema } from '@utils/zod'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import type { z } from 'zod'
 
 /**The prop column is to set the content as columns instead of rows */
 export default function CategoryForm({
@@ -20,7 +18,6 @@ export default function CategoryForm({
     column?: boolean
 }) {
     const router = useRouter()
-    const notificationHook = useCustomNotification()
     const form = useForm({
         initialValues: { state: true, name: '', price: [] },
         validate: zodResolver(TeamMemberCategorySchema),
@@ -42,11 +39,10 @@ export default function CategoryForm({
             body: JSON.stringify(category),
         })
         if (res.status === 200) {
-            notificationHook({
-                title: 'Tu vieja',
-                message: 'Pinga',
-                intent: 'error',
-                ms_duration: 5000,
+            notifications.show({
+                title: 'Categoría creada',
+                message: 'Se creo correctamente la categoría',
+                intent: 'success',
             })
             setLoading(false)
 
@@ -59,12 +55,7 @@ export default function CategoryForm({
             notifications.show({
                 title: 'Error',
                 message: 'No se pudo crear la categoría',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
             setLoading(false)
         }

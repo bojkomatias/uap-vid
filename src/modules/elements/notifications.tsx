@@ -8,7 +8,6 @@ type NotificationProps = {
     title: string
     message: string
     intent: 'primary' | 'success' | 'error'
-    ms_duration?: number
 }
 
 const duration_default = 5000
@@ -21,7 +20,7 @@ class Notifications {
         root.render(<Notification {...props} />)
         setTimeout(() => {
             root.unmount()
-        }, props.ms_duration ?? duration_default)
+        }, duration_default)
     }
 }
 
@@ -36,20 +35,15 @@ const colors = {
 /**
  * Notification Component
  */
-function Notification({
-    title,
-    message,
-    intent,
-    ms_duration = duration_default,
-}: NotificationProps) {
+function Notification({ title, message, intent }: NotificationProps) {
     useEffect(() => {
         setTimeout(() => {
             document
                 .getElementById('custom-notification')
                 ?.classList.add('fade-out-right')
-        }, ms_duration - 600)
+        }, duration_default - 600)
     })
-    //It has the max value permitted for the z-index to ensure it'll always be on top
+
     return (
         <div
             id="custom-notification"

@@ -6,7 +6,7 @@ import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Disclosure, Transition } from '@headlessui/react'
-import { notifications } from '@elements/notification'
+import { notifications } from '@elements/notifications'
 
 export const SignIn = () => {
     const router = useRouter()
