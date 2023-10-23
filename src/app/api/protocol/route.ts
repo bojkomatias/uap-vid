@@ -1,15 +1,14 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createProtocol } from '../../../repositories/protocol'
-import { getConvocatoryById } from '@repositories/convocatory'
+import { getConvocatoryByIdWithCount } from '@repositories/convocatory'
 import type { Protocol } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
     const data = (await request.json()) as Protocol
 
     // Get the convocatory with the protocol count
-    const convocatory = await getConvocatoryById(data.convocatoryId)
+    const convocatory = await getConvocatoryByIdWithCount(data.convocatoryId)
 
     const pNumber =
         convocatory?.year.toString().substring(2, 4) +
