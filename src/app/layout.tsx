@@ -31,6 +31,7 @@ export default async function RootLayout({
             ) : null}
             <body className="subpixel-antialiased">
                 <MantineProvider>
+                    <div id="notifications-container" className="relative" />
                     <Header />
                     <main className="relative min-h-[90vh]">{children}</main>
                     <Footer />

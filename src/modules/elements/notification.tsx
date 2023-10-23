@@ -1,7 +1,31 @@
 'use client'
 import { cx } from '@utils/cx'
 import React, { useEffect } from 'react'
+import { createRoot } from 'react-dom/client'
 import { Check, InfoCircle, X } from 'tabler-icons-react'
+
+type NotificationProps = {
+    title: string
+    message: string
+    intent: 'primary' | 'success' | 'error'
+    ms_duration?: number
+}
+
+const duration_default = 5000
+
+class Notifications {
+    show(props: NotificationProps) {
+        const root = createRoot(
+            document.getElementById('notifications-container')!
+        )
+        root.render(<Notification {...props} />)
+        setTimeout(() => {
+            root.unmount()
+        }, props.ms_duration ?? duration_default)
+    }
+}
+
+export const notifications = new Notifications()
 
 const colors = {
     primary: 'primary',
@@ -9,30 +33,27 @@ const colors = {
     error: 'error-500',
 }
 
-export default function Notification({
-    title = 'Testeando notificaciones',
-    message = 'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
-    intent = 'success',
-    ms_duration = 5000,
-}: {
-    title?: string
-    message?: string
-    intent?: 'primary' | 'success' | 'error'
-    ms_duration?: number
-}) {
+/**
+ * Notification Component
+ */
+function Notification({
+    title,
+    message,
+    intent,
+    ms_duration = duration_default,
+}: NotificationProps) {
     useEffect(() => {
         setTimeout(() => {
             document
                 .getElementById('custom-notification')
                 ?.classList.add('fade-out-right')
-        }, ms_duration)
+        }, ms_duration - 600)
     })
     //It has the max value permitted for the z-index to ensure it'll always be on top
     return (
         <div
-            key="custom-notification-key"
             id="custom-notification"
-            className=" fixed bottom-[3%] right-[2%] z-[2147483647] mx-auto flex w-[20rem] gap-2  rounded-md border bg-white p-2 text-sm shadow-lg"
+            className="fade-in-right fixed bottom-[3%] right-[2%] z-50 mx-auto flex w-[20rem] gap-2 rounded-md border bg-white p-2 text-sm shadow-lg"
         >
             <div
                 className={cx(
