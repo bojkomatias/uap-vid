@@ -3,26 +3,23 @@ import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { Logout, Settings } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import Image from 'next/image'
 import { useState } from 'react'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
+import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { Logout, Settings } from 'tabler-icons-react'
 
-export const UserDropdown = ({user}:{user:User}) => {
+export const UserDropdown = ({ user }: { user: User }) => {
     const [loading, setLoading] = useState(false)
-
 
     const path = usePathname()
     if (user) {
         return (
             <>
                 <span className="hidden flex-col items-end lg:flex">
-                    <span className="text-xs font-medium">
-                        {user.name}
-                    </span>
+                    <span className="text-xs font-medium">{user.name}</span>
                 </span>
                 <Menu as="div" className="relative ml-1">
                     <div>
@@ -52,9 +49,7 @@ export const UserDropdown = ({user}:{user:User}) => {
                             ) : (
                                 // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
-                                    {user.name
-                                        .split(' ')[0]
-                                        .substring(0, 1) +
+                                    {user.name.split(' ')[0].substring(0, 1) +
                                         user.name
                                             .split(' ')
                                             .at(-1)

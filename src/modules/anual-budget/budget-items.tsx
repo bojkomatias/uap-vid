@@ -1,14 +1,13 @@
 'use client'
 import { Button } from '@elements/button'
+import CurrencyInput from '@elements/currency-input'
+import { notifications } from '@elements/notifications'
+import { useForm } from '@mantine/form'
 import type { AnualBudgetItem } from '@prisma/client'
+import { updateAnualBudgetItems } from '@repositories/anual-budget'
+import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
-import { useForm } from '@mantine/form'
-import CurrencyInput from '@elements/currency-input'
-import { updateAnualBudgetItems } from '@repositories/anual-budget'
-import { notifications } from '@mantine/notifications'
-import { Check } from 'tabler-icons-react'
-import { ExecutionType } from '@utils/anual-budget'
 import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetItems({
@@ -43,12 +42,7 @@ export function BudgetItems({
                         title: 'Valores actualizados',
                         message:
                             'Los montos a aprobar fueron actualizados con éxito',
-                        color: 'teal',
-                        icon: <Check />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'success',
                     })
             })}
         >
@@ -172,7 +166,7 @@ export function BudgetItems({
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
                                             !approved &&
-                                            'float-right table-cell'
+                                                'float-right table-cell'
                                         )}
                                     >
                                         <CurrencyInput
@@ -190,7 +184,7 @@ export function BudgetItems({
                                             className={cx(
                                                 'w-32 text-xs',
                                                 form.isDirty(`${i}.amount`) &&
-                                                'border-warning-200 bg-warning-50'
+                                                    'border-warning-200 bg-warning-50'
                                             )}
                                         />
                                     </td>

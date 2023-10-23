@@ -1,6 +1,6 @@
 'use client'
 import { Combobox } from '@headlessui/react'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
 import type { State } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
@@ -46,7 +46,7 @@ const ReviewAssignSelect = ({
             notifications.show({
                 title: 'Evaluador asignado',
                 message: 'El evaluador ha sido asignado con éxito',
-                color: 'green',
+                intent: 'success',
             })
 
             setShow(false)
@@ -55,7 +55,7 @@ const ReviewAssignSelect = ({
         return notifications.show({
             title: 'No hemos podido asignar el evaluador',
             message: 'Lo lamentamos, ha ocurrido un error',
-            color: 'red',
+            intent: 'error',
         })
     }
 

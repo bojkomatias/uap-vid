@@ -1,11 +1,10 @@
 'use client'
 import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import type { AcademicUnitBudget } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Check, X } from 'tabler-icons-react'
 
 export const AcademicUnitBudgetUpdate = ({
     academicUnitId,
@@ -56,12 +55,7 @@ export const AcademicUnitBudgetUpdate = ({
             notifications.show({
                 title: 'Presupuesto actualizado',
                 message: 'El presupuesto fue actualizado correctamente',
-                color: 'success',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'success',
             })
 
             router.refresh()
@@ -69,12 +63,7 @@ export const AcademicUnitBudgetUpdate = ({
             notifications.show({
                 title: 'Error',
                 message: 'No se pudo actualizar el precio',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
         }
     }

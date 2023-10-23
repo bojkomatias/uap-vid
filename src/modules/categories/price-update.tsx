@@ -1,11 +1,10 @@
 import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
+import { notifications } from '@elements/notifications'
 import PopoverComponent from '@elements/popover'
-import { notifications } from '@mantine/notifications'
 import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { Check, X } from 'tabler-icons-react'
+import { useState } from 'react'
 
 export default function PriceUpdate({
     category,
@@ -29,12 +28,7 @@ export default function PriceUpdate({
             notifications.show({
                 title: 'Precio actualizado',
                 message: 'El precio fue actualizado correctamente',
-                color: 'success',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'success',
             })
 
             router.refresh()
@@ -45,12 +39,7 @@ export default function PriceUpdate({
             notifications.show({
                 title: 'Error',
                 message: 'No se pudo actualizar el precio',
-                color: 'red',
-                icon: <X />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+                intent: 'error',
             })
         }
     }
@@ -109,9 +98,7 @@ export default function PriceUpdate({
                         category.price[category.price.length - 1]?.price
                     }
                     className="min-w-[7rem] rounded-md py-1 text-xs"
-
                     priceSetter={(e) => setPrice(e)}
-
                 />
             </div>
         </PopoverComponent>

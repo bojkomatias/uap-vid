@@ -1,11 +1,12 @@
 'use client'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { notifications } from '@mantine/notifications'
+
 import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Disclosure, Transition } from '@headlessui/react'
+import { notifications } from '@elements/notifications'
 
 export const SignIn = () => {
     const router = useRouter()
@@ -38,13 +39,13 @@ export const SignIn = () => {
                         redirect: false,
                         callbackUrl: '/protocols',
                     })
-                    
+
                     if ((res && res.status !== 200) || (res && res.error)) {
                         setLoading(false)
                         notifications.show({
                             title: 'No se pudo iniciar sesión',
                             message: 'Credenciales inválidas',
-                            color: 'red',
+                            intent: 'error',
                         })
                     } else {
                         setLoading(false)

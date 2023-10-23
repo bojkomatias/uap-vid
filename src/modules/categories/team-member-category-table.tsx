@@ -73,14 +73,12 @@ export default function CategoriesTable({
     const initialVisible = { id: false }
 
     return (
-        <>
-            <TanStackTable
-                data={categories}
-                columns={columns}
-                totalRecords={totalRecords}
-                initialVisibility={initialVisible}
-                searchBarPlaceholder="Buscar por nombre de categoría"
-            />
-        </>
+        <TanStackTable
+            data={categories}
+            columns={columns}
+            totalRecords={totalRecords}
+            initialVisibility={initialVisible}
+            searchBarPlaceholder="Buscar por nombre de categoría"
+        />
     )
 }

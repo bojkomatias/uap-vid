@@ -1,10 +1,9 @@
 'use client'
 import { Button } from '@elements/button'
-import { notifications } from '@mantine/notifications'
+import { notifications } from '@elements/notifications'
 import { approveAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
-import { Check, X } from 'tabler-icons-react'
 
 export function ApproveAnualBudget({ id }: { id: string }) {
     const router = useRouter()
@@ -21,23 +20,13 @@ export function ApproveAnualBudget({ id }: { id: string }) {
                         title: 'Error al aprobar',
                         message:
                             'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
-                        color: 'red',
-                        icon: <X />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'error',
                     })
                 if (res)
                     notifications.show({
                         title: 'Presupuesto aprobado',
                         message: 'El presupuesto fue aprobado con éxito',
-                        color: 'teal',
-                        icon: <Check />,
-                        radius: 0,
-                        style: {
-                            marginBottom: '.8rem',
-                        },
+                        intent: 'success',
                     })
                 startTransition(() => router.refresh())
             }}
