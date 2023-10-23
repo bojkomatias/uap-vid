@@ -56,7 +56,7 @@ export default function CustomDrawer({
                             <Dialog.Title className="font-semibold text-gray-600">
                                 {title}
                             </Dialog.Title>
-                            <div className="mt-2 rounded-md border border-gray-100 bg-gray-50 p-4 pb-6 shadow-md">
+                            <div className="mt-2 rounded-md border border-gray-100 bg-gray-50 p-4 shadow-md">
                                 {children}
                             </div>
                         </Dialog.Panel>

@@ -1,11 +1,9 @@
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import { DateTimePicker } from '@mantine/dates'
 import { useForm, zodResolver } from '@mantine/form'
 import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
-import 'dayjs/locale/es'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 
@@ -109,9 +107,7 @@ export function ConvocatoryForm({
             </div>
 
             <div className="m-3 p-1">
-                <label className="label">
-                    Fecha desde {new Date().toISOString().substring(0, 16)}
-                </label>
+                <label className="label">Fecha desde</label>
                 <input
                     type="datetime-local"
                     className="input"

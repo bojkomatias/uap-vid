@@ -1,11 +1,8 @@
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import { SegmentedControl } from '@mantine/core'
 import { zodResolver } from '@mantine/form'
 import type { Protocol } from '@prisma/client'
-import { usePathname, useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
 import {
     BibliographyForm,
     BudgetForm,
