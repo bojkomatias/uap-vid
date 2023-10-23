@@ -6,6 +6,8 @@ import { type ColumnDef } from '@tanstack/react-table'
 import PriceUpdate from './price-update'
 import TeamMemberCategoryView from './team-member-category-view'
 import Currency from '@elements/currency'
+import { Button } from '@elements/button'
+import { useCustomNotification } from '@utils/notifications-hook'
 
 export default function CategoriesTable({
     categories,
@@ -14,6 +16,7 @@ export default function CategoriesTable({
     categories: TeamMemberCategory[]
     totalRecords: number
 }) {
+    const notificationHook = useCustomNotification()
     const columns = useMemo<ColumnDef<any>[]>(
         () => [
             {
@@ -74,6 +77,20 @@ export default function CategoriesTable({
 
     return (
         <>
+            <Button
+                onClick={() => {
+                    notificationHook({
+                        title: 'Hola',
+                        message: 'Testeando hook de notificaciones',
+                        intent: 'success',
+                        ms_duration: 5000,
+                    })
+                }}
+                intent="primary"
+            >
+                Hola
+            </Button>
+
             <TanStackTable
                 data={categories}
                 columns={columns}

@@ -15,9 +15,9 @@ export default function Notification({
     intent = 'success',
     ms_duration = 5000,
 }: {
-    title: string
-    message: string
-    intent: 'primary' | 'success' | 'error'
+    title?: string
+    message?: string
+    intent?: 'primary' | 'success' | 'error'
     ms_duration?: number
 }) {
     useEffect(() => {
@@ -30,8 +30,9 @@ export default function Notification({
     //It has the max value permitted for the z-index to ensure it'll always be on top
     return (
         <div
+            key="custom-notification-key"
             id="custom-notification"
-            className="fade-in-right fixed bottom-[3%] right-[2%] z-[2147483647] mx-auto flex w-[20rem] gap-2  rounded-md border bg-white p-2 text-sm shadow-lg"
+            className=" fixed bottom-[3%] right-[2%] z-[2147483647] mx-auto flex w-[20rem] gap-2  rounded-md border bg-white p-2 text-sm shadow-lg"
         >
             <div
                 className={cx(
@@ -39,7 +40,7 @@ export default function Notification({
                     `bg-${colors[intent]}`
                 )}
             ></div>
-            <div className="flex flex-col">
+            <div className="flex flex-grow flex-col">
                 <div className="flex items-center gap-1 border-b pb-1">
                     {intent == 'error' ? (
                         <X className={cx(`text-${colors[intent]}`)} />

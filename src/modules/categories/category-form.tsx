@@ -9,6 +9,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import type { z } from 'zod'
 import { cx } from '@utils/cx'
+import { useCustomNotification } from '@utils/notifications-hook'
 
 /**The prop column is to set the content as columns instead of rows */
 export default function CategoryForm({
@@ -19,7 +20,7 @@ export default function CategoryForm({
     column?: boolean
 }) {
     const router = useRouter()
-
+    const notificationHook = useCustomNotification()
     const form = useForm({
         initialValues: { state: true, name: '', price: [] },
         validate: zodResolver(TeamMemberCategorySchema),
@@ -41,24 +42,19 @@ export default function CategoryForm({
             body: JSON.stringify(category),
         })
         if (res.status === 200) {
-            notifications.show({
-                title: 'Categoría creada',
-                message: 'Nueva categoría creada correctamente',
-                color: 'success',
-                icon: <Check />,
-                radius: 0,
-                style: {
-                    marginBottom: '.8rem',
-                },
+            notificationHook({
+                title: 'Tu vieja',
+                message: 'Pinga',
+                intent: 'error',
+                ms_duration: 5000,
             })
             setLoading(false)
 
-            closeInterceptingDrawer
-                ? //Agregué un timeout porque era demasiado rápido el close
-                  setTimeout(() => {
-                      closeInterceptingDrawer(router)
-                  }, 500)
-                : router.push('/categories')
+            //Agregué un timeout porque era demasiado rápido el close
+            setTimeout(() => {
+                closeInterceptingDrawer && closeInterceptingDrawer(router)
+                router.push('/categories')
+            }, 500)
         } else if (res.status === 422) {
             notifications.show({
                 title: 'Error',
