@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import type { AnualBudgetTeamMemberWithAllRelations } from '@utils/anual-budget'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { notifications } from '@elements/notifications'
 
 type ActionButtonTypes = {
     hasBudgetCurrentYear: boolean
@@ -43,7 +44,7 @@ export default function GenerateAnualBudgetButton({
                     intent="secondary"
                     onClick={() => {
                         router.push(`/protocols/${budgetPreview.protocolId}/0`)
-                        close()
+                        setOpen(false)
                     }}
                 >
                     Editar miembros de equipo
@@ -53,12 +54,30 @@ export default function GenerateAnualBudgetButton({
             return (
                 <Button
                     intent="secondary"
-                    onClick={() => {
-                        generateAnualBudget(
+                    onClick={async () => {
+                        const budget = await generateAnualBudget(
                             budgetPreview.protocolId,
                             currentYear
                         )
-                        close()
+
+                        //Adding this for improved UX.
+                        setTimeout(() => {
+                            budget
+                                ? notifications.show({
+                                      title: 'Presupuesto generado',
+                                      message:
+                                          'Se generó correctamente el presupuesto',
+                                      intent: 'success',
+                                  })
+                                : notifications.show({
+                                      title: 'Problema al generar presupuesto',
+                                      message:
+                                          'Ocurrió un error al generar el presupuesto',
+                                      intent: 'error',
+                                  })
+
+                            setOpen(false)
+                        }, 500)
                     }}
                 >
                     Generar presupuesto
@@ -217,42 +236,53 @@ export default function GenerateAnualBudgetButton({
                                                         )
                                                     )}
                                                 </div>
-                                                <div className="my-2 rounded-md border px-6 py-2 text-sm shadow">
-                                                    <div className="grid grid-cols-3 ">
-                                                        <div className=" w-fit font-semibold text-gray-600">
-                                                            <span>Item</span>
-                                                        </div>
-                                                        <div className="text-center font-semibold text-gray-600">
-                                                            <span>Tipo</span>
-                                                        </div>
-                                                        <div className="text-right font-semibold text-gray-600">
-                                                            <span>Monto</span>
-                                                        </div>
-                                                    </div>
-
-                                                    {budgetPreview.budgetItems.map(
-                                                        (i, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className="my-2 grid grid-cols-3"
-                                                            >
+                                                {budgetPreview.budgetItems
+                                                    .length !== 0 && (
+                                                    <div className="my-2 rounded-md border px-6 py-2 text-sm shadow">
+                                                        <div className="grid grid-cols-3 ">
+                                                            <div className=" w-fit font-semibold text-gray-600">
                                                                 <span>
-                                                                    {i.detail}
-                                                                </span>
-                                                                <span className="text-center">
-                                                                    {i.type}
-                                                                </span>
-                                                                <span className="text-right">
-                                                                    <Currency
-                                                                        amount={
-                                                                            i.amount
-                                                                        }
-                                                                    />
+                                                                    Item
                                                                 </span>
                                                             </div>
-                                                        )
-                                                    )}
-                                                </div>
+                                                            <div className="text-center font-semibold text-gray-600">
+                                                                <span>
+                                                                    Tipo
+                                                                </span>
+                                                            </div>
+                                                            <div className="text-right font-semibold text-gray-600">
+                                                                <span>
+                                                                    Monto
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        {budgetPreview.budgetItems.map(
+                                                            (i, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="my-2 grid grid-cols-3"
+                                                                >
+                                                                    <span>
+                                                                        {
+                                                                            i.detail
+                                                                        }
+                                                                    </span>
+                                                                    <span className="text-center">
+                                                                        {i.type}
+                                                                    </span>
+                                                                    <span className="text-right">
+                                                                        <Currency
+                                                                            amount={
+                                                                                i.amount
+                                                                            }
+                                                                        />
+                                                                    </span>
+                                                                </div>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </section>
@@ -264,7 +294,7 @@ export default function GenerateAnualBudgetButton({
                 </Dialog>
             </Transition>
 
-            {hasBudgetCurrentYear ? (
+            {!hasBudgetCurrentYear ? (
                 <div className="relative w-fit">
                     <div className="absolute inset-0 z-[10] mr-3 ">
                         <InfoTooltip>
@@ -285,7 +315,11 @@ export default function GenerateAnualBudgetButton({
                     </Button>
                 </div>
             ) : (
-                <Button intent="secondary" onClick={() => setOpen(true)}>
+                <Button
+                    className="h-10"
+                    intent="secondary"
+                    onClick={() => setOpen(true)}
+                >
                     <FileDollar />
                     Generar presupuesto
                 </Button>
