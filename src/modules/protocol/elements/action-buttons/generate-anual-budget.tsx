@@ -266,7 +266,7 @@ export default function GenerateAnualBudgetButton({
 
             {hasBudgetCurrentYear ? (
                 <div className="relative h-fit w-fit">
-                    <div className="absolute inset-0 z-[1] mr-3">
+                    <div className="absolute inset-0 z-[10] mr-3">
                         <InfoTooltip>
                             <h4>
                                 El protocolo ya tiene generado un presupuesto en
