@@ -265,8 +265,8 @@ export default function GenerateAnualBudgetButton({
             </Transition>
 
             {hasBudgetCurrentYear ? (
-                <div className="relative h-fit w-fit">
-                    <div className="absolute inset-0 z-[10] mr-3">
+                <div className="relative w-fit">
+                    <div className="absolute inset-0 z-[10] mr-3 ">
                         <InfoTooltip>
                             <h4>
                                 El protocolo ya tiene generado un presupuesto en
@@ -275,12 +275,13 @@ export default function GenerateAnualBudgetButton({
                         </InfoTooltip>
                     </div>
                     <Button
+                        className="h-10"
                         intent={'secondary'}
                         disabled={hasBudgetCurrentYear}
                     >
                         <FileDollar />
                         Generar presupuesto
-                        <div className="w-4" />
+                        <div className="w-4 " />
                     </Button>
                 </div>
             ) : (
