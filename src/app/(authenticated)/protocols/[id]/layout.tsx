@@ -75,10 +75,6 @@ async function Layout({
                             state: protocol.state,
                         }}
                     />
-                    <ApproveButton
-                        role={session.user.role}
-                        protocol={{ id: protocol.id, state: protocol.state }}
-                    />
                     <AcceptButton
                         role={session.user.role}
                         protocol={{ id: protocol.id, state: protocol.state }}
