@@ -26,11 +26,11 @@ const totalExecution = (ex: Execution[]): number => {
     }, 0) : 0
 }
 
-const calculateRemainingABI = (abi: AnualBudgetItem[]): number => {
-    return abi ? abi.reduce((acc, item) => {
+const calculateRemainingABI = (abi: AnualBudgetItem[], amountOfAcademicUnits:number): number => {
+    return abi ? (abi.reduce((acc, item) => {
         acc += item.remaining
         return acc
-    }, 0) : 0
+    }, 0) / amountOfAcademicUnits) : 0
 }
 
 const calculateRemainingABTM = (
@@ -54,16 +54,18 @@ export const calculateTotalBudget = (
         budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     }
 ) => {
+    const amountOfAcademicUnits = anualBudget.academicUnitsIds.length
+
     //Executions
     const ABIe = totalExecution(
-        anualBudget.budgetItems?.map((item) => item.executions).flat()
+        anualBudget.budgetItems.map((item) => item.executions).flat()
     )
     const ABTe = totalExecution(
-        anualBudget.budgetTeamMembers?.map((item) => item.executions).flat()
+        anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
     )
 
     //Remainings
-    const ABIr = calculateRemainingABI(anualBudget.budgetItems)
+    const ABIr = calculateRemainingABI(anualBudget.budgetItems, amountOfAcademicUnits)
     const ABTr = calculateRemainingABTM(anualBudget.budgetTeamMembers)
 
     return {
