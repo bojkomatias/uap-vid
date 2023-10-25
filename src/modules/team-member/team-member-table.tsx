@@ -13,6 +13,7 @@ type TeamMember = Prisma.TeamMemberGetPayload<{
     include: {
         user: { select: { id: true; name: true; email: true; role: true } }
         categories: { include: { category: true } }
+        AcademicUnit: { select: { name: true } }
     }
 }>
 /**
@@ -93,6 +94,12 @@ export default function TeamMemberTable({
                 enableSorting: false,
             },
             {
+                id: 'academicUnit',
+                accessorFn: (row) => row.AcademicUnit?.name,
+                header: 'Unidad Académica',
+                enableSorting: true,
+            },
+            {
                 accessorKey: 'actions',
                 header: 'Acciones',
                 cell: ({ row }) => (
@@ -114,7 +121,11 @@ export default function TeamMemberTable({
         []
     )
     /** Explicitly announce initial state of hidden columns. */
-    const initialVisible = { id: false }
+    const initialVisible = {
+        id: false,
+        academicUnit: false,
+        pointsObrero: false,
+    }
 
     return (
         <>
