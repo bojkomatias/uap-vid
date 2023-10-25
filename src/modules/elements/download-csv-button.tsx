@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import dataToCsv from '@utils/dataToCsv'
-import React, { useMemo } from 'react'
-import { CSVLink } from 'react-csv'
+import React, { useMemo, useState } from 'react'
+import { CSVDownload } from 'react-csv'
 import { Button } from './button'
 
 export default function DownloadCSVButton({
@@ -13,7 +13,8 @@ export default function DownloadCSVButton({
     data: unknown[]
     columns: ColumnDef<any, unknown>[]
 }) {
-    const CSVData = useMemo(() => dataToCsv(columns, data), [columns, data])
+    const [download, setDownload] = useState(false)
+
     return (
         <div className="group relative">
             {/*Tried using Tooltip component but couldn't make it work as intended, so I copied the styles from the tooltip to mantain the style */}
@@ -48,12 +49,27 @@ export default function DownloadCSVButton({
                 className="group z-10"
                 disabled={totalRecordsCheck}
                 intent="outline"
+                onClick={() => {
+                    setDownload(true)
+                    setTimeout(() => {
+                        setDownload(false)
+                    }, 1000)
+                }}
             >
-                {totalRecordsCheck ? 'Descargar hoja de datos' :
-                    <CSVLink filename="data.csv" data={CSVData}>
-                        Descargar hoja de datos
-                    </CSVLink>}
+                Descargar hoja de datos
             </Button>
+            {download ? <Download data={data} columns={columns} /> : null}
         </div>
     )
+}
+
+function Download({
+    data,
+    columns,
+}: {
+    data: unknown[]
+    columns: ColumnDef<any, unknown>[]
+}) {
+    const CSVData = useMemo(() => dataToCsv(columns, data), [columns, data])
+    return <CSVDownload data={CSVData} target="_blank" />
 }
