@@ -6,10 +6,14 @@ import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
+import { Badge } from '@elements/badge'
+import { dateFormatter } from '@utils/formatters'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
     select: {
         id: true
+        createdAt: true
+        approved: true
         year: true
         protocol: true
     }
@@ -22,7 +26,7 @@ export default function AnualBudgetTable({
     anualBudgets: CustomAnualBudget[]
     totalRecords: number
 }) {
-    const columns = useMemo<ColumnDef<any>[]>(
+    const columns = useMemo<ColumnDef<CustomAnualBudget>[]>(
         () => [
             {
                 accessorKey: 'id',
@@ -34,7 +38,15 @@ export default function AnualBudgetTable({
                 ),
                 enableSorting: false,
             },
-
+            {
+                accessorKey: 'createdAt',
+                header: 'Fecha de creación',
+                cell: ({ row }) => (
+                    <span className="text-xs text-gray-600">
+                        {dateFormatter.format(row.original.createdAt)}
+                    </span>
+                ),
+            },
             {
                 accessorKey: 'protocol.sections.identification.title',
                 header: 'Protocolo',
@@ -44,7 +56,7 @@ export default function AnualBudgetTable({
                         <>
                             <Link
                                 target="_blank"
-                                className="  transition-all duration-150 hover:text-primary"
+                                className="transition-all duration-150 hover:text-primary"
                                 href={`/protocols/${row.original.protocol.id}`}
                                 title={
                                     row.original.protocol.sections
@@ -57,7 +69,7 @@ export default function AnualBudgetTable({
                                           .identification.title
                                     : row.original.protocol.sections.identification.title.slice(
                                           0,
-                                          80
+                                          60
                                       ) + '...'}
                             </Link>
                         </>
@@ -65,11 +77,23 @@ export default function AnualBudgetTable({
                 },
             },
             {
+                accessorKey: 'approved',
+                header: 'Aprobado',
+                cell: ({ row }) =>
+                    row.original.approved ? (
+                        <Badge className="bg-success-50 text-success-600 ring-success-500">
+                            Aprobado
+                        </Badge>
+                    ) : (
+                        <Badge>Pendiente</Badge>
+                    ),
+                enableHiding: true,
+            },
+            {
                 accessorKey: 'year',
                 header: 'Año',
                 enableHiding: true,
             },
-
             {
                 accessorKey: 'actions',
                 header: 'Acciones',
@@ -105,7 +129,7 @@ export default function AnualBudgetTable({
         ],
         []
     )
-    const initialVisible = { id: false }
+    const initialVisible = { id: false, createdAt: false }
 
     return (
         <>
