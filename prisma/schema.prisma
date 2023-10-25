@@ -16,6 +16,7 @@ model AcademicUnit {
   budgets                     AcademicUnitBudget[]
   AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
   academicUnitAnualBudgetsIds String[]             @db.ObjectId
+  TeamMembers                 TeamMember[]
 }
 
 type AcademicUnitBudget {
@@ -85,6 +86,8 @@ model TeamMember {
   obrero                Boolean                      @default(false)
   pointsObrero          Int?
   AnualBudgetTeamMember AnualBudgetTeamMember[]
+  AcademicUnit          AcademicUnit?                @relation(fields: [academicUnitId], references: [id])
+  academicUnitId        String?                      @db.ObjectId
 }
 
 model HistoricTeamMemberCategory {

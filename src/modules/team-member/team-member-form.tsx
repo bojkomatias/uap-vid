@@ -1,7 +1,7 @@
 'use client'
 import { Badge } from '@elements/badge'
 import { Button } from '@elements/button'
-import { Combobox } from '@headlessui/react'
+import { Combobox, Listbox } from '@headlessui/react'
 import { useForm, zodResolver } from '@mantine/form'
 import type {
     HistoricTeamMemberCategory,
@@ -23,6 +23,7 @@ export default function TeamMemberForm({
     member,
     researchers,
     categories,
+    academicUnits,
 }: {
     member:
         | (TeamMember & {
@@ -31,6 +32,11 @@ export default function TeamMemberForm({
         | null
     researchers: User[]
     categories: TeamMemberCategory[]
+    academicUnits: {
+        id: string
+        name: string
+        shortname: string
+    }[]
 }) {
     const router = useRouter()
     const form = useForm({
@@ -38,6 +44,7 @@ export default function TeamMemberForm({
             id: member ? member.id : '',
             userId: member ? member.userId : null,
             name: member ? member.name : '',
+            academicUnitId: member ? member.academicUnitId : null,
             obrero: member ? member.obrero : false,
             pointsObrero: member ? member.pointsObrero : null,
         },
@@ -255,6 +262,87 @@ export default function TeamMemberForm({
                             *{form.getInputProps('name').error}
                         </p>
                     ) : null}
+                </div>
+                <div className="flex-grow">
+                    <label htmlFor="academicUnit" className="label">
+                        Unidad académica (Auspicia al docente)
+                    </label>
+                    <Listbox
+                        value={form.getInputProps('academicUnitId').value}
+                        onChange={(e) => {
+                            form.setFieldValue('academicUnitId', e)
+                        }}
+                    >
+                        <div className="relative mt-1 w-full">
+                            <Listbox.Button className="input text-left">
+                                <span className={'block truncate'}>
+                                    {form.values.academicUnitId
+                                        ? academicUnits.find(
+                                              (e) =>
+                                                  e.id ===
+                                                  form.values.academicUnitId
+                                          )?.name
+                                        : '-'}
+                                </span>
+                                <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
+                                    <Selector
+                                        className="h-5 text-gray-600 "
+                                        aria-hidden="true"
+                                    />
+                                </span>
+                            </Listbox.Button>
+
+                            <Listbox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                                {academicUnits.map((value) => (
+                                    <Listbox.Option
+                                        key={value.id}
+                                        value={value.id}
+                                        className={({ active }) =>
+                                            cx(
+                                                'relative cursor-default select-none py-2 pl-8 pr-2',
+                                                active
+                                                    ? 'bg-gray-100'
+                                                    : 'text-gray-600'
+                                            )
+                                        }
+                                    >
+                                        {({ active, selected }) => (
+                                            <>
+                                                <span className="block truncate font-medium">
+                                                    <span
+                                                        className={cx(
+                                                            active &&
+                                                                'text-gray-800',
+                                                            selected &&
+                                                                'text-primary'
+                                                        )}
+                                                    >
+                                                        {value.name}
+                                                    </span>
+                                                </span>
+
+                                                {selected && (
+                                                    <span
+                                                        className={cx(
+                                                            'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
+                                                            active
+                                                                ? 'text-white'
+                                                                : ''
+                                                        )}
+                                                    >
+                                                        <Check
+                                                            className="h-4 w-4 text-gray-500"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </div>
+                    </Listbox>
                 </div>
                 <div className="grid grid-cols-4 gap-8">
                     <div className="ml-2 flex h-20 items-center">

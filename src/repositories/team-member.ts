@@ -71,12 +71,12 @@ export const getTeamMembersByIds = async (teamMemberIds: string[]) =>
     await prisma.teamMember.findMany({
         where: {
             id: {
-                in: teamMemberIds
-            }
+                in: teamMemberIds,
+            },
         },
         include: {
-            user: true
-        }
+            user: true,
+        },
     })
 
 export const getTeamMembers = async ({
@@ -100,11 +100,12 @@ export const getTeamMembers = async ({
                     select: { id: true, name: true, email: true, role: true },
                 },
                 categories: { include: { category: true } },
+                AcademicUnit: { select: { name: true } },
             },
             where: search
                 ? {
-                    OR: [{ name: { contains: search, mode: 'insensitive' } }],
-                }
+                      OR: [{ name: { contains: search, mode: 'insensitive' } }],
+                  }
                 : {},
 
             orderBy,

@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { ProtocolMetadata } from '@protocol/protocol-metadata'
-import ApproveButton from '@protocol/elements/action-buttons/approve'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import PublishButton from '@protocol/elements/action-buttons/publish'
 import EditButton from '@protocol/elements/action-buttons/edit'
@@ -74,10 +73,6 @@ async function Layout({
                             id: protocol.id,
                             state: protocol.state,
                         }}
-                    />
-                    <ApproveButton
-                        role={session.user.role}
-                        protocol={{ id: protocol.id, state: protocol.state }}
                     />
                     <AcceptButton
                         role={session.user.role}

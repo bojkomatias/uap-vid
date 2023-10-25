@@ -1,4 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
+import { getAcademicUnitsTabs, getAllAcademicUnits } from '@repositories/academic-unit'
 import { getTeamMemberById } from '@repositories/team-member'
 import { getAllCategories } from '@repositories/team-member-category'
 import { getAllNonTeamMembers } from '@repositories/user'
@@ -13,6 +14,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     )
 
     const categories = await getAllCategories()
+    const academicUnits = await getAcademicUnitsTabs()
+
     return (
         <>
             <PageHeading title={'Miembro de investigación'} />
@@ -20,6 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 member={member}
                 researchers={researchers}
                 categories={categories}
+                academicUnits={academicUnits}
             />
         </>
     )
