@@ -3,7 +3,6 @@ import { Footer } from '@layout/footer'
 import { Header } from '@layout/header'
 import { Montserrat } from 'next/font/google'
 
-
 export const metadata = {
     title: {
         default: 'UAP - Investigación y Desarrollo',
@@ -22,12 +21,11 @@ export default async function RootLayout({
     return (
         <html className={`${font.variable} font-sans`}>
             {process.env.NEXTAUTH_URL === 'https://uap-vid.vercel.app' ? (
-                <>
-                    <div className="bg-black/90 text-center text-lg font-black text-white">
+                <div className="bg-transparent pointer-events-none fixed inset-0 z-50 backdrop-hue-rotate-60">
+                    <div className="fixed inset-x-0 top-0 -mt-1 h-6 bg-black/90 text-center text-lg font-black text-white">
                         TESTING
                     </div>
-                    <div className="bg-transparent pointer-events-none fixed inset-0 z-50 backdrop-hue-rotate-60" />
-                </>
+                </div>
             ) : null}
             <body className="subpixel-antialiased">
                 <div id="notifications-container" className="relative" />
