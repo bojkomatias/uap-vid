@@ -294,7 +294,7 @@ export default function GenerateAnualBudgetButton({
                 </Dialog>
             </Transition>
 
-            {!hasBudgetCurrentYear ? (
+            {hasBudgetCurrentYear ? (
                 <div className="relative w-fit">
                     <div className="absolute inset-0 z-[10] mr-3 ">
                         <InfoTooltip>
