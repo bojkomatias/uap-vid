@@ -19,23 +19,50 @@ export type AnualBudgetTeamMemberWithAllRelations =
         typeof anualBudgetTeamMemberWithAllRelations
     >
 
-const totalExecution = (ex: Execution[]): number => {
-    return ex ? ex.reduce((acc, item) => {
+const totalExecution = (ex: Execution[], academicUnitId?:string): number => {
+    if(academicUnitId){
+        const executionAmountPerAcademicUnit = ex.filter((e) => e.academicUnitId === academicUnitId).reduce((acc, item) => {
+            acc += item.amount
+            return acc
+        }, 0)
+        return executionAmountPerAcademicUnit
+    }
+    return ex.reduce((acc, item) => {
         acc += item.amount
         return acc
-    }, 0) : 0
+    }, 0)
 }
 
-const calculateRemainingABI = (abi: AnualBudgetItem[], amountOfAcademicUnits:number): number => {
-    return abi ? (abi.reduce((acc, item) => {
-        acc += item.remaining
+const calculateRemainingABI = (abi: AnualBudgetItem[], amountAcademicUnits:number, executionPerAcademicUnit?:number): number => {
+    const totalBudgetItemsAmount = abi.reduce((acc, item) => {
+        acc += item.amount / amountAcademicUnits
         return acc
-    }, 0) / amountOfAcademicUnits) : 0
+    },0)
+    const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
+
+    if(executionPerAcademicUnit){
+        return amountPerAcademicUnit - executionPerAcademicUnit
+    }
+
+    const totalExecutionAmount = abi.map(bi=>bi.executions).reduce((acc, item) => {
+        acc += totalExecution(item)
+        return acc
+    }, 0)
+    return totalBudgetItemsAmount - totalExecutionAmount
 }
 
 const calculateRemainingABTM = (
-    abtm: AnualBudgetTeamMemberWithAllRelations[]
+    abtm: AnualBudgetTeamMemberWithAllRelations[], academicUnitId?: string
 ): number => {
+    //This part is used to calculate the remaining budget for a specific academic unit in summary cards
+    if (academicUnitId) {
+        const abtmAcademicUnit = abtm.filter((item) => item.teamMember.academicUnitId === academicUnitId)
+        return abtmAcademicUnit ? abtmAcademicUnit.reduce((acc, item) => {
+        acc += item.remainingHours * getLastCategoryPrice(item)
+        return acc
+    }, 0) : 0
+    }
+
     return abtm ? abtm.reduce((acc, item) => {
         acc += item.remainingHours * getLastCategoryPrice(item)
         return acc
@@ -52,21 +79,20 @@ const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
 export const calculateTotalBudget = (
     anualBudget: AnualBudget & {
         budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    }
+    }, academicUnitId?: string
 ) => {
-    const amountOfAcademicUnits = anualBudget.academicUnitsIds.length
-
+    const amountAcademicUnits = anualBudget.academicUnitsIds.length
     //Executions
     const ABIe = totalExecution(
-        anualBudget.budgetItems.map((item) => item.executions).flat()
+        anualBudget.budgetItems.map((item) => item.executions).flat(), academicUnitId
     )
     const ABTe = totalExecution(
         anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
     )
 
     //Remainings
-    const ABIr = calculateRemainingABI(anualBudget.budgetItems, amountOfAcademicUnits)
-    const ABTr = calculateRemainingABTM(anualBudget.budgetTeamMembers)
+    const ABIr = calculateRemainingABI(anualBudget.budgetItems, amountAcademicUnits, ABIe)
+    const ABTr = calculateRemainingABTM(anualBudget.budgetTeamMembers, academicUnitId)
 
     return {
         ABIe,

@@ -164,8 +164,9 @@ model AnualBudgetTeamMember {
 }
 
 type Execution {
-  amount Float
-  date   DateTime
+  amount         Float
+  date           DateTime
+  academicUnitId String
 }
 
 type ReviewQuestion {
