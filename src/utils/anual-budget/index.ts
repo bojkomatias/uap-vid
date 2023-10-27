@@ -1,4 +1,4 @@
-import type {  AnualBudget, Execution } from '@prisma/client'
+import type { AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 
@@ -19,12 +19,14 @@ export type AnualBudgetTeamMemberWithAllRelations =
         typeof anualBudgetTeamMemberWithAllRelations
     >
 
-const totalExecution = (ex: Execution[], academicUnitId?:string): number => {
-    if(academicUnitId){
-        const executionAmountPerAcademicUnit = ex.filter((e) => e.academicUnitId === academicUnitId).reduce((acc, item) => {
-            acc += item.amount
-            return acc
-        }, 0)
+const totalExecution = (ex: Execution[], academicUnitId?: string): number => {
+    if (academicUnitId) {
+        const executionAmountPerAcademicUnit = ex
+            .filter((e) => e.academicUnitId === academicUnitId)
+            .reduce((acc, item) => {
+                acc += item.amount
+                return acc
+            }, 0)
         return executionAmountPerAcademicUnit
     }
     return ex.reduce((acc, item) => {
@@ -33,40 +35,53 @@ const totalExecution = (ex: Execution[], academicUnitId?:string): number => {
     }, 0)
 }
 
-const calculateRemainingABI = (abi: AnualBudgetItem[], amountAcademicUnits:number, executionPerAcademicUnit?:number): number => {
+const calculateRemainingABI = (
+    abi: AnualBudgetItem[],
+    amountAcademicUnits: number,
+    executionPerAcademicUnit?: number
+): number => {
     const totalBudgetItemsAmount = abi.reduce((acc, item) => {
         acc += item.amount / amountAcademicUnits
         return acc
-    },0)
+    }, 0)
     const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
 
-    if(executionPerAcademicUnit){
+    if (executionPerAcademicUnit) {
         return amountPerAcademicUnit - executionPerAcademicUnit
     }
 
-    const totalExecutionAmount = abi.map(bi=>bi.executions).reduce((acc, item) => {
-        acc += totalExecution(item)
-        return acc
-    }, 0)
+    const totalExecutionAmount = abi
+        .map((bi) => bi.executions)
+        .reduce((acc, item) => {
+            acc += totalExecution(item)
+            return acc
+        }, 0)
     return totalBudgetItemsAmount - totalExecutionAmount
 }
 
 const calculateRemainingABTM = (
-    abtm: AnualBudgetTeamMemberWithAllRelations[], academicUnitId?: string
+    abtm: AnualBudgetTeamMemberWithAllRelations[],
+    academicUnitId?: string
 ): number => {
     //This part is used to calculate the remaining budget for a specific academic unit in summary cards
     if (academicUnitId) {
-        const abtmAcademicUnit = abtm.filter((item) => item.teamMember.academicUnitId === academicUnitId)
-        return abtmAcademicUnit ? abtmAcademicUnit.reduce((acc, item) => {
-        acc += item.remainingHours * getLastCategoryPrice(item)
-        return acc
-    }, 0) : 0
+        const abtmAcademicUnit = abtm.filter(
+            (item) => item.teamMember.academicUnitId === academicUnitId
+        )
+        return abtmAcademicUnit
+            ? abtmAcademicUnit.reduce((acc, item) => {
+                  acc += item.remainingHours * getLastCategoryPrice(item)
+                  return acc
+              }, 0)
+            : 0
     }
 
-    return abtm ? abtm.reduce((acc, item) => {
-        acc += item.remainingHours * getLastCategoryPrice(item)
-        return acc
-    }, 0) : 0
+    return abtm
+        ? abtm.reduce((acc, item) => {
+              acc += item.remainingHours * getLastCategoryPrice(item)
+              return acc
+          }, 0)
+        : 0
 }
 
 const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
@@ -79,20 +94,38 @@ const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
 export const calculateTotalBudget = (
     anualBudget: AnualBudget & {
         budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    }, academicUnitId?: string
+    },
+    academicUnitId?: string
 ) => {
     const amountAcademicUnits = anualBudget.academicUnitsIds.length
     //Executions
     const ABIe = totalExecution(
-        anualBudget.budgetItems.map((item) => item.executions).flat(), academicUnitId
+        anualBudget.budgetItems.map((item) => item.executions).flat(),
+        academicUnitId
     )
     const ABTe = totalExecution(
-        anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
+        academicUnitId
+            ? anualBudget.budgetTeamMembers
+                  .filter(
+                      (tm) => tm.teamMember.academicUnitId === academicUnitId
+                  )
+                  .map((item) => item.executions)
+                  .flat()
+            : anualBudget.budgetTeamMembers
+                  .map((item) => item.executions)
+                  .flat()
     )
 
     //Remainings
-    const ABIr = calculateRemainingABI(anualBudget.budgetItems, amountAcademicUnits, ABIe)
-    const ABTr = calculateRemainingABTM(anualBudget.budgetTeamMembers, academicUnitId)
+    const ABIr = calculateRemainingABI(
+        anualBudget.budgetItems,
+        amountAcademicUnits,
+        ABIe
+    )
+    const ABTr = calculateRemainingABTM(
+        anualBudget.budgetTeamMembers,
+        academicUnitId
+    )
 
     return {
         ABIe,
@@ -104,25 +137,29 @@ export const calculateTotalBudget = (
 }
 
 export const calculateTotalBudgetAggregated = (
-    anualBudgets: (AnualBudget & {budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]})[]
+    anualBudgets: (AnualBudget & {
+        budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+    })[]
 ) => {
     const result = anualBudgets
         .map((anualBudget) => calculateTotalBudget(anualBudget))
-        .reduce((acc, item) => {
-            acc.ABIe += item.ABIe
-            acc.ABTe += item.ABTe
-            acc.ABIr += item.ABIr
-            acc.ABTr += item.ABTr
-            acc.total += item.total
-            return acc
-        }
-        , {
-            ABIe: 0,
-            ABTe: 0,
-            ABIr: 0,
-            ABTr: 0,
-            total: 0,
-        })
+        .reduce(
+            (acc, item) => {
+                acc.ABIe += item.ABIe
+                acc.ABTe += item.ABTe
+                acc.ABIr += item.ABIr
+                acc.ABTr += item.ABTr
+                acc.total += item.total
+                return acc
+            },
+            {
+                ABIe: 0,
+                ABTe: 0,
+                ABIr: 0,
+                ABTr: 0,
+                total: 0,
+            }
+        )
     return result
 }
 
@@ -131,4 +168,3 @@ export enum ExecutionType {
     TeamMember,
     Item,
 }
-
