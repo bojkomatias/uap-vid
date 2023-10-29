@@ -55,6 +55,11 @@ export default function GenerateAnualBudgetButton({
                 <Button
                     intent="secondary"
                     onClick={async () => {
+                        notifications.show({
+                            title: 'Presupuesto generado',
+                            message: 'Se generó correctamente el presupuesto',
+                            intent: 'success',
+                        })
                         const budget = await generateAnualBudget(
                             budgetPreview.protocolId,
                             currentYear

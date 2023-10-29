@@ -36,7 +36,16 @@ import {
  */
 export const generateAnualBudget = async (protocolId: string, year: string) => {
     const protocol = await findProtocolById(protocolId)
-    if (!protocol) return null
+    //The next few lines of code are to check if there's a generated budget for the protocol already. The logic behind is as it follows: if it finds budgets, it's because there's already a created budget. I also check for the specific year, to be able to generate a new budget for the following year when necessary.
+    const anualBudgetIds = protocol?.anualBudgetIds
+    const anualBudgetsYears = await Promise.all((anualBudgetIds || []).map(async (id) => {
+        return await getAnualBudgetById(id).then(res => {
+            return res?.year;
+        });
+    }));
+
+
+    if (!protocol || anualBudgetsYears.includes(new Date().getFullYear())) return null
 
     // Create the annual budget with all the items listed in the protocol budget section.
     const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
