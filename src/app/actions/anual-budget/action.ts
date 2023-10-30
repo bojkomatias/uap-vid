@@ -175,6 +175,7 @@ export const saveNewTeamMemberExecution = async (
 }
 
 export const saveNewItemExecution = async (
+    academicUnitId: string,
     budgetItemIndex: number,
     anualBudgetId: string,
     amount: number
@@ -188,6 +189,7 @@ export const saveNewItemExecution = async (
     const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
         if (index === budgetItemIndex) {
             item.executions.push({
+                academicUnitId,
                 amount,
                 date: new Date(),
             })
@@ -324,7 +326,7 @@ export const getBudgetSummary = async (
 
     // This summary is related to protocols budgets
     // TODO: Calculate the detla in the projected budget
-    const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets)
+    const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets, academicUnitId)
 
     // This summary is related to academic unit budgets
     const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(

@@ -139,10 +139,11 @@ export const calculateTotalBudget = (
 export const calculateTotalBudgetAggregated = (
     anualBudgets: (AnualBudget & {
         budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    })[]
+    })[],
+    academicUnitId?: string
 ) => {
     const result = anualBudgets
-        .map((anualBudget) => calculateTotalBudget(anualBudget))
+        .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
         .reduce(
             (acc, item) => {
                 acc.ABIe += item.ABIe
