@@ -27,7 +27,6 @@ import {
     type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
 
-
 /**
  * Generates an annual budget based on a given protocol ID and year.
  * @param protocolId - The ID of the protocol to generate the budget from.
@@ -282,23 +281,21 @@ const getProjectedBudgetSummary = (
         .flat()
         .filter((c) => c.category.price.some((p) => p.to))
         .sort((a, b) => {
-            const aLastPriceChange = a.category.price
-                .filter((p) => p.to)
-                .at(-1)
-            const bLastPriceChange = b.category.price
-                .filter((p) => p.to)
-                .at(-1)
+            const aLastPriceChange = a.category.price.filter((p) => p.to).at(-1)
+            const bLastPriceChange = b.category.price.filter((p) => p.to).at(-1)
             if (!aLastPriceChange || !bLastPriceChange) return 0
             return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
         })
         .at(-1)
-    const [before, actual] = [lastCategoryWithPriceChange?.category.price.at(-2), lastCategoryWithPriceChange?.category.price.at(-1)]
+    const [before, actual] = [
+        lastCategoryWithPriceChange?.category.price.at(-2),
+        lastCategoryWithPriceChange?.category.price.at(-1),
+    ]
 
-    const deltaValue = actual && before ? actual.price - before.price : actual?.price
+    const deltaValue =
+        actual && before ? actual.price - before.price : actual?.price
 
-    const delta = deltaValue
-        ? (total / (total - deltaValue) - 1) * 100
-        : 0
+    const delta = deltaValue ? (total / (total - deltaValue) - 1) * 100 : 0
 
     return {
         value: total,
@@ -306,11 +303,31 @@ const getProjectedBudgetSummary = (
     }
 }
 
+function removeDuplicates(
+    inputArray: (AnualBudget & {
+        budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+    })[]
+) {
+    const uniqueArray = []
+    const seenItems = new Set()
+
+    for (const item of inputArray) {
+        const budgetItems = item.budgetItems
+        const key = JSON.stringify(budgetItems)
+
+        if (!seenItems.has(key)) {
+            uniqueArray.push(item)
+            seenItems.add(key)
+        }
+    }
+
+    return uniqueArray
+}
+
 export const getBudgetSummary = async (
     academicUnitId?: string,
     year: number = new Date().getFullYear()
 ) => {
-    // TODO: There is a bug here, the query do not return the anual budgets for some reason
     const academicUnits = await getAcademicUnitById(academicUnitId)
 
     if (!academicUnits)
@@ -319,14 +336,14 @@ export const getBudgetSummary = async (
             projectedBudgetSummary: { value: 0, delta: 0 },
             spendedBudget: 0,
         }
-
-    const anualBudgets = academicUnits
-        .map((ac) => ac.AcademicUnitAnualBudgets)
-        .flat()
+    const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
+    const anualBudgets = removeDuplicates(list)
 
     // This summary is related to protocols budgets
-    // TODO: Calculate the detla in the projected budget
-    const protocolBudgetSummary = calculateTotalBudgetAggregated(anualBudgets, academicUnitId)
+    const protocolBudgetSummary = calculateTotalBudgetAggregated(
+        anualBudgets,
+        academicUnitId
+    )
 
     // This summary is related to academic unit budgets
     const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(
