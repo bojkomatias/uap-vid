@@ -12,13 +12,13 @@ import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetItems({
     budgetId,
-    approved,
+    editable,
     budgetItems,
     ABIe,
     ABIr,
 }: {
     budgetId: string
-    approved: boolean
+    editable: boolean
     budgetItems: AnualBudgetItem[]
     ABIe: number
     ABIr: number
@@ -28,7 +28,7 @@ export function BudgetItems({
     return (
         <form
             onSubmit={form.onSubmit(async (values) => {
-                if (approved) return
+                if (!editable) return
                 const itemsWithRemainingUpdated = values.map((item) => {
                     const remaining = item.amount
                     return { ...item, remaining }
@@ -55,7 +55,7 @@ export function BudgetItems({
             </div>
 
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
-                {!approved ? (
+                {editable ? (
                     <Button
                         type="submit"
                         intent="secondary"
@@ -67,11 +67,17 @@ export function BudgetItems({
                 ) : null}
                 <table className="min-w-full">
                     <colgroup>
-                        <col className={cx(approved ? 'w-[45%]' : 'w-[50%]')} />
-                        <col className={cx(approved ? 'w-[15%]' : 'w-[20%]')} />
-                        <col className={cx(approved ? 'w-[15%]' : 'w-[20%]')} />
-                        <col className={cx(approved ? 'w-[15%]' : 'hidden')} />
-                        <col className={cx(approved ? 'w-[10%]' : 'hidden')} />
+                        <col
+                            className={cx(!editable ? 'w-[45%]' : 'w-[50%]')}
+                        />
+                        <col
+                            className={cx(!editable ? 'w-[15%]' : 'w-[20%]')}
+                        />
+                        <col
+                            className={cx(!editable ? 'w-[15%]' : 'w-[20%]')}
+                        />
+                        <col className={cx(!editable ? 'w-[15%]' : 'hidden')} />
+                        <col className={cx(!editable ? 'w-[10%]' : 'hidden')} />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -85,7 +91,7 @@ export function BudgetItems({
                                 scope="col"
                                 className={cx(
                                     'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
-                                    approved && 'table-cell'
+                                    !editable && 'table-cell'
                                 )}
                             >
                                 Restante
@@ -94,7 +100,7 @@ export function BudgetItems({
                                 scope="col"
                                 className={cx(
                                     'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
-                                    approved && 'table-cell'
+                                    !editable && 'table-cell'
                                 )}
                             >
                                 Ejecutado
@@ -103,7 +109,7 @@ export function BudgetItems({
                                 scope="col"
                                 className={cx(
                                     'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
-                                    !approved && 'table-cell'
+                                    !!editable && 'table-cell'
                                 )}
                             >
                                 A aprobar
@@ -118,7 +124,7 @@ export function BudgetItems({
                                 scope="col"
                                 className={cx(
                                     'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
-                                    approved && 'table-cell'
+                                    !editable && 'table-cell'
                                 )}
                             >
                                 Ejecuciones
@@ -146,7 +152,7 @@ export function BudgetItems({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
-                                            approved && 'table-cell'
+                                            !editable && 'table-cell'
                                         )}
                                     >
                                         ${currencyFormatter.format(remaining)}
@@ -154,7 +160,7 @@ export function BudgetItems({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
-                                            approved && 'table-cell'
+                                            !editable && 'table-cell'
                                         )}
                                     >
                                         $
@@ -165,7 +171,7 @@ export function BudgetItems({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm',
-                                            !approved &&
+                                            !!editable &&
                                                 'float-right table-cell'
                                         )}
                                     >
@@ -195,7 +201,7 @@ export function BudgetItems({
                                     <td
                                         className={cx(
                                             'hidden',
-                                            approved && 'table-cell'
+                                            !editable && 'table-cell'
                                         )}
                                     >
                                         <BudgetExecutionView
@@ -216,13 +222,13 @@ export function BudgetItems({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 3 : 2}
+                                colSpan={!editable ? 3 : 2}
                                 className="table-cell pl-4 pt-6 text-left text-sm font-normal text-gray-500 sm:text-right"
                             >
                                 Ejecutado
                             </th>
                             <td className="px-3 pt-6 text-right text-sm text-gray-500">
-                                {approved ? (
+                                {!editable ? (
                                     <>${currencyFormatter.format(ABIe)}</>
                                 ) : (
                                     '-'
@@ -232,7 +238,7 @@ export function BudgetItems({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 3 : 2}
+                                colSpan={!editable ? 3 : 2}
                                 className="table-cell pl-4 pt-4 text-left text-sm font-normal text-gray-500 sm:text-right"
                             >
                                 Restante
@@ -244,7 +250,7 @@ export function BudgetItems({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 3 : 2}
+                                colSpan={!editable ? 3 : 2}
                                 className="table-cell pl-4 pt-4 text-left text-sm font-semibold text-gray-900 sm:text-right"
                             >
                                 Total

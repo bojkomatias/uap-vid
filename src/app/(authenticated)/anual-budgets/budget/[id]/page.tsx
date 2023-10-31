@@ -24,11 +24,13 @@ export default async function Page({ params }: { params: { id: string } }) {
             <PageHeading title={`Presupuesto ${meta.year}`} />
             <div className="flex w-full flex-col items-end justify-between gap-3 sm:flex-row">
                 <BudgetMetadata {...meta} />
-                {meta.approved ? null : <ApproveAnualBudget id={meta.id} />}
+                {meta.state === 'PENDING' ? null : (
+                    <ApproveAnualBudget id={meta.id} />
+                )}
             </div>
             <BudgetView
                 budgetId={meta.id}
-                approved={meta.approved}
+                state={meta.state}
                 budgetItems={budgetItems}
                 budgetTeamMembers={budgetTeamMembers}
                 calculations={calculations}

@@ -12,12 +12,12 @@ import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
 
 export function BudgetTeamMemberFees({
-    approved,
+    editable,
     budgetTeamMembers,
     ABTe,
     ABTr,
 }: {
-    approved: boolean
+    editable: boolean
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     ABTe: number
     ABTr: number
@@ -26,7 +26,7 @@ export function BudgetTeamMemberFees({
     return (
         <form
             onSubmit={form.onSubmit(async (values) => {
-                if (approved) return
+                if (!editable) return
 
                 const res = await updateAnualBudgetTeamMemberHours(
                     values.map((e) => {
@@ -55,7 +55,7 @@ export function BudgetTeamMemberFees({
             </div>
 
             <div className="-mx-4 mt-8 flow-root sm:mx-0">
-                {!approved ? (
+                {editable ? (
                     <Button
                         type="submit"
                         intent="secondary"
@@ -68,14 +68,14 @@ export function BudgetTeamMemberFees({
                 <table className="min-w-full">
                     <colgroup>
                         <col
-                            className={cx(approved ? ' w-[30%]' : ' w-[38%]')}
+                            className={cx(!editable ? ' w-[30%]' : ' w-[38%]')}
                         />
-                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
-                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
-                        <col className={approved ? 'w-[12%]' : 'w-[20%]'} />
-                        <col className={approved ? 'w-[12%]' : 'hidden'} />
-                        <col className={approved ? 'w-[12%]' : 'hidden'} />
-                        <col className={approved ? 'w-[10%]' : 'hidden'} />
+                        <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
+                        <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
+                        <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
+                        <col className={!editable ? 'w-[12%]' : 'hidden'} />
+                        <col className={!editable ? 'w-[12%]' : 'hidden'} />
+                        <col className={!editable ? 'w-[10%]' : 'hidden'} />
                     </colgroup>
                     <thead className="border-b border-gray-300 text-gray-900">
                         <tr>
@@ -95,7 +95,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className={cx(
                                     'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
-                                    approved && 'sm:table-cell'
+                                    !editable && 'sm:table-cell'
                                 )}
                             >
                                 Horas restantes
@@ -110,7 +110,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className={cx(
                                     'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
-                                    approved && 'sm:table-cell'
+                                    !editable && 'sm:table-cell'
                                 )}
                             >
                                 Restante
@@ -125,7 +125,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className={cx(
                                     'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
-                                    approved && 'table-cell'
+                                    !editable && 'table-cell'
                                 )}
                             >
                                 Ejecuciones
@@ -178,7 +178,7 @@ export function BudgetTeamMemberFees({
                                         </div>
                                     </td>
                                     <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                                        {approved ? (
+                                        {!editable ? (
                                             hours
                                         ) : (
                                             <input
@@ -206,7 +206,7 @@ export function BudgetTeamMemberFees({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm text-gray-600',
-                                            approved && 'sm:table-cell'
+                                            !editable && 'sm:table-cell'
                                         )}
                                     >
                                         {remainingHours}
@@ -223,7 +223,7 @@ export function BudgetTeamMemberFees({
                                     <td
                                         className={cx(
                                             'hidden px-3 py-5 text-right text-sm text-gray-600',
-                                            approved && 'sm:table-cell'
+                                            !editable && 'sm:table-cell'
                                         )}
                                     >
                                         $
@@ -246,7 +246,7 @@ export function BudgetTeamMemberFees({
                                     <td
                                         className={cx(
                                             'hidden',
-                                            approved && 'table-cell'
+                                            !editable && 'table-cell'
                                         )}
                                     >
                                         <BudgetExecutionView
@@ -294,13 +294,13 @@ export function BudgetTeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 5 : 3}
+                                colSpan={!editable ? 5 : 3}
                                 className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Ejecutado
                             </th>
                             <td className="px-3 pt-6 text-right text-sm text-gray-500">
-                                {approved ? (
+                                {!editable ? (
                                     <> ${currencyFormatter.format(ABTe)}</>
                                 ) : (
                                     '-'
@@ -310,7 +310,7 @@ export function BudgetTeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 5 : 3}
+                                colSpan={!editable ? 5 : 3}
                                 className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Restante
@@ -322,7 +322,7 @@ export function BudgetTeamMemberFees({
                         <tr>
                             <th
                                 scope="row"
-                                colSpan={approved ? 5 : 3}
+                                colSpan={!editable ? 5 : 3}
                                 className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Total
