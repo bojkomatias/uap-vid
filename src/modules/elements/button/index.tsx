@@ -8,7 +8,13 @@ interface Props
         ButtonHTMLAttributes<HTMLButtonElement>,
         HTMLButtonElement
     > {
-    intent: 'primary' | 'secondary' | 'outline' | 'destructive' | 'unset'
+    intent:
+        | 'primary'
+        | 'secondary'
+        | 'outline'
+        | 'destructive'
+        | 'warning'
+        | 'unset'
     className?: string
     type?: 'button' | 'reset' | 'submit'
     loading?: boolean
