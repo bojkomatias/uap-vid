@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
-import { Check, ChevronDown } from 'tabler-icons-react'
+import { Check, ChevronDown, Loader2 } from 'tabler-icons-react'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 /** Arbitrary number. I select the current year and the past 20 years from there. */
@@ -16,16 +16,26 @@ const getYears = () => {
 const years = getYears()
 
 export default function Example() {
-    const [selected, setSelected] = useState(years[0])
+    const [selected, setSelected] = useState('')
+    const [loading, setLoading] = useState(false)
     const [query, setQuery] = useState('')
     const update = useUpdateQuery()
 
-    // useEffect(() => {
-    //     update({
-    //         filter: 'year',
-    //         values: selected,
-    //     })
-    // })
+    useEffect(() => {
+        selected &&
+            update({
+                filter: 'year',
+                values: selected,
+            })
+
+        //Esto está bastante fiero, quería dejar algo lindo en cuanto a UX así que si a alguno se le ocurre un approach más prolijo, bienvenido sea.
+        if (selected) {
+            setLoading(true)
+            setTimeout(() => {
+                setLoading(false)
+            }, 500)
+        }
+    }, [selected, update])
 
     const filteredPeople =
         query === ''
@@ -43,16 +53,23 @@ export default function Example() {
                     <div className="focus-visible:ring-offset-teal-300 relative w-full cursor-default overflow-hidden rounded-lg border bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 sm:text-sm">
                         <Combobox.Input
                             className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                            displayValue={(year): string => year as string}
+                            displayValue={(year): string =>
+                                selected ? (year as string) : 'Filtrar por año'
+                            }
                             onChange={(event) => {
                                 setQuery(event.target.value)
                             }}
                         />
+
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronDown
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                            />
+                            {loading ? (
+                                <Loader2 className="loader h-5 w-5" />
+                            ) : (
+                                <ChevronDown
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                />
+                            )}
                         </Combobox.Button>
                     </div>
                     <Transition
