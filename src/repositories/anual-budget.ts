@@ -8,7 +8,6 @@ import type {
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
-import { updateProtocolStateById } from './protocol'
 
 export const getAnualBudgets = cache(
     async ({
@@ -24,7 +23,6 @@ export const getAnualBudgets = cache(
     }) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
-
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
@@ -234,11 +232,14 @@ export const getAnualBudgetsByAcademicUnit = cache(
     ) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
-
+            console.log(filter, values)
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
                         AND: [
+                            filter == 'year'
+                                ? { year: { equals: Number(values) } }
+                                : {},
                             academicUnitId
                                 ? { academicUnitsIds: { has: academicUnitId } }
                                 : {},
@@ -265,7 +266,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                                       },
                                   }
                                 : {},
-                            filter && values
+                            filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
                                 : {},
                         ],
@@ -277,9 +278,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
                     take: Number(records),
                     where: {
                         AND: [
+                            filter == 'year'
+                                ? { year: { equals: Number(values) } }
+                                : {},
                             academicUnitId
                                 ? { academicUnitsIds: { has: academicUnitId } }
                                 : {},
+
                             search
                                 ? {
                                       protocol: {
@@ -303,7 +308,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                                       },
                                   }
                                 : {},
-                            filter && values
+                            filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
                                 : {},
                         ],
