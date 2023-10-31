@@ -8,6 +8,9 @@ import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
+import { Combobox } from '@headlessui/react'
+import { Check, Selector, X } from 'tabler-icons-react'
+import { cx } from '@utils/cx'
 
 export default function BudgetExecutionView({
     title,
@@ -31,13 +34,24 @@ export default function BudgetExecutionView({
     academicUnits?: AcademicUnit[]
 }) {
     const [opened, setOpened] = useState(false)
+    const [query, setQuery] = useState('')
     const [selectedAcademicUnit, setSelectedAcademicUnit] =
         useState<AcademicUnit>()
     useEffect(() => {
         if (!academicUnits) return
-        setSelectedAcademicUnit(academicUnits.at(0))
+        setSelectedAcademicUnit(academicUnits[0])
     }, [academicUnits])
-
+    const filteredAcademicUnits =
+        query === '' || !academicUnits
+            ? academicUnits
+            : academicUnits.filter((ac) => {
+                  return (
+                      ac.name.toLowerCase().includes(query.toLowerCase()) ||
+                      ac.shortname
+                          .toLowerCase()
+                          .includes(query.toLocaleLowerCase())
+                  )
+              })
     return (
         <>
             <CustomDrawer title="Ejecuciones" open={opened} onClose={setOpened}>
@@ -84,6 +98,112 @@ export default function BudgetExecutionView({
                                 <p className="text-md font-semibold text-gray-600">
                                     Nueva Ejecución:
                                 </p>
+                                {academicUnits ? (
+                                    <Combobox
+                                        as="div"
+                                        value={selectedAcademicUnit?.id}
+                                        onChange={(value) => {
+                                            if (value) {
+                                                setSelectedAcademicUnit(
+                                                    academicUnits?.find(
+                                                        (ac) => ac.id === value
+                                                    )
+                                                )
+                                            }
+                                        }}
+                                        className="relative z-10"
+                                    >
+                                        <Combobox.Button className="relative w-2/3">
+                                            <Combobox.Input
+                                                autoComplete="off"
+                                                onChange={(event) =>
+                                                    setQuery(event.target.value)
+                                                }
+                                                className="input disabled:bg-gray-100"
+                                                placeholder={`Seleccione una unidad academica`}
+                                                displayValue={() =>
+                                                    academicUnits?.find(
+                                                        (ac) =>
+                                                            ac.id ===
+                                                            selectedAcademicUnit?.id
+                                                    )?.shortname ?? ''
+                                                }
+                                            />
+
+                                            <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
+                                                <Selector
+                                                    className="h-4 text-gray-600 hover:text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                            </div>
+                                        </Combobox.Button>
+
+                                        {filteredAcademicUnits &&
+                                        filteredAcademicUnits.length > 0 ? (
+                                            <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                                                {filteredAcademicUnits.map(
+                                                    (value) => (
+                                                        <Combobox.Option
+                                                            key={value.id}
+                                                            value={value.id}
+                                                            className={({
+                                                                active,
+                                                            }) =>
+                                                                cx(
+                                                                    'relative cursor-default select-none py-2 pl-8 pr-2',
+                                                                    active
+                                                                        ? 'bg-gray-100'
+                                                                        : 'text-gray-600'
+                                                                )
+                                                            }
+                                                        >
+                                                            {({
+                                                                active,
+                                                                selected,
+                                                            }) => (
+                                                                <>
+                                                                    <span className="block truncate font-medium">
+                                                                        <span
+                                                                            title={
+                                                                                value.shortname
+                                                                            }
+                                                                            className={cx(
+                                                                                'ml-3 truncate text-xs font-light',
+                                                                                active
+                                                                                    ? 'text-gray-700'
+                                                                                    : 'text-gray-500'
+                                                                            )}
+                                                                        >
+                                                                            {
+                                                                                value.name
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+
+                                                                    {selected && (
+                                                                        <span
+                                                                            className={cx(
+                                                                                'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
+                                                                                active
+                                                                                    ? 'text-white'
+                                                                                    : ''
+                                                                            )}
+                                                                        >
+                                                                            <Check
+                                                                                className="h-4 w-4 text-gray-500"
+                                                                                aria-hidden="true"
+                                                                            />
+                                                                        </span>
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                        </Combobox.Option>
+                                                    )
+                                                )}
+                                            </Combobox.Options>
+                                        ) : null}
+                                    </Combobox>
+                                ) : null}
                                 <BudgetNewExecution
                                     academicUnit={selectedAcademicUnit}
                                     maxAmount={remaining}

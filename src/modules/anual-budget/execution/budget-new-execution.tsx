@@ -11,7 +11,7 @@ import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useState, useTransition } from 'react'
+import React, { useTransition } from 'react'
 import { z } from 'zod'
 
 const BudgetNewExecution = ({
@@ -76,7 +76,7 @@ const BudgetNewExecution = ({
                     maxAmount={maxAmount}
                     defaultPrice={0}
                     className={cx(
-                        'min-w-[7rem] rounded-md py-1 text-xs',
+                        'min-w-[7rem] rounded-md py-2.5 text-xs',
                         !form.isValid('amount') &&
                             'border-error-200 bg-error-50'
                     )}
@@ -88,7 +88,7 @@ const BudgetNewExecution = ({
             </div>
 
             <Button
-                className="py-1.5 text-xs shadow-sm"
+                className="py-2.5 text-xs shadow-sm"
                 intent="secondary"
                 // Disabled if it hasn't changed
                 disabled={!form.isValid('amount') || !form.isDirty('amount')}
