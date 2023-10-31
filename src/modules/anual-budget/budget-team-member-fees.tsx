@@ -209,7 +209,7 @@ export function BudgetTeamMemberFees({
                                             approved && 'sm:table-cell'
                                         )}
                                     >
-                                        {remainingHours}
+                                        {remainingHours.toFixed(2)}
                                     </td>
                                     <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
                                         $

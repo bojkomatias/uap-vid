@@ -6,6 +6,7 @@ import {
 import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
+import type { AcademicUnit } from '@prisma/client'
 import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
@@ -14,17 +15,18 @@ import React, { useState, useTransition } from 'react'
 import { z } from 'zod'
 
 const BudgetNewExecution = ({
+    academicUnit,
     maxAmount,
     budgetItemPositionIndex,
     anualBudgetTeamMemberId,
     executionType,
 }: {
+    academicUnit?: AcademicUnit
     maxAmount: number
     budgetItemPositionIndex: number
     anualBudgetTeamMemberId?: string
     executionType: ExecutionType
 }) => {
-    const [newAmount] = useState(0)
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
     const path = usePathname()
@@ -39,7 +41,9 @@ const BudgetNewExecution = ({
         }
 
         if (executionType === ExecutionType.Item) {
+            if (!academicUnit) return
             await saveNewItemExecution(
+                academicUnit.id,
                 budgetItemPositionIndex,
                 anualBudgetId!,
                 amount
@@ -66,10 +70,7 @@ const BudgetNewExecution = ({
         validateInputOnChange: true,
     })
     return (
-        <form
-            className="flex items-baseline gap-2"
-            onSubmit={form.onSubmit(async () => {})}
-        >
+        <form className="flex items-baseline gap-2">
             <div className="flex flex-col ">
                 <CurrencyInput
                     maxAmount={maxAmount}
@@ -94,7 +95,7 @@ const BudgetNewExecution = ({
                 loading={isPending}
                 onClick={(e) => {
                     e.preventDefault()
-                    newExecution(newAmount)
+                    newExecution(form.values.amount)
                 }}
             >
                 {isPending ? 'Creando' : 'Crear'}

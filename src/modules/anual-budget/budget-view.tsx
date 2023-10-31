@@ -1,4 +1,4 @@
-import type { AnualBudgetItem } from '@prisma/client'
+import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
 import type {
     AnualBudgetTeamMemberWithAllRelations,
     TotalBudgetCalculation,
@@ -13,12 +13,14 @@ export function BudgetView({
     budgetItems,
     budgetTeamMembers,
     calculations,
+    academicUnits,
 }: {
     budgetId: string
     approved: boolean
     budgetItems: AnualBudgetItem[]
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     calculations: TotalBudgetCalculation
+    academicUnits: AcademicUnit[]
 }) {
     return (
         <div className="mx-auto mt-10 max-w-7xl space-y-6">
@@ -30,6 +32,7 @@ export function BudgetView({
             />
 
             <BudgetItems
+                academicUnits={academicUnits}
                 budgetId={budgetId}
                 approved={approved}
                 budgetItems={budgetItems}

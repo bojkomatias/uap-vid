@@ -31,6 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 approved={meta.approved}
                 budgetItems={budgetItems}
                 budgetTeamMembers={budgetTeamMembers}
+                academicUnits={anualBudget.AcademicUnits}
                 calculations={calculations}
             />
         </>

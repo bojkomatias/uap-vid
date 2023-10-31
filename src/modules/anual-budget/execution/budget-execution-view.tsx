@@ -1,12 +1,12 @@
 'use client'
 
-import type { Execution } from '@prisma/client'
+import type { AcademicUnit, Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import Currency from '@elements/currency'
 import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
 
 export default function BudgetExecutionView({
@@ -18,6 +18,7 @@ export default function BudgetExecutionView({
     positionIndex,
     anualBudgetTeamMemberId,
     executionType,
+    academicUnits,
 }: {
     title: string
     itemName: string
@@ -27,8 +28,15 @@ export default function BudgetExecutionView({
     executionType: ExecutionType
     obrero?: { pointsObrero: number; pointPrice: number }
     anualBudgetTeamMemberId?: string
+    academicUnits?: AcademicUnit[]
 }) {
     const [opened, setOpened] = useState(false)
+    const [selectedAcademicUnit, setSelectedAcademicUnit] =
+        useState<AcademicUnit>()
+    useEffect(() => {
+        if (!academicUnits) return
+        setSelectedAcademicUnit(academicUnits.at(0))
+    }, [academicUnits])
 
     return (
         <>
@@ -77,6 +85,7 @@ export default function BudgetExecutionView({
                                     Nueva Ejecución:
                                 </p>
                                 <BudgetNewExecution
+                                    academicUnit={selectedAcademicUnit}
                                     maxAmount={remaining}
                                     anualBudgetTeamMemberId={
                                         anualBudgetTeamMemberId
@@ -108,7 +117,9 @@ export default function BudgetExecutionView({
                                             .map((execution, idx) => {
                                                 return (
                                                     <>
-                                                        <tr key={idx}>
+                                                        <tr
+                                                            key={`${execution.date.getTime()}${idx}`}
+                                                        >
                                                             <td className="pt-2">
                                                                 <Currency
                                                                     amount={

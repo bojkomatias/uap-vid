@@ -164,13 +164,17 @@ export const saveNewTeamMemberExecution = async (
     const remainingHours =
         anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
+    if (!anualBudgetTeamMember.teamMember.academicUnitId) {
+        return null
+    }
+
     const updated = await newTeamMemberExecution(
         anualBudgetTeamMemberId,
         amount,
-        remainingHours
+        remainingHours,
+        anualBudgetTeamMember.teamMember.academicUnitId
     )
     return updated
-    // await newBudgetItemExecution(id, amount, executions)
 }
 
 export const saveNewItemExecution = async (
