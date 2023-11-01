@@ -17,7 +17,7 @@ const years = getYears()
 
 export default function Example() {
     const [selected, setSelected] = useState('')
-    const [loading, setLoading] = useState(false)
+
     const [query, setQuery] = useState('')
     const update = useUpdateQuery()
 
@@ -27,14 +27,6 @@ export default function Example() {
                 filter: 'year',
                 values: selected,
             })
-
-        //Esto está bastante fiero, quería dejar algo lindo en cuanto a UX así que si a alguno se le ocurre un approach más prolijo, bienvenido sea.
-        if (selected) {
-            setLoading(true)
-            setTimeout(() => {
-                setLoading(false)
-            }, 500)
-        }
     }, [selected, update])
 
     const filteredPeople =
@@ -62,14 +54,10 @@ export default function Example() {
                         />
 
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                            {loading ? (
-                                <Loader2 className="loader h-5 w-5" />
-                            ) : (
-                                <ChevronDown
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                />
-                            )}
+                            <ChevronDown
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                            />
                         </Combobox.Button>
                     </div>
                     <Transition
