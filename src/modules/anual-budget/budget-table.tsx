@@ -13,7 +13,7 @@ type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
     select: {
         id: true
         createdAt: true
-        approved: true
+        state: true
         year: true
         protocol: true
     }
@@ -79,14 +79,7 @@ export default function AnualBudgetTable({
             {
                 accessorKey: 'approved',
                 header: 'Aprobado',
-                cell: ({ row }) =>
-                    row.original.approved ? (
-                        <Badge className="bg-success-50 text-success-600 ring-success-500">
-                            Aprobado
-                        </Badge>
-                    ) : (
-                        <Badge>Pendiente</Badge>
-                    ),
+                cell: ({ row }) => <Badge>{row.original.state}</Badge>,
                 enableHiding: true,
             },
             {

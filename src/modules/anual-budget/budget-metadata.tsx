@@ -7,7 +7,7 @@ export const BudgetMetadata = ({
     sponsor,
     createdAt,
     updatedAt,
-    approved,
+    state,
 }: Omit<AnualBudget, 'budgetItems'> & {
     title: string
     sponsor: string[]
@@ -35,9 +35,7 @@ export const BudgetMetadata = ({
             </span>
             {sponsor.join(', ')}
 
-            <Badge className="float-right">
-                {approved ? 'Aprobado' : 'No presentado'}
-            </Badge>
+            <Badge className="float-right">{state}</Badge>
         </div>
     )
 }

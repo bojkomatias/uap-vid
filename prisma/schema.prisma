@@ -133,7 +133,7 @@ model AnualBudget {
   id                String                  @id @default(auto()) @map("_id") @db.ObjectId
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @default(now())
-  approved          Boolean                 @default(false)
+  state             AnualBudgetState        @default(PENDING)
   budgetItems       AnualBudgetItem[]
   budgetTeamMembers AnualBudgetTeamMember[]
   year              Int
@@ -309,4 +309,11 @@ enum State {
   DELETED
   DISCONTINUED
   FINISHED
+}
+
+enum AnualBudgetState {
+  PENDING
+  APPROVED
+  INTERRUPTED
+  REJECTED
 }

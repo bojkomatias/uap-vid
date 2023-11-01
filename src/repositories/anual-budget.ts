@@ -8,7 +8,6 @@ import type {
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
-import { updateProtocolStateById } from './protocol'
 
 export const getAnualBudgets = cache(
     async ({
@@ -158,7 +157,7 @@ export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
 })
 
 export const createAnualBudget = async (
-    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
+    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
 
@@ -311,7 +310,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                     select: {
                         id: true,
                         createdAt: true,
-                        approved: true,
+                        state: true,
                         year: true,
                         protocol: true,
                     },
@@ -352,7 +351,7 @@ export const newBudgetItemExecution = (
 export const approveAnualBudget = async (id: string) => {
     return await prisma.anualBudget.update({
         where: { id },
-        data: { approved: true },
+        data: { state: 'APPROVED' },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }

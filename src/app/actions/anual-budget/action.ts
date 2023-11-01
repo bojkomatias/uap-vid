@@ -55,7 +55,7 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
     )
     const data: Omit<
         AnualBudget,
-        'id' | 'createdAt' | 'updatedAt' | 'approved'
+        'id' | 'createdAt' | 'updatedAt' | 'state'
     > = {
         protocolId: protocol.id,
         year: Number(year),
