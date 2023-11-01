@@ -3,25 +3,40 @@ import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
 import Link from 'next/link'
-import { Home } from 'tabler-icons-react'
+import { cx } from '@utils/cx'
 
-type MapLink = { [key: string]: string }
+type MapLink = { [key: string]: string | undefined }
 
+/** The undefined one are routes that exists but shouldn't be accesible via breadcrumb */
 const newLinkMap: MapLink = {
-    users: 'Lista de usuarios',
-    protocols: 'Lista de protocolos',
-    convocatories: 'Lista de convocatorias',
-    'team-members': 'Lista de miembros de investigación',
-    categories: 'Lista de categorías',
-    'anual-budgets': 'Lista de presupuestos',
-    budget: 'Presupuesto anual',
+    users: 'Usuarios',
+    protocols: 'Protocolos',
+    convocatories: 'Convocatorias',
+    'academic-units': 'Unidades académicas',
+    'team-members': 'Miembros de investigación',
+    categories: 'Categorías docentes',
+    'anual-budgets': 'Presupuestos anuales',
+    budget: undefined,
+}
+/**
+ * Some LOB is needed to check to see if breadcrumbs is View or Edit page [id]
+ * */
+const previousLink: MapLink = {
+    protocols: 'Vista de protocolo',
+    convocatories: 'Editar de convocatoria',
+    'team-members': 'Editar de miembro',
+    'anual-budgets': undefined,
+}
+const previousSecondLink: MapLink = {
+    protocols: 'Edición de protocolo',
+    'anual-budgets': 'Vista de presupuesto',
 }
 
 export const Breadcrumbs = () => {
     const pathname = usePathname()
     const breadcrumbs = useMemo(
         function generateBreadcrumbs() {
-            const asPathNestedRoutes = pathname!
+            const asPathNestedRoutes = pathname
                 .split('/')
                 .filter((v) => v.length > 0)
 
@@ -29,14 +44,13 @@ export const Breadcrumbs = () => {
                 const href = `/${asPathNestedRoutes
                     .slice(0, idx + 1)
                     .join('/')}`
+
                 return {
                     href,
-                    name: subpath.replace(
-                        subpath,
-                        newLinkMap[subpath]
-                            ? newLinkMap[subpath]
-                            : 'Vista de protocolo'
-                    ),
+                    name:
+                        newLinkMap[subpath] ??
+                        previousLink[asPathNestedRoutes[idx - 1]] ??
+                        previousSecondLink[asPathNestedRoutes[idx - 2]],
                 }
             })
 
@@ -48,34 +62,34 @@ export const Breadcrumbs = () => {
     return (
         <nav className="absolute left-24 top-8 flex" aria-label="Breadcrumb">
             <ol role="list" className="flex rounded-md bg-white">
-                {pathname !== '/protocols' ? (
-                    <li className="flex items-center">
-                        <Link
-                            href="/protocols"
-                            className="text-gray-500 hover:text-primary"
-                            passHref
-                        >
-                            <Home className="h-5 w-5 flex-shrink-0" />
-                            <span className="sr-only">Home</span>
-                        </Link>
-                    </li>
-                ) : null}
+                <li className="flex items-center">
+                    <Link
+                        href="/protocols"
+                        className="ml-4 text-sm font-medium text-gray-500 hover:text-primary"
+                    >
+                        Inicio
+                    </Link>
+                </li>
 
-                {breadcrumbs.slice(0, -1).map((page) => (
-                    <li key={page.name} className="flex">
-                        {page.name == 'Inicio' ? null : (
+                {breadcrumbs
+                    .filter((p) => p.name)
+                    .map((page) => (
+                        <li key={page.name} className="flex">
                             <div className="flex items-center">
                                 <ChevronRight className="ml-2 h-4 text-gray-500" />
                                 <Link
                                     href={page.href}
-                                    className="ml-4 text-sm font-medium text-gray-500 hover:text-primary"
+                                    className={cx(
+                                        'ml-4 text-sm font-medium text-gray-500 hover:text-primary',
+                                        pathname === page.href &&
+                                            'pointer-events-none text-gray-800 drop-shadow-sm'
+                                    )}
                                 >
                                     {page.name}
                                 </Link>
                             </div>
-                        )}
-                    </li>
-                ))}
+                        </li>
+                    ))}
             </ol>
         </nav>
     )

@@ -11,6 +11,8 @@ const styles = {
         'bg-gray-100 font-semibold text-gray-600 hover:bg-gray-200 hover:text-gray-700',
     outline: 'text-gray-700 ring-1 hover:bg-gray-50 bg-white',
     destructive: 'font-semibold text-error-600 bg-error-50 hover:bg-error-100',
+    warning:
+        'font-semibold text-warning-600 bg-warning-50 hover:bg-warning-100',
 }
 
 /**
@@ -20,7 +22,13 @@ const styles = {
 
 // Added a buttonSize parameter/property to the function because in some cases I couldn't modify the size of the button externally. In any case, it's initialized as true, so none of the already defined buttons are affected, but now there's an option to turn it off and give a size externally. Nico.
 export const buttonStyle = (
-    intent: 'primary' | 'secondary' | 'outline' | 'destructive' | 'unset',
+    intent:
+        | 'primary'
+        | 'secondary'
+        | 'outline'
+        | 'destructive'
+        | 'warning'
+        | 'unset',
     buttonSize: boolean = true
 ) =>
     cx(
