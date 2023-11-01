@@ -8,6 +8,7 @@ import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
+import CustomCombobox from '@elements/years-combobox'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
     select: {
@@ -124,6 +125,10 @@ export default function AnualBudgetTable({
     )
     const initialVisible = { id: false, createdAt: false }
 
+    const yearFilter = () => {
+        return <CustomCombobox></CustomCombobox>
+    }
+
     return (
         <>
             <TanStackTable
@@ -132,6 +137,7 @@ export default function AnualBudgetTable({
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
                 searchBarPlaceholder="Buscar por nombre de categoría"
+                customFilterSlot={yearFilter()}
             />
         </>
     )
