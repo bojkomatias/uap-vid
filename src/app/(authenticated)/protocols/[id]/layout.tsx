@@ -1,7 +1,7 @@
 import { PageHeading } from '@layout/page-heading'
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import type { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import Reviews from '@review/reviews-template'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
@@ -17,6 +17,8 @@ import { FinishButton } from '@protocol/elements/action-buttons/finish'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 import GenerateAnualBudgetButton from '@protocol/elements/action-buttons/generate-anual-budget'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
+import { BudgetModalView } from '@protocol/elements/budgets/budget-modal-view'
+import { BudgetResearcherView } from 'modules/anual-budget/budget-researcher-view'
 
 async function Layout({
     params,
@@ -55,6 +57,7 @@ async function Layout({
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
+
             <div className="flex w-full justify-between gap-3">
                 <ProtocolMetadata
                     currentUser={session.user}
@@ -76,11 +79,20 @@ async function Layout({
                     />
                     <AcceptButton
                         role={session.user.role}
-                        protocol={{ id: protocol.id, state: protocol.state }}
+                        protocol={{
+                            id: protocol.id,
+                            state: protocol.state,
+                        }}
                         reviews={reviews}
                     />
                     {/* I need to pass the whole protocol to check validity! */}
                     <PublishButton user={session.user} protocol={protocol} />
+
+                    <BudgetModalView>
+                        <BudgetResearcherView
+                            budgetId={'653fda40f07b2757b86a0ac5'}
+                        />
+                    </BudgetModalView>
                     {canExecute(
                         'GENERATE_ANUAL_BUDGET',
                         session.user.role,
