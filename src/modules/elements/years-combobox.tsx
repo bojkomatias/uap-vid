@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
-import { Check, ChevronDown, Loader2 } from 'tabler-icons-react'
+import { Check, ChevronDown } from 'tabler-icons-react'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 
 /** Arbitrary number. I select the current year and the past 20 years from there. */
