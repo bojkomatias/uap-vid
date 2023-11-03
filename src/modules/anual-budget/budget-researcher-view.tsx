@@ -1,6 +1,8 @@
 import { calculateTotalBudget } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 import { getAnualBudgetById } from '@repositories/anual-budget'
+import { PDF } from 'modules/budget-pdf'
+import { Suspense } from 'react'
 
 export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
     const anualBudget = await getAnualBudgetById(budgetId)
@@ -12,9 +14,22 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
 
     return (
         <div className="mx-auto max-w-7xl space-y-6 p-6">
-            <h1 className="text-lg font-semibold leading-7 text-gray-900">
-                Presupuesto anual {anualBudget.year}
-            </h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-lg font-semibold leading-7 text-gray-900">
+                    Presupuesto anual {anualBudget.year}
+                </h1>
+                <Suspense>
+                    <PDF
+                        budgetItems={budgetItems}
+                        budgetTeamMembers={budgetTeamMembers}
+                        year={anualBudget.year}
+                        protocolTitle={
+                            anualBudget.protocol.sections.identification.title
+                        }
+                        calculations={calculations}
+                    />
+                </Suspense>
+            </div>
             <div>
                 <h2 className="text-base font-semibold leading-6 text-gray-800">
                     Honorarios Calculados
@@ -59,14 +74,8 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                         <tbody>
                             {budgetTeamMembers.map(
                                 ({
-                                    teamMember: {
-                                        id,
-                                        name,
-                                        obrero,
-                                        categories,
-                                        pointsObrero,
-                                    },
-                                    memberRole,
+                                    teamMember: { id, name, categories },
+
                                     hours,
                                 }) => (
                                     <tr
@@ -154,7 +163,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {budgetItems.map(({ detail, type, amount }, i) => (
+                            {budgetItems.map(({ detail, amount }, i) => (
                                 <tr
                                     key={i}
                                     className="border-b border-gray-200 text-gray-600"
