@@ -301,7 +301,7 @@ export default function GenerateAnualBudgetButton({
 
             {hasBudgetCurrentYear ? (
                 <div className="relative w-fit">
-                    <div className="absolute inset-0 z-[10] mr-3 ">
+                    <div className="absolute inset-0 z-[10] mr-3">
                         <InfoTooltip>
                             <h4>
                                 El protocolo ya tiene generado un presupuesto en
@@ -314,9 +314,9 @@ export default function GenerateAnualBudgetButton({
                         intent={'secondary'}
                         disabled={hasBudgetCurrentYear}
                     >
-                        <FileDollar />
+                        <FileDollar className="h-4 w-4 text-current" />
                         Generar presupuesto
-                        <div className="w-4 " />
+                        <div className="w-4" />
                     </Button>
                 </div>
             ) : (
@@ -325,7 +325,7 @@ export default function GenerateAnualBudgetButton({
                     intent="secondary"
                     onClick={() => setOpen(true)}
                 >
-                    <FileDollar />
+                    <FileDollar className="h-4 w-4 text-current" />
                     Generar presupuesto
                 </Button>
             )}

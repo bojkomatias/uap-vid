@@ -1,31 +1,25 @@
 import { Badge } from '@elements/badge'
-import type { State, User } from '@prisma/client'
+import type { User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { Calendar, User as UserIcon } from 'tabler-icons-react'
-import { ResearcherReassignation } from './elements/action-buttons/researcher-reassignation'
 import { getAllOwners } from '@repositories/user'
-import ProtocolNumberUpdate from './elements/protocol-number-update'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { getProtocolMetadata } from '@repositories/protocol'
+import { ResearcherReassignation } from '@protocol/elements/action-buttons/researcher-reassignation'
+import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 
-export async function ProtocolMetadata({
-    currentUser,
-    id,
-    protocolNumber,
-    createdAt,
-    state,
-    researcher,
-    convocatory,
+export default async function ProtocolMetadata({
+    params,
 }: {
-    currentUser: User
-    id: string
-    protocolNumber: string | null
-    createdAt: Date | null
-    state: State
-    researcher: { id: string; name: string; email: string }
-    convocatory: { id: string; name: string }
+    params: { id: string }
 }) {
+    const session = await getServerSession(authOptions)
+    const protocol = await getProtocolMetadata(params.id)
+    if (!session || !protocol) return
     let researcherList: User[] = []
-    if (currentUser.role === 'ADMIN') {
+    if (session.user.role === 'ADMIN') {
         researcherList = await getAllOwners()
     }
 
@@ -34,41 +28,41 @@ export async function ProtocolMetadata({
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-6">
                     <ProtocolNumberUpdate
-                        protocolId={id}
-                        protocolNumber={protocolNumber}
-                        role={currentUser.role}
+                        protocolId={params.id}
+                        protocolNumber={protocol.protocolNumber}
+                        role={session.user.role}
                     />
 
                     <span>
                         <Calendar className="mr-2 inline h-4 text-gray-600" />
                         <span className="mt-0.5 text-xs text-gray-600">
-                            {dateFormatter.format(createdAt!)}
+                            {dateFormatter.format(protocol.createdAt!)}
                         </span>
                     </span>
                 </div>
-                <Badge>{convocatory?.name}</Badge>
+                <Badge>{protocol.convocatory.name}</Badge>
             </div>
             <div className="mt-2 flex items-baseline gap-4">
                 <div className="flex items-center gap-2">
                     <UserIcon className="h-4 text-gray-600" />
                     <div className="font-medium">
-                        {researcher?.name}
+                        {protocol.researcher.name}
                         <div className="-mt-1.5 ml-px text-xs font-light text-gray-500">
-                            {researcher?.email}
+                            {protocol.researcher.email}
                         </div>
                     </div>
                 </div>
                 <div className="mx-3 mt-1 flex-grow">
-                    {currentUser.role === 'ADMIN' && (
+                    {session.user.role === 'ADMIN' && (
                         <ResearcherReassignation
-                            protocolId={id}
-                            researcherId={researcher?.id}
+                            protocolId={params.id}
+                            researcherId={protocol.researcher.id}
                             researchers={researcherList}
                         />
                     )}
                 </div>
                 <Badge className="text-sm">
-                    {ProtocolStatesDictionary[state]}
+                    {ProtocolStatesDictionary[protocol.state]}
                 </Badge>
             </div>
         </div>

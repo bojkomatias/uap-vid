@@ -18,17 +18,15 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                 <h1 className="text-lg font-semibold leading-7 text-gray-900">
                     Presupuesto anual {anualBudget.year}
                 </h1>
-                <Suspense>
-                    <PDF
-                        budgetItems={budgetItems}
-                        budgetTeamMembers={budgetTeamMembers}
-                        year={anualBudget.year}
-                        protocolTitle={
-                            anualBudget.protocol.sections.identification.title
-                        }
-                        calculations={calculations}
-                    />
-                </Suspense>
+                <PDF
+                    budgetItems={budgetItems}
+                    budgetTeamMembers={budgetTeamMembers}
+                    year={anualBudget.year}
+                    protocolTitle={
+                        anualBudget.protocol.sections.identification.title
+                    }
+                    calculations={calculations}
+                />
             </div>
             <div>
                 <h2 className="text-base font-semibold leading-6 text-gray-800">
