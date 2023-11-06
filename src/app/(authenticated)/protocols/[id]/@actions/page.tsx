@@ -59,11 +59,12 @@ export default async function ActionsPage({
                 'GENERATE_ANUAL_BUDGET',
                 session.user.role,
                 protocol.state
-            ) ? (
-                <GenerateAnualBudgetButton
-                    hasBudgetCurrentYear={hasBudgetCurrentYear}
-                />
-            ) : null}
+            ) &&
+                !hasBudgetCurrentYear && (
+                    <GenerateAnualBudgetButton
+                        hasBudgetCurrentYear={hasBudgetCurrentYear}
+                    />
+                )}
             <EditButton
                 user={session.user}
                 protocol={{
