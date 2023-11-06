@@ -141,6 +141,7 @@ export default function BudgetExecutionView({
                     setOpened(true)
                 }}
                 intent="secondary"
+                size='xs'
             >
                 Ver
             </Button>

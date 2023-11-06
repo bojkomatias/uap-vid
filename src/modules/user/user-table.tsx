@@ -89,10 +89,7 @@ export default function UserTable({
                             <p>Cambiar rol del usuario</p>
                             <RoleUpdater user={row.original} />
                         </UserView>
-                        <DeleteUserButton
-                            userId={row.original.id}
-                            className="px-2.5 py-1 text-xs"
-                        />
+                        <DeleteUserButton userId={row.original.id} />
                     </div>
                 ),
                 enableHiding: false,

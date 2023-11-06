@@ -4,7 +4,6 @@ import TanStackTable from '@elements/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
 import { Check, Minus } from 'tabler-icons-react'
 import Currency from '@elements/currency'
@@ -105,11 +104,7 @@ export default function TeamMemberTable({
                 cell: ({ row }) => (
                     <Link
                         href={`/team-members/${row.original.id}`}
-                        passHref
-                        className={cx(
-                            buttonStyle('secondary'),
-                            'px-2.5 py-1 text-xs'
-                        )}
+                        className={buttonStyle('secondary', 'xs')}
                     >
                         Ver
                     </Link>

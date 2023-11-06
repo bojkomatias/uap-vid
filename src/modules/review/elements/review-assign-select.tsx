@@ -73,7 +73,7 @@ const ReviewAssignSelect = ({
         return (
             <Button
                 intent="outline"
-                className="relative px-3 py-1.5 text-xs"
+                className="relative"
                 onClick={() => setShow(true)}
             >
                 <div className="invisible absolute left-36 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
@@ -88,7 +88,7 @@ const ReviewAssignSelect = ({
         return (
             <Button
                 intent="outline"
-                className="relative px-3 py-1.5 text-xs"
+                className="relative"
                 onClick={() => setShow(true)}
             >
                 <div className="invisible absolute left-40 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
