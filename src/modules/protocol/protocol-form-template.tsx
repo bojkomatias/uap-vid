@@ -128,7 +128,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 intent="outline"
                 size="xs"
                 className={cx(
-                    'px-2 py-1 text-xs font-medium',
+                    'hover:bg-primary-50',
                     section === value && 'font-bold shadow',
                     !form.isValid(path) && section !== value ? 'opacity-50' : ''
                 )}
