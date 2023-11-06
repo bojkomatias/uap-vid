@@ -24,7 +24,7 @@ export default function SearchBar({
                     //If searchQuery is empty, goes back to the normal paginated page
                     if (e.target.value === '') update({ search: '' })
                 }}
-                className={cx('input', 'h-[2.1rem] text-sm')}
+                className={cx('input', 'h-[2.125rem] text-sm')}
                 placeholder={placeholderMessage}
             />
             <Button

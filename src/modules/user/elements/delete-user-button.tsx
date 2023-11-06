@@ -6,13 +6,7 @@ import { useCallback, useState, useTransition } from 'react'
 
 let timeout: NodeJS.Timeout
 
-export function DeleteUserButton({
-    userId,
-    className,
-}: {
-    userId: string
-    className?: string
-}) {
+export function DeleteUserButton({ userId }: { userId: string }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [deleting, setDeleting] = useState(false)
@@ -46,8 +40,8 @@ export function DeleteUserButton({
                 setDeleting(false)
             }}
             disabled={isPending}
-            className={className}
             intent="destructive"
+            size="xs"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +79,7 @@ export function DeleteUserButton({
             }}
             disabled={isPending}
             intent="destructive"
-            className={className}
+            size="xs"
         >
             Eliminar
         </Button>

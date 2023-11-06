@@ -21,11 +21,7 @@ export default function UserView({
 
     return (
         <>
-            <CustomDrawer
-                title="Usuario"
-                open={opened}
-                onClose={setOpened}
-            >
+            <CustomDrawer title="Usuario" open={opened} onClose={setOpened}>
                 <section className="flex flex-col gap-4 text-gray-600">
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
                         <div className="flex items-end justify-between gap-2">
@@ -50,16 +46,15 @@ export default function UserView({
                 </section>
             </CustomDrawer>
 
-
-                <Button
-
-                    className="px-2.5 py-1 text-xs"
-                    onClick={()=>{setOpened(true)}}
-                    intent="secondary"
-                >
-                    Editar
-                </Button>
-
+            <Button
+                onClick={() => {
+                    setOpened(true)
+                }}
+                intent="secondary"
+                size="xs"
+            >
+                Editar
+            </Button>
         </>
     )
 }

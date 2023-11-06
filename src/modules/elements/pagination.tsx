@@ -56,7 +56,7 @@ export default function Pagination({
 
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className="mx-auto mt-8 flex w-fit gap-2">
+            <div className="mx-auto mt-8 flex w-fit gap-1">
                 {numberOfDisplayedPages >=
                 Math.ceil(totalRecords / shownRecords) ? null : (
                     <>
@@ -67,7 +67,7 @@ export default function Pagination({
                             className="bg-gray-100"
                             onClick={() => update({ page: 1 })}
                         >
-                            <ChevronsLeft className="w-4 text-gray-500" />
+                            <ChevronsLeft className="w-3.5 text-gray-500" />
                         </Button>
                         <Button
                             title="Página anterior"
@@ -94,8 +94,8 @@ export default function Pagination({
                               size="icon"
                               className={
                                   Number(currentPage) === page
-                                      ? 'fade-in ring-2 md:ring-primary'
-                                      : 'fade-in hidden md:block'
+                                      ? 'fade-in text-xs ring-2 md:ring-primary'
+                                      : 'fade-in hidden text-xs md:block'
                               }
                               onClick={() => {
                                   if (Number(currentPage) !== page)
@@ -137,7 +137,7 @@ export default function Pagination({
                                 })
                             }
                         >
-                            <ChevronsRight className="w-4 text-gray-500" />
+                            <ChevronsRight className="w-3.5 text-gray-500" />
                         </Button>
                     </>
                 )}

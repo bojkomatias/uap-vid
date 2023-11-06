@@ -8,15 +8,16 @@ const styles = {
         'bg-primary font-bold text-white shadow hover:bg-primary/90 hover:shadow-primary/50 active:scale-95 focus-visible:outline-offset-2',
     secondary:
         'bg-gray-100 font-semibold text-gray-600 hover:bg-gray-200 hover:text-gray-700',
-    outline: 'text-gray-700 ring-1 hover:bg-gray-50 bg-white',
+    outline:
+        'text-gray-700 font-medium ring-1 hover:bg-gray-50 bg-white ring-inset',
     destructive: 'font-semibold text-error-600 bg-error-50 hover:bg-error-100',
     warning:
         'font-semibold text-warning-600 bg-warning-50 hover:bg-warning-100',
 }
 const sizes = {
     xs: 'text-xs h-6 px-1.5',
-    sm: 'text-[0.81rem] h-8 px-2.5',
-    md: 'text-sm h-9 px-3',
+    sm: 'text-[0.81rem] h-[2.125rem] px-2.5',
+    md: 'text-sm h-10 px-3',
     lg: 'text-base h-11 px-4',
     icon: 'h-8 w-8 p-0',
     'icon-lg': 'h-12 w-12 p-0',
