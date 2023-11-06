@@ -15,6 +15,7 @@ interface Props
         | 'destructive'
         | 'warning'
         | 'unset'
+    size?: 'xs' | 'sm' | 'md' | 'lg'
     className?: string
     type?: 'button' | 'reset' | 'submit'
     loading?: boolean
@@ -22,6 +23,7 @@ interface Props
 }
 export const Button = ({
     intent,
+    size,
     className,
     type = 'button',
     loading = false,
@@ -33,7 +35,7 @@ export const Button = ({
             {...buttonProps}
             disabled={loading || buttonProps.disabled}
             type={type}
-            className={cx(buttonStyle(intent), className)}
+            className={cx(buttonStyle(intent, size), className)}
         >
             {loading ? (
                 intent === 'primary' ? (

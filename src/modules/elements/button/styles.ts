@@ -1,5 +1,4 @@
 // This component exists, because some styles are used on the Server, and cannot be exported all together with Button file
-
 import { cx } from '@utils/cx'
 
 const styles = {
@@ -14,13 +13,18 @@ const styles = {
     warning:
         'font-semibold text-warning-600 bg-warning-50 hover:bg-warning-100',
 }
+const sizes = {
+    xs: 'text-xs h-6 px-1.5',
+    sm: 'text-[0.81rem] h-8 px-2.5',
+    md: 'text-sm h-9 px-3',
+    lg: 'text-base h-11 px-4',
+}
 
 /**
  * Here I export a HELPER for Components that can't consume the Button (eg. Link), but want to obtain the style anyways
  * Base class + styles
  */
 
-// Added a buttonSize parameter/property to the function because in some cases I couldn't modify the size of the button externally. In any case, it's initialized as true, so none of the already defined buttons are affected, but now there's an option to turn it off and give a size externally. Nico.
 export const buttonStyle = (
     intent:
         | 'primary'
@@ -29,11 +33,10 @@ export const buttonStyle = (
         | 'destructive'
         | 'warning'
         | 'unset',
-    buttonSize: boolean = true
+    size?: 'xs' | 'sm' | 'md' | 'lg'
 ) =>
     cx(
-        `group flex items-center gap-1.5 justify-center rounded-md ${
-            buttonSize && 'px-4 py-2.5'
-        } text-sm transition duration-200 ease-out focus-visible:outline focus-visible:outline-[1.5px] focus-visible:outline-primary active:brightness-95 disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50`,
-        styles[intent]
+        `group whitespace-nowrap flex items-center gap-1.5 justify-center rounded-md transition duration-200 ease-out focus-visible:outline focus-visible:outline-[1.5px] focus-visible:outline-primary active:brightness-95 disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50`,
+        styles[intent],
+        sizes[size ?? 'md']
     )
