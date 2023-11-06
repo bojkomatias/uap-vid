@@ -10,7 +10,6 @@ export function GenerateAnualBudgetButton({
 }: {
     hasBudgetCurrentYear: boolean
 }) {
-    
     return hasBudgetCurrentYear ? (
         <div className="relative w-fit">
             <div className="absolute inset-0 z-[10] mr-3">
@@ -33,6 +32,7 @@ export function GenerateAnualBudgetButton({
         </div>
     ) : (
         <Link
+            scroll={false}
             href="/generate-budget"
             className={cx(buttonStyle('secondary'), 'h-10')}
         >

@@ -154,6 +154,7 @@ export async function GenerateAnualBudget({
                 <ActionGenerateButton protocolId={protocolId} />
             ) : (
                 <Link
+                    scroll={false}
                     href={`/protocols/${protocolId}/0`}
                     className={buttonStyle('secondary')}
                 >
