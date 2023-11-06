@@ -24,7 +24,7 @@ export default async function ProtocolMetadata({
     }
 
     return (
-        <div className="z-10 my-1 ml-2 max-w-3xl flex-grow gap-2 rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+        <div className="relative z-20 my-1 ml-2 max-w-3xl flex-grow gap-2 rounded-lg bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-6">
                     <ProtocolNumberUpdate
