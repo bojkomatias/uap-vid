@@ -1,14 +1,14 @@
+import { GenerateAnualBudget } from '@protocol/elements/budgets/generate-anual-budget'
 import { ProtocolInterceptedModal } from '@protocol/elements/protocol-intercepted-modal'
-import { BudgetResearcherView } from 'modules/anual-budget/budget-researcher-view'
 
 export default async function ModalPage({
     params,
 }: {
-    params: { budgetId: string }
+    params: { id: string }
 }) {
     return (
         <ProtocolInterceptedModal>
-            <BudgetResearcherView budgetId={params.budgetId} />
+            <GenerateAnualBudget protocolId={params.id} />
         </ProtocolInterceptedModal>
     )
 }

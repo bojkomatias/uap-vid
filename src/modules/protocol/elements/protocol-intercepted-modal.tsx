@@ -1,9 +1,13 @@
 'use client'
 import { Dialog, Transition } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
-import { Fragment, Suspense } from 'react'
+import { Fragment } from 'react'
 
-export function BudgetModalView({ children }: { children: React.ReactNode }) {
+export function ProtocolInterceptedModal({
+    children,
+}: {
+    children: React.ReactNode
+}) {
     const router = useRouter()
 
     return (

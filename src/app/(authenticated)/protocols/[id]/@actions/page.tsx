@@ -1,10 +1,9 @@
-import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
 import EditButton from '@protocol/elements/action-buttons/edit'
 import { FinishButton } from '@protocol/elements/action-buttons/finish'
-import GenerateAnualBudgetButton from '@protocol/elements/action-buttons/generate-anual-budget'
+import { GenerateAnualBudgetButton } from '@protocol/elements/action-buttons/generate-budget-button'
 import PublishButton from '@protocol/elements/action-buttons/publish'
 import { BudgetDropdown } from '@protocol/elements/budgets/budget-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
@@ -22,11 +21,6 @@ export default async function ActionsPage({
     const protocol = await findProtocolByIdWithResearcher(params.id)
     if (!protocol || !session) return
     const reviews = await getReviewsByProtocol(protocol.id)
-    const budgetPreview = await protocolToAnualBudgetPreview(
-        protocol.id,
-        protocol.sections.budget,
-        protocol.sections.identification.team
-    )
 
     const hasBudgetCurrentYear = protocol.anualBudgets
         .map((b) => {
@@ -57,7 +51,10 @@ export default async function ActionsPage({
                 'VIEW_ANUAL_BUDGET',
                 session.user.role,
                 protocol.state
-            ) && <BudgetDropdown budgets={protocol.anualBudgets} />}
+            ) &&
+                protocol.anualBudgets.length > 0 && (
+                    <BudgetDropdown budgets={protocol.anualBudgets} />
+                )}
             {canExecute(
                 'GENERATE_ANUAL_BUDGET',
                 session.user.role,
@@ -65,8 +62,6 @@ export default async function ActionsPage({
             ) ? (
                 <GenerateAnualBudgetButton
                     hasBudgetCurrentYear={hasBudgetCurrentYear}
-                    budgetPreview={budgetPreview}
-                    teamMembers={protocol.sections.identification.team}
                 />
             ) : null}
             <EditButton

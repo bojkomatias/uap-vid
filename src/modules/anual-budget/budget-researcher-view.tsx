@@ -2,7 +2,6 @@ import { calculateTotalBudget } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 import { getAnualBudgetById } from '@repositories/anual-budget'
 import { PDF } from 'modules/budget-pdf'
-import { Suspense } from 'react'
 
 export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
     const anualBudget = await getAnualBudgetById(budgetId)
