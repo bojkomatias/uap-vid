@@ -126,6 +126,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         }) => (
             <Button
                 intent="outline"
+                size="xs"
                 className={cx(
                     'px-2 py-1 text-xs font-medium',
                     section === value && 'font-bold shadow',
@@ -257,6 +258,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     <Button
                         type="button"
                         intent="outline"
+                        size="icon"
                         disabled={section === '0'}
                         onClick={() =>
                             setSection((p) => (Number(p) - 1).toString())
@@ -277,6 +279,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     <Button
                         type="button"
                         intent="outline"
+                        size="icon"
                         disabled={section === '7'}
                         onClick={() =>
                             setSection((p) => (Number(p) + 1).toString())

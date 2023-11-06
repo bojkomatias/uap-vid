@@ -15,7 +15,7 @@ interface Props
         | 'destructive'
         | 'warning'
         | 'unset'
-    size?: 'xs' | 'sm' | 'md' | 'lg'
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon-lg'
     className?: string
     type?: 'button' | 'reset' | 'submit'
     loading?: boolean

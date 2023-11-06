@@ -5,7 +5,6 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { buttonStyle } from '@elements/button/styles'
-import { cx } from '@utils/cx'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
 import CustomCombobox from '@elements/years-combobox'
@@ -95,28 +94,12 @@ export default function AnualBudgetTable({
                 enableSorting: false,
                 cell: ({ row }) => {
                     return (
-                        <div className="flex gap-2">
-                            <Link
-                                passHref
-                                className={cx(
-                                    buttonStyle('secondary'),
-                                    'px-2.5 py-1 text-xs'
-                                )}
-                                href={`/anual-budgets/budget/${row.original.id}`}
-                            >
-                                Ver
-                            </Link>
-                            <Link
-                                passHref
-                                className={cx(
-                                    buttonStyle('secondary'),
-                                    'px-2.5 py-1 text-xs'
-                                )}
-                                href={`/anual-budgets/${row.original.id}`}
-                            >
-                                Otra acción
-                            </Link>
-                        </div>
+                        <Link
+                            className={buttonStyle('secondary', 'xs')}
+                            href={`/anual-budgets/budget/${row.original.id}`}
+                        >
+                            Ver
+                        </Link>
                     )
                 },
             },

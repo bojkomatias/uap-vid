@@ -36,7 +36,6 @@ export default function EditButton({
         <Link
             href={`/protocols/${protocol.id}/0`}
             className={buttonStyle('secondary')}
-            passHref
         >
             <Edit className="h-5 text-current" />
             Editar

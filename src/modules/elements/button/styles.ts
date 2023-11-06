@@ -18,6 +18,8 @@ const sizes = {
     sm: 'text-[0.81rem] h-8 px-2.5',
     md: 'text-sm h-9 px-3',
     lg: 'text-base h-11 px-4',
+    icon: 'h-8 w-8 p-0',
+    'icon-lg': 'h-12 w-12 p-0',
 }
 
 /**
@@ -33,10 +35,10 @@ export const buttonStyle = (
         | 'destructive'
         | 'warning'
         | 'unset',
-    size?: 'xs' | 'sm' | 'md' | 'lg'
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon-lg'
 ) =>
     cx(
         `group whitespace-nowrap flex items-center gap-1.5 justify-center rounded-md transition duration-200 ease-out focus-visible:outline focus-visible:outline-[1.5px] focus-visible:outline-primary active:brightness-95 disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50`,
         styles[intent],
-        sizes[size ?? 'md']
+        sizes[size ?? 'sm']
     )

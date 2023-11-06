@@ -63,6 +63,7 @@ export default function Pagination({
                         <Button
                             title="Primer página"
                             intent="outline"
+                            size="icon"
                             className="bg-gray-100"
                             onClick={() => update({ page: 1 })}
                         >
@@ -71,6 +72,7 @@ export default function Pagination({
                         <Button
                             title="Página anterior"
                             intent="outline"
+                            size="icon"
                             className="bg-gray-100"
                             onClick={() =>
                                 update({
@@ -89,6 +91,7 @@ export default function Pagination({
                           <Button
                               key={page}
                               intent="outline"
+                              size="icon"
                               className={
                                   Number(currentPage) === page
                                       ? 'fade-in ring-2 md:ring-primary'
@@ -109,6 +112,7 @@ export default function Pagination({
                         <Button
                             title="Siguiente página"
                             intent="outline"
+                            size="icon"
                             className="bg-gray-100"
                             onClick={() =>
                                 update({
@@ -125,6 +129,7 @@ export default function Pagination({
                         <Button
                             title="Última página"
                             intent="outline"
+                            size="icon"
                             className="bg-gray-100"
                             onClick={() =>
                                 update({

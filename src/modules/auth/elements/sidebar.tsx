@@ -30,10 +30,9 @@ export function DesktopNavigation({ user }: { user: User }) {
                                 href={item.href}
                                 className={cx(
                                     'pointer-events-none relative',
-                                    buttonStyle('secondary'),
+                                    buttonStyle('secondary', 'icon-lg'),
                                     pathname?.includes(item.href) &&
-                                        buttonStyle('primary'),
-                                    'p-0'
+                                        buttonStyle('primary', 'icon-lg')
                                 )}
                                 passHref
                             >

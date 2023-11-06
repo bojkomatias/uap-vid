@@ -271,11 +271,7 @@ export default function ProtocolTable({
                 cell: ({ row }) => (
                     <Link
                         href={`/protocols/${row.original.id}`}
-                        passHref
-                        className={cx(
-                            buttonStyle('secondary'),
-                            'px-2.5 py-1 text-xs'
-                        )}
+                        className={buttonStyle('secondary', 'xs')}
                     >
                         Ver
                     </Link>
