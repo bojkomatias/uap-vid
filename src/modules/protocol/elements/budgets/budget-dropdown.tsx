@@ -41,6 +41,7 @@ export function BudgetDropdown({
                             <Menu.Item key={id}>
                                 {({ active }) => (
                                     <Link
+                                        scroll={false}
                                         href={`/anual-budget-view/${id}`}
                                         className={cx(
                                             'flex w-full items-center gap-1 px-4 py-2 text-sm font-medium',
