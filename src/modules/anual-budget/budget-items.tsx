@@ -202,6 +202,14 @@ export function BudgetItems({
                                     >
                                         <BudgetExecutionView
                                             academicUnits={academicUnits}
+                                            maxAmountPerAcademicUnit={
+                                                budgetItems
+                                                    .map((bi) => bi.amount)
+                                                    .reduce(
+                                                        (a, b) => a + b,
+                                                        0
+                                                    ) / academicUnits.length
+                                            }
                                             positionIndex={i}
                                             remaining={remaining}
                                             title={detail}

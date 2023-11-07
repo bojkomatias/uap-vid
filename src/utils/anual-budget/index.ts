@@ -127,9 +127,6 @@ export const calculateTotalBudget = (
         anualBudget.budgetTeamMembers,
         academicUnitId
     )
-    console.log('academicUnitId', academicUnitId);
-    
-    console.log('ABTr', ABTr)
 
     return {
         ABIe,
