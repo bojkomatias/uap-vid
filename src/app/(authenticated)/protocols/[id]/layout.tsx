@@ -20,19 +20,9 @@ import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 
 async function Layout({
     params,
-    metadata,
-    evaluators,
-    actions,
-    reviews,
-    modal,
     children,
 }: {
     params: { id: string }
-    metadata: ReactNode
-    evaluators: ReactNode
-    actions: ReactNode
-    reviews: ReactNode
-    modal: ReactNode
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
@@ -126,8 +116,6 @@ async function Layout({
                         }}
                     />
                 </div>
-                {actions}
-                {modal}
             </div>
 
             {canAccess('EVALUATORS', session.user.role) &&
