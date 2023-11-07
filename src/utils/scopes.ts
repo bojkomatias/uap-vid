@@ -36,19 +36,13 @@ const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
  * - EDIT_BY_OWNER & PUBLISH can only be done for users that are protocol owners.
  */
 const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
-    [ROLE.RESEARCHER]: [
-        ACTION.CREATE,
-        ACTION.EDIT_BY_OWNER,
-        ACTION.PUBLISH,
-        ACTION.VIEW_ANUAL_BUDGET,
-    ],
+    [ROLE.RESEARCHER]: [ACTION.CREATE, ACTION.EDIT_BY_OWNER, ACTION.PUBLISH],
     [ROLE.SECRETARY]: [
         ACTION.ACCEPT,
         ACTION.CREATE,
         ACTION.EDIT,
         ACTION.EDIT_BY_OWNER,
         ACTION.PUBLISH,
-        ACTION.VIEW_ANUAL_BUDGET,
     ],
     [ROLE.METHODOLOGIST]: [
         ACTION.REVIEW,
@@ -70,7 +64,6 @@ const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
         ACTION.DELETE,
         ACTION.DISCONTINUE,
         ACTION.FINISH,
-        ACTION.VIEW_ANUAL_BUDGET,
         ACTION.GENERATE_ANUAL_BUDGET,
     ],
 }
@@ -106,14 +99,8 @@ const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
         ACTION.DISCONTINUE,
         ACTION.EDIT,
         ACTION.GENERATE_ANUAL_BUDGET,
-        ACTION.VIEW_ANUAL_BUDGET,
     ],
-    [STATE.ON_GOING]: [
-        ACTION.FINISH,
-        ACTION.DISCONTINUE,
-        ACTION.VIEW_ANUAL_BUDGET,
-        ACTION.GENERATE_ANUAL_BUDGET,
-    ],
+    [STATE.ON_GOING]: [ACTION.FINISH, ACTION.DISCONTINUE],
     [STATE.FINISHED]: [],
     [STATE.DISCONTINUED]: [],
     [STATE.DELETED]: [],
