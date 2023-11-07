@@ -22,6 +22,7 @@ export default async function Page({
             <PageHeading title="Lista de convocatorias" />
             <div className="flex flex-row-reverse">
                 <Link
+                    scroll={false}
                     href={'/convocatories/new'}
                     className={buttonStyle('secondary')}
                 >

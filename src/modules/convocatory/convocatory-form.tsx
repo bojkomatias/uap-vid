@@ -2,6 +2,7 @@
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
+import { cx } from '@utils/cx'
 import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -10,9 +11,11 @@ import { useCallback, useTransition } from 'react'
 export function ConvocatoryForm({
     convocatory,
     isNew,
+    column = false,
 }: {
     convocatory: Convocatory
     isNew: boolean
+    column?: boolean
 }) {
     const router = useRouter()
 
@@ -73,9 +76,13 @@ export function ConvocatoryForm({
     return (
         <form
             onSubmit={form.onSubmit((values) => upsertConvocatory(values))}
-            className="mx-auto mt-8 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
+            className={cx(
+                column
+                    ? 'flex flex-col gap-1'
+                    : 'mx-auto mt-8 max-w-5xl place-items-stretch gap-3 lg:grid lg:grid-cols-2'
+            )}
         >
-            <div className="m-3 p-1">
+            <div className="p-1">
                 <label className="label">Nombre</label>
                 <input
                     className="input"
@@ -89,7 +96,7 @@ export function ConvocatoryForm({
                     </p>
                 )}
             </div>
-            <div className="m-3 p-1">
+            <div className=" p-1">
                 <label className="label">Año</label>
                 <input
                     className="input"
@@ -106,7 +113,7 @@ export function ConvocatoryForm({
                 )}
             </div>
 
-            <div className="m-3 p-1">
+            <div className="p-1">
                 <label className="label">Fecha desde</label>
                 <input
                     type="datetime-local"
@@ -123,7 +130,7 @@ export function ConvocatoryForm({
                     </p>
                 )}
             </div>
-            <div className="m-3 p-1">
+            <div className=" p-1">
                 <label className="label">Fecha hasta</label>
                 <input
                     type="datetime-local"
