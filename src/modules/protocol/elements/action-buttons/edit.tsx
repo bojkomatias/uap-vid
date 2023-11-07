@@ -37,7 +37,7 @@ export default function EditButton({
             href={`/protocols/${protocol.id}/0`}
             className={buttonStyle('secondary')}
         >
-            <Edit className="h-5 text-current" />
+            <Edit className="h-4 w-4 text-current" />
             Editar
         </Link>
     )

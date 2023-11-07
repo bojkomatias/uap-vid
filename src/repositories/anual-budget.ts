@@ -113,6 +113,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
             include: {
                 protocol: {
                     select: {
+                        state: true,
                         sections: {
                             select: {
                                 identification: {
