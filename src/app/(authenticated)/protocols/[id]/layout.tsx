@@ -12,6 +12,7 @@ async function Layout({
     evaluators,
     actions,
     reviews,
+    modal,
     children,
 }: {
     params: { id: string }
@@ -19,6 +20,7 @@ async function Layout({
     evaluators: ReactNode
     actions: ReactNode
     reviews: ReactNode
+    modal: ReactNode
     children: ReactNode
 }) {
     const session = await getServerSession(authOptions)
@@ -45,6 +47,7 @@ async function Layout({
                     {evaluators}
                 </div>
                 {actions}
+                {modal}
             </div>
 
             <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x">
