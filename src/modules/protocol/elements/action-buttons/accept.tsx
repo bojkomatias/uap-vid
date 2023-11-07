@@ -56,7 +56,7 @@ const AcceptButton = ({ role, protocol, reviews }: ActionButtonTypes) => {
             disabled={protocol.state !== State.SCIENTIFIC_EVALUATION}
             loading={isPending}
         >
-            <FileCheck className="h-5 text-current" />
+            <FileCheck className="h-4 w-4 text-current" />
             Aceptar
             <span className="ml-1 text-[0.5rem]">(a evaluar en comisión)</span>
         </Button>

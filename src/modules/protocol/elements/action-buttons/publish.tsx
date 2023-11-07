@@ -76,7 +76,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
                     </InfoTooltip>
                 </div>
                 <Button intent={'secondary'} disabled={!isValid}>
-                    <Upload className="h-5 text-current" />
+                    <Upload className="h-4 w-4 text-current" />
                     Publicar
                     <div className="w-4" />
                 </Button>
@@ -88,7 +88,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
             intent={'primary'}
             loading={isPending}
         >
-            <Upload className="h-5 text-current" />
+            <Upload className="h-4 w-4 text-current" />
             Publicar
         </Button>
     )

@@ -72,7 +72,7 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
 
     await createManyAnualBudgetTeamMember(ABT)
     //Added this return to check if the budget was created
-    return true
+    return newAnualBudget.id
 }
 
 // Utilities for generating the annual budget from a protocol.
