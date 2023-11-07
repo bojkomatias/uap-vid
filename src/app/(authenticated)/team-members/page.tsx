@@ -23,7 +23,6 @@ export default async function Page({
                 <Link
                     href={'/team-members/new'}
                     className={buttonStyle('secondary')}
-                    passHref
                 >
                     <UserPlus className="h-5 w-5 text-current" />
                     Nuevo miembro

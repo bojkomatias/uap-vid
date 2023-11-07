@@ -18,30 +18,7 @@ const findProtocolByIdWithResearcher = cache(
             include: {
                 researcher: { select: { id: true, name: true, email: true } },
                 convocatory: { select: { id: true, name: true } },
-                anualBudgets: {
-                    select: { createdAt: true, year: true, id: true },
-                },
-            },
-        })
-)
-const getProtocolMetadata = cache(
-    async (id: string) =>
-        await prisma.protocol.findUnique({
-            where: {
-                id,
-            },
-            select: {
-                id: true,
-                protocolNumber: true,
-                createdAt: true,
-                state: true,
-                convocatory: { select: { id: true, name: true } },
-                researcher: {
-                    select: { name: true, email: true, id: true, role: true },
-                },
-                sections: {
-                    select: { identification: { select: { title: true } } },
-                },
+                anualBudgets: { select: { createdAt: true, year: true } },
             },
         })
 )
@@ -451,7 +428,6 @@ const getProtocolsByRol = cache(
 
 export {
     findProtocolById,
-    getProtocolMetadata,
     findProtocolByIdWithResearcher,
     updateProtocolById,
     createProtocol,

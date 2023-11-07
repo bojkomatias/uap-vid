@@ -47,9 +47,9 @@ export default function EnumFilterOptions({
                                   >
                                       <Badge
                                           className={cx(
-                                              'cursor-pointer transition hover:bg-gray-200',
+                                              'cursor-pointer transition hover:bg-primary-100',
                                               currentValues?.includes(value) &&
-                                                  'bg-gray-300'
+                                                  'bg-primary-50 ring-primary/50'
                                           )}
                                       >
                                           {name}

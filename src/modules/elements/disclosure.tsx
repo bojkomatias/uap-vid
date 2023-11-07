@@ -3,6 +3,7 @@
 import { Disclosure, Transition } from '@headlessui/react'
 import React from 'react'
 import { ChevronUp } from 'tabler-icons-react'
+import { Button } from './button'
 
 export default function DisclosureComponent({
     title,
@@ -13,11 +14,16 @@ export default function DisclosureComponent({
 }) {
     return (
         <div className="w-full">
-            <div className="mx-auto w-full  rounded-md  bg-white ">
+            <div className="mx-auto w-full rounded-md bg-white ">
                 <Disclosure>
                     {({ open }) => (
                         <>
-                            <Disclosure.Button className="bg-purple-100 text-purple-900 focus-visible:ring-purple-500 flex w-full justify-between rounded-lg px-4 py-3 text-left text-sm font-medium transition hover:bg-primary-100 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                            <Disclosure.Button
+                                as={Button}
+                                intent="secondary"
+                                size="md"
+                                className="w-full justify-between"
+                            >
                                 <span>{title}</span>
                                 <ChevronUp
                                     className={`${

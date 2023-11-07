@@ -59,6 +59,7 @@ export const SignIn = () => {
                 </div>
                 <Button
                     intent="primary"
+                    size="md"
                     type="button"
                     loading={loadingMicrosoft}
                     onClick={(e) => {
@@ -118,6 +119,7 @@ export const SignIn = () => {
 
                             <Button
                                 intent="primary"
+                                size="md"
                                 type="submit"
                                 loading={loading}
                             >
