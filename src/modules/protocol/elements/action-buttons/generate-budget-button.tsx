@@ -20,11 +20,7 @@ export function GenerateAnualBudgetButton({
                     </h4>
                 </InfoTooltip>
             </div>
-            <Button
-                className="h-10"
-                intent={'secondary'}
-                disabled={hasBudgetCurrentYear}
-            >
+            <Button intent={'secondary'} disabled={hasBudgetCurrentYear}>
                 <FileDollar className="h-4 w-4 text-current" />
                 Generar presupuesto
                 <div className="w-4" />
@@ -34,7 +30,7 @@ export function GenerateAnualBudgetButton({
         <Link
             scroll={false}
             href="/generate-budget"
-            className={cx(buttonStyle('secondary'), 'h-10')}
+            className={cx(buttonStyle('secondary'))}
         >
             <FileDollar className="h-4 w-4 text-current" />
             Generar presupuesto

@@ -15,7 +15,7 @@ const styles = {
         'font-semibold text-warning-600 bg-warning-50 hover:bg-warning-100',
 }
 const sizes = {
-    xs: 'text-xs h-6 px-1.5',
+    xs: 'text-xs h-6 px-2',
     sm: 'text-[0.81rem] h-[2.125rem] px-2.5',
     md: 'text-sm h-10 px-3',
     lg: 'text-base h-11 px-4',

@@ -193,14 +193,13 @@ export function ProfileInfo({
             </div>
             <h3 className="border-b">Editar cuenta</h3>{' '}
             {!user.password ? (
-                <Button className="h-10" intent="outline">
+                <Button intent="outline">
                     <Link
                         className="flex-gap flex items-center"
                         href={'https://www.office.com/'}
                     >
                         Editar cuenta en{' '}
                         <Image
-                            className=""
                             src={'/whitebackgroundmicrosoft.png'}
                             alt="Microsoft Logo"
                             width={100}
