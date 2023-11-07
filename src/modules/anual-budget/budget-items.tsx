@@ -129,10 +129,7 @@ export function BudgetItems({
                     </thead>
                     <tbody>
                         {budgetItems.map(
-                            (
-                                { detail, type, amount, remaining, executions },
-                                i
-                            ) => (
+                            ({ detail, type, amount, executions }, i) => (
                                 <tr
                                     key={i}
                                     className="border-b border-gray-200 text-gray-600"
@@ -151,7 +148,15 @@ export function BudgetItems({
                                             approved && 'table-cell'
                                         )}
                                     >
-                                        ${currencyFormatter.format(remaining)}
+                                        $
+                                        {currencyFormatter.format(
+                                            amount -
+                                                executions.reduce(
+                                                    (acc, curr) =>
+                                                        acc + curr.amount,
+                                                    0
+                                                )
+                                        )}
                                     </td>
                                     <td
                                         className={cx(
@@ -161,7 +166,13 @@ export function BudgetItems({
                                     >
                                         $
                                         {currencyFormatter.format(
-                                            amount - remaining
+                                            amount -
+                                                (amount -
+                                                    executions.reduce(
+                                                        (acc, curr) =>
+                                                            acc + curr.amount,
+                                                        0
+                                                    ))
                                         )}
                                     </td>
                                     <td
@@ -203,7 +214,14 @@ export function BudgetItems({
                                         <BudgetExecutionView
                                             academicUnits={academicUnits}
                                             positionIndex={i}
-                                            remaining={remaining}
+                                            remaining={
+                                                amount -
+                                                executions.reduce(
+                                                    (acc, curr) =>
+                                                        acc + curr.amount,
+                                                    0
+                                                )
+                                            }
                                             title={detail}
                                             executionType={ExecutionType.Item}
                                             itemName={type}

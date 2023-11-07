@@ -40,8 +40,10 @@ const calculateRemainingABI = (
     amountAcademicUnits: number,
     executionPerAcademicUnit?: number
 ): number => {
+    console.log('amountAcademicUnits', amountAcademicUnits);
+    
     const totalBudgetItemsAmount = abi.reduce((acc, item) => {
-        acc += item.amount / amountAcademicUnits
+        acc += executionPerAcademicUnit ? item.amount / amountAcademicUnits : item.amount
         return acc
     }, 0)
     const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
@@ -56,6 +58,11 @@ const calculateRemainingABI = (
             acc += totalExecution(item)
             return acc
         }, 0)
+
+    console.log('totalBudgetItemsAmount', totalBudgetItemsAmount);
+    console.log('totalExecutionAmount', totalExecutionAmount);
+    
+
     return totalBudgetItemsAmount - totalExecutionAmount
 }
 
@@ -120,12 +127,16 @@ export const calculateTotalBudget = (
     const ABIr = calculateRemainingABI(
         anualBudget.budgetItems,
         amountAcademicUnits,
-        ABIe
+        academicUnitId ? ABIe : undefined
     )
     const ABTr = calculateRemainingABTM(
         anualBudget.budgetTeamMembers,
         academicUnitId
     )
+    // console.log('academicUnitId', academicUnitId);
+    
+    console.log('ABIr', ABIr)
+    // console.log('ABTr', ABTr)
 
     return {
         ABIe,
