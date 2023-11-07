@@ -24,6 +24,7 @@ export default function BudgetExecutionView({
     executionType,
     academicUnits,
     maxAmountPerAcademicUnit,
+    allExecutions,
 }: {
     title: string
     itemName: string
@@ -35,6 +36,7 @@ export default function BudgetExecutionView({
     anualBudgetTeamMemberId?: string
     academicUnits?: AcademicUnit[]
     maxAmountPerAcademicUnit?: number
+    allExecutions?: Execution[]
 }) {
     const [opened, setOpened] = useState(false)
     const [query, setQuery] = useState('')
@@ -56,8 +58,8 @@ export default function BudgetExecutionView({
                   )
               })
     const executionAmountByAcademicUnit = useMemo(() => {
-        if (!executions) return 0
-        return executions
+        if (!allExecutions) return 0
+        return allExecutions
             .filter(
                 (execution) =>
                     execution.academicUnitId === selectedAcademicUnit?.id
@@ -65,7 +67,7 @@ export default function BudgetExecutionView({
             .reduce((acc, curr) => {
                 return acc + curr.amount
             }, 0)
-    }, [executions, selectedAcademicUnit])
+    }, [allExecutions, selectedAcademicUnit])
 
     const maxExecutionAmount = useMemo(() => {
         if (!maxAmountPerAcademicUnit) return remaining
@@ -261,12 +263,15 @@ export default function BudgetExecutionView({
                                 </p>
                                 <table className="table-auto text-sm text-gray-600">
                                     <thead>
-                                        <tr className="text-left ">
-                                            <th className="font-semibold">
-                                                Monto
-                                            </th>
-                                            <th className="font-semibold">
+                                        <tr>
+                                            <th className="text-left font-semibold">
                                                 Fecha
+                                            </th>
+                                            <th className=" text-center font-semibold">
+                                                Unidad Académica
+                                            </th>
+                                            <th className="text-center font-semibold">
+                                                Monto
                                             </th>
                                         </tr>
                                     </thead>
@@ -279,15 +284,24 @@ export default function BudgetExecutionView({
                                                         <tr
                                                             key={`${execution.date.getTime()}${idx}`}
                                                         >
+                                                            <td>
+                                                                {execution.date.toLocaleDateString()}
+                                                            </td>
+                                                            <td className="text-center">
+                                                                {
+                                                                    academicUnits?.find(
+                                                                        (x) =>
+                                                                            x.id ===
+                                                                            execution.academicUnitId
+                                                                    )?.shortname
+                                                                }
+                                                            </td>
                                                             <td className="pt-2">
                                                                 <Currency
                                                                     amount={
                                                                         execution.amount
                                                                     }
                                                                 />
-                                                            </td>
-                                                            <td>
-                                                                {execution.date.toLocaleDateString()}
                                                             </td>
                                                         </tr>
                                                     </>

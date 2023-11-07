@@ -4,6 +4,7 @@ import {
     saveNewTeamMemberExecution,
 } from '@actions/anual-budget/action'
 import { Button } from '@elements/button'
+import { notifications } from '@elements/notifications'
 import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnit } from '@prisma/client'
@@ -32,25 +33,6 @@ const BudgetNewExecution = ({
     const path = usePathname()
     const anualBudgetId = path?.split('/')[3]
 
-    const newExecution = async (amount: number) => {
-        if (
-            anualBudgetTeamMemberId &&
-            executionType === ExecutionType.TeamMember
-        ) {
-            await saveNewTeamMemberExecution(amount, anualBudgetTeamMemberId)
-        }
-
-        if (executionType === ExecutionType.Item) {
-            if (!academicUnit) return
-            await saveNewItemExecution(
-                academicUnit.id,
-                budgetItemPositionIndex,
-                anualBudgetId!,
-                amount
-            )
-        }
-        startTransition(() => router.refresh())
-    }
     const form = useForm({
         initialValues: {
             amount: 1000,
@@ -69,6 +51,41 @@ const BudgetNewExecution = ({
         ),
         validateInputOnChange: true,
     })
+    const newExecution = async (amount: number) => {
+        try {
+            if (
+                anualBudgetTeamMemberId &&
+                executionType === ExecutionType.TeamMember
+            ) {
+                await saveNewTeamMemberExecution(
+                    amount,
+                    anualBudgetTeamMemberId
+                )
+            }
+
+            if (executionType === ExecutionType.Item) {
+                if (!academicUnit) return
+                await saveNewItemExecution(
+                    academicUnit.id,
+                    budgetItemPositionIndex,
+                    anualBudgetId!,
+                    amount
+                )
+            }
+            notifications.show({
+                title: 'Ejecución creada',
+                message: 'La ejecución ha sido creada con éxito',
+                intent: 'success',
+            })
+            startTransition(() => router.refresh())
+        } catch (error) {
+            notifications.show({
+                title: 'Error',
+                message: 'Ha ocurrido un error al crear la ejecución',
+                intent: 'error',
+            })
+        }
+    }
     return (
         <form className="flex items-baseline gap-2">
             <div className="flex flex-col ">

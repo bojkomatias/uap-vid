@@ -210,6 +210,9 @@ export function BudgetItems({
                                                         0
                                                     ) / academicUnits.length
                                             }
+                                            allExecutions={budgetItems
+                                                .map((bi) => bi.executions)
+                                                .flat()}
                                             positionIndex={i}
                                             remaining={remaining}
                                             title={detail}
