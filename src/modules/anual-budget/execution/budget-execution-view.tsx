@@ -6,7 +6,7 @@ import { Button } from '@elements/button'
 import Currency from '@elements/currency'
 import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
 import { Combobox } from '@headlessui/react'
 import { Check, Selector, X } from 'tabler-icons-react'
@@ -55,6 +55,22 @@ export default function BudgetExecutionView({
                           .includes(query.toLocaleLowerCase())
                   )
               })
+    const executionAmountByAcademicUnit = useMemo(() => {
+        if (!executions) return 0
+        return executions
+            .filter(
+                (execution) =>
+                    execution.academicUnitId === selectedAcademicUnit?.id
+            )
+            .reduce((acc, curr) => {
+                return acc + curr.amount
+            }, 0)
+    }, [executions, selectedAcademicUnit])
+
+    const maxExecutionAmount = useMemo(() => {
+        if (!maxAmountPerAcademicUnit) return remaining
+        return maxAmountPerAcademicUnit - executionAmountByAcademicUnit
+    }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
     return (
         <>
             <CustomDrawer title="Ejecuciones" open={opened} onClose={setOpened}>
@@ -105,7 +121,7 @@ export default function BudgetExecutionView({
                                     <>
                                         <div className="flex flex-col items-start gap-2">
                                             <p className="text-sm font-semibold text-gray-600">
-                                                Presupuesto restante: $
+                                                Presupuesto asignado: $
                                                 {currencyFormatter.format(
                                                     maxAmountPerAcademicUnit ??
                                                         0
@@ -114,18 +130,7 @@ export default function BudgetExecutionView({
                                             <p className="text-sm font-semibold text-gray-600">
                                                 Presupuesto utilizado: $
                                                 {currencyFormatter.format(
-                                                    executions
-                                                        .filter(
-                                                            (execution) =>
-                                                                execution.academicUnitId ===
-                                                                selectedAcademicUnit?.id
-                                                        )
-                                                        .reduce((acc, curr) => {
-                                                            return (
-                                                                acc +
-                                                                curr.amount
-                                                            )
-                                                        }, 0)
+                                                    executionAmountByAcademicUnit
                                                 )}
                                             </p>
                                         </div>
@@ -240,7 +245,7 @@ export default function BudgetExecutionView({
                                 ) : null}
                                 <BudgetNewExecution
                                     academicUnit={selectedAcademicUnit}
-                                    maxAmount={remaining}
+                                    maxAmount={maxExecutionAmount}
                                     anualBudgetTeamMemberId={
                                         anualBudgetTeamMemberId
                                     }
