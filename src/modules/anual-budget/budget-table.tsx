@@ -8,6 +8,7 @@ import { buttonStyle } from '@elements/button/styles'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
 import CustomCombobox from '@elements/years-combobox'
+import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
     select: {
@@ -78,8 +79,12 @@ export default function AnualBudgetTable({
             },
             {
                 accessorKey: 'approved',
-                header: 'Aprobado',
-                cell: ({ row }) => <Badge>{row.original.state}</Badge>,
+                header: 'Estado',
+                cell: ({ row }) => (
+                    <Badge>
+                        {AnualBudgetStateDictionary[row.original.state]}
+                    </Badge>
+                ),
                 enableHiding: true,
             },
             {
