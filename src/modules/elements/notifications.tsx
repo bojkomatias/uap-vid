@@ -47,7 +47,7 @@ function Notification({ title, message, intent }: NotificationProps) {
     return (
         <div
             id="custom-notification"
-            className="fade-in-right fixed bottom-[3%] right-[2%] z-50 mx-auto flex w-[20rem] gap-2 rounded-md border bg-white p-2 text-sm shadow-lg"
+            className="fade-in-right fixed bottom-[3%] right-[2%] z-[150] mx-auto flex w-[20rem] gap-2 rounded-md border bg-white p-2 text-sm shadow-lg"
         >
             <div
                 className={cx(
