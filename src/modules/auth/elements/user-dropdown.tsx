@@ -90,7 +90,7 @@ export const UserDropdown = ({ user }: { user: User }) => {
                                             )}
                                             passHref
                                         >
-                                            <Settings className="-mt-0.5 mr-2 inline h-5 w-4" />
+                                            <Settings className="-mt-0.5 mr-2 inline h-4 w-4" />
                                             Cuenta
                                         </Link>
                                     )}
@@ -109,7 +109,7 @@ export const UserDropdown = ({ user }: { user: User }) => {
                                                 signOut({ callbackUrl: '/' })
                                             }}
                                         >
-                                            <Logout className="-mt-0.5 mr-2 inline h-5 w-4" />
+                                            <Logout className="-mt-0.5 mr-2 inline h-4 w-4" />
                                             Cerrar sesión
                                         </button>
                                     )}

@@ -55,7 +55,7 @@ export default function Example() {
 
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronDown
-                                className="h-5 w-5 text-gray-400"
+                                className="h-4 w-4 text-gray-400"
                                 aria-hidden="true"
                             />
                         </Combobox.Button>
@@ -105,7 +105,7 @@ export default function Example() {
                                                         }`}
                                                     >
                                                         <Check
-                                                            className="h-5 w-5"
+                                                            className="h-4 w-4"
                                                             aria-hidden="true"
                                                         />
                                                     </span>

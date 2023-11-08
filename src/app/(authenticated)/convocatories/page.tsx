@@ -25,7 +25,7 @@ export default async function Page({
                     href={'/convocatories/new'}
                     className={buttonStyle('secondary')}
                 >
-                    <CalendarPlus className="h-5 w-5 text-current" />
+                    <CalendarPlus className="h-4 w-4 text-current" />
                     Nueva convocatoria
                 </Link>
             </div>

@@ -24,7 +24,7 @@ export default async function Page({
                     href={'/team-members/new'}
                     className={buttonStyle('secondary')}
                 >
-                    <UserPlus className="h-5 w-5 text-current" />
+                    <UserPlus className="h-4 w-4 text-current" />
                     Nuevo miembro
                 </Link>
             </div>

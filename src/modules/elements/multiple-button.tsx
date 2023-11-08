@@ -31,7 +31,7 @@ export default function MultipleButton({
                             )}
                             passHref
                         >
-                            <FilePlus className="h-5 text-current" /> Crear en{' '}
+                            <FilePlus className="h-4 text-current" /> Crear en{' '}
                             {selected.title}
                         </Link>
                         <Listbox.Button
@@ -43,7 +43,7 @@ export default function MultipleButton({
                                 Change published status
                             </span>
                             <ChevronDown
-                                className="h-5 w-5 text-current"
+                                className="h-4 w-4 text-current"
                                 aria-hidden="true"
                             />
                         </Listbox.Button>
@@ -91,7 +91,7 @@ export default function MultipleButton({
                                                         }
                                                     >
                                                         <Check
-                                                            className="h-5 w-5"
+                                                            className="h-4 w-4"
                                                             aria-hidden="true"
                                                         />
                                                     </span>
