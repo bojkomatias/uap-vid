@@ -1,23 +1,23 @@
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import { approveAnualBudget } from '@repositories/anual-budget'
+import { interruptAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 
-export function ApproveAnualBudget({ id }: { id: string }) {
+export function InterruptAnualBudget({ id }: { id: string }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     return (
         <Button
             loading={isPending}
-            intent="secondary"
+            intent="warning"
             onClick={async () => {
-                const res = await approveAnualBudget(id)
+                const res = await interruptAnualBudget(id)
 
                 if (!res)
                     return notifications.show({
-                        title: 'Error al aprobar',
+                        title: 'Error al interrumpir',
                         message:
                             'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
                         intent: 'error',
@@ -32,15 +32,16 @@ export function ApproveAnualBudget({ id }: { id: string }) {
                     )
                     if (r)
                         notifications.show({
-                            title: 'Presupuesto aprobado',
-                            message: 'El presupuesto fue aprobado con éxito',
+                            title: 'Presupuesto interrumpido',
+                            message:
+                                'El presupuesto fue dado de baja exitosamente.',
                             intent: 'success',
                         })
                     startTransition(() => router.refresh())
                 }
             }}
         >
-            Aprobar presupuesto
+            Interrumpir
         </Button>
     )
 }

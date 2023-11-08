@@ -5,6 +5,7 @@ import { BudgetView } from 'modules/anual-budget/budget-view'
 import { BudgetMetadata } from 'modules/anual-budget/budget-metadata'
 import { redirect } from 'next/navigation'
 import { ApproveAnualBudget } from 'modules/anual-budget/approve-budget'
+import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
 
 export default async function Page({ params }: { params: { id: string } }) {
     const anualBudget = await getAnualBudgetById(params.id)
@@ -24,8 +25,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             <PageHeading title={`Presupuesto ${meta.year}`} />
             <div className="flex w-full flex-col items-end justify-between gap-3 sm:flex-row">
                 <BudgetMetadata {...meta} />
-                {meta.state === 'PENDING' ? null : (
+                {meta.state === 'PENDING' && (
                     <ApproveAnualBudget id={meta.id} />
+                )}
+                {meta.state === 'APPROVED' && (
+                    <InterruptAnualBudget id={meta.id} />
                 )}
             </div>
             <BudgetView

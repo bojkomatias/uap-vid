@@ -361,3 +361,11 @@ export const approveAnualBudget = async (id: string) => {
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }
+
+export const interruptAnualBudget = async (id: string) => {
+    // Where the magic happens
+    return await prisma.anualBudget.findFirst({
+        where: { id },
+        select: { id: true, protocol: { select: { id: true, state: true } } },
+    })
+}

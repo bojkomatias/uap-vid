@@ -13,7 +13,7 @@ export const BudgetMetadata = ({
     sponsor: string[]
 }) => {
     return (
-        <div className="w-full max-w-3xl rounded-lg bg-gray-50 p-4 text-sm leading-loose">
+        <div className="w-full max-w-3xl rounded-lg bg-gray-50 p-4 text-xs leading-loose">
             <div>
                 <span className="pr-2 font-medium underline underline-offset-2">
                     Creado:
