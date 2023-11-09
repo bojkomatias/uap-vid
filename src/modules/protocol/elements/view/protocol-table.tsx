@@ -271,11 +271,7 @@ export default function ProtocolTable({
                 cell: ({ row }) => (
                     <Link
                         href={`/protocols/${row.original.id}`}
-                        passHref
-                        className={cx(
-                            buttonStyle('secondary'),
-                            'px-2.5 py-1 text-xs'
-                        )}
+                        className={buttonStyle('secondary', 'xs')}
                     >
                         Ver
                     </Link>
@@ -364,9 +360,9 @@ const AcademicUnitFilter = () => {
                         >
                             <Badge
                                 className={cx(
-                                    'cursor-pointer transition hover:bg-gray-200',
+                                    'cursor-pointer transition hover:bg-primary-100',
                                     currentValues?.includes(value) &&
-                                        'bg-gray-300'
+                                        'bg-primary-50 ring-primary/50'
                                 )}
                             >
                                 {value}

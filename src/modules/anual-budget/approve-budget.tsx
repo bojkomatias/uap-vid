@@ -15,6 +15,7 @@ export function ApproveAnualBudget({ id }: { id: string }) {
             className="whitespace-nowrap"
             onClick={async () => {
                 const res = await approveAnualBudget(id)
+
                 if (!res)
                     return notifications.show({
                         title: 'Error al aprobar',
@@ -22,13 +23,22 @@ export function ApproveAnualBudget({ id }: { id: string }) {
                             'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
                         intent: 'error',
                     })
-                if (res)
-                    notifications.show({
-                        title: 'Presupuesto aprobado',
-                        message: 'El presupuesto fue aprobado con éxito',
-                        intent: 'success',
-                    })
-                startTransition(() => router.refresh())
+                if (res) {
+                    const r = await fetch(
+                        `/api/protocol/${res.protocol.id}/approve`,
+                        {
+                            method: 'PUT',
+                            body: JSON.stringify(res.protocol),
+                        }
+                    )
+                    if (r)
+                        notifications.show({
+                            title: 'Presupuesto aprobado',
+                            message: 'El presupuesto fue aprobado con éxito',
+                            intent: 'success',
+                        })
+                    startTransition(() => router.refresh())
+                }
             }}
         >
             Aprobar presupuesto

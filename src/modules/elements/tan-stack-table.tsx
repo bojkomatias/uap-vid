@@ -29,7 +29,7 @@ export default function TanStackTable({
     columns: ColumnDef<any, unknown>[]
     totalRecords: number
     initialVisibility: VisibilityState
-    filterableByKey?: { filter: string; values: any[][] }
+    filterableByKey?: { filter: string; values: any[][] | any[] }
     searchBarPlaceholder: string
     customFilterSlot?: React.ReactNode
 }) {
@@ -52,7 +52,7 @@ export default function TanStackTable({
 
     return (
         <>
-            <div className="mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
+            <div className=" mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
                 <div className="flex flex-wrap gap-2">
                     <ColumnVisibilityDropdown
@@ -114,7 +114,6 @@ export default function TanStackTable({
                 </div>
             ) : (
                 <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
-
                     <h1 className="font-semibold">
                         No se encontraron registros con los criterios de
                         búsqueda especificados
@@ -126,12 +125,11 @@ export default function TanStackTable({
             )}
             <Pagination totalRecords={totalRecords} />
             <div className="-mb-12 mt-2 flex items-center justify-end text-xs font-light text-gray-400">
-
                 <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
                     Shift
                 </kbd>
                 +
-                <Mouse className="mx-0.5 h-5 text-gray-400" />
+                <Mouse className="mx-0.5 h-4 text-gray-400" />
                 para navegar lateralmente.
             </div>
         </>

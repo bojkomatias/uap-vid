@@ -79,7 +79,7 @@ export function SecretaryMultipleSelect({
 
                     <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none ">
                         <Selector
-                            className="h-5 text-primary transition-all duration-200 hover:text-gray-400"
+                            className="h-4 text-primary transition-all duration-200 hover:text-gray-400"
                             aria-hidden="true"
                         />
                     </div>

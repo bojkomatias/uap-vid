@@ -21,7 +21,7 @@ export default function AcademicUnitView({
     return (
         <>
             <CustomDrawer
-                title='Unidad Académica'
+                title="Unidad Académica"
                 open={opened}
                 onClose={setOpened}
             >
@@ -110,9 +110,11 @@ export default function AcademicUnitView({
                 </section>
             </CustomDrawer>
             <Button
-                className="px-2.5 py-1 text-xs"
-                onClick={()=>{setOpened(true)}}
+                onClick={() => {
+                    setOpened(true)
+                }}
                 intent="secondary"
+                size="xs"
             >
                 Editar
             </Button>

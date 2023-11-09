@@ -13,9 +13,8 @@ export default async function Page({
 }: {
     searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, convocatories] = await getAllConvocatories(
-        searchParams
-    )
+    const [totalRecords, convocatories] =
+        await getAllConvocatories(searchParams)
     const currentConvocatory = await getCurrentConvocatory()
 
     return (
@@ -25,9 +24,8 @@ export default async function Page({
                 <Link
                     href={'/convocatories/new'}
                     className={buttonStyle('secondary')}
-                    passHref
                 >
-                    <CalendarPlus className="h-5 w-5 text-current" />
+                    <CalendarPlus className="h-4 w-4 text-current" />
                     Nueva convocatoria
                 </Link>
             </div>

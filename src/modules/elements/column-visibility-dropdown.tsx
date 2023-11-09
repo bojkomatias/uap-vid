@@ -16,7 +16,7 @@ export default function ColumnVisibilityDropdown({
                 <Menu.Button as={Button} intent="outline">
                     Columnas
                     <ChevronDown
-                        className="-mr-1 ml-2 h-4 w-4 text-gray-500"
+                        className="h-4 w-4 text-gray-500"
                         aria-hidden="true"
                     />
                 </Menu.Button>

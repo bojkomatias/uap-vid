@@ -19,9 +19,8 @@ export default async function Page({
                 <Link
                     href={'/users/new'}
                     className={buttonStyle('secondary')}
-                    passHref
                 >
-                    <UserPlus className="h-5 text-current" />
+                    <UserPlus className="h-4 text-current" />
                     Nuevo usuario
                 </Link>
             </div>

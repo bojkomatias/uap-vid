@@ -1,11 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 import { Button } from '@elements/button'
+import { buttonStyle } from '@elements/button/styles'
 import CustomDrawer from '@elements/custom-drawer'
 import DisclosureComponent from '@elements/disclosure'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { User } from '@prisma/client'
+import { cx } from '@utils/cx'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
 import Image from 'next/image'
@@ -193,21 +195,18 @@ export function ProfileInfo({
             </div>
             <h3 className="border-b">Editar cuenta</h3>{' '}
             {!user.password ? (
-                <Button className="h-10" intent="outline">
-                    <Link
-                        className="flex-gap flex items-center"
-                        href={'https://www.office.com/'}
-                    >
-                        Editar cuenta en{' '}
-                        <Image
-                            className=""
-                            src={'/whitebackgroundmicrosoft.png'}
-                            alt="Microsoft Logo"
-                            width={100}
-                            height={100}
-                        />
-                    </Link>
-                </Button>
+                <Link
+                    className={cx(buttonStyle('outline'))}
+                    href={'https://www.office.com/'}
+                >
+                    Editar cuenta en{' '}
+                    <Image
+                        src={'/whitebackgroundmicrosoft.png'}
+                        alt="Microsoft Logo"
+                        width={100}
+                        height={100}
+                    />
+                </Link>
             ) : (
                 <>
                     <DisclosureComponent

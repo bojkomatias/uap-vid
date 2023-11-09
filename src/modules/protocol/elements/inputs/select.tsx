@@ -67,7 +67,7 @@ export default function Select({
                                 aria-hidden="true"
                             />
                             <Selector
-                                className="h-5 text-gray-600 hover:text-gray-400"
+                                className="h-4 text-gray-600 hover:text-gray-400"
                                 aria-hidden="true"
                             />
                         </div>
