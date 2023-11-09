@@ -14,12 +14,12 @@ const BudgetCardDelta = ({ delta }: { delta: number }) => {
         >
             {delta >= 0 ? (
                 <ArrowNarrowUp
-                    className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-success-600"
+                    className="-ml-1 mr-0.5 h-4 w-4 flex-shrink-0 self-center text-success-600"
                     aria-hidden="true"
                 />
             ) : (
                 <ArrowNarrowDown
-                    className="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-error-700"
+                    className="-ml-1 mr-0.5 h-4 w-4 flex-shrink-0 self-center text-error-700"
                     aria-hidden="true"
                 />
             )}

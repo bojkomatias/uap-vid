@@ -24,7 +24,7 @@ export default function RecordsDropdown({
                     Cantidad de registros
                     {': ' + shownRecords}
                     <ChevronDown
-                        className="-mr-1 w-4 text-gray-500"
+                        className="w-4 text-gray-500"
                         aria-hidden="true"
                     />
                 </Menu.Button>

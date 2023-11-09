@@ -17,7 +17,7 @@ export default async function Page({
     const budgetSummary = await getBudgetSummary(params.name)
     return (
         <>
-            <BudgetSummary {...budgetSummary} />
+            <BudgetSummary summary={budgetSummary} />
             <AnualBudgetTable
                 anualBudgets={anualBudgets}
                 totalRecords={totalRecords}

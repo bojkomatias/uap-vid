@@ -8,7 +8,6 @@ import type {
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
-import { updateProtocolStateById } from './protocol'
 
 export const getAnualBudgets = cache(
     async ({
@@ -24,7 +23,6 @@ export const getAnualBudgets = cache(
     }) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
-
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
@@ -115,6 +113,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
             include: {
                 protocol: {
                     select: {
+                        state: true,
                         sections: {
                             select: {
                                 identification: {
@@ -133,6 +132,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                         },
                     },
                 },
+                AcademicUnits:true
             },
         })
     } catch (error) {
@@ -158,7 +158,7 @@ export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
 })
 
 export const createAnualBudget = async (
-    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'approved'>
+    data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>
 ) => {
     const newAnualBudget = await prisma.anualBudget.create({ data })
 
@@ -234,11 +234,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
     ) => {
         try {
             const orderBy = order && sort ? orderByQuery(sort, order) : {}
-
             return await prisma.$transaction([
                 prisma.anualBudget.count({
                     where: {
                         AND: [
+                            filter == 'year'
+                                ? { year: { equals: Number(values) } }
+                                : {},
                             academicUnitId
                                 ? { academicUnitsIds: { has: academicUnitId } }
                                 : {},
@@ -265,7 +267,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                                       },
                                   }
                                 : {},
-                            filter && values
+                            filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
                                 : {},
                         ],
@@ -277,9 +279,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
                     take: Number(records),
                     where: {
                         AND: [
+                            filter == 'year'
+                                ? { year: { equals: Number(values) } }
+                                : {},
                             academicUnitId
                                 ? { academicUnitsIds: { has: academicUnitId } }
                                 : {},
+
                             search
                                 ? {
                                       protocol: {
@@ -303,7 +309,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                                       },
                                   }
                                 : {},
-                            filter && values
+                            filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
                                 : {},
                         ],
@@ -311,7 +317,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                     select: {
                         id: true,
                         createdAt: true,
-                        approved: true,
+                        state: true,
                         year: true,
                         protocol: true,
                     },
@@ -328,12 +334,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
 export const newTeamMemberExecution = (
     anualBudgetTeamMemberId: string,
     amount: number,
-    remainingHours: number
+    remainingHours: number,
+    academicUnitId: string
 ) => {
     return prisma.anualBudgetTeamMember.update({
         where: { id: anualBudgetTeamMemberId },
         data: {
-            executions: { push: { amount, date: new Date() } },
+            executions: { push: { academicUnitId, amount, date: new Date() } },
             remainingHours: remainingHours,
         },
     })
@@ -352,7 +359,7 @@ export const newBudgetItemExecution = (
 export const approveAnualBudget = async (id: string) => {
     return await prisma.anualBudget.update({
         where: { id },
-        data: { approved: true },
+        data: { state: 'APPROVED' },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }

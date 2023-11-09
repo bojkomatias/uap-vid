@@ -1,4 +1,3 @@
-
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
@@ -13,12 +12,12 @@ export default function TeamMemberCategoryView({
 }: {
     teamMemberCategory: TeamMemberCategory
 }) {
-    const [opened, setOpened] = useState(false);
+    const [opened, setOpened] = useState(false)
 
     return (
         <>
             <CustomDrawer
-                title='Valores históricos de la categoría'
+                title="Valores históricos de la categoría"
                 open={opened}
                 onClose={setOpened}
             >
@@ -84,16 +83,14 @@ export default function TeamMemberCategoryView({
                 </section>
             </CustomDrawer>
 
-
-                <Button
-
-                    className="px-2.5 py-1 text-xs"
-                    onClick={()=>setOpened(true)}
-                    intent="secondary"
-                >
-                    Ver histórico
-                </Button>
-
+            <Button
+                className="px-2.5 py-1 text-xs"
+                onClick={() => setOpened(true)}
+                intent="secondary"
+                size="xs"
+            >
+                Ver histórico
+            </Button>
         </>
     )
 }

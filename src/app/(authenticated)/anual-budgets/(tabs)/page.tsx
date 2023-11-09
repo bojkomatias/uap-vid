@@ -8,15 +8,13 @@ export default async function AllAnualBudgetPage({
 }: {
     searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
-        searchParams
-    )
+    const [totalRecords, anualBudgets] =
+        await getAnualBudgetsByAcademicUnit(searchParams)
 
     const budgetSummary = await getBudgetSummary()
-
     return (
         <>
-            <BudgetSummary {...budgetSummary} />
+            <BudgetSummary summary={budgetSummary} allAcademicUnits />
             <AnualBudgetTable
                 anualBudgets={anualBudgets}
                 totalRecords={totalRecords}

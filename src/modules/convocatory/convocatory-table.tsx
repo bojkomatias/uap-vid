@@ -3,7 +3,6 @@ import { buttonStyle } from '@elements/button/styles'
 import TanStackTable from '@elements/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
-import { cx } from '@utils/cx'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
@@ -75,10 +74,7 @@ export async function ConvocatoryTable({
             cell: ({ row }) => (
                 <Link
                     href={`/convocatories/${row.original.id}`}
-                    className={cx(
-                        buttonStyle('secondary'),
-                        'px-2.5 py-1 text-xs'
-                    )}
+                    className={buttonStyle('secondary', 'xs')}
                 >
                     Ver
                 </Link>

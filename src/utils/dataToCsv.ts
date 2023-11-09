@@ -16,6 +16,7 @@ export default function dataToCsv(
             ({ accessorKey }) =>
                 //Remove self-indicator and actions keys, which are not useful for a spreadsheet, and also remove the undefined (at least for now).
                 accessorKey !== 'self-indicator' &&
+                accessorKey !== 'logs' &&
                 accessorKey !== 'actions' &&
                 accessorKey !== 'password' &&
                 accessorKey
@@ -34,13 +35,12 @@ export default function dataToCsv(
                 const keys = nestedKeyString.split('.')
                 let result: any = object
                 for (const key of keys) {
-                    if (object) result = result[key]
+                    // Check if result is null or undefined before going deeper (instead of object)
+                    if (result) result = result[key]
                 }
-
                 // Assign the extracted data to the corresponding key in the row object
                 rowData[c.accessorKey] = result?.toString()
             })
-
             results.push(rowData) // Push the row object to the results array
         })
 

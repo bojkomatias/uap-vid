@@ -144,7 +144,7 @@ export const ResearcherReassignation = ({
     ) : (
         <Button
             intent="outline"
-            className="px-3 py-1.5 text-xs"
+            size="xs"
             disabled={researchers.length === 0}
             onClick={() => setShowSelector(true)}
         >

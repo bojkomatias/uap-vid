@@ -19,7 +19,7 @@ import { buttonStyle } from '@elements/button/styles'
 export function DesktopNavigation({ user }: { user: User }) {
     const pathname = usePathname()
     return (
-        <div className="absolute inset-0 left-0 z-20 h-full w-16 border-r bg-gray-50">
+        <div className="absolute inset-0 left-0 z-30 h-full w-16 border-r bg-gray-50">
             {/* Sidebar component, swap this element with another sidebar if you like */}
             <div className="sticky inset-0 flex min-h-0 flex-1 flex-col pt-8">
                 <nav className="flex-1 space-y-3 px-1.5">
@@ -30,10 +30,9 @@ export function DesktopNavigation({ user }: { user: User }) {
                                 href={item.href}
                                 className={cx(
                                     'pointer-events-none relative',
-                                    buttonStyle('secondary'),
+                                    buttonStyle('secondary', 'icon-lg'),
                                     pathname?.includes(item.href) &&
-                                        buttonStyle('primary'),
-                                    'p-0'
+                                        buttonStyle('primary', 'icon-lg')
                                 )}
                                 passHref
                             >

@@ -5,15 +5,16 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { buttonStyle } from '@elements/button/styles'
-import { cx } from '@utils/cx'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
+import CustomCombobox from '@elements/years-combobox'
+import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
     select: {
         id: true
         createdAt: true
-        approved: true
+        state: true
         year: true
         protocol: true
     }
@@ -78,15 +79,12 @@ export default function AnualBudgetTable({
             },
             {
                 accessorKey: 'approved',
-                header: 'Aprobado',
-                cell: ({ row }) =>
-                    row.original.approved ? (
-                        <Badge className="bg-success-50 text-success-600 ring-success-500">
-                            Aprobado
-                        </Badge>
-                    ) : (
-                        <Badge>Pendiente</Badge>
-                    ),
+                header: 'Estado',
+                cell: ({ row }) => (
+                    <Badge>
+                        {AnualBudgetStateDictionary[row.original.state]}
+                    </Badge>
+                ),
                 enableHiding: true,
             },
             {
@@ -101,28 +99,12 @@ export default function AnualBudgetTable({
                 enableSorting: false,
                 cell: ({ row }) => {
                     return (
-                        <div className="flex gap-2">
-                            <Link
-                                passHref
-                                className={cx(
-                                    buttonStyle('secondary'),
-                                    'px-2.5 py-1 text-xs'
-                                )}
-                                href={`/anual-budgets/budget/${row.original.id}`}
-                            >
-                                Ver
-                            </Link>
-                            <Link
-                                passHref
-                                className={cx(
-                                    buttonStyle('secondary'),
-                                    'px-2.5 py-1 text-xs'
-                                )}
-                                href={`/anual-budgets/${row.original.id}`}
-                            >
-                                Otra acción
-                            </Link>
-                        </div>
+                        <Link
+                            className={buttonStyle('secondary', 'xs')}
+                            href={`/anual-budgets/budget/${row.original.id}`}
+                        >
+                            Ver
+                        </Link>
                     )
                 },
             },
@@ -130,6 +112,10 @@ export default function AnualBudgetTable({
         []
     )
     const initialVisible = { id: false, createdAt: false }
+
+    const yearFilter = () => {
+        return <CustomCombobox></CustomCombobox>
+    }
 
     return (
         <>
@@ -139,6 +125,7 @@ export default function AnualBudgetTable({
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
                 searchBarPlaceholder="Buscar por nombre de categoría"
+                customFilterSlot={yearFilter()}
             />
         </>
     )

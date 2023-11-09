@@ -2,6 +2,7 @@
 import { Button } from './button'
 import { useState } from 'react'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { cx } from '@utils/cx'
 
 export default function SearchBar({
     placeholderMessage,
@@ -23,7 +24,7 @@ export default function SearchBar({
                     //If searchQuery is empty, goes back to the normal paginated page
                     if (e.target.value === '') update({ search: '' })
                 }}
-                className="input"
+                className={cx('input', 'h-[2.125rem] text-sm')}
                 placeholder={placeholderMessage}
             />
             <Button

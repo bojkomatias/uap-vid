@@ -56,7 +56,7 @@ const Tiptap = ({
                 onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
                 editor={editor}
             />
-            <div className="absolute bottom-1 right-0 px-3 text-black/30">
+            <div className="absolute bottom-1 right-0 px-3 text-xs text-black/30">
                 {editor.storage.characterCount.words() <= 1 &&
                 editor.storage.characterCount.words() !== 0 ? (
                     <>{editor.storage.characterCount.words()} palabra</>

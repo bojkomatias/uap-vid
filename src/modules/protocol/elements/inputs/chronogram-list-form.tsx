@@ -65,7 +65,7 @@ export function ChronogramList() {
                                         )
                                     }}
                                     className={cx(
-                                        'mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90]',
+                                        'mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90]',
                                         index === 0 && 'hidden'
                                     )}
                                 />

@@ -42,7 +42,7 @@ export const DiscontinueButton = ({ role, protocol }: ActionButtonTypes) => {
     return (
         <Button
             onClick={discontinueProtocol}
-            intent={'destructive'}
+            intent={'warning'}
             loading={isPending}
         >
             Discontinuar
