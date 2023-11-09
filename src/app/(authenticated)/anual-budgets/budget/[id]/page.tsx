@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     return (
         <>
             <PageHeading title={`Presupuesto ${meta.year}`} />
-            <div className="flex w-full flex-col items-end justify-between gap-3 sm:flex-row">
+            <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
                 <BudgetMetadata {...meta} />
                 {meta.state === 'PENDING' && (
                     <ApproveAnualBudget id={meta.id} />
