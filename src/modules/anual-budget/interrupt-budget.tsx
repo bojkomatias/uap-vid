@@ -23,20 +23,13 @@ export function InterruptAnualBudget({ id }: { id: string }) {
                         intent: 'error',
                     })
                 if (res) {
-                    const r = await fetch(
-                        `/api/protocol/${res.protocol.id}/approve`,
-                        {
-                            method: 'PUT',
-                            body: JSON.stringify(res.protocol),
-                        }
-                    )
-                    if (r)
-                        notifications.show({
-                            title: 'Presupuesto interrumpido',
-                            message:
-                                'El presupuesto fue dado de baja exitosamente.',
-                            intent: 'success',
-                        })
+                    // TODO: Side effect on protocol should go here, if any!
+                    notifications.show({
+                        title: 'Presupuesto interrumpido',
+                        message:
+                            'El presupuesto fue dado de baja exitosamente.',
+                        intent: 'success',
+                    })
                     startTransition(() => router.refresh())
                 }
             }}

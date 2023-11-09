@@ -37,14 +37,16 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
     const protocol = await findProtocolById(protocolId)
     //The next few lines of code are to check if there's a generated budget for the protocol already. The logic behind is as it follows: if it finds budgets, it's because there's already a created budget. I also check for the specific year, to be able to generate a new budget for the following year when necessary.
     const anualBudgetIds = protocol?.anualBudgetIds
-    const anualBudgetsYears = await Promise.all((anualBudgetIds || []).map(async (id) => {
-        return await getAnualBudgetById(id).then(res => {
-            return res?.year;
-        });
-    }));
+    const anualBudgetsYears = await Promise.all(
+        (anualBudgetIds || []).map(async (id) => {
+            return await getAnualBudgetById(id).then((res) => {
+                return res?.year
+            })
+        })
+    )
 
-
-    if (!protocol || anualBudgetsYears.includes(new Date().getFullYear())) return null
+    if (!protocol || anualBudgetsYears.includes(new Date().getFullYear()))
+        return null
 
     // Create the annual budget with all the items listed in the protocol budget section.
     const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
@@ -52,15 +54,13 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
     const academicUnitsIds = await generateAnualBudgetAcademicUnitRelation(
         protocol.sections.identification.sponsor
     )
-    const data: Omit<
-        AnualBudget,
-        'id' | 'createdAt' | 'updatedAt' | 'state'
-    > = {
-        protocolId: protocol.id,
-        year: Number(year),
-        budgetItems: ABI,
-        academicUnitsIds,
-    }
+    const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> =
+        {
+            protocolId: protocol.id,
+            year: Number(year),
+            budgetItems: ABI,
+            academicUnitsIds,
+        }
     const newAnualBudget = await createAnualBudget(data)
 
     // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
@@ -257,9 +257,9 @@ const getAcademicUnitBudgetSummary = (
     // Get the actual and the previous budget in the same year for the academic unit with the last budget change
     const [before, actual] = academicUnitWithLastBudgetChange
         ? [
-            academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
-            academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
-        ]
+              academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
+              academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+          ]
         : [0, 0]
 
     if (!actual) return { value: 0, delta: 0, changeDate: '' }
@@ -270,7 +270,7 @@ const getAcademicUnitBudgetSummary = (
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
     const delta = deltaValue
         ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
-        100
+          100
         : 0
 
     return {
@@ -349,10 +349,13 @@ export const getBudgetSummary = async (
         return {
             academicUnitBudgetSummary: { value: 0, delta: 0 },
             projectedBudgetSummary: { value: 0, delta: 0 },
+            projectedBudgetSummaryApproved: { value: 0, delta: 0 },
             spendedBudget: 0,
         }
     const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
-    const anualBudgets = removeDuplicates(list)
+    const anualBudgets = removeDuplicates(list).filter(
+        (ab) => ab.state !== 'REJECTED'
+    )
 
     // This summary is related to protocols budgets
     const protocolBudgetSummary = calculateTotalBudgetAggregated(
@@ -372,9 +375,16 @@ export const getBudgetSummary = async (
         year
     )
 
+    const projectedBudgetSummaryApproved = getProjectedBudgetSummary(
+        protocolBudgetSummary.total,
+        anualBudgets.filter((e) => e.state !== 'PENDING'),
+        year
+    )
+
     return {
         academicUnitBudgetSummary,
         projectedBudgetSummary,
+        projectedBudgetSummaryApproved,
         spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
     }
 }

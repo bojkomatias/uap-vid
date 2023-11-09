@@ -132,7 +132,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                         },
                     },
                 },
-                AcademicUnits:true
+                AcademicUnits: true,
             },
         })
     } catch (error) {
@@ -365,9 +365,30 @@ export const approveAnualBudget = async (id: string) => {
 }
 
 export const interruptAnualBudget = async (id: string) => {
-    // Where the magic happens
-    return await prisma.anualBudget.findFirst({
+    const AB = await prisma.anualBudget.findFirst({
         where: { id },
-        select: { id: true, protocol: { select: { id: true, state: true } } },
+        select: {
+            id: true,
+            protocol: { select: { id: true } },
+            state: true,
+            budgetItems: true,
+            budgetTeamMembers: true,
+        },
     })
+    if (!AB || AB.state !== 'APPROVED') return
+    // Match budget Items amount to execution and remaining 0
+    AB.budgetItems.forEach((bi) => {
+        bi.amount = bi.executions.reduce((acc, curr) => acc + curr.amount, 0)
+        bi.remaining = 0
+    })
+    // Match only paid hours and remaining to 0
+    AB.budgetTeamMembers.forEach((btm) => {
+        btm.hours = btm.hours - btm.remainingHours
+        btm.remainingHours = 0
+    })
+
+    await updateAnualBudgetItems(AB.id, AB.budgetItems)
+    await updateAnualBudgetTeamMemberHours(AB.budgetTeamMembers)
+
+    return AB
 }
