@@ -104,7 +104,7 @@ export default function CategorizationForm({
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                                     <Selector
-                                        className="h-5 text-gray-600 "
+                                        className="h-4 text-gray-600 "
                                         aria-hidden="true"
                                     />
                                 </span>

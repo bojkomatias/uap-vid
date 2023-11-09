@@ -28,7 +28,7 @@ export default function DisclosureComponent({
                                 <ChevronUp
                                     className={`${
                                         open ? 'rotate-180 transform' : ''
-                                    } text-purple-500 h-5 w-5`}
+                                    } text-purple-500 h-4 w-4`}
                                 />
                             </Disclosure.Button>
                             <Transition

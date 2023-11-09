@@ -132,6 +132,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                         },
                     },
                 },
+                AcademicUnits:true
             },
         })
     } catch (error) {
@@ -333,12 +334,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
 export const newTeamMemberExecution = (
     anualBudgetTeamMemberId: string,
     amount: number,
-    remainingHours: number
+    remainingHours: number,
+    academicUnitId: string
 ) => {
     return prisma.anualBudgetTeamMember.update({
         where: { id: anualBudgetTeamMemberId },
         data: {
-            executions: { push: { amount, date: new Date() } },
+            executions: { push: { academicUnitId, amount, date: new Date() } },
             remainingHours: remainingHours,
         },
     })

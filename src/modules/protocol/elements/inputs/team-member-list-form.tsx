@@ -67,7 +67,7 @@ export default function TeamMemberListForm() {
                         </div>
                         <Trash
                             onClick={() => form.removeListItem(path, index)}
-                            className={`mt-[2.2rem] h-5 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
+                            className={`mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
                                 index == 0
                                     ? 'pointer-events-none invisible'
                                     : ''
@@ -190,7 +190,7 @@ function TeamMemberSelector({
                             aria-hidden="true"
                         />
                         <Selector
-                            className="h-5 text-gray-600 hover:text-gray-400"
+                            className="h-4 text-gray-600 hover:text-gray-400"
                             aria-hidden="true"
                         />
                     </div>

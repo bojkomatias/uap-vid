@@ -22,10 +22,11 @@ export default async function Page({
             <PageHeading title="Lista de convocatorias" />
             <div className="flex flex-row-reverse">
                 <Link
+                    scroll={false}
                     href={'/convocatories/new'}
                     className={buttonStyle('secondary')}
                 >
-                    <CalendarPlus className="h-5 w-5 text-current" />
+                    <CalendarPlus className="h-4 w-4 text-current" />
                     Nueva convocatoria
                 </Link>
             </div>

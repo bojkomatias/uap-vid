@@ -129,7 +129,7 @@ export default function TanStackTable({
                     Shift
                 </kbd>
                 +
-                <Mouse className="mx-0.5 h-5 text-gray-400" />
+                <Mouse className="mx-0.5 h-4 text-gray-400" />
                 para navegar lateralmente.
             </div>
         </>

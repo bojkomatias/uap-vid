@@ -18,9 +18,9 @@ export default function ReviewQuestionView({
 
                 <div>
                     {approved ? (
-                        <Check className="h-5 w-5 text-success-600" />
+                        <Check className="h-4 w-4 text-success-600" />
                     ) : (
-                        <X className="h-5 w-5 text-error-600" />
+                        <X className="h-4 w-4 text-error-600" />
                     )}
                 </div>
             </div>

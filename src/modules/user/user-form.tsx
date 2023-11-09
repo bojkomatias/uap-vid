@@ -107,7 +107,7 @@ export default function UserForm() {
                 className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
             >
                 {loading ? (
-                    <span className="loader-primary h-5 w-5"></span>
+                    <span className="loader-primary h-4 w-4"></span>
                 ) : (
                     'Crear Nuevo Usuario'
                 )}

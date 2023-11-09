@@ -3,12 +3,13 @@ import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import type { AnualBudgetItem } from '@prisma/client'
+import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
+import { useRouter } from 'next/navigation'
 
 export function BudgetItems({
     budgetId,
@@ -16,13 +17,16 @@ export function BudgetItems({
     budgetItems,
     ABIe,
     ABIr,
+    academicUnits,
 }: {
     budgetId: string
     editable: boolean
     budgetItems: AnualBudgetItem[]
     ABIe: number
     ABIr: number
+    academicUnits: AcademicUnit[]
 }) {
+    const router = useRouter()
     const form = useForm({ initialValues: budgetItems })
 
     return (
@@ -37,13 +41,15 @@ export function BudgetItems({
                     budgetId,
                     itemsWithRemainingUpdated
                 )
-                if (res)
-                    return notifications.show({
+                if (res) {
+                    notifications.show({
                         title: 'Valores actualizados',
                         message:
                             'Los montos a aprobar fueron actualizados con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                }
             })}
         >
             <div className="flex items-center">
@@ -205,6 +211,18 @@ export function BudgetItems({
                                         )}
                                     >
                                         <BudgetExecutionView
+                                            academicUnits={academicUnits}
+                                            maxAmountPerAcademicUnit={
+                                                budgetItems
+                                                    .map((bi) => bi.amount)
+                                                    .reduce(
+                                                        (a, b) => a + b,
+                                                        0
+                                                    ) / academicUnits.length
+                                            }
+                                            allExecutions={budgetItems
+                                                .map((bi) => bi.executions)
+                                                .flat()}
                                             positionIndex={i}
                                             remaining={remaining}
                                             title={detail}
