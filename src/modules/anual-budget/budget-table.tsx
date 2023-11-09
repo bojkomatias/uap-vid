@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { buttonStyle } from '@elements/button/styles'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
-import CustomCombobox from '@elements/years-combobox'
+import { BudgetYearCombobox } from '@elements/years-combobox'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
@@ -114,7 +114,7 @@ export default function AnualBudgetTable({
     const initialVisible = { id: false, createdAt: false }
 
     const yearFilter = () => {
-        return <CustomCombobox></CustomCombobox>
+        return <BudgetYearCombobox />
     }
 
     return (
