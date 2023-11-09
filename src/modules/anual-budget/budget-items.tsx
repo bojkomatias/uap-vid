@@ -3,7 +3,7 @@ import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import type { AnualBudgetItem } from '@prisma/client'
+import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
@@ -16,12 +16,14 @@ export function BudgetItems({
     budgetItems,
     ABIe,
     ABIr,
+    academicUnits,
 }: {
     budgetId: string
     editable: boolean
     budgetItems: AnualBudgetItem[]
     ABIe: number
     ABIr: number
+    academicUnits: AcademicUnit[]
 }) {
     const form = useForm({ initialValues: budgetItems })
 
@@ -205,6 +207,18 @@ export function BudgetItems({
                                         )}
                                     >
                                         <BudgetExecutionView
+                                            academicUnits={academicUnits}
+                                            maxAmountPerAcademicUnit={
+                                                budgetItems
+                                                    .map((bi) => bi.amount)
+                                                    .reduce(
+                                                        (a, b) => a + b,
+                                                        0
+                                                    ) / academicUnits.length
+                                            }
+                                            allExecutions={budgetItems
+                                                .map((bi) => bi.executions)
+                                                .flat()}
                                             positionIndex={i}
                                             remaining={remaining}
                                             title={detail}

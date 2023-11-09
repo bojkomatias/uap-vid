@@ -3,10 +3,13 @@ import type { BudgetSummaryType } from '@actions/anual-budget/action'
 import BudgetCardDelta from './budget-card-delta'
 import BudgetCardDoughnut from './budget-card-doughnut'
 
-export const BudgetSummary = (
-    summary: BudgetSummaryType,
+export const BudgetSummary = ({
+    summary,
+    allAcademicUnits,
+}: {
+    summary: BudgetSummaryType
     allAcademicUnits?: Boolean
-) => {
+}) => {
     const stats = [
         {
             name: allAcademicUnits
