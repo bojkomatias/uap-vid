@@ -9,6 +9,7 @@ import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
+import { useRouter } from 'next/navigation'
 
 export function BudgetItems({
     budgetId,
@@ -25,6 +26,7 @@ export function BudgetItems({
     ABIr: number
     academicUnits: AcademicUnit[]
 }) {
+    const router = useRouter()
     const form = useForm({ initialValues: budgetItems })
 
     return (
@@ -39,13 +41,15 @@ export function BudgetItems({
                     budgetId,
                     itemsWithRemainingUpdated
                 )
-                if (res)
-                    return notifications.show({
+                if (res) {
+                    notifications.show({
                         title: 'Valores actualizados',
                         message:
                             'Los montos a aprobar fueron actualizados con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                }
             })}
         >
             <div className="flex items-center">

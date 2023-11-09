@@ -10,6 +10,7 @@ import {
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
+import { useRouter } from 'next/navigation'
 
 export function BudgetTeamMemberFees({
     editable,
@@ -22,6 +23,7 @@ export function BudgetTeamMemberFees({
     ABTe: number
     ABTr: number
 }) {
+    const router = useRouter()
     const form = useForm({ initialValues: budgetTeamMembers })
     return (
         <form
@@ -37,13 +39,15 @@ export function BudgetTeamMemberFees({
                         }
                     })
                 )
-                if (res)
-                    return notifications.show({
+                if (res) {
+                    notifications.show({
                         title: 'Valores actualizados',
                         message:
                             'Las horas de los miembros de equipo fueron actualizadas con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                }
             })}
         >
             <div className="sm:flex sm:items-center">
