@@ -29,7 +29,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <ApproveAnualBudget id={meta.id} />
                 )}
                 {meta.state === 'APPROVED' && (
-                    <InterruptAnualBudget id={meta.id} />
+                    <InterruptAnualBudget
+                        id={meta.id}
+                        protocolId={meta.protocolId}
+                />
                 )}
             </div>
             <BudgetView
