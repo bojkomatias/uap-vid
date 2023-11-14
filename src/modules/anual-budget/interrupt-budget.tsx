@@ -38,7 +38,8 @@ export function InterruptAnualBudget({
                         body: JSON.stringify({
                             id: protocolId,
                             // Always the same, ongoing if it has budget.
-                            state: 'ON_GOING',
+                            // But this should be the only way... so static to unify the flow
+                            state: 'ACCEPTED',
                         }),
                     })
                     notifications.show({

@@ -110,7 +110,6 @@ const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
     ],
     [STATE.ON_GOING]: [
         ACTION.FINISH,
-        ACTION.DISCONTINUE,
         ACTION.VIEW_ANUAL_BUDGET,
         ACTION.GENERATE_ANUAL_BUDGET,
     ],
