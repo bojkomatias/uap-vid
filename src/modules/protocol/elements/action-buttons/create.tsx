@@ -15,6 +15,13 @@ export default async function CreateButton({ role }: { role: RoleType }) {
         const [, convocatories] = await getAllConvocatories({})
         if (!convocatories || convocatories.length === 0) return null
         const current = await getCurrentConvocatory()
+        const options = convocatories.map((e) => ({
+            title: e.name,
+            href: `/protocols/new/0?convocatory=${e.id}`,
+            description: `${e.from.toLocaleDateString(
+                'es-AR'
+            )},  ${e.to.toLocaleDateString('es-AR')}`,
+        }))
         return (
             <MultipleButton
                 defaultValue={
@@ -26,15 +33,9 @@ export default async function CreateButton({ role }: { role: RoleType }) {
                                   'es-AR'
                               )},  ${current.to.toLocaleDateString('es-AR')}`,
                           }
-                        : null
+                        : options[0]
                 }
-                options={convocatories.map((e) => ({
-                    title: e.name,
-                    href: `/protocols/new/0?convocatory=${e.id}`,
-                    description: `${e.from.toLocaleDateString(
-                        'es-AR'
-                    )},  ${e.to.toLocaleDateString('es-AR')}`,
-                }))}
+                options={options}
             />
         )
     } else {

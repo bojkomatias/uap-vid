@@ -8,23 +8,20 @@ import Link from 'next/link'
 import { Button } from './button'
 import { buttonStyle } from './button/styles'
 
+type Option = {
+    title: string
+    description: string
+    href?: string
+    onClick?: MouseEventHandler<HTMLButtonElement>
+}
+
 export default function MultipleButton({
     defaultValue,
     options,
     position,
 }: {
-    defaultValue: {
-        title: string
-        description: string
-        href?: string
-        onClick?: MouseEventHandler<HTMLButtonElement>
-    } | null
-    options: {
-        title: string
-        description: string
-        href?: string
-        onClick?: MouseEventHandler<HTMLButtonElement>
-    }[]
+    defaultValue: Option
+    options: Option[]
     position?: string
 }) {
     const [selected, setSelected] = useState(
