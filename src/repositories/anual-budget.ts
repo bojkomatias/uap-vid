@@ -390,5 +390,9 @@ export const interruptAnualBudget = async (id: string) => {
     await updateAnualBudgetItems(AB.id, AB.budgetItems)
     await updateAnualBudgetTeamMemberHours(AB.budgetTeamMembers)
 
-    return AB
+    return await prisma.anualBudget.update({
+        where: { id },
+        data: { state: 'INTERRUPTED' },
+        select: { id: true, protocol: { select: { id: true, state: true } } },
+    })
 }
