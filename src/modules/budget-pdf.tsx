@@ -171,71 +171,89 @@ const PDFDocument = ({
                                     </View>
                                 </View>
                             </View>
-                            <Text style={{ marginVertical: 10, fontSize: 13 }}>
-                                Gastos directos
-                            </Text>
-                            <View>
-                                <View
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        borderBottom: 1,
-                                    }}
-                                >
-                                    <Text style={{ width: '80%' }}>
-                                        Detalle
-                                    </Text>
-
+                            {budgetItems.length > 0 && (
+                                <>
                                     <Text
                                         style={{
-                                            width: '20%',
-                                            textAlign: 'right',
+                                            marginVertical: 10,
+                                            fontSize: 13,
                                         }}
                                     >
-                                        Total
+                                        Gastos directos
                                     </Text>
-                                </View>
-                                <View>
-                                    <View
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            marginTop: 3,
-                                            gap: 3,
-                                        }}
-                                    >
-                                        {budgetItems.map((item, idx) => {
-                                            return (
-                                                <View
-                                                    key={idx}
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'row',
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: '80%' }}
-                                                    >
-                                                        {item.detail}
-                                                    </Text>
-                                                    <Text
-                                                        style={{
-                                                            width: '20%',
-                                                            textAlign: 'right',
-                                                        }}
-                                                    >
-                                                        $
-                                                        {currencyFormatter.format(
-                                                            item.amount
-                                                        )}
-                                                    </Text>
-                                                </View>
-                                            )
-                                        })}
+                                    <View>
+                                        <View
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                borderBottom: 1,
+                                            }}
+                                        >
+                                            <Text style={{ width: '80%' }}>
+                                                Detalle
+                                            </Text>
+
+                                            <Text
+                                                style={{
+                                                    width: '20%',
+                                                    textAlign: 'right',
+                                                }}
+                                            >
+                                                Total
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <View
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    marginTop: 3,
+                                                    gap: 3,
+                                                }}
+                                            >
+                                                {budgetItems.map(
+                                                    (item, idx) => {
+                                                        return (
+                                                            <View
+                                                                key={idx}
+                                                                style={{
+                                                                    display:
+                                                                        'flex',
+                                                                    flexDirection:
+                                                                        'row',
+                                                                }}
+                                                            >
+                                                                <Text
+                                                                    style={{
+                                                                        width: '80%',
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        item.detail
+                                                                    }
+                                                                </Text>
+                                                                <Text
+                                                                    style={{
+                                                                        width: '20%',
+                                                                        textAlign:
+                                                                            'right',
+                                                                    }}
+                                                                >
+                                                                    $
+                                                                    {currencyFormatter.format(
+                                                                        item.amount
+                                                                    )}
+                                                                </Text>
+                                                            </View>
+                                                        )
+                                                    }
+                                                )}
+                                            </View>
+                                        </View>
                                     </View>
-                                </View>
-                            </View>
+                                </>
+                            )}
                         </View>
                         <View>
                             <Text
