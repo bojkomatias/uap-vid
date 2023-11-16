@@ -9,7 +9,7 @@ import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useMemo, useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
 import { Combobox } from '@headlessui/react'
-import { Check, Selector, X } from 'tabler-icons-react'
+import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 
@@ -325,7 +325,7 @@ export default function BudgetExecutionView({
                     setOpened(true)
                 }}
                 intent="secondary"
-                size='xs'
+                size="xs"
             >
                 Ver
             </Button>

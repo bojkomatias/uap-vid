@@ -8,7 +8,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-    const { id, ...teamMember } = await request.json()
+    const { ...teamMember } = await request.json()
 
     const created = await createTeamMember(teamMember)
     if (!created)

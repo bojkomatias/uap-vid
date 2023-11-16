@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-prototype-builtins */
 'use client'
 import type { ColumnDef, VisibilityState } from '@tanstack/react-table'

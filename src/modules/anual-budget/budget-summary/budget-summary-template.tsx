@@ -50,7 +50,17 @@ export const BudgetSummary = ({
                 indicator: 'graph',
             },
         ],
-        [approved]
+        [
+            allAcademicUnits,
+            approved,
+            summary?.academicUnitBudgetSummary.changeDate,
+            summary?.academicUnitBudgetSummary.delta,
+            summary?.academicUnitBudgetSummary.value,
+            summary.projectedBudgetSummary.delta,
+            summary.projectedBudgetSummary.value,
+            summary?.projectedBudgetSummaryApproved?.value,
+            summary?.spendedBudget,
+        ]
     )
     return (
         <div>
