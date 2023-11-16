@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { Button } from '@elements/button'
 import type { AnualBudgetItem, AnualBudgetTeamMember } from '@prisma/client'
@@ -104,11 +105,11 @@ const PDFDocument = ({
                                         {budgetTeamMembers.map((member) => {
                                             return (
                                                 <View
+                                                    key={member.id}
                                                     style={{
                                                         display: 'flex',
                                                         flexDirection: 'row',
                                                     }}
-                                                    key={member.id}
                                                 >
                                                     <Text
                                                         style={{ width: '40%' }}
@@ -188,14 +189,14 @@ const PDFDocument = ({
                                             gap: 3,
                                         }}
                                     >
-                                        {budgetItems.map((item) => {
+                                        {budgetItems.map((item, idx) => {
                                             return (
                                                 <View
+                                                    key={idx}
                                                     style={{
                                                         display: 'flex',
                                                         flexDirection: 'row',
                                                     }}
-                                                    key={item.detail}
                                                 >
                                                     <Text
                                                         style={{ width: '80%' }}

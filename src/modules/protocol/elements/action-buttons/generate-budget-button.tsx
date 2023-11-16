@@ -4,18 +4,12 @@ import { Button } from '@elements/button'
 import InfoTooltip from '../tooltip'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
-import { headers } from 'next/headers'
 
 export function GenerateAnualBudgetButton({
     hasBudgetCurrentYear,
 }: {
     hasBudgetCurrentYear: boolean
 }) {
-    const headersList = headers()
-
-    const pathname = headersList.get('x-pathname')
-
-    console.log(pathname)
     return hasBudgetCurrentYear ? (
         <div className="relative w-fit">
             <div className="absolute inset-0 z-[10] mr-3">

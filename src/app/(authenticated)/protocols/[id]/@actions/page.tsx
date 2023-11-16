@@ -11,7 +11,6 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { canExecute } from '@utils/scopes'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
-import path from 'path'
 
 export default async function ActionsPage({
     params,
