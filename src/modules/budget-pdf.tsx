@@ -102,56 +102,72 @@ const PDFDocument = ({
                                             gap: 3,
                                         }}
                                     >
-                                        {budgetTeamMembers.map((member) => {
-                                            return (
-                                                <View
-                                                    key={member.id}
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'row',
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: '40%' }}
-                                                    >
-                                                        {member.teamMember.name}
-                                                    </Text>
-                                                    <Text
-                                                        style={{ width: '22%' }}
-                                                    >
-                                                        {member.hours}
-                                                    </Text>
-                                                    <Text
-                                                        style={{ width: '22%' }}
-                                                    >
-                                                        $
-                                                        {currencyFormatter.format(
-                                                            member.teamMember.categories
-                                                                .at(-1)
-                                                                ?.category.price.at(
-                                                                    -1
-                                                                )?.price ?? 0
-                                                        )}
-                                                    </Text>
-                                                    <Text
+                                        {budgetTeamMembers.map(
+                                            (member, idx) => {
+                                                return (
+                                                    <View
+                                                        key={idx}
                                                         style={{
-                                                            width: '16%',
-                                                            textAlign: 'right',
+                                                            display: 'flex',
+                                                            flexDirection:
+                                                                'row',
                                                         }}
                                                     >
-                                                        $
-                                                        {currencyFormatter.format(
-                                                            (member.teamMember.categories
-                                                                .at(-1)
-                                                                ?.category.price.at(
-                                                                    -1
-                                                                )?.price ?? 0) *
-                                                                member.hours
-                                                        )}
-                                                    </Text>
-                                                </View>
-                                            )
-                                        })}
+                                                        <Text
+                                                            style={{
+                                                                width: '40%',
+                                                            }}
+                                                        >
+                                                            {
+                                                                member
+                                                                    .teamMember
+                                                                    .name
+                                                            }
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                width: '22%',
+                                                            }}
+                                                        >
+                                                            {member.hours}
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                width: '22%',
+                                                            }}
+                                                        >
+                                                            $
+                                                            {currencyFormatter.format(
+                                                                member.teamMember.categories
+                                                                    .at(-1)
+                                                                    ?.category.price.at(
+                                                                        -1
+                                                                    )?.price ??
+                                                                    0
+                                                            )}
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                width: '16%',
+                                                                textAlign:
+                                                                    'right',
+                                                            }}
+                                                        >
+                                                            $
+                                                            {currencyFormatter.format(
+                                                                (member.teamMember.categories
+                                                                    .at(-1)
+                                                                    ?.category.price.at(
+                                                                        -1
+                                                                    )?.price ??
+                                                                    0) *
+                                                                    member.hours
+                                                            )}
+                                                        </Text>
+                                                    </View>
+                                                )
+                                            }
+                                        )}
                                     </View>
                                 </View>
                             </View>

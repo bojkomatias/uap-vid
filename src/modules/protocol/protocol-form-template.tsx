@@ -272,6 +272,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             type="submit"
                             intent="secondary"
                             loading={isPending}
+                            onClick={() => {
+                                if (!path.includes('new'))
+                                    //Timeout is for UX purposes
+                                    setTimeout(() => {
+                                        router.back()
+                                    }, 500)
+                                else return
+                            }}
                         >
                             Guardar
                         </Button>
