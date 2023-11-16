@@ -148,7 +148,7 @@ export default function Pagination({
                     currentPage={currentPage}
                 />
             </div>
-            <span className="flex gap-1 text-xs text-black">
+            <span className="flex gap-1 text-xs text-gray-700">
                 {shownRecords * Number(searchParams?.get('page') || 1) -
                     shownRecords +
                     1 <
