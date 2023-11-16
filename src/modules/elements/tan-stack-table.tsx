@@ -25,6 +25,7 @@ export default function TanStackTable({
     filterableByKey,
     searchBarPlaceholder,
     customFilterSlot,
+    customFilterSlot2,
 }: {
     data: unknown[]
     columns: ColumnDef<any, unknown>[]
@@ -33,6 +34,7 @@ export default function TanStackTable({
     filterableByKey?: { filter: string; values: any[][] | any[] }
     searchBarPlaceholder: string
     customFilterSlot?: React.ReactNode
+    customFilterSlot2?: React.ReactNode
 }) {
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(initialVisibility)
@@ -56,6 +58,7 @@ export default function TanStackTable({
             <div className=" mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
                 <SearchBar placeholderMessage={searchBarPlaceholder} />
                 <div className="flex flex-wrap gap-2">
+                    {customFilterSlot2}
                     <ColumnVisibilityDropdown
                         columns={table.getAllLeafColumns()}
                     />
