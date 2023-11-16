@@ -64,7 +64,7 @@ export const BudgetSummary = ({
     )
     return (
         <div>
-            <dl className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-3">
+            <dl className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-3">
                 {stats.map((item, i) => (
                     <div
                         key={item.name}
@@ -92,7 +92,7 @@ export const BudgetSummary = ({
                                 </Button>
                             )}
                         </dt>
-                        <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <dd className="relative mt-1 block items-baseline justify-between lg:flex">
                             <div className="flex items-baseline text-2xl font-semibold text-black/70">
                                 ${currencyFormatter.format(item.total)}
                                 {item.of ? (
