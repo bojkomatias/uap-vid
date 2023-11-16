@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ColumnDef } from '@tanstack/react-table'
 /**This helper is basically a formatter which takes the columns and data of the table and returns them in a format that can be directly downloaded as a CSV file
  * @param columns - the columns defined for the TanStack table.

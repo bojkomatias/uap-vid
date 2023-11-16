@@ -21,28 +21,30 @@ export default async function Page({ params }: { params: { id: string } }) {
     const calculations = calculateTotalBudget(anualBudget)
 
     return (
-        <>
-            <PageHeading title={`Presupuesto ${meta.year}`} />
-            <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
-                <BudgetMetadata {...meta} />
-                {meta.state === 'PENDING' && (
-                    <ApproveAnualBudget id={meta.id} />
-                )}
-                {meta.state === 'APPROVED' && (
-                    <InterruptAnualBudget
-                        id={meta.id}
-                        protocolId={meta.protocolId}
+        <div className="w-full">
+            <div className="mx-auto max-w-7xl pt-2">
+                <PageHeading title={`Presupuesto ${meta.year}`} />
+                <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
+                    <BudgetMetadata {...meta} />
+                    {meta.state === 'PENDING' && (
+                        <ApproveAnualBudget id={meta.id} />
+                    )}
+                    {meta.state === 'APPROVED' && (
+                        <InterruptAnualBudget
+                            id={meta.id}
+                            protocolId={meta.protocolId}
+                        />
+                    )}
+                </div>
+                <BudgetView
+                    budgetId={meta.id}
+                    state={meta.state}
+                    budgetItems={budgetItems}
+                    budgetTeamMembers={budgetTeamMembers}
+                    academicUnits={anualBudget.AcademicUnits}
+                    calculations={calculations}
                 />
-                )}
             </div>
-            <BudgetView
-                budgetId={meta.id}
-                state={meta.state}
-                budgetItems={budgetItems}
-                budgetTeamMembers={budgetTeamMembers}
-                academicUnits={anualBudget.AcademicUnits}
-                calculations={calculations}
-            />
-        </>
+        </div>
     )
 }

@@ -78,8 +78,8 @@ const ReviewAssignSelect = ({
                 onClick={() => setShow(true)}
             >
                 <div className="invisible absolute left-36 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
-                    <div className="w-64 rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
-                        Al asignar el evaluador el protocolo cambiara de estado.
+                    <div className="w-64 whitespace-normal rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
+                        Al asignar el evaluador el protocolo cambiará de estado.
                     </div>
                 </div>
                 Asignar evaluador
@@ -94,7 +94,7 @@ const ReviewAssignSelect = ({
                 onClick={() => setShow(true)}
             >
                 <div className="invisible absolute left-36 top-0 z-40 ml-1.5 origin-top-left rounded-md shadow-sm after:absolute after:-left-1 after:top-3.5 after:h-2 after:w-2 after:rotate-45 after:rounded-[1px] after:bg-gray-100 group-hover:visible">
-                    <div className="w-64 whitespace-normal rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
+                    <div className="whitespace-normal rounded-md bg-gray-100 px-3 py-2 text-left text-xs font-light text-gray-600">
                         Al reasignar se perderá la evaluación ya realizada por
                         el evaluador.
                     </div>

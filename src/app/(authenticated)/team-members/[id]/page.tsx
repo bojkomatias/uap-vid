@@ -1,5 +1,5 @@
 import { PageHeading } from '@layout/page-heading'
-import { getAcademicUnitsTabs, getAllAcademicUnits } from '@repositories/academic-unit'
+import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import { getTeamMemberById } from '@repositories/team-member'
 import { getAllCategories } from '@repositories/team-member-category'
 import { getAllNonTeamMembers } from '@repositories/user'

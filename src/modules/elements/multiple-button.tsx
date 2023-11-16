@@ -31,8 +31,8 @@ export default function MultipleButton({
                             )}
                             passHref
                         >
-                            <FilePlus className="h-4 text-current" /> Crear en{' '}
-                            {selected.title}
+                            <FilePlus className="h-4 text-current" /> Crear
+                            nuevo proyecto en {selected.title}
                         </Link>
                         <Listbox.Button
                             as={Button}

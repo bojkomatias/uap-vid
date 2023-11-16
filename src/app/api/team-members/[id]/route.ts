@@ -9,7 +9,7 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const { id, ...teamMember } = await request.json()
+    const { ...teamMember } = await request.json()
     const updated = await updateTeamMember(params.id, teamMember)
     if (!updated)
         return new Response('Failed to create Team Member', { status: 500 })

@@ -5,6 +5,7 @@
  * @param order : string
  * @returns
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const orderByQuery: any = (query: string, order: string) => {
     const arr = query.split(/[.|_]/)
     if (!arr[0]) return order
