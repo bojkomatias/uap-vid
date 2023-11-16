@@ -108,7 +108,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700 sm:table-cell"
                             >
-                                Valor / hora
+                                Valor categoría
                             </th>
                             <th
                                 scope="col"

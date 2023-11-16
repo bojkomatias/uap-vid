@@ -10,6 +10,7 @@ import type {
 import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
+import { Badge } from '@elements/badge'
 
 export function BudgetView({
     budgetId,
@@ -44,11 +45,16 @@ export function BudgetView({
                 ABIr={calculations.ABIr}
             />
 
-            <div className="flex justify-between text-lg font-medium ">
-                <span>Total de presupuesto (ARS):</span>
-                <span className="font-semibold">
-                    ${currencyFormatter.format(calculations.total)}
-                </span>
+            <div className="mr-32 flex justify-end pt-4">
+                <Badge className="flex gap-2 text-lg">
+                    {' '}
+                    <span className="font-normal">
+                        Total de presupuesto (ARS):
+                    </span>
+                    <span className="font-semibold">
+                        ${currencyFormatter.format(calculations.total)}
+                    </span>
+                </Badge>
             </div>
         </div>
     )
