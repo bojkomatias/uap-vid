@@ -45,7 +45,7 @@ export function BudgetView({
                 ABIr={calculations.ABIr}
             />
 
-            <div className="mr-32 flex justify-end pt-4">
+            <div className="flex justify-end pt-4">
                 <Badge className="flex gap-2 text-lg">
                     {' '}
                     <span className="font-normal">
