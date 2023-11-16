@@ -3,10 +3,13 @@ import type { ListRowValues } from '@protocol/elements/view/item-list-view'
 import ItemListView from '@protocol/elements/view/item-list-view'
 import SectionViewer from '../elements/view/section-viewer'
 import ItemView from '@protocol/elements/view/item-view'
+import { getTeamMembersByIds } from '@repositories/team-member'
 interface IdentificationProps {
     data: ProtocolSectionsIdentification
 }
-export default function IdentificationView({ data }: IdentificationProps) {
+export default async function IdentificationView({
+    data,
+}: IdentificationProps) {
     const shortData = [
         {
             title: 'Título',
@@ -25,12 +28,32 @@ export default function IdentificationView({ data }: IdentificationProps) {
             value: data.sponsor.join(' | '),
         },
     ]
+    const teamMembersIds = data.team
+        .filter((tm) => tm.teamMemberId)
+        .map((tm) => tm.teamMemberId) as string[]
+
+    const teamMembers =
+        teamMembersIds.length > 0
+            ? await getTeamMembersByIds(teamMembersIds)
+            : []
+    const team = data.team.map((tm) => {
+        const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
+        const fullName = teamMember
+            ? teamMember.name
+            : `${tm.last_name}, ${tm.name}`
+        return {
+            fullName,
+            role: tm.role,
+            hours: tm.hours,
+        }
+    })
+
     const tableData = {
         title: 'Equipo',
-        values: data.team.reduce((newVal: ListRowValues[], person) => {
+        values: team.reduce((newVal: ListRowValues[], person) => {
             newVal.push([
                 {
-                    up: `${person.last_name}, ${person.name}`,
+                    up: person.fullName,
                     down: person.role,
                 },
                 {

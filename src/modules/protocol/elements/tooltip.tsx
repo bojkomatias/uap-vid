@@ -11,7 +11,7 @@ export default function InfoTooltip({
 }) {
     return (
         <div className="group pointer-events-none relative flex h-0 justify-end">
-            <InfoCircle className="pointer-events-auto mt-3.5 h-4 w-4 cursor-help text-gray-600 transition delay-500 duration-300 hover:scale-110 hover:text-primary hover:delay-100" />
+            <InfoCircle className="pointer-events-auto mt-2 h-4 w-4 cursor-help text-gray-600 transition delay-500 duration-300 hover:scale-110 hover:text-primary hover:delay-100" />
 
             <div
                 className={cx(

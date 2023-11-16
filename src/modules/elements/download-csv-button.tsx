@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ColumnDef } from '@tanstack/react-table'
 import dataToCsv from '@utils/dataToCsv'
 import React, { useMemo, useState } from 'react'

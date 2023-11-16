@@ -125,7 +125,7 @@ export default function AnualBudgetTable({
                 totalRecords={totalRecords}
                 initialVisibility={initialVisible}
                 searchBarPlaceholder="Buscar por nombre de categoría"
-                customFilterSlot={yearFilter()}
+                customFilterSlot2={yearFilter()}
             />
         </>
     )

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 'use client'
 import type { Review, User } from '@prisma/client'
 import {
