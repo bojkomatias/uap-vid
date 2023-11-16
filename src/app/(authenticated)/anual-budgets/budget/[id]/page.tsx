@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div className="w-full">
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl pt-2">
                 <PageHeading title={`Presupuesto ${meta.year}`} />
                 <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
                     <BudgetMetadata {...meta} />

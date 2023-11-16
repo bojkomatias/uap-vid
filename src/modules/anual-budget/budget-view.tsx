@@ -27,7 +27,7 @@ export function BudgetView({
     academicUnits: AcademicUnit[]
 }) {
     return (
-        <div className="mt-10 space-y-6">
+        <div className="mt-10 space-y-6 ">
             <BudgetTeamMemberFees
                 editable={state === 'PENDING'}
                 budgetTeamMembers={budgetTeamMembers}
@@ -44,7 +44,7 @@ export function BudgetView({
                 ABIr={calculations.ABIr}
             />
 
-            <div className="flex justify-between text-lg font-medium">
+            <div className="flex justify-between text-lg font-medium ">
                 <span>Total de presupuesto (ARS):</span>
                 <span className="font-semibold">
                     ${currencyFormatter.format(calculations.total)}
