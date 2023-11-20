@@ -11,6 +11,7 @@ export const updateTeamMember = async (id: string, data: TeamMember) =>
     await prisma.teamMember.update({
         where: { id },
         data,
+        include: { categories: true },
     })
 
 export const updateCategoryHistory = async (data: {

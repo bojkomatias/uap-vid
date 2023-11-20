@@ -69,9 +69,17 @@ export default function TeamMemberForm({
                 })
 
                 const { id } = await res.json()
-                router.push(`/team-members/${id}`)
-
-                return router.refresh()
+                return teamMember.id
+                    ? router.refresh()
+                    : router.push(`/team-members/${id}`)
+            }
+            if (res.status === 428) {
+                notifications.show({
+                    title: 'La categoría obrero no existe',
+                    message:
+                        'Por favor dar de alta la categoría con nombre: "FMR", que corresponde a los obreros.',
+                    intent: 'error',
+                })
             }
             notifications.show({
                 title: 'Ha ocurrido un error',

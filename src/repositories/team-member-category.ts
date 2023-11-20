@@ -39,7 +39,7 @@ const getCategories = cache(
                                           {
                                               name: {
                                                   contains: search,
-                                                  mode: 'insensitive'
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -72,7 +72,7 @@ const getCategories = cache(
                                           {
                                               name: {
                                                   contains: search,
-                                                  mode: 'insensitive'
+                                                  mode: 'insensitive',
                                               },
                                           },
                                       ],
@@ -144,10 +144,18 @@ const getAllCategories = async () =>
         },
     })
 
+const getObreroCategory = async () => {
+    return await prisma.teamMemberCategory.findFirst({
+        where: { name: 'FMR' },
+        select: { id: true },
+    })
+}
+
 export {
     getCategories,
     updatePriceCategoryById,
     createCategory,
     deleteCategoryById,
     getAllCategories,
+    getObreroCategory,
 }
