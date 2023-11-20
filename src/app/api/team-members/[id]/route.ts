@@ -4,13 +4,20 @@ import {
     updateTeamMember,
 } from '@repositories/team-member'
 import { getObreroCategory } from '@repositories/team-member-category'
+import type { TeamMember } from '@prisma/client'
+
 
 // Updates Team Member
 export async function PUT(
     request: NextRequest,
     { params }: { params: { id: string } }
 ) {
-    const { id, ...teamMember } = await request.json()
+    /**
+     *  Destructured ID so it's not passed on runtime,
+     * prisma doesn't like a malformed ID
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...teamMember } = (await request.json()) as TeamMember
     const updated = await updateTeamMember(params.id, teamMember)
     if (!updated)
         return new Response('Failed to create Team Member', { status: 500 })

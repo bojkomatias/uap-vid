@@ -9,7 +9,7 @@ import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useMemo, useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
 import { Combobox } from '@headlessui/react'
-import { Check, Selector, X } from 'tabler-icons-react'
+import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 
@@ -81,10 +81,10 @@ export default function BudgetExecutionView({
                     onClick={(e) => e.preventDefault()}
                 >
                     <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
-                        <h1 className="text-xl font-semibold">
+                        <h1 className="text-xl font-semibold text-gray-800">
                             {executionType === ExecutionType.TeamMember
                                 ? 'Honorario de equipo'
-                                : 'Gasto Directo'}
+                                : 'Gasto directo'}
                         </h1>
                         <div className="flex  items-center gap-1">
                             <p className="text-sm font-semibold text-gray-600">
@@ -325,7 +325,7 @@ export default function BudgetExecutionView({
                     setOpened(true)
                 }}
                 intent="secondary"
-                size='xs'
+                size="xs"
             >
                 Ver
             </Button>

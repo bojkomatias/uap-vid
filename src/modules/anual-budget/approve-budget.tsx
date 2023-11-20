@@ -12,7 +12,6 @@ export function ApproveAnualBudget({ id }: { id: string }) {
         <Button
             loading={isPending}
             intent="secondary"
-            className="whitespace-nowrap"
             onClick={async () => {
                 const res = await approveAnualBudget(id)
 

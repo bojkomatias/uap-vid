@@ -39,9 +39,9 @@ export function BudgetYearCombobox() {
               )
 
     return (
-        <div className="relative mt-3 w-fit">
+        <div className="relative w-fit">
             <Combobox value={selected} onChange={setSelected}>
-                <div className="relative mt-1">
+                <div className="relative">
                     <Combobox.Input
                         className="input"
                         displayValue={(year): string =>

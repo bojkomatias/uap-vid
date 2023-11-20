@@ -8,6 +8,15 @@ export default withAuth(
     async function middleware(req) {
         const token = await getToken({ req })
 
+        //Useful headers. I'm following this thread from StackOverflow https://stackoverflow.com/questions/75362636/how-can-i-get-the-url-pathname-on-a-server-component-next-js-13
+        const url = new URL(req.url);
+        const origin = url.origin;
+        const pathname = url.pathname;
+        const requestHeaders = new Headers(req.headers);
+        requestHeaders.set('x-url', req.url);
+        requestHeaders.set('x-origin', origin);
+        requestHeaders.set('x-pathname', pathname);
+
         if (req.nextUrl.pathname === '/') {
             if (token)
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -70,7 +79,11 @@ export default withAuth(
             }
         }
 
-        return NextResponse.next()
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            }
+        })
     },
     {
         callbacks: {

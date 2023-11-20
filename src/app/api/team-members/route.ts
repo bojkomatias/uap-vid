@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createTeamMember, getAllTeamMembers } from '@repositories/team-member'
+import type { TeamMember } from '@prisma/client'
 
 export async function GET() {
     const teamMembers = await getAllTeamMembers()
@@ -8,7 +9,12 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-    const { id, ...teamMember } = await request.json()
+    /**
+     *  Destructured ID so it's not passed on runtime,
+     * prisma doesn't like a malformed ID
+     */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...teamMember } = (await request.json()) as TeamMember
 
     const created = await createTeamMember(teamMember)
     if (!created)

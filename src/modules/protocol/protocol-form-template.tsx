@@ -206,7 +206,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     initial={{ opacity: 0, y: -7 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="mx-auto mb-6 flex w-fit max-w-full gap-1 overflow-auto rounded border bg-gray-50 p-1"
+                    className="mx-auto mb-6 flex w-fit flex-wrap items-center justify-center gap-1 rounded border bg-gray-50 p-1"
                 >
                     <SectionButton
                         path={'sections.identification'}
@@ -272,6 +272,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             type="submit"
                             intent="secondary"
                             loading={isPending}
+                            onClick={() => {
+                                if (!path.includes('new'))
+                                    //Timeout is for UX purposes
+                                    setTimeout(() => {
+                                        router.back()
+                                    }, 500)
+                                else return
+                            }}
                         >
                             Guardar
                         </Button>

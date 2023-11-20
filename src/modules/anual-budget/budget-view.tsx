@@ -1,4 +1,8 @@
-import type { AcademicUnit, AnualBudgetItem, AnualBudgetState } from '@prisma/client'
+import type {
+    AcademicUnit,
+    AnualBudgetItem,
+    AnualBudgetState,
+} from '@prisma/client'
 import type {
     AnualBudgetTeamMemberWithAllRelations,
     TotalBudgetCalculation,
@@ -6,6 +10,7 @@ import type {
 import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
+import { Badge } from '@elements/badge'
 
 export function BudgetView({
     budgetId,
@@ -23,7 +28,7 @@ export function BudgetView({
     academicUnits: AcademicUnit[]
 }) {
     return (
-        <div className="mx-auto mt-10 max-w-7xl space-y-6">
+        <div className="mt-10 space-y-6 ">
             <BudgetTeamMemberFees
                 editable={state === 'PENDING'}
                 budgetTeamMembers={budgetTeamMembers}
@@ -40,11 +45,16 @@ export function BudgetView({
                 ABIr={calculations.ABIr}
             />
 
-            <div className="flex justify-between text-lg font-medium">
-                <span>Total de presupuesto (ARS):</span>
-                <span className="font-semibold">
-                    ${currencyFormatter.format(calculations.total)}
-                </span>
+            <div className="flex justify-end pt-4">
+                <Badge className="flex gap-2 text-lg">
+                    {' '}
+                    <span className="font-normal">
+                        Total de presupuesto (ARS):
+                    </span>
+                    <span className="font-semibold">
+                        ${currencyFormatter.format(calculations.total)}
+                    </span>
+                </Badge>
             </div>
         </div>
     )
