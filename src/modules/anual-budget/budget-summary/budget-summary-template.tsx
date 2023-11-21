@@ -28,7 +28,7 @@ export const BudgetSummary = ({
                 indicator: 'number',
             },
             {
-                name: 'Consumo Proyectado',
+                name: 'Consumo proyectado',
                 total: approved
                     ? summary?.projectedBudgetSummaryApproved?.value
                     : summary.projectedBudgetSummary.value ?? 0,
@@ -37,7 +37,7 @@ export const BudgetSummary = ({
                 indicator: 'number',
             },
             {
-                name: 'Consumo Ejecutado',
+                name: 'Consumo ejecutado',
                 total: summary?.spendedBudget ?? 0,
                 of: approved
                     ? summary?.projectedBudgetSummaryApproved?.value
