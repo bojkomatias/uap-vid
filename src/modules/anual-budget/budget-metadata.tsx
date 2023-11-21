@@ -36,7 +36,7 @@ export const BudgetMetadata = ({
             {title}
             <br />
             <span className="pr-2 font-medium underline underline-offset-2">
-                Ente Patrocinante:
+                Ente patrocinante:
             </span>
             {sponsor.join(', ')}
         </div>
