@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div className="w-full">
-            <div className="mx-auto w-fit pt-5">
+            <div className="mx-auto max-w-3xl pt-5">
                 <PageHeading title={'Miembro de investigación'} />
                 <TeamMemberForm
                     member={member}
