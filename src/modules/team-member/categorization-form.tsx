@@ -64,7 +64,7 @@ export default function CategorizationForm({
             onSubmit={form.onSubmit((values) =>
                 categorizeTeamMember(values.categoryId)
             )}
-            className="mx-auto mt-20 max-w-5xl space-y-6"
+            className="mt-20 max-w-5xl space-y-6"
         >
             <div className="mb-2 text-sm font-medium">
                 Categorize al docente según corresponda.

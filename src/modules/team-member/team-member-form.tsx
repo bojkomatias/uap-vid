@@ -104,7 +104,7 @@ export default function TeamMemberForm({
         <div>
             <form
                 onSubmit={form.onSubmit((values) => saveTeamMember(values))}
-                className="mx-auto mt-10 max-w-5xl space-y-6"
+                className="mt-10 max-w-5xl space-y-6"
             >
                 <div>
                     <div className="mb-2 text-sm font-medium">
