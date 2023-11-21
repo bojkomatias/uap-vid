@@ -69,9 +69,17 @@ export default function TeamMemberForm({
                 })
 
                 const { id } = await res.json()
-                router.push(`/team-members/${id}`)
-
-                return router.refresh()
+                return teamMember.id
+                    ? router.refresh()
+                    : router.push(`/team-members/${id}`)
+            }
+            if (res.status === 428) {
+                notifications.show({
+                    title: 'La categoría obrero no existe',
+                    message:
+                        'Por favor dar de alta la categoría con nombre: "FMR", que corresponde a los obreros.',
+                    intent: 'error',
+                })
             }
             notifications.show({
                 title: 'Ha ocurrido un error',
@@ -96,11 +104,11 @@ export default function TeamMemberForm({
         <div>
             <form
                 onSubmit={form.onSubmit((values) => saveTeamMember(values))}
-                className="mx-auto mt-10 max-w-5xl space-y-6"
+                className="mt-10 max-w-5xl space-y-6"
             >
                 <div>
                     <div className="mb-2 text-sm font-medium">
-                        Relacioné un usuario con el miembro de investigación
+                        Relacione un usuario con el miembro de investigación
                     </div>
                     <label htmlFor="select-user" className="label">
                         Usuario
@@ -244,7 +252,7 @@ export default function TeamMemberForm({
                 <div>
                     <div className="mb-2 text-sm font-medium">
                         Cree un nuevo miembro de investigación sin relación con
-                        usuario existente.
+                        un usuario existente.
                     </div>
                     <label htmlFor="name" className="label">
                         Nombre completo

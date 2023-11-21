@@ -17,14 +17,16 @@ export default async function Page({ params }: { params: { id: string } }) {
     const academicUnits = await getAcademicUnitsTabs()
 
     return (
-        <>
-            <PageHeading title={'Miembro de investigación'} />
-            <TeamMemberForm
-                member={member}
-                researchers={researchers}
-                categories={categories}
-                academicUnits={academicUnits}
-            />
-        </>
+        <div className="w-full">
+            <div className="mx-auto max-w-3xl pt-5">
+                <PageHeading title={'Miembro de investigación'} />
+                <TeamMemberForm
+                    member={member}
+                    researchers={researchers}
+                    categories={categories}
+                    academicUnits={academicUnits}
+                />
+            </div>
+        </div>
     )
 }
