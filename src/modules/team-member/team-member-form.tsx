@@ -108,7 +108,7 @@ export default function TeamMemberForm({
             >
                 <div>
                     <div className="mb-2 text-sm font-medium">
-                        Relacioné un usuario con el miembro de investigación
+                        Relacione un usuario con el miembro de investigación
                     </div>
                     <label htmlFor="select-user" className="label">
                         Usuario
@@ -252,7 +252,7 @@ export default function TeamMemberForm({
                 <div>
                     <div className="mb-2 text-sm font-medium">
                         Cree un nuevo miembro de investigación sin relación con
-                        usuario existente.
+                        un usuario existente.
                     </div>
                     <label htmlFor="name" className="label">
                         Nombre completo

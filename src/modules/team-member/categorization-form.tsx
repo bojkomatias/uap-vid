@@ -67,9 +67,9 @@ export default function CategorizationForm({
             className="mt-20 max-w-5xl space-y-6"
         >
             <div className="mb-2 text-sm font-medium">
-                Categorize al docente según corresponda.
+                Categorice al docente según corresponda.
                 <div className="font-light italic text-gray-700">
-                    Recuerde que si es obrero, el calculo de sus puntos por el
+                    Recuerde que si es obrero, el cálculo de sus puntos por el
                     valor de la categoría FMR será lo que determine sus
                     honorarios.
                 </div>
