@@ -9,6 +9,7 @@ import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
+import { useRouter } from 'next/navigation'
 
 export function BudgetItems({
     budgetId,
@@ -25,6 +26,7 @@ export function BudgetItems({
     ABIr: number
     academicUnits: AcademicUnit[]
 }) {
+    const router = useRouter()
     const form = useForm({ initialValues: budgetItems })
 
     return (
@@ -39,18 +41,20 @@ export function BudgetItems({
                     budgetId,
                     itemsWithRemainingUpdated
                 )
-                if (res)
-                    return notifications.show({
+                if (res) {
+                    notifications.show({
                         title: 'Valores actualizados',
                         message:
                             'Los montos a aprobar fueron actualizados con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                }
             })}
         >
             <div className="flex items-center">
                 <div className="flex-auto">
-                    <h1 className="text-base font-semibold leading-6 text-gray-900">
+                    <h1 className="text-base font-semibold leading-6 text-gray-700">
                         Lista de gastos directos
                     </h1>
                 </div>
@@ -81,18 +85,18 @@ export function BudgetItems({
                         <col className={cx(!editable ? 'w-[15%]' : 'hidden')} />
                         <col className={cx(!editable ? 'w-[10%]' : 'hidden')} />
                     </colgroup>
-                    <thead className="border-b border-gray-300 text-gray-900">
+                    <thead className="border-b border-gray-300 text-gray-700">
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
                             >
                                 Detalle
                             </th>
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
                                     !editable && 'table-cell'
                                 )}
                             >
@@ -101,7 +105,7 @@ export function BudgetItems({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
                                     !editable && 'table-cell'
                                 )}
                             >
@@ -110,7 +114,7 @@ export function BudgetItems({
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
                                     !!editable && 'table-cell'
                                 )}
                             >
@@ -118,14 +122,14 @@ export function BudgetItems({
                             </th>
                             <th
                                 scope="col"
-                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
                                 Total
                             </th>
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
+                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0',
                                     !editable && 'table-cell'
                                 )}
                             >
@@ -144,7 +148,7 @@ export function BudgetItems({
                                     className="border-b border-gray-200 text-gray-600"
                                 >
                                     <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                                        <div className="font-medium text-gray-900">
+                                        <div className="font-medium text-gray-700">
                                             {detail}
                                         </div>
                                         <div className="mt-1 truncate text-gray-500">
@@ -265,11 +269,11 @@ export function BudgetItems({
                             <th
                                 scope="row"
                                 colSpan={!editable ? 3 : 2}
-                                className="table-cell pl-4 pt-4 text-left text-sm font-semibold text-gray-900 sm:text-right"
+                                className="table-cell pl-4 pt-4 text-left text-sm font-semibold text-gray-700 sm:text-right"
                             >
                                 Total
                             </th>
-                            <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-900">
+                            <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
                                 ${currencyFormatter.format(ABIr + ABIe)}
                             </td>
                         </tr>

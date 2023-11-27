@@ -15,7 +15,7 @@ const getYears = () => {
 }
 const years = getYears()
 
-export default function Example() {
+export function BudgetYearCombobox() {
     const [selected, setSelected] = useState('')
 
     const [query, setQuery] = useState('')
@@ -39,27 +39,26 @@ export default function Example() {
               )
 
     return (
-        <div className="relative mt-3 w-fit">
+        <div className="relative w-fit">
             <Combobox value={selected} onChange={setSelected}>
-                <div className="relative mt-1">
-                    <div className="focus-visible:ring-offset-teal-300 relative w-full cursor-default overflow-hidden rounded-lg border bg-white text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 sm:text-sm">
-                        <Combobox.Input
-                            className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                            displayValue={(year): string =>
-                                selected ? (year as string) : 'Filtrar por año'
-                            }
-                            onChange={(event) => {
-                                setQuery(event.target.value)
-                            }}
-                        />
+                <div className="relative">
+                    <Combobox.Input
+                        className="input"
+                        displayValue={(year): string =>
+                            selected ? (year as string) : 'Filtrar por año'
+                        }
+                        onChange={(event) => {
+                            setQuery(event.target.value)
+                        }}
+                    />
 
-                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronDown
-                                className="h-4 w-4 text-gray-400"
-                                aria-hidden="true"
-                            />
-                        </Combobox.Button>
-                    </div>
+                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                        <ChevronDown
+                            className="h-4 w-4 text-gray-400"
+                            aria-hidden="true"
+                        />
+                    </Combobox.Button>
+
                     <Transition
                         as={Fragment}
                         leave="transition ease-in duration-100"

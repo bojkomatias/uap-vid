@@ -24,7 +24,7 @@ const newLinkMap: MapLink = {
 const previousLink: MapLink = {
     protocols: 'Vista de protocolo',
     convocatories: 'Editar de convocatoria',
-    'team-members': 'Editar de miembro',
+    'team-members': 'Editar miembro de equipo',
     'anual-budgets': undefined,
 }
 const previousSecondLink: MapLink = {

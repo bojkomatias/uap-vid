@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -85,15 +86,15 @@ export const getAllAcademicUnits = cache(
                         AND: [
                             search
                                 ? {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: search,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  }
+                                    OR: [
+                                        {
+                                            name: {
+                                                contains: search,
+                                                mode: 'insensitive',
+                                            },
+                                        },
+                                    ],
+                                }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }
@@ -119,15 +120,15 @@ export const getAllAcademicUnits = cache(
                         AND: [
                             search
                                 ? {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: search,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  }
+                                    OR: [
+                                        {
+                                            name: {
+                                                contains: search,
+                                                mode: 'insensitive',
+                                            },
+                                        },
+                                    ],
+                                }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }

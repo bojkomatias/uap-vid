@@ -1,4 +1,5 @@
 'use client'
+import type { MouseEventHandler } from 'react'
 import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronDown, FilePlus } from 'tabler-icons-react'
@@ -7,12 +8,21 @@ import Link from 'next/link'
 import { Button } from './button'
 import { buttonStyle } from './button/styles'
 
+type Option = {
+    title: string
+    description: string
+    href?: string
+    onClick?: MouseEventHandler<HTMLButtonElement>
+}
+
 export default function MultipleButton({
     defaultValue,
     options,
+    position,
 }: {
-    defaultValue: { title: string; description: string; href: string } | null
-    options: { title: string; description: string; href: string }[]
+    defaultValue: Option
+    options: Option[]
+    position?: string
 }) {
     const [selected, setSelected] = useState(
         defaultValue ? defaultValue : options[0]
@@ -22,26 +32,39 @@ export default function MultipleButton({
             {({ open }) => (
                 <div className="relative">
                     <div className="inline-flex rounded-md shadow-sm">
-                        <Link
-                            href={selected.href}
-                            className={cx(
-                                'hover:z-10 focus-visible:z-10',
-                                buttonStyle('secondary'),
-                                'rounded-r-none'
-                            )}
-                            passHref
-                        >
-                            <FilePlus className="h-4 text-current" /> Crear en{' '}
-                            {selected.title}
-                        </Link>
+                        {selected.onClick ? (
+                            <Button
+                                intent="secondary"
+                                className={cx(
+                                    'hover:z-10 focus-visible:z-10',
+                                    'rounded-r-none'
+                                )}
+                                onClick={selected.onClick}
+                            >
+                                <FilePlus className="h-4 text-current" />
+                                {selected.title}
+                            </Button>
+                        ) : (
+                            selected.href && (
+                                <Link
+                                    href={selected.href}
+                                    className={cx(
+                                        'hover:z-10 focus-visible:z-10',
+                                        buttonStyle('secondary'),
+                                        'rounded-r-none'
+                                    )}
+                                >
+                                    <FilePlus className="h-4 text-current" />
+                                    {selected.title}
+                                </Link>
+                            )
+                        )}
                         <Listbox.Button
                             as={Button}
                             intent="secondary"
                             className="border-l-none ml-px rounded-l-none"
                         >
-                            <span className="sr-only">
-                                Change published status
-                            </span>
+                            <span className="sr-only">Change selector</span>
                             <ChevronDown
                                 className="h-4 w-4 text-current"
                                 aria-hidden="true"
@@ -56,7 +79,14 @@ export default function MultipleButton({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Listbox.Options className="absolute right-0 z-20 mt-2 max-h-60 w-72 origin-top-right  divide-y overflow-auto rounded-md bg-white shadow-lg ring-1  focus:outline-none">
+                        <Listbox.Options
+                            className={cx(
+                                'z-20 max-h-60 w-72 divide-y overflow-auto rounded-md bg-white shadow-lg ring-1 focus:outline-none',
+                                position
+                                    ? position
+                                    : 'absolute right-0 mt-2 origin-top-right'
+                            )}
+                        >
                             {options.map((option) => (
                                 <Listbox.Option
                                     key={option.title}

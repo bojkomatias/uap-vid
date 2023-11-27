@@ -14,6 +14,7 @@ export default function CategoriesTable({
     categories: TeamMemberCategory[]
     totalRecords: number
 }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const columns = useMemo<ColumnDef<any>[]>(
         () => [
             {

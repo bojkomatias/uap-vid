@@ -2,15 +2,19 @@ import type { TeamMember } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 
-export const createTeamMember = async (data: TeamMember) =>
+export const createTeamMember = async (data: Omit<TeamMember, 'id'>) =>
     await prisma.teamMember.create({
         data,
     })
 
-export const updateTeamMember = async (id: string, data: TeamMember) =>
+export const updateTeamMember = async (
+    id: string,
+    data: Omit<TeamMember, 'id'>
+) =>
     await prisma.teamMember.update({
         where: { id },
         data,
+        include: { categories: true },
     })
 
 export const updateCategoryHistory = async (data: {

@@ -10,6 +10,7 @@ import {
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
+import { useRouter } from 'next/navigation'
 
 export function BudgetTeamMemberFees({
     editable,
@@ -22,6 +23,7 @@ export function BudgetTeamMemberFees({
     ABTe: number
     ABTr: number
 }) {
+    const router = useRouter()
     const form = useForm({ initialValues: budgetTeamMembers })
     return (
         <form
@@ -37,19 +39,21 @@ export function BudgetTeamMemberFees({
                         }
                     })
                 )
-                if (res)
-                    return notifications.show({
+                if (res) {
+                    notifications.show({
                         title: 'Valores actualizados',
                         message:
                             'Las horas de los miembros de equipo fueron actualizadas con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                }
             })}
         >
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <h1 className="text-base font-semibold leading-6 text-gray-900">
-                        Honorarios Calculados
+                    <h1 className="text-base font-semibold leading-6 text-gray-700">
+                        Honorarios
                     </h1>
                 </div>
             </div>
@@ -77,24 +81,24 @@ export function BudgetTeamMemberFees({
                         <col className={!editable ? 'w-[12%]' : 'hidden'} />
                         <col className={!editable ? 'w-[10%]' : 'hidden'} />
                     </colgroup>
-                    <thead className="border-b border-gray-300 text-gray-900">
+                    <thead className="border-b border-gray-300 text-gray-700">
                         <tr>
                             <th
                                 scope="col"
-                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
                             >
                                 Miembro
                             </th>
                             <th
                                 scope="col"
-                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
                                 Horas
                             </th>
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
                                     !editable && 'sm:table-cell'
                                 )}
                             >
@@ -102,14 +106,14 @@ export function BudgetTeamMemberFees({
                             </th>
                             <th
                                 scope="col"
-                                className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
+                                className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700 sm:table-cell"
                             >
-                                Valor / hora
+                                Valor categoría
                             </th>
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900',
+                                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
                                     !editable && 'sm:table-cell'
                                 )}
                             >
@@ -117,14 +121,14 @@ export function BudgetTeamMemberFees({
                             </th>
                             <th
                                 scope="col"
-                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
                                 Total
                             </th>
                             <th
                                 scope="col"
                                 className={cx(
-                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-900 sm:pr-0',
+                                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0',
                                     !editable && 'table-cell'
                                 )}
                             >
@@ -156,7 +160,7 @@ export function BudgetTeamMemberFees({
                                     className="border-b border-gray-200"
                                 >
                                     <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                                        <div className="font-medium text-gray-900">
+                                        <div className="font-medium text-gray-700">
                                             {name}
                                         </div>
                                         <div className="mt-1 truncate text-gray-500">
@@ -323,12 +327,12 @@ export function BudgetTeamMemberFees({
                             <th
                                 scope="row"
                                 colSpan={!editable ? 5 : 3}
-                                className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-900 sm:table-cell sm:pl-0 sm:text-right"
+                                className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-700 sm:table-cell sm:pl-0 sm:text-right"
                             >
                                 Total
                             </th>
 
-                            <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-900">
+                            <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
                                 ${currencyFormatter.format(ABTr + ABTe)}
                             </td>
                         </tr>
