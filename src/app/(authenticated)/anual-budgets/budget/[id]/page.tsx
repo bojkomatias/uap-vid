@@ -6,6 +6,7 @@ import { BudgetMetadata } from 'modules/anual-budget/budget-metadata'
 import { redirect } from 'next/navigation'
 import { ApproveAnualBudget } from 'modules/anual-budget/approve-budget'
 import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
+import { RejectAnualBudget } from 'modules/anual-budget/reject-budget'
 
 export default async function Page({ params }: { params: { id: string } }) {
     const anualBudget = await getAnualBudgetById(params.id)
@@ -29,10 +30,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                     {meta.state === 'PENDING' && (
                         <ApproveAnualBudget id={meta.id} />
                     )}
+                    {meta.state === 'PENDING' && (
+                        <RejectAnualBudget id={meta.id} />
+                    )}
                     {/* If remainings are 0 then budget is finished */}
                     {meta.state === 'APPROVED' &&
-                    calculations.ABIr !== 0 &&
-                    calculations.ABTr !== 0 ? (
+                    (calculations.ABIr !== 0 || calculations.ABTr !== 0) ? (
                         <InterruptAnualBudget
                             id={meta.id}
                             protocolId={meta.protocolId}
