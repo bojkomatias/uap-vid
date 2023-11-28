@@ -3,7 +3,6 @@ import {
     updateCategoryHistory,
     updateTeamMember,
 } from '@repositories/team-member'
-import { getObreroCategory } from '@repositories/team-member-category'
 import type { TeamMember } from '@prisma/client'
 
 // Updates Team Member

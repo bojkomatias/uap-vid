@@ -19,6 +19,7 @@ export const updateTeamMember = async (
 
 export const updateCategoryHistory = async (data: {
     newCategory: string
+    pointsObrero: number | undefined
     expireId: string | undefined
     memberId: string
 }) => {
@@ -27,6 +28,7 @@ export const updateCategoryHistory = async (data: {
             return await prisma.historicTeamMemberCategory.create({
                 data: {
                     categoryId: data.newCategory,
+                    pointsObrero: data.pointsObrero,
                     teamMemberId: data.memberId,
                     from: new Date(),
                     to: null,
@@ -40,6 +42,7 @@ export const updateCategoryHistory = async (data: {
             prisma.historicTeamMemberCategory.create({
                 data: {
                     categoryId: data.newCategory,
+                    pointsObrero: data.pointsObrero,
                     teamMemberId: data.memberId,
                     from: new Date(),
                     to: null,

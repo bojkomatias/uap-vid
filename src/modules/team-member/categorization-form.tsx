@@ -42,9 +42,16 @@ export default function CategorizationForm({
     })
 
     const categorizeTeamMember = useCallback(
-        async (newCategory: string) => {
+        async ({
+            categoryId,
+            pointsObrero,
+        }: {
+            categoryId: string
+            pointsObrero: number | undefined
+        }) => {
             const data = {
-                newCategory,
+                newCategory: categoryId,
+                pointsObrero,
                 expireId: currentCategory?.id,
                 memberId: member.id,
             }
@@ -74,9 +81,7 @@ export default function CategorizationForm({
 
     return (
         <form
-            onSubmit={form.onSubmit((values) =>
-                categorizeTeamMember(values.categoryId)
-            )}
+            onSubmit={form.onSubmit((values) => categorizeTeamMember(values))}
             className="mt-20 max-w-5xl space-y-6"
         >
             <div className="mb-2 text-sm font-medium">
