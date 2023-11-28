@@ -1,4 +1,4 @@
-import type { AnualBudget, Execution, HistoricTeamMemberCategory } from '@prisma/client'
+import type { AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 
@@ -97,8 +97,7 @@ const calculateRemainingABTM = (
 const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
     const category = abtm.teamMember.categories.find((c) => !c.to)
     if (!category) return 0
-    const lastPrice = category.category.price.find((p) => !p.to)
-    return lastPrice?.price || 0
+    return calculateHourRateGivenCategory(category)
 }
 
 export const calculateHourRateGivenCategory = (category: HistoricTeamMemberCategoryWithAllRelations | null) => {
@@ -111,11 +110,6 @@ export const calculateHourRateGivenCategory = (category: HistoricTeamMemberCateg
     }
 
     const hourRate = isObrero ? calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0) : categoryPrice
-    
-    console.log('isObrero', isObrero);
-    
-    console.log('hourRate', hourRate);
-    
 
     return hourRate
 }
