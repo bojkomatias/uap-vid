@@ -1,4 +1,4 @@
-import type { AnualBudget, Execution } from '@prisma/client'
+import type { AnualBudget, Execution, HistoricTeamMemberCategory } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 
@@ -18,6 +18,15 @@ export type AnualBudgetTeamMemberWithAllRelations =
     Prisma.AnualBudgetTeamMemberGetPayload<
         typeof anualBudgetTeamMemberWithAllRelations
     >
+
+const HistoricTeamMemberCategoryWithAllRelations = Prisma.validator<Prisma.HistoricTeamMemberCategoryDefaultArgs>()({
+    include: {
+        category: true
+    },
+})
+
+export type HistoricTeamMemberCategoryWithAllRelations = Prisma.HistoricTeamMemberCategoryGetPayload<
+    typeof HistoricTeamMemberCategoryWithAllRelations>
 
 const totalExecution = (ex: Execution[], academicUnitId?: string): number => {
     if (academicUnitId) {
@@ -90,6 +99,25 @@ const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
     if (!category) return 0
     const lastPrice = category.category.price.find((p) => !p.to)
     return lastPrice?.price || 0
+}
+
+export const calculateHourRateGivenCategory = (category: HistoricTeamMemberCategoryWithAllRelations | null) => {
+    if (!category) return 0
+    const isObrero = Boolean(category.pointsObrero)
+    const categoryPrice = category.category.price.at(-1)?.price ?? 0
+
+    const calculateObreroHourlyRate = (categoryPrice: number, pointsObrero: number) => {
+        return (pointsObrero * categoryPrice) / 44
+    }
+
+    const hourRate = isObrero ? calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0) : categoryPrice
+    
+    console.log('isObrero', isObrero);
+    
+    console.log('hourRate', hourRate);
+    
+
+    return hourRate
 }
 
 export const calculateTotalBudget = (

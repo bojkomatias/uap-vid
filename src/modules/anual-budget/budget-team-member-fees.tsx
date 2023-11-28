@@ -6,6 +6,7 @@ import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
 import {
     ExecutionType,
     type AnualBudgetTeamMemberWithAllRelations,
+    calculateHourRateGivenCategory,
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
@@ -220,10 +221,9 @@ export function BudgetTeamMemberFees({
                                     <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
                                         $
                                         {currencyFormatter.format(
-                                            categories
-                                                .at(-1)
-                                                ?.category.price.at(-1)
-                                                ?.price ?? 0
+                                            calculateHourRateGivenCategory(
+                                                categories.at(-1) ?? null
+                                            )
                                         )}
                                     </td>
                                     <td
@@ -234,19 +234,17 @@ export function BudgetTeamMemberFees({
                                     >
                                         $
                                         {currencyFormatter.format(
-                                            (categories
-                                                .at(-1)
-                                                ?.category.price.at(-1)
-                                                ?.price ?? 0) * remainingHours
+                                            calculateHourRateGivenCategory(
+                                                categories.at(-1) ?? null
+                                            ) * remainingHours
                                         )}
                                     </td>
                                     <td className="px-3 py-5 text-right text-sm text-gray-600 ">
                                         $
                                         {currencyFormatter.format(
-                                            (categories
-                                                .at(-1)
-                                                ?.category.price.at(-1)
-                                                ?.price ?? 0) * hours
+                                            calculateHourRateGivenCategory(
+                                                categories.at(-1) ?? null
+                                            ) * hours
                                         )}
                                     </td>
                                     <td
@@ -258,11 +256,9 @@ export function BudgetTeamMemberFees({
                                         <BudgetExecutionView
                                             positionIndex={i}
                                             remaining={
-                                                (categories
-                                                    .at(-1)
-                                                    ?.category.price.at(-1)
-                                                    ?.price ?? 0) *
-                                                remainingHours
+                                                calculateHourRateGivenCategory(
+                                                    categories.at(-1) ?? null
+                                                ) * remainingHours
                                             }
                                             executions={executions}
                                             anualBudgetTeamMemberId={
@@ -289,6 +285,12 @@ export function BudgetTeamMemberFees({
                                                                   ?.category.price.at(
                                                                       -1
                                                                   )?.price ?? 0,
+                                                          hourlyRate:
+                                                              calculateHourRateGivenCategory(
+                                                                  categories.at(
+                                                                      -1
+                                                                  ) ?? null
+                                                              ),
                                                       }
                                                     : undefined
                                             }
