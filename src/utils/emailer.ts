@@ -1,50 +1,53 @@
 import nodemailer from 'nodemailer'
 
 export enum useCases {
-    onReview,
-    onRevised,
-    onAssignation,
-    onPublish,
-    onApprove,
-    changeUserEmail,
+  onReview,
+  onRevised,
+  onAssignation,
+  onPublish,
+  onApprove,
+  changeUserEmail,
+
 }
 const messages = {
-    [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
-    [useCases.onRevised]:
-        'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
-    [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
-    [useCases.onPublish]:
-        'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
-    [useCases.onApprove]:
-        'Tu protocolo de investigación fue aprobado por la Vicerrectoría de Investigación y Desarrollo',
-    [useCases.changeUserEmail]:
-        'Este es el código de confirmación para cambiar tu email',
+  [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
+  [useCases.onRevised]:
+    'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
+  [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
+  [useCases.onPublish]:
+    'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
+  [useCases.onApprove]:
+    `Se aprobó tu proyecto de investigación y el presupuesto del mismo para el año ${new Date().getFullYear() + 1}`,
+  [useCases.changeUserEmail]:
+    'Este es el código de confirmación para cambiar tu email',
+
 }
 
 const subjects = {
-    [useCases.onReview]: 'Proyecto evaluado',
-    [useCases.onRevised]: 'Correcciones revisadas',
-    [useCases.onAssignation]: 'Nuevo proyecto asignado',
-    [useCases.onPublish]: 'Nuevo protocolo publicado.',
-    [useCases.onApprove]: 'Proyecto aprobado',
-    [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
+  [useCases.onReview]: 'Proyecto evaluado',
+  [useCases.onRevised]: 'Correcciones revisadas',
+  [useCases.onAssignation]: 'Nuevo proyecto asignado',
+  [useCases.onPublish]: 'Nuevo protocolo publicado.',
+  [useCases.onApprove]: 'Proyecto aprobado',
+  [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
+
 }
 export type Emailer = {
-    useCase: useCases
-    email: string
-    protocolId?: string
-    randomString?: string
+  useCase: useCases
+  email: string
+  protocolId?: string
+  randomString?: string
 }
 
 export async function emailer({
-    useCase,
-    email,
-    protocolId,
-    randomString,
+  useCase,
+  email,
+  protocolId,
+  randomString,
 }: Emailer) {
-    // Variable used in template to redirect (hardcoded cause process.env failed.)
-    const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
-    const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  // Variable used in template to redirect (hardcoded cause process.env failed.)
+  const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
+  const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -252,7 +255,7 @@ export async function emailer({
     </body>
     
     </html>`
-    const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -459,58 +462,51 @@ export async function emailer({
     
     </html>`
 
-    // const transporter = nodemailer.createTransport({
-    //     host: process.env.SMTP_ADDRESS,
-    //     port: Number(process.env.SMTP_PORT),
-    //     secure: false,
-    //     ignoreTLS: true,
-    // })
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: 'nicoskate000@gmail.com',
-            pass: 'luqj vdtt kqgp mbof',
-        },
-    })
+  // const transporter = nodemailer.createTransport({
+  //     host: process.env.SMTP_ADDRESS,
+  //     port: Number(process.env.SMTP_PORT),
+  //     secure: false,
+  //     ignoreTLS: true,
+  // })
 
-    //This transporter can be used for developing.
-    // const transporter = nodemailer.createTransport({
-    //     host: 'smtp.gmail.com',
-    //     port: 587,
-    //     secure: false,
-    //     auth: {
-    //         user: 'nicoskate000@gmail.com',
-    //         pass: 'luqj vdtt kqgp mbof',
-    //     },
-    // })
 
-    const emailObject = {
-        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
-        to: email,
-        subject: subjects[useCase],
-        text: messages[useCase],
-        html: randomString ? htmlEmailUpdate : html,
+  //This transporter can be used for developing.
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'nicoskate000@gmail.com',
+      pass: 'luqj vdtt kqgp mbof',
+    },
+  })
+
+  const emailObject = {
+    from: '"Portal VID - UAP" no-reply@uap.edu.ar',
+    to: email,
+    subject: subjects[useCase],
+    text: messages[useCase],
+    html: randomString ? htmlEmailUpdate : html,
+  }
+
+  transporter.sendMail(emailObject, (err) => {
+    if (err) {
+      return new Response('Error sending email', { status: 500 })
+    } else {
+      return new Response(`Successfully sent email to ${email}`, {
+        status: 250,
+      })
     }
+  })
 
-    transporter.sendMail(emailObject, (err) => {
-        if (err) {
-            return new Response('Error sending email', { status: 500 })
-        } else {
-            return new Response(`Successfully sent email to ${email}`, {
-                status: 250,
-            })
-        }
-    })
-
-    transporter.verify(function (error, success) {
-        if (error) {
-            // eslint-disable-next-line no-console
-            console.log(`Error sending the email: ${error}`)
-        } else {
-            // eslint-disable-next-line no-console
-            console.log(`Email sent: ${success}`)
-        }
-    })
+  transporter.verify(function (error, success) {
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.log(`Error sending the email: ${error}`)
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Email sent: ${success}`)
+    }
+  })
 }
+

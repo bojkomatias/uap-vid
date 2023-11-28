@@ -26,6 +26,7 @@ import {
     calculateTotalBudgetAggregated,
     type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
+import { PROTOCOL_DURATION_DEFAULT } from '@utils/constants'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -55,18 +56,22 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         protocol.sections.identification.sponsor
     )
     const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> =
-        {
-            protocolId: protocol.id,
-            year: Number(year),
-            budgetItems: ABI,
-            academicUnitsIds,
-        }
+    {
+        protocolId: protocol.id,
+        year: Number(year),
+        budgetItems: ABI,
+        academicUnitsIds,
+    }
     const newAnualBudget = await createAnualBudget(data)
+
+    const protocolDuration = parseInt(protocol.sections.duration.duration.split(' ').at(0) || PROTOCOL_DURATION_DEFAULT.toString())
+    const duration =  protocolDuration >= 12 ? 52 : 26 //in weeks
 
     // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
     const ABT = generateAnualBudgetTeamMembersItems(
         protocol.sections.identification.team,
-        newAnualBudget.id
+        newAnualBudget.id,
+        duration
     )
 
     await createManyAnualBudgetTeamMember(ABT)
@@ -98,15 +103,16 @@ const generateAnualBudgetItems = (
 
 const generateAnualBudgetTeamMembersItems = (
     protocolTeam: ProtocolSectionsIdentificationTeam[],
-    anualBudgetId: string | null
+    anualBudgetId: string | null,
+    duration: number
 ): Omit<AnualBudgetTeamMember, 'id'>[] => {
     return protocolTeam.map((item) => {
         return {
             anualBudgetId: anualBudgetId,
             teamMemberId: item.teamMemberId!,
             memberRole: item.role,
-            hours: item.hours,
-            remainingHours: item.hours,
+            hours: item.hours * duration,
+            remainingHours: item.hours * duration,
             executions: [] as Execution[],
         }
     })
@@ -124,13 +130,14 @@ const generateAnualBudgetAcademicUnitRelation = async (sponsors: string[]) => {
 export const protocolToAnualBudgetPreview = async (
     protocolId: string,
     protocolBudgetItems: ProtocolSectionsBudget,
-    protocolTeamMembers: ProtocolSectionsIdentificationTeam[]
+    protocolTeamMembers: ProtocolSectionsIdentificationTeam[],
+    duration:number
 ) => {
     const ABI = generateAnualBudgetItems(
         protocolBudgetItems,
         new Date().getFullYear().toString()
     )
-    const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null)
+    const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null, duration)
 
     const thereAreTeamMembers =
         ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
@@ -257,9 +264,9 @@ const getAcademicUnitBudgetSummary = (
     // Get the actual and the previous budget in the same year for the academic unit with the last budget change
     const [before, actual] = academicUnitWithLastBudgetChange
         ? [
-              academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
-              academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
-          ]
+            academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
+            academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+        ]
         : [0, 0]
 
     if (!actual) return { value: 0, delta: 0, changeDate: '' }
@@ -270,7 +277,7 @@ const getAcademicUnitBudgetSummary = (
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
     const delta = deltaValue
         ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
-          100
+        100
         : 0
 
     return {

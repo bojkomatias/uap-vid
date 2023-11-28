@@ -29,26 +29,26 @@ export const getAnualBudgets = cache(
                         AND: [
                             search
                                 ? {
-                                      protocol: {
-                                          is: {
-                                              sections: {
-                                                  is: {
-                                                      identification: {
-                                                          is: {
-                                                              title: {
-                                                                  contains:
-                                                                      search,
-                                                                  mode: Prisma
-                                                                      .QueryMode
-                                                                      .insensitive,
-                                                              },
-                                                          },
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  }
+                                    protocol: {
+                                        is: {
+                                            sections: {
+                                                is: {
+                                                    identification: {
+                                                        is: {
+                                                            title: {
+                                                                contains:
+                                                                    search,
+                                                                mode: Prisma
+                                                                    .QueryMode
+                                                                    .insensitive,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }
@@ -65,26 +65,26 @@ export const getAnualBudgets = cache(
                         AND: [
                             search
                                 ? {
-                                      protocol: {
-                                          is: {
-                                              sections: {
-                                                  is: {
-                                                      identification: {
-                                                          is: {
-                                                              title: {
-                                                                  contains:
-                                                                      search,
-                                                                  mode: Prisma
-                                                                      .QueryMode
-                                                                      .insensitive,
-                                                              },
-                                                          },
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  }
+                                    protocol: {
+                                        is: {
+                                            sections: {
+                                                is: {
+                                                    identification: {
+                                                        is: {
+                                                            title: {
+                                                                contains:
+                                                                    search,
+                                                                mode: Prisma
+                                                                    .QueryMode
+                                                                    .insensitive,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }
@@ -246,26 +246,26 @@ export const getAnualBudgetsByAcademicUnit = cache(
                                 : {},
                             search
                                 ? {
-                                      protocol: {
-                                          is: {
-                                              sections: {
-                                                  is: {
-                                                      identification: {
-                                                          is: {
-                                                              title: {
-                                                                  contains:
-                                                                      search,
-                                                                  mode: Prisma
-                                                                      .QueryMode
-                                                                      .insensitive,
-                                                              },
-                                                          },
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  }
+                                    protocol: {
+                                        is: {
+                                            sections: {
+                                                is: {
+                                                    identification: {
+                                                        is: {
+                                                            title: {
+                                                                contains:
+                                                                    search,
+                                                                mode: Prisma
+                                                                    .QueryMode
+                                                                    .insensitive,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
                                 : {},
                             filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
@@ -288,26 +288,26 @@ export const getAnualBudgetsByAcademicUnit = cache(
 
                             search
                                 ? {
-                                      protocol: {
-                                          is: {
-                                              sections: {
-                                                  is: {
-                                                      identification: {
-                                                          is: {
-                                                              title: {
-                                                                  contains:
-                                                                      search,
-                                                                  mode: Prisma
-                                                                      .QueryMode
-                                                                      .insensitive,
-                                                              },
-                                                          },
-                                                      },
-                                                  },
-                                              },
-                                          },
-                                      },
-                                  }
+                                    protocol: {
+                                        is: {
+                                            sections: {
+                                                is: {
+                                                    identification: {
+                                                        is: {
+                                                            title: {
+                                                                contains:
+                                                                    search,
+                                                                mode: Prisma
+                                                                    .QueryMode
+                                                                    .insensitive,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                }
                                 : {},
                             filter && values && filter != 'year'
                                 ? { [filter]: { in: values.split('-') } }
