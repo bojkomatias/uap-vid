@@ -17,11 +17,13 @@ export function BudgetTeamMemberFees({
     budgetTeamMembers,
     ABTe,
     ABTr,
+    duration,
 }: {
     editable: boolean
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     ABTe: number
     ABTr: number
+    duration: 52 | 26
 }) {
     const router = useRouter()
     const form = useForm({ initialValues: budgetTeamMembers })
@@ -184,13 +186,16 @@ export function BudgetTeamMemberFees({
                                         ) : (
                                             <input
                                                 type="number"
-                                                {...form.getInputProps(
-                                                    `${i}.hours`
-                                                )}
+                                                defaultValue={
+                                                    form.getInputProps(
+                                                        `${i}.hours`
+                                                    ).value / duration
+                                                }
                                                 onBlur={(e) =>
                                                     form.setFieldValue(
                                                         `${i}.hours`,
-                                                        Number(e.target.value)
+                                                        Number(e.target.value) *
+                                                            duration
                                                     )
                                                 }
                                                 className={cx(

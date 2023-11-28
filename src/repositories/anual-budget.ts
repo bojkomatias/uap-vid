@@ -119,6 +119,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                                 identification: {
                                     select: { title: true, sponsor: true },
                                 },
+                                duration: { select: { duration: true } },
                             },
                         },
                     },
