@@ -1,15 +1,15 @@
-import Link from 'next/link'
+'use client'
 import { FileDollar } from 'tabler-icons-react'
 import { Button } from '@elements/button'
 import InfoTooltip from '../tooltip'
-import { cx } from '@utils/cx'
-import { buttonStyle } from '@elements/button/styles'
+import { useRouter } from 'next/navigation'
 
 export function GenerateAnualBudgetButton({
     hasBudgetCurrentYear,
 }: {
     hasBudgetCurrentYear: boolean
 }) {
+    const router = useRouter()
     return hasBudgetCurrentYear ? (
         <div className="relative w-fit">
             <div className="absolute inset-0 z-[10] mr-3">
@@ -27,13 +27,15 @@ export function GenerateAnualBudgetButton({
             </Button>
         </div>
     ) : (
-        <Link
-            scroll={false}
-            href="/generate-budget"
-            className={cx(buttonStyle('secondary'))}
+        <Button
+            intent="secondary"
+            onClick={() => {
+                router.refresh()
+                router.push('/generate-budget', { scroll: false })
+            }}
         >
             <FileDollar className="h-4 w-4 text-current" />
             Generar presupuesto
-        </Link>
+        </Button>
     )
 }
