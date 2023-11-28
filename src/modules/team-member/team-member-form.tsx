@@ -6,7 +6,6 @@ import { useForm, zodResolver } from '@mantine/form'
 import type {
     HistoricTeamMemberCategory,
     TeamMember,
-    TeamMemberCategory,
     User,
 } from '@prisma/client'
 import { cx } from '@utils/cx'
@@ -15,14 +14,13 @@ import { TeamMemberSchema } from '@utils/zod'
 import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import type { z } from 'zod'
-import CategorizationForm from './categorization-form'
+
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 
 export default function TeamMemberForm({
     member,
     researchers,
-    categories,
     academicUnits,
 }: {
     member:
@@ -31,7 +29,6 @@ export default function TeamMemberForm({
           } & { user: User | null })
         | null
     researchers: User[]
-    categories: TeamMemberCategory[]
     academicUnits: {
         id: string
         name: string
@@ -362,13 +359,6 @@ export default function TeamMemberForm({
                         : 'Crear miembro de investigación'}
                 </Button>
             </form>
-            {member ? (
-                <CategorizationForm
-                    categories={categories}
-                    historicCategories={member.categories}
-                    member={member}
-                />
-            ) : null}
         </div>
     )
 }

@@ -15,10 +15,12 @@ import { Check, Selector } from 'tabler-icons-react'
 
 export default function CategorizationForm({
     categories,
+    obreroCategory,
     historicCategories,
     member,
 }: {
     categories: TeamMemberCategory[]
+    obreroCategory: TeamMemberCategory | null
     historicCategories: HistoricTeamMemberCategory[]
     member: TeamMember
 }) {
@@ -26,7 +28,17 @@ export default function CategorizationForm({
 
     const currentCategory = historicCategories.at(-1)
     const form = useForm({
-        initialValues: { categoryId: currentCategory?.categoryId ?? '' },
+        initialValues: {
+            categoryId: currentCategory?.categoryId ?? '',
+            pointsObrero: undefined,
+        },
+        validate: {
+            pointsObrero: (value, values) =>
+                values.categoryId === obreroCategory!.id &&
+                (value === undefined || value === 0)
+                    ? 'Debe cargar los puntos de obrero'
+                    : null,
+        },
     })
 
     const categorizeTeamMember = useCallback(
@@ -47,6 +59,7 @@ export default function CategorizationForm({
                         'La categoría del miembro de investigación fue actualizada con éxito',
                     intent: 'success',
                 })
+                form.resetDirty()
                 return router.refresh()
             }
             notifications.show({
@@ -56,7 +69,7 @@ export default function CategorizationForm({
                 intent: 'error',
             })
         },
-        [currentCategory?.id, member, router]
+        [currentCategory?.id, form, member.id, router]
     )
 
     return (
@@ -104,7 +117,7 @@ export default function CategorizationForm({
                                 </span>
                             </Listbox.Button>
 
-                            <Listbox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
+                            <Listbox.Options className="absolute bottom-full z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
                                 {categories.map((value) => (
                                     <Listbox.Option
                                         key={value.id}
@@ -176,9 +189,28 @@ export default function CategorizationForm({
                         </div>
                     </Listbox>
                 </div>
+                {/* Hidden if category is not obrero's */}
+                <div
+                    className={cx(
+                        obreroCategory &&
+                            form.values.categoryId !== obreroCategory.id &&
+                            'hidden'
+                    )}
+                >
+                    <div className="label">Puntaje Obrero</div>
+                    <input
+                        className="input"
+                        type="number"
+                        name="pointsObrero"
+                        {...form.getInputProps('pointsObrero')}
+                    />
+                    <p className="error -mb-5 h-5">
+                        {form.getInputProps('pointsObrero').error}
+                    </p>
+                </div>
                 <div className={cx(!form.isDirty() && 'hidden')}>
                     <div className="label">Categoría anterior</div>
-                    <div className="ml-1 font-medium">
+                    <div className="ml-1 text-sm font-medium">
                         {currentCategory
                             ? categories.find(
                                   (e) => e.id === currentCategory.categoryId
