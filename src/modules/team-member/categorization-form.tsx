@@ -84,15 +84,9 @@ export default function CategorizationForm({
                         onChange={(e) => {
                             form.setFieldValue('categoryId', e)
                         }}
-                        disabled={member.obrero}
                     >
                         <div className="relative mt-1 w-full">
-                            <Listbox.Button
-                                className={cx(
-                                    'input text-left',
-                                    member.obrero && 'bg-gray-100'
-                                )}
-                            >
+                            <Listbox.Button className={'input text-left'}>
                                 <span className={'block truncate'}>
                                     {form.values.categoryId
                                         ? categories.find(
