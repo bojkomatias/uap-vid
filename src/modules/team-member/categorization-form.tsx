@@ -30,7 +30,7 @@ export default function CategorizationForm({
     const form = useForm({
         initialValues: {
             categoryId: currentCategory?.categoryId ?? '',
-            pointsObrero: undefined,
+            pointsObrero: currentCategory?.pointsObrero ?? undefined,
         },
         validate: {
             pointsObrero: (value, values) =>
