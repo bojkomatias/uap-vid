@@ -140,13 +140,7 @@ export function BudgetTeamMemberFees({
                         {budgetTeamMembers.map(
                             (
                                 {
-                                    teamMember: {
-                                        id,
-                                        name,
-                                        obrero,
-                                        categories,
-                                        pointsObrero,
-                                    },
+                                    teamMember: { id, name, categories },
                                     id: anualBudgetTeamMemberId,
                                     executions,
                                     memberRole,
@@ -166,10 +160,13 @@ export function BudgetTeamMemberFees({
                                         <div className="mt-1 truncate text-gray-500">
                                             {memberRole}
                                             {' - '}
-                                            {obrero ? (
+                                            {categories.at(-1)?.pointsObrero ? (
                                                 <span className="font-medium text-gray-700">
                                                     Puntos de obrero:{' '}
-                                                    {pointsObrero}
+                                                    {
+                                                        categories.at(-1)
+                                                            ?.pointsObrero
+                                                    }
                                                 </span>
                                             ) : (
                                                 <span className="font-medium text-gray-700">
@@ -275,10 +272,12 @@ export function BudgetTeamMemberFees({
                                                     .name ?? 'Sin Categoría'
                                             }
                                             obrero={
-                                                obrero
+                                                categories.at(-1)?.pointsObrero
                                                     ? {
                                                           pointsObrero:
-                                                              pointsObrero ?? 0,
+                                                              categories.at(-1)
+                                                                  ?.pointsObrero ??
+                                                              0,
                                                           pointPrice:
                                                               categories
                                                                   .at(-1)

@@ -52,18 +52,22 @@ export default function TeamMemberTable({
                 accessorKey: 'obrero',
                 header: 'Obrero',
                 cell: ({ row }) =>
-                    row.original.obrero ? (
+                    row.original.categories.at(-1)?.pointsObrero ? (
                         <Check className="ml-4 h-4 text-gray-600" />
                     ) : (
                         <Minus className="ml-4 h-4 text-gray-600" />
                     ),
+                enableSorting: false,
             },
             {
                 accessorKey: 'pointsObrero',
                 header: 'Puntos',
                 cell: ({ row }) => (
-                    <span className="ml-4">{row.original.pointsObrero}</span>
+                    <span className="ml-4">
+                        {row.original.categories.at(-1)?.pointsObrero}
+                    </span>
                 ),
+                enableSorting: false,
             },
             {
                 id: 'category.name',
