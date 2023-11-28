@@ -158,7 +158,7 @@ export const UserSchema = z.object({
 export const HistoricCategoryPriceSchema = z.object({
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
-    price: z.number().min(1, { message: 'El valor debe ser mayor a 1' }),
+    price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
     currency: z.string().default('ARS').nullable(),
 })
 
