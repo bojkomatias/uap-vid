@@ -158,7 +158,7 @@ export const UserSchema = z.object({
 export const HistoricCategoryPriceSchema = z.object({
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
-    price: z.number().min(1, { message: 'El valor debe ser mayor a 1' }),
+    price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
     currency: z.string().default('ARS').nullable(),
 })
 
@@ -184,32 +184,21 @@ export const HistoricTeamMemberCategorySchema = z.object({
     to: z.coerce.date().nullable(),
     teamMemberId: z.string(),
     categoryId: z.string(),
+    pointsObrero: z.number().optional(),
 })
 
 /////////////////////////////////////////
 // TEAM MEMBER SCHEMA
 /////////////////////////////////////////
 
-export const TeamMemberSchema = z
-    .object({
-        id: z.string(),
-        userId: z.string().nullable(),
-        name: z.string().min(1, {
-            message:
-                'No puede estar vació, seleccione usuario o ingrese un nombre.',
-        }),
-        obrero: z.boolean(),
-        pointsObrero: z.coerce.number().nullable(),
-    })
-    .refine(
-        (value) => {
-            if (value.obrero) {
-                if (value.pointsObrero) return true
-                return false
-            } else return true
-        },
-        { message: 'Campo obligatorio para obreros', path: ['pointsObrero'] }
-    )
+export const TeamMemberSchema = z.object({
+    id: z.string(),
+    userId: z.string().nullable(),
+    name: z.string().min(1, {
+        message:
+            'No puede estar vació, seleccione usuario o ingrese un nombre.',
+    }),
+})
 
 /////////////////////////////////////////
 // PROTOCOL ANUAL BUDGET SCHEMA

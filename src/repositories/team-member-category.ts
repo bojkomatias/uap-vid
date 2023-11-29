@@ -146,8 +146,7 @@ const getAllCategories = async () =>
 
 const getObreroCategory = async () => {
     return await prisma.teamMemberCategory.findFirst({
-        where: { name: 'FMR' },
-        select: { id: true },
+        where: { name: 'Obrero' },
     })
 }
 

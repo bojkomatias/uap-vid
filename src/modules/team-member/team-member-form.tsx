@@ -6,7 +6,6 @@ import { useForm, zodResolver } from '@mantine/form'
 import type {
     HistoricTeamMemberCategory,
     TeamMember,
-    TeamMemberCategory,
     User,
 } from '@prisma/client'
 import { cx } from '@utils/cx'
@@ -15,14 +14,13 @@ import { TeamMemberSchema } from '@utils/zod'
 import { useCallback, useState } from 'react'
 import { Check, Selector, X } from 'tabler-icons-react'
 import type { z } from 'zod'
-import CategorizationForm from './categorization-form'
+
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 
 export default function TeamMemberForm({
     member,
     researchers,
-    categories,
     academicUnits,
 }: {
     member:
@@ -31,7 +29,6 @@ export default function TeamMemberForm({
           } & { user: User | null })
         | null
     researchers: User[]
-    categories: TeamMemberCategory[]
     academicUnits: {
         id: string
         name: string
@@ -45,8 +42,6 @@ export default function TeamMemberForm({
             userId: member ? member.userId : null,
             name: member ? member.name : '',
             academicUnitId: member ? member.academicUnitId : null,
-            obrero: member ? member.obrero : false,
-            pointsObrero: member ? member.pointsObrero : null,
         },
         validate: zodResolver(TeamMemberSchema),
     })
@@ -352,54 +347,7 @@ export default function TeamMemberForm({
                         </div>
                     </Listbox>
                 </div>
-                <div className="grid grid-cols-4 gap-8">
-                    <div className="ml-2 flex h-20 items-center">
-                        <input
-                            id="obrero"
-                            name="obrero"
-                            type="checkbox"
-                            className="h-4 w-4 rounded-md  text-primary focus:ring-primary"
-                            {...form.getInputProps('obrero', {
-                                type: 'checkbox',
-                            })}
-                        />
-                        <div className="ml-3 mt-0.5 text-sm leading-6">
-                            <label
-                                htmlFor="obrero"
-                                className="label pointer-events-auto"
-                            >
-                                Obrero
-                            </label>
-                        </div>
-                    </div>
-                    <div
-                        className={cx(
-                            'place-self-end text-right',
-                            form.getInputProps('obrero').value ? '' : 'hidden'
-                        )}
-                    >
-                        <label htmlFor="pointsObrero" className="label">
-                            Puntos de obrero
-                        </label>
-                        <input
-                            type="number"
-                            className="input w-36 text-right"
-                            name="pointsObrero"
-                            {...form.getInputProps('pointsObrero')}
-                            onBlur={() =>
-                                form.setFieldValue(
-                                    'pointsObrero',
-                                    Number(form.values.pointsObrero)
-                                )
-                            }
-                        />
-                        {form.getInputProps('pointsObrero').error ? (
-                            <p className="error">
-                                *{form.getInputProps('pointsObrero').error}
-                            </p>
-                        ) : null}
-                    </div>
-                </div>
+
                 <Button
                     intent="secondary"
                     type="submit"
@@ -411,13 +359,6 @@ export default function TeamMemberForm({
                         : 'Crear miembro de investigación'}
                 </Button>
             </form>
-            {member ? (
-                <CategorizationForm
-                    categories={categories}
-                    historicCategories={member.categories}
-                    member={member}
-                />
-            ) : null}
         </div>
     )
 }

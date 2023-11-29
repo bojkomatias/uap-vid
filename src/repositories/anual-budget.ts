@@ -119,6 +119,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                                 identification: {
                                     select: { title: true, sponsor: true },
                                 },
+                                duration: { select: { duration: true } },
                             },
                         },
                     },
@@ -360,6 +361,14 @@ export const approveAnualBudget = async (id: string) => {
     return await prisma.anualBudget.update({
         where: { id },
         data: { state: 'APPROVED' },
+        select: { id: true, protocol: { select: { id: true, state: true } } },
+    })
+}
+
+export const rejectAnualBudget = async (id: string) => {
+    return await prisma.anualBudget.update({
+        where: { id },
+        data: { state: 'REJECTED' },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }

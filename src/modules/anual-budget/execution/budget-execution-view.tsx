@@ -32,7 +32,7 @@ export default function BudgetExecutionView({
     executions: Execution[]
     positionIndex: number
     executionType: ExecutionType
-    obrero?: { pointsObrero: number; pointPrice: number }
+    obrero?: { pointsObrero: number; pointPrice: number; hourlyRate: number }
     anualBudgetTeamMemberId?: string
     academicUnits?: AcademicUnit[]
     maxAmountPerAcademicUnit?: number
@@ -109,6 +109,9 @@ export default function BudgetExecutionView({
                                 </p>
                                 <p className="text-sm font-semibold text-gray-600">
                                     Precio Punto: ${obrero.pointPrice}
+                                </p>
+                                <p className="text-sm font-semibold text-gray-600">
+                                    Precio Hora: ${obrero.hourlyRate}
                                 </p>
                             </div>
                         )}

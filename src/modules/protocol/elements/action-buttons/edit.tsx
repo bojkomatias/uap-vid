@@ -2,7 +2,7 @@
 import { buttonStyle } from '@elements/button/styles'
 import type { Review, State, User } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
-import { ACTION } from '@utils/zod'
+import { ACTION, STATE } from '@utils/zod'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Edit } from 'tabler-icons-react'
@@ -29,7 +29,10 @@ export default function EditButton({
             user.role,
             protocol.state
         ) ||
-        (reviews.length > 2 && reviews.every((r) => r.verdict === 'APPROVED'))
+        protocol.state === STATE.SCIENTIFIC_EVALUATION ||
+        (protocol.state === STATE.METHODOLOGICAL_EVALUATION &&
+            reviews.length > 2 &&
+            reviews.every((r) => r.verdict === 'APPROVED'))
     )
         return <></>
     return (

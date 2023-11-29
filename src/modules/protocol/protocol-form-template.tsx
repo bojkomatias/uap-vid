@@ -276,7 +276,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                                 if (!path.includes('new'))
                                     //Timeout is for UX purposes
                                     setTimeout(() => {
-                                        router.back()
+                                        router.push(`/protocols/${protocol.id}`)
                                     }, 500)
                                 else return
                             }}
