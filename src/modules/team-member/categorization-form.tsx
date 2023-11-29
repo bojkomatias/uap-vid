@@ -30,7 +30,7 @@ export default function CategorizationForm({
     const form = useForm({
         initialValues: {
             categoryId: currentCategory?.categoryId ?? '',
-            pointsObrero: currentCategory?.pointsObrero ?? undefined,
+            pointsObrero: currentCategory?.pointsObrero,
         },
         validate: {
             pointsObrero: (value, values) =>
@@ -47,7 +47,7 @@ export default function CategorizationForm({
             pointsObrero,
         }: {
             categoryId: string
-            pointsObrero: number | undefined
+            pointsObrero: number | null | undefined
         }) => {
             const data = {
                 newCategory: categoryId,
@@ -55,7 +55,7 @@ export default function CategorizationForm({
                 expireId: currentCategory?.id,
                 memberId: member.id,
             }
-            console.log(data)
+
             const res = await fetch(`/api/team-members/${data.memberId}`, {
                 method: 'PATCH',
                 body: JSON.stringify(data),
@@ -102,6 +102,8 @@ export default function CategorizationForm({
                         value={form.getInputProps('categoryId').value}
                         onChange={(e) => {
                             form.setFieldValue('categoryId', e)
+                            if (e !== obreroCategory?.id)
+                                form.setFieldValue('pointsObrero', null)
                         }}
                     >
                         <div className="relative mt-1 w-full">
