@@ -55,6 +55,7 @@ export default function CategorizationForm({
                 expireId: currentCategory?.id,
                 memberId: member.id,
             }
+            console.log(data)
             const res = await fetch(`/api/team-members/${data.memberId}`, {
                 method: 'PATCH',
                 body: JSON.stringify(data),
@@ -207,7 +208,13 @@ export default function CategorizationForm({
                         className="input"
                         type="number"
                         name="pointsObrero"
-                        {...form.getInputProps('pointsObrero')}
+                        defaultValue={form.getInputProps('pointsObrero').value}
+                        onBlur={(e) =>
+                            form.setFieldValue(
+                                'pointsObrero',
+                                Number(e.target.value)
+                            )
+                        }
                     />
                     <p className="error -mb-5 h-5">
                         {form.getInputProps('pointsObrero').error}
