@@ -15,6 +15,7 @@ import { Badge } from '@elements/badge'
 export function BudgetView({
     budgetId,
     state,
+    duration,
     budgetItems,
     budgetTeamMembers,
     calculations,
@@ -22,6 +23,7 @@ export function BudgetView({
 }: {
     budgetId: string
     state: AnualBudgetState
+    duration: 52 | 26
     budgetItems: AnualBudgetItem[]
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     calculations: TotalBudgetCalculation
@@ -34,6 +36,7 @@ export function BudgetView({
                 budgetTeamMembers={budgetTeamMembers}
                 ABTe={calculations.ABTe}
                 ABTr={calculations.ABTr}
+                duration={duration}
             />
 
             <BudgetItems

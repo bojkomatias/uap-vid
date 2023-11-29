@@ -26,6 +26,7 @@ import {
     calculateTotalBudgetAggregated,
     type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
+import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -63,10 +64,13 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         }
     const newAnualBudget = await createAnualBudget(data)
 
+    const duration = protocolDuration(protocol.sections.duration.duration)
+
     // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
     const ABT = generateAnualBudgetTeamMembersItems(
         protocol.sections.identification.team,
-        newAnualBudget.id
+        newAnualBudget.id,
+        duration
     )
 
     await createManyAnualBudgetTeamMember(ABT)
@@ -98,15 +102,16 @@ const generateAnualBudgetItems = (
 
 const generateAnualBudgetTeamMembersItems = (
     protocolTeam: ProtocolSectionsIdentificationTeam[],
-    anualBudgetId: string | null
+    anualBudgetId: string | null,
+    duration: number
 ): Omit<AnualBudgetTeamMember, 'id'>[] => {
     return protocolTeam.map((item) => {
         return {
             anualBudgetId: anualBudgetId,
             teamMemberId: item.teamMemberId!,
             memberRole: item.role,
-            hours: item.hours,
-            remainingHours: item.hours,
+            hours: item.hours * duration,
+            remainingHours: item.hours * duration,
             executions: [] as Execution[],
         }
     })
@@ -124,13 +129,18 @@ const generateAnualBudgetAcademicUnitRelation = async (sponsors: string[]) => {
 export const protocolToAnualBudgetPreview = async (
     protocolId: string,
     protocolBudgetItems: ProtocolSectionsBudget,
-    protocolTeamMembers: ProtocolSectionsIdentificationTeam[]
+    protocolTeamMembers: ProtocolSectionsIdentificationTeam[],
+    duration: number
 ) => {
     const ABI = generateAnualBudgetItems(
         protocolBudgetItems,
         new Date().getFullYear().toString()
     )
-    const ABT = generateAnualBudgetTeamMembersItems(protocolTeamMembers, null)
+    const ABT = generateAnualBudgetTeamMembersItems(
+        protocolTeamMembers,
+        null,
+        duration
+    )
 
     const thereAreTeamMembers =
         ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0

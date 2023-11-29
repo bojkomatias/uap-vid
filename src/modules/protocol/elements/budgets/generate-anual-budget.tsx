@@ -6,6 +6,7 @@ import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import { findProtocolById } from '@repositories/protocol'
 import { buttonStyle } from '@elements/button/styles'
 import { ActionGenerateButton } from './action-generate'
+import { PROTOCOL_DURATION_DEFAULT } from '@utils/constants'
 
 export async function GenerateAnualBudget({
     protocolId,
@@ -17,7 +18,11 @@ export async function GenerateAnualBudget({
     const budgetPreview = await protocolToAnualBudgetPreview(
         protocolId,
         protocol.sections.budget,
-        protocol.sections.identification.team
+        protocol.sections.identification.team,
+        parseInt(
+            protocol.sections.duration.duration.split(' ').at(0) ||
+                PROTOCOL_DURATION_DEFAULT.toString()
+        )
     )
     const parsedObject = TeamMemberRelation.safeParse(
         protocol.sections.identification.team

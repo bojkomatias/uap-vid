@@ -1,6 +1,6 @@
 'use client'
 import { Dialog, Transition } from '@headlessui/react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Fragment } from 'react'
 
 export function ProtocolInterceptedModal({
@@ -9,9 +9,13 @@ export function ProtocolInterceptedModal({
     children: React.ReactNode
 }) {
     const router = useRouter()
+    const path = usePathname()
+    const isOpen =
+        path.split('/')[1] === 'generate-budget' ||
+        path.split('/')[1] === 'anual-budget-view'
 
     return (
-        <Transition appear show={true} as={Fragment}>
+        <Transition appear show={isOpen} as={Fragment}>
             <Dialog
                 as="div"
                 className="relative z-50"

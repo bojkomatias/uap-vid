@@ -1,0 +1,1 @@
+export const PROTOCOL_DURATION_DEFAULT=12

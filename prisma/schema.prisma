@@ -83,8 +83,6 @@ model TeamMember {
   userId                String?                      @unique @db.ObjectId
   name                  String
   categories            HistoricTeamMemberCategory[]
-  obrero                Boolean                      @default(false)
-  pointsObrero          Int?
   AnualBudgetTeamMember AnualBudgetTeamMember[]
   AcademicUnit          AcademicUnit?                @relation(fields: [academicUnitId], references: [id])
   academicUnitId        String?                      @db.ObjectId
@@ -96,6 +94,7 @@ model HistoricTeamMemberCategory {
   teamMemberId String             @db.ObjectId
   category     TeamMemberCategory @relation(fields: [categoryId], references: [id])
   categoryId   String             @db.ObjectId
+  pointsObrero Int?
   from         DateTime
   to           DateTime?
 }
