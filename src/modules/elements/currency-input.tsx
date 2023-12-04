@@ -37,14 +37,11 @@ export default function CurrencyInput({
                 value={amount}
                 //I'm calling the setAmount here to format the value shown in the input field everytime the user types a new number.
                 onChange={(e) => {
-                    setAmount(
-                        formatCurrency(e.target.value) === '0,00'
-                            ? ''
-                            : formatCurrency(e.target.value)
-                    )
+                    setAmount(formatCurrency(e.target.value))
                 }}
                 onBlur={(e) => {
                     const value = e.target.value === '' ? '0' : e.target.value
+                    console.log(value, e.target.value)
                     priceSetter(parseLocaleNumber(value, 'es-AR'))
                 }}
                 placeholder="3499.00"

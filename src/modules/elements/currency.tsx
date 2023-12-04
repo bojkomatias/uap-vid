@@ -23,7 +23,7 @@ export default function Currency({
                 size === 'md' && 'text-md'
             )}
         >
-            {amount == 0 || !amount ? (
+            {amount === null || amount === undefined ? (
                 <>No se especificó</>
             ) : (
                 <>
