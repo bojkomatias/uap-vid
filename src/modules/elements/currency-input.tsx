@@ -41,7 +41,6 @@ export default function CurrencyInput({
                 }}
                 onBlur={(e) => {
                     const value = e.target.value === '' ? '0' : e.target.value
-                    console.log(value, e.target.value)
                     priceSetter(parseLocaleNumber(value, 'es-AR'))
                 }}
                 placeholder="3499.00"
