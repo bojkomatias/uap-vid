@@ -170,16 +170,17 @@ export function BudgetTeamMemberFees({
                                                     categories.at(-1)?.category
                                                         .name
                                                 }
-                                            </span>
+                                            </span>{' '}
                                             <span>
                                                 {categories.at(-1)
                                                     ?.pointsObrero ? (
-                                                    <span className="font-medium text-gray-700">
-                                                        Puntos:{' '}
+                                                    <span className="text-gray-600">
+                                                        {'{'}
                                                         {
                                                             categories.at(-1)
                                                                 ?.pointsObrero
                                                         }
+                                                        {'}'}
                                                     </span>
                                                 ) : null}
                                             </span>
