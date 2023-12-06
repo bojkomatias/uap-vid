@@ -110,6 +110,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                 setTimeout(() => {
                     router.push(`/protocols/${protocol.id}`)
                 }, 500)
+                startTransition(() => {
+                    router.refresh()
+                })
             }
         },
         [router, section]
