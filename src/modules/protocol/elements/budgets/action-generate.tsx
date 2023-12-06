@@ -38,11 +38,6 @@ export function ActionGenerateButton({ protocolId }: { protocolId: string }) {
             title: `Generar presupuesto: ${currentYear + 1}`,
             description: 'Genera el presupuesto para el año entrante',
             onClick: async () => {
-                notifications.show({
-                    title: 'Presupuesto generado',
-                    message: 'Se generó correctamente el presupuesto',
-                    intent: 'success',
-                })
                 const budget = await generateAnualBudget(
                     protocolId,
                     (currentYear + 1).toString()
