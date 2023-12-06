@@ -162,11 +162,9 @@ function TeamMemberSelector({
                                         `${path}.${index}.teamMemberId`
                                     ).value
                             )?.name ??
-                            form.getInputProps(`${path}.${index}.name`).value ??
-                            '' +
+                            form.getInputProps(`${path}.${index}.name`).value +
                                 form.getInputProps(`${path}.${index}.last_name`)
-                                    .value ??
-                            ''
+                                    .value
                         }
                     />
 
