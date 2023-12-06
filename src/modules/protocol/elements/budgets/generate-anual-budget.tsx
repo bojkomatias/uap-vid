@@ -94,7 +94,7 @@ export async function GenerateAnualBudget({
                                     <span>Rol</span>
                                 </div>
                                 <div className=" text-right font-semibold text-gray-600">
-                                    <span>Horas asignadas</span>
+                                    <span>Horas semanales</span>
                                 </div>
                             </div>
                             {budgetPreview.budgetTeamMembers.map(

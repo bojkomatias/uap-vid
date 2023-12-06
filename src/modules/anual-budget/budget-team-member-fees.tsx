@@ -96,7 +96,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
-                                Horas
+                                Horas semanales
                             </th>
                             <th
                                 scope="col"

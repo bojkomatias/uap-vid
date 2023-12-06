@@ -62,7 +62,7 @@ export default function TeamMemberListForm() {
                         <div className="w-20">
                             <NumberInput
                                 path={`${path}.${index}.hours`}
-                                label={'Horas'}
+                                label={'Horas semanales'}
                             />
                         </div>
                         <Trash
