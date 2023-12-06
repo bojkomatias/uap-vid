@@ -83,6 +83,7 @@ export const getTeamMembersByIds = async (teamMemberIds: string[]) =>
         },
         include: {
             user: true,
+            categories: { include: { category: true } },
         },
     })
 

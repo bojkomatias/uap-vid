@@ -83,12 +83,15 @@ export async function GenerateAnualBudget({
                             </p>
                         </div>
                         <div className="  my-2 rounded-md border px-6 py-2 text-sm shadow">
-                            <div className="grid grid-cols-3">
+                            <div className="grid grid-cols-4">
                                 <div className="font-semibold text-gray-600 ">
                                     <span>Miembro de equipo</span>
                                 </div>
                                 <div className=" text-center font-semibold text-gray-600">
                                     <span>Rol</span>
+                                </div>
+                                <div className=" text-center font-semibold text-gray-600">
+                                    <span>Categoría</span>
                                 </div>
                                 <div className=" text-right font-semibold text-gray-600">
                                     <span>Horas semanales</span>
@@ -98,7 +101,7 @@ export async function GenerateAnualBudget({
                                 (teamMemberBudget, idx) => (
                                     <div
                                         key={idx}
-                                        className="my-2 grid grid-cols-3"
+                                        className="my-2 grid grid-cols-4"
                                     >
                                         <span>
                                             {teamMemberBudget.teamMember?.name}
@@ -109,7 +112,14 @@ export async function GenerateAnualBudget({
                                                     (x) =>
                                                         x.teamMemberId ==
                                                         teamMemberBudget.teamMemberId
-                                                )?.role //This is the only thing that I didn't like and add it to the preview will generate type conflict and inconsistencies
+                                                )?.role
+                                            }
+                                        </span>
+                                        <span className="text-center">
+                                            {
+                                                teamMemberBudget.teamMember.categories.at(
+                                                    -1
+                                                )?.category.name
                                             }
                                         </span>
                                         <span className="text-right">

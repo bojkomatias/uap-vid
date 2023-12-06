@@ -62,7 +62,7 @@ export default function TeamMemberListForm() {
                         <div className="w-20">
                             <NumberInput
                                 path={`${path}.${index}.hours`}
-                                label={'Horas semanales'}
+                                label={'Horas'}
                             />
                         </div>
                         <Trash
@@ -137,8 +137,8 @@ function TeamMemberSelector({
                 }
                 onChange={(e: string) => {
                     form.setFieldValue(`${path}.${index}.teamMemberId`, e)
-                    form.setFieldValue(`${path}.${index}.name`, null)
-                    form.setFieldValue(`${path}.${index}.last_name`, null)
+                    form.setFieldValue(`${path}.${index}.name`, '')
+                    form.setFieldValue(`${path}.${index}.last_name`, '')
                 }}
                 className="relative"
             >
@@ -153,6 +153,7 @@ function TeamMemberSelector({
                                 `${path}.${index}.name`,
                                 e.target.value
                             )
+                            form.setFieldValue(`${path}.${index}.last_name`, '')
                         }}
                         displayValue={() =>
                             teamMembers.find(
@@ -162,9 +163,11 @@ function TeamMemberSelector({
                                         `${path}.${index}.teamMemberId`
                                     ).value
                             )?.name ??
-                            form.getInputProps(`${path}.${index}.name`).value +
+                            (form.getInputProps(`${path}.${index}.name`).value +
+                                ' ' +
                                 form.getInputProps(`${path}.${index}.last_name`)
-                                    .value
+                                    .value ||
+                                '')
                         }
                     />
 
