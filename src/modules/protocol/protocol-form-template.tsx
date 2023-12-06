@@ -106,13 +106,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     message: 'El protocolo ha sido guardado con éxito',
                     intent: 'success',
                 })
+
                 //Timeout is for UX purposes
                 setTimeout(() => {
                     router.push(`/protocols/${protocol.id}`)
+                    startTransition(() => {
+                        router.refresh()
+                    })
                 }, 500)
-                startTransition(() => {
-                    router.refresh()
-                })
             }
         },
         [router, section]
