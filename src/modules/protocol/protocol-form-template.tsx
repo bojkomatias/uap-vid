@@ -106,9 +106,14 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                     message: 'El protocolo ha sido guardado con éxito',
                     intent: 'success',
                 })
-                startTransition(() => {
-                    router.refresh()
-                })
+
+                //Timeout is for UX purposes
+                setTimeout(() => {
+                    router.push(`/protocols/${protocol.id}`)
+                    startTransition(() => {
+                        router.refresh()
+                    })
+                }, 500)
             }
         },
         [router, section]
@@ -272,14 +277,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
                             type="submit"
                             intent="secondary"
                             loading={isPending}
-                            onClick={() => {
-                                if (!path.includes('new'))
-                                    //Timeout is for UX purposes
-                                    setTimeout(() => {
-                                        router.push(`/protocols/${protocol.id}`)
-                                    }, 500)
-                                else return
-                            }}
                         >
                             Guardar
                         </Button>

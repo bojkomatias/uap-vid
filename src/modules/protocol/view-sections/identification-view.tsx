@@ -40,7 +40,7 @@ export default async function IdentificationView({
         const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
         const fullName = teamMember
             ? teamMember.name
-            : `${tm.last_name}, ${tm.name}`
+            : `${tm.name} ${tm.last_name}`
         return {
             fullName,
             role: tm.role,
@@ -57,7 +57,7 @@ export default async function IdentificationView({
                     down: person.role,
                 },
                 {
-                    up: 'Horas',
+                    up: 'Horas semanales',
                     down: person.hours,
                 },
             ])

@@ -96,7 +96,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
-                                Horas
+                                Horas semanales
                             </th>
                             <th
                                 scope="col"
@@ -111,7 +111,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700 sm:table-cell"
                             >
-                                Valor categoría
+                                Valor hora
                             </th>
                             <th
                                 scope="col"
@@ -161,24 +161,29 @@ export function BudgetTeamMemberFees({
                                             {name}
                                         </div>
                                         <div className="mt-1 truncate text-gray-500">
+                                            <b>Rol: </b>
                                             {memberRole}
                                             {' - '}
-                                            {categories.at(-1)?.pointsObrero ? (
-                                                <span className="font-medium text-gray-700">
-                                                    Puntos de obrero:{' '}
-                                                    {
-                                                        categories.at(-1)
-                                                            ?.pointsObrero
-                                                    }
-                                                </span>
-                                            ) : (
-                                                <span className="font-medium text-gray-700">
-                                                    {
-                                                        categories.at(-1)
-                                                            ?.category.name
-                                                    }
-                                                </span>
-                                            )}
+                                            <b>Categoría: </b>
+                                            <span className="font-medium text-gray-700">
+                                                {
+                                                    categories.at(-1)?.category
+                                                        .name
+                                                }
+                                            </span>{' '}
+                                            <span>
+                                                {categories.at(-1)
+                                                    ?.pointsObrero ? (
+                                                    <span className="text-gray-600">
+                                                        {'{'}
+                                                        {
+                                                            categories.at(-1)
+                                                                ?.pointsObrero
+                                                        }
+                                                        {'}'}
+                                                    </span>
+                                                ) : null}
+                                            </span>
                                         </div>
                                     </td>
                                     <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
