@@ -12,7 +12,7 @@ export enum useCases {
 const messages = {
   [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
   [useCases.onRevised]:
-    'Las correcciones al protocolo fueron vistas y el protocolo modificadas',
+    'Las correcciones al protocolo fueron revisadas y el protocolo fue modificado acorde a las mismas',
   [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
   [useCases.onPublish]:
     'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
@@ -22,6 +22,8 @@ const messages = {
     'Este es el código de confirmación para cambiar tu email',
 
 }
+
+
 
 const subjects = {
   [useCases.onReview]: 'Proyecto evaluado',
