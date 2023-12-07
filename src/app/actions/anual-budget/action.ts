@@ -28,6 +28,7 @@ import {
 } from '@utils/anual-budget'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 
+
 /**
  * Generates an annual budget based on a given protocol ID and year.
  * @param protocolId - The ID of the protocol to generate the budget from.
@@ -46,6 +47,7 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         })
     )
 
+
     if (!protocol || anualBudgetsYears.includes(new Date().getFullYear()))
         return null
 
@@ -56,12 +58,12 @@ export const generateAnualBudget = async (protocolId: string, year: string) => {
         protocol.sections.identification.sponsor
     )
     const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> =
-        {
-            protocolId: protocol.id,
-            year: Number(year),
-            budgetItems: ABI,
-            academicUnitsIds,
-        }
+    {
+        protocolId: protocol.id,
+        year: Number(year),
+        budgetItems: ABI,
+        academicUnitsIds,
+    }
     const newAnualBudget = await createAnualBudget(data)
 
     const duration = protocolDuration(protocol.sections.duration.duration)
@@ -267,9 +269,9 @@ const getAcademicUnitBudgetSummary = (
     // Get the actual and the previous budget in the same year for the academic unit with the last budget change
     const [before, actual] = academicUnitWithLastBudgetChange
         ? [
-              academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
-              academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
-          ]
+            academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
+            academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+        ]
         : [0, 0]
 
     if (!actual) return { value: 0, delta: 0, changeDate: '' }
@@ -280,7 +282,7 @@ const getAcademicUnitBudgetSummary = (
     // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
     const delta = deltaValue
         ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
-          100
+        100
         : 0
 
     return {

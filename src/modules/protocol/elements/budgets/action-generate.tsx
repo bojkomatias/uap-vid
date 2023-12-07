@@ -4,11 +4,18 @@ import MultipleButton from '@elements/multiple-button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 
-export function ActionGenerateButton({ protocolId }: { protocolId: string }) {
+export function ActionGenerateButton({
+    protocolId,
+    anualBudgetYears,
+}: {
+    protocolId: string
+    anualBudgetYears: number[]
+}) {
     const router = useRouter()
     const currentYear = new Date().getFullYear()
     const options = [
         {
+            year: currentYear,
             title: `Generar presupuesto: ${currentYear}`,
             description: 'Genera el presupuesto para el año actual',
             onClick: async () => {
@@ -35,6 +42,7 @@ export function ActionGenerateButton({ protocolId }: { protocolId: string }) {
             },
         },
         {
+            year: currentYear + 1,
             title: `Generar presupuesto: ${currentYear + 1}`,
             description: 'Genera el presupuesto para el año entrante',
             onClick: async () => {
@@ -60,7 +68,7 @@ export function ActionGenerateButton({ protocolId }: { protocolId: string }) {
                     })
             },
         },
-    ]
+    ].filter((x) => anualBudgetYears.includes(x.year))
     // The default is the option where it starts next year.
     return (
         <MultipleButton
