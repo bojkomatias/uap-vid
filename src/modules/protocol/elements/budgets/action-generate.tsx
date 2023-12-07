@@ -68,13 +68,21 @@ export function ActionGenerateButton({
                     })
             },
         },
-    ].filter((x) => anualBudgetYears.includes(x.year))
+    ]
     // The default is the option where it starts next year.
     return (
         <MultipleButton
             position="left-0 absolute bottom-0"
-            defaultValue={options[1]}
-            options={options}
+            defaultValue={
+                anualBudgetYears.includes(options[1].year)
+                    ? options[0]
+                    : options[1]
+            }
+            options={
+                anualBudgetYears.length > 0
+                    ? options.filter((x) => !anualBudgetYears.includes(x.year))
+                    : options
+            }
         />
     )
 }
