@@ -57,7 +57,7 @@ export default async function IdentificationView({
                     down: person.role,
                 },
                 {
-                    up: 'Horas',
+                    up: 'Horas semanales',
                     down: person.hours,
                 },
             ])

@@ -80,7 +80,9 @@ const PDFDocument = ({
                                     <Text style={{ width: '40%' }}>
                                         Miembro
                                     </Text>
-                                    <Text style={{ width: '22%' }}>Horas</Text>
+                                    <Text style={{ width: '22%' }}>
+                                        Horas semanales
+                                    </Text>
                                     <Text style={{ width: '22%' }}>
                                         Valor hora
                                     </Text>

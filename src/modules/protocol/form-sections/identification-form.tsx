@@ -54,6 +54,12 @@ export function IdentificationForm() {
 const TeamInfo = () => (
     <InfoTooltip>
         <p>
+            <b>Las horas corresponden a horas semanales.</b>
+            <br />
+            Si no encuentra un miembro de equipo, escriba nombre completo del
+            mismo y guarde igualmente el formulario.
+        </p>
+        <p>
             <b>Codirector:</b> En el caso de un proyecto tesis de posgrado,
             agregar el nombre del director o consejero.
         </p>
