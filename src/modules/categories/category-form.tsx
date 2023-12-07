@@ -49,6 +49,7 @@ export default function CategoryForm({
             //Agregué un timeout porque era demasiado rápido el close
             setTimeout(() => {
                 closeInterceptingDrawer && closeInterceptingDrawer(router)
+                router.refresh()
                 router.push('/categories')
             }, 500)
         } else if (res.status === 422) {

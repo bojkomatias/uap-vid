@@ -19,14 +19,17 @@ export type AnualBudgetTeamMemberWithAllRelations =
         typeof anualBudgetTeamMemberWithAllRelations
     >
 
-const HistoricTeamMemberCategoryWithAllRelations = Prisma.validator<Prisma.HistoricTeamMemberCategoryDefaultArgs>()({
-    include: {
-        category: true
-    },
-})
+const HistoricTeamMemberCategoryWithAllRelations =
+    Prisma.validator<Prisma.HistoricTeamMemberCategoryDefaultArgs>()({
+        include: {
+            category: true,
+        },
+    })
 
-export type HistoricTeamMemberCategoryWithAllRelations = Prisma.HistoricTeamMemberCategoryGetPayload<
-    typeof HistoricTeamMemberCategoryWithAllRelations>
+export type HistoricTeamMemberCategoryWithAllRelations =
+    Prisma.HistoricTeamMemberCategoryGetPayload<
+        typeof HistoricTeamMemberCategoryWithAllRelations
+    >
 
 const totalExecution = (ex: Execution[], academicUnitId?: string): number => {
     if (academicUnitId) {
@@ -50,7 +53,9 @@ const calculateRemainingABI = (
     executionPerAcademicUnit?: number
 ): number => {
     const totalBudgetItemsAmount = abi.reduce((acc, item) => {
-        acc += executionPerAcademicUnit ? item.amount / amountAcademicUnits : item.amount
+        acc += executionPerAcademicUnit
+            ? item.amount / amountAcademicUnits
+            : item.amount
         return acc
     }, 0)
     const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
@@ -100,16 +105,23 @@ const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
     return calculateHourRateGivenCategory(category)
 }
 
-export const calculateHourRateGivenCategory = (category: HistoricTeamMemberCategoryWithAllRelations | null) => {
+export const calculateHourRateGivenCategory = (
+    category: HistoricTeamMemberCategoryWithAllRelations | null
+) => {
     if (!category) return 0
     const isObrero = Boolean(category.pointsObrero)
     const categoryPrice = category.category.price.at(-1)?.price ?? 0
 
-    const calculateObreroHourlyRate = (categoryPrice: number, pointsObrero: number) => {
-        return (pointsObrero * categoryPrice) / 44
+    const calculateObreroHourlyRate = (
+        categoryPrice: number,
+        pointsObrero: number
+    ) => {
+        return (pointsObrero * categoryPrice) / 176
     }
 
-    const hourRate = isObrero ? calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0) : categoryPrice
+    const hourRate = isObrero
+        ? calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0)
+        : categoryPrice
 
     return hourRate
 }

@@ -6,7 +6,7 @@ import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import { findProtocolById } from '@repositories/protocol'
 import { buttonStyle } from '@elements/button/styles'
 import { ActionGenerateButton } from './action-generate'
-import { PROTOCOL_DURATION_DEFAULT } from '@utils/constants'
+import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 
 export async function GenerateAnualBudget({
     protocolId,
@@ -65,10 +65,7 @@ export async function GenerateAnualBudget({
         protocolId,
         protocol.sections.budget,
         protocol.sections.identification.team,
-        parseInt(
-            protocol.sections.duration.duration.split(' ').at(0) ||
-                PROTOCOL_DURATION_DEFAULT.toString()
-        )
+        protocolDuration(protocol.sections.duration.duration)
     )
 
     return (
@@ -102,22 +99,25 @@ export async function GenerateAnualBudget({
                         </p>
                     </div>
                     <div className="  my-2 rounded-md border px-6 py-2 text-sm shadow">
-                        <div className="grid grid-cols-3">
+                        <div className="grid grid-cols-4">
                             <div className="font-semibold text-gray-600 ">
                                 <span>Miembro de equipo</span>
                             </div>
                             <div className=" text-center font-semibold text-gray-600">
                                 <span>Rol</span>
                             </div>
+                            <div className=" text-center font-semibold text-gray-600">
+                                <span>Categoría</span>
+                            </div>
                             <div className=" text-right font-semibold text-gray-600">
-                                <span>Horas asignadas</span>
+                                <span>Horas semanales</span>
                             </div>
                         </div>
                         {budgetPreview.budgetTeamMembers.map(
                             (teamMemberBudget, idx) => (
                                 <div
                                     key={idx}
-                                    className="my-2 grid grid-cols-3"
+                                    className="my-2 grid grid-cols-4"
                                 >
                                     <span>
                                         {teamMemberBudget.teamMember?.name}
@@ -128,11 +128,22 @@ export async function GenerateAnualBudget({
                                                 (x) =>
                                                     x.teamMemberId ==
                                                     teamMemberBudget.teamMemberId
-                                            )?.role //This is the only thing that I didn't like and add it to the preview will generate type conflict and inconsistencies
+                                            )?.role
+                                        }
+                                    </span>
+                                    <span className="text-center">
+                                        {
+                                            teamMemberBudget.teamMember.categories.at(
+                                                -1
+                                            )?.category.name
                                         }
                                     </span>
                                     <span className="text-right">
-                                        {teamMemberBudget.hours}
+                                        {teamMemberBudget.hours /
+                                            protocolDuration(
+                                                protocol.sections.duration
+                                                    .duration
+                                            )}
                                     </span>
                                 </div>
                             )
