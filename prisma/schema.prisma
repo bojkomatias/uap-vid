@@ -157,6 +157,7 @@ model AnualBudgetTeamMember {
   memberRole     String
   hours          Float
   remainingHours Float
+  workingMonths  Int?
   executions     Execution[]
   AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
   anualBudgetId  String?      @db.ObjectId
