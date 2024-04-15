@@ -157,7 +157,6 @@ model AnualBudgetTeamMember {
   memberRole     String
   hours          Float
   remainingHours Float
-  workingMonths  Int?
   executions     Execution[]
   AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
   anualBudgetId  String?      @db.ObjectId
@@ -245,11 +244,12 @@ type ProtocolSectionsIdentification {
 }
 
 type ProtocolSectionsIdentificationTeam {
-  hours        Float
-  last_name    String?
-  name         String?
-  role         String
-  teamMemberId String? @db.ObjectId
+  hours          Float
+  last_name      String?
+  name           String?
+  workingMonths  Int?
+  role           String
+  teamMemberId   String? @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {
