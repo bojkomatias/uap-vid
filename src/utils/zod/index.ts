@@ -398,6 +398,7 @@ export const IdentificationSchema = z.object({
                     .string()
                     .min(1, { message: 'El campo no puede estar vacío' }),
                 teamMemberId: z.string().nullable(),
+                workingMonths: z.number().nullable(),
             })
         )
         .array()

@@ -67,7 +67,7 @@ export default function TeamMemberListForm() {
                         </div>
                         <div className="w-20">
                             <NumberInput
-                                path={`${path}.${index}.hours`}
+                                path={`${path}.${index}.workingMonths`}
                                 label={'Meses'}
                             />
                         </div>
