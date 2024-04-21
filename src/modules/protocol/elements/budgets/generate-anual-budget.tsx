@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { AlertCircle, CircleCheck } from 'tabler-icons-react'
 import Currency from '@elements/currency'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
-import { findProtocolById } from '@repositories/protocol'
+import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { buttonStyle } from '@elements/button/styles'
 import { ActionGenerateButton } from './action-generate'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
@@ -13,7 +13,7 @@ export async function GenerateAnualBudget({
 }: {
     protocolId: string
 }) {
-    const protocol = await findProtocolById(protocolId)
+    const protocol = await findProtocolByIdWithResearcher(protocolId)
     if (!protocol) return
     const parsedObject = TeamMemberRelation.safeParse(
         protocol.sections.identification.team
@@ -182,7 +182,12 @@ export async function GenerateAnualBudget({
                 </div>
             </section>
 
-            <ActionGenerateButton protocolId={protocolId} />
+            <ActionGenerateButton
+                protocolId={protocolId}
+                anualBudgetYears={protocol.anualBudgets.map((anual) => {
+                    return anual.year
+                })}
+            />
         </div>
     )
 }

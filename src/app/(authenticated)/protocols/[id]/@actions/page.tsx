@@ -11,6 +11,7 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { canExecute } from '@utils/scopes'
 import { authOptions } from 'app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
+import { protocol_duration_helper } from '@utils/helpers'
 
 export default async function ActionsPage({
     params,
@@ -22,11 +23,16 @@ export default async function ActionsPage({
     if (!protocol || !session) return
     const reviews = await getReviewsByProtocol(protocol.id)
 
-    const hasBudgetCurrentYear = protocol.anualBudgets
-        .map((b) => {
-            return b.year == new Date().getFullYear()
-        })
-        .some((s) => s == true)
+    const budgets_created_years = protocol.anualBudgets.map((anual) => {
+        return anual.year
+    })
+
+    const budget_years_check = protocol_duration_helper(
+        protocol.sections.duration.duration,
+        protocol.createdAt
+    )
+        .years_active.sort()
+        .every((value, index) => value === budgets_created_years.sort()[index])
 
     return (
         <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1">
@@ -60,9 +66,9 @@ export default async function ActionsPage({
                 session.user.role,
                 protocol.state
             ) &&
-                !hasBudgetCurrentYear && (
+                !budget_years_check && (
                     <GenerateAnualBudgetButton
-                        hasBudgetCurrentYear={hasBudgetCurrentYear}
+                        budget_years_check={budget_years_check}
                     />
                 )}
             <EditButton
