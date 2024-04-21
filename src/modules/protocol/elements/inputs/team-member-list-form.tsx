@@ -65,6 +65,12 @@ export default function TeamMemberListForm() {
                                 label={'Horas'}
                             />
                         </div>
+                        <div className="w-20">
+                            <NumberInput
+                                path={`${path}.${index}.workingMonths`}
+                                label={'Meses'}
+                            />
+                        </div>
                         <Trash
                             onClick={() => form.removeListItem(path, index)}
                             className={`mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${

@@ -110,7 +110,7 @@ export async function GenerateAnualBudget({
                                 <span>Categoría</span>
                             </div>
                             <div className=" text-right font-semibold text-gray-600">
-                                <span>Horas semanales</span>
+                                <span>Total horas</span>
                             </div>
                         </div>
                         {budgetPreview.budgetTeamMembers.map(
@@ -139,11 +139,7 @@ export async function GenerateAnualBudget({
                                         }
                                     </span>
                                     <span className="text-right">
-                                        {teamMemberBudget.hours /
-                                            protocolDuration(
-                                                protocol.sections.duration
-                                                    .duration
-                                            )}
+                                        {teamMemberBudget.hours}
                                     </span>
                                 </div>
                             )

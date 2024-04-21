@@ -17,6 +17,7 @@ export const initialSectionValues: Sections = {
                 name: '',
                 role: 'Director',
                 teamMemberId: null,
+                workingMonths: null,
             },
         ],
         title: '',

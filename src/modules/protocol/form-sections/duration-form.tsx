@@ -57,8 +57,9 @@ const modalities = [
     'Proyecto Tesis Posgrado (PTP)',
 ]
 
-const duration = (v: string) => {
-    if (v === 'Proyecto de investigación desde las cátedras (PIC)')
+/** Depending on if the project type is a "PIC", it can have a duration that's less than 12 months. Using this helper we manage to add this exception */
+const duration = (value: string) => {
+    if (value === 'Proyecto de investigación desde las cátedras (PIC)')
         return ['6 meses', '12 meses', '24 meses']
     else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
 }
