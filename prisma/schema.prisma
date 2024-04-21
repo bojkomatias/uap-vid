@@ -244,11 +244,12 @@ type ProtocolSectionsIdentification {
 }
 
 type ProtocolSectionsIdentificationTeam {
-  hours        Float
-  last_name    String?
-  name         String?
-  role         String
-  teamMemberId String? @db.ObjectId
+  hours          Float
+  last_name      String?
+  name           String?
+  workingMonths  Int?
+  role           String
+  teamMemberId   String? @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {
