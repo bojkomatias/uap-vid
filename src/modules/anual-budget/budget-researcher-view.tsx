@@ -51,13 +51,13 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                                     scope="col"
                                     className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
-                                    Horas semanales
+                                    Horas (total)
                                 </th>
                                 <th
                                     scope="col"
                                     className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-900 sm:table-cell"
                                 >
-                                    Valor / hora
+                                    Valor hora
                                 </th>
 
                                 <th
