@@ -113,8 +113,8 @@ const generateAnualBudgetTeamMembersItems = (
             teamMemberId: item.teamMemberId!,
             memberRole: item.role,
             //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
-            hours: item.workingMonths && item.workingMonths > 0 ? item.hours * item.workingMonths * 4 : item.hours * duration,
-            remainingHours: item.hours * duration,
+            hours: Math.ceil(item.workingMonths && item.workingMonths > 0 ? item.hours * item.workingMonths * 4.33333 : item.hours * duration),
+            remainingHours: Math.ceil(item.workingMonths && item.workingMonths > 0 ? item.hours * item.workingMonths * 4.33333 : item.hours * duration),
             executions: [] as Execution[],
         }
     })

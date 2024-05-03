@@ -51,7 +51,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                                     scope="col"
                                     className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
-                                    Horas (total)
+                                    Horas anuales
                                 </th>
                                 <th
                                     scope="col"

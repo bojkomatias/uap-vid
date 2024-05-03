@@ -96,7 +96,7 @@ export function BudgetTeamMemberFees({
                                 scope="col"
                                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
                             >
-                                Total horas
+                                Horas anuales
                             </th>
                             <th
                                 scope="col"
@@ -149,6 +149,8 @@ export function BudgetTeamMemberFees({
                                     memberRole,
                                     hours,
                                     remainingHours,
+
+                                    
                                 },
                                 i
                             ) => (
@@ -175,12 +177,12 @@ export function BudgetTeamMemberFees({
                                                 {categories.at(-1)
                                                     ?.pointsObrero ? (
                                                     <span className="text-gray-600">
-                                                        {'{'}
+                                                        {'['}
                                                         {
                                                             categories.at(-1)
                                                                 ?.pointsObrero
                                                         }
-                                                        {'}'}
+                                                        {']'}
                                                     </span>
                                                 ) : null}
                                             </span>
@@ -195,13 +197,12 @@ export function BudgetTeamMemberFees({
                                                 defaultValue={
                                                     form.getInputProps(
                                                         `${i}.hours`
-                                                    ).value / duration
+                                                    ).value 
                                                 }
                                                 onBlur={(e) =>
                                                     form.setFieldValue(
                                                         `${i}.hours`,
-                                                        Number(e.target.value) *
-                                                            duration
+                                                        Number(e.target.value)
                                                     )
                                                 }
                                                 className={cx(
