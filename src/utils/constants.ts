@@ -1,1 +1,2 @@
 export const PROTOCOL_DURATION_DEFAULT=12
+export const WEEKS_IN_MONTH = 52/12
