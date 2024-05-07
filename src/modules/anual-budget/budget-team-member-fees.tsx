@@ -12,6 +12,7 @@ import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
 import { useRouter } from 'next/navigation'
+import type { WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
 
 export function BudgetTeamMemberFees({
     editable,
@@ -24,7 +25,7 @@ export function BudgetTeamMemberFees({
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
     ABTe: number
     ABTr: number
-    duration: 52 | 26
+    duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
 }) {
     const router = useRouter()
     const form = useForm({ initialValues: budgetTeamMembers })
