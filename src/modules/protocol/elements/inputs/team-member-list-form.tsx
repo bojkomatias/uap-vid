@@ -36,7 +36,7 @@ export default function TeamMemberListForm() {
                         id={`row-${index}`}
                         className="flex w-full items-start justify-around gap-2"
                     >
-                        <div className="w-60">
+                        <div className="w-48">
                             <Select
                                 options={[
                                     'Director',
@@ -134,7 +134,7 @@ function TeamMemberSelector({
     return (
         <div className="flex-grow">
             <label htmlFor="select-user" className="label">
-                Miembro del equipo de investigación
+                Miembro del equipo
             </label>
             <Combobox
                 as="div"
