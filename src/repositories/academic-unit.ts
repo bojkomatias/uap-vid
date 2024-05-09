@@ -40,7 +40,7 @@ export const getAcademicUnitById = async (id?: string) => {
 
         return prisma.academicUnit.findMany({
             where: {
-                id
+                id,
             },
             include: {
                 AcademicUnitAnualBudgets: {
@@ -86,15 +86,15 @@ export const getAllAcademicUnits = cache(
                         AND: [
                             search
                                 ? {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: search,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                    ],
-                                }
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: search,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }
@@ -120,15 +120,15 @@ export const getAllAcademicUnits = cache(
                         AND: [
                             search
                                 ? {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: search,
-                                                mode: 'insensitive',
-                                            },
-                                        },
-                                    ],
-                                }
+                                      OR: [
+                                          {
+                                              name: {
+                                                  contains: search,
+                                                  mode: 'insensitive',
+                                              },
+                                          },
+                                      ],
+                                  }
                                 : {},
                             filter && values
                                 ? { [filter]: { in: values.split('-') } }
