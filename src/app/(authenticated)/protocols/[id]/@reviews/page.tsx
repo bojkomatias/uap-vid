@@ -5,7 +5,7 @@ import ReviewFormTemplate from '@review/review-form-template'
 import { cx } from '@utils/cx'
 import { canExecute, canAccess } from '@utils/scopes'
 import { ACCESS, ACTION } from '@utils/zod'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 
 export default async function ReviewsPage({
