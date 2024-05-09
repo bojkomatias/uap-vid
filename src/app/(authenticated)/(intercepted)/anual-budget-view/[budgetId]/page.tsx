@@ -1,6 +1,6 @@
 import { getAnualBudgetById } from '@repositories/anual-budget'
 import { canExecute } from '@utils/scopes'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { BudgetResearcherView } from 'modules/anual-budget/budget-researcher-view'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'

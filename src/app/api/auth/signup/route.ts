@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { findUserByEmail, saveUser } from '../../../../repositories/user'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { createHashScrypt } from '@utils/hash'
 
 export async function POST(request: NextRequest) {

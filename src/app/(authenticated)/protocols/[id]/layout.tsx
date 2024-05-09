@@ -3,7 +3,7 @@ import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 
 async function Layout({

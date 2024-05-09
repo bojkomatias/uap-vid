@@ -6,7 +6,7 @@ import { Badge } from '@elements/badge'
 import { canAccess, canExecute } from '@utils/scopes'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import ReviewAssignSelect from '@review/elements/review-assign-select'
 

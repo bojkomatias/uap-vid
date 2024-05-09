@@ -1,4 +1,4 @@
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import ProfileDrawer from 'modules/profile/profile-info-drawer'
 import { getReviewsByReviewerId } from '@repositories/review'

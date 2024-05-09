@@ -1,5 +1,5 @@
 import { getReviewsByReviewerId } from '@repositories/review'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getServerSession } from 'next-auth'
 import React from 'react'

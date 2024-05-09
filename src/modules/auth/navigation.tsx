@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { DesktopNavigation } from './elements/sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 
 export default async function Navigation({
     children,
