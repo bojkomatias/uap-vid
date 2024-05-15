@@ -1,5 +1,5 @@
 import type { ProtocolSections } from '@prisma/client'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'
 const IdentificationView = dynamic(

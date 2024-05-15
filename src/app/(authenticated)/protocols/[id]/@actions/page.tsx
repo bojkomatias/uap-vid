@@ -9,7 +9,7 @@ import { BudgetDropdown } from '@protocol/elements/budgets/budget-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
 import { canExecute } from '@utils/scopes'
-import { authOptions } from 'app/api/auth/[...nextauth]/route'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { protocol_duration_helper } from '@utils/helpers'
 
