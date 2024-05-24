@@ -26,7 +26,7 @@ const Tiptap = ({
     editable,
     onChange,
 }: {
-    value: string
+    value?: string
     editable?: boolean
     onChange: (a: string) => void
 }) => {
