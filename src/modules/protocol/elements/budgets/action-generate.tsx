@@ -1,5 +1,6 @@
 'use client'
 import { generateAnualBudget } from '@actions/anual-budget/action'
+import { Badge } from '@elements/badge'
 import MultipleButton from '@elements/multiple-button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
@@ -31,7 +32,7 @@ export function ActionGenerateButton({
                         intent: 'success',
                     })
                     setTimeout(() => {
-                        router.push(`anual-budgets/budget/${budget}`)
+                        router.push(`/anual-budgets/budget/${budget}`)
                     }, 500)
                 } else
                     notifications.show({
@@ -58,7 +59,7 @@ export function ActionGenerateButton({
                         intent: 'success',
                     })
                     setTimeout(() => {
-                        router.push(`anual-budgets/budget/${budget}`)
+                        router.push(`/anual-budgets/budget/${budget}`)
                     }, 500)
                 } else
                     notifications.show({
@@ -69,7 +70,20 @@ export function ActionGenerateButton({
             },
         },
     ]
-    // The default is the option where it starts next year.
+
+    const validToGenerateOptions = options.filter(
+        (x) => !anualBudgetYears.includes(x.year)
+    )
+
+    const hasNoValidOptions = validToGenerateOptions.length === 0
+
+    if (hasNoValidOptions)
+        return (
+            <Badge className="bg-warning-50 ring-warning-300">
+                Presupuestos ya han sido generados
+            </Badge>
+        )
+
     return (
         <MultipleButton
             position="left-0 absolute bottom-0"
@@ -78,11 +92,7 @@ export function ActionGenerateButton({
                     ? options[0]
                     : options[1]
             }
-            options={
-                anualBudgetYears.length > 0
-                    ? options.filter((x) => !anualBudgetYears.includes(x.year))
-                    : options
-            }
+            options={validToGenerateOptions}
         />
     )
 }
