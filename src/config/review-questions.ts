@@ -189,4 +189,96 @@ export const questions = [
         question:
             '¿El presupuesto de tiempo presentado responde a las demandas del proyecto?',
     },
+    //Below this comment are the new questions
+    {
+        id: '26',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿La redacción del anteproyecto de investigación es clara y correcta?',
+    },
+    {
+        id: '27',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿Se puede afirmar que el anteproyecto propone un desarrollo coherente y lógico?',
+    },
+    {
+        id: '28',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿Se aprecia una relación clara entre el problema de investigación, el objetivo general, los objetivos específicos y las hipótesis? Se entiende que no necesariamente todos los anteproyectos deben incluir todas las categorías.',
+    },
+    {
+        id: '29',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            'Al abordar la lectura del anteproyecto, ¿queda claro de qué tipo de investigación se trata?, ¿cuantitativa, cualitativa, mixta?',
+    },
+    {
+        id: '30',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            'Considerando las características distintivas de los estudios cuantitativos y los cualitativos, ¿se explicita cuál será la población?, ¿cuáles serán los criterios de inclusión y de exclusión para integrar la muestra?, ¿qué tamaño se espera que tenga la muestra?',
+    },
+    {
+        id: '31',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            'Los instrumentos de recolección de datos, preexistentes o a diseñar, ¿satisfacen las condiciones que exige el diseño de investigación propuesto, ya sea que se trate de un estudio cuantitativo, cualitativo o mixto? (En caso de que aplique)',
+    },
+    {
+        id: '32',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿Se describen detalladamente los procedimientos a seguir para la recolección de datos? (En caso de que aplique)',
+    },
+    {
+        id: '33',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿Se especifican los pasos a seguir para el análisis de datos? (En caso de que aplique)',
+    },
+    {
+        id: '34',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿Se explica el proceso que se aplicará para alcanzar los objetivos y probar las hipótesis, si las hubiere? (En caso de que aplique)',
+    },
+    {
+        id: '35',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿El diseño metodológico es adecuado para alcanzar los objetivos propuestos?',
+    },
+    {
+        id: '36',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿La justificación del estudio es suficiente para validar el desarrollo del proyecto?',
+    },
+    {
+        id: '37',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿La metodología propuesta parece viable de aplicar, a priori, en el tiempo programado para el desarrollo del proyecto?',
+    },
+    {
+        id: '38',
+        active: true,
+        type: ReviewType.METHODOLOGICAL,
+        question:
+            '¿El cronograma propuesto es consistente con la magnitud de cada etapa del estudio, incluida la de la publicación de resultados, y contiene la descripción de responsabilidades de cada investigador, en el caso de que se trate de un equipo de investigación?',
+    },
 ]

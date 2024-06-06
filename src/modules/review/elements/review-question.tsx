@@ -33,7 +33,12 @@ export default function ReviewQuestion({
             >
                 <RadioGroup.Label className="select-none text-xs">
                     <b>{index + 1}- </b>
-                    {questions.find((question) => question.id === id)?.question}
+                    {
+                        questions.find(
+                            (question) =>
+                                question.id === id && question.active == true
+                        )?.question
+                    }
                 </RadioGroup.Label>
                 <div className="mt-1 flex justify-end gap-2">
                     <RadioGroup.Option

@@ -22,12 +22,14 @@ async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
             {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ? (
                 <ul role="list" className="space-y-3 px-1">
                     {reviews.map((r, i) => (
-                        <ReviewItem
-                            key={i}
-                            review={r}
-                            role={role}
-                            isOwner={isOwner}
-                        />
+                        <>
+                            <ReviewItem
+                                key={i}
+                                review={r}
+                                role={role}
+                                isOwner={isOwner}
+                            />
+                        </>
                     ))}
                 </ul>
             ) : null}
