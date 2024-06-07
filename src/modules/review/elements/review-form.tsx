@@ -12,6 +12,7 @@ import { ReviewSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import ReviewQuestion from './review-question'
+import { questions as rawQuestions } from 'config/review-questions'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
@@ -68,13 +69,22 @@ export default function ReviewForm({ review }: { review: Review }) {
                     }}
                 >
                     <div className="space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
-                        {form.values.questions.map((q, index) => (
-                            <ReviewQuestion
-                                key={q.id}
-                                index={index}
-                                id={q.id}
-                            />
-                        ))}
+                        {form.values.questions
+                            .filter((q) => {
+                                const questionInfo = rawQuestions.find(
+                                    (rQuestion) => rQuestion.id === q.id
+                                )
+                                return questionInfo
+                                    ? questionInfo.active
+                                    : false
+                            })
+                            .map((q, index) => (
+                                <ReviewQuestion
+                                    key={q.id}
+                                    index={index}
+                                    id={q.id}
+                                />
+                            ))}
                     </div>
                     <RadioGroup
                         {...form.getInputProps('verdict')}
