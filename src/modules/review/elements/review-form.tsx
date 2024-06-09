@@ -12,10 +12,20 @@ import { ReviewSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import ReviewQuestion from './review-question'
+import { questions as rawQuestions } from 'config/review-questions'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
-        initialValues: review,
+        initialValues: {
+            ...review,
+            //This filter passes only the active questions to the form values.
+            questions: review.questions.filter((q) => {
+                const questionInfo = rawQuestions.find(
+                    (rQuestion) => rQuestion.id === q.id
+                )
+                return questionInfo ? questionInfo.active : false
+            }),
+        },
         validate: zodResolver(ReviewSchema),
         validateInputOnChange: true,
     })
@@ -56,12 +66,14 @@ export default function ReviewForm({ review }: { review: Review }) {
             <h3 className="ml-2 text-lg font-semibold text-gray-900">
                 Realizar revisión
             </h3>
+
             <ReviewProvider form={form}>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
                         addReview({
                             ...form.values,
+
                             revised: false,
                             updatedAt: new Date(),
                         })
