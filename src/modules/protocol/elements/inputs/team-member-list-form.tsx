@@ -17,7 +17,7 @@ export default function TeamMemberListForm() {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
     useEffect(() => {
-        ;(async () => {
+        (async () => {
             setTeamMembers(await getAllTeamMembers())
         })()
     }, [])

@@ -38,7 +38,7 @@ export async function PUT(
     }
 
     if (updated) {
-        ;(
+        (
             await secretariesEmails(updated.sections.identification.sponsor)
         ).forEach((email) => {
             emailer({
