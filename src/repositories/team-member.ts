@@ -1,3 +1,5 @@
+'use server'
+
 import type { TeamMember } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'

@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use server'
+
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
