@@ -81,7 +81,7 @@ export default function TeamMemberForm({
                     intent: 'success',
                 })
 
-                return router.push(`/team-members/${id}`)
+                return router.push(`/team-members/${created.id}`)
             }
             return notifications.show({
                 title: 'Ha ocurrido un error',

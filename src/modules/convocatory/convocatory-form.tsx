@@ -14,14 +14,14 @@ export function ConvocatoryForm({
     isNew,
     column = false,
 }: {
-    convocatory: Convocatory
+    convocatory: Omit<Convocatory, 'id' | 'createdAt'>
     isNew: boolean
     column?: boolean
 }) {
     const router = useRouter()
 
     const [isPending, startTransition] = useTransition()
-    const form = useForm<Convocatory>({
+    const form = useForm<Omit<Convocatory, 'id' | 'createdAt'>>({
         initialValues: convocatory,
         transformValues: (values) => ({
             ...values,
@@ -32,7 +32,7 @@ export function ConvocatoryForm({
     })
 
     const upsertConvocatory = useCallback(
-        async (convocatory: Convocatory) => {
+        async (convocatory: Omit<Convocatory, 'id' | 'createdAt'>) => {
             if (isNew) {
                 const created = await createConvocatory(convocatory)
 
@@ -51,8 +51,8 @@ export function ConvocatoryForm({
                     intent: 'error',
                 })
             }
-
-            const updated = await updateConvocatory(convocatory)
+            // @ts-ignore
+            const updated = await updateConvocatory(convocatory.id, convocatory)
 
             if (updated) {
                 notifications.show({

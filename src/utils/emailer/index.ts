@@ -1,15 +1,8 @@
 'use server'
 
 import nodemailer from 'nodemailer'
+import { useCases } from './use-cases'
 
-export enum useCases {
-    onReview,
-    onRevised,
-    onAssignation,
-    onPublish,
-    onApprove,
-    changeUserEmail,
-}
 const messages = {
     [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
     [useCases.onRevised]:
@@ -30,6 +23,7 @@ const subjects = {
     [useCases.onApprove]: 'Proyecto aprobado',
     [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
 }
+
 export type Emailer = {
     useCase: useCases
     email: string

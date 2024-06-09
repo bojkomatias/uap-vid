@@ -1,7 +1,8 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { markRevised, updateReview } from '@repositories/review'
-import { emailer, useCases } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
+import { emailer } from '@utils/emailer'
 
 export async function PUT(request: NextRequest) {
     const data = await request.json()

@@ -1,12 +1,12 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { State } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
-import { emailer, useCases } from '@utils/emailer'
 import { getSecretariesEmailsByAcademicUnit } from '@repositories/academic-unit'
+import { useCases } from '@utils/emailer/use-cases'
+import { emailer } from '@utils/emailer'
 
 export async function PUT(
     request: NextRequest,
@@ -37,20 +37,21 @@ export async function PUT(
             .flat()
     }
 
-    if(updated){
-        (await secretariesEmails(updated.sections.identification.sponsor)).forEach(email=>{
+    if (updated) {
+        ;(
+            await secretariesEmails(updated.sections.identification.sponsor)
+        ).forEach((email) => {
             emailer({
                 useCase: useCases.onPublish,
                 email: email!,
                 protocolId: updated.id,
             })
         })
-
-       
-    }else{
-        console.log("No se pudo enviar emails a los secretarios de investigación")
+    } else {
+        console.log(
+            'No se pudo enviar emails a los secretarios de investigación'
+        )
     }
-    
 
     await logProtocolUpdate({
         user: token!.user,

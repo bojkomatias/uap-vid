@@ -198,10 +198,13 @@ export const TeamMemberSchema = z.object({
         message:
             'No puede estar vació, seleccione usuario o ingrese un nombre.',
     }),
-    academicUnitId: z.string().min(1, {
-        message:
-            'No puede estar vació, seleccione usuario o ingrese un nombre.',
-    }),
+    academicUnitId: z
+        .string()
+        .min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        })
+        .nullable(),
 })
 
 /////////////////////////////////////////

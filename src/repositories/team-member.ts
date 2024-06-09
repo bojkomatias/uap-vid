@@ -21,7 +21,7 @@ export const updateTeamMember = async (
 
 export const updateCategoryHistory = async (data: {
     newCategory: string
-    pointsObrero: number | undefined
+    pointsObrero: number | null | undefined
     expireId: string | undefined
     memberId: string
 }) => {

@@ -48,7 +48,7 @@ export default function CategorizationForm({
             pointsObrero,
         }: {
             categoryId: string
-            pointsObrero: number | undefined
+            pointsObrero: number | null | undefined
         }) => {
             const data = {
                 newCategory: categoryId,

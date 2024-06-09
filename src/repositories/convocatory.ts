@@ -119,7 +119,9 @@ export const getCurrentConvocatory = cache(async () => {
     }
 })
 
-export const createConvocatory = async (data: Omit<Convocatory, 'id'>) => {
+export const createConvocatory = async (
+    data: Omit<Convocatory, 'id' | 'createdAt'>
+) => {
     try {
         return await prisma.convocatory.create({
             data,
@@ -128,12 +130,14 @@ export const createConvocatory = async (data: Omit<Convocatory, 'id'>) => {
         return null
     }
 }
-export const updateConvocatory = async (data: Convocatory) => {
-    const { id, ...rest } = data
+export const updateConvocatory = async (
+    id: string,
+    data: Omit<Convocatory, 'id'>
+) => {
     try {
         return await prisma.convocatory.update({
             where: { id },
-            data: rest,
+            data,
         })
     } catch (e) {
         return null

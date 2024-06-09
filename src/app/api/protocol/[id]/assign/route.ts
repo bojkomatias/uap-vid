@@ -1,4 +1,3 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import {
@@ -11,7 +10,8 @@ import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
 import { canExecute } from '@utils/scopes'
-import { emailer, useCases } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
+import { emailer } from '@utils/emailer'
 
 const newStateByReviewType = {
     [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
