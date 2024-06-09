@@ -1,4 +1,5 @@
 'use server'
+
 import type { Logs } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'

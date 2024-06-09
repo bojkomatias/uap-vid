@@ -1,3 +1,5 @@
+'use server'
+
 import type { Convocatory } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
