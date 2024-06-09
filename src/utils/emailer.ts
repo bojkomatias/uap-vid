@@ -1,55 +1,51 @@
+'use server'
+
 import nodemailer from 'nodemailer'
 
 export enum useCases {
-  onReview,
-  onRevised,
-  onAssignation,
-  onPublish,
-  onApprove,
-  changeUserEmail,
-
+    onReview,
+    onRevised,
+    onAssignation,
+    onPublish,
+    onApprove,
+    changeUserEmail,
 }
 const messages = {
-  [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
-  [useCases.onRevised]:
-    'Las correcciones al protocolo fueron revisadas y el protocolo fue modificado acorde a las mismas',
-  [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
-  [useCases.onPublish]:
-    'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
-  [useCases.onApprove]:
-    `Se aprobó tu proyecto de investigación y el presupuesto del mismo para el año ${new Date().getFullYear() + 1}`,
-  [useCases.changeUserEmail]:
-    'Este es el código de confirmación para cambiar tu email',
-
+    [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
+    [useCases.onRevised]:
+        'Las correcciones al protocolo fueron revisadas y el protocolo fue modificado acorde a las mismas',
+    [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
+    [useCases.onPublish]:
+        'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
+    [useCases.onApprove]: `Se aprobó tu proyecto de investigación y el presupuesto del mismo para el año ${new Date().getFullYear() + 1}`,
+    [useCases.changeUserEmail]:
+        'Este es el código de confirmación para cambiar tu email',
 }
-
-
 
 const subjects = {
-  [useCases.onReview]: 'Proyecto evaluado',
-  [useCases.onRevised]: 'Correcciones revisadas',
-  [useCases.onAssignation]: 'Nuevo proyecto asignado',
-  [useCases.onPublish]: 'Nuevo protocolo publicado.',
-  [useCases.onApprove]: 'Proyecto aprobado',
-  [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
-
+    [useCases.onReview]: 'Proyecto evaluado',
+    [useCases.onRevised]: 'Correcciones revisadas',
+    [useCases.onAssignation]: 'Nuevo proyecto asignado',
+    [useCases.onPublish]: 'Nuevo protocolo publicado.',
+    [useCases.onApprove]: 'Proyecto aprobado',
+    [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
 }
 export type Emailer = {
-  useCase: useCases
-  email: string
-  protocolId?: string
-  randomString?: string
+    useCase: useCases
+    email: string
+    protocolId?: string
+    randomString?: string
 }
 
 export async function emailer({
-  useCase,
-  email,
-  protocolId,
-  randomString,
+    useCase,
+    email,
+    protocolId,
+    randomString,
 }: Emailer) {
-  // Variable used in template to redirect (hardcoded cause process.env failed.)
-  const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
-  const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    // Variable used in template to redirect (hardcoded cause process.env failed.)
+    const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
+    const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -65,7 +61,7 @@ export async function emailer({
       <meta name="x-apple-disable-message-reformatting">
       <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
       <title></title>
-      
+
         <style type="text/css">
           @media only screen and (min-width: 520px) {
       .u-row {
@@ -74,13 +70,13 @@ export async function emailer({
       .u-row .u-col {
         vertical-align: top;
       }
-    
+
       .u-row .u-col-100 {
         width: 500px !important;
       }
-    
+
     }
-    
+
     @media (max-width: 520px) {
       .u-row-container {
         max-width: 100% !important;
@@ -106,39 +102,39 @@ export async function emailer({
       margin: 0;
       padding: 0;
     }
-    
+
     table,
     tr,
     td {
       vertical-align: top;
       border-collapse: collapse;
     }
-    
+
     p {
       margin: 0;
     }
-    
+
     .ie-container table,
     .mso-container table {
       table-layout: fixed;
     }
-    
+
     * {
       line-height: inherit;
     }
-    
+
     a[x-apple-data-detectors='true'] {
       color: inherit !important;
       text-decoration: none !important;
     }
-    
+
     table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: underline; }
         </style>
-      
-      
-    
+
+
+
     </head>
-    
+
     <body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #ffffff;color: #000000">
       <!--[if IE]><div class="ie-container"><![endif]-->
       <!--[if mso]><div class="mso-container"><![endif]-->
@@ -147,23 +143,23 @@ export async function emailer({
       <tr style="vertical-align: top">
         <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #ffffff;"><![endif]-->
-        
-    
+
+
     <div class="u-row-container" style="padding: 0px;background-color: transparent">
       <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
         <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
           <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-          
+
     <!--[if (mso)|(IE)]><td align="center" width="500" style="width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
     <div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
       <div style="height: 100%;width: 100% !important;">
       <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;"><!--<![endif]-->
-      
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
         <tbody>
           <tr style="vertical-align: top">
@@ -173,29 +169,29 @@ export async function emailer({
           </tr>
         </tbody>
       </table>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <h1 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: arial black,AvenirNext-Heavy,avant garde,arial; font-size: 22px; font-weight: 400;">Vicerrectoría de Investigación y Desarrollo</h1>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
         <tbody>
           <tr style="vertical-align: top">
@@ -205,38 +201,38 @@ export async function emailer({
           </tr>
         </tbody>
       </table>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}</h1>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
         <p style="line-height: 140%;">Entrá a ver el protocolo haciendo <a rel="noopener" href=${href} target="_blank">click acá.</a></p>
       </div>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
       <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
       </div>
     </div>
@@ -245,8 +241,8 @@ export async function emailer({
         </div>
       </div>
     </div>
-    
-    
+
+
         <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </td>
       </tr>
@@ -255,9 +251,9 @@ export async function emailer({
       <!--[if mso]></div><![endif]-->
       <!--[if IE]></div><![endif]-->
     </body>
-    
+
     </html>`
-  const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -273,7 +269,7 @@ export async function emailer({
       <meta name="x-apple-disable-message-reformatting">
       <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
       <title></title>
-      
+
         <style type="text/css">
           @media only screen and (min-width: 520px) {
       .u-row {
@@ -282,13 +278,13 @@ export async function emailer({
       .u-row .u-col {
         vertical-align: top;
       }
-    
+
       .u-row .u-col-100 {
         width: 500px !important;
       }
-    
+
     }
-    
+
     @media (max-width: 520px) {
       .u-row-container {
         max-width: 100% !important;
@@ -314,39 +310,39 @@ export async function emailer({
       margin: 0;
       padding: 0;
     }
-    
+
     table,
     tr,
     td {
       vertical-align: top;
       border-collapse: collapse;
     }
-    
+
     p {
       margin: 0;
     }
-    
+
     .ie-container table,
     .mso-container table {
       table-layout: fixed;
     }
-    
+
     * {
       line-height: inherit;
     }
-    
+
     a[x-apple-data-detectors='true'] {
       color: inherit !important;
       text-decoration: none !important;
     }
-    
+
     table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: underline; }
         </style>
-      
-      
-    
+
+
+
     </head>
-    
+
     <body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #ffffff;color: #000000">
       <!--[if IE]><div class="ie-container"><![endif]-->
       <!--[if mso]><div class="mso-container"><![endif]-->
@@ -355,23 +351,23 @@ export async function emailer({
       <tr style="vertical-align: top">
         <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #ffffff;"><![endif]-->
-        
-    
+
+
     <div class="u-row-container" style="padding: 0px;background-color: transparent">
       <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
         <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
           <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px;"><tr style="background-color: transparent;"><![endif]-->
-          
+
     <!--[if (mso)|(IE)]><td align="center" width="500" style="width: 500px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
     <div class="u-col u-col-100" style="max-width: 320px;min-width: 500px;display: table-cell;vertical-align: top;">
       <div style="height: 100%;width: 100% !important;">
       <!--[if (!mso)&(!IE)]><!--><div style="box-sizing: border-box; height: 100%; padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;"><!--<![endif]-->
-      
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
         <tbody>
           <tr style="vertical-align: top">
@@ -381,29 +377,29 @@ export async function emailer({
           </tr>
         </tbody>
       </table>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <h1 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-family: arial black,AvenirNext-Heavy,avant garde,arial; font-size: 22px; font-weight: 400;">Vicerrectoría de Investigación y Desarrollo</h1>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #BBBBBB;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
         <tbody>
           <tr style="vertical-align: top">
@@ -413,36 +409,36 @@ export async function emailer({
           </tr>
         </tbody>
       </table>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
+
       <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
-    
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
     <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
       <tbody>
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-            
-     
-    
+
+
+
           </td>
         </tr>
       </tbody>
     </table>
-    
+
       <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
       </div>
     </div>
@@ -451,8 +447,8 @@ export async function emailer({
         </div>
       </div>
     </div>
-    
-    
+
+
         <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </td>
       </tr>
@@ -461,54 +457,52 @@ export async function emailer({
       <!--[if mso]></div><![endif]-->
       <!--[if IE]></div><![endif]-->
     </body>
-    
+
     </html>`
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_ADDRESS,
-    port: Number(process.env.SMTP_PORT),
-    secure: false,
-    ignoreTLS: true,
-  })
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
+    })
 
+    // //This transporter can be used for developing.
+    // const transporter = nodemailer.createTransport({
+    //   host: 'smtp.gmail.com',
+    //   port: 587,
+    //   secure: false,
+    //   auth: {
+    //     user: 'nicoskate000@gmail.com',
+    //     pass: 'luqj vdtt kqgp mbof',
+    //   },
+    // })
 
-  // //This transporter can be used for developing.
-  // const transporter = nodemailer.createTransport({
-  //   host: 'smtp.gmail.com',
-  //   port: 587,
-  //   secure: false,
-  //   auth: {
-  //     user: 'nicoskate000@gmail.com',
-  //     pass: 'luqj vdtt kqgp mbof',
-  //   },
-  // })
-
-  const emailObject = {
-    from: '"Portal VID - UAP" no-reply@uap.edu.ar',
-    to: email,
-    subject: subjects[useCase],
-    text: messages[useCase],
-    html: randomString ? htmlEmailUpdate : html,
-  }
-
-  transporter.sendMail(emailObject, (err) => {
-    if (err) {
-      return new Response('Error sending email', { status: 500 })
-    } else {
-      return new Response(`Successfully sent email to ${email}`, {
-        status: 250,
-      })
+    const emailObject = {
+        from: '"Portal VID - UAP" no-reply@uap.edu.ar',
+        to: email,
+        subject: subjects[useCase],
+        text: messages[useCase],
+        html: randomString ? htmlEmailUpdate : html,
     }
-  })
 
-  transporter.verify(function (error, success) {
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.log(`Error sending the email: ${error}`)
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(`Email sent: ${success}`)
-    }
-  })
+    transporter.sendMail(emailObject, (err) => {
+        if (err) {
+            return new Response('Error sending email', { status: 500 })
+        } else {
+            return new Response(`Successfully sent email to ${email}`, {
+                status: 250,
+            })
+        }
+    })
+
+    transporter.verify(function (error, success) {
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.log(`Error sending the email: ${error}`)
+        } else {
+            // eslint-disable-next-line no-console
+            console.log(`Email sent: ${success}`)
+        }
+    })
 }
-
