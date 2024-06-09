@@ -17,6 +17,7 @@ import type { z } from 'zod'
 
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
+import { createTeamMember, updateTeamMember } from '@repositories/team-member'
 
 export default function TeamMemberForm({
     member,
@@ -48,38 +49,43 @@ export default function TeamMemberForm({
 
     const saveTeamMember = useCallback(
         async (teamMember: z.infer<typeof TeamMemberSchema>) => {
-            // Since default id is '' will jump to team-members and POST
-            const res = await fetch(`/api/team-members/${teamMember.id}`, {
-                method: teamMember.id ? 'PUT' : 'POST',
-                body: JSON.stringify(teamMember),
-            })
-            if (res.status === 200) {
+            if (teamMember.id) {
+                const updated = await updateTeamMember(
+                    teamMember.id,
+                    teamMember
+                )
+                if (updated) {
+                    notifications.show({
+                        title: 'Miembro actualizado',
+                        message:
+                            'El miembro de investigación fue actualizado correctamente',
+                        intent: 'success',
+                    })
+                    return router.refresh()
+                }
+                return notifications.show({
+                    title: 'Ocurrió un error',
+                    message: 'Error al actualizar el miembro de investigación',
+                    intent: 'error',
+                })
+            }
+
+            // If new teamMember flow
+            const created = await createTeamMember(teamMember)
+
+            if (created) {
                 notifications.show({
-                    title: teamMember.id
-                        ? 'Miembro actualizado'
-                        : 'Miembro creado',
+                    title: 'Miembro creado',
                     message:
                         'El miembro de investigación fue creado correctamente',
                     intent: 'success',
                 })
 
-                const { id } = await res.json()
-                return teamMember.id
-                    ? router.refresh()
-                    : router.push(`/team-members/${id}`)
+                return router.push(`/team-members/${id}`)
             }
-            if (res.status === 428) {
-                notifications.show({
-                    title: 'La categoría obrero no existe',
-                    message:
-                        'Por favor dar de alta la categoría con nombre: "FMR", que corresponde a los obreros.',
-                    intent: 'error',
-                })
-            }
-            notifications.show({
+            return notifications.show({
                 title: 'Ha ocurrido un error',
-                message:
-                    'Hubo un error al guardar el miembro de investigación.',
+                message: 'Hubo un error al crear el miembro de investigación',
                 intent: 'error',
             })
         },
