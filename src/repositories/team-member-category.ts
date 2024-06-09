@@ -126,7 +126,7 @@ const deleteCategoryById = async (id: string, data: TeamMemberCategory) => {
     }
 }
 
-const createCategory = async (data: TeamMemberCategory) => {
+const insertCategory = async (data: Omit<TeamMemberCategory, 'id'>) => {
     try {
         const category = await prisma.teamMemberCategory.create({
             data,
@@ -155,7 +155,7 @@ const getObreroCategory = async () => {
 export {
     getCategories,
     updatePriceCategoryById,
-    createCategory,
+    insertCategory,
     deleteCategoryById,
     getAllCategories,
     getObreroCategory,

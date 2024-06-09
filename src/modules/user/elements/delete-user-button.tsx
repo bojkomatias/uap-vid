@@ -1,6 +1,7 @@
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
+import { deleteUserById } from '@repositories/user'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
@@ -12,10 +13,9 @@ export function DeleteUserButton({ userId }: { userId: string }) {
     const [deleting, setDeleting] = useState(false)
 
     const deleteUser = useCallback(async () => {
-        const res = await fetch(`/api/users/${userId}`, {
-            method: 'DELETE',
-        })
-        if (res.ok) {
+        const deleted = await deleteUserById(userId)
+
+        if (deleted) {
             notifications.show({
                 title: 'Usuario eliminado',
                 message: 'El usuario ha sido eliminado con éxito.',
