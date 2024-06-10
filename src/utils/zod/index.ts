@@ -159,7 +159,7 @@ export const HistoricCategoryPriceSchema = z.object({
     from: z.coerce.date(),
     to: z.coerce.date().nullable(),
     price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
-    currency: z.string().default('ARS').nullable(),
+    currency: z.string().default('ARS'),
 })
 
 /////////////////////////////////////////
@@ -198,6 +198,13 @@ export const TeamMemberSchema = z.object({
         message:
             'No puede estar vació, seleccione usuario o ingrese un nombre.',
     }),
+    academicUnitId: z
+        .string()
+        .min(1, {
+            message:
+                'No puede estar vació, seleccione usuario o ingrese un nombre.',
+        })
+        .nullable(),
 })
 
 /////////////////////////////////////////

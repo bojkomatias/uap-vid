@@ -2,6 +2,7 @@
 import { notifications } from '@elements/notifications'
 import { Combobox } from '@headlessui/react'
 import type { User } from '@prisma/client'
+import { updateAcademicUnit } from '@repositories/academic-unit'
 import { cx } from '@utils/cx'
 import { useCallback, useState } from 'react'
 import { Check, Selector } from 'tabler-icons-react'
@@ -25,17 +26,18 @@ export function SecretaryMultipleSelect({
 
     const updateSecretaries = useCallback(
         async (id: string, secretaries: string[]) => {
-            const res = await fetch(`/api/academic-units/${id}`, {
-                method: 'PUT',
-                body: JSON.stringify({ secretariesIds: secretaries }),
+            const res = await updateAcademicUnit(id, {
+                secretariesIds: secretaries,
             })
-            if (res.status === 200)
+
+            if (res)
                 return notifications.show({
                     title: 'Secretarios modificados',
                     message:
                         'Se actualizo la lista de secretarios para la unidad académica.',
                     intent: 'success',
                 })
+
             notifications.show({
                 title: 'Error',
                 message: 'Ocurrió un error al actualizar los secretarios',

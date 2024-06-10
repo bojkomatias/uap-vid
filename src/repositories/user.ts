@@ -1,11 +1,14 @@
+'use server'
+
 import type { User } from '@prisma/client'
 import { Role } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
 
 /** This query returns all users that match the filtering criteria. The criteria includes:
- 
+
  * @param records this is the amount of records shown in the table at once.
  * @param page necessary for pagination, the total amount of pages is calculated using the records number. Defaults to 1.
  * @param search string that, for now, only searches the name of the user, which is defined as insensitive.
@@ -244,14 +247,35 @@ const updateUserEmailById = async (id: string, email: string) => {
     }
 }
 
-const updateUserPasswordById = async (id: string, password: string) => {
+const updateUserPasswordById = async ({
+    id,
+    currentPassword,
+    currentPasswordHash,
+    newPassword,
+}: {
+    id: string
+    currentPassword: string
+    currentPasswordHash: string
+    newPassword: string
+}) => {
+    // Check if match
+    const passwordCheck = await verifyHashScrypt(
+        currentPassword,
+        currentPasswordHash
+    )
+
+    if (!passwordCheck) return null
+
+    // Hash new one
+    const newPasswordHash = await createHashScrypt(newPassword)
+
     try {
         const user = await prisma.user.update({
             where: {
                 id,
             },
             data: {
-                password: password,
+                password: newPasswordHash,
             },
         })
 

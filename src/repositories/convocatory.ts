@@ -1,3 +1,5 @@
+'use server'
+
 import type { Convocatory } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
@@ -117,7 +119,9 @@ export const getCurrentConvocatory = cache(async () => {
     }
 })
 
-export const createConvocatory = async (data: Convocatory) => {
+export const createConvocatory = async (
+    data: Omit<Convocatory, 'id' | 'createdAt'>
+) => {
     try {
         return await prisma.convocatory.create({
             data,
@@ -126,12 +130,14 @@ export const createConvocatory = async (data: Convocatory) => {
         return null
     }
 }
-export const updateConvocatory = async (data: Convocatory) => {
-    const { id, ...rest } = data
+export const updateConvocatory = async (
+    id: string,
+    data: Omit<Convocatory, 'id'>
+) => {
     try {
         return await prisma.convocatory.update({
             where: { id },
-            data: rest,
+            data,
         })
     } catch (e) {
         return null

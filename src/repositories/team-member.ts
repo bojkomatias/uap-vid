@@ -1,3 +1,5 @@
+'use server'
+
 import type { TeamMember } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -19,7 +21,7 @@ export const updateTeamMember = async (
 
 export const updateCategoryHistory = async (data: {
     newCategory: string
-    pointsObrero: number | undefined
+    pointsObrero: number | null | undefined
     expireId: string | undefined
     memberId: string
 }) => {

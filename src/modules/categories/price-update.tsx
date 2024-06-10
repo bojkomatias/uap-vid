@@ -3,6 +3,7 @@ import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import PopoverComponent from '@elements/popover'
 import type { HistoricCategoryPrice, TeamMemberCategory } from '@prisma/client'
+import { updatePriceCategoryById } from '@repositories/team-member-category'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -16,15 +17,9 @@ export default function PriceUpdate({
     const [price, setPrice] = useState(category.price.at(-1)!.price)
 
     const updatePrice = async (id: string, data: TeamMemberCategory) => {
-        const res = await fetch(`/api/categories/${id}`, {
-            method: 'PATCH',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        if (res.status === 200) {
+        const updated = await updatePriceCategoryById(id, data)
+
+        if (updated) {
             notifications.show({
                 title: 'Precio actualizado',
                 message: 'El precio fue actualizado correctamente',
@@ -35,13 +30,13 @@ export default function PriceUpdate({
             setTimeout(() => {
                 document.getElementById('main-element')?.click()
             }, 500)
-        } else if (res.status === 422) {
-            notifications.show({
-                title: 'Error',
-                message: 'No se pudo actualizar el precio',
-                intent: 'error',
-            })
+            return
         }
+        notifications.show({
+            title: 'Error',
+            message: 'No se pudo actualizar el precio',
+            intent: 'error',
+        })
     }
     return (
         <PopoverComponent

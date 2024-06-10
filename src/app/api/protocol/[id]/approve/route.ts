@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { updateProtocolStateById } from '@repositories/protocol'
@@ -7,7 +5,8 @@ import { logProtocolUpdate } from '@utils/logger'
 import { canExecute } from '@utils/scopes'
 import { State } from '@prisma/client'
 import { getToken } from 'next-auth/jwt'
-import { emailer, useCases } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
+import { emailer } from '@utils/emailer'
 
 export async function PUT(
     request: NextRequest,

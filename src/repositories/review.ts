@@ -1,3 +1,5 @@
+'use server'
+
 import type { Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'

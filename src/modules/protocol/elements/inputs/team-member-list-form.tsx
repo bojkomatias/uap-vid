@@ -1,6 +1,6 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from './select'
 import NumberInput from './number-input'
 import { Check, Plus, Selector, Trash, X } from 'tabler-icons-react'
@@ -8,6 +8,7 @@ import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
 import { Combobox } from '@headlessui/react'
 import type { TeamMember } from '@prisma/client'
+import { getAllTeamMembers } from '@repositories/team-member'
 
 export default function TeamMemberListForm() {
     const form = useProtocolContext()
@@ -15,16 +16,11 @@ export default function TeamMemberListForm() {
 
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
-    const fetchData = useCallback(async () => {
-        const res = await fetch(`/api/team-members`, {
-            next: { revalidate: 120 },
-        })
-        setTeamMembers(await res.json())
-    }, [])
-
     useEffect(() => {
-        fetchData()
-    }, [fetchData])
+        (async () => {
+            setTeamMembers(await getAllTeamMembers())
+        })()
+    }, [])
 
     return (
         <div>

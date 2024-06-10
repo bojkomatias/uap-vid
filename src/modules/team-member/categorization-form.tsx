@@ -8,6 +8,7 @@ import type {
     TeamMember,
     TeamMemberCategory,
 } from '@prisma/client'
+import { updateCategoryHistory } from '@repositories/team-member'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
@@ -37,7 +38,7 @@ export default function CategorizationForm({
                 values.categoryId === obreroCategory!.id &&
                 (value === undefined || value === 0)
                     ? 'Debe cargar los puntos de obrero'
-                    : null,
+                    : undefined,
         },
     })
 
@@ -56,11 +57,9 @@ export default function CategorizationForm({
                 memberId: member.id,
             }
 
-            const res = await fetch(`/api/team-members/${data.memberId}`, {
-                method: 'PATCH',
-                body: JSON.stringify(data),
-            })
-            if (res.status === 200) {
+            const updated = await updateCategoryHistory(data)
+
+            if (updated) {
                 notifications.show({
                     title: 'Categoría actualizada',
                     message:

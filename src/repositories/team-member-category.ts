@@ -1,10 +1,12 @@
+'use server'
+
 import type { TeamMemberCategory } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 
 /** This query returns all categories that match the filtering criteria. The criteria includes:
- 
+
  * @param records this is the amount of records shown in the table at once.
  * @param page necessary for pagination, the total amount of pages is calculated using the records number. Defaults to 1.
  * @param search string that, for now, only searches the name of the category, which is defined as insensitive.
@@ -124,7 +126,7 @@ const deleteCategoryById = async (id: string, data: TeamMemberCategory) => {
     }
 }
 
-const createCategory = async (data: TeamMemberCategory) => {
+const insertCategory = async (data: Omit<TeamMemberCategory, 'id'>) => {
     try {
         const category = await prisma.teamMemberCategory.create({
             data,
@@ -153,7 +155,7 @@ const getObreroCategory = async () => {
 export {
     getCategories,
     updatePriceCategoryById,
-    createCategory,
+    insertCategory,
     deleteCategoryById,
     getAllCategories,
     getObreroCategory,

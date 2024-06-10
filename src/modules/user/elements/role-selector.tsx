@@ -12,7 +12,7 @@ export const RoleSelector = ({
     callback,
 }: {
     user: User | { role: Role } // new User only should have pre-selected
-    callback?: Function
+    callback?: (role: Role) => void
 }) => {
     return (
         <Listbox

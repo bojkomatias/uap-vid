@@ -3,6 +3,7 @@ import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import type { AcademicUnitBudget } from '@prisma/client'
+import { updateAcademicUnit } from '@repositories/academic-unit'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -15,6 +16,7 @@ export const AcademicUnitBudgetUpdate = ({
 }) => {
     const router = useRouter()
     const [newAmount, setNewAmount] = useState(ACBudgets.at(-1)?.amount ?? 0)
+
     const updateBudget = async (id: string, budgets: AcademicUnitBudget[]) => {
         // Create a new budget object
         const newBudget = {
@@ -41,32 +43,24 @@ export const AcademicUnitBudgetUpdate = ({
             newBudget,
         ]
 
-        const res = await fetch(`/api/academic-units/${id}`, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            // Pass the updated budget
-            body: JSON.stringify({ budgets: updatedBudgets }),
-        })
+        const res = await updateAcademicUnit(id, { budgets: updatedBudgets })
 
-        if (res.status === 200) {
+        if (res) {
             notifications.show({
                 title: 'Presupuesto actualizado',
                 message: 'El presupuesto fue actualizado correctamente',
                 intent: 'success',
             })
 
-            router.refresh()
-        } else if (res.status === 422) {
-            notifications.show({
-                title: 'Error',
-                message: 'No se pudo actualizar el precio',
-                intent: 'error',
-            })
+            return router.refresh()
         }
+        notifications.show({
+            title: 'Error',
+            message: 'No se pudo actualizar el precio',
+            intent: 'error',
+        })
     }
+
     return (
         <div className="flex items-center gap-2">
             <CurrencyInput

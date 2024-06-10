@@ -13,6 +13,9 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import ReviewQuestion from './review-question'
 import { questions as rawQuestions } from 'config/review-questions'
+import { updateReview } from '@repositories/review'
+import { emailer } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
 
 export default function ReviewForm({ review }: { review: Review }) {
     const form = useReview({
@@ -38,25 +41,27 @@ export default function ReviewForm({ review }: { review: Review }) {
             notifcationTitle = 'Revisión publicada',
             notificationText = 'La revisión fue correctamente publicada.'
         ) => {
-            const res = await fetch(`/api/review/${review.id}`, {
-                method: 'PUT',
-                body: JSON.stringify(review),
-            })
+            const reviewUpdated = await updateReview(review)
 
-            if (res.status == 200)
+            if (reviewUpdated) {
+                emailer({
+                    useCase: useCases.onReview,
+                    email: reviewUpdated.protocol.researcher.email,
+                    protocolId: reviewUpdated.protocolId,
+                })
                 notifications.show({
                     title: notifcationTitle,
                     message: notificationText,
                     intent: 'success',
                 })
-            else {
-                notifications.show({
-                    title: 'Ocurrió un error',
-                    message: 'Hubo un problema al publicar tu revisión.',
-                    intent: 'error',
-                })
+                return startTransition(() => router.refresh())
             }
-            startTransition(() => router.refresh())
+            notifications.show({
+                title: 'Ocurrió un error',
+                message: 'Hubo un problema al publicar tu revisión.',
+                intent: 'error',
+            })
+            return startTransition(() => router.refresh())
         },
         [router]
     )

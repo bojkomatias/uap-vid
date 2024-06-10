@@ -1,4 +1,5 @@
 'use server'
+
 import { Prisma } from '@prisma/client'
 import type {
     AnualBudget,
@@ -332,13 +333,13 @@ export const getAnualBudgetsByAcademicUnit = cache(
     }
 )
 
-export const newTeamMemberExecution = (
+export const newTeamMemberExecution = async (
     anualBudgetTeamMemberId: string,
     amount: number,
     remainingHours: number,
     academicUnitId: string
 ) => {
-    return prisma.anualBudgetTeamMember.update({
+    return await prisma.anualBudgetTeamMember.update({
         where: { id: anualBudgetTeamMemberId },
         data: {
             executions: { push: { academicUnitId, amount, date: new Date() } },
@@ -347,11 +348,11 @@ export const newTeamMemberExecution = (
     })
 }
 
-export const newBudgetItemExecution = (
+export const newBudgetItemExecution = async (
     id: string,
     budgetItems: AnualBudgetItem[]
 ) => {
-    return prisma.anualBudget.update({
+    return await prisma.anualBudget.update({
         where: { id },
         data: { budgetItems: budgetItems },
     })

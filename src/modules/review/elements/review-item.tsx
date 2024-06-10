@@ -9,6 +9,9 @@ import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight } from 'tabler-icons-react'
 import ReviewVerdictBadge from './review-verdict-badge'
+import { emailer } from '@utils/emailer'
+import { markRevised } from '@repositories/review'
+import { useCases } from '@utils/emailer/use-cases'
 
 export default function ReviewItem({
     review,
@@ -112,14 +115,17 @@ const ReviseCheckbox = ({ id, revised }: { id: string; revised: boolean }) => {
     const router = useRouter()
     const updateRevised = useCallback(
         async (revised: boolean) => {
-            const res = await fetch(`/api/review/${id}`, {
-                method: 'PATCH',
-                body: JSON.stringify(revised),
-            })
-            if (res.status === 200)
+            const review = await markRevised(id, revised)
+            if (review) {
+                emailer({
+                    useCase: useCases.onRevised,
+                    email: review.reviewer.email,
+                    protocolId: review.protocolId,
+                })
                 startTransition(() => {
                     router.refresh()
                 })
+            }
         },
         [id, router]
     )

@@ -3,6 +3,7 @@ import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
+import { insertCategory } from '@repositories/team-member-category'
 import { cx } from '@utils/cx'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -30,15 +31,9 @@ export default function CategoryForm({
         category: z.infer<typeof TeamMemberCategorySchema>
     ) => {
         setLoading(true)
-        const res = await fetch(`/api/categories`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(category),
-        })
-        if (res.status === 200) {
+        const created = await insertCategory(category)
+
+        if (created) {
             notifications.show({
                 title: 'Categoría creada',
                 message: 'Se creo correctamente la categoría',
@@ -52,14 +47,15 @@ export default function CategoryForm({
                 router.refresh()
                 router.push('/categories')
             }, 500)
-        } else if (res.status === 422) {
-            notifications.show({
-                title: 'Error',
-                message: 'No se pudo crear la categoría',
-                intent: 'error',
-            })
-            setLoading(false)
+            return
         }
+
+        notifications.show({
+            title: 'Error',
+            message: 'No se pudo crear la categoría',
+            intent: 'error',
+        })
+        setLoading(false)
     }
 
     return (

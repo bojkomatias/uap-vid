@@ -7,8 +7,11 @@ import DisclosureComponent from '@elements/disclosure'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { User } from '@prisma/client'
+import { updateUserEmailById, updateUserPasswordById } from '@repositories/user'
 import { cx } from '@utils/cx'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { emailer } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
 import { UserEmailChangeSchema, UserPasswordChangeSchema } from '@utils/zod'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -66,71 +69,45 @@ export function ProfileInfo({
         id: string
         email: string
     }) => {
-        fetch(`/api/users/change-email`, {
-            method: 'PATCH',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, email }),
-        }).then((res) => {
-            if (res.status == 200) {
-                notifications.show({
-                    title: 'Se cambió tu Email',
-                    message:
-                        'Vas a ver los cambios cuando vuelvas a iniciar sesión',
-                    intent: 'success',
-                })
-            } else {
-                notifications.show({
-                    title: 'Ocurrió un error',
-                    message: 'No se pudo actualizar el Email',
-                    intent: 'error',
-                })
-            }
-            return res
+        const updatedEmail = await updateUserEmailById(id, email)
+
+        if (updatedEmail)
+            return notifications.show({
+                title: 'Se cambió tu Email',
+                message:
+                    'Vas a ver los cambios cuando vuelvas a iniciar sesión',
+                intent: 'success',
+            })
+
+        notifications.show({
+            title: 'Ocurrió un error',
+            message: 'No se pudo actualizar el Email',
+            intent: 'error',
         })
     }
-    const updateUserPassword = async ({
-        id,
-        currentPasswordHash,
-        currentPassword,
-        newPassword,
-    }: {
+
+    const updateUserPassword = async (data: {
         id: string
         currentPasswordHash: string
         currentPassword: string
         newPassword: string
     }) => {
-        fetch(`/api/users/change-password`, {
-            method: 'PATCH',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id,
-                currentPasswordHash,
-                currentPassword,
-                newPassword,
-            }),
-        }).then((res) => {
-            if (res.status == 200) {
-                notifications.show({
-                    title: 'Se cambió tu contraseña',
-                    message: 'Se actualizó tu contraseña con éxito',
-                    intent: 'success',
-                })
-            } else {
-                notifications.show({
-                    title: 'Ocurrió un error',
-                    message: 'No se pudo actualizar la contraseña',
-                    intent: 'error',
-                })
-            }
-            return res
+        const updatedPassword = await updateUserPasswordById(data)
+
+        if (updatedPassword) {
+            return notifications.show({
+                title: 'Se cambió tu contraseña',
+                message: 'Se actualizó tu contraseña con éxito',
+                intent: 'success',
+            })
+        }
+        notifications.show({
+            title: 'Ocurrió un error',
+            message: 'No se pudo actualizar la contraseña',
+            intent: 'error',
         })
     }
+
     const sendEmail = async ({
         email,
         randomString,
@@ -138,33 +115,25 @@ export function ProfileInfo({
         email: string
         randomString: string
     }) => {
-        return await fetch(`/api/email`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email,
-                randomString,
-            }),
-        }).then((res) => {
-            if (res.status == 200) {
-                notifications.show({
-                    title: 'Se envió un código a tu Email',
-                    message:
-                        'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
-                    intent: 'primary',
-                })
-            }
-            return res
+        const emailData = {
+            email,
+            randomString,
+            useCase: useCases.changeUserEmail,
+        }
+
+        await emailer(emailData)
+
+        notifications.show({
+            title: 'Se envió un código a tu Email',
+            message:
+                'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
+            intent: 'primary',
         })
     }
 
     return (
         <div className="flex flex-col justify-between gap-4 rounded-md border-gray-200 text-gray-600">
             <div>
-                {' '}
                 <div
                     key={user?.name}
                     className=" flex flex-col gap-10   sm:flex-row"

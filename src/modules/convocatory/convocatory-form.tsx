@@ -2,8 +2,9 @@
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
+import type { Convocatory } from '@prisma/client'
+import { createConvocatory, updateConvocatory } from '@repositories/convocatory'
 import { cx } from '@utils/cx'
-import type { Convocatory } from '@utils/zod'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
@@ -13,14 +14,14 @@ export function ConvocatoryForm({
     isNew,
     column = false,
 }: {
-    convocatory: Convocatory
+    convocatory: Omit<Convocatory, 'id' | 'createdAt'>
     isNew: boolean
     column?: boolean
 }) {
     const router = useRouter()
 
     const [isPending, startTransition] = useTransition()
-    const form = useForm<Convocatory>({
+    const form = useForm<Omit<Convocatory, 'id' | 'createdAt'>>({
         initialValues: convocatory,
         transformValues: (values) => ({
             ...values,
@@ -31,44 +32,41 @@ export function ConvocatoryForm({
     })
 
     const upsertConvocatory = useCallback(
-        async (convocatory: Convocatory) => {
+        async (convocatory: Omit<Convocatory, 'id' | 'createdAt'>) => {
             if (isNew) {
-                const res = await fetch(`/api/convocatories`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(convocatory),
-                })
+                const created = await createConvocatory(convocatory)
 
-                if (res.status === 200) {
+                if (created) {
                     notifications.show({
                         title: 'Convocatoria creada',
                         message: 'La convocatoria ha sido creada con éxito',
                         intent: 'success',
                     })
+                    router.refresh()
+                    return router.push(`/convocatories`)
                 }
-                router.refresh()
-                return router.push(`/convocatories`)
+                return notifications.show({
+                    title: 'Error al crear',
+                    message: 'Ocurrió un error al crear la convocatoria',
+                    intent: 'error',
+                })
             }
-            const res = await fetch(`/api/convocatories/${convocatory.id}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(convocatory),
-            })
+            // @ts-ignore
+            const updated = await updateConvocatory(convocatory.id, convocatory)
 
-            if (res.status === 200) {
+            if (updated) {
                 notifications.show({
                     title: 'Convocatoria guardada',
                     message: 'La convocatoria ha sido guardado con éxito',
                     intent: 'success',
                 })
-                startTransition(() => router.refresh())
+                return startTransition(() => router.refresh())
             }
+            return notifications.show({
+                title: 'Error al actualizar',
+                message: 'Ocurrió un error al actualizar la convocatoria',
+                intent: 'error',
+            })
         },
         [isNew, router]
     )
