@@ -1,20 +1,19 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createCategory } from '@repositories/team-member-category'
 
 export async function POST(request: NextRequest) {
-    const data = await request.json()
+  const data = await request.json()
 
-    const created = await createCategory({
-        ...data,
+  const created = await createCategory({
+    ...data,
+  })
+
+  if (!created) {
+    return new Response('Problema al crear la categoría', {
+      status: 500,
     })
+  }
 
-    if (!created) {
-        return new Response('Problema al crear la categoría', {
-            status: 500,
-        })
-    }
-
-    return NextResponse.json(created)
+  return NextResponse.json(created)
 }

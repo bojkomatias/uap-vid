@@ -4,37 +4,36 @@ import Link from 'next/link'
 import { CalendarPlus } from 'tabler-icons-react'
 import { buttonStyle } from '@elements/button/styles'
 import {
-    getAllConvocatories,
-    getCurrentConvocatory,
+  getAllConvocatories,
+  getCurrentConvocatory,
 } from '@repositories/convocatory'
 
 export default async function Page({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, convocatories] =
-        await getAllConvocatories(searchParams)
-    const currentConvocatory = await getCurrentConvocatory()
+  const [totalRecords, convocatories] = await getAllConvocatories(searchParams)
+  const currentConvocatory = await getCurrentConvocatory()
 
-    return (
-        <>
-            <PageHeading title="Lista de convocatorias" />
-            <div className="flex flex-row-reverse">
-                <Link
-                    scroll={false}
-                    href={'/convocatories/new'}
-                    className={buttonStyle('secondary')}
-                >
-                    <CalendarPlus className="h-4 w-4 text-current" />
-                    Nueva convocatoria
-                </Link>
-            </div>
-            <ConvocatoryTable
-                totalRecords={totalRecords}
-                convocatories={convocatories}
-                currentConvocatory={currentConvocatory!}
-            />
-        </>
-    )
+  return (
+    <>
+      <PageHeading title="Lista de convocatorias" />
+      <div className="flex flex-row-reverse">
+        <Link
+          scroll={false}
+          href={'/convocatories/new'}
+          className={buttonStyle('secondary')}
+        >
+          <CalendarPlus className="h-4 w-4 text-current" />
+          Nueva convocatoria
+        </Link>
+      </div>
+      <ConvocatoryTable
+        totalRecords={totalRecords}
+        convocatories={convocatories}
+        currentConvocatory={currentConvocatory!}
+      />
+    </>
+  )
 }

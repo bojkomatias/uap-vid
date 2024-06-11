@@ -6,28 +6,27 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 export default async function Page({
-    params,
+  params,
 }: {
-    params: { budgetId: string }
+  params: { budgetId: string }
 }) {
-    const session = await getServerSession(authOptions)
-    const anualBudget = await getAnualBudgetById(params.budgetId)
-    if (!session || !anualBudget) redirect('/protocols')
-    if (
-        canExecute(
-            'VIEW_ANUAL_BUDGET',
-            session.user.role,
-            anualBudget.protocol.state
-        )
+  const session = await getServerSession(authOptions)
+  const anualBudget = await getAnualBudgetById(params.budgetId)
+  if (!session || !anualBudget) redirect('/protocols')
+  if (
+    canExecute(
+      'VIEW_ANUAL_BUDGET',
+      session.user.role,
+      anualBudget.protocol.state
     )
-        return (
-            <div className="pt-20">
-                <h1 className="pl-2 text-lg font-medium leading-7">
-                    Presupuesto de:{' '}
-                    {anualBudget.protocol.sections.identification.title}
-                </h1>
-                <BudgetResearcherView budgetId={params.budgetId} />
-            </div>
-        )
-    return redirect('/protocols')
+  )
+    return (
+      <div className="pt-20">
+        <h1 className="pl-2 text-lg font-medium leading-7">
+          Presupuesto de: {anualBudget.protocol.sections.identification.title}
+        </h1>
+        <BudgetResearcherView budgetId={params.budgetId} />
+      </div>
+    )
+  return redirect('/protocols')
 }

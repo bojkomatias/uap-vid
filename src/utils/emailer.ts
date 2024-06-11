@@ -7,7 +7,6 @@ export enum useCases {
   onPublish,
   onApprove,
   changeUserEmail,
-
 }
 const messages = {
   [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
@@ -16,14 +15,10 @@ const messages = {
   [useCases.onAssignation]: 'Se te asignó un nuevo protocolo para evaluar',
   [useCases.onPublish]:
     'Un nuevo protocolo fue publicado en la unidad académica que te corresponde.',
-  [useCases.onApprove]:
-    `Se aprobó tu proyecto de investigación y el presupuesto del mismo para el año ${new Date().getFullYear() + 1}`,
+  [useCases.onApprove]: `Se aprobó tu proyecto de investigación y el presupuesto del mismo para el año ${new Date().getFullYear() + 1}`,
   [useCases.changeUserEmail]:
     'Este es el código de confirmación para cambiar tu email',
-
 }
-
-
 
 const subjects = {
   [useCases.onReview]: 'Proyecto evaluado',
@@ -32,7 +27,6 @@ const subjects = {
   [useCases.onPublish]: 'Nuevo protocolo publicado.',
   [useCases.onApprove]: 'Proyecto aprobado',
   [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
-
 }
 export type Emailer = {
   useCase: useCases
@@ -471,7 +465,6 @@ export async function emailer({
     ignoreTLS: true,
   })
 
-
   // //This transporter can be used for developing.
   // const transporter = nodemailer.createTransport({
   //   host: 'smtp.gmail.com',
@@ -511,4 +504,3 @@ export async function emailer({
     }
   })
 }
-

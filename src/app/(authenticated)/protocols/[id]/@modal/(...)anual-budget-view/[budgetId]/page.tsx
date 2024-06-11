@@ -2,13 +2,13 @@ import { ProtocolInterceptedModal } from '@protocol/elements/protocol-intercepte
 import { BudgetResearcherView } from 'modules/anual-budget/budget-researcher-view'
 
 export default async function ModalPage({
-    params,
+  params,
 }: {
-    params: { budgetId: string }
+  params: { budgetId: string }
 }) {
-    return (
-        <ProtocolInterceptedModal>
-            <BudgetResearcherView budgetId={params.budgetId} />
-        </ProtocolInterceptedModal>
-    )
+  return (
+    <ProtocolInterceptedModal>
+      <BudgetResearcherView budgetId={params.budgetId} />
+    </ProtocolInterceptedModal>
+  )
 }

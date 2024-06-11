@@ -3,36 +3,36 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 export async function PATCH(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-    const id = params.id
-    const { role } = await request.json()
+  const id = params.id
+  const { role } = await request.json()
 
-    if (!id || !role) {
-        return new Response('We cannot update your user: Invalid Data', {
-            status: 500,
-        })
-    }
+  if (!id || !role) {
+    return new Response('We cannot update your user: Invalid Data', {
+      status: 500,
+    })
+  }
 
-    const updated = await updateUserRoleById(id, role)
+  const updated = await updateUserRoleById(id, role)
 
-    if (!updated) {
-        return new Response('We cannot update your user', { status: 500 })
-    }
+  if (!updated) {
+    return new Response('We cannot update your user', { status: 500 })
+  }
 
-    return NextResponse.json({ message: 'success' })
+  return NextResponse.json({ message: 'success' })
 }
 
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-    const id = params.id
-    const deleted = await deleteUserById(id)
+  const id = params.id
+  const deleted = await deleteUserById(id)
 
-    if (!deleted) {
-        return new Response('We cannot update delete user', { status: 500 })
-    }
-    return NextResponse.json({ message: 'success' })
+  if (!deleted) {
+    return new Response('We cannot update delete user', { status: 500 })
+  }
+  return NextResponse.json({ message: 'success' })
 }

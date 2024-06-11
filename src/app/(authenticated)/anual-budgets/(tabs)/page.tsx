@@ -4,21 +4,21 @@ import { BudgetSummary } from 'modules/anual-budget/budget-summary/budget-summar
 import AnualBudgetTable from 'modules/anual-budget/budget-table'
 
 export default async function AllAnualBudgetPage({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, anualBudgets] =
-        await getAnualBudgetsByAcademicUnit(searchParams)
+  const [totalRecords, anualBudgets] =
+    await getAnualBudgetsByAcademicUnit(searchParams)
 
-    const budgetSummary = await getBudgetSummary()
-    return (
-        <>
-            <BudgetSummary summary={budgetSummary} allAcademicUnits />
-            <AnualBudgetTable
-                anualBudgets={anualBudgets}
-                totalRecords={totalRecords}
-            />
-        </>
-    )
+  const budgetSummary = await getBudgetSummary()
+  return (
+    <>
+      <BudgetSummary summary={budgetSummary} allAcademicUnits />
+      <AnualBudgetTable
+        anualBudgets={anualBudgets}
+        totalRecords={totalRecords}
+      />
+    </>
+  )
 }

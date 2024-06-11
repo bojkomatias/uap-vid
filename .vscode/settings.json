@@ -4,8 +4,5 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "editor.tabSize": 2,
-    "conventionalCommits.scopes": [
-        "Allow 0,00 on currency input + table "
-    ],
     "editor.formatOnSave": true
 }

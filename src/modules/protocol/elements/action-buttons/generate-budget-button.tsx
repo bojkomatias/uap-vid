@@ -5,20 +5,20 @@ import InfoTooltip from '../tooltip'
 import { useRouter } from 'next/navigation'
 
 export function GenerateAnualBudgetButton({
-    protocolId,
+  protocolId,
 }: {
-    protocolId: string
+  protocolId: string
 }) {
-    const router = useRouter()
-    return (
-        <Button
-            intent="secondary"
-            onClick={() => {
-                router.push(`/generate-budget/${protocolId}`, { scroll: false })
-            }}
-        >
-            <FileDollar className="h-4 w-4 text-current" />
-            Generar presupuesto
-        </Button>
-    )
+  const router = useRouter()
+  return (
+    <Button
+      intent="secondary"
+      onClick={() => {
+        router.push(`/generate-budget/${protocolId}`, { scroll: false })
+      }}
+    >
+      <FileDollar className="h-4 w-4 text-current" />
+      Generar presupuesto
+    </Button>
+  )
 }
