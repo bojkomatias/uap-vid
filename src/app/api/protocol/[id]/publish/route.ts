@@ -9,59 +9,59 @@ import { useCases } from '@utils/emailer/use-cases'
 import { emailer } from '@utils/emailer'
 
 export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+    request: NextRequest,
+    { params }: { params: { id: string } }
 ) {
-  const token = await getToken({ req: request })
-  const id = params.id
-  const protocol = await request.json()
+    const token = await getToken({ req: request })
+    const id = params.id
+    const protocol = await request.json()
 
-  if (protocol) delete protocol.id
-  const updated = await updateProtocolStateById(id, ProtocolState.PUBLISHED)
+    if (protocol) delete protocol.id
+    const updated = await updateProtocolStateById(id, ProtocolState.PUBLISHED)
 
-  const secretariesEmails = async (academicUnits: string[]) => {
-    const secretaryEmailPromises = academicUnits.map(async (s) => {
-      return await getSecretariesEmailsByAcademicUnit(s)
-    })
-
-    const secretaryEmails = (
-      await Promise.all(secretaryEmailPromises)
-    ).flat()
-
-    return secretaryEmails
-      .map((s) => {
-        return s?.secretaries.map((e) => {
-          return e.email
+    const secretariesEmails = async (academicUnits: string[]) => {
+        const secretaryEmailPromises = academicUnits.map(async (s) => {
+            return await getSecretariesEmailsByAcademicUnit(s)
         })
-      })
-      .flat()
-  }
 
-  if (updated) {
-    (
-      await secretariesEmails(updated.sections.identification.sponsor)
-    ).forEach((email) => {
-      emailer({
-        useCase: useCases.onPublish,
-        email: email!,
-        protocolId: updated.id,
-      })
+        const secretaryEmails = (
+            await Promise.all(secretaryEmailPromises)
+        ).flat()
+
+        return secretaryEmails
+            .map((s) => {
+                return s?.secretaries.map((e) => {
+                    return e.email
+                })
+            })
+            .flat()
+    }
+
+    if (updated) {
+        ;(
+            await secretariesEmails(updated.sections.identification.sponsor)
+        ).forEach((email) => {
+            emailer({
+                useCase: useCases.onPublish,
+                email: email!,
+                protocolId: updated.id,
+            })
+        })
+    } else {
+        console.log(
+            'No se pudo enviar emails a los secretarios de investigación'
+        )
+    }
+
+    await logProtocolUpdate({
+        user: token!.user,
+        fromState: ProtocolState.DRAFT,
+        toState: ProtocolState.PUBLISHED,
+        protocolId: id,
     })
-  } else {
-    console.log(
-      'No se pudo enviar emails a los secretarios de investigación'
-    )
-  }
 
-  await logProtocolUpdate({
-    user: token!.user,
-    fromState: ProtocolState.DRAFT,
-    toState: ProtocolState.PUBLISHED,
-    protocolId: id,
-  })
-
-  if (!updated) {
-    return new Response('We cannot publish this protocol', { status: 500 })
-  }
-  return NextResponse.json({ success: true })
+    if (!updated) {
+        return new Response('We cannot publish this protocol', { status: 500 })
+    }
+    return NextResponse.json({ success: true })
 }

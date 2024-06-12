@@ -1,4 +1,8 @@
-import { PROTOCOL_DURATION_DEFAULT, WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
+import {
+    PROTOCOL_DURATION_DEFAULT,
+    WEEKS_IN_HALF_YEAR,
+    WEEKS_IN_YEAR,
+} from '@utils/constants'
 
 /** Returns the procol duration in weeks
  *

@@ -5,6 +5,7 @@ import { type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
+import { Action, ProtocolState } from '@prisma/client'
 
 async function Layout({
     params,
@@ -26,7 +27,13 @@ async function Layout({
     const session = await getServerSession(authOptions)
     if (!session) return
     if (params.id === 'new') {
-        if (!canExecute('CREATE', session.user.role, 'NOT_CREATED'))
+        if (
+            !canExecute(
+                Action.CREATE,
+                session.user.role,
+                ProtocolState.NOT_CREATED
+            )
+        )
             redirect('/protocols')
         return (
             <>

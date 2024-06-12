@@ -1,13 +1,14 @@
 'use server'
 
-import type {
-    AnualBudget,
-    ProtocolSectionsBudget,
-    AnualBudgetItem,
-    Execution,
-    ProtocolSectionsIdentificationTeam,
-    AnualBudgetTeamMember,
-    AcademicUnit,
+import {
+    type AnualBudget,
+    type ProtocolSectionsBudget,
+    type AnualBudgetItem,
+    type Execution,
+    type ProtocolSectionsIdentificationTeam,
+    type AnualBudgetTeamMember,
+    type AcademicUnit,
+    AnualBudgetState,
 } from '@prisma/client'
 import {
     getAcademicUnitById,
@@ -375,7 +376,7 @@ export const getBudgetSummary = async (
         }
     const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
     const anualBudgets = removeDuplicates(list).filter(
-        (ab) => ab.state !== 'REJECTED'
+        (ab) => ab.state !== AnualBudgetState.REJECTED
     )
 
     // This summary is related to protocols budgets
@@ -398,7 +399,7 @@ export const getBudgetSummary = async (
 
     const projectedBudgetSummaryApproved = getProjectedBudgetSummary(
         protocolBudgetSummary.total,
-        anualBudgets.filter((e) => e.state !== 'PENDING'),
+        anualBudgets.filter((e) => e.state !== AnualBudgetState.PENDING),
         year
     )
 

@@ -304,7 +304,7 @@ export default function ReviewForm({ review }: { review: Review }) {
                                 addReview(
                                     {
                                         ...form.values,
-                                        verdict: 'NOT_REVIEWED',
+                                        verdict: ReviewVerdict.NOT_REVIEWED,
                                     },
                                     'Revisión guardada',
                                     'La revision fue guardada como borrador, sin veredicto. No podrá ser vista por nadie más que usted.'

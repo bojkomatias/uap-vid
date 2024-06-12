@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import type { User } from '@prisma/client'
+import { Action, type User } from '@prisma/client'
 import type { Protocol } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { useMemo, useTransition } from 'react'
@@ -51,7 +51,7 @@ export default function PublishButton({ user, protocol }: ActionButtonTypes) {
     if (
         !protocol.id ||
         user.id !== protocol.researcherId ||
-        !canExecute('PUBLISH', user.role, protocol.state)
+        !canExecute(Action.PUBLISH, user.role, protocol.state)
     )
         return <></>
 

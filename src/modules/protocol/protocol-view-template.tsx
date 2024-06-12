@@ -1,4 +1,4 @@
-import type { ProtocolSections } from '@prisma/client'
+import { Role, type ProtocolSections } from '@prisma/client'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import dynamic from 'next/dynamic'
@@ -32,7 +32,7 @@ export default async function View({
 }) {
     const session = await getServerSession(authOptions)
 
-    if (session?.user.role === 'METHODOLOGIST')
+    if (session?.user.role === Role.METHODOLOGIST)
         return (
             <div className="px-2">
                 <IdentificationView data={sections.identification} />

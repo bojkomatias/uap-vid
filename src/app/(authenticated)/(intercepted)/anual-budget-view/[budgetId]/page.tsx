@@ -1,3 +1,4 @@
+import { Action } from '@prisma/client'
 import { getAnualBudgetById } from '@repositories/anual-budget'
 import { canExecute } from '@utils/scopes'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
@@ -15,7 +16,7 @@ export default async function Page({
     if (!session || !anualBudget) redirect('/protocols')
     if (
         canExecute(
-            'VIEW_ANUAL_BUDGET',
+            Action.VIEW_ANUAL_BUDGET,
             session.user.role,
             anualBudget.protocol.state
         )

@@ -150,8 +150,6 @@ export function BudgetTeamMemberFees({
                                     memberRole,
                                     hours,
                                     remainingHours,
-
-                                    
                                 },
                                 i
                             ) => (
@@ -198,7 +196,7 @@ export function BudgetTeamMemberFees({
                                                 defaultValue={
                                                     form.getInputProps(
                                                         `${i}.hours`
-                                                    ).value 
+                                                    ).value
                                                 }
                                                 onBlur={(e) =>
                                                     form.setFieldValue(

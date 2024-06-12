@@ -35,16 +35,16 @@ export default function Pagination({
             currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
                 ? 0
                 : currentPage + Math.ceil(numberOfDisplayedPages / 2) >=
-                  allPages.length
-                ? allPages.length - numberOfDisplayedPages
-                : currentPage - Math.floor(numberOfDisplayedPages / 2)
+                    allPages.length
+                  ? allPages.length - numberOfDisplayedPages
+                  : currentPage - Math.floor(numberOfDisplayedPages / 2)
         const ceil =
             currentPage + Math.ceil(numberOfDisplayedPages / 2) >=
             allPages.length
                 ? allPages.length
                 : currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
-                ? numberOfDisplayedPages
-                : currentPage + Math.ceil(numberOfDisplayedPages / 2)
+                  ? numberOfDisplayedPages
+                  : currentPage + Math.ceil(numberOfDisplayedPages / 2)
 
         const displayedPages =
             allPages.length > numberOfDisplayedPages

@@ -28,10 +28,10 @@ export default function HeaderSorter({
                             searchParams.get('sort') !== header.id
                                 ? 'asc'
                                 : searchParams?.get('order') == 'asc'
-                                ? 'desc'
-                                : searchParams?.get('order') == 'desc'
-                                ? null
-                                : 'asc',
+                                  ? 'desc'
+                                  : searchParams?.get('order') == 'desc'
+                                    ? null
+                                    : 'asc',
                     }),
             }}
         >

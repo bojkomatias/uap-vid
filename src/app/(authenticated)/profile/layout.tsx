@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client'
 import { getReviewsByReviewerId } from '@repositories/review'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
@@ -18,8 +19,8 @@ export default async function Layout({
             {children}{' '}
             {
                 // Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page.
-                (session.user.role == 'SCIENTIST' ||
-                    session.user.role == 'METHODOLOGIST') && (
+                (session.user.role == Role.SCIENTIST ||
+                    session.user.role == Role.METHODOLOGIST) && (
                     <ReviewerCertificatePDF
                         user={session.user}
                         reviews={reviews}
