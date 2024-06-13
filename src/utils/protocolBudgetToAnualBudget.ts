@@ -18,6 +18,8 @@ export const protocolBudgetToAnualBudget = (
                     amount: d.amount,
                     remaining: d.amount,
                     executions: [],
+                    amountIndex: null,
+                    remainingIndex: null,
                 }
             })
         })

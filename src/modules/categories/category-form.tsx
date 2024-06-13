@@ -20,7 +20,7 @@ export default function CategoryForm({
 }) {
     const router = useRouter()
     const form = useForm({
-        initialValues: { state: true, name: '', price: [] },
+        initialValues: { state: true, name: '', price: [], amountIndex: null },
         validate: zodResolver(TeamMemberCategorySchema),
         validateInputOnBlur: true,
     })

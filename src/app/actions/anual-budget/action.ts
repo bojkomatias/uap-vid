@@ -96,6 +96,9 @@ const generateAnualBudgetItems = (
                     detail: d.detail,
                     remaining: d.amount,
                     executions: [] as Execution[],
+                    //Esto es para que no jodan los tipos
+                    amountIndex: null,
+                    remainingIndex: null,
                 }
             })
         acc.push(...budgetItems)

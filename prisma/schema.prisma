@@ -20,9 +20,10 @@ model AcademicUnit {
 }
 
 type AcademicUnitBudget {
-  amount Float
-  from   DateTime
-  to     DateTime?
+  amount      Float //Deprecate 
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex?
 }
 
 model Convocatory {
@@ -103,10 +104,12 @@ model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String                       @unique
   state                      Boolean?
-  price                      HistoricCategoryPrice[]
+  price                      HistoricCategoryPrice[] //Deprecate
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
+  amountIndex                AmountIndex? //FCA or FMR
 }
 
+//To be deprecated
 type HistoricCategoryPrice {
   from     DateTime
   to       DateTime?
@@ -143,11 +146,18 @@ model AnualBudget {
 }
 
 type AnualBudgetItem {
-  type       String
-  detail     String
-  amount     Float
-  executions Execution[]
-  remaining  Float
+  type           String
+  detail         String
+  amount         Float
+  executions     Execution[]
+  remaining      Float
+  amountIndex    AmountIndex?
+  remainingIndex AmountIndex?
+}
+
+type AmountIndex {
+  FCA Float
+  FMR Float
 }
 
 model AnualBudgetTeamMember {
@@ -160,6 +170,18 @@ model AnualBudgetTeamMember {
   executions     Execution[]
   AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
   anualBudgetId  String?      @db.ObjectId
+}
+
+model Index {
+  id     String          @id @default(auto()) @map("_id") @db.ObjectId
+  unit   String
+  values HistoricIndex[]
+}
+
+type HistoricIndex {
+  from  DateTime
+  to    DateTime?
+  price Float
 }
 
 type Execution {
@@ -205,9 +227,10 @@ type ProtocolSectionsBudgetExpenses {
 }
 
 type ProtocolSectionsBudgetExpensesData {
-  amount Float
-  detail String
-  year   String
+  amount      Float //Deprecate
+  amountIndex AmountIndex?
+  detail      String
+  year        String
 }
 
 type ProtocolSectionsDescription {

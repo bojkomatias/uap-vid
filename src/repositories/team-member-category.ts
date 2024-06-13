@@ -63,6 +63,7 @@ const getCategories = cache(
                         state: true,
                         name: true,
                         price: true,
+                        amountIndex: true,
                     },
                     // Add all the globally searchable fields
                     where: {
