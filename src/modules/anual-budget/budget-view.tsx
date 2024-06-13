@@ -1,8 +1,4 @@
-import type {
-    AcademicUnit,
-    AnualBudgetItem,
-    AnualBudgetState,
-} from '@prisma/client'
+import { AcademicUnit, AnualBudgetItem, AnualBudgetState } from '@prisma/client'
 import type {
     AnualBudgetTeamMemberWithAllRelations,
     TotalBudgetCalculation,
@@ -11,7 +7,7 @@ import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
 import { Badge } from '@elements/badge'
-import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants';
+import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants'
 
 export function BudgetView({
     budgetId,
@@ -33,7 +29,7 @@ export function BudgetView({
     return (
         <div className="mt-10 space-y-6 ">
             <BudgetTeamMemberFees
-                editable={state === 'PENDING'}
+                editable={state === AnualBudgetState.PENDING}
                 budgetTeamMembers={budgetTeamMembers}
                 ABTe={calculations.ABTe}
                 ABTr={calculations.ABTr}
@@ -43,7 +39,7 @@ export function BudgetView({
             <BudgetItems
                 academicUnits={academicUnits}
                 budgetId={budgetId}
-                editable={state === 'PENDING'}
+                editable={state === AnualBudgetState.PENDING}
                 budgetItems={budgetItems}
                 ABIe={calculations.ABIe}
                 ABIr={calculations.ABIr}

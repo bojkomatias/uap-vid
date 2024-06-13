@@ -1,14 +1,14 @@
-import { State } from '@prisma/client'
+import { ProtocolState } from '@prisma/client'
 
 export default {
-    [State.NOT_CREATED]: null,
-    [State.DRAFT]: 'Borrador',
-    [State.PUBLISHED]: 'Publicado',
-    [State.METHODOLOGICAL_EVALUATION]: 'Evaluación metodológica',
-    [State.SCIENTIFIC_EVALUATION]: 'Evaluación científica',
-    [State.ACCEPTED]: 'Aceptado',
-    [State.ON_GOING]: 'En curso',
-    [State.FINISHED]: 'Finalizado',
-    [State.DISCONTINUED]: 'Discontinuado',
-    [State.DELETED]: 'Eliminado',
+    [ProtocolState.NOT_CREATED]: null,
+    [ProtocolState.DRAFT]: 'Borrador',
+    [ProtocolState.PUBLISHED]: 'Publicado',
+    [ProtocolState.METHODOLOGICAL_EVALUATION]: 'Evaluación metodológica',
+    [ProtocolState.SCIENTIFIC_EVALUATION]: 'Evaluación científica',
+    [ProtocolState.ACCEPTED]: 'Aceptado',
+    [ProtocolState.ON_GOING]: 'En curso',
+    [ProtocolState.FINISHED]: 'Finalizado',
+    [ProtocolState.DISCONTINUED]: 'Discontinuado',
+    [ProtocolState.DELETED]: 'Eliminado',
 } as const

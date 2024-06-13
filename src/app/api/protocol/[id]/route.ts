@@ -1,11 +1,10 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import {
     updateProtocolById,
     updateProtocolStateById,
 } from '@repositories/protocol'
-import { State } from '@prisma/client'
+import { ProtocolState } from '@prisma/client'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
 import { canExecute } from '@utils/scopes'
@@ -66,16 +65,16 @@ export async function DELETE(
     { params }: { params: { id: string } }
 ) {
     const token = await getToken({ req: request })
-    // Deleted in in disguise an STATE transition => 'DELETED'
+    // Deleted in in disguise an ProtocolState transition => 'DELETED'
     const { state } = await request.json()
 
     const id = params.id
-    const deleted = await updateProtocolStateById(id, State.DELETED)
+    const deleted = await updateProtocolStateById(id, ProtocolState.DELETED)
 
     await logProtocolUpdate({
         user: token!.user,
         fromState: state,
-        toState: State.DELETED,
+        toState: ProtocolState.DELETED,
         protocolId: id,
     })
 

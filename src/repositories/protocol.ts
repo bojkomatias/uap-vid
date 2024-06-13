@@ -1,13 +1,11 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import type { RoleType, StateType } from '@utils/zod'
-import { ROLE } from '@utils/zod'
-import type { Protocol } from '@prisma/client'
+import { type Protocol, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
-import { Prisma } from '@prisma/client'
+import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 
 const findProtocolByIdWithResearcher = cache(
@@ -82,7 +80,7 @@ const updateProtocolById = async (id: string, data: Protocol) =>
         data,
     })
 
-const updateProtocolStateById = async (id: string, state: StateType) => {
+const updateProtocolStateById = async (id: string, state: ProtocolState) => {
     try {
         const protocol = await prisma.protocol.update({
             where: {
@@ -127,7 +125,7 @@ const getAllProtocols = cache(async () => {
 
 const getProtocolsByRol = cache(
     async (
-        role: RoleType,
+        role: Role,
         id: string,
         {
             records = '5',
@@ -258,7 +256,7 @@ const getProtocolsByRol = cache(
             : {}
 
         const queryBuilder = async () => {
-            if (role === ROLE.RESEARCHER)
+            if (role === Role.RESEARCHER)
                 return prisma.$transaction([
                     prisma.protocol.count({
                         where: {
@@ -269,7 +267,7 @@ const getProtocolsByRol = cache(
                                 whereSearch,
                                 whereFilter,
                             ],
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                     prisma.protocol.findMany({
@@ -285,11 +283,11 @@ const getProtocolsByRol = cache(
                                 whereSearch,
                                 whereFilter,
                             ],
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                 ])
-            if (role === ROLE.METHODOLOGIST || role === ROLE.SCIENTIST)
+            if (role === Role.METHODOLOGIST || role === Role.SCIENTIST)
                 return prisma.$transaction([
                     prisma.protocol.count({
                         where: {
@@ -311,7 +309,7 @@ const getProtocolsByRol = cache(
                                 whereSearch,
                                 whereFilter,
                             ],
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                     prisma.protocol.findMany({
@@ -338,11 +336,11 @@ const getProtocolsByRol = cache(
                                 whereSearch,
                                 whereFilter,
                             ],
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                 ])
-            if (role === ROLE.SECRETARY) {
+            if (role === Role.SECRETARY) {
                 const academicUnits = await getAcademicUnitsByUserId(id)
                 return prisma.$transaction([
                     prisma.protocol.count({
@@ -378,7 +376,7 @@ const getProtocolsByRol = cache(
                                 whereUnits,
                             ],
 
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                     prisma.protocol.findMany({
@@ -418,7 +416,7 @@ const getProtocolsByRol = cache(
                                 whereUnits,
                             ],
 
-                            NOT: { state: 'DELETED' },
+                            NOT: { state: ProtocolState.DELETED },
                         },
                     }),
                 ])

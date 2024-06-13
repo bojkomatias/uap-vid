@@ -1,7 +1,6 @@
 import type { Role } from '@prisma/client'
-import { State } from '@prisma/client'
+import { Access, Action, ProtocolState } from '@prisma/client'
 import { canAccess, canExecute } from '@utils/scopes'
-import { ACCESS, ACTION } from '@utils/zod'
 import ReviewList from './elements/review-list'
 import ReviewFormTemplate from './review-form-template'
 import { cx } from '@utils/cx'
@@ -16,7 +15,7 @@ export default async function ReviewsTemplate({
 }: {
     id: string
     researcherId: string
-    state: State
+    state: ProtocolState
     userId: string
     userRole: Role
 }) {
@@ -24,15 +23,17 @@ export default async function ReviewsTemplate({
         <aside
             className={cx(
                 'min-w-fit space-y-3 overflow-y-auto py-3 pl-4 pr-1 lg:sticky lg:top-0 lg:h-screen lg:pl-0',
-                (state === State.DRAFT || state === State.PUBLISHED) && 'hidden'
+                (state === ProtocolState.DRAFT ||
+                    state === ProtocolState.PUBLISHED) &&
+                    'hidden'
             )}
         >
             {userId !== researcherId &&
-            canExecute(ACTION.REVIEW, userRole, state) ? (
+            canExecute(Action.REVIEW, userRole, state) ? (
                 <ReviewFormTemplate protocolId={id} userId={userId} />
             ) : null}
 
-            {userId === researcherId || canAccess(ACCESS.REVIEWS, userRole) ? (
+            {userId === researcherId || canAccess(Access.REVIEWS, userRole) ? (
                 <ReviewList
                     role={userRole}
                     id={id}

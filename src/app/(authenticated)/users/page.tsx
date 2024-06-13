@@ -16,10 +16,7 @@ export default async function Page({
         <>
             <PageHeading title="Lista de usuarios" />
             <div className="flex flex-row-reverse">
-                <Link
-                    href={'/users/new'}
-                    className={buttonStyle('secondary')}
-                >
+                <Link href={'/users/new'} className={buttonStyle('secondary')}>
                     <UserPlus className="h-4 text-current" />
                     Nuevo usuario
                 </Link>

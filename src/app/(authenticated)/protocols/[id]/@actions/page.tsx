@@ -1,3 +1,4 @@
+import { Action } from '@prisma/client'
 import AcceptButton from '@protocol/elements/action-buttons/accept'
 import { DeleteButton } from '@protocol/elements/action-buttons/delete'
 import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
@@ -42,7 +43,7 @@ export default async function ActionsPage({
             {/* I need to pass the whole protocol to check validity! */}
             <PublishButton user={session.user} protocol={protocol} />
             {canExecute(
-                'VIEW_ANUAL_BUDGET',
+                Action.VIEW_ANUAL_BUDGET,
                 session.user.role,
                 protocol.state
             ) &&
@@ -50,7 +51,7 @@ export default async function ActionsPage({
                     <BudgetDropdown budgets={protocol.anualBudgets} />
                 )}
             {canExecute(
-                'GENERATE_ANUAL_BUDGET',
+                Action.GENERATE_ANUAL_BUDGET,
                 session.user.role,
                 protocol.state
             ) && <GenerateAnualBudgetButton protocolId={protocol.id} />}

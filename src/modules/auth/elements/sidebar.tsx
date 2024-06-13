@@ -8,9 +8,8 @@ import {
     Category,
     CurrencyDollar,
 } from 'tabler-icons-react'
-import { ACCESS } from '@utils/zod'
 import { usePathname } from 'next/navigation'
-import type { User } from '@prisma/client'
+import { Access, type User } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import Link from 'next/link'
 import { cx } from '@utils/cx'
@@ -64,42 +63,42 @@ export const navigation = [
         name: 'Proyectos de investigación',
         icon: List,
         href: '/protocols',
-        scope: ACCESS.PROTOCOLS,
+        scope: Access.PROTOCOLS,
     },
     {
         name: 'Panel de convocatorias',
         icon: CalendarEvent,
         href: '/convocatories',
-        scope: ACCESS.CONVOCATORIES,
+        scope: Access.CONVOCATORIES,
     },
     {
         name: 'Unidades académicas',
         icon: BuildingCommunity,
         href: '/academic-units',
-        scope: ACCESS.ACADEMIC_UNITS,
+        scope: Access.ACADEMIC_UNITS,
     },
     {
         name: 'Presupuestos anuales',
         icon: CurrencyDollar,
         href: '/anual-budgets',
-        scope: ACCESS.TEAM_MEMBERS,
+        scope: Access.TEAM_MEMBERS,
     },
     {
         name: 'Miembros de investigación',
         icon: UserSearch,
         href: '/team-members',
-        scope: ACCESS.TEAM_MEMBERS,
+        scope: Access.TEAM_MEMBERS,
     },
     {
         name: 'Categorías de miembros de equipo de investigación',
         icon: Category,
         href: '/categories',
-        scope: ACCESS.TEAM_MEMBERS,
+        scope: Access.TEAM_MEMBERS,
     },
     {
         name: 'Lista de usuarios',
         icon: Users,
         href: '/users',
-        scope: ACCESS.USERS,
+        scope: Access.USERS,
     },
 ]

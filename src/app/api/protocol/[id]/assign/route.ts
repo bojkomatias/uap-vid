@@ -4,8 +4,8 @@ import {
     assignReviewerToProtocol,
     reassignReviewerToProtocol,
 } from '@repositories/review'
-import { type Review } from '@prisma/client'
-import { ReviewType, State } from '@prisma/client'
+import { Action, type Review } from '@prisma/client'
+import { ReviewType, ProtocolState } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
@@ -14,9 +14,9 @@ import { useCases } from '@utils/emailer/use-cases'
 import { emailer } from '@utils/emailer'
 
 const newStateByReviewType = {
-    [ReviewType.METHODOLOGICAL]: State.METHODOLOGICAL_EVALUATION,
-    [ReviewType.SCIENTIFIC_INTERNAL]: State.SCIENTIFIC_EVALUATION,
-    [ReviewType.SCIENTIFIC_EXTERNAL]: State.SCIENTIFIC_EVALUATION,
+    [ReviewType.METHODOLOGICAL]: ProtocolState.METHODOLOGICAL_EVALUATION,
+    [ReviewType.SCIENTIFIC_INTERNAL]: ProtocolState.SCIENTIFIC_EVALUATION,
+    [ReviewType.SCIENTIFIC_EXTERNAL]: ProtocolState.SCIENTIFIC_EVALUATION,
 }
 
 export async function PUT(
@@ -26,7 +26,7 @@ export async function PUT(
     const token = await getToken({ req: request })
 
     const data = (await request.json()) as {
-        protocolState: State
+        protocolState: ProtocolState
         review: Review
         reviewerId: string
         type: ReviewType
@@ -37,9 +37,9 @@ export async function PUT(
     // Not allowed by state or role to assign
     if (
         !canExecute(
-            data.type === 'METHODOLOGICAL'
-                ? 'ASSIGN_TO_METHODOLOGIST'
-                : 'ASSIGN_TO_SCIENTIFIC',
+            data.type === ReviewType.METHODOLOGICAL
+                ? Action.ASSIGN_TO_METHODOLOGIST
+                : Action.ASSIGN_TO_SCIENTIFIC,
             token!.user.role,
             data.protocolState
         )
@@ -78,8 +78,8 @@ export async function PUT(
                 user: token!.user,
                 fromState:
                     data.type === ReviewType.METHODOLOGICAL
-                        ? State.PUBLISHED
-                        : State.METHODOLOGICAL_EVALUATION,
+                        ? ProtocolState.PUBLISHED
+                        : ProtocolState.METHODOLOGICAL_EVALUATION,
                 toState: newStateByReviewType[data.type],
                 protocolId: params.id,
             })

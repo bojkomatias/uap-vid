@@ -1,4 +1,11 @@
-import { ReviewType, ReviewVerdict, Role } from '@prisma/client'
+import {
+    Access,
+    Action,
+    ProtocolState,
+    ReviewType,
+    ReviewVerdict,
+    Role,
+} from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import { UserSearch } from 'tabler-icons-react'
@@ -20,18 +27,18 @@ export default async function ReviewAssignation({
     if (!session || !protocol) return
 
     if (
-        canAccess('EVALUATORS', session.user.role) &&
-        protocol.state !== 'DRAFT'
+        canAccess(Access.EVALUATORS, session.user.role) &&
+        protocol.state !== ProtocolState.DRAFT
     ) {
         const reviews = await getReviewsByProtocol(protocol.id)
         const users = await getAllUsersWithoutResearchers()
         if (!users) return null
 
         const assignedInternal = reviews.find(
-            (r) => r.type === 'SCIENTIFIC_INTERNAL'
+            (r) => r.type === ReviewType.SCIENTIFIC_INTERNAL
         )?.reviewerId
         const assignedExternal = reviews.find(
-            (r) => r.type === 'SCIENTIFIC_EXTERNAL'
+            (r) => r.type === ReviewType.SCIENTIFIC_EXTERNAL
         )?.reviewerId
 
         const methodologicalVerdict = reviews.find(
@@ -47,7 +54,7 @@ export default async function ReviewAssignation({
                         u.id !== protocol.researcher.id
                 ),
                 enabled: canExecute(
-                    'ASSIGN_TO_METHODOLOGIST',
+                    Action.ASSIGN_TO_METHODOLOGIST,
                     session.user.role,
                     protocol.state
                 ),
@@ -66,7 +73,7 @@ export default async function ReviewAssignation({
                 ),
                 enabled:
                     canExecute(
-                        'ASSIGN_TO_SCIENTIFIC',
+                        Action.ASSIGN_TO_SCIENTIFIC,
                         session.user.role,
                         protocol.state
                     ) &&
@@ -89,7 +96,7 @@ export default async function ReviewAssignation({
                 ),
                 enabled:
                     canExecute(
-                        'ASSIGN_TO_SCIENTIFIC',
+                        Action.ASSIGN_TO_SCIENTIFIC,
                         session.user.role,
                         protocol.state
                     ) &&
@@ -113,7 +120,7 @@ export default async function ReviewAssignation({
                 ),
                 enabled:
                     canExecute(
-                        'ASSIGN_TO_SCIENTIFIC',
+                        Action.ASSIGN_TO_SCIENTIFIC,
                         session.user.role,
                         protocol.state
                     ) &&

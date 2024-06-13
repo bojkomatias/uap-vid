@@ -8,9 +8,8 @@ export default async function Page({
 }: {
     searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, academicUnits] = await getAllAcademicUnits(
-        searchParams
-    )
+    const [totalRecords, academicUnits] =
+        await getAllAcademicUnits(searchParams)
     const secretaries = await getAllSecretaries()
     if (!secretaries)
         return <div>No hay secretarios cargados en el sistema</div>

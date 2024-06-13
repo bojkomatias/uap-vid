@@ -1,4 +1,4 @@
-
+import { Access } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import { getToken } from 'next-auth/jwt'
 import { withAuth } from 'next-auth/middleware'
@@ -9,13 +9,13 @@ export default withAuth(
         const token = await getToken({ req })
 
         //Useful headers. I'm following this thread from StackOverflow https://stackoverflow.com/questions/75362636/how-can-i-get-the-url-pathname-on-a-server-component-next-js-13
-        const url = new URL(req.url);
-        const origin = url.origin;
-        const pathname = url.pathname;
-        const requestHeaders = new Headers(req.headers);
-        requestHeaders.set('x-url', req.url);
-        requestHeaders.set('x-origin', origin);
-        requestHeaders.set('x-pathname', pathname);
+        const url = new URL(req.url)
+        const origin = url.origin
+        const pathname = url.pathname
+        const requestHeaders = new Headers(req.headers)
+        requestHeaders.set('x-url', req.url)
+        requestHeaders.set('x-origin', origin)
+        requestHeaders.set('x-pathname', pathname)
 
         if (req.nextUrl.pathname === '/') {
             if (token)
@@ -32,7 +32,7 @@ export default withAuth(
         // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
 
         if (req.nextUrl.pathname.includes('/users')) {
-            if (!canAccess('USERS', token.user.role)) {
+            if (!canAccess(Access.USERS, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -40,7 +40,7 @@ export default withAuth(
         }
 
         if (req.nextUrl.pathname.includes('/convocatories')) {
-            if (!canAccess('CONVOCATORIES', token.user.role)) {
+            if (!canAccess(Access.CONVOCATORIES, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -48,7 +48,7 @@ export default withAuth(
         }
 
         if (req.nextUrl.pathname.includes('/academic-units')) {
-            if (!canAccess('ACADEMIC_UNITS', token.user.role)) {
+            if (!canAccess(Access.ACADEMIC_UNITS, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -56,7 +56,7 @@ export default withAuth(
         }
 
         if (req.nextUrl.pathname.includes('/categories')) {
-            if (!canAccess('MEMBER_CATEGORIES', token.user.role)) {
+            if (!canAccess(Access.MEMBER_CATEGORIES, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -64,7 +64,7 @@ export default withAuth(
         }
 
         if (req.nextUrl.pathname.includes('/team-members')) {
-            if (!canAccess('TEAM_MEMBERS', token.user.role)) {
+            if (!canAccess(Access.TEAM_MEMBERS, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -72,7 +72,7 @@ export default withAuth(
         }
 
         if (req.nextUrl.pathname.includes('/anual-budgets')) {
-            if (!canAccess('ANUAL_BUDGETS', token.user.role)) {
+            if (!canAccess(Access.ANUAL_BUDGETS, token.user.role)) {
                 if (req.nextUrl.pathname.startsWith('/api'))
                     return new Response('Unauthorized', { status: 401 })
                 return NextResponse.redirect(new URL('/protocols', req.url))
@@ -82,7 +82,7 @@ export default withAuth(
         return NextResponse.next({
             request: {
                 headers: requestHeaders,
-            }
+            },
         })
     },
     {

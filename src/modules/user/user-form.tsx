@@ -3,13 +3,12 @@ import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
-import { ROLE } from '@utils/zod'
 import { RoleSelector } from './elements/role-selector'
+import { Role } from '@prisma/client'
 
 export default function UserForm() {
     const router = useRouter()
-    const [newUser, setNewUser] = useState({ role: ROLE.RESEARCHER })
+    const [newUser, setNewUser] = useState({ role: Role.RESEARCHER })
     const [loading, setLoading] = useState(false)
 
     const createNewUser = async () => {

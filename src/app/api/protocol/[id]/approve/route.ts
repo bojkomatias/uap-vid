@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { canExecute } from '@utils/scopes'
-import { State } from '@prisma/client'
+import { Action, ProtocolState } from '@prisma/client'
 import { getToken } from 'next-auth/jwt'
 import { useCases } from '@utils/emailer/use-cases'
 import { emailer } from '@utils/emailer'
@@ -15,8 +15,11 @@ export async function PUT(
     const token = await getToken({ req: request })
     const id = params.id
     const protocol = await request.json()
-    if (token && canExecute('APPROVE', token.user.role, protocol.state)) {
-        const updated = await updateProtocolStateById(id, State.ON_GOING)
+    if (token && canExecute(Action.APPROVE, token.user.role, protocol.state)) {
+        const updated = await updateProtocolStateById(
+            id,
+            ProtocolState.ON_GOING
+        )
 
         if (updated) {
             emailer({
@@ -29,8 +32,8 @@ export async function PUT(
         }
         await logProtocolUpdate({
             user: token.user,
-            fromState: State.ACCEPTED,
-            toState: State.ON_GOING,
+            fromState: ProtocolState.ACCEPTED,
+            toState: ProtocolState.ON_GOING,
             protocolId: id,
         })
 

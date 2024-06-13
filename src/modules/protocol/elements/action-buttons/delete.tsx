@@ -1,9 +1,8 @@
 'use client'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import type { Role, State } from '@prisma/client'
+import { type Role, type ProtocolState, Action } from '@prisma/client'
 import { canExecute } from '@utils/scopes'
-import { ACTION } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
 
@@ -14,7 +13,7 @@ export function DeleteButton({
     protocol,
 }: {
     role: Role
-    protocol: { id: string; state: State }
+    protocol: { id: string; state: ProtocolState }
 }) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
@@ -39,7 +38,7 @@ export function DeleteButton({
         }
     }, [protocol.id, protocol.state, router])
 
-    if (!protocol.id || !canExecute(ACTION.DELETE, role, protocol.state))
+    if (!protocol.id || !canExecute(Action.DELETE, role, protocol.state))
         return <></>
 
     return deleting ? (

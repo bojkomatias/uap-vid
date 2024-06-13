@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
+import { AnualBudgetState } from '@prisma/client'
 
 export const BudgetSummary = ({
     summary,
@@ -87,8 +88,12 @@ export const BudgetSummary = ({
                                     )}
                                 >
                                     {approved
-                                        ? AnualBudgetStateDictionary['APPROVED']
-                                        : AnualBudgetStateDictionary['PENDING']}
+                                        ? AnualBudgetStateDictionary[
+                                              AnualBudgetState.APPROVED
+                                          ]
+                                        : AnualBudgetStateDictionary[
+                                              AnualBudgetState.PENDING
+                                          ]}
                                 </Button>
                             )}
                         </dt>

@@ -1,6 +1,6 @@
 'use server'
 
-import { Prisma } from '@prisma/client'
+import { AnualBudgetState, Prisma } from '@prisma/client'
 import type {
     AnualBudget,
     AnualBudgetTeamMember,
@@ -361,7 +361,7 @@ export const newBudgetItemExecution = async (
 export const approveAnualBudget = async (id: string) => {
     return await prisma.anualBudget.update({
         where: { id },
-        data: { state: 'APPROVED' },
+        data: { state: AnualBudgetState.APPROVED },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }
@@ -369,7 +369,7 @@ export const approveAnualBudget = async (id: string) => {
 export const rejectAnualBudget = async (id: string) => {
     return await prisma.anualBudget.update({
         where: { id },
-        data: { state: 'REJECTED' },
+        data: { state: AnualBudgetState.REJECTED },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }
@@ -385,7 +385,7 @@ export const interruptAnualBudget = async (id: string) => {
             budgetTeamMembers: true,
         },
     })
-    if (!AB || AB.state !== 'APPROVED') return
+    if (!AB || AB.state !== AnualBudgetState.APPROVED) return
     // Match budget Items amount to execution and remaining 0
     AB.budgetItems.forEach((bi) => {
         bi.amount = bi.executions.reduce((acc, curr) => acc + curr.amount, 0)
@@ -402,7 +402,7 @@ export const interruptAnualBudget = async (id: string) => {
 
     return await prisma.anualBudget.update({
         where: { id },
-        data: { state: 'INTERRUPTED' },
+        data: { state: AnualBudgetState.INTERRUPTED },
         select: { id: true, protocol: { select: { id: true, state: true } } },
     })
 }

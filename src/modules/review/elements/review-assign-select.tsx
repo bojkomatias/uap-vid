@@ -2,7 +2,7 @@
 import { Combobox } from '@headlessui/react'
 import { notifications } from '@elements/notifications'
 import type { Review, User, ReviewType } from '@prisma/client'
-import type { State } from '@prisma/client'
+import type { ProtocolState } from '@prisma/client'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
@@ -15,7 +15,7 @@ interface ReviewAssignSelectProps {
     users: User[]
     review: Review | null
     protocolId: string
-    protocolState: State
+    protocolState: ProtocolState
 }
 
 const ReviewAssignSelect = ({

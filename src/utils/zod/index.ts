@@ -11,10 +11,8 @@ const RoleSchema = z.enum([
     'SCIENTIST',
     'ADMIN',
 ])
-export const ROLE = RoleSchema.Enum
-export type RoleType = `${z.infer<typeof RoleSchema>}`
 
-const StateSchema = z.enum([
+const ProtocolStateSchema = z.enum([
     'NOT_CREATED',
     'DRAFT',
     'PUBLISHED',
@@ -27,52 +25,43 @@ const StateSchema = z.enum([
     'FINISHED',
 ])
 
-export const STATE = StateSchema.Enum
-export type StateType = `${z.infer<typeof StateSchema>}`
-
 // Schema for Transitions between protocols
-const ActionSchema = z.enum([
-    'CREATE',
-    'EDIT',
-    'EDIT_BY_OWNER',
-    'PUBLISH',
-    'ASSIGN_TO_METHODOLOGIST',
-    'ASSIGN_TO_SCIENTIFIC',
-    'REVIEW',
-    'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
-    'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
-    'DISCONTINUE',
-    'FINISH',
-    'DELETE',
-    'GENERATE_ANUAL_BUDGET',
-    'VIEW_ANUAL_BUDGET',
-])
-export const ACTION = ActionSchema.Enum
-export type ActionType = `${z.infer<typeof ActionSchema>}`
+// const ActionSchema = z.enum([
+//     'CREATE',
+//     'EDIT',
+//     'EDIT_BY_OWNER',
+//     'PUBLISH',
+//     'ASSIGN_TO_METHODOLOGIST',
+//     'ASSIGN_TO_SCIENTIFIC',
+//     'REVIEW',
+//     'ACCEPT', //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+//     'APPROVE', //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+//     'DISCONTINUE',
+//     'FINISH',
+//     'DELETE',
+//     'GENERATE_ANUAL_BUDGET',
+//     'VIEW_ANUAL_BUDGET',
+// ])
 
-const AccessSchema = z.enum([
-    'PROTOCOLS',
-    'USERS',
-    'EVALUATORS',
-    'REVIEWS',
-    'CONVOCATORIES',
-    'ACADEMIC_UNITS',
-    'TEAM_MEMBERS',
-    'MEMBER_CATEGORIES',
-    'ANUAL_BUDGETS',
-])
-export const ACCESS = AccessSchema.Enum
-export type AccessType = `${z.infer<typeof AccessSchema>}`
+// const AccessSchema = z.enum([
+//     'PROTOCOLS',
+//     'USERS',
+//     'EVALUATORS',
+//     'REVIEWS',
+//     'CONVOCATORIES',
+//     'ACADEMIC_UNITS',
+//     'TEAM_MEMBERS',
+//     'MEMBER_CATEGORIES',
+//     'ANUAL_BUDGETS',
+// ])
 
 const ReviewTypeSchema = z.enum([
     'METHODOLOGICAL',
     'SCIENTIFIC_INTERNAL',
     'SCIENTIFIC_EXTERNAL',
 ])
-export const REVIEW_TYPE = ReviewTypeSchema.Enum
 
 const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
-export const REVIEW_VERDICT = ReviewVerdictSchema.Enum
 
 /////////////////////////////////////////
 // MODELS
@@ -112,7 +101,7 @@ export type Convocatory = z.infer<typeof ConvocatorySchema>
 export const ProtocolSchema = z.object({
     id: z.string().optional(),
     createdAt: z.coerce.date().nullable().optional(),
-    state: StateSchema,
+    state: ProtocolStateSchema,
     researcherId: z.string(),
     sections: z.lazy(() => SectionsSchema),
     convocatoryId: z.string(),

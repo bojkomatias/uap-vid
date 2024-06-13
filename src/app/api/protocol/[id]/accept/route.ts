@@ -1,10 +1,9 @@
-
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { canExecute } from '@utils/scopes'
-import { State } from '@prisma/client'
+import { Action, ProtocolState } from '@prisma/client'
 import { getToken } from 'next-auth/jwt'
 
 export async function PUT(
@@ -15,13 +14,16 @@ export async function PUT(
     const id = params.id
     const protocol = await request.json()
 
-    if (token && canExecute('ACCEPT', token.user.role, protocol.state)) {
-        const updated = await updateProtocolStateById(id, State.ACCEPTED)
+    if (token && canExecute(Action.ACCEPT, token.user.role, protocol.state)) {
+        const updated = await updateProtocolStateById(
+            id,
+            ProtocolState.ACCEPTED
+        )
 
         await logProtocolUpdate({
             user: token.user,
-            fromState: State.SCIENTIFIC_EVALUATION,
-            toState: State.ACCEPTED,
+            fromState: ProtocolState.SCIENTIFIC_EVALUATION,
+            toState: ProtocolState.ACCEPTED,
             protocolId: id,
         })
 

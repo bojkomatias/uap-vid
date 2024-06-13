@@ -1,33 +1,32 @@
-import type { RoleType, StateType, ActionType, AccessType } from './zod'
-import { ROLE, STATE, ACTION, ACCESS } from './zod'
-
 // This component is meant to export helper functionalities in a centralized matter when we come to roles or states.
 // Atomic SRP Components that operate with one of these actions, should be guarded by this functions.
 // Check if role its allowed access or action
 
+import { Access, Action, ProtocolState, Role } from '@prisma/client'
+
 /** Role Access Scope
  * - Check access to resource according to user role
  */
-const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
-    [ROLE.RESEARCHER]: [ACCESS.PROTOCOLS, ACCESS.REVIEWS, ACCESS.USERS],
-    [ROLE.SECRETARY]: [
-        ACCESS.PROTOCOLS,
-        ACCESS.REVIEWS,
-        ACCESS.EVALUATORS,
-        ACCESS.USERS,
+const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
+    [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS, Access.USERS],
+    [Role.SECRETARY]: [
+        Access.PROTOCOLS,
+        Access.REVIEWS,
+        Access.EVALUATORS,
+        Access.USERS,
     ],
-    [ROLE.METHODOLOGIST]: [ACCESS.PROTOCOLS, ACCESS.USERS],
-    [ROLE.SCIENTIST]: [ACCESS.PROTOCOLS, ACCESS.USERS],
-    [ROLE.ADMIN]: [
-        ACCESS.PROTOCOLS,
-        ACCESS.CONVOCATORIES,
-        ACCESS.REVIEWS,
-        ACCESS.EVALUATORS,
-        ACCESS.USERS,
-        ACCESS.ACADEMIC_UNITS,
-        ACCESS.TEAM_MEMBERS,
-        ACCESS.MEMBER_CATEGORIES,
-        ACCESS.ANUAL_BUDGETS,
+    [Role.METHODOLOGIST]: [Access.PROTOCOLS, Access.USERS],
+    [Role.SCIENTIST]: [Access.PROTOCOLS, Access.USERS],
+    [Role.ADMIN]: [
+        Access.PROTOCOLS,
+        Access.CONVOCATORIES,
+        Access.REVIEWS,
+        Access.EVALUATORS,
+        Access.USERS,
+        Access.ACADEMIC_UNITS,
+        Access.TEAM_MEMBERS,
+        Access.MEMBER_CATEGORIES,
+        Access.ANUAL_BUDGETS,
     ],
 }
 
@@ -35,87 +34,91 @@ const ROLE_ACCESS: { [key in keyof typeof ROLE]: AccessType[] } = {
  * - Check if action can be performed according to user role
  * - EDIT_BY_OWNER & PUBLISH can only be done for users that are protocol owners.
  */
-const ROLE_SCOPE: { [key in keyof typeof ROLE]: ActionType[] } = {
-    [ROLE.RESEARCHER]: [
-        ACTION.CREATE,
-        ACTION.EDIT_BY_OWNER,
-        ACTION.PUBLISH,
-        ACTION.VIEW_ANUAL_BUDGET,
+const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
+    [Role.RESEARCHER]: [
+        Action.CREATE,
+        Action.EDIT_BY_OWNER,
+        Action.PUBLISH,
+        Action.VIEW_ANUAL_BUDGET,
     ],
-    [ROLE.SECRETARY]: [
-        ACTION.ACCEPT,
-        ACTION.CREATE,
-        ACTION.EDIT,
-        ACTION.EDIT_BY_OWNER,
-        ACTION.PUBLISH,
-        ACTION.VIEW_ANUAL_BUDGET,
+    [Role.SECRETARY]: [
+        Action.ACCEPT,
+        Action.CREATE,
+        Action.EDIT,
+        Action.EDIT_BY_OWNER,
+        Action.PUBLISH,
+        Action.VIEW_ANUAL_BUDGET,
     ],
-    [ROLE.METHODOLOGIST]: [
-        ACTION.REVIEW,
-        ACTION.CREATE,
-        ACTION.EDIT_BY_OWNER,
-        ACTION.PUBLISH,
+    [Role.METHODOLOGIST]: [
+        Action.REVIEW,
+        Action.CREATE,
+        Action.EDIT_BY_OWNER,
+        Action.PUBLISH,
     ],
-    [ROLE.SCIENTIST]: [ACTION.REVIEW],
-    [ROLE.ADMIN]: [
-        ACTION.CREATE,
-        ACTION.EDIT,
-        ACTION.EDIT_BY_OWNER,
-        ACTION.PUBLISH,
-        ACTION.ACCEPT,
-        ACTION.REVIEW,
-        ACTION.APPROVE,
-        ACTION.ASSIGN_TO_METHODOLOGIST,
-        ACTION.ASSIGN_TO_SCIENTIFIC,
-        ACTION.DELETE,
-        ACTION.DISCONTINUE,
-        ACTION.FINISH,
-        ACTION.VIEW_ANUAL_BUDGET,
-        ACTION.GENERATE_ANUAL_BUDGET,
+    [Role.SCIENTIST]: [Action.REVIEW],
+    [Role.ADMIN]: [
+        Action.CREATE,
+        Action.EDIT,
+        Action.EDIT_BY_OWNER,
+        Action.PUBLISH,
+        Action.ACCEPT,
+        Action.REVIEW,
+        Action.APPROVE,
+        Action.ASSIGN_TO_METHODOLOGIST,
+        Action.ASSIGN_TO_SCIENTIFIC,
+        Action.DELETE,
+        Action.DISCONTINUE,
+        Action.FINISH,
+        Action.VIEW_ANUAL_BUDGET,
+        Action.GENERATE_ANUAL_BUDGET,
     ],
 }
 
-/** State Action Scope
+/** ProtocolState Action Scope
  * - Check if an action can be performed according current protocol state
  */
-const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
-    [STATE.NOT_CREATED]: [ACTION.CREATE],
-    [STATE.DRAFT]: [ACTION.EDIT_BY_OWNER, ACTION.PUBLISH, ACTION.DELETE],
-    [STATE.PUBLISHED]: [
-        ACTION.ASSIGN_TO_METHODOLOGIST,
-        ACTION.EDIT,
-        ACTION.DISCONTINUE,
-        ACTION.DELETE,
+const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
+    [ProtocolState.NOT_CREATED]: [Action.CREATE],
+    [ProtocolState.DRAFT]: [
+        Action.EDIT_BY_OWNER,
+        Action.PUBLISH,
+        Action.DELETE,
     ],
-    [STATE.METHODOLOGICAL_EVALUATION]: [
-        ACTION.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation
-        ACTION.EDIT_BY_OWNER,
-        ACTION.REVIEW,
-        ACTION.ASSIGN_TO_SCIENTIFIC,
-        ACTION.DISCONTINUE,
+    [ProtocolState.PUBLISHED]: [
+        Action.ASSIGN_TO_METHODOLOGIST,
+        Action.EDIT,
+        Action.DISCONTINUE,
+        Action.DELETE,
     ],
-    [STATE.SCIENTIFIC_EVALUATION]: [
-        ACTION.ASSIGN_TO_SCIENTIFIC, // Allows re-assignation
-        ACTION.EDIT_BY_OWNER,
-        ACTION.REVIEW,
-        ACTION.ACCEPT,
-        ACTION.DISCONTINUE,
+    [ProtocolState.METHODOLOGICAL_EVALUATION]: [
+        Action.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation
+        Action.EDIT_BY_OWNER,
+        Action.REVIEW,
+        Action.ASSIGN_TO_SCIENTIFIC,
+        Action.DISCONTINUE,
     ],
-    [STATE.ACCEPTED]: [
-        ACTION.APPROVE,
-        ACTION.DISCONTINUE,
-        ACTION.EDIT,
-        ACTION.GENERATE_ANUAL_BUDGET,
-        ACTION.VIEW_ANUAL_BUDGET,
+    [ProtocolState.SCIENTIFIC_EVALUATION]: [
+        Action.ASSIGN_TO_SCIENTIFIC, // Allows re-assignation
+        Action.EDIT_BY_OWNER,
+        Action.REVIEW,
+        Action.ACCEPT,
+        Action.DISCONTINUE,
     ],
-    [STATE.ON_GOING]: [
-        ACTION.FINISH,
-        ACTION.VIEW_ANUAL_BUDGET,
-        ACTION.GENERATE_ANUAL_BUDGET,
+    [ProtocolState.ACCEPTED]: [
+        Action.APPROVE,
+        Action.DISCONTINUE,
+        Action.EDIT,
+        Action.GENERATE_ANUAL_BUDGET,
+        Action.VIEW_ANUAL_BUDGET,
     ],
-    [STATE.FINISHED]: [],
-    [STATE.DISCONTINUED]: [],
-    [STATE.DELETED]: [],
+    [ProtocolState.ON_GOING]: [
+        Action.FINISH,
+        Action.VIEW_ANUAL_BUDGET,
+        Action.GENERATE_ANUAL_BUDGET,
+    ],
+    [ProtocolState.FINISHED]: [],
+    [ProtocolState.DISCONTINUED]: [],
+    [ProtocolState.DELETED]: [],
 }
 
 /**
@@ -124,18 +127,15 @@ const STATE_SCOPE: { [key in keyof typeof STATE]: ActionType[] } = {
  * @param role
  * @returns
  */
-export const canAccess = (access: AccessType, role: RoleType) =>
-    ROLE_ACCESS[role].includes(access)
+export const canAccess = (access: Access, role: Role) =>
+    Role_ACCESS[role].includes(access)
 
 /**
- * Check Execution Permission according to State and Role
+ * Check Execution Permission according to ProtocolState and Role
  * @param action
  * @param role
  * @param state
  * @returns
  */
-export const canExecute = (
-    action: ActionType,
-    role: RoleType,
-    state: StateType
-) => ROLE_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
+export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
+    Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)

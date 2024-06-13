@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { State } from '@prisma/client'
+import { ProtocolState } from '@prisma/client'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { logProtocolUpdate } from '@utils/logger'
 import { getToken } from 'next-auth/jwt'
@@ -17,7 +17,7 @@ export async function PUT(
     const protocol = await request.json()
 
     if (protocol) delete protocol.id
-    const updated = await updateProtocolStateById(id, State.PUBLISHED)
+    const updated = await updateProtocolStateById(id, ProtocolState.PUBLISHED)
 
     const secretariesEmails = async (academicUnits: string[]) => {
         const secretaryEmailPromises = academicUnits.map(async (s) => {
@@ -38,7 +38,7 @@ export async function PUT(
     }
 
     if (updated) {
-        (
+        ;(
             await secretariesEmails(updated.sections.identification.sponsor)
         ).forEach((email) => {
             emailer({
@@ -55,8 +55,8 @@ export async function PUT(
 
     await logProtocolUpdate({
         user: token!.user,
-        fromState: State.DRAFT,
-        toState: State.PUBLISHED,
+        fromState: ProtocolState.DRAFT,
+        toState: ProtocolState.PUBLISHED,
         protocolId: id,
     })
 

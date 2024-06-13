@@ -6,11 +6,10 @@ import {
     getAllConvocatories,
     getCurrentConvocatory,
 } from '@repositories/convocatory'
-import type { RoleType } from '@utils/zod'
 import Link from 'next/link'
 import { FilePlus } from 'tabler-icons-react'
 
-export default async function CreateButton({ role }: { role: RoleType }) {
+export default async function CreateButton({ role }: { role: Role }) {
     if (role === Role.ADMIN) {
         const [, convocatories] = await getAllConvocatories({})
         if (!convocatories || convocatories.length === 0) return null

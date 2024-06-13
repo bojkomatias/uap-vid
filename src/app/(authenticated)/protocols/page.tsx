@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolsByRol } from 'repositories/protocol'
 import { canExecute } from '@utils/scopes'
-import { ACTION } from '@utils/zod'
+import { Action, ProtocolState } from '@prisma/client'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -33,9 +33,9 @@ export default async function Page({
 
             <div className="mt-3 flex justify-end">
                 {canExecute(
-                    ACTION.CREATE,
+                    Action.CREATE,
                     session.user.role,
-                    'NOT_CREATED'
+                    ProtocolState.NOT_CREATED
                 ) && <CreateButton role={session.user.role} />}
             </div>
 

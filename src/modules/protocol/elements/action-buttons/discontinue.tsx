@@ -1,19 +1,22 @@
 'use client'
-import type { State, Role } from '@prisma/client'
-import { ACTION } from '@utils/zod'
+import { Action, type ProtocolState, type Role } from '@prisma/client'
+
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { Button } from '@elements/button'
 import { canExecute } from '@utils/scopes'
 import { useTransition } from 'react'
 
-type ActionButtonTypes = { role: Role; protocol: { id: string; state: State } }
+type ActionButtonTypes = {
+    role: Role
+    protocol: { id: string; state: ProtocolState }
+}
 
 export const DiscontinueButton = ({ role, protocol }: ActionButtonTypes) => {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
 
-    if (!protocol.id || !canExecute(ACTION.DISCONTINUE, role, protocol.state))
+    if (!protocol.id || !canExecute(Action.DISCONTINUE, role, protocol.state))
         return <></>
 
     const discontinueProtocol = async () => {

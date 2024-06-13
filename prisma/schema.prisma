@@ -51,7 +51,7 @@ model Protocol {
   createdAt      DateTime?        @default(now()) @db.Date
   researcherId   String           @db.ObjectId
   researcher     User             @relation(fields: [researcherId], references: [id])
-  state          State            @default(DRAFT)
+  state          ProtocolState    @default(DRAFT)
   reviews        Review[]
   sections       ProtocolSections
   convocatory    Convocatory      @relation(fields: [convocatoryId], references: [id])
@@ -244,12 +244,12 @@ type ProtocolSectionsIdentification {
 }
 
 type ProtocolSectionsIdentificationTeam {
-  hours          Float
-  last_name      String?
-  name           String?
-  workingMonths  Int?
-  role           String
-  teamMemberId   String? @db.ObjectId
+  hours         Float
+  last_name     String?
+  name          String?
+  workingMonths Int?
+  role          String
+  teamMemberId  String? @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {
@@ -299,7 +299,7 @@ enum Role {
   ADMIN
 }
 
-enum State {
+enum ProtocolState {
   NOT_CREATED
   DRAFT
   PUBLISHED
@@ -317,4 +317,41 @@ enum AnualBudgetState {
   APPROVED
   INTERRUPTED
   REJECTED
+}
+
+// This is a Dummy modal to support exporting the Action to types
+// In the future we might change roles
+model Metadata {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  action Action
+  access Access // I believe Acces should be actions as well...
+}
+
+enum Action {
+  CREATE
+  EDIT
+  EDIT_BY_OWNER
+  PUBLISH
+  ASSIGN_TO_METHODOLOGIST
+  ASSIGN_TO_SCIENTIFIC
+  REVIEW
+  ACCEPT //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+  APPROVE //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+  DISCONTINUE
+  FINISH
+  DELETE
+  GENERATE_ANUAL_BUDGET
+  VIEW_ANUAL_BUDGET
+}
+
+enum Access {
+  PROTOCOLS
+  USERS
+  EVALUATORS
+  REVIEWS
+  CONVOCATORIES
+  ACADEMIC_UNITS
+  TEAM_MEMBERS
+  MEMBER_CATEGORIES
+  ANUAL_BUDGETS
 }
