@@ -154,6 +154,10 @@ export const HistoricCategoryPriceSchema = z.object({
   currency: z.string().default('ARS'),
 })
 
+const AmountIndexSchema = z
+  .object({ FCA: z.number(), FMR: z.number() })
+  .nullable()
+
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
 // Contiene el array histórico de categorías
@@ -165,6 +169,7 @@ export const TeamMemberCategorySchema = z.object({
   price: HistoricCategoryPriceSchema.array().min(1, {
     message: 'Configure un precio',
   }),
+  amountIndex: AmountIndexSchema, //Remove nullable
 })
 
 /////////////////////////////////////////
