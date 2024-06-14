@@ -27,7 +27,8 @@
             "@user/*": ["./modules/user/*"],
             "@review/*": ["./modules/review/*"],
             "@convocatory/*": ["./modules/convocatory/*"],
-            "@components/*": ["./components/*"]
+            "@components/*": ["./components/*"],
+            "@shared/*": ["./shared/*"]
         },
         "plugins": [
             {

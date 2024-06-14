@@ -75,7 +75,9 @@ export const ConvocatorySchema = z
     .object({
         id: z.string().optional(),
         createdAt: z.coerce.date().optional(),
-        name: z.string(),
+        name: z.string().min(6, {
+            message: 'Debe tener mínimo 6 caracteres',
+        }),
         from: z.coerce.date().min(new Date(-1), {
             message: 'La fecha no puede ser menor a la actual',
         }),

@@ -1,4 +1,5 @@
 import * as Headless from '@headlessui/react'
+import { cx } from '@utils/cx'
 import clsx from 'clsx'
 
 export function Fieldset({
@@ -40,7 +41,7 @@ export function FieldGroup({
         <div
             data-slot="control"
             {...props}
-            className={clsx(className, 'space-y-8')}
+            className={cx('space-y-8', className)}
         />
     )
 }

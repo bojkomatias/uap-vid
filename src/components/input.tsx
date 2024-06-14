@@ -24,22 +24,21 @@ export function InputGroup({
 const dateTypes = ['date', 'datetime-local', 'month', 'time', 'week']
 type DateType = (typeof dateTypes)[number]
 
+export type InputProps = {
+    className?: string
+    type?:
+        | 'email'
+        | 'number'
+        | 'password'
+        | 'search'
+        | 'tel'
+        | 'text'
+        | 'url'
+        | DateType
+} & Omit<Headless.InputProps, 'className'>
+
 export const Input = forwardRef(function Input(
-    {
-        className,
-        ...props
-    }: {
-        className?: string
-        type?:
-            | 'email'
-            | 'number'
-            | 'password'
-            | 'search'
-            | 'tel'
-            | 'text'
-            | 'url'
-            | DateType
-    } & Omit<Headless.InputProps, 'className'>,
+    { className, ...props }: InputProps,
     ref: React.ForwardedRef<HTMLInputElement>
 ) {
     return (
