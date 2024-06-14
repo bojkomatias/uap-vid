@@ -6,22 +6,22 @@ import UserTable from '@user/user-table'
 import { buttonStyle } from '@elements/button/styles'
 
 export default async function Page({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, users] = await getUsers(searchParams)
+  const [totalRecords, users] = await getUsers(searchParams)
 
-    return (
-        <>
-            <PageHeading title="Lista de usuarios" />
-            <div className="flex flex-row-reverse">
-                <Link href={'/users/new'} className={buttonStyle('secondary')}>
-                    <UserPlus className="h-4 text-current" />
-                    Nuevo usuario
-                </Link>
-            </div>
-            <UserTable users={users} totalRecords={totalRecords} />
-        </>
-    )
+  return (
+    <>
+      <PageHeading title="Lista de usuarios" />
+      <div className="flex flex-row-reverse">
+        <Link href={'/users/new'} className={buttonStyle('secondary')}>
+          <UserPlus className="h-4 text-current" />
+          Nuevo usuario
+        </Link>
+      </div>
+      <UserTable users={users} totalRecords={totalRecords} />
+    </>
+  )
 }

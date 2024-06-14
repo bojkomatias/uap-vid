@@ -7,7 +7,7 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const orderByQuery: any = (query: string, order: string) => {
-    const arr = query.split(/[.|_]/)
-    if (!arr[0]) return order
-    return { [arr[0]]: orderByQuery(arr.slice(1).join('.'), order) }
+  const arr = query.split(/[.|_]/)
+  if (!arr[0]) return order
+  return { [arr[0]]: orderByQuery(arr.slice(1).join('.'), order) }
 }
