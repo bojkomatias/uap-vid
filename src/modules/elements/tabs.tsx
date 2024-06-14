@@ -25,7 +25,7 @@ export default function Tabs({
                 <select
                     id="tabs"
                     title="tabs"
-                    className="focus:border-indigo-500 focus:ring-indigo-500 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:outline-none sm:text-sm"
+                    className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 >
                     {tabs.map((tab) => (
                         <option key={tab.shortname}>{tab.shortname}</option>

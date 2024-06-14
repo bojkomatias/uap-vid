@@ -17,7 +17,7 @@ function getYears() {
 const years = getYears()
 
 export function BudgetYearCombobox() {
-    const [selected, setSelected] = useState('')
+    const [selected, setSelected] = useState(null)
 
     const [query, setQuery] = useState('')
     const update = useUpdateQuery()
@@ -41,7 +41,7 @@ export function BudgetYearCombobox() {
 
     return (
         <div className="relative w-fit">
-            <Combobox value={selected} onChange={setSelected}>
+            <Combobox value={selected} onChange={(value) => setSelected(value)}>
                 <div className="relative">
                     <Combobox.Input
                         className="input"
