@@ -26,7 +26,8 @@
             "@repositories/*": ["./repositories/*"],
             "@user/*": ["./modules/user/*"],
             "@review/*": ["./modules/review/*"],
-            "@convocatory/*": ["./modules/convocatory/*"]
+            "@convocatory/*": ["./modules/convocatory/*"],
+            "@components/*": ["./components/*"]
         },
         "plugins": [
             {

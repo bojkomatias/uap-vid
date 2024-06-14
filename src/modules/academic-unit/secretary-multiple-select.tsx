@@ -49,9 +49,7 @@ export function SecretaryMultipleSelect({
 
     return (
         <Combobox
-            //@ts-ignore
             multiple
-            className={className}
             value={selected}
             onChange={(e) => {
                 setSelected(e)
@@ -61,7 +59,7 @@ export function SecretaryMultipleSelect({
                 }, 1500)
             }}
         >
-            <div className="relative">
+            <div className={cx('relative', className)}>
                 <Combobox.Button className="relative w-full">
                     <Combobox.Input
                         autoComplete="off"

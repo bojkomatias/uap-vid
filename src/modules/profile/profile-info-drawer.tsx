@@ -155,10 +155,10 @@ export function ProfileInfo({
                         )}
                     </div>
                 </div>
-                <p className="text-indigo-600 text-sm font-semibold leading-6">
+                <p className="text-sm font-semibold leading-6 text-indigo-600">
                     {RolesDictionary[user.role]}
                 </p>
-                <p className="text-indigo-600 text-sm font-semibold leading-6">
+                <p className="text-sm font-semibold leading-6 text-indigo-600">
                     {user.email}
                 </p>
             </div>
