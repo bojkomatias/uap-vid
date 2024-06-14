@@ -1,4 +1,4 @@
-import Navigation, { AppLayout } from '@auth/navigation'
+import { AppLayout } from '@auth/navigation'
 import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export default async function RootLayout({
@@ -10,7 +10,9 @@ export default async function RootLayout({
 }) {
     return (
         <AppLayout>
-            <Breadcrumbs />
+            <div className="max-lg:hidden">
+                <Breadcrumbs />
+            </div>
             {children}
             {drawer}
         </AppLayout>

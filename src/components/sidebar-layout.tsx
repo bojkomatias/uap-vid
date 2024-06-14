@@ -76,7 +76,7 @@ export function SidebarLayout({
     const [showSidebar, setShowSidebar] = useState(false)
 
     return (
-        <div className="relative isolate flex min-h-svh w-full bg-white max-lg:flex-col lg:bg-gray-100 dark:bg-gray-900 dark:lg:bg-gray-950">
+        <div className="relative isolate flex min-h-svh w-full bg-white dark:bg-gray-900 max-lg:flex-col lg:bg-gray-100 dark:lg:bg-gray-950">
             {/* Sidebar on desktop */}
             <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden">
                 {sidebar}
