@@ -76,7 +76,7 @@ export function SidebarLayout({
     const [showSidebar, setShowSidebar] = useState(false)
 
     return (
-        <div className="relative isolate flex min-h-svh w-full bg-white dark:bg-gray-900 max-lg:flex-col lg:bg-gray-100 dark:lg:bg-gray-950">
+        <div className="relative isolate flex min-h-svh w-full bg-white max-lg:flex-col lg:bg-gray-100 dark:bg-gray-900 dark:lg:bg-gray-950">
             {/* Sidebar on desktop */}
             <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden">
                 {sidebar}
@@ -105,8 +105,8 @@ export function SidebarLayout({
 
             {/* Content */}
             <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-64 lg:pr-2 lg:pt-2">
-                <div className="grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-sm lg:ring-1 lg:ring-gray-950/5 dark:lg:bg-gray-900 dark:lg:ring-white/10">
-                    <div className="mx-auto max-w-6xl">{children}</div>
+                <div className="relative grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-sm lg:ring-1 lg:ring-gray-950/5 dark:lg:bg-gray-900 dark:lg:ring-white/10">
+                    {children}
                 </div>
             </main>
         </div>

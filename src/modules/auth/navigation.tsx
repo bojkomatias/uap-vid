@@ -2,10 +2,13 @@ import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { cx } from '@utils/cx'
 import { redirect } from 'next/navigation'
-import { DesktopNavigation } from './elements/sidebar'
+import { AppSidebar, DesktopNavigation } from './elements/sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
+import { Navbar } from '@components/navbar'
+import { Sidebar } from '@components/sidebar'
+import { SidebarLayout } from '@components/sidebar-layout'
 
 export default async function Navigation({
     children,
@@ -18,6 +21,7 @@ export default async function Navigation({
     const currentConvocatory = await getCurrentConvocatory()
 
     const hasNavigation = session?.user?.role === 'ADMIN'
+
     return (
         <>
             {hasNavigation ? <DesktopNavigation user={session.user} /> : null}
@@ -32,5 +36,23 @@ export default async function Navigation({
                 </main>
             </div>
         </>
+    )
+}
+
+export async function AppLayout({ children }: { children: ReactNode }) {
+    const session = await getServerSession(authOptions)
+    if (!session) redirect('/')
+
+    const convocatory = await getCurrentConvocatory()
+
+    return (
+        <SidebarLayout
+            sidebar={
+                <AppSidebar user={session.user} convocatory={convocatory} />
+            }
+            navbar={<Navbar>{/* Your navbar content */}</Navbar>}
+        >
+            {children}
+        </SidebarLayout>
     )
 }

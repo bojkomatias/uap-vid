@@ -60,7 +60,7 @@ export const Breadcrumbs = () => {
     )
 
     return (
-        <nav className="absolute left-24 top-8 flex" aria-label="Breadcrumb">
+        <nav aria-label="Breadcrumb">
             <ol role="list" className="flex rounded-md bg-white">
                 <li className="flex items-center">
                     <Link

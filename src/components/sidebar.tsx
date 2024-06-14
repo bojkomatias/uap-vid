@@ -87,7 +87,7 @@ export function SidebarDivider({
             {...props}
             className={clsx(
                 className,
-                'my-4 border-t border-gray-950/5 dark:border-white/5 lg:-mx-4'
+                'my-4 border-t border-gray-950/5 lg:-mx-4 dark:border-white/5'
             )}
         />
     )
@@ -140,22 +140,22 @@ export const SidebarItem = React.forwardRef(function SidebarItem(
         // Base
         'flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-gray-950 sm:py-2 sm:text-sm/5',
         // Leading icon/icon-only
-        'data-[slot=icon]:*:size-6 data-[slot=icon]:*:shrink-0 data-[slot=icon]:*:fill-gray-500 sm:data-[slot=icon]:*:size-5',
+        'data-[slot=icon]:*:size-6 data-[slot=icon]:*:shrink-0 data-[slot=icon]:*:stroke-gray-500 sm:data-[slot=icon]:*:size-5',
         // Trailing icon (down chevron or similar)
         'data-[slot=icon]:last:*:ml-auto data-[slot=icon]:last:*:size-5 sm:data-[slot=icon]:last:*:size-4',
         // Avatar
         'data-[slot=avatar]:*:-m-0.5 data-[slot=avatar]:*:size-7 data-[slot=avatar]:*:[--ring-opacity:10%] sm:data-[slot=avatar]:*:size-6',
         // Hover
-        'data-[hover]:bg-gray-950/5 data-[slot=icon]:*:data-[hover]:fill-gray-950',
+        'data-[hover]:bg-gray-950/5 data-[slot=icon]:*:data-[hover]:stroke-gray-950',
         // Active
-        'data-[active]:bg-gray-950/5 data-[slot=icon]:*:data-[active]:fill-gray-950',
+        'data-[active]:bg-gray-950/5 data-[slot=icon]:*:data-[active]:stroke-gray-950',
         // Current
-        'data-[slot=icon]:*:data-[current]:fill-gray-950',
+        'data-[slot=icon]:*:data-[current]:stroke-gray-950',
         // Dark mode
-        'dark:text-white dark:data-[slot=icon]:*:fill-gray-400',
-        'dark:data-[hover]:bg-white/5 dark:data-[slot=icon]:*:data-[hover]:fill-white',
-        'dark:data-[active]:bg-white/5 dark:data-[slot=icon]:*:data-[active]:fill-white',
-        'dark:data-[slot=icon]:*:data-[current]:fill-white'
+        'dark:text-white dark:data-[slot=icon]:*:stroke-gray-400',
+        'dark:data-[hover]:bg-white/5 dark:data-[slot=icon]:*:data-[hover]:stroke-white',
+        'dark:data-[active]:bg-white/5 dark:data-[slot=icon]:*:data-[active]:stroke-white',
+        'dark:data-[slot=icon]:*:data-[current]:stroke-white'
     )
 
     return (

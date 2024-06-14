@@ -9,14 +9,24 @@ import {
     CurrencyDollar,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
-import { Access, type User } from '@prisma/client'
+import { Access, Convocatory, type User } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import Link from 'next/link'
 import { cx } from '@utils/cx'
 import { buttonStyle } from '@elements/button/styles'
+import {
+    Sidebar,
+    SidebarBody,
+    SidebarSection,
+    SidebarItem,
+    SidebarLabel,
+    SidebarSpacer,
+} from '@components/sidebar'
+import { CurrentConvocatory } from '@convocatory/timer'
 
 export function DesktopNavigation({ user }: { user: User }) {
     const pathname = usePathname()
+
     return (
         <div className="absolute inset-0 left-0 z-30 h-full w-16 border-r bg-gray-50">
             {/* Sidebar component, swap this element with another sidebar if you like */}
@@ -55,6 +65,43 @@ export function DesktopNavigation({ user }: { user: User }) {
                 </nav>
             </div>
         </div>
+    )
+}
+
+export function AppSidebar({
+    user,
+    convocatory,
+}: {
+    user: User
+    convocatory: Convocatory | null
+}) {
+    const pathname = usePathname()
+
+    return (
+        <Sidebar>
+            <SidebarBody>
+                <SidebarSection>
+                    {navigation.map((item) =>
+                        canAccess(item.scope, user.role) ? (
+                            <SidebarItem
+                                key={item.name}
+                                href="/"
+                                current={pathname?.includes(item.href)}
+                            >
+                                <item.icon data-slot="icon" />
+                                <SidebarLabel>{item.name}</SidebarLabel>
+                            </SidebarItem>
+                        ) : null
+                    )}
+                </SidebarSection>
+                <SidebarSpacer />
+                {convocatory ? (
+                    <SidebarSection>
+                        <CurrentConvocatory convocatory={convocatory} />
+                    </SidebarSection>
+                ) : null}
+            </SidebarBody>
+        </Sidebar>
     )
 }
 
