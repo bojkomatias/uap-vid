@@ -16,147 +16,143 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
  */
 
 const getCategories = cache(
-    async ({
-        records = '5',
-        page = '1',
-        search,
-        sort,
-        order,
-        filter,
-        values,
-    }: {
-        [key: string]: string
-    }) => {
-        try {
-            const orderBy = order && sort ? orderByQuery(sort, order) : {}
+  async ({
+    records = '5',
+    page = '1',
+    search,
+    sort,
+    order,
+    filter,
+    values,
+  }: {
+    [key: string]: string
+  }) => {
+    try {
+      const orderBy = order && sort ? orderByQuery(sort, order) : {}
 
-            return await prisma.$transaction([
-                prisma.teamMemberCategory.count({
-                    where: {
-                        state: { not: false },
-                        AND: [
-                            search
-                                ? {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: search,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  }
-                                : {},
-                            filter && values
-                                ? { [filter]: { in: values.split('-') } }
-                                : {},
-                        ],
+      return await prisma.$transaction([
+        prisma.teamMemberCategory.count({
+          where: {
+            state: { not: false },
+            AND: [
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
+                      },
                     },
-                }),
+                  ],
+                }
+              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
+            ],
+          },
+        }),
 
-                prisma.teamMemberCategory.findMany({
-                    skip: Number(records) * (Number(page) - 1),
-                    take: Number(records),
-                    // Grab the model, and  bring relational data
-                    select: {
-                        id: true,
-                        state: true,
-                        name: true,
-                        price: true,
+        prisma.teamMemberCategory.findMany({
+          skip: Number(records) * (Number(page) - 1),
+          take: Number(records),
+          // Grab the model, and  bring relational data
+          select: {
+            id: true,
+            state: true,
+            name: true,
+            price: true,
+          },
+          // Add all the globally searchable fields
+          where: {
+            state: { not: false },
+            AND: [
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
+                      },
                     },
-                    // Add all the globally searchable fields
-                    where: {
-                        state: { not: false },
-                        AND: [
-                            search
-                                ? {
-                                      OR: [
-                                          {
-                                              name: {
-                                                  contains: search,
-                                                  mode: 'insensitive',
-                                              },
-                                          },
-                                      ],
-                                  }
-                                : {},
-                            filter && values
-                                ? { [filter]: { in: values.split('-') } }
-                                : {},
-                        ],
-                    },
+                  ],
+                }
+              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
+            ],
+          },
 
-                    orderBy,
-                }),
-            ])
-        } catch (error) {
-            return []
-        }
+          orderBy,
+        }),
+      ])
+    } catch (error) {
+      return []
     }
+  }
 )
 
 const updatePriceCategoryById = async (
-    id: string,
-    data: TeamMemberCategory
+  id: string,
+  data: TeamMemberCategory
 ) => {
-    try {
-        const category = await prisma.teamMemberCategory.update({
-            where: {
-                id,
-            },
-            data: { price: data.price },
-        })
-        return category
-    } catch (error) {
-        return new Error(`${error}`)
-    }
+  try {
+    const category = await prisma.teamMemberCategory.update({
+      where: {
+        id,
+      },
+      data: { price: data.price },
+    })
+    return category
+  } catch (error) {
+    return new Error(`${error}`)
+  }
 }
 
 const deleteCategoryById = async (id: string, data: TeamMemberCategory) => {
-    try {
-        const user = await prisma.teamMemberCategory.update({
-            where: {
-                id,
-            },
-            data: { state: data.state },
-        })
-        return user
-    } catch (error) {
-        return new Error(`${error}`)
-    }
+  try {
+    const user = await prisma.teamMemberCategory.update({
+      where: {
+        id,
+      },
+      data: { state: data.state },
+    })
+    return user
+  } catch (error) {
+    return new Error(`${error}`)
+  }
 }
 
 const insertCategory = async (data: Omit<TeamMemberCategory, 'id'>) => {
-    try {
-        const category = await prisma.teamMemberCategory.create({
-            data,
-        })
-        return category
-    } catch (error) {
-        return null
-    }
+  try {
+    const category = await prisma.teamMemberCategory.create({
+      data,
+    })
+    return category
+  } catch (error) {
+    return null
+  }
 }
 
 const getAllCategories = async () =>
-    await prisma.teamMemberCategory.findMany({
-        where: {
-            state: {
-                not: false,
-            },
-        },
-    })
+  await prisma.teamMemberCategory.findMany({
+    where: {
+      state: {
+        not: false,
+      },
+    },
+  })
 
 const getObreroCategory = async () => {
-    return await prisma.teamMemberCategory.findFirst({
-        where: { name: 'Obrero' },
-    })
+  return await prisma.teamMemberCategory.findFirst({
+    where: { name: 'Obrero' },
+  })
 }
 
 export {
-    getCategories,
-    updatePriceCategoryById,
-    insertCategory,
-    deleteCategoryById,
-    getAllCategories,
-    getObreroCategory,
+  getCategories,
+  updatePriceCategoryById,
+  insertCategory,
+  deleteCategoryById,
+  getAllCategories,
+  getObreroCategory,
 }
