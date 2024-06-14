@@ -7,9 +7,11 @@ import {
     Users,
     Category,
     CurrencyDollar,
+    Logout,
+    Settings,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
-import { Access, Convocatory, type User } from '@prisma/client'
+import { Access, type Convocatory, type User } from '@prisma/client'
 import { canAccess } from '@utils/scopes'
 import Link from 'next/link'
 import { cx } from '@utils/cx'
@@ -21,8 +23,11 @@ import {
     SidebarItem,
     SidebarLabel,
     SidebarSpacer,
+    SidebarDivider,
+    SidebarHeading,
 } from '@components/sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
+import { UserDropdownV2 } from './user-dropdown'
 
 export function DesktopNavigation({ user }: { user: User }) {
     const pathname = usePathname()
@@ -81,11 +86,15 @@ export function AppSidebar({
         <Sidebar>
             <SidebarBody>
                 <SidebarSection>
+                    <UserDropdownV2 user={user} />
+                </SidebarSection>
+                <SidebarDivider />
+                <SidebarSection>
                     {navigation.map((item) =>
                         canAccess(item.scope, user.role) ? (
                             <SidebarItem
                                 key={item.name}
-                                href="/"
+                                href={item.href}
                                 current={pathname?.includes(item.href)}
                             >
                                 <item.icon data-slot="icon" />
@@ -94,12 +103,24 @@ export function AppSidebar({
                         ) : null
                     )}
                 </SidebarSection>
-                <SidebarSpacer />
                 {convocatory ? (
                     <SidebarSection>
+                        <SidebarHeading>Convocatoria activa</SidebarHeading>
                         <CurrentConvocatory convocatory={convocatory} />
                     </SidebarSection>
                 ) : null}
+                <SidebarSpacer />
+                <SidebarDivider />
+                <SidebarSection>
+                    <SidebarItem href="/profile">
+                        <Settings data-slot="icon" />
+                        <SidebarLabel>Cuenta</SidebarLabel>
+                    </SidebarItem>
+                    <SidebarItem>
+                        <Logout data-slot="icon" />
+                        <SidebarLabel>Cerrar sesión</SidebarLabel>
+                    </SidebarItem>
+                </SidebarSection>
             </SidebarBody>
         </Sidebar>
     )

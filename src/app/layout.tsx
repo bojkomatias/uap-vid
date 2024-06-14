@@ -1,6 +1,4 @@
 import './globals.css'
-import { Footer } from '@layout/footer'
-import { Header } from '@layout/header'
 import { Montserrat } from 'next/font/google'
 
 export const metadata = {
@@ -29,9 +27,7 @@ export default async function RootLayout({
             ) : null}
             <body>
                 <div id="notifications-container" className="relative" />
-                <Header />
-                <div className="relative min-h-screen">{children}</div>
-                <Footer />
+                {children}
             </body>
         </html>
     )

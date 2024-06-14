@@ -2,12 +2,10 @@ import type { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { cx } from '@utils/cx'
 import { redirect } from 'next/navigation'
-import { AppSidebar, DesktopNavigation } from './elements/sidebar'
+import { AppSidebar, DesktopNavigation } from './elements/app-sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { getCurrentConvocatory } from '@repositories/convocatory'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
-import { Navbar } from '@components/navbar'
-import { Sidebar } from '@components/sidebar'
 import { SidebarLayout } from '@components/sidebar-layout'
 
 export default async function Navigation({
@@ -50,7 +48,7 @@ export async function AppLayout({ children }: { children: ReactNode }) {
             sidebar={
                 <AppSidebar user={session.user} convocatory={convocatory} />
             }
-            navbar={<Navbar>{/* Your navbar content */}</Navbar>}
+            navbar={'PUTOS'}
         >
             {children}
         </SidebarLayout>
