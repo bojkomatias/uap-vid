@@ -10,7 +10,6 @@ module.exports = {
             },
             colors: {
                 current: 'currentColor',
-                base: colors.neutral,
                 primary: {
                     DEFAULT: '#003C71',
                     // Generated with uicolors.app ... we are the darkest one
@@ -32,7 +31,6 @@ module.exports = {
                 error: colors.rose,
                 success: colors.teal,
                 warning: colors.amber,
-                zinc: colors.zinc,
             },
             borderRadius: { DEFAULT: '0.5rem' },
             borderColor: ({ theme }) => ({
