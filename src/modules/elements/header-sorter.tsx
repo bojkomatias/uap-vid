@@ -14,39 +14,37 @@ export default function HeaderSorter({
   const searchParams = useSearchParams()
   const update = useUpdateQuery()
   return header.isPlaceholder ? null : (
-    <div
-      {...{
-        className: header.column.getCanSort()
-          ? 'cursor-pointer select-none flex items-center hover:text-black group'
-          : '',
-        onClick: () =>
-          header.column.getCanSort() &&
-          update({
-            sort: header.id,
-            order:
-              searchParams?.get('sort') == null ||
-              searchParams.get('sort') !== header.id
-                ? 'asc'
-                : searchParams?.get('order') == 'asc'
-                  ? 'desc'
-                  : searchParams?.get('order') == 'desc'
-                    ? null
-                    : 'asc',
-          }),
-      }}
-    >
-      {flexRender(header.column.columnDef.header, header.getContext())}
-      {searchParams?.get('sort') === header.column.id ? (
-        searchParams.get('order') === 'asc' ? (
-          <ArrowUp className="ml-1.5 h-4 w-4 text-primary" />
-        ) : (
-          <ArrowDown className="ml-1.5 h-4 w-4 text-primary" />
-        )
-      ) : (
-        header.column.getCanSort() && (
-          <ArrowsSort className="ml-1.5 h-3 w-3 text-gray-400 group-hover:text-gray-600" />
-        )
-      )}
-    </div>
-  )
+      <div
+        {...{
+          className:
+            header.column.getCanSort() ?
+              'cursor-pointer select-none flex items-center hover:text-black group'
+            : '',
+          onClick: () =>
+            header.column.getCanSort() &&
+            update({
+              sort: header.id,
+              order:
+                (
+                  searchParams?.get('sort') == null ||
+                  searchParams.get('sort') !== header.id
+                ) ?
+                  'asc'
+                : searchParams?.get('order') == 'asc' ? 'desc'
+                : searchParams?.get('order') == 'desc' ? null
+                : 'asc',
+            }),
+        }}
+      >
+        {flexRender(header.column.columnDef.header, header.getContext())}
+        {searchParams?.get('sort') === header.column.id ?
+          searchParams.get('order') === 'asc' ?
+            <ArrowUp className="ml-1.5 h-4 w-4 text-primary" />
+          : <ArrowDown className="ml-1.5 h-4 w-4 text-primary" />
+        : header.column.getCanSort() && (
+            <ArrowsSort className="ml-1.5 h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+          )
+        }
+      </div>
+    )
 }

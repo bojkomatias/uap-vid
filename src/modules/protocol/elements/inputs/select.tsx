@@ -19,11 +19,11 @@ export default function Select({
   const [query, setQuery] = useState('')
 
   const filteredValues =
-    query === ''
-      ? options
-      : options?.filter((value: string) => {
-          return value.toLowerCase().includes(query.toLowerCase())
-        })
+    query === '' ? options : (
+      options?.filter((value: string) => {
+        return value.toLowerCase().includes(query.toLowerCase())
+      })
+    )
 
   return (
     <div>
@@ -70,9 +70,9 @@ export default function Select({
               />
             </div>
           </Combobox.Button>
-          {form.getInputProps(path).error ? (
+          {form.getInputProps(path).error ?
             <p className="error">*{form.getInputProps(path).error}</p>
-          ) : null}
+          : null}
 
           {filteredValues?.length > 0 && (
             <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 text-base shadow focus:outline-none sm:text-sm">

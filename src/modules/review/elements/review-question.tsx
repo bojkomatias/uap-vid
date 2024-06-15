@@ -36,9 +36,9 @@ export default function ReviewQuestion({
             className={({ checked }) =>
               cx(
                 'flex w-20 cursor-pointer items-center justify-center rounded-md border py-0.5 text-sm font-semibold uppercase',
-                checked
-                  ? 'bg-success-100 text-success-600'
-                  : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                checked ?
+                  'bg-success-100 text-success-600'
+                : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
               )
             }
           >
@@ -50,9 +50,9 @@ export default function ReviewQuestion({
             className={({ checked }) =>
               cx(
                 'flex w-20 cursor-pointer items-center justify-center rounded-md border py-0.5 text-sm font-semibold uppercase',
-                checked
-                  ? 'bg-error-50 text-error-600'
-                  : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                checked ?
+                  'bg-error-50 text-error-600'
+                : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
               )
             }
           >

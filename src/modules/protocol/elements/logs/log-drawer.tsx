@@ -45,7 +45,7 @@ export default function ProtocolLogsDrawer({
       </div>
       <CustomDrawer title="Observaciones" open={opened} onClose={setOpened}>
         <div className="max-h-[70svh] min-h-[10svh] overflow-y-auto border-b p-2">
-          {logs.length > 0 ? (
+          {logs.length > 0 ?
             logs.map((log) => (
               <div key={log.id} className="text-black/70">
                 <div className="flex justify-between">
@@ -59,11 +59,10 @@ export default function ProtocolLogsDrawer({
                 </span>
               </div>
             ))
-          ) : (
-            <div className="text-center text-sm text-black/60">
+          : <div className="text-center text-sm text-black/60">
               No hay cambios de estado ni observaciones
             </div>
-          )}
+          }
         </div>
         <form
           onSubmit={(e) => {

@@ -24,7 +24,9 @@ export const Header = async () => {
           </Link>
         </div>
         <div className="flex items-center gap-2">
-          {session ? <UserDropdown user={session.user} /> : null}
+          {session ?
+            <UserDropdown user={session.user} />
+          : null}
         </div>
       </div>
     </nav>

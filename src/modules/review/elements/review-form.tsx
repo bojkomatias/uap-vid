@@ -106,9 +106,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                     <span
                       className={cx(
                         'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
-                        checked
-                          ? 'border-transparent bg-success-600'
-                          : ' bg-white',
+                        checked ?
+                          'border-transparent bg-success-600'
+                        : ' bg-white',
                         active ? 'ring-2 ring-success-600 ring-offset-1' : ''
                       )}
                       aria-hidden="true"
@@ -120,9 +120,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                         as="span"
                         className={cx(
                           'block text-sm',
-                          checked
-                            ? 'font-medium text-gray-900'
-                            : 'font-regular text-gray-700'
+                          checked ?
+                            'font-medium text-gray-900'
+                          : 'font-regular text-gray-700'
                         )}
                       >
                         {ReviewVerdictsDictionary[ReviewVerdict.APPROVED]}
@@ -156,9 +156,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                     <span
                       className={cx(
                         'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
-                        checked
-                          ? 'border-transparent bg-warning-600'
-                          : ' bg-white',
+                        checked ?
+                          'border-transparent bg-warning-600'
+                        : ' bg-white',
                         active ? 'ring-2 ring-warning-600 ring-offset-1' : ''
                       )}
                       aria-hidden="true"
@@ -170,9 +170,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                         as="span"
                         className={cx(
                           'block text-sm',
-                          checked
-                            ? 'font-medium text-gray-900'
-                            : 'font-regular text-gray-700'
+                          checked ?
+                            'font-medium text-gray-900'
+                          : 'font-regular text-gray-700'
                         )}
                       >
                         {
@@ -210,9 +210,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                     <span
                       className={cx(
                         'flex h-4 w-4 shrink-0 cursor-pointer items-center justify-center rounded-full border',
-                        checked
-                          ? 'border-transparent bg-error-600'
-                          : ' bg-white',
+                        checked ?
+                          'border-transparent bg-error-600'
+                        : ' bg-white',
                         active ? 'ring-2 ring-error-600 ring-offset-1' : ''
                       )}
                       aria-hidden="true"
@@ -224,9 +224,9 @@ export default function ReviewForm({ review }: { review: Review }) {
                         as="span"
                         className={cx(
                           'block text-sm',
-                          checked
-                            ? 'font-medium text-gray-900'
-                            : 'font-regular text-gray-700'
+                          checked ?
+                            'font-medium text-gray-900'
+                          : 'font-regular text-gray-700'
                         )}
                       >
                         {ReviewVerdictsDictionary[ReviewVerdict.REJECTED]}

@@ -28,26 +28,26 @@ export const getAnualBudgets = cache(
         prisma.anualBudget.count({
           where: {
             AND: [
-              search
-                ? {
-                    protocol: {
-                      is: {
-                        sections: {
-                          is: {
-                            identification: {
-                              is: {
-                                title: {
-                                  contains: search,
-                                  mode: Prisma.QueryMode.insensitive,
-                                },
+              search ?
+                {
+                  protocol: {
+                    is: {
+                      sections: {
+                        is: {
+                          identification: {
+                            is: {
+                              title: {
+                                contains: search,
+                                mode: Prisma.QueryMode.insensitive,
                               },
                             },
                           },
                         },
                       },
                     },
-                  }
-                : {},
+                  },
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -59,26 +59,26 @@ export const getAnualBudgets = cache(
 
           where: {
             AND: [
-              search
-                ? {
-                    protocol: {
-                      is: {
-                        sections: {
-                          is: {
-                            identification: {
-                              is: {
-                                title: {
-                                  contains: search,
-                                  mode: Prisma.QueryMode.insensitive,
-                                },
+              search ?
+                {
+                  protocol: {
+                    is: {
+                      sections: {
+                        is: {
+                          identification: {
+                            is: {
+                              title: {
+                                contains: search,
+                                mode: Prisma.QueryMode.insensitive,
                               },
                             },
                           },
                         },
                       },
                     },
-                  }
-                : {},
+                  },
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -231,32 +231,32 @@ export const getAnualBudgetsByAcademicUnit = cache(
           where: {
             AND: [
               filter == 'year' ? { year: { equals: Number(values) } } : {},
-              academicUnitId
-                ? { academicUnitsIds: { has: academicUnitId } }
-                : {},
-              search
-                ? {
-                    protocol: {
-                      is: {
-                        sections: {
-                          is: {
-                            identification: {
-                              is: {
-                                title: {
-                                  contains: search,
-                                  mode: Prisma.QueryMode.insensitive,
-                                },
+              academicUnitId ?
+                { academicUnitsIds: { has: academicUnitId } }
+              : {},
+              search ?
+                {
+                  protocol: {
+                    is: {
+                      sections: {
+                        is: {
+                          identification: {
+                            is: {
+                              title: {
+                                contains: search,
+                                mode: Prisma.QueryMode.insensitive,
                               },
                             },
                           },
                         },
                       },
                     },
-                  }
-                : {},
-              filter && values && filter != 'year'
-                ? { [filter]: { in: values.split('-') } }
-                : {},
+                  },
+                }
+              : {},
+              filter && values && filter != 'year' ?
+                { [filter]: { in: values.split('-') } }
+              : {},
             ],
           },
         }),
@@ -267,33 +267,33 @@ export const getAnualBudgetsByAcademicUnit = cache(
           where: {
             AND: [
               filter == 'year' ? { year: { equals: Number(values) } } : {},
-              academicUnitId
-                ? { academicUnitsIds: { has: academicUnitId } }
-                : {},
+              academicUnitId ?
+                { academicUnitsIds: { has: academicUnitId } }
+              : {},
 
-              search
-                ? {
-                    protocol: {
-                      is: {
-                        sections: {
-                          is: {
-                            identification: {
-                              is: {
-                                title: {
-                                  contains: search,
-                                  mode: Prisma.QueryMode.insensitive,
-                                },
+              search ?
+                {
+                  protocol: {
+                    is: {
+                      sections: {
+                        is: {
+                          identification: {
+                            is: {
+                              title: {
+                                contains: search,
+                                mode: Prisma.QueryMode.insensitive,
                               },
                             },
                           },
                         },
                       },
                     },
-                  }
-                : {},
-              filter && values && filter != 'year'
-                ? { [filter]: { in: values.split('-') } }
-                : {},
+                  },
+                }
+              : {},
+              filter && values && filter != 'year' ?
+                { [filter]: { in: values.split('-') } }
+              : {},
             ],
           },
           select: {

@@ -40,9 +40,9 @@ export default function Tabs({
               title={'Mostrar todos los presupuestos'}
               className={cx(
                 'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
-                segment == null
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
+                segment == null ?
+                  'border-primary text-primary'
+                : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
               )}
             >
               TODOS
@@ -54,24 +54,24 @@ export default function Tabs({
                 title={name}
                 className={cx(
                   'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
-                  segment == id
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
+                  segment == id ?
+                    'border-primary text-primary'
+                  : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
                 )}
               >
                 {shortname}{' '}
-                {_count ? (
+                {_count ?
                   <span
                     className={cx(
                       'ml-3 hidden rounded-full px-2.5 py-0.5 text-xs font-medium md:inline-block',
-                      segment == id
-                        ? 'bg-gray-100 text-primary'
-                        : 'bg-gray-50 text-gray-500'
+                      segment == id ?
+                        'bg-gray-100 text-primary'
+                      : 'bg-gray-50 text-gray-500'
                     )}
                   >
                     {_count}
                   </span>
-                ) : null}
+                : null}
               </Link>
             ))}
           </nav>

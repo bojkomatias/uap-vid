@@ -22,9 +22,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     >
       <div className="flex items-center gap-2">
         <DialogTitle>{convocatory.name}</DialogTitle>
-        {current && current.id === convocatory.id ? (
+        {current && current.id === convocatory.id ?
           <Badge color="teal">Activa</Badge>
-        ) : null}
+        : null}
       </div>
       <DialogDescription>
         Tenga en cuenta que esto puede afectar al resto de la applicación

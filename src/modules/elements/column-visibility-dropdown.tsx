@@ -48,11 +48,9 @@ export default function ColumnVisibilityDropdown({
                           active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                         )}
                       >
-                        {column.getIsVisible() ? (
+                        {column.getIsVisible() ?
                           <Check className="h-4 w-4 stroke-gray-600" />
-                        ) : (
-                          <span className="w-4" />
-                        )}
+                        : <span className="w-4" />}
                         {column.columnDef.header as ReactNode}
                       </button>
                     )}

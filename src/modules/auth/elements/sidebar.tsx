@@ -23,7 +23,7 @@ export function DesktopNavigation({ user }: { user: User }) {
       <div className="sticky inset-0 flex min-h-0 flex-1 flex-col pt-8">
         <nav className="flex-1 space-y-3 px-1.5">
           {navigation.map((item) =>
-            canAccess(item.scope, user.role) ? (
+            canAccess(item.scope, user.role) ?
               <Link
                 key={item.name}
                 href={item.href}
@@ -49,7 +49,7 @@ export function DesktopNavigation({ user }: { user: User }) {
                 />
                 {/* {item.name} */}
               </Link>
-            ) : null
+            : null
           )}
         </nav>
       </div>

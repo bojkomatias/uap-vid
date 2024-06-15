@@ -37,10 +37,12 @@ export default async function Page({ params }: { params: { id: string } }) {
               <RejectAnualBudget id={meta.id} />
             )}
             {/* If remainings are 0 then budget is finished */}
-            {meta.state === AnualBudgetState.APPROVED &&
-            (calculations.ABIr !== 0 || calculations.ABTr !== 0) ? (
+            {(
+              meta.state === AnualBudgetState.APPROVED &&
+              (calculations.ABIr !== 0 || calculations.ABTr !== 0)
+            ) ?
               <InterruptAnualBudget id={meta.id} protocolId={meta.protocolId} />
-            ) : null}
+            : null}
           </div>
         </div>
         <BudgetView

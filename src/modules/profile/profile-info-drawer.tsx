@@ -138,7 +138,7 @@ export function ProfileInfo({
             <h3 className=" w-full border-b text-base font-semibold leading-7 tracking-tight text-gray-900">
               {user.name}
             </h3>
-            {user.image ? (
+            {user.image ?
               <Image
                 className="h-12 w-12 rounded-full"
                 src={user.image as string}
@@ -146,9 +146,7 @@ export function ProfileInfo({
                 height={200}
                 width={200}
               />
-            ) : (
-              <UserCircle width={48} height={48} />
-            )}
+            : <UserCircle width={48} height={48} />}
           </div>
         </div>
         <p className="text-sm font-semibold leading-6 text-indigo-600">
@@ -159,7 +157,7 @@ export function ProfileInfo({
         </p>
       </div>
       <h3 className="border-b">Editar cuenta</h3>{' '}
-      {!user.password ? (
+      {!user.password ?
         <Link
           className={cx(buttonStyle('outline'))}
           href={'https://www.office.com/'}
@@ -172,8 +170,7 @@ export function ProfileInfo({
             height={100}
           />
         </Link>
-      ) : (
-        <>
+      : <>
           <DisclosureComponent
             title={
               <div className="flex items-center gap-2 font-semibold">
@@ -195,11 +192,11 @@ export function ProfileInfo({
                       {...emailForm.getInputProps('newEmail')}
                     />
 
-                    {emailForm.getInputProps('newEmail').error ? (
+                    {emailForm.getInputProps('newEmail').error ?
                       <p className="error">
                         *{emailForm.getInputProps('newEmail').error}
                       </p>
-                    ) : null}
+                    : null}
                   </div>
                   <Button
                     className="h-8 w-fit shadow-sm"
@@ -238,11 +235,11 @@ export function ProfileInfo({
                         {...emailForm.getInputProps('emailCode')}
                       />
 
-                      {emailForm.getInputProps('emailCode').error ? (
+                      {emailForm.getInputProps('emailCode').error ?
                         <p className="error">
                           *{emailForm.getInputProps('emailCode').error}
                         </p>
-                      ) : null}
+                      : null}
                     </div>
                   </div>
                 </div>
@@ -288,11 +285,11 @@ export function ProfileInfo({
                       {...passwordForm.getInputProps('currentPassword')}
                     />
 
-                    {passwordForm.getInputProps('currentPassword').error ? (
+                    {passwordForm.getInputProps('currentPassword').error ?
                       <p className="error">
                         *{passwordForm.getInputProps('currentPassword').error}
                       </p>
-                    ) : null}
+                    : null}
                   </div>
                 </div>
               </div>
@@ -311,11 +308,11 @@ export function ProfileInfo({
                       {...passwordForm.getInputProps('newPassword')}
                     />
 
-                    {passwordForm.getInputProps('newPassword').error ? (
+                    {passwordForm.getInputProps('newPassword').error ?
                       <p className="error">
                         *{passwordForm.getInputProps('newPassword').error}
                       </p>
-                    ) : null}
+                    : null}
                   </div>
                 </div>
               </div>
@@ -334,12 +331,12 @@ export function ProfileInfo({
                       {...passwordForm.getInputProps('newPasswordConfirm')}
                     />
 
-                    {passwordForm.getInputProps('newPasswordConfirm').error ? (
+                    {passwordForm.getInputProps('newPasswordConfirm').error ?
                       <p className="error">
                         *
                         {passwordForm.getInputProps('newPasswordConfirm').error}
                       </p>
-                    ) : null}
+                    : null}
                   </div>
                 </div>
               </div>
@@ -362,7 +359,7 @@ export function ProfileInfo({
             </form>
           </DisclosureComponent>
         </>
-      )}
+      }
       {certificate}
     </div>
   )

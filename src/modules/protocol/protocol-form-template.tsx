@@ -49,9 +49,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
   const form = useProtocol({
     initialValues:
-      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol')
-        ? JSON.parse(localStorage.getItem('temp-protocol')!)
-        : protocol,
+      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+        JSON.parse(localStorage.getItem('temp-protocol')!)
+      : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
   })
@@ -138,15 +138,11 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
       >
         {label}
 
-        {!form.isValid(path) ? (
-          form.isDirty(path) ? (
+        {!form.isValid(path) ?
+          form.isDirty(path) ?
             <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
-          ) : (
-            <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
-          )
-        ) : (
-          <CircleCheck className="h-4 w-4 stroke-success-500/80" />
-        )}
+          : <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
+        : <CircleCheck className="h-4 w-4 stroke-success-500/80" />}
       </Button>
     ),
     [form, section]
@@ -156,9 +152,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     <ProtocolProvider form={form}>
       <form
         onBlur={() => {
-          path?.split('/')[2] === 'new' && typeof window !== 'undefined'
-            ? localStorage.setItem('temp-protocol', JSON.stringify(form.values))
-            : null
+          path?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
+            localStorage.setItem('temp-protocol', JSON.stringify(form.values))
+          : null
         }}
         onSubmit={(e) => {
           e.preventDefault()
@@ -172,9 +168,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
             return form.validate()
           }
-          typeof window !== 'undefined'
-            ? localStorage.removeItem('temp-protocol')
-            : null
+          typeof window !== 'undefined' ?
+            localStorage.removeItem('temp-protocol')
+          : null
           upsertProtocol(form.values)
         }}
         className="w-full px-4 py-4"

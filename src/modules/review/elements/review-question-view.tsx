@@ -17,11 +17,9 @@ export default function ReviewQuestionView({
         </div>
 
         <div>
-          {approved ? (
+          {approved ?
             <Check className="h-4 w-4 text-success-600" />
-          ) : (
-            <X className="h-4 w-4 text-error-600" />
-          )}
+          : <X className="h-4 w-4 text-error-600" />}
         </div>
       </div>
       <div className="mt-1 pl-4 text-xs font-light text-gray-900">

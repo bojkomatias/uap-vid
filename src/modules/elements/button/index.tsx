@@ -37,15 +37,11 @@ export const Button = ({
       type={type}
       className={cx(buttonStyle(intent, size), className)}
     >
-      {loading ? (
-        intent === 'primary' ? (
+      {loading ?
+        intent === 'primary' ?
           <span className="loader h-4 w-4" />
-        ) : (
-          <span className="loader-primary h-4 w-4" />
-        )
-      ) : (
-        children
-      )}
+        : <span className="loader-primary h-4 w-4" />
+      : children}
     </button>
   )
 }

@@ -32,22 +32,21 @@ export default function Pagination({
     }
 
     const floor =
-      currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
-        ? 0
-        : currentPage + Math.ceil(numberOfDisplayedPages / 2) >= allPages.length
-          ? allPages.length - numberOfDisplayedPages
-          : currentPage - Math.floor(numberOfDisplayedPages / 2)
+      currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0 ? 0
+      : currentPage + Math.ceil(numberOfDisplayedPages / 2) >= allPages.length ?
+        allPages.length - numberOfDisplayedPages
+      : currentPage - Math.floor(numberOfDisplayedPages / 2)
     const ceil =
-      currentPage + Math.ceil(numberOfDisplayedPages / 2) >= allPages.length
-        ? allPages.length
-        : currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0
-          ? numberOfDisplayedPages
-          : currentPage + Math.ceil(numberOfDisplayedPages / 2)
+      currentPage + Math.ceil(numberOfDisplayedPages / 2) >= allPages.length ?
+        allPages.length
+      : currentPage - Math.floor(numberOfDisplayedPages / 2) <= 0 ?
+        numberOfDisplayedPages
+      : currentPage + Math.ceil(numberOfDisplayedPages / 2)
 
     const displayedPages =
-      allPages.length > numberOfDisplayedPages
-        ? allPages.slice(floor, ceil)
-        : allPages
+      allPages.length > numberOfDisplayedPages ?
+        allPages.slice(floor, ceil)
+      : allPages
 
     return { allPages, displayedPages }
   }, [totalRecords, shownRecords, numberOfDisplayedPages, currentPage])
@@ -55,9 +54,8 @@ export default function Pagination({
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="mx-auto mt-8 flex w-fit gap-1">
-        {numberOfDisplayedPages >=
-        Math.ceil(totalRecords / shownRecords) ? null : (
-          <>
+        {numberOfDisplayedPages >= Math.ceil(totalRecords / shownRecords) ? null
+        : <>
             <Button
               title="Primer página"
               intent="outline"
@@ -80,31 +78,29 @@ export default function Pagination({
             >
               <ChevronLeft className="w-3.5 text-gray-500" />
             </Button>
-          </>
-        )}
+          </>}
 
-        {Math.ceil(totalRecords / shownRecords) >= 1 && allPages.length != 1
-          ? displayedPages.map((page: number) => (
-              <Button
-                key={page}
-                intent="outline"
-                size="icon"
-                className={
-                  Number(currentPage) === page
-                    ? 'fade-in text-xs ring-2 md:ring-primary'
-                    : 'fade-in hidden text-xs md:block'
-                }
-                onClick={() => {
-                  if (Number(currentPage) !== page) update({ page: page })
-                }}
-              >
-                {page}
-              </Button>
-            ))
-          : null}
-        {numberOfDisplayedPages >=
-        Math.ceil(totalRecords / shownRecords) ? null : (
-          <>
+        {Math.ceil(totalRecords / shownRecords) >= 1 && allPages.length != 1 ?
+          displayedPages.map((page: number) => (
+            <Button
+              key={page}
+              intent="outline"
+              size="icon"
+              className={
+                Number(currentPage) === page ?
+                  'fade-in text-xs ring-2 md:ring-primary'
+                : 'fade-in hidden text-xs md:block'
+              }
+              onClick={() => {
+                if (Number(currentPage) !== page) update({ page: page })
+              }}
+            >
+              {page}
+            </Button>
+          ))
+        : null}
+        {numberOfDisplayedPages >= Math.ceil(totalRecords / shownRecords) ? null
+        : <>
             <Button
               title="Siguiente página"
               intent="outline"
@@ -113,9 +109,9 @@ export default function Pagination({
               onClick={() =>
                 update({
                   page:
-                    currentPage < allPages.length
-                      ? currentPage + 1
-                      : allPages[allPages.length - 1],
+                    currentPage < allPages.length ?
+                      currentPage + 1
+                    : allPages[allPages.length - 1],
                 })
               }
             >
@@ -135,8 +131,7 @@ export default function Pagination({
             >
               <ChevronsRight className="w-3.5 text-gray-500" />
             </Button>
-          </>
-        )}
+          </>}
 
         <RecordsDropdown
           options={[5, 10, 15, 20, totalRecords]}
@@ -156,10 +151,12 @@ export default function Pagination({
                 shownRecords +
                 1}
               {' a '}
-              {shownRecords * Number(searchParams?.get('page') || 1) >=
-              totalRecords
-                ? totalRecords
-                : shownRecords * Number(searchParams?.get('page') || 1)}{' '}
+              {(
+                shownRecords * Number(searchParams?.get('page') || 1) >=
+                totalRecords
+              ) ?
+                totalRecords
+              : shownRecords * Number(searchParams?.get('page') || 1)}{' '}
             </span>
             de{' '}
             <p

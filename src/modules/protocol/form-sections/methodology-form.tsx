@@ -80,7 +80,7 @@ const ConditionalIfRecollection = ({ path }: { path: string }) => {
           </label>
         </div>
       </div>
-      {form.getInputProps(path + 'humanAnimalOrDb').value ? (
+      {form.getInputProps(path + 'humanAnimalOrDb').value ?
         <>
           <Textarea
             path={path + 'procedures'}
@@ -95,7 +95,7 @@ const ConditionalIfRecollection = ({ path }: { path: string }) => {
             label="Consideraciones éticas"
           />
         </>
-      ) : null}
+      : null}
     </>
   )
 }

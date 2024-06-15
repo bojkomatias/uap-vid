@@ -27,9 +27,9 @@ export default function MultipleSelect({
               className={'input'}
               placeholder={label}
               displayValue={(e: string[]) =>
-                form.getInputProps(path).value.length < 2
-                  ? e.join(', ')
-                  : e.map((x) => x.split('-')[1]).join(' | ')
+                form.getInputProps(path).value.length < 2 ?
+                  e.join(', ')
+                : e.map((x) => x.split('-')[1]).join(' | ')
               }
             />
 
@@ -51,9 +51,9 @@ export default function MultipleSelect({
               />
             </div>
           </Combobox.Button>
-          {form.getInputProps(path).error ? (
+          {form.getInputProps(path).error ?
             <p className="error">*{form.getInputProps(path).error}</p>
-          ) : null}
+          : null}
 
           <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border  bg-white py-1 text-base shadow focus:outline-none sm:text-sm">
             {options.map((value: string, index: number) => (

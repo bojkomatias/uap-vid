@@ -58,11 +58,11 @@ export function ConvocatoryTable({
       enableSorting: false,
       cell: ({ row }) => {
         {
-          currentConvocatory && currentConvocatory.id === row.original.id ? (
+          currentConvocatory && currentConvocatory.id === row.original.id ?
             <span className="rounded border bg-gray-50 px-3 py-px text-xs uppercase">
               actual
             </span>
-          ) : null
+          : null
         }
       },
     },

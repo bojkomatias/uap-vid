@@ -60,7 +60,7 @@ export function BudgetItems({
       </div>
 
       <div className="-mx-4 mt-8 flow-root sm:mx-0">
-        {editable ? (
+        {editable ?
           <Button
             type="submit"
             intent="secondary"
@@ -69,7 +69,7 @@ export function BudgetItems({
           >
             Guardar valores actualizados
           </Button>
-        ) : null}
+        : null}
         <table className="min-w-full">
           <colgroup>
             <col className={cx(!editable ? 'w-[45%]' : 'w-[50%]')} />
@@ -208,7 +208,9 @@ export function BudgetItems({
                 Ejecutado
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
-                {!editable ? <>${currencyFormatter.format(ABIe)}</> : '-'}
+                {!editable ?
+                  <>${currencyFormatter.format(ABIe)}</>
+                : '-'}
               </td>
             </tr>
             <tr>

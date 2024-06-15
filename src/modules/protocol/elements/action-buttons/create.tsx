@@ -24,15 +24,15 @@ export default async function CreateButton({ role }: { role: Role }) {
     return (
       <MultipleButton
         defaultValue={
-          current
-            ? {
-                title: current.name,
-                href: `/protocols/new/0?convocatory=${current.id}`,
-                description: `${current.from.toLocaleDateString(
-                  'es-AR'
-                )},  ${current.to.toLocaleDateString('es-AR')}`,
-              }
-            : options[0]
+          current ?
+            {
+              title: current.name,
+              href: `/protocols/new/0?convocatory=${current.id}`,
+              description: `${current.from.toLocaleDateString(
+                'es-AR'
+              )},  ${current.to.toLocaleDateString('es-AR')}`,
+            }
+          : options[0]
         }
         options={options}
       />

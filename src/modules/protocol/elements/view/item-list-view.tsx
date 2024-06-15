@@ -17,7 +17,7 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
   return (
     <div className="sm:col-span-2">
       <dt className="text-sm font-medium text-gray-500">{data.title}</dt>
-      {data.values && data.values.length > 0 ? (
+      {data.values && data.values.length > 0 ?
         <dd className="mt-1 text-sm text-gray-900">
           <div className="mt-2 flex flex-col divide-y rounded-lg border pt-2">
             {data.values.map((row, index) => (
@@ -25,10 +25,10 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
             ))}
           </div>
         </dd>
-      ) : data.deepValues && data.deepValues.length > 0 ? (
+      : data.deepValues && data.deepValues.length > 0 ?
         <dd className="mt-1 text-sm text-gray-900">
           <div className="mt-2 flex flex-col divide-y overflow-hidden rounded-lg border">
-            {data.deepValues.some((e) => e.data.length > 0) ? (
+            {data.deepValues.some((e) => e.data.length > 0) ?
               data.deepValues.map((item, i) => (
                 <>
                   {item.data.length === 0 ? null : (
@@ -43,16 +43,13 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
                   )}
                 </>
               ))
-            ) : (
-              <span className="mx-auto w-fit py-3 text-sm text-gray-400">
+            : <span className="mx-auto w-fit py-3 text-sm text-gray-400">
                 Sin elementos cargados.
               </span>
-            )}
+            }
           </div>
         </dd>
-      ) : (
-        <EmptyStateItem />
-      )}
+      : <EmptyStateItem />}
       {footer}
     </div>
   )

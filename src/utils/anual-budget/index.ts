@@ -53,9 +53,8 @@ const calculateRemainingABI = (
   executionPerAcademicUnit?: number
 ): number => {
   const totalBudgetItemsAmount = abi.reduce((acc, item) => {
-    acc += executionPerAcademicUnit
-      ? item.amount / amountAcademicUnits
-      : item.amount
+    acc +=
+      executionPerAcademicUnit ? item.amount / amountAcademicUnits : item.amount
     return acc
   }, 0)
   const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
@@ -83,16 +82,16 @@ const calculateRemainingABTM = (
     const abtmAcademicUnit = abtm.filter(
       (item) => item.teamMember.academicUnitId === academicUnitId
     )
-    return abtmAcademicUnit
-      ? abtmAcademicUnit.reduce((acc, item) => {
+    return abtmAcademicUnit ?
+        abtmAcademicUnit.reduce((acc, item) => {
           acc += item.remainingHours * getLastCategoryPrice(item)
           return acc
         }, 0)
       : 0
   }
 
-  return abtm
-    ? abtm.reduce((acc, item) => {
+  return abtm ?
+      abtm.reduce((acc, item) => {
         acc += item.remainingHours * getLastCategoryPrice(item)
         return acc
       }, 0)
@@ -119,8 +118,9 @@ export const calculateHourRateGivenCategory = (
     return (pointsObrero * categoryPrice) / 176
   }
 
-  const hourRate = isObrero
-    ? calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0)
+  const hourRate =
+    isObrero ?
+      calculateObreroHourlyRate(categoryPrice, category.pointsObrero ?? 0)
     : categoryPrice
 
   return hourRate
@@ -139,12 +139,12 @@ export const calculateTotalBudget = (
     academicUnitId
   )
   const ABTe = totalExecution(
-    academicUnitId
-      ? anualBudget.budgetTeamMembers
-          .filter((tm) => tm.teamMember.academicUnitId === academicUnitId)
-          .map((item) => item.executions)
-          .flat()
-      : anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
+    academicUnitId ?
+      anualBudget.budgetTeamMembers
+        .filter((tm) => tm.teamMember.academicUnitId === academicUnitId)
+        .map((item) => item.executions)
+        .flat()
+    : anualBudget.budgetTeamMembers.map((item) => item.executions).flat()
   )
 
   //Remainings

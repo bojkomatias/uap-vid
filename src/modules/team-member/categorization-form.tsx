@@ -35,10 +35,12 @@ export default function CategorizationForm({
     },
     validate: {
       pointsObrero: (value, values) =>
-        values.categoryId === obreroCategory!.id &&
-        (value === undefined || value === 0)
-          ? 'Debe cargar los puntos de obrero'
-          : undefined,
+        (
+          values.categoryId === obreroCategory!.id &&
+          (value === undefined || value === 0)
+        ) ?
+          'Debe cargar los puntos de obrero'
+        : undefined,
     },
   })
 
@@ -107,10 +109,10 @@ export default function CategorizationForm({
             <div className="relative mt-1 w-full">
               <Listbox.Button className={'input text-left'}>
                 <span className={'block truncate'}>
-                  {form.values.categoryId
-                    ? categories.find((e) => e.id === form.values.categoryId)
-                        ?.name
-                    : '-'}
+                  {form.values.categoryId ?
+                    categories.find((e) => e.id === form.values.categoryId)
+                      ?.name
+                  : '-'}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                   <Selector className="h-4 text-gray-600 " aria-hidden="true" />
@@ -198,10 +200,9 @@ export default function CategorizationForm({
         <div className={cx(!form.isDirty() && 'hidden')}>
           <div className="label">Categoría anterior</div>
           <div className="ml-1 text-sm font-medium">
-            {currentCategory
-              ? categories.find((e) => e.id === currentCategory.categoryId)
-                  ?.name
-              : null}
+            {currentCategory ?
+              categories.find((e) => e.id === currentCategory.categoryId)?.name
+            : null}
           </div>
         </div>
       </div>

@@ -20,10 +20,12 @@ export default async function Navigation({
   const hasNavigation = session?.user?.role === 'ADMIN'
   return (
     <>
-      {hasNavigation ? <DesktopNavigation user={session.user} /> : null}
-      {currentConvocatory ? (
+      {hasNavigation ?
+        <DesktopNavigation user={session.user} />
+      : null}
+      {currentConvocatory ?
         <CurrentConvocatory convocatory={currentConvocatory} />
-      ) : null}
+      : null}
       <div className={cx('flex flex-1 flex-col', hasNavigation && 'pl-16')}>
         <main className="w-full flex-1 px-4 pb-20 sm:px-6 xl:px-10">
           {children}

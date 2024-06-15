@@ -35,18 +35,18 @@ const getCategories = cache(
           where: {
             state: { not: false },
             AND: [
-              search
-                ? {
-                    OR: [
-                      {
-                        name: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                    ],
-                  }
-                : {},
+                    },
+                  ],
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -66,18 +66,18 @@ const getCategories = cache(
           where: {
             state: { not: false },
             AND: [
-              search
-                ? {
-                    OR: [
-                      {
-                        name: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                    ],
-                  }
-                : {},
+                    },
+                  ],
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },

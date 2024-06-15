@@ -19,21 +19,21 @@ export default async function Page({
   if (!searchParams.convocatory && params.id === 'new') redirect('/protocols')
 
   const protocol =
-    params.id === 'new'
-      ? {
-          convocatoryId: searchParams.convocatory,
-          state: ProtocolState.DRAFT,
-          researcherId: session.user.id,
-          sections: initialSectionValues,
-        }
-      : await findProtocolById(params.id)
+    params.id === 'new' ?
+      {
+        convocatoryId: searchParams.convocatory,
+        state: ProtocolState.DRAFT,
+        researcherId: session.user.id,
+        sections: initialSectionValues,
+      }
+    : await findProtocolById(params.id)
 
   if (!protocol) redirect('/protocols')
   if (
     !canExecute(
-      session.user.id === protocol.researcherId
-        ? Action.EDIT_BY_OWNER
-        : Action.EDIT,
+      session.user.id === protocol.researcherId ?
+        Action.EDIT_BY_OWNER
+      : Action.EDIT,
       session.user.role,
       protocol.state
     )

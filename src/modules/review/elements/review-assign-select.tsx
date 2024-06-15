@@ -62,11 +62,11 @@ const ReviewAssignSelect = ({
   const [query, setQuery] = useState('')
 
   const filteredPeople =
-    query === ''
-      ? users
-      : users.filter((person) => {
-          return person.name.toLowerCase().includes(query.toLowerCase())
-        })
+    query === '' ? users : (
+      users.filter((person) => {
+        return person.name.toLowerCase().includes(query.toLowerCase())
+      })
+    )
   const [show, setShow] = useState(false)
 
   if (!show && !review?.reviewerId)

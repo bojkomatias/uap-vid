@@ -10,11 +10,9 @@ const ItemView = ({ title, value }: ShortDataProps) => {
       {title === 'Materia' && value.length <= 0 ? null : (
         <>
           <dt className="text-sm font-medium text-gray-500">{title}</dt>
-          {value ? (
+          {value ?
             <dd className="mt-1 text-sm text-gray-900">{value}</dd>
-          ) : (
-            <EmptyStateItem />
-          )}
+          : <EmptyStateItem />}
         </>
       )}
     </div>

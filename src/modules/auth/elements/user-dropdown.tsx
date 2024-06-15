@@ -28,31 +28,29 @@ export const UserDropdown = ({ user }: { user: User }) => {
               className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 focus:ring-offset-primary"
             >
               <span className="sr-only">Open user menu</span>
-              {user.image ? (
-                loading ? (
+              {user.image ?
+                loading ?
                   <div className="flex h-10 w-10 items-center justify-center">
                     <span className="loader h-8 w-8"></span>
                   </div>
-                ) : (
-                  <Image
+                : <Image
                     src={user.image}
                     className="h-10 w-10 overflow-hidden rounded-full"
                     alt="Image de usuario"
                     width={100}
                     height={100}
                   />
-                )
-              ) : loading ? (
+
+              : loading ?
                 <div className="flex h-10 w-10 items-center justify-center">
                   <span className="loader h-8 w-8"></span>
                 </div>
-              ) : (
                 // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
+              : <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
                   {user.name.split(' ')[0].substring(0, 1) +
                     user.name.split(' ').at(-1)?.substring(0, 1)}
                 </div>
-              )}
+              }
             </Menu.Button>
           </div>
           <Transition

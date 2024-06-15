@@ -20,9 +20,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     <div className="mt-20 max-w-5xl">
       <div className="flex items-center gap-2">
         <Heading>{convocatory.name}</Heading>
-        {current && current.id === convocatory.id ? (
+        {current && current.id === convocatory.id ?
           <Badge color="teal">Activa</Badge>
-        ) : null}
+        : null}
       </div>
       <Text>
         Tenga en cuenta que esto puede afectar al resto de la applicación

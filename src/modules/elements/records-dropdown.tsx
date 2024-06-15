@@ -57,14 +57,12 @@ export default function RecordsDropdown({
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                     )}
                   >
-                    {shownRecords === o ? (
+                    {shownRecords === o ?
                       <div className="flex items-center font-bold">
                         <Check className="mr-1 h-4 w-4" />
                         {o}
                       </div>
-                    ) : (
-                      o
-                    )}
+                    : o}
                   </button>
                 )}
               </Menu.Item>
@@ -84,14 +82,12 @@ export default function RecordsDropdown({
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   )}
                 >
-                  {shownRecords === options.at(-1) ? (
+                  {shownRecords === options.at(-1) ?
                     <div className=" flex items-center font-bold">
                       <Check className=" mr-1 h-4 w-4" />
                       Todos los registros
                     </div>
-                  ) : (
-                    <>Todos los registros</>
-                  )}
+                  : <>Todos los registros</>}
                 </button>
               )}
             </Menu.Item>

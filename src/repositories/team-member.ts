@@ -112,8 +112,9 @@ export const getTeamMembers = async ({
         categories: { include: { category: true } },
         AcademicUnit: { select: { name: true } },
       },
-      where: search
-        ? {
+      where:
+        search ?
+          {
             OR: [{ name: { contains: search, mode: 'insensitive' } }],
           }
         : {},

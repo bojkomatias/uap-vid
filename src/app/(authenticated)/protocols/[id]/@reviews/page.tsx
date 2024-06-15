@@ -25,19 +25,23 @@ export default async function ReviewsPage({
           'hidden'
       )}
     >
-      {session.user.id !== protocol.researcher.id &&
-      canExecute(Action.REVIEW, session.user.role, protocol.state) ? (
+      {(
+        session.user.id !== protocol.researcher.id &&
+        canExecute(Action.REVIEW, session.user.role, protocol.state)
+      ) ?
         <ReviewFormTemplate protocolId={protocol.id} userId={session.user.id} />
-      ) : null}
+      : null}
 
-      {session.user.id === protocol.researcher.id ||
-      canAccess(Access.REVIEWS, session.user.role) ? (
+      {(
+        session.user.id === protocol.researcher.id ||
+        canAccess(Access.REVIEWS, session.user.role)
+      ) ?
         <ReviewList
           role={session.user.role}
           id={protocol.id}
           isOwner={session.user.id === protocol.researcher.id}
         />
-      ) : null}
+      : null}
     </aside>
   )
 }

@@ -161,7 +161,7 @@ export const SidebarItem = React.forwardRef(function SidebarItem(
           className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-gray-950 dark:bg-white"
         />
       )}
-      {'href' in props ? (
+      {'href' in props ?
         <Headless.CloseButton as={Fragment} ref={ref}>
           <Link
             className={classes}
@@ -171,8 +171,7 @@ export const SidebarItem = React.forwardRef(function SidebarItem(
             <TouchTarget>{children}</TouchTarget>
           </Link>
         </Headless.CloseButton>
-      ) : (
-        <Headless.Button
+      : <Headless.Button
           {...props}
           className={clsx('cursor-default', classes)}
           data-current={current ? 'true' : undefined}
@@ -180,7 +179,7 @@ export const SidebarItem = React.forwardRef(function SidebarItem(
         >
           <TouchTarget>{children}</TouchTarget>
         </Headless.Button>
-      )}
+      }
     </span>
   )
 })

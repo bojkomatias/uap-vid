@@ -47,14 +47,14 @@ export default function BudgetExecutionView({
     setSelectedAcademicUnit(academicUnits[0])
   }, [academicUnits])
   const filteredAcademicUnits =
-    query === '' || !academicUnits
-      ? academicUnits
-      : academicUnits.filter((ac) => {
-          return (
-            ac.name.toLowerCase().includes(query.toLowerCase()) ||
-            ac.shortname.toLowerCase().includes(query.toLocaleLowerCase())
-          )
-        })
+    query === '' || !academicUnits ?
+      academicUnits
+    : academicUnits.filter((ac) => {
+        return (
+          ac.name.toLowerCase().includes(query.toLowerCase()) ||
+          ac.shortname.toLowerCase().includes(query.toLocaleLowerCase())
+        )
+      })
   const executionAmountByAcademicUnit = useMemo(() => {
     if (!allExecutions) return 0
     return allExecutions
@@ -79,15 +79,15 @@ export default function BudgetExecutionView({
         >
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
             <h1 className="text-xl font-semibold text-gray-800">
-              {executionType === ExecutionType.TeamMember
-                ? 'Honorario de equipo'
-                : 'Gasto directo'}
+              {executionType === ExecutionType.TeamMember ?
+                'Honorario de equipo'
+              : 'Gasto directo'}
             </h1>
             <div className="flex  items-center gap-1">
               <p className="text-sm font-semibold text-gray-600">
-                {executionType === ExecutionType.TeamMember
-                  ? 'Nombre y Apellido:'
-                  : 'Detalle:'}
+                {executionType === ExecutionType.TeamMember ?
+                  'Nombre y Apellido:'
+                : 'Detalle:'}
               </p>
               <p className="text-sm">{title}</p>
             </div>
@@ -110,10 +110,10 @@ export default function BudgetExecutionView({
             )}
           </div>
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
-            {remaining > 0 ? (
+            {remaining > 0 ?
               <>
                 <h1 className="text-xl font-semibold">Nueva Ejecución:</h1>
-                {academicUnits ? (
+                {academicUnits ?
                   <>
                     <div className="flex flex-col items-start gap-2">
                       <p className="text-sm font-semibold text-gray-600">
@@ -162,8 +162,10 @@ export default function BudgetExecutionView({
                         </div>
                       </Combobox.Button>
 
-                      {filteredAcademicUnits &&
-                      filteredAcademicUnits.length > 0 ? (
+                      {(
+                        filteredAcademicUnits &&
+                        filteredAcademicUnits.length > 0
+                      ) ?
                         <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
                           {filteredAcademicUnits.map((value) => (
                             <Combobox.Option
@@ -183,9 +185,9 @@ export default function BudgetExecutionView({
                                       title={value.shortname}
                                       className={cx(
                                         'ml-3 truncate text-xs font-light',
-                                        active
-                                          ? 'text-gray-700'
-                                          : 'text-gray-500'
+                                        active ? 'text-gray-700' : (
+                                          'text-gray-500'
+                                        )
                                       )}
                                     >
                                       {value.name}
@@ -210,10 +212,10 @@ export default function BudgetExecutionView({
                             </Combobox.Option>
                           ))}
                         </Combobox.Options>
-                      ) : null}
+                      : null}
                     </Combobox>
                   </>
-                ) : null}
+                : null}
                 <BudgetNewExecution
                   academicUnit={selectedAcademicUnit}
                   maxAmount={maxExecutionAmount}
@@ -222,8 +224,8 @@ export default function BudgetExecutionView({
                   budgetItemPositionIndex={positionIndex}
                 />
               </>
-            ) : null}
-            {executions.length > 0 ? (
+            : null}
+            {executions.length > 0 ?
               <>
                 <p className="text-sm text-gray-600">Ejecuciones históricas:</p>
                 <table className="table-auto text-sm text-gray-600">
@@ -259,11 +261,10 @@ export default function BudgetExecutionView({
                   </tbody>
                 </table>
               </>
-            ) : (
-              <p className="mt-6 text-center text-sm text-gray-600">
+            : <p className="mt-6 text-center text-sm text-gray-600">
                 <b>No hay ejecuciones históricas</b>
               </p>
-            )}
+            }
           </div>
         </section>
       </CustomDrawer>

@@ -16,15 +16,13 @@ export default async function Page({
     <>
       <PageHeading title="Unidades Académicas" />
 
-      {academicUnits && academicUnits.length > 0 ? (
+      {academicUnits && academicUnits.length > 0 ?
         <AcademicUnitsTable
           academicUnits={academicUnits}
           secretaries={secretaries}
           totalRecords={totalRecords}
         />
-      ) : (
-        'No se encontraron unidades académicas'
-      )}
+      : 'No se encontraron unidades académicas'}
     </>
   )
 }

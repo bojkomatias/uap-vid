@@ -299,9 +299,9 @@ export default function ProtocolTable({
         ),
       }}
       customFilterSlot={
-        user.role === 'ADMIN' || user.role === 'SECRETARY' ? (
+        user.role === 'ADMIN' || user.role === 'SECRETARY' ?
           <AcademicUnitFilter />
-        ) : null
+        : null
       }
       searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
     />
@@ -326,9 +326,10 @@ const AcademicUnitFilter = () => {
             <Button
               onClick={() => {
                 update({
-                  units: currentValues
-                    ? currentValues.includes(value)
-                      ? currentValues.filter((e) => e !== value).join('-')
+                  units:
+                    currentValues ?
+                      currentValues.includes(value) ?
+                        currentValues.filter((e) => e !== value).join('-')
                       : currentValues.join('-').concat('-', value)
                     : value,
                 })

@@ -57,7 +57,9 @@ export default function DownloadCSVButton({
       >
         Descargar hoja de datos
       </Button>
-      {download ? <Download data={data} columns={columns} /> : null}
+      {download ?
+        <Download data={data} columns={columns} />
+      : null}
     </div>
   )
 }

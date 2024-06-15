@@ -105,11 +105,9 @@ export default function UserForm() {
         type="submit"
         className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
       >
-        {loading ? (
+        {loading ?
           <span className="loader-primary h-4 w-4"></span>
-        ) : (
-          'Crear Nuevo Usuario'
-        )}
+        : 'Crear Nuevo Usuario'}
       </Button>
     </form>
   )

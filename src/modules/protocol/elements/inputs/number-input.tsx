@@ -29,9 +29,9 @@ const NumberInput = ({
         placeholder={label}
         autoComplete="off"
       />
-      {form.getInputProps(path).error ? (
+      {form.getInputProps(path).error ?
         <p className="error">*{form.getInputProps(path).error}</p>
-      ) : null}
+      : null}
     </div>
   )
 }

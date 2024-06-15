@@ -55,13 +55,11 @@ function Notification({ title, message, intent }: NotificationProps) {
       ></div>
       <div className="flex flex-grow flex-col">
         <div className="flex items-center gap-1 border-b pb-1">
-          {intent == 'error' ? (
+          {intent == 'error' ?
             <X className={cx(`text-${colors[intent]}`)} />
-          ) : intent == 'primary' ? (
+          : intent == 'primary' ?
             <InfoCircle className={cx(`text-${colors[intent]}`)} />
-          ) : (
-            <Check className={cx(`text-${colors[intent]}`)} />
-          )}
+          : <Check className={cx(`text-${colors[intent]}`)} />}
           <h3 className={cx('font-semibold', `text-${colors[intent]}`)}>
             {title}
           </h3>

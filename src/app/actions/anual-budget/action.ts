@@ -114,14 +114,14 @@ const generateAnualBudgetTeamMembersItems = (
       memberRole: item.role,
       //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
       hours: Math.ceil(
-        item.workingMonths && item.workingMonths > 0
-          ? item.hours * item.workingMonths * WEEKS_IN_MONTH
-          : item.hours * duration
+        item.workingMonths && item.workingMonths > 0 ?
+          item.hours * item.workingMonths * WEEKS_IN_MONTH
+        : item.hours * duration
       ),
       remainingHours: Math.ceil(
-        item.workingMonths && item.workingMonths > 0
-          ? item.hours * item.workingMonths * WEEKS_IN_MONTH
-          : item.hours * duration
+        item.workingMonths && item.workingMonths > 0 ?
+          item.hours * item.workingMonths * WEEKS_IN_MONTH
+        : item.hours * duration
       ),
       executions: [] as Execution[],
     }
@@ -156,8 +156,9 @@ export const protocolToAnualBudgetPreview = async (
   const thereAreTeamMembers =
     ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
 
-  const teamMembers = thereAreTeamMembers
-    ? await getTeamMembersByIds(ABT.map((t) => t.teamMemberId))
+  const teamMembers =
+    thereAreTeamMembers ?
+      await getTeamMembersByIds(ABT.map((t) => t.teamMemberId))
     : []
 
   const ABTWithTeamMemberAndUserData = ABT.map((t) => {
@@ -272,8 +273,9 @@ const getAcademicUnitBudgetSummary = (
     .at(-1)
 
   // Get the actual and the previous budget in the same year for the academic unit with the last budget change
-  const [before, actual] = academicUnitWithLastBudgetChange
-    ? [
+  const [before, actual] =
+    academicUnitWithLastBudgetChange ?
+      [
         academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
         academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
       ]
@@ -285,8 +287,9 @@ const getAcademicUnitBudgetSummary = (
   const deltaValue = actual && before ? actual - before : actual
 
   // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
-  const delta = deltaValue
-    ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) * 100
+  const delta =
+    deltaValue ?
+      (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) * 100
     : 0
 
   return {

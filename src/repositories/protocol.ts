@@ -184,8 +184,9 @@ const getProtocolsByRol = cache(
       order && sort ? orderByQuery(sort, order) : { createdAt: 'desc' }
 
     // Search reusable
-    const whereSearch = search
-      ? {
+    const whereSearch =
+      search ?
+        {
           OR: [
             {
               sections: {
@@ -230,8 +231,9 @@ const getProtocolsByRol = cache(
     const whereFilter =
       filter && values ? { [filter]: { in: values.split('-') } } : {}
 
-    const whereUnits = units
-      ? {
+    const whereUnits =
+      units ?
+        {
           sections: {
             is: {
               identification: {

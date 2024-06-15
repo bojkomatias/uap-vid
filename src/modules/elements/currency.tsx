@@ -23,13 +23,12 @@ export default function Currency({
         size === 'md' && 'text-md'
       )}
     >
-      {amount === null || amount === undefined ? (
+      {amount === null || amount === undefined ?
         <>No se especificó</>
-      ) : (
-        <>
+      : <>
           ${currencyFormatter.format(amount)} {currency}
         </>
-      )}
+      }
     </Badge>
   )
 }

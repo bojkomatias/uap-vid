@@ -61,7 +61,7 @@ export const RoleSelector = ({
                         {role}
                       </span>
 
-                      {selected ? (
+                      {selected ?
                         <span
                           className={cx(
                             'absolute inset-y-0 right-0 flex items-center pr-4',
@@ -73,7 +73,7 @@ export const RoleSelector = ({
                             aria-hidden="true"
                           />
                         </span>
-                      ) : null}
+                      : null}
                     </>
                   )}
                 </Listbox.Option>

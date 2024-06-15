@@ -91,11 +91,11 @@ export default function TeamMemberForm({
   const [query, setQuery] = useState('')
 
   const filteredPeople =
-    query === ''
-      ? researchers
-      : researchers.filter((user) => {
-          return user.name.toLowerCase().includes(query.toLowerCase())
-        })
+    query === '' ? researchers : (
+      researchers.filter((user) => {
+        return user.name.toLowerCase().includes(query.toLowerCase())
+      })
+    )
 
   return (
     <div>
@@ -157,7 +157,7 @@ export default function TeamMemberForm({
               </div>
             </Combobox.Button>
 
-            {filteredPeople.length > 0 ? (
+            {filteredPeople.length > 0 ?
               <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
                 {filteredPeople.map((value) => (
                   <Combobox.Option
@@ -213,7 +213,7 @@ export default function TeamMemberForm({
                   </Combobox.Option>
                 ))}
               </Combobox.Options>
-            ) : null}
+            : null}
           </Combobox>
         </div>
         <div className="relative">
@@ -245,9 +245,9 @@ export default function TeamMemberForm({
             disabled={!!form.values.userId}
             {...form.getInputProps('name')}
           />
-          {form.getInputProps('name').error ? (
+          {form.getInputProps('name').error ?
             <p className="error">*{form.getInputProps('name').error}</p>
-          ) : null}
+          : null}
         </div>
         <div className="flex-grow">
           <label htmlFor="academicUnit" className="label">
@@ -262,11 +262,11 @@ export default function TeamMemberForm({
             <div className="relative mt-1 w-full">
               <Listbox.Button className="input text-left">
                 <span className={'block truncate'}>
-                  {form.values.academicUnitId
-                    ? academicUnits.find(
-                        (e) => e.id === form.values.academicUnitId
-                      )?.name
-                    : '-'}
+                  {form.values.academicUnitId ?
+                    academicUnits.find(
+                      (e) => e.id === form.values.academicUnitId
+                    )?.name
+                  : '-'}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
                   <Selector className="h-4 text-gray-600 " aria-hidden="true" />
@@ -326,9 +326,9 @@ export default function TeamMemberForm({
           disabled={!form.isDirty()}
           className="float-right"
         >
-          {member
-            ? 'Actualizar miembro de investigación'
-            : 'Crear miembro de investigación'}
+          {member ?
+            'Actualizar miembro de investigación'
+          : 'Crear miembro de investigación'}
         </Button>
       </form>
     </div>

@@ -36,24 +36,24 @@ const getUsers = cache(
         prisma.user.count({
           where: {
             AND: [
-              search
-                ? {
-                    OR: [
-                      {
-                        name: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                      {
-                        email: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+                    },
+                    {
+                      email: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                    ],
-                  }
-                : {},
+                    },
+                  ],
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -76,24 +76,24 @@ const getUsers = cache(
           // Add all the globally searchable fields
           where: {
             AND: [
-              search
-                ? {
-                    OR: [
-                      {
-                        name: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+              search ?
+                {
+                  OR: [
+                    {
+                      name: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                      {
-                        email: {
-                          contains: search,
-                          mode: 'insensitive',
-                        },
+                    },
+                    {
+                      email: {
+                        contains: search,
+                        mode: 'insensitive',
                       },
-                    ],
-                  }
-                : {},
+                    },
+                  ],
+                }
+              : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },

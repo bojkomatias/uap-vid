@@ -37,9 +37,9 @@ export async function PUT(
   // Not allowed by state or role to assign
   if (
     !canExecute(
-      data.type === ReviewType.METHODOLOGICAL
-        ? Action.ASSIGN_TO_METHODOLOGIST
-        : Action.ASSIGN_TO_SCIENTIFIC,
+      data.type === ReviewType.METHODOLOGICAL ?
+        Action.ASSIGN_TO_METHODOLOGIST
+      : Action.ASSIGN_TO_SCIENTIFIC,
       token!.user.role,
       data.protocolState
     )
@@ -66,20 +66,20 @@ export async function PUT(
     })
 
     const protocol =
-      data.type === ReviewType.SCIENTIFIC_THIRD
-        ? null
-        : await updateProtocolStateById(
-            params.id,
-            newStateByReviewType[data.type]
-          )
+      data.type === ReviewType.SCIENTIFIC_THIRD ?
+        null
+      : await updateProtocolStateById(
+          params.id,
+          newStateByReviewType[data.type]
+        )
 
     if (data.type !== ReviewType.SCIENTIFIC_THIRD)
       await logProtocolUpdate({
         user: token!.user,
         fromState:
-          data.type === ReviewType.METHODOLOGICAL
-            ? ProtocolState.PUBLISHED
-            : ProtocolState.METHODOLOGICAL_EVALUATION,
+          data.type === ReviewType.METHODOLOGICAL ?
+            ProtocolState.PUBLISHED
+          : ProtocolState.METHODOLOGICAL_EVALUATION,
         toState: newStateByReviewType[data.type],
         protocolId: params.id,
       })

@@ -10,13 +10,11 @@ const TextItemView = ({ title, content, className }: TextItemProps) => {
   return (
     <div className="sm:col-span-2">
       <dt className="text-sm font-medium text-gray-500">{title}</dt>
-      {content ? (
+      {content ?
         <dd className={cx(className, 'prose max-w-none text-sm')}>
           <div dangerouslySetInnerHTML={{ __html: content }} />
         </dd>
-      ) : (
-        <EmptyStateItem />
-      )}
+      : <EmptyStateItem />}
     </div>
   )
 }

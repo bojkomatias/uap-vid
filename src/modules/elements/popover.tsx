@@ -59,9 +59,9 @@ export default function PopoverComponent({
           {({ close }) => (
             <div
               className={cx(
-                column
-                  ? 'flex flex-col items-end justify-start gap-2'
-                  : 'flex items-center gap-2'
+                column ?
+                  'flex flex-col items-end justify-start gap-2'
+                : 'flex items-center gap-2'
               )}
             >
               {children}

@@ -25,8 +25,9 @@ export const AcademicUnitBudgetUpdate = ({
     }
 
     // Update the old price to set the 'to' property
-    const oldBudget = budgets[budgets.length - 1]
-      ? {
+    const oldBudget =
+      budgets[budgets.length - 1] ?
+        {
           ...budgets[budgets.length - 1],
           to: new Date(),
         }

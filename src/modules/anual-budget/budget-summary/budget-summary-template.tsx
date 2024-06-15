@@ -20,9 +20,10 @@ export const BudgetSummary = ({
   const stats = useMemo(
     () => [
       {
-        name: allAcademicUnits
-          ? 'Presupuesto total'
-          : 'Presupuesto de la Unidad Académica',
+        name:
+          allAcademicUnits ? 'Presupuesto total' : (
+            'Presupuesto de la Unidad Académica'
+          ),
         total: summary?.academicUnitBudgetSummary.value ?? 0,
         delta: summary?.academicUnitBudgetSummary.delta,
         date: summary?.academicUnitBudgetSummary.changeDate,
@@ -30,8 +31,9 @@ export const BudgetSummary = ({
       },
       {
         name: 'Consumo proyectado',
-        total: approved
-          ? summary?.projectedBudgetSummaryApproved?.value
+        total:
+          approved ?
+            summary?.projectedBudgetSummaryApproved?.value
           : summary.projectedBudgetSummary.value ?? 0,
         of: summary?.academicUnitBudgetSummary.value ?? 0,
         delta: summary.projectedBudgetSummary.delta ?? 0,
@@ -40,14 +42,15 @@ export const BudgetSummary = ({
       {
         name: 'Consumo ejecutado',
         total: summary?.spendedBudget ?? 0,
-        of: approved
-          ? summary?.projectedBudgetSummaryApproved?.value
+        of:
+          approved ?
+            summary?.projectedBudgetSummaryApproved?.value
           : summary.projectedBudgetSummary.value ?? 0,
         delta:
           summary?.spendedBudget /
-          (approved
-            ? summary?.projectedBudgetSummaryApproved?.value
-            : summary.projectedBudgetSummary.value ?? 0),
+          (approved ?
+            summary?.projectedBudgetSummaryApproved?.value
+          : summary.projectedBudgetSummary.value ?? 0),
         indicator: 'graph',
       },
     ],
@@ -81,32 +84,32 @@ export const BudgetSummary = ({
                   onClick={() => showApproved((prev) => !prev)}
                   className={cx(approved ? 'bg-success-200' : 'bg-warning-200')}
                 >
-                  {approved
-                    ? AnualBudgetStateDictionary[AnualBudgetState.APPROVED]
-                    : AnualBudgetStateDictionary[AnualBudgetState.PENDING]}
+                  {approved ?
+                    AnualBudgetStateDictionary[AnualBudgetState.APPROVED]
+                  : AnualBudgetStateDictionary[AnualBudgetState.PENDING]}
                 </Button>
               )}
             </dt>
             <dd className="relative mt-1 block items-baseline justify-between lg:flex">
               <div className="flex items-baseline text-2xl font-semibold text-black/70">
                 ${currencyFormatter.format(item.total)}
-                {item.of ? (
+                {item.of ?
                   <span className="ml-2 text-sm font-medium text-gray-500">
                     de ${item.of ? currencyFormatter.format(item.of) : 0}
                   </span>
-                ) : null}
+                : null}
               </div>
-              {item.indicator === 'number' ? (
+              {item.indicator === 'number' ?
                 <BudgetCardDelta delta={item.delta ?? 0} />
-              ) : null}
+              : null}
 
-              {item.indicator === 'graph' ? (
+              {item.indicator === 'graph' ?
                 <BudgetCardDoughnut
                   percentage={
                     item.of ? ((item.total / item.of) * 100).toFixed(1) : '0'
                   }
                 />
-              ) : null}
+              : null}
             </dd>
           </div>
         ))}

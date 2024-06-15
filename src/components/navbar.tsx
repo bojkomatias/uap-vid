@@ -97,7 +97,7 @@ export const NavbarItem = React.forwardRef(function NavbarItem(
           className="absolute inset-x-2 -bottom-2.5 h-0.5 rounded-full bg-gray-950 dark:bg-white"
         />
       )}
-      {'href' in props ? (
+      {'href' in props ?
         <Link
           {...props}
           className={classes}
@@ -106,8 +106,7 @@ export const NavbarItem = React.forwardRef(function NavbarItem(
         >
           <TouchTarget>{children}</TouchTarget>
         </Link>
-      ) : (
-        <Headless.Button
+      : <Headless.Button
           {...props}
           className={clsx('cursor-default', classes)}
           data-current={current ? 'true' : undefined}
@@ -115,7 +114,7 @@ export const NavbarItem = React.forwardRef(function NavbarItem(
         >
           <TouchTarget>{children}</TouchTarget>
         </Headless.Button>
-      )}
+      }
     </span>
   )
 })

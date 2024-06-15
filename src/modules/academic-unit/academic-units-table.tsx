@@ -32,14 +32,14 @@ export default function AcademicUnitsTable({
         <>
           <Currency
             title={
-              row.original.budgets[row.original.budgets.length - 1]
-                ? `Desde ${dateFormatter.format(
-                    row.original.budgets[row.original.budgets.length - 1].from
-                  )} hasta el ${dateFormatter.format(
-                    row.original.budgets[row.original.budgets.length - 1].to ??
-                      new Date()
-                  )}`
-                : undefined
+              row.original.budgets[row.original.budgets.length - 1] ?
+                `Desde ${dateFormatter.format(
+                  row.original.budgets[row.original.budgets.length - 1].from
+                )} hasta el ${dateFormatter.format(
+                  row.original.budgets[row.original.budgets.length - 1].to ??
+                    new Date()
+                )}`
+              : undefined
             }
             amount={
               row.original.budgets[row.original.budgets.length - 1]?.amount

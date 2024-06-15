@@ -20,7 +20,7 @@ async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
   return (
     <div className="w-full lg:w-[28rem] xl:w-[36rem]">
       <h3 className="ml-2 text-lg font-semibold text-gray-900">Revisiones</h3>
-      {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ? (
+      {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ?
         <ul role="list" className="space-y-3 px-1">
           {reviews.map((r, i) => (
             <>
@@ -28,7 +28,7 @@ async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
             </>
           ))}
         </ul>
-      ) : null}
+      : null}
     </div>
   )
 }

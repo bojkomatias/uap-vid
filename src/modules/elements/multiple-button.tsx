@@ -32,7 +32,7 @@ export default function MultipleButton({
       {({ open }) => (
         <div className="relative">
           <div className="inline-flex rounded-md shadow-sm">
-            {selected.onClick ? (
+            {selected.onClick ?
               <Button
                 intent="secondary"
                 className={cx(
@@ -44,8 +44,7 @@ export default function MultipleButton({
                 <FilePlus className="h-4 text-current" />
                 {selected.title}
               </Button>
-            ) : (
-              selected.href && (
+            : selected.href && (
                 <Link
                   href={selected.href}
                   className={cx(
@@ -58,7 +57,7 @@ export default function MultipleButton({
                   {selected.title}
                 </Link>
               )
-            )}
+            }
             <Listbox.Button
               as={Button}
               intent="secondary"
@@ -104,7 +103,7 @@ export default function MultipleButton({
                         >
                           {option.title}
                         </p>
-                        {selected ? (
+                        {selected ?
                           <span
                             className={
                               active ? 'text-gray-700' : 'text-gray-600'
@@ -112,7 +111,7 @@ export default function MultipleButton({
                           >
                             <Check className="h-4 w-4" aria-hidden="true" />
                           </span>
-                        ) : null}
+                        : null}
                       </div>
                       <p
                         className={cx(

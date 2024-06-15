@@ -63,7 +63,7 @@ export function BudgetTeamMemberFees({
       </div>
 
       <div className="-mx-4 mt-8 flow-root sm:mx-0">
-        {editable ? (
+        {editable ?
           <Button
             type="submit"
             intent="secondary"
@@ -72,7 +72,7 @@ export function BudgetTeamMemberFees({
           >
             Guardar valores actualizados
           </Button>
-        ) : null}
+        : null}
         <table className="min-w-full">
           <colgroup>
             <col className={cx(!editable ? ' w-[30%]' : ' w-[38%]')} />
@@ -163,21 +163,20 @@ export function BudgetTeamMemberFees({
                         {categories.at(-1)?.category.name}
                       </span>{' '}
                       <span>
-                        {categories.at(-1)?.pointsObrero ? (
+                        {categories.at(-1)?.pointsObrero ?
                           <span className="text-gray-600">
                             {'['}
                             {categories.at(-1)?.pointsObrero}
                             {']'}
                           </span>
-                        ) : null}
+                        : null}
                       </span>
                     </div>
                   </td>
                   <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                    {!editable ? (
+                    {!editable ?
                       hours
-                    ) : (
-                      <input
+                    : <input
                         type="number"
                         defaultValue={form.getInputProps(`${i}.hours`).value}
                         onBlur={(e) =>
@@ -193,7 +192,7 @@ export function BudgetTeamMemberFees({
                         )}
                         placeholder="24"
                       />
-                    )}
+                    }
                   </td>
                   <td
                     className={cx(
@@ -246,18 +245,17 @@ export function BudgetTeamMemberFees({
                         categories.at(-1)?.category.name ?? 'Sin Categoría'
                       }
                       obrero={
-                        categories.at(-1)?.pointsObrero
-                          ? {
-                              pointsObrero:
-                                categories.at(-1)?.pointsObrero ?? 0,
-                              pointPrice:
-                                categories.at(-1)?.category.price.at(-1)
-                                  ?.price ?? 0,
-                              hourlyRate: calculateHourRateGivenCategory(
-                                categories.at(-1) ?? null
-                              ),
-                            }
-                          : undefined
+                        categories.at(-1)?.pointsObrero ?
+                          {
+                            pointsObrero: categories.at(-1)?.pointsObrero ?? 0,
+                            pointPrice:
+                              categories.at(-1)?.category.price.at(-1)?.price ??
+                              0,
+                            hourlyRate: calculateHourRateGivenCategory(
+                              categories.at(-1) ?? null
+                            ),
+                          }
+                        : undefined
                       }
                     />
                   </td>
@@ -275,7 +273,9 @@ export function BudgetTeamMemberFees({
                 Ejecutado
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
-                {!editable ? <> ${currencyFormatter.format(ABTe)}</> : '-'}
+                {!editable ?
+                  <> ${currencyFormatter.format(ABTe)}</>
+                : '-'}
               </td>
             </tr>
             <tr>

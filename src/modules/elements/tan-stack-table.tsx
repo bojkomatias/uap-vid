@@ -78,7 +78,7 @@ export default function TanStackTable({
         />
       )}
 
-      {data?.length >= 1 ? (
+      {data?.length >= 1 ?
         <div className="w-full overflow-x-auto">
           <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
             <thead>
@@ -114,8 +114,7 @@ export default function TanStackTable({
             </tbody>
           </table>
         </div>
-      ) : (
-        <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
+      : <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
           <h1 className="font-semibold">
             No se encontraron registros con los criterios de búsqueda
             especificados
@@ -124,7 +123,7 @@ export default function TanStackTable({
             Pruebe nuevamente con otros criterios de filtrado
           </p>
         </div>
-      )}
+      }
       <Pagination totalRecords={totalRecords} />
       <div className="-mb-12 mt-2 flex items-center justify-end text-xs font-light text-gray-400">
         <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">

@@ -51,15 +51,14 @@ export default function ReviewItem({
           >
             <ReviewVerdictBadge verdict={review.verdict} />
 
-            {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ? (
-              isOwner ? (
+            {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ?
+              isOwner ?
                 <ReviseCheckbox id={review.id} revised={review.revised} />
-              ) : (
-                <label className="label pointer-events-auto">
+              : <label className="label pointer-events-auto">
                   {review.revised ? 'revisado' : 'no revisado'}
                 </label>
-              )
-            ) : null}
+
+            : null}
             <span className="flex text-xs font-semibold text-gray-600 group-hover:underline">
               Ver detalles
               <ChevronRight
@@ -85,9 +84,9 @@ export default function ReviewItem({
 
           <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
             <span className="font-semibold text-gray-700">
-              {role === Role.ADMIN || role === Role.SECRETARY
-                ? review.reviewer.name
-                : null}
+              {role === Role.ADMIN || role === Role.SECRETARY ?
+                review.reviewer.name
+              : null}
             </span>
             <span className="font-light text-gray-500">
               {getDuration(

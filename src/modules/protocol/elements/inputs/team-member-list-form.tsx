@@ -113,11 +113,11 @@ function TeamMemberSelector({
   const [query, setQuery] = useState('')
 
   const filteredPeople =
-    query === ''
-      ? teamMembers
-      : teamMembers.filter((member) => {
-          return member.name.toLowerCase().includes(query.toLowerCase())
-        })
+    query === '' ? teamMembers : (
+      teamMembers.filter((member) => {
+        return member.name.toLowerCase().includes(query.toLowerCase())
+      })
+    )
 
   return (
     <div className="flex-grow">
@@ -177,7 +177,7 @@ function TeamMemberSelector({
           </div>
         </Combobox.Button>
 
-        {filteredPeople.length > 0 ? (
+        {filteredPeople.length > 0 ?
           <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
             {filteredPeople.map((value) => (
               <Combobox.Option
@@ -221,7 +221,7 @@ function TeamMemberSelector({
               </Combobox.Option>
             ))}
           </Combobox.Options>
-        ) : null}
+        : null}
       </Combobox>
     </div>
   )

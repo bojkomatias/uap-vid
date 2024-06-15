@@ -76,9 +76,9 @@ export default function CategoryForm({
           placeholder="Nombre de la categoría"
           {...form.getInputProps('name')}
         />
-        {form.getInputProps('name').error ? (
+        {form.getInputProps('name').error ?
           <p className="error">*{form.getInputProps('name').error}</p>
-        ) : null}
+        : null}
       </div>
       <div className="m-3 p-1">
         <label htmlFor="price" className="label">
@@ -96,13 +96,15 @@ export default function CategoryForm({
             })
           }}
         />
-        {form.getInputProps('price').error ||
-        form.getInputProps('price.0.price').error ? (
+        {(
+          form.getInputProps('price').error ||
+          form.getInputProps('price.0.price').error
+        ) ?
           <p className="error">
             *{form.getInputProps('price').error}
             {form.getInputProps('price.0.price').error}
           </p>
-        ) : null}
+        : null}
       </div>
 
       <Button

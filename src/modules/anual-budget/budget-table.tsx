@@ -59,13 +59,16 @@ export default function AnualBudgetTable({
                 href={`/protocols/${row.original.protocol.id}`}
                 title={row.original.protocol.sections.identification.title}
               >
-                {row.original.protocol.sections.identification.title.length <=
-                80
-                  ? row.original.protocol.sections.identification.title
-                  : row.original.protocol.sections.identification.title.slice(
-                      0,
-                      60
-                    ) + '...'}
+                {(
+                  row.original.protocol.sections.identification.title.length <=
+                  80
+                ) ?
+                  row.original.protocol.sections.identification.title
+                : row.original.protocol.sections.identification.title.slice(
+                    0,
+                    60
+                  ) + '...'
+                }
               </Link>
             </>
           )

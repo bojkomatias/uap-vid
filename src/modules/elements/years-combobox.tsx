@@ -31,13 +31,13 @@ export function BudgetYearCombobox() {
   }, [selected, update])
 
   const filteredYears =
-    query === ''
-      ? years
-      : years.filter((year) =>
-          year
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, ''))
-        )
+    query === '' ? years : (
+      years.filter((year) =>
+        year
+          .replace(/\s+/g, '')
+          .includes(query.toLowerCase().replace(/\s+/g, ''))
+      )
+    )
 
   return (
     <div className="relative w-fit">
@@ -65,12 +65,11 @@ export function BudgetYearCombobox() {
             afterLeave={() => setQuery('')}
           >
             <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-              {filteredYears.length === 0 && query !== '' ? (
+              {filteredYears.length === 0 && query !== '' ?
                 <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
                   No se encontraron resultados.
                 </div>
-              ) : (
-                filteredYears.map((year) => (
+              : filteredYears.map((year) => (
                   <Combobox.Option
                     key={year}
                     className={({ active }) =>
@@ -89,7 +88,7 @@ export function BudgetYearCombobox() {
                         >
                           {year}
                         </span>
-                        {selected ? (
+                        {selected ?
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                               active ? 'text-primary' : 'text-teal-600'
@@ -97,12 +96,12 @@ export function BudgetYearCombobox() {
                           >
                             <Check className="h-4 w-4" aria-hidden="true" />
                           </span>
-                        ) : null}
+                        : null}
                       </>
                     )}
                   </Combobox.Option>
                 ))
-              )}
+              }
             </Combobox.Options>
           </Transition>
         </div>

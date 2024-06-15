@@ -17,9 +17,9 @@ const Textarea = ({ path, label }: { path: string; label: string }) => {
         {label}
       </label>
       <Tiptap {...form.getInputProps(path)} />
-      {form.getInputProps(path).error ? (
+      {form.getInputProps(path).error ?
         <p className="error">*{form.getInputProps(path).error}</p>
-      ) : null}
+      : null}
     </div>
   )
 }
