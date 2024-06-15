@@ -76,7 +76,7 @@ export function ConvocatoryForm({
     <form onSubmit={form.onSubmit((values) => upsertConvocatory(values))}>
       <Fieldset className="@container">
         <Legend>Datos de convocatoria</Legend>
-        <FieldGroup className="grid gap-6 space-y-0 @xl:grid-cols-2">
+        <FieldGroup className="@xl:grid-cols-2 grid gap-6 space-y-0">
           <FormInput
             label="Nombre"
             placeholder="Convocatoria 20XX"

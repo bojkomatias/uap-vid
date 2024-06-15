@@ -20,12 +20,9 @@ dependencies:
   '@tabler/icons':
     specifier: ^2.47.0
     version: 2.47.0
-<<<<<<< HEAD
-=======
   '@tailwindcss/container-queries':
     specifier: ^0.1.1
     version: 0.1.1(tailwindcss@3.4.4)
->>>>>>> 2895be8d (improv: Passed convocatory form to Catalyst toolkit)
   '@tailwindcss/forms':
     specifier: ^0.5.7
     version: 0.5.7(tailwindcss@3.4.4)
@@ -743,8 +740,6 @@ packages:
     resolution: {integrity: sha512-4w5evLh+7FUUiA1GucvGj2ReX2TvOjEr4ejXdwL/bsjoSkof6r1gQmzqI+VHrE2CpJpB3al7bCTulOkFa/RcyA==}
     dev: false
 
-<<<<<<< HEAD
-=======
   /@tailwindcss/container-queries@0.1.1(tailwindcss@3.4.4):
     resolution: {integrity: sha512-p18dswChx6WnTSaJCSGx6lTmrGzNNvm2FtXmiO6AuA1V4U5REyoqwmT6kgAsIMdjo07QdAfYXHJ4hnMtfHzWgA==}
     peerDependencies:
@@ -753,7 +748,6 @@ packages:
       tailwindcss: 3.4.4
     dev: false
 
->>>>>>> 2895be8d (improv: Passed convocatory form to Catalyst toolkit)
   /@tailwindcss/forms@0.5.7(tailwindcss@3.4.4):
     resolution: {integrity: sha512-QE7X69iQI+ZXwldE+rzasvbJiyV/ju1FGHH0Qn2W3FKbuYtqp8LKcy6iSw79fVUT5/Vvf+0XgLCeYVG+UV6hOw==}
     peerDependencies:
