@@ -8,15 +8,10 @@ import { Access, Action, ProtocolState, Role } from '@prisma/client'
  * - Check access to resource according to user role
  */
 const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
-  [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS, Access.USERS],
-  [Role.SECRETARY]: [
-    Access.PROTOCOLS,
-    Access.REVIEWS,
-    Access.EVALUATORS,
-    Access.USERS,
-  ],
-  [Role.METHODOLOGIST]: [Access.PROTOCOLS, Access.USERS],
-  [Role.SCIENTIST]: [Access.PROTOCOLS, Access.USERS],
+  [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS],
+  [Role.SECRETARY]: [Access.PROTOCOLS, Access.REVIEWS, Access.EVALUATORS],
+  [Role.METHODOLOGIST]: [Access.PROTOCOLS],
+  [Role.SCIENTIST]: [Access.PROTOCOLS],
   [Role.ADMIN]: [
     Access.PROTOCOLS,
     Access.CONVOCATORIES,

@@ -25,6 +25,7 @@ import {
 } from '@components/sidebar'
 import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
+import { signOut } from 'next-auth/react'
 
 export function AppSidebar({
   user,
@@ -69,7 +70,11 @@ export function AppSidebar({
             <Settings data-slot="icon" />
             <SidebarLabel>Cuenta</SidebarLabel>
           </SidebarItem>
-          <SidebarItem>
+          <SidebarItem
+            onClick={() => {
+              signOut({ callbackUrl: '/' })
+            }}
+          >
             <Logout data-slot="icon" />
             <SidebarLabel>Cerrar sesión</SidebarLabel>
           </SidebarItem>
