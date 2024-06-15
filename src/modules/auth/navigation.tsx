@@ -8,19 +8,17 @@ import { SidebarLayout } from '@components/sidebar-layout'
 import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export async function AppLayout({ children }: { children: ReactNode }) {
-    const session = await getServerSession(authOptions)
-    if (!session) redirect('/')
+  const session = await getServerSession(authOptions)
+  if (!session) redirect('/')
 
-    const convocatory = await getCurrentConvocatory()
+  const convocatory = await getCurrentConvocatory()
 
-    return (
-        <SidebarLayout
-            sidebar={
-                <AppSidebar user={session.user} convocatory={convocatory} />
-            }
-            navbar={<Breadcrumbs />} // We can add later if need be
-        >
-            {children}
-        </SidebarLayout>
-    )
+  return (
+    <SidebarLayout
+      sidebar={<AppSidebar user={session.user} convocatory={convocatory} />}
+      navbar={<Breadcrumbs />} // We can add later if need be
+    >
+      {children}
+    </SidebarLayout>
+  )
 }

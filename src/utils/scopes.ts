@@ -8,26 +8,26 @@ import { Access, Action, ProtocolState, Role } from '@prisma/client'
  * - Check access to resource according to user role
  */
 const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
-    [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS, Access.USERS],
-    [Role.SECRETARY]: [
-        Access.PROTOCOLS,
-        Access.REVIEWS,
-        Access.EVALUATORS,
-        Access.USERS,
-    ],
-    [Role.METHODOLOGIST]: [Access.PROTOCOLS, Access.USERS],
-    [Role.SCIENTIST]: [Access.PROTOCOLS, Access.USERS],
-    [Role.ADMIN]: [
-        Access.PROTOCOLS,
-        Access.CONVOCATORIES,
-        Access.REVIEWS,
-        Access.EVALUATORS,
-        Access.USERS,
-        Access.ACADEMIC_UNITS,
-        Access.TEAM_MEMBERS,
-        Access.MEMBER_CATEGORIES,
-        Access.ANUAL_BUDGETS,
-    ],
+  [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS, Access.USERS],
+  [Role.SECRETARY]: [
+    Access.PROTOCOLS,
+    Access.REVIEWS,
+    Access.EVALUATORS,
+    Access.USERS,
+  ],
+  [Role.METHODOLOGIST]: [Access.PROTOCOLS, Access.USERS],
+  [Role.SCIENTIST]: [Access.PROTOCOLS, Access.USERS],
+  [Role.ADMIN]: [
+    Access.PROTOCOLS,
+    Access.CONVOCATORIES,
+    Access.REVIEWS,
+    Access.EVALUATORS,
+    Access.USERS,
+    Access.ACADEMIC_UNITS,
+    Access.TEAM_MEMBERS,
+    Access.MEMBER_CATEGORIES,
+    Access.ANUAL_BUDGETS,
+  ],
 }
 
 /** Role Action Scope
@@ -35,90 +35,86 @@ const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
  * - EDIT_BY_OWNER & PUBLISH can only be done for users that are protocol owners.
  */
 const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
-    [Role.RESEARCHER]: [
-        Action.CREATE,
-        Action.EDIT_BY_OWNER,
-        Action.PUBLISH,
-        Action.VIEW_ANUAL_BUDGET,
-    ],
-    [Role.SECRETARY]: [
-        Action.ACCEPT,
-        Action.CREATE,
-        Action.EDIT,
-        Action.EDIT_BY_OWNER,
-        Action.PUBLISH,
-        Action.VIEW_ANUAL_BUDGET,
-    ],
-    [Role.METHODOLOGIST]: [
-        Action.REVIEW,
-        Action.CREATE,
-        Action.EDIT_BY_OWNER,
-        Action.PUBLISH,
-    ],
-    [Role.SCIENTIST]: [Action.REVIEW],
-    [Role.ADMIN]: [
-        Action.CREATE,
-        Action.EDIT,
-        Action.EDIT_BY_OWNER,
-        Action.PUBLISH,
-        Action.ACCEPT,
-        Action.REVIEW,
-        Action.APPROVE,
-        Action.ASSIGN_TO_METHODOLOGIST,
-        Action.ASSIGN_TO_SCIENTIFIC,
-        Action.DELETE,
-        Action.DISCONTINUE,
-        Action.FINISH,
-        Action.VIEW_ANUAL_BUDGET,
-        Action.GENERATE_ANUAL_BUDGET,
-    ],
+  [Role.RESEARCHER]: [
+    Action.CREATE,
+    Action.EDIT_BY_OWNER,
+    Action.PUBLISH,
+    Action.VIEW_ANUAL_BUDGET,
+  ],
+  [Role.SECRETARY]: [
+    Action.ACCEPT,
+    Action.CREATE,
+    Action.EDIT,
+    Action.EDIT_BY_OWNER,
+    Action.PUBLISH,
+    Action.VIEW_ANUAL_BUDGET,
+  ],
+  [Role.METHODOLOGIST]: [
+    Action.REVIEW,
+    Action.CREATE,
+    Action.EDIT_BY_OWNER,
+    Action.PUBLISH,
+  ],
+  [Role.SCIENTIST]: [Action.REVIEW],
+  [Role.ADMIN]: [
+    Action.CREATE,
+    Action.EDIT,
+    Action.EDIT_BY_OWNER,
+    Action.PUBLISH,
+    Action.ACCEPT,
+    Action.REVIEW,
+    Action.APPROVE,
+    Action.ASSIGN_TO_METHODOLOGIST,
+    Action.ASSIGN_TO_SCIENTIFIC,
+    Action.DELETE,
+    Action.DISCONTINUE,
+    Action.FINISH,
+    Action.VIEW_ANUAL_BUDGET,
+    Action.GENERATE_ANUAL_BUDGET,
+  ],
 }
 
 /** ProtocolState Action Scope
  * - Check if an action can be performed according current protocol state
  */
 const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
-    [ProtocolState.NOT_CREATED]: [Action.CREATE],
-    [ProtocolState.DRAFT]: [
-        Action.EDIT_BY_OWNER,
-        Action.PUBLISH,
-        Action.DELETE,
-    ],
-    [ProtocolState.PUBLISHED]: [
-        Action.ASSIGN_TO_METHODOLOGIST,
-        Action.EDIT,
-        Action.DISCONTINUE,
-        Action.DELETE,
-    ],
-    [ProtocolState.METHODOLOGICAL_EVALUATION]: [
-        Action.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation
-        Action.EDIT_BY_OWNER,
-        Action.REVIEW,
-        Action.ASSIGN_TO_SCIENTIFIC,
-        Action.DISCONTINUE,
-    ],
-    [ProtocolState.SCIENTIFIC_EVALUATION]: [
-        Action.ASSIGN_TO_SCIENTIFIC, // Allows re-assignation
-        Action.EDIT_BY_OWNER,
-        Action.REVIEW,
-        Action.ACCEPT,
-        Action.DISCONTINUE,
-    ],
-    [ProtocolState.ACCEPTED]: [
-        Action.APPROVE,
-        Action.DISCONTINUE,
-        Action.EDIT,
-        Action.GENERATE_ANUAL_BUDGET,
-        Action.VIEW_ANUAL_BUDGET,
-    ],
-    [ProtocolState.ON_GOING]: [
-        Action.FINISH,
-        Action.VIEW_ANUAL_BUDGET,
-        Action.GENERATE_ANUAL_BUDGET,
-    ],
-    [ProtocolState.FINISHED]: [],
-    [ProtocolState.DISCONTINUED]: [],
-    [ProtocolState.DELETED]: [],
+  [ProtocolState.NOT_CREATED]: [Action.CREATE],
+  [ProtocolState.DRAFT]: [Action.EDIT_BY_OWNER, Action.PUBLISH, Action.DELETE],
+  [ProtocolState.PUBLISHED]: [
+    Action.ASSIGN_TO_METHODOLOGIST,
+    Action.EDIT,
+    Action.DISCONTINUE,
+    Action.DELETE,
+  ],
+  [ProtocolState.METHODOLOGICAL_EVALUATION]: [
+    Action.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation
+    Action.EDIT_BY_OWNER,
+    Action.REVIEW,
+    Action.ASSIGN_TO_SCIENTIFIC,
+    Action.DISCONTINUE,
+  ],
+  [ProtocolState.SCIENTIFIC_EVALUATION]: [
+    Action.ASSIGN_TO_SCIENTIFIC, // Allows re-assignation
+    Action.EDIT_BY_OWNER,
+    Action.REVIEW,
+    Action.ACCEPT,
+    Action.DISCONTINUE,
+  ],
+  [ProtocolState.ACCEPTED]: [
+    Action.APPROVE,
+    Action.DISCONTINUE,
+    Action.EDIT,
+    Action.GENERATE_ANUAL_BUDGET,
+    Action.VIEW_ANUAL_BUDGET,
+  ],
+  [ProtocolState.ON_GOING]: [
+    Action.FINISH,
+    Action.VIEW_ANUAL_BUDGET,
+    Action.GENERATE_ANUAL_BUDGET,
+  ],
+  [ProtocolState.FINISHED]: [],
+  [ProtocolState.DISCONTINUED]: [],
+  [ProtocolState.DELETED]: [],
 }
 
 /**
@@ -128,7 +124,7 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
  * @returns
  */
 export const canAccess = (access: Access, role: Role) =>
-    Role_ACCESS[role].includes(access)
+  Role_ACCESS[role].includes(access)
 
 /**
  * Check Execution Permission according to ProtocolState and Role
@@ -138,4 +134,4 @@ export const canAccess = (access: Access, role: Role) =>
  * @returns
  */
 export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
-    Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
+  Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
