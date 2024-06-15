@@ -7,25 +7,26 @@ body {
 }
 
 @layer base {
-  html {
-    @apply subpixel-antialiased;
-  }
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
 }
+
 @layer components {
   .input {
     @apply w-full self-start rounded border border-gray-200 px-3 py-1.5 text-sm transition placeholder:text-[0.72rem] placeholder:uppercase placeholder:text-gray-400/50 focus:border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-0 disabled:pointer-events-none disabled:select-none;
   }
+
   .label {
     @apply select-none p-1 text-[0.72rem] font-normal uppercase text-gray-600;
   }
+
   .required {
     @apply after:pl-0.5 after:text-gray-400 after:content-['*'];
   }
+
   .error {
     @apply pl-2 pt-1 text-xs font-medium text-error-500;
   }
@@ -60,7 +61,7 @@ body {
 }
 
 .loader {
-  border: 5px solid #fff;
+  border: 5px solid currentColor;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -81,6 +82,7 @@ body {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -95,14 +97,17 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @keyframes fade-in {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -119,18 +124,21 @@ body {
     transform: translateX(100%);
     opacity: 0;
   }
+
   100% {
     -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
 }
+
 @keyframes fade-in-right {
   0% {
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     opacity: 0;
   }
+
   100% {
     -webkit-transform: translateX(0);
     transform: translateX(0);
@@ -147,14 +155,17 @@ body {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
 }
+
 @keyframes fade-in {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -169,14 +180,17 @@ body {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
 }
+
 @keyframes fade-out {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -194,18 +208,21 @@ body {
     transform: translateX(0);
     opacity: 1;
   }
+
   100% {
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
     opacity: 0;
   }
 }
+
 @keyframes fade-out-right {
   0% {
     -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
+
   100% {
     -webkit-transform: translateX(100%);
     transform: translateX(100%);

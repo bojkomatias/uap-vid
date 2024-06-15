@@ -1,6 +1,4 @@
 import './globals.css'
-import { Footer } from '@layout/footer'
-import { Header } from '@layout/header'
 import { Montserrat } from 'next/font/google'
 
 export const metadata = {
@@ -19,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html className={`${font.variable} font-sans`}>
+    <html className={`${font.variable} font-sans antialiased`}>
       {process.env.NEXTAUTH_URL === 'https://uap-vid.vercel.app' ?
         <div className="pointer-events-none fixed inset-0 z-50 bg-transparent backdrop-hue-rotate-60">
           <div className="fixed inset-x-0 top-0 -mt-1 h-6 bg-black/90 text-center text-lg font-black text-white">
@@ -27,11 +25,9 @@ export default async function RootLayout({
           </div>
         </div>
       : null}
-      <body className="subpixel-antialiased">
+      <body>
         <div id="notifications-container" className="relative" />
-        <Header />
-        <main className="relative min-h-[90vh]">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   )

@@ -1,7 +1,6 @@
 'use client'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-
 import { Button } from '@elements/button'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -16,8 +15,8 @@ export const SignIn = () => {
   const [password, setPassword] = useState('')
 
   return (
-    <div className="absolute inset-x-4 top-12 mx-auto flex max-w-sm flex-col items-center">
-      <div className="flex flex-col items-center justify-center py-10 text-center text-xs font-bold uppercase text-primary">
+    <div className="mx-auto flex min-h-screen max-w-sm flex-col items-center pt-24">
+      <div className="flex flex-col items-center justify-center py-12 text-center text-xs font-bold uppercase text-primary">
         <Image src="/UAPazul.png" alt="UAP Logo" width={300} height={300} />
         <p>Vicerrectoría de Investigación y Desarrollo</p>
       </div>
