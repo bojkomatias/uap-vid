@@ -76,7 +76,7 @@ export const Footer = () => (
         </p>
         <div className="mt-8 md:order-1 md:mt-0">
           <p className="text-center text-xs leading-5 text-gray-300">
-            &copy; 2023{' '}
+            &copy; {new Date().getFullYear()}{" "}  
             <Link
               className="transition hover:text-white"
               target="_blank"
