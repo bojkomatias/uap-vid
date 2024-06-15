@@ -11,7 +11,7 @@ export function Fieldset({
       {...props}
       className={clsx(
         className,
-        '[&>*+[data-slot=control]]:mt-6 [&>[data-slot=text]]:mt-1'
+        'mt-4 [&>*+[data-slot=control]]:mt-4 [&>[data-slot=text]]:mt-1'
       )}
     />
   )
@@ -41,7 +41,7 @@ export function FieldGroup({
     <div
       data-slot="control"
       {...props}
-      className={cx('space-y-8', className)}
+      className={cx('space-y-4', className)}
     />
   )
 }
@@ -55,11 +55,11 @@ export function Field({
       {...props}
       className={clsx(
         className,
-        '[&>[data-slot=label]+[data-slot=control]]:mt-3',
-        '[&>[data-slot=label]+[data-slot=description]]:mt-1',
-        '[&>[data-slot=description]+[data-slot=control]]:mt-3',
-        '[&>[data-slot=control]+[data-slot=description]]:mt-3',
-        '[&>[data-slot=control]+[data-slot=error]]:mt-3',
+        '[&>[data-slot=label]+[data-slot=control]]:mt-2',
+        '[&>[data-slot=label]+[data-slot=description]]:mt-0',
+        '[&>[data-slot=description]+[data-slot=control]]:mt-1',
+        '[&>[data-slot=control]+[data-slot=description]]:mt-2',
+        '[&>[data-slot=control]+[data-slot=error]]:mt-1',
         '[&>[data-slot=label]]:font-medium'
       )}
     />
@@ -92,7 +92,7 @@ export function Description({
       {...props}
       className={clsx(
         className,
-        'text-base/6 text-gray-500 data-[disabled]:opacity-50 dark:text-gray-400 sm:text-sm/6'
+        'text-sm/6 text-gray-500 data-[disabled]:opacity-50 dark:text-gray-400 sm:text-xs/6'
       )}
     />
   )
@@ -108,7 +108,22 @@ export function ErrorMessage({
       {...props}
       className={clsx(
         className,
-        'text-base/6 text-red-600 data-[disabled]:opacity-50 dark:text-red-500 sm:text-sm/6'
+        'text-sm/6 text-red-600 data-[disabled]:opacity-50 dark:text-red-500 sm:text-xs/6'
+      )}
+    />
+  )
+}
+
+export function FormActions({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'div'>) {
+  return (
+    <div
+      {...props}
+      className={clsx(
+        className,
+        'mt-8 flex flex-col-reverse items-center justify-end gap-3 *:w-full sm:flex-row sm:*:w-auto'
       )}
     />
   )

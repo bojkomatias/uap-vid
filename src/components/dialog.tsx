@@ -1,3 +1,5 @@
+'use client'
+
 import * as Headless from '@headlessui/react'
 import clsx from 'clsx'
 import { Text } from './text'
@@ -14,6 +16,12 @@ const sizes = {
   '5xl': 'sm:max-w-5xl',
 }
 
+export type DialogProps = {
+  size?: keyof typeof sizes
+  className?: string
+  children: React.ReactNode
+} & Omit<Headless.DialogProps, 'className'>
+
 export function Dialog({
   open,
   onClose,
@@ -21,11 +29,7 @@ export function Dialog({
   className,
   children,
   ...props
-}: {
-  size?: keyof typeof sizes
-  className?: string
-  children: React.ReactNode
-} & Omit<Headless.DialogProps, 'className'>) {
+}: DialogProps) {
   return (
     <Headless.Transition appear show={open} {...props}>
       <Headless.Dialog onClose={onClose}>

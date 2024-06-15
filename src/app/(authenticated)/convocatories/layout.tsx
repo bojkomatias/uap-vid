@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function Layout({
   children,
   drawer,
@@ -8,8 +6,9 @@ export default function Layout({
   drawer: React.ReactNode
 }) {
   return (
-    <main>
-      {children} {drawer}
-    </main>
+    <>
+      {drawer}
+      {children}
+    </>
   )
 }

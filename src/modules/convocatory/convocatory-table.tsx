@@ -1,4 +1,5 @@
 'use client'
+
 import { buttonStyle } from '@elements/button/styles'
 import TanStackTable from '@elements/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
@@ -6,7 +7,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
-export async function ConvocatoryTable({
+export function ConvocatoryTable({
   convocatories,
   totalRecords,
   currentConvocatory,
@@ -72,7 +73,7 @@ export async function ConvocatoryTable({
       enableSorting: false,
       cell: ({ row }) => (
         <Link
-          href={`/convocatories/${row.original.id}`}
+          href={`/convocatories/edit/${row.original.id}`}
           className={buttonStyle('secondary', 'xs')}
         >
           Ver
