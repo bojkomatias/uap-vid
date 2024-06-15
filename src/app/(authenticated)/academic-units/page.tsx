@@ -4,29 +4,27 @@ import { getAllSecretaries } from '@repositories/user'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
 
 export default async function Page({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, academicUnits] =
-        await getAllAcademicUnits(searchParams)
-    const secretaries = await getAllSecretaries()
-    if (!secretaries)
-        return <div>No hay secretarios cargados en el sistema</div>
+  const [totalRecords, academicUnits] = await getAllAcademicUnits(searchParams)
+  const secretaries = await getAllSecretaries()
+  if (!secretaries) return <div>No hay secretarios cargados en el sistema</div>
 
-    return (
-        <>
-            <PageHeading title="Unidades Académicas" />
+  return (
+    <>
+      <PageHeading title="Unidades Académicas" />
 
-            {academicUnits && academicUnits.length > 0 ? (
-                <AcademicUnitsTable
-                    academicUnits={academicUnits}
-                    secretaries={secretaries}
-                    totalRecords={totalRecords}
-                />
-            ) : (
-                'No se encontraron unidades académicas'
-            )}
-        </>
-    )
+      {academicUnits && academicUnits.length > 0 ? (
+        <AcademicUnitsTable
+          academicUnits={academicUnits}
+          secretaries={secretaries}
+          totalRecords={totalRecords}
+        />
+      ) : (
+        'No se encontraron unidades académicas'
+      )}
+    </>
+  )
 }

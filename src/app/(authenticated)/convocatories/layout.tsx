@@ -1,15 +1,16 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 
-export default function Layout({
-    children,
-    drawer,
+export default async function Layout({
+  children,
+  dialog,
 }: {
-    children: React.ReactNode
-    drawer: React.ReactNode
+  children: ReactNode
+  dialog: ReactNode
 }) {
-    return (
-        <main>
-            {children} {drawer}
-        </main>
-    )
+  return (
+    <>
+      {dialog}
+      {children}
+    </>
+  )
 }

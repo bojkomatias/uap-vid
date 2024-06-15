@@ -1,23 +1,26 @@
+import { Heading } from '@components/heading'
+import { Text } from '@components/text'
+
 import { ConvocatoryForm } from '@convocatory/convocatory-form'
-import { PageHeading } from '@layout/page-heading'
 
-import { redirect } from 'next/navigation'
+export default function Page() {
+  const convocatory = {
+    name: '',
+    from: new Date(),
+    to: new Date(),
+    year: new Date().getFullYear(),
+  }
 
-export default async function Page() {
-    const convocatory = {
-        name: '',
-        from: new Date(),
-        to: new Date(),
-        year: new Date().getFullYear(),
-    }
+  return (
+    <div className="mt-20 max-w-5xl">
+      <Heading>Crear convocatoria</Heading>
+      <Text>
+        Aquí puede crear una nueva convocatoria a cual asignar proyectos de
+        investigación
+      </Text>
+      <div className="mt-10" />
 
-    if (!convocatory) redirect('/convocatories')
-
-    return (
-        <div>
-            <PageHeading title={'Nueva Convocatoria'} />
-            <div className="mt-20" />
-            <ConvocatoryForm convocatory={convocatory} isNew={true} />
-        </div>
-    )
+      <ConvocatoryForm convocatory={convocatory} />
+    </div>
+  )
 }

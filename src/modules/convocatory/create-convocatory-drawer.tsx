@@ -12,7 +12,6 @@ export default function CreateConvocatoryDrawer() {
           to: new Date(),
           year: new Date().getFullYear(),
         }}
-        isNew={true}
       />
     </CustomDrawer>
   )

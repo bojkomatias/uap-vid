@@ -1,29 +1,25 @@
 'use client'
 
-import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
-import { Button } from '@elements/button'
+import { FieldGroup, Fieldset, FormActions, Legend } from '@components/fieldset'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
-import type { Convocatory } from '@prisma/client'
 import { createConvocatory, updateConvocatory } from '@repositories/convocatory'
-import { cx } from '@utils/cx'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
-import { FormInput } from 'shared/form-input'
+import { FormInput } from '@shared/form/form-input'
+import { Button } from '@components/button'
+import type { z } from 'zod'
 
 export function ConvocatoryForm({
   convocatory,
-  isNew,
 }: {
-  convocatory: Omit<Convocatory, 'id' | 'createdAt'>
-  isNew: boolean
-  column?: boolean
+  convocatory: z.infer<typeof ConvocatorySchema>
 }) {
   const router = useRouter()
 
   const [isPending, startTransition] = useTransition()
-  const form = useForm<Omit<Convocatory, 'id' | 'createdAt'>>({
+  const form = useForm<z.infer<typeof ConvocatorySchema>>({
     initialValues: convocatory,
     transformValues: (values) => ({
       ...values,
@@ -34,8 +30,9 @@ export function ConvocatoryForm({
   })
 
   const upsertConvocatory = useCallback(
-    async (convocatory: Omit<Convocatory, 'id' | 'createdAt'>) => {
-      if (isNew) {
+    async (convocatory: z.infer<typeof ConvocatorySchema>) => {
+      /* If has no ID is a new category, so we create */
+      if (!convocatory.id) {
         const created = await createConvocatory(convocatory)
 
         if (created) {
@@ -44,7 +41,7 @@ export function ConvocatoryForm({
             message: 'La convocatoria ha sido creada con éxito',
             intent: 'success',
           })
-          router.refresh()
+
           return router.push(`/convocatories`)
         }
         return notifications.show({
@@ -53,6 +50,9 @@ export function ConvocatoryForm({
           intent: 'error',
         })
       }
+
+      /* Else if it has ID, we update existing one */
+
       // @ts-ignore
       const updated = await updateConvocatory(convocatory.id, convocatory)
 
@@ -70,54 +70,57 @@ export function ConvocatoryForm({
         intent: 'error',
       })
     },
-    [isNew, router]
+    [router]
   )
 
   return (
-    <form onSubmit={form.onSubmit((values) => upsertConvocatory(values))}>
-      <Fieldset className="@container">
-        <Legend>Datos de convocatoria</Legend>
-        <FieldGroup className="grid gap-6 space-y-0 @xl:grid-cols-2">
+    <form
+      onSubmit={form.onSubmit(
+        (values) => upsertConvocatory(values),
+        (errors) => console.log(errors)
+      )}
+      className="@container"
+    >
+      <Fieldset>
+        <FieldGroup className="@2xl:grid @2xl:grid-cols-2 @2xl:gap-6 @2xl:space-y-0">
           <FormInput
             label="Nombre"
+            description="Nombre de la convocatoria"
             placeholder="Convocatoria 20XX"
             {...form.getInputProps('name')}
           />
           <FormInput
             label="Año"
+            description="Año en la cual entraría en vigencia"
             type="number"
-            value={form.getInputProps('year').value}
+            {...form.getInputProps('year')}
             onChange={(e: any) =>
               form.setFieldValue('year', Number(e.target.value))
             }
           />
           <FormInput
-            label="Fecha desde"
+            label="Desde"
+            description="Fecha desde que comienza a correr"
             type="datetime-local"
-            defaultValue={new Date(form.getInputProps('from').value)
-              .toISOString()
-              .substring(0, 16)}
+            {...form.getInputProps('from')}
             onChange={(e: any) => form.setFieldValue('from', e.target.value)}
           />
 
           <FormInput
-            label="Fecha hasta"
+            label="Hasta"
+            description="Fecha en la cual finzaliza"
             type="datetime-local"
-            defaultValue={new Date(form.getInputProps('to').value)
-              .toISOString()
-              .substring(0, 16)}
+            {...form.getInputProps('to')}
             onChange={(e: any) => form.setFieldValue('to', e.target.value)}
           />
         </FieldGroup>
       </Fieldset>
-      <Button
-        intent="secondary"
-        type="submit"
-        loading={isPending}
-        className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
-      >
-        {isNew ? 'Crear convocatoria' : 'Actualizar convocatoria'}
-      </Button>
+
+      <FormActions>
+        <Button type="submit">
+          {!convocatory.id ? 'Crear convocatoria' : 'Actualizar convocatoria'}
+        </Button>
+      </FormActions>
     </form>
   )
 }
