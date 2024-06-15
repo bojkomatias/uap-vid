@@ -62,7 +62,7 @@ export const Breadcrumbs = () => {
         <li className="flex items-center">
           <Link
             href="/protocols"
-            className="ml-4 text-sm font-medium text-gray-500 hover:text-primary"
+            className="ml-0.5 text-sm font-medium text-gray-500 hover:text-primary"
           >
             Inicio
           </Link>
