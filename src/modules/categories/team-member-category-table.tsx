@@ -1,6 +1,6 @@
 'use client'
 import type { TeamMemberCategory } from '@prisma/client'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import PriceUpdate from './price-update'

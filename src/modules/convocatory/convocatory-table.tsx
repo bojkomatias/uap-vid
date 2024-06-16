@@ -1,7 +1,7 @@
 'use client'
 
 import { buttonStyle } from '@elements/button/styles'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import { dateFormatter } from '@utils/formatters'

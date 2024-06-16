@@ -67,7 +67,7 @@ const base = [
   // Indicator color (dark mode)
   'dark:group-data-[checked]:group-data-[hover]:[--radio-indicator:var(--radio-checked-indicator)] dark:group-data-[hover]:[--radio-indicator:theme(colors.gray.700)]',
   // Focus ring
-  'group-data-[focus]:outline group-data-[focus]:outline-2 group-data-[focus]:outline-offset-2 group-data-[focus]:outline-blue-500',
+  'group-data-[focus]:outline group-data-[focus]:outline-2 group-data-[focus]:outline-offset-2 group-data-[focus]:outline-primary-950',
   // Disabled state
   'group-data-[disabled]:opacity-50',
   'group-data-[disabled]:border-gray-950/25 group-data-[disabled]:bg-gray-950/5 group-data-[disabled]:[--radio-checked-indicator:theme(colors.gray.950/50%)] group-data-[disabled]:before:bg-transparent',

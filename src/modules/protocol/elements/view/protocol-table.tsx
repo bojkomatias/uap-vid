@@ -4,7 +4,7 @@ import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictiona
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 import { User as UserIcon } from 'tabler-icons-react'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'

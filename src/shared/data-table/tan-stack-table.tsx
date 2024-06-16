@@ -16,6 +16,14 @@ import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/table'
 
 export default function TanStackTable({
   data,
@@ -79,41 +87,30 @@ export default function TanStackTable({
       )}
 
       {data?.length >= 1 ?
-        <div className="w-full overflow-x-auto">
-          <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-2 py-2 text-left text-sm font-medium uppercase text-gray-600 first:pl-4 last:pr-4 last:text-right sm:first:pl-0 sm:last:pr-0"
-                    >
-                      <HeaderSorter header={header} />
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className="divide-y bg-white">
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="whitespace-nowrap px-2 py-3.5 text-sm text-gray-800 first:pl-4 last:w-16 last:pr-4 last:text-right sm:first:pl-0"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table>
+          <TableHead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHeader key={header.id}>
+                    <HeaderSorter header={header} />
+                  </TableHeader>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       : <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
           <h1 className="font-semibold">
             No se encontraron registros con los criterios de búsqueda

@@ -1,6 +1,5 @@
 'use client'
 import { useMemo } from 'react'
-import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
@@ -10,6 +9,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'tabler-icons-react'
+import { Button } from '@components/button'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
   totalRecords,
@@ -58,25 +58,21 @@ export default function Pagination({
         : <>
             <Button
               title="Primer página"
-              intent="outline"
-              size="icon"
-              className="bg-gray-100"
               onClick={() => update({ page: 1 })}
+              plain
             >
-              <ChevronsLeft className="w-3.5 text-gray-500" />
+              <ChevronsLeft data-slot="icon" />
             </Button>
             <Button
               title="Página anterior"
-              intent="outline"
-              size="icon"
-              className="bg-gray-100"
               onClick={() =>
                 update({
                   page: currentPage > 1 ? currentPage - 1 : 1,
                 })
               }
+              plain
             >
-              <ChevronLeft className="w-3.5 text-gray-500" />
+              <ChevronLeft data-slot="icon" />
             </Button>
           </>}
 
@@ -84,16 +80,15 @@ export default function Pagination({
           displayedPages.map((page: number) => (
             <Button
               key={page}
-              intent="outline"
-              size="icon"
               className={
                 Number(currentPage) === page ?
-                  'fade-in text-xs ring-2 md:ring-primary'
-                : 'fade-in hidden text-xs md:block'
+                  'fade-in size-9 ring-2 ring-primary'
+                : 'fade-in hidden size-9 md:block'
               }
               onClick={() => {
                 if (Number(currentPage) !== page) update({ page: page })
               }}
+              outline
             >
               {page}
             </Button>
@@ -103,9 +98,6 @@ export default function Pagination({
         : <>
             <Button
               title="Siguiente página"
-              intent="outline"
-              size="icon"
-              className="bg-gray-100"
               onClick={() =>
                 update({
                   page:
@@ -114,22 +106,21 @@ export default function Pagination({
                     : allPages[allPages.length - 1],
                 })
               }
+              plain
             >
-              <ChevronRight className="w-3.5 text-gray-500" />
+              <ChevronRight data-slot="icon" />
             </Button>
 
             <Button
               title="Última página"
-              intent="outline"
-              size="icon"
-              className="bg-gray-100"
               onClick={() =>
                 update({
                   page: allPages[allPages.length - 1],
                 })
               }
+              plain
             >
-              <ChevronsRight className="w-3.5 text-gray-500" />
+              <ChevronsRight data-slot="icon" />
             </Button>
           </>}
 

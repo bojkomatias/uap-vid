@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { Button } from './button'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { Badge } from './badge'
 import { cx } from '@utils/cx'
+import { Button } from '@components/button'
+import { BadgeButton } from '@components/badge'
 
 export default function EnumFilterOptions({
   filter,
@@ -23,7 +23,7 @@ export default function EnumFilterOptions({
           {values[0]?.[0] ?
             values.map(([value, name], i) => {
               return (
-                <Button
+                <BadgeButton
                   onClick={() => {
                     update({
                       filter,
@@ -35,24 +35,15 @@ export default function EnumFilterOptions({
                         : value,
                     })
                   }}
-                  intent="unset"
                   key={i}
                 >
-                  <Badge
-                    className={cx(
-                      'cursor-pointer transition hover:bg-primary-100',
-                      currentValues?.includes(value) &&
-                        'bg-primary-50 ring-primary/50'
-                    )}
-                  >
-                    {name}
-                  </Badge>
-                </Button>
+                  {name}
+                </BadgeButton>
               )
             })
           : values.map((value, i) => {
               return (
-                <Button
+                <BadgeButton
                   onClick={() => {
                     update({
                       filter,
@@ -64,18 +55,10 @@ export default function EnumFilterOptions({
                         : value,
                     })
                   }}
-                  intent="unset"
                   key={i}
                 >
-                  <Badge
-                    className={cx(
-                      'cursor-pointer transition hover:bg-gray-200',
-                      currentValues?.includes(value) && 'bg-gray-300'
-                    )}
-                  >
-                    {value}
-                  </Badge>
-                </Button>
+                  {value}
+                </BadgeButton>
               )
             })
           }
