@@ -4,6 +4,9 @@ import { buttonStyle } from '@elements/button/styles'
 import Link from 'next/link'
 import CategoriesTable from 'modules/categories/team-member-category-table'
 import { getCategories } from '@repositories/team-member-category'
+import { Heading, Subheading } from '@components/heading'
+import { Button } from '@components/button'
+import { CodePlus, Plus, VariablePlus } from 'tabler-icons-react'
 
 export default async function Page({
   searchParams,
@@ -14,20 +17,18 @@ export default async function Page({
 
   return (
     <>
-      <PageHeading title="Categorías de miembros de equipo de investigación" />
-      <p className="ml-2 text-sm text-gray-500">
+      <div className="flex items-end">
+        <Heading>Categorías de miembros de equipo de investigación</Heading>
+        <Button scroll={false} href={'/categories/new'}>
+          <Plus data-slot="icon" />
+          Crear categoría
+        </Button>
+      </div>
+      <Subheading>
         Lista de las categorías asignables a los miembros de equipo de un
         proyecto de investigación.
-      </p>
-      <div className="flex flex-row-reverse">
-        <Link
-          scroll={false}
-          href={'/categories/new'}
-          className={cx(buttonStyle('secondary'), 'float-right mt-2 w-fit')}
-        >
-          Crear categoría
-        </Link>
-      </div>
+      </Subheading>
+
       <CategoriesTable categories={categories} totalRecords={totalRecords} />
     </>
   )

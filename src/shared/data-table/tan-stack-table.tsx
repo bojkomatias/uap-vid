@@ -66,7 +66,7 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className=" mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="mx-auto my-4 flex flex-wrap items-center justify-between gap-4">
         <SearchBar placeholderMessage={searchBarPlaceholder} />
         <div className="flex flex-wrap gap-2">
           {customFilterSlot2}
