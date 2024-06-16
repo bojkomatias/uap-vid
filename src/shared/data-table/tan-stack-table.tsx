@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@components/table'
+import { Text } from '@components/text'
 
 export default function TanStackTable({
   data,
@@ -71,12 +72,6 @@ export default function TanStackTable({
         <div className="flex flex-wrap gap-2">
           {customFilterSlot2}
           <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
-
-          <DownloadCSVButton
-            totalRecordsCheck={totalRecordsCheck}
-            data={data}
-            columns={columns}
-          />
         </div>
       </div>
 
@@ -132,14 +127,22 @@ export default function TanStackTable({
           </p>
         </div>
       }
-      <Pagination totalRecords={totalRecords} />
-      <div className="-mb-12 mt-2 flex items-center justify-end text-xs font-light text-gray-400">
+      <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
         <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
           Shift
         </kbd>
         +
         <Mouse className="mx-0.5 h-4 text-gray-400" />
         para navegar lateralmente.
+      </Text>
+      <div className="mt-3 flex flex-col items-start justify-between sm:flex-row">
+        <span className="w-20" />
+        <Pagination totalRecords={totalRecords} />
+        <DownloadCSVButton
+          totalRecordsCheck={totalRecordsCheck}
+          data={data}
+          columns={columns}
+        />
       </div>
     </>
   )
