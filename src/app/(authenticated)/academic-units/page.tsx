@@ -1,5 +1,4 @@
 import { Heading } from '@components/heading'
-import { PageHeading } from '@layout/page-heading'
 import { getAllAcademicUnits } from '@repositories/academic-unit'
 import { getAllSecretaries } from '@repositories/user'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'

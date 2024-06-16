@@ -14,7 +14,7 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
   Table,

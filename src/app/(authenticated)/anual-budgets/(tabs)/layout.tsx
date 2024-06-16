@@ -1,5 +1,3 @@
-import { PageHeading } from '@layout/page-heading'
-import Link from 'next/link'
 import Tabs from '@elements/tabs'
 import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import { Heading, Subheading } from '@components/heading'

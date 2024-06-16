@@ -1,10 +1,10 @@
-import { PageHeading } from '@layout/page-heading'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
 import { ProfileInfo } from 'modules/profile/profile-info-drawer'
 import { Role } from '@prisma/client'
+import { Heading } from '@components/heading'
 
 export default async function Page() {
   const session = await getServerSession(authOptions)
@@ -12,8 +12,8 @@ export default async function Page() {
   const reviews = await getReviewsByReviewerId(session.user.id)
 
   return (
-    <main className="mx-16">
-      <PageHeading title="Perfil" />
+    <>
+      <Heading>Perfil de usuario</Heading>
       <ProfileInfo
         certificate={
           // Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page.
@@ -24,6 +24,6 @@ export default async function Page() {
         }
         user={session.user}
       />
-    </main>
+    </>
   )
 }

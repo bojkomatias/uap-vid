@@ -1,12 +1,8 @@
-import { PageHeading } from '@layout/page-heading'
-import { cx } from '@utils/cx'
-import { buttonStyle } from '@elements/button/styles'
-import Link from 'next/link'
 import CategoriesTable from 'modules/categories/team-member-category-table'
 import { getCategories } from '@repositories/team-member-category'
 import { Heading, Subheading } from '@components/heading'
 import { Button } from '@components/button'
-import { CodePlus, Plus, VariablePlus } from 'tabler-icons-react'
+import { Plus } from 'tabler-icons-react'
 
 export default async function Page({
   searchParams,

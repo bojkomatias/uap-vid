@@ -105,7 +105,6 @@ export default function UserTable({
           values: Object.entries(RolesDictionary),
         }}
         searchBarPlaceholder="Buscar por: Nombre, Email"
-        enableRowAsLink={false}
       />
     </>
   )
