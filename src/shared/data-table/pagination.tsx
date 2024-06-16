@@ -10,6 +10,7 @@ import {
   ChevronsRight,
 } from 'tabler-icons-react'
 import { Button } from '@components/button'
+import { cx } from '@utils/cx'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
   totalRecords,
@@ -53,7 +54,7 @@ export default function Pagination({
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="mx-auto mt-8 flex w-fit gap-1">
+      <div className="mx-auto flex w-fit gap-1">
         {numberOfDisplayedPages >= Math.ceil(totalRecords / shownRecords) ? null
         : <>
             <Button
@@ -80,17 +81,21 @@ export default function Pagination({
           displayedPages.map((page: number) => (
             <Button
               key={page}
-              className={
-                Number(currentPage) === page ?
-                  'fade-in size-9 ring-2 ring-primary'
-                : 'fade-in hidden size-9 md:block'
-              }
               onClick={() => {
                 if (Number(currentPage) !== page) update({ page: page })
               }}
-              outline
+              {...(Number(currentPage) === page ?
+                { outline: true }
+              : { plain: true })}
             >
-              {page}
+              <span
+                className={cx(
+                  Number(currentPage) === page && '!font-semibold',
+                  'w-3.5 font-normal'
+                )}
+              >
+                {page}
+              </span>
             </Button>
           ))
         : null}

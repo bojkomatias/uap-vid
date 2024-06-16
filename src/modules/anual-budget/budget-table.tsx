@@ -104,6 +104,7 @@ export default function AnualBudgetTable({
         initialVisibility={initialVisible}
         searchBarPlaceholder="Buscar por nombre de categoría"
         customFilterSlot2={yearFilter()}
+        rowAsLinkPath="/anual-bugdets/bugdet/"
       />
     </>
   )
