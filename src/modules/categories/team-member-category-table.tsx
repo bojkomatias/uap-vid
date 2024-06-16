@@ -30,7 +30,6 @@ export default function CategoriesTable({
         header: 'Categoría',
         enableHiding: false,
       },
-
       {
         accessorKey: 'price',
         header: 'Valor hora',
@@ -45,7 +44,6 @@ export default function CategoriesTable({
           />
         ),
       },
-
       {
         accessorKey: 'actions',
         header: 'Acciones',

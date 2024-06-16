@@ -1,8 +1,7 @@
 'use client'
-import { Button } from './button'
+
 import { useState } from 'react'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { cx } from '@utils/cx'
 import { Input } from '@components/input'
 
 export default function SearchBar({

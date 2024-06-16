@@ -2,8 +2,6 @@
 import React from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { cx } from '@utils/cx'
-import { Button } from '@components/button'
 import { BadgeButton } from '@components/badge'
 
 export default function EnumFilterOptions({

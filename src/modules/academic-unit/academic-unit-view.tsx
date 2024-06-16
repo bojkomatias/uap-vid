@@ -1,7 +1,6 @@
 'use client'
 
 import type { AcademicUnit, User } from '@prisma/client'
-import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import Currency from '@elements/currency'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
