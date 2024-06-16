@@ -21,7 +21,7 @@ export default function Pagination({
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
 
-  const shownRecords = Number(searchParams?.get('records')) || 5
+  const shownRecords = Number(searchParams?.get('records')) || 10
 
   const currentPage = Number(searchParams?.get('page')) || 1
 
@@ -125,7 +125,7 @@ export default function Pagination({
           </>}
 
         <RecordsDropdown
-          options={[5, 10, 15, 20, totalRecords]}
+          options={[10, 20, 50, totalRecords]}
           shownRecords={shownRecords}
           currentPage={currentPage}
         />

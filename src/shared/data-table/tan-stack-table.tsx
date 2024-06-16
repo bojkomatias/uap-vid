@@ -14,7 +14,7 @@ import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
   Table,
@@ -34,6 +34,7 @@ export default function TanStackTable({
   searchBarPlaceholder,
   customFilterSlot,
   customFilterSlot2,
+  enableRowAsLink = true,
 }: {
   data: unknown[]
   columns: ColumnDef<any, unknown>[]
@@ -43,7 +44,9 @@ export default function TanStackTable({
   searchBarPlaceholder: string
   customFilterSlot?: React.ReactNode
   customFilterSlot2?: React.ReactNode
+  enableRowAsLink?: boolean
 }) {
+  const pathname = usePathname()
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialVisibility)
 
@@ -87,7 +90,10 @@ export default function TanStackTable({
       )}
 
       {data?.length >= 1 ?
-        <Table>
+        <Table
+          bleed
+          className="[--gutter:theme(spacing.6)] sm:[--gutter:theme(spacing.8)]"
+        >
           <TableHead>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -101,7 +107,12 @@ export default function TanStackTable({
           </TableHead>
           <TableBody>
             {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                {...(enableRowAsLink ?
+                  { href: pathname + '/' + row.original.id }
+                : {})}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

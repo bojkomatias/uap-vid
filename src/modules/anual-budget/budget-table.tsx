@@ -87,22 +87,6 @@ export default function AnualBudgetTable({
         header: 'Año',
         enableHiding: true,
       },
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        enableHiding: false,
-        enableSorting: false,
-        cell: ({ row }) => {
-          return (
-            <Link
-              className={buttonStyle('secondary', 'xs')}
-              href={`/anual-budgets/budget/${row.original.id}`}
-            >
-              Ver
-            </Link>
-          )
-        },
-      },
     ],
     []
   )

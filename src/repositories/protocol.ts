@@ -128,7 +128,7 @@ const getProtocolsByRol = cache(
     role: Role,
     id: string,
     {
-      records = '5',
+      records = '10',
       page = '1',
       search,
       sort,

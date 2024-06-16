@@ -90,7 +90,7 @@ export const getTeamMembersByIds = async (teamMemberIds: string[]) =>
   })
 
 export const getTeamMembers = async ({
-  records = '5',
+  records = '10',
   page = '1',
   search,
   sort,

@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { Check, ChevronDown } from 'tabler-icons-react'
-import { cx } from '@utils/cx'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { Button } from '@components/button'
 import { Listbox, ListboxOption } from '@components/listbox'
 
 export default function RecordsDropdown({
@@ -19,7 +14,7 @@ export default function RecordsDropdown({
   const update = useUpdateQuery()
 
   return (
-    <Listbox defaultValue="10">
+    <Listbox defaultValue={shownRecords || 10}>
       {options.slice(0, options.length - 1).map((o, idx) => (
         <ListboxOption
           key={idx}

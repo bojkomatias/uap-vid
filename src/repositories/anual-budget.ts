@@ -12,7 +12,7 @@ import { prisma } from 'utils/bd'
 
 export const getAnualBudgets = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,
@@ -212,7 +212,7 @@ export const updateAnualBudgetTeamMemberHours = async (
 export const getAnualBudgetsByAcademicUnit = cache(
   async (
     {
-      records = '5',
+      records = '10',
       page = '1',
       search,
       sort,

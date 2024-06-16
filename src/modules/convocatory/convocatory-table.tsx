@@ -66,20 +66,6 @@ export function ConvocatoryTable({
         }
       },
     },
-    {
-      accessorKey: 'actions',
-      header: 'Ver',
-      enableHiding: false,
-      enableSorting: false,
-      cell: ({ row }) => (
-        <Link
-          href={`/convocatories/edit/${row.original.id}`}
-          className={buttonStyle('secondary', 'xs')}
-        >
-          Ver
-        </Link>
-      ),
-    },
   ]
 
   return (
@@ -91,8 +77,8 @@ export function ConvocatoryTable({
       initialVisibility={{
         name: true,
         year: true,
-        from: false,
-        to: false,
+        from: true,
+        to: true,
         id: false,
         isCurrent: false,
       }}

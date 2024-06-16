@@ -72,6 +72,7 @@ export default function CategoriesTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
       searchBarPlaceholder="Buscar por nombre de categoría"
+      enableRowAsLink={false}
     />
   )
 }

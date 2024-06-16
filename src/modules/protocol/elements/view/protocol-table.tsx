@@ -246,21 +246,6 @@ export default function ProtocolTable({
           user.role === 'SECRETARY' ||
           user.role === 'RESEARCHER',
       },
-
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <Link
-            href={`/protocols/${row.original.id}`}
-            className={buttonStyle('secondary', 'xs')}
-          >
-            Ver
-          </Link>
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
     ],
     [user.id, user.role]
   )

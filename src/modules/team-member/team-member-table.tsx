@@ -93,20 +93,6 @@ export default function TeamMemberTable({
         header: 'Unidad Académica',
         enableSorting: true,
       },
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <Link
-            href={`/team-members/${row.original.id}`}
-            className={buttonStyle('secondary', 'xs')}
-          >
-            Ver
-          </Link>
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
     ],
     []
   )
