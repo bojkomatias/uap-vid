@@ -35,7 +35,7 @@ export default function TanStackTable({
   searchBarPlaceholder,
   customFilterSlot,
   customFilterSlot2,
-  enableRowAsLink = true,
+  rowAsLinkPath,
 }: {
   data: unknown[]
   columns: ColumnDef<any, unknown>[]
@@ -45,9 +45,8 @@ export default function TanStackTable({
   searchBarPlaceholder: string
   customFilterSlot?: React.ReactNode
   customFilterSlot2?: React.ReactNode
-  enableRowAsLink?: boolean
+  rowAsLinkPath?: string
 }) {
-  const pathname = usePathname()
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialVisibility)
 
@@ -104,8 +103,8 @@ export default function TanStackTable({
             {table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                {...(enableRowAsLink ?
-                  { href: pathname + '/' + row.original.id }
+                {...(rowAsLinkPath ?
+                  { href: rowAsLinkPath + row.original.id }
                 : {})}
               >
                 {row.getVisibleCells().map((cell) => (
