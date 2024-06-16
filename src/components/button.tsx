@@ -180,7 +180,7 @@ export const Button = React.forwardRef(function Button(
     styles.base,
     outline ? styles.outline
     : plain ? styles.plain
-    : clsx(styles.solid, styles.colors[color ?? 'dark/gray'])
+    : clsx(styles.solid, styles.colors[color ?? 'primary'])
   )
 
   return 'href' in props ?

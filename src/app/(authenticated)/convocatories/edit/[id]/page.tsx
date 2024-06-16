@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const current = await getCurrentConvocatory()
 
   return (
-    <div className="mt-20 max-w-5xl">
+    <div className="max-w-4xl">
       <div className="flex items-center gap-2">
         <Heading>{convocatory.name}</Heading>
         {current && current.id === convocatory.id ?
@@ -27,7 +27,6 @@ export default async function Page({ params }: { params: { id: string } }) {
       <Text>
         Tenga en cuenta que esto puede afectar al resto de la applicación
       </Text>
-      <div className="mt-10" />
 
       <ConvocatoryForm convocatory={convocatory} />
     </div>

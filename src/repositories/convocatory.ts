@@ -2,8 +2,10 @@
 
 import type { Convocatory } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { ConvocatorySchema } from '@utils/zod'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
+import { z } from 'zod'
 
 export const getAllConvocatories = cache(
   async ({
@@ -115,27 +117,22 @@ export const getCurrentConvocatory = cache(async () => {
   }
 })
 
-export const createConvocatory = async (
-  data: Omit<Convocatory, 'id' | 'createdAt'>
+export const upsertConvocatory = async (
+  data: z.infer<typeof ConvocatorySchema>
 ) => {
+  const { id, ...convocatory } = data
   try {
-    return await prisma.convocatory.create({
-      data,
-    })
-  } catch (e) {
-    return null
-  }
-}
-export const updateConvocatory = async (
-  id: string,
-  data: Omit<Convocatory, 'id'>
-) => {
-  try {
+    if (!id)
+      return await prisma.convocatory.create({
+        data,
+      })
+
     return await prisma.convocatory.update({
       where: { id },
-      data,
+      data: convocatory,
     })
-  } catch (e) {
+  } catch (error) {
+    console.error(error)
     return null
   }
 }

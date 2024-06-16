@@ -11,7 +11,7 @@ export function NewConvocatoryDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} color="primary">
+      <Button onClick={() => setOpen(true)}>
         <CalendarPlus data-slot="icon" />
         Convocatoria
       </Button>

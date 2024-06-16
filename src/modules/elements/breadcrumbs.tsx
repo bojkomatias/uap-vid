@@ -57,12 +57,12 @@ export const Breadcrumbs = () => {
   )
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label="Breadcrumb" className="ml-4 lg:-mt-3 lg:mb-3 lg:ml-0.5">
       <ol role="list" className="flex rounded-md bg-white">
         <li className="flex items-center">
           <Link
             href="/protocols"
-            className="ml-0.5 text-sm font-medium text-gray-500 hover:text-primary"
+            className="text-sm font-medium text-gray-500 hover:text-primary"
           >
             Inicio
           </Link>

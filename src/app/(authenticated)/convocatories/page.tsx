@@ -1,11 +1,10 @@
 import { ConvocatoryTable } from '@convocatory/convocatory-table'
-import { PageHeading } from '@layout/page-heading'
 import {
   getAllConvocatories,
   getCurrentConvocatory,
 } from '@repositories/convocatory'
 import { NewConvocatoryDialog } from '@convocatory/new-convocatory-dialog'
-import { Heading, Subheading } from '@components/heading'
+import { Heading } from '@components/heading'
 
 export default async function Page({
   searchParams,

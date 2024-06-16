@@ -1,26 +1,37 @@
 'use client'
 
-import { FieldGroup, Fieldset, FormActions, Legend } from '@components/fieldset'
+import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
-import { createConvocatory, updateConvocatory } from '@repositories/convocatory'
+import { upsertConvocatory } from '@repositories/convocatory'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
 import { Button } from '@components/button'
 import type { z } from 'zod'
+import { FormButton } from '@shared/form/form-button'
 
 export function ConvocatoryForm({
   convocatory,
+  onSubmitCallback,
 }: {
   convocatory: z.infer<typeof ConvocatorySchema>
+  onSubmitCallback?: () => void
 }) {
   const router = useRouter()
 
   const [isPending, startTransition] = useTransition()
   const form = useForm<z.infer<typeof ConvocatorySchema>>({
-    initialValues: convocatory,
+    initialValues: {
+      id: convocatory.id,
+      name: convocatory.name,
+      year: convocatory.year,
+      // @ts-ignore -- I am transforming values later
+      from: convocatory.from.toISOString().slice(0, 16),
+      // @ts-ignore
+      to: convocatory.to.toISOString().slice(0, 16),
+    },
     transformValues: (values) => ({
       ...values,
       from: new Date(values.from),
@@ -29,60 +40,35 @@ export function ConvocatoryForm({
     validate: zodResolver(ConvocatorySchema),
   })
 
-  const upsertConvocatory = useCallback(
+  const submitConvocatory = useCallback(
     async (convocatory: z.infer<typeof ConvocatorySchema>) => {
-      /* If has no ID is a new category, so we create */
-      if (!convocatory.id) {
-        const created = await createConvocatory(convocatory)
+      const upserted = await upsertConvocatory(convocatory)
 
-        if (created) {
-          notifications.show({
-            title: 'Convocatoria creada',
-            message: 'La convocatoria ha sido creada con éxito',
-            intent: 'success',
-          })
-
-          return router.push(`/convocatories`)
-        }
-        return notifications.show({
-          title: 'Error al crear',
-          message: 'Ocurrió un error al crear la convocatoria',
-          intent: 'error',
-        })
-      }
-
-      /* Else if it has ID, we update existing one */
-
-      // @ts-ignore
-      const updated = await updateConvocatory(convocatory.id, convocatory)
-
-      if (updated) {
+      if (upserted)
         notifications.show({
           title: 'Convocatoria guardada',
           message: 'La convocatoria ha sido guardado con éxito',
           intent: 'success',
         })
-        return startTransition(() => router.refresh())
-      }
-      return notifications.show({
-        title: 'Error al actualizar',
-        message: 'Ocurrió un error al actualizar la convocatoria',
-        intent: 'error',
+
+      startTransition(() => {
+        router.refresh()
+        if (onSubmitCallback) onSubmitCallback()
       })
     },
-    [router]
+    [router, onSubmitCallback]
   )
 
   return (
     <form
       onSubmit={form.onSubmit(
-        (values) => upsertConvocatory(values),
-        (errors) => console.log(errors)
+        // @ts-ignore --Overriding values
+        (values) => submitConvocatory(values)
       )}
       className="@container"
     >
       <Fieldset>
-        <FieldGroup className="@2xl:grid @2xl:grid-cols-2 @2xl:gap-6 @2xl:space-y-0">
+        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
           <FormInput
             label="Nombre"
             description="Nombre de la convocatoria"
@@ -117,9 +103,9 @@ export function ConvocatoryForm({
       </Fieldset>
 
       <FormActions>
-        <Button type="submit">
+        <FormButton isLoading={isPending}>
           {!convocatory.id ? 'Crear convocatoria' : 'Actualizar convocatoria'}
-        </Button>
+        </FormButton>
       </FormActions>
     </form>
   )
