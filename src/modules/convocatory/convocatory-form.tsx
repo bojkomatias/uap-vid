@@ -8,7 +8,6 @@ import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
-import { Button } from '@components/button'
 import type { z } from 'zod'
 import { FormButton } from '@shared/form/form-button'
 

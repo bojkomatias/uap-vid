@@ -143,6 +143,23 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+/////////////////////////////////////////
+// HISTORIC INDEX SCHEMA
+/////////////////////////////////////////
+
+export const HistoricIndexSchema = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
+})
+
+export const IndexSchema = z.object({
+  id: z.string().optional(),
+  unit: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+  values: HistoricIndexSchema.array().min(1, {
+    message: 'El indice debe contener un valor',
+  }),
+})
 
 /////////////////////////////////////////
 // HISTORIC PRICE CATEGORY SCHEMA
