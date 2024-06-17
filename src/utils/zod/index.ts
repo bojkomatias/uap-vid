@@ -154,7 +154,7 @@ export const HistoricIndexSchema = z.object({
 })
 
 export const IndexSchema = z.object({
-  id: z.string().optional(),
+  id: z.string(),
   unit: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   values: HistoricIndexSchema.array().min(1, {
     message: 'El indice debe contener un valor',
