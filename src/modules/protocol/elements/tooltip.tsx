@@ -15,7 +15,7 @@ export default function InfoTooltip({
 
       <div
         className={cx(
-          'prose prose-zinc inset-auto z-10 mr-6 min-w-[20vw] origin-top-right scale-90 rounded bg-white p-3 text-xs opacity-0 shadow-md ring-1 ring-inset transition delay-500 duration-300 group-hover:scale-100 group-hover:opacity-100 group-hover:delay-100 prose-p:pl-2',
+          'prose prose-zinc prose-p:pl-2 inset-auto z-10 mr-6 min-w-[20vw] origin-top-right scale-90 rounded bg-white p-3 text-xs opacity-0 shadow-md ring-1 ring-inset transition delay-500 duration-300 group-hover:scale-100 group-hover:opacity-100 group-hover:delay-100',
           className ?? 'absolute'
         )}
       >

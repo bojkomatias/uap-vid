@@ -1,28 +1,37 @@
 'use client'
-import { Button } from '@elements/button'
+
+import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
-import type { Convocatory } from '@prisma/client'
-import { createConvocatory, updateConvocatory } from '@repositories/convocatory'
-import { cx } from '@utils/cx'
+import { upsertConvocatory } from '@repositories/convocatory'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
+import { FormInput } from '@shared/form/form-input'
+import { Button } from '@components/button'
+import type { z } from 'zod'
+import { FormButton } from '@shared/form/form-button'
 
 export function ConvocatoryForm({
   convocatory,
-  isNew,
-  column = false,
+  onSubmitCallback,
 }: {
-  convocatory: Omit<Convocatory, 'id' | 'createdAt'>
-  isNew: boolean
-  column?: boolean
+  convocatory: z.infer<typeof ConvocatorySchema>
+  onSubmitCallback?: () => void
 }) {
   const router = useRouter()
 
   const [isPending, startTransition] = useTransition()
-  const form = useForm<Omit<Convocatory, 'id' | 'createdAt'>>({
-    initialValues: convocatory,
+  const form = useForm<z.infer<typeof ConvocatorySchema>>({
+    initialValues: {
+      id: convocatory.id,
+      name: convocatory.name,
+      year: convocatory.year,
+      // @ts-ignore -- I am transforming values later
+      from: convocatory.from.toISOString().slice(0, 16),
+      // @ts-ignore
+      to: convocatory.to.toISOString().slice(0, 16),
+    },
     transformValues: (values) => ({
       ...values,
       from: new Date(values.from),
@@ -31,129 +40,73 @@ export function ConvocatoryForm({
     validate: zodResolver(ConvocatorySchema),
   })
 
-  const upsertConvocatory = useCallback(
-    async (convocatory: Omit<Convocatory, 'id' | 'createdAt'>) => {
-      if (isNew) {
-        const created = await createConvocatory(convocatory)
+  const submitConvocatory = useCallback(
+    async (convocatory: z.infer<typeof ConvocatorySchema>) => {
+      const upserted = await upsertConvocatory(convocatory)
 
-        if (created) {
-          notifications.show({
-            title: 'Convocatoria creada',
-            message: 'La convocatoria ha sido creada con éxito',
-            intent: 'success',
-          })
-          router.refresh()
-          return router.push(`/convocatories`)
-        }
-        return notifications.show({
-          title: 'Error al crear',
-          message: 'Ocurrió un error al crear la convocatoria',
-          intent: 'error',
-        })
-      }
-      // @ts-ignore
-      const updated = await updateConvocatory(convocatory.id, convocatory)
-
-      if (updated) {
+      if (upserted)
         notifications.show({
           title: 'Convocatoria guardada',
           message: 'La convocatoria ha sido guardado con éxito',
           intent: 'success',
         })
-        return startTransition(() => router.refresh())
-      }
-      return notifications.show({
-        title: 'Error al actualizar',
-        message: 'Ocurrió un error al actualizar la convocatoria',
-        intent: 'error',
+
+      startTransition(() => {
+        router.refresh()
+        if (onSubmitCallback) onSubmitCallback()
       })
     },
-    [isNew, router]
+    [router, onSubmitCallback]
   )
 
   return (
     <form
-      onSubmit={form.onSubmit((values) => upsertConvocatory(values))}
-      className={cx(
-        column ?
-          'flex flex-col gap-1'
-        : 'mx-auto mt-8 max-w-5xl place-items-stretch gap-3 lg:grid lg:grid-cols-2'
+      onSubmit={form.onSubmit(
+        // @ts-ignore --Overriding values
+        (values) => submitConvocatory(values)
       )}
+      className="@container"
     >
-      <div className="p-1">
-        <label className="label">Nombre</label>
-        <input
-          className="input"
-          type="text"
-          placeholder="Convocatoria - AAAA"
-          {...form.getInputProps('name')}
-        />
-        {form.getInputProps('name').error && (
-          <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-            *{form.getInputProps('name').error}
-          </p>
-        )}
-      </div>
-      <div className=" p-1">
-        <label className="label">Año</label>
-        <input
-          className="input"
-          type="number"
-          value={form.getInputProps('year').value}
-          onChange={(e) => form.setFieldValue('year', Number(e.target.value))}
-        />
-        {form.getInputProps('year').error && (
-          <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-            *{form.getInputProps('year').error}
-          </p>
-        )}
-      </div>
+      <Fieldset>
+        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+          <FormInput
+            label="Nombre"
+            description="Nombre de la convocatoria"
+            placeholder="Convocatoria 20XX"
+            {...form.getInputProps('name')}
+          />
+          <FormInput
+            label="Año"
+            description="Año en la cual entraría en vigencia"
+            type="number"
+            {...form.getInputProps('year')}
+            onChange={(e: any) =>
+              form.setFieldValue('year', Number(e.target.value))
+            }
+          />
+          <FormInput
+            label="Desde"
+            description="Fecha desde que comienza a correr"
+            type="datetime-local"
+            {...form.getInputProps('from')}
+            onChange={(e: any) => form.setFieldValue('from', e.target.value)}
+          />
 
-      <div className="p-1">
-        <label className="label">Fecha desde</label>
-        <input
-          type="datetime-local"
-          className="input"
-          defaultValue={new Date(form.getInputProps('from').value)
-            .toISOString()
-            .substring(0, 16)}
-          // @ts-ignore
-          onChange={(e) => form.setFieldValue('from', e.target.value)}
-        />
-        {form.getInputProps('from').error && (
-          <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-            *{form.getInputProps('from').error}
-          </p>
-        )}
-      </div>
-      <div className=" p-1">
-        <label className="label">Fecha hasta</label>
-        <input
-          type="datetime-local"
-          className="input"
-          placeholder="Desde"
-          defaultValue={new Date(form.getInputProps('to').value)
-            .toISOString()
-            .substring(0, 16)}
-          // @ts-ignore
-          onChange={(e) => form.setFieldValue('to', e.target.value)}
-        />
+          <FormInput
+            label="Hasta"
+            description="Fecha en la cual finzaliza"
+            type="datetime-local"
+            {...form.getInputProps('to')}
+            onChange={(e: any) => form.setFieldValue('to', e.target.value)}
+          />
+        </FieldGroup>
+      </Fieldset>
 
-        {form.getInputProps('to').error && (
-          <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-            *{form.getInputProps('to').error}
-          </p>
-        )}
-      </div>
-
-      <Button
-        intent="secondary"
-        type="submit"
-        loading={isPending}
-        className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
-      >
-        {isNew ? 'Crear convocatoria' : 'Actualizar convocatoria'}
-      </Button>
+      <FormActions>
+        <FormButton isLoading={isPending}>
+          {!convocatory.id ? 'Crear convocatoria' : 'Actualizar convocatoria'}
+        </FormButton>
+      </FormActions>
     </form>
   )
 }

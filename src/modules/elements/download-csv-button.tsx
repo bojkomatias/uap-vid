@@ -21,7 +21,7 @@ export default function DownloadCSVButton({
       {/*Tried using Tooltip component but couldn't make it work as intended, so I copied the styles from the tooltip to mantain the style */}
       {totalRecordsCheck && (
         <div className="pointer-events-none absolute left-0 top-10  z-20 bg-white  text-xs text-gray-500 opacity-0 transition delay-300 group-hover:pointer-events-auto group-hover:opacity-100">
-          <div className="prose prose-zinc inset-auto mt-2  cursor-default  rounded  border p-3 px-3 py-2 text-xs shadow-md  ring-inset prose-p:pl-2 ">
+          <div className="prose prose-zinc prose-p:pl-2 inset-auto  mt-2  cursor-default  rounded border p-3 px-3 py-2 text-xs  shadow-md ring-inset ">
             Para descargar la hoja de datos, seleccione <br />
             <span
               className="font-bold transition hover:text-gray-700"

@@ -1,12 +1,10 @@
 import { ConvocatoryTable } from '@convocatory/convocatory-table'
-import { PageHeading } from '@layout/page-heading'
-import Link from 'next/link'
-import { CalendarPlus } from 'tabler-icons-react'
-import { buttonStyle } from '@elements/button/styles'
 import {
   getAllConvocatories,
   getCurrentConvocatory,
 } from '@repositories/convocatory'
+import { NewConvocatoryDialog } from '@convocatory/new-convocatory-dialog'
+import { Heading } from '@components/heading'
 
 export default async function Page({
   searchParams,
@@ -18,17 +16,11 @@ export default async function Page({
 
   return (
     <>
-      <PageHeading title="Lista de convocatorias" />
-      <div className="flex flex-row-reverse">
-        <Link
-          scroll={false}
-          href={'/convocatories/new'}
-          className={buttonStyle('secondary')}
-        >
-          <CalendarPlus className="h-4 w-4 text-current" />
-          Nueva convocatoria
-        </Link>
+      <div className="flex items-end">
+        <Heading className="grow">Convocatorias</Heading>
+        <NewConvocatoryDialog />
       </div>
+
       <ConvocatoryTable
         totalRecords={totalRecords}
         convocatories={convocatories}
