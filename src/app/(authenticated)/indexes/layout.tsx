@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { Subheading, Heading } from '@components/heading'
-import { Divider } from '@components/divider'
 
 export default function Layout({
   fca,
@@ -18,7 +17,7 @@ export default function Layout({
         directamente al usuario final sino la conversion a valor nominal en
         pesos de acuerdo al indice vigente en el momento.
       </Subheading>
-      <div className="grid gap-20 pt-12 2xl:grid-cols-2">
+      <div className="space-y-10 pt-10">
         {fca}
         {fmr}
       </div>
