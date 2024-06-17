@@ -1,9 +1,15 @@
 'use client'
 
-import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogDescription,
+  DialogTitle,
+} from '@components/dialog'
 
 import { useState } from 'react'
-import { CalendarPlus } from 'tabler-icons-react'
+import { RefreshDot } from 'tabler-icons-react'
 import { Button } from '@components/button'
 
 export function UpdateIndexDialog() {
@@ -12,8 +18,7 @@ export function UpdateIndexDialog() {
   return (
     <>
       <Button onClick={() => setOpen(true)}>
-        <CalendarPlus data-slot="icon" />
-        Convocatoria
+        <RefreshDot data-slot="icon" /> Actualizar indices
       </Button>
 
       <Dialog open={open} onClose={setOpen} size="xl">
@@ -23,6 +28,8 @@ export function UpdateIndexDialog() {
           recuerde mantenerlos al día. Puede actualizar un indice a la vez si
           desea.
         </DialogDescription>
+        <DialogBody></DialogBody>
+        <DialogActions></DialogActions>
       </Dialog>
     </>
   )
