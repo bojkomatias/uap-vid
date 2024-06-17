@@ -150,7 +150,9 @@ export const UserSchema = z.object({
 export const HistoricIndexSchema = z.object({
   from: z.coerce.date(),
   to: z.coerce.date().nullable(),
-  price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
+  price: z.coerce
+    .number()
+    .min(0, { message: 'El valor no puede ser negativo' }),
 })
 
 export const IndexSchema = z.object({

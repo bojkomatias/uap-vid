@@ -4,13 +4,10 @@ import { prisma } from '../utils/bd'
 import { IndexSchema } from '@utils/zod'
 import type { HistoricIndex } from '@prisma/client'
 
-export async function getIndexes() {
-  try {
-    return await prisma.index.findMany()
-  } catch (error) {
-    console.log(error)
-    return null
-  }
+export async function getIndexByUnit(unit: 'FCA' | 'FMR') {
+  return await prisma.index.findFirstOrThrow({
+    where: { unit },
+  })
 }
 
 export async function updateIndexByUnit(
