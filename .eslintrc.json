@@ -1,35 +1,36 @@
 {
-    "extends": [
-        "next",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "project": ["./tsconfig.json"],
-        "ecmaVersion": 2021,
-        "ecmaFeatures": {
-            "jsx": true
-        }
-    },
-    "plugins": ["@typescript-eslint"],
-    "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/no-explicit-any": "warn",
-        "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-namespace": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-this-alias": "off",
-        "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@next/next/no-server-import-in-page": "off",
-        "prefer-spread": "off",
-        "no-case-declarations": "off",
-        "no-console": "warn",
-        "@typescript-eslint/no-unused-vars": ["warn"],
-        "@typescript-eslint/consistent-type-imports": "warn"
-    },
-    "root": true
+  "extends": [
+    "next",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"],
+    "ecmaVersion": 2021,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@next/next/no-server-import-in-page": "off",
+    "prefer-spread": "off",
+    "no-case-declarations": "off",
+    "no-console": "warn",
+    "no-extra-semi": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/consistent-type-imports": "warn"
+  },
+  "root": true
 }

@@ -1,44 +1,43 @@
-version: '3'
 services:
-    mongodb:
-        image: mongo
-        userns_mode: 'host'
-        restart: always
-        volumes:
-            - ../apps/mongo-data:/data/db
-        env_file:
-            - ../apps/enviroments/mongo.env
-        networks:
-            - node-next
-        healthcheck:
-            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
-            interval: 10s
-            start_period: 30s
-        command: "mongod --replSet rs0"
-    mongoinit:
-        image: mongo
-        # this container will exit after executing the command
-        restart: "no"
-        depends_on:
-            - mongodb
-        command: >
-            mongo --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("main"); config = { "_id" : "rs0", "members" : [ {
-                "_id" : 0,
-                "host" : "mongodb:27017"
-            } ] }; rs.initiate(config); '      
-    uap-research:
-        #Our container app name
-        image: uapvid
-        restart: always
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-        env_file:
-            - ../apps/enviroments/uap-vid.env
-        networks:
-            - node-next
-            - exposed-services
+  mongodb:
+    image: mongo
+    userns_mode: 'host'
+    restart: always
+    volumes:
+      - ../apps/mongo-data:/data/db
+    env_file:
+      - ../apps/enviroments/mongo.env
+    networks:
+      - node-next
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+    command: 'mongod --replSet rs0'
+  mongoinit:
+    image: mongo
+    # this container will exit after executing the command
+    restart: 'no'
+    depends_on:
+      - mongodb
+    command: >
+      mongo --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("main"); config = { "_id" : "rs0", "members" : [ {
+          "_id" : 0,
+          "host" : "mongodb:27017"
+      } ] }; rs.initiate(config); '
+  uap-research:
+    #Our container app name
+    image: uapvid
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - ../apps/enviroments/uap-vid.env
+    networks:
+      - node-next
+      - exposed-services
 networks:
-    node-next:
-    exposed-services:
-        external: true
+  node-next:
+  exposed-services:
+    external: true

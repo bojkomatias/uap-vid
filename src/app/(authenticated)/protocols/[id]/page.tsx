@@ -4,16 +4,16 @@ import { findProtocolById } from 'repositories/protocol'
 import { PDF } from 'modules/protocol-pdf'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    if (params.id === 'new') redirect('/protocols/new/0')
-    const protocol = await findProtocolById(params.id)
-    if (!protocol) {
-        redirect('/protocols')
-    }
+  if (params.id === 'new') redirect('/protocols/new/0')
+  const protocol = await findProtocolById(params.id)
+  if (!protocol) {
+    redirect('/protocols')
+  }
 
-    return (
-        <>
-            <PDF protocol={protocol} />
-            <View sections={protocol.sections} />
-        </>
-    )
+  return (
+    <>
+      <PDF protocol={protocol} />
+      <View sections={protocol.sections} />
+    </>
+  )
 }
