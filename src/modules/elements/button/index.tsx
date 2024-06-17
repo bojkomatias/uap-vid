@@ -2,6 +2,7 @@
 import { cx } from '@utils/cx'
 import type { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react'
 import { buttonStyle } from './styles'
+import React from 'react'
 
 interface Props
   extends DetailedHTMLProps<

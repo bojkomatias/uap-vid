@@ -5,6 +5,7 @@ import { Check, ChevronDown } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { Button } from './button'
+import React from 'react'
 
 export default function RecordsDropdown({
   options,
