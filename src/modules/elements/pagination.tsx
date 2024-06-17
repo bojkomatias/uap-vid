@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import { useMemo } from 'react'
 import { Button } from './button'
 import RecordsDropdown from './records-dropdown'
@@ -84,6 +85,7 @@ export default function Pagination({
           displayedPages.map((page: number) => (
             <Button
               key={page}
+              data-testid={`test-id-${page-1}`}
               intent="outline"
               size="icon"
               className={

@@ -40,7 +40,8 @@
     "**/*.tsx",
     "pages/index.tsx",
     "config/exhibit.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "./vitest.config.ts"
   ],
   "exclude": ["node_modules"]
 }
