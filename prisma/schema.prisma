@@ -20,7 +20,7 @@ model AcademicUnit {
 }
 
 type AcademicUnitBudget {
-  amount      Float //Deprecate 
+  amount      Float /// @deprecated use `amountIndex` instead
   from        DateTime
   to          DateTime?
   amountIndex AmountIndex?
@@ -104,12 +104,12 @@ model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String                       @unique
   state                      Boolean?
-  price                      HistoricCategoryPrice[] //Deprecate
+  price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
   amountIndex                AmountIndex? //FCA or FMR
 }
 
-//To be deprecated
+/// @deprecated this won't be needed after indexing the whole app.
 type HistoricCategoryPrice {
   from     DateTime
   to       DateTime?
@@ -227,7 +227,7 @@ type ProtocolSectionsBudgetExpenses {
 }
 
 type ProtocolSectionsBudgetExpensesData {
-  amount      Float //Deprecate
+  amount      Float /// @deprecated use `amountIndex` instead
   amountIndex AmountIndex?
   detail      String
   year        String
