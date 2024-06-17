@@ -141,8 +141,7 @@ export default function Pagination({
       </div>
       <span className="flex gap-1 text-xs text-gray-700">
         {shownRecords * Number(searchParams?.get('page') || 1) -
-          shownRecords +
-          1 <
+          shownRecords  <
           totalRecords && (
           <>
             Mostrando registros
