@@ -16,6 +16,15 @@ import EnumFilterOptions from './enum-filter-options'
 import { Mouse } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/table'
+import { Text } from '@components/text'
 
 export default function TanStackTable({
   data,
@@ -26,6 +35,7 @@ export default function TanStackTable({
   searchBarPlaceholder,
   customFilterSlot,
   customFilterSlot2,
+  rowAsLinkPath,
 }: {
   data: unknown[]
   columns: ColumnDef<any, unknown>[]
@@ -35,6 +45,7 @@ export default function TanStackTable({
   searchBarPlaceholder: string
   customFilterSlot?: React.ReactNode
   customFilterSlot2?: React.ReactNode
+  rowAsLinkPath?: string
 }) {
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialVisibility)
@@ -55,17 +66,11 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className=" mx-auto mt-6 flex flex-wrap items-center justify-between gap-4">
+      <div className="mx-auto my-4 flex flex-wrap items-center justify-between gap-4">
         <SearchBar placeholderMessage={searchBarPlaceholder} />
         <div className="flex flex-wrap gap-2">
           {customFilterSlot2}
           <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
-
-          <DownloadCSVButton
-            totalRecordsCheck={totalRecordsCheck}
-            data={data}
-            columns={columns}
-          />
         </div>
       </div>
 
@@ -79,41 +84,38 @@ export default function TanStackTable({
       )}
 
       {data?.length >= 1 ?
-        <div className="w-full overflow-x-auto">
-          <table className="fade-in -mx-4 mt-6 table-fixed divide-y-2 sm:-mx-0 sm:min-w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-2 py-2 text-left text-sm font-medium uppercase text-gray-600 first:pl-4 last:pr-4 last:text-right sm:first:pl-0 sm:last:pr-0"
-                    >
-                      <HeaderSorter header={header} />
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className="divide-y bg-white">
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="whitespace-nowrap px-2 py-3.5 text-sm text-gray-800 first:pl-4 last:w-16 last:pr-4 last:text-right sm:first:pl-0"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          bleed
+          className="[--gutter:theme(spacing.6)] sm:[--gutter:theme(spacing.8)]"
+        >
+          <TableHead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHeader key={header.id}>
+                    <HeaderSorter header={header} />
+                  </TableHeader>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                {...(rowAsLinkPath ?
+                  { href: rowAsLinkPath + row.original.id }
+                : {})}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       : <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
           <h1 className="font-semibold">
             No se encontraron registros con los criterios de búsqueda
@@ -124,14 +126,22 @@ export default function TanStackTable({
           </p>
         </div>
       }
-      <Pagination totalRecords={totalRecords} />
-      <div className="-mb-12 mt-2 flex items-center justify-end text-xs font-light text-gray-400">
+      <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
         <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
           Shift
         </kbd>
         +
         <Mouse className="mx-0.5 h-4 text-gray-400" />
         para navegar lateralmente.
+      </Text>
+      <div className="mt-3 flex flex-col items-start justify-between sm:flex-row">
+        <span className="w-20" />
+        <Pagination totalRecords={totalRecords} />
+        <DownloadCSVButton
+          totalRecordsCheck={totalRecordsCheck}
+          data={data}
+          columns={columns}
+        />
       </div>
     </>
   )

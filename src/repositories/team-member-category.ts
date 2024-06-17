@@ -17,7 +17,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 
 const getCategories = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,

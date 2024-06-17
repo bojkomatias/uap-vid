@@ -2,14 +2,12 @@
 import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
-import Link from 'next/link'
 import { User as UserIcon } from 'tabler-icons-react'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@elements/badge'
-import { buttonStyle } from '@elements/button/styles'
 import { cx } from '@utils/cx'
 import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
@@ -246,21 +244,6 @@ export default function ProtocolTable({
           user.role === 'SECRETARY' ||
           user.role === 'RESEARCHER',
       },
-
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <Link
-            href={`/protocols/${row.original.id}`}
-            className={buttonStyle('secondary', 'xs')}
-          >
-            Ver
-          </Link>
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
     ],
     [user.id, user.role]
   )
@@ -290,6 +273,7 @@ export default function ProtocolTable({
       columns={columns}
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
+      rowAsLinkPath="/protocols/"
       filterableByKey={{
         filter: 'state',
         // Slice to avoid NOT_CREATED

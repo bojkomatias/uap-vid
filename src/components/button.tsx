@@ -10,7 +10,7 @@ const styles = {
     // Sizing
     'px-[calc(theme(spacing[3.5])-1px)] py-[calc(theme(spacing[2.5])-1px)] sm:px-[calc(theme(spacing.3)-1px)] sm:py-[calc(theme(spacing[1.5])-1px)] sm:text-sm/6',
     // Focus
-    'focus:outline-none data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-blue-500',
+    'focus:outline-none data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-primary-950',
     // Disabled
     'data-[disabled]:opacity-50',
     // Icon
@@ -43,6 +43,10 @@ const styles = {
   outline: [
     // Base
     'border-gray-950/10 text-gray-950 data-[active]:bg-gray-950/[2.5%] data-[hover]:bg-gray-950/[2.5%]',
+    // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
+    'after:absolute after:inset-px after:rounded-[calc(theme(borderRadius.lg)-1px)] after:shadow-sm',
+    // Background color is moved to control and shadow is removed in dark mode so hide `before` pseudo
+    'dark:after:hidden',
     // Dark mode
     'dark:border-white/15 dark:text-white dark:[--btn-bg:transparent] dark:data-[active]:bg-white/5 dark:data-[hover]:bg-white/5',
     // Icon

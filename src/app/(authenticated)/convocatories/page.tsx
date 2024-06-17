@@ -17,7 +17,7 @@ export default async function Page({
   return (
     <>
       <div className="flex items-end">
-        <Heading className="grow">Convocatorias</Heading>
+        <Heading>Convocatorias</Heading>
         <NewConvocatoryDialog />
       </div>
 

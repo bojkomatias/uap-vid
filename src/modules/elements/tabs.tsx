@@ -41,7 +41,7 @@ export default function Tabs({
               className={cx(
                 'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
                 segment == null ?
-                  'border-indigo-500 border-primary text-primary'
+                  'border-primary text-primary'
                 : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
               )}
             >
@@ -55,7 +55,7 @@ export default function Tabs({
                 className={cx(
                   'flex whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-all duration-200',
                   segment == id ?
-                    'border-indigo-500 border-primary text-primary'
+                    'border-primary text-primary'
                   : 'border-transparent text-gray-300 hover:border-gray-300 hover:text-gray-500'
                 )}
               >

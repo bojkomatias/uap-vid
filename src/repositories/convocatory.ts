@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 export const getAllConvocatories = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,

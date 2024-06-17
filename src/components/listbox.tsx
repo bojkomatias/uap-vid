@@ -29,7 +29,7 @@ export function Listbox<T>({
           // Basic layout
           'group relative block w-full',
           // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
-          'before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow',
+          'before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-sm',
           // Background color is moved to control and shadow is removed in dark mode so hide `before` pseudo
           'dark:before:hidden',
           // Hide default focus styles
@@ -156,7 +156,7 @@ export function ListboxOption<T>({
               // Typography
               'text-base/6 text-gray-950 dark:text-white sm:text-sm/6 forced-colors:text-[CanvasText]',
               // Focus
-              'outline-none data-[focus]:bg-blue-500 data-[focus]:text-white',
+              'outline-none data-[focus]:bg-primary-950 data-[focus]:text-white',
               // Forced colors mode
               'forced-color-adjust-none forced-colors:data-[focus]:bg-[Highlight] forced-colors:data-[focus]:text-[HighlightText]',
               // Disabled

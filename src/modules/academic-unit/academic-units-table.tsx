@@ -2,7 +2,7 @@
 'use client'
 import type { AcademicUnit, User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
 import Currency from '@elements/currency'
 import AcademicUnitView from './academic-unit-view'

@@ -1,4 +1,4 @@
-import { PageHeading } from '@layout/page-heading'
+import { Heading } from '@components/heading'
 import { getAllAcademicUnits } from '@repositories/academic-unit'
 import { getAllSecretaries } from '@repositories/user'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
@@ -14,7 +14,7 @@ export default async function Page({
 
   return (
     <>
-      <PageHeading title="Unidades Académicas" />
+      <Heading>Unidades Académicas</Heading>
 
       {academicUnits && academicUnits.length > 0 ?
         <AcademicUnitsTable

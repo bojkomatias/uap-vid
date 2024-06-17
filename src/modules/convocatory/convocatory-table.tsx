@@ -1,11 +1,9 @@
 'use client'
 
-import { buttonStyle } from '@elements/button/styles'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import { dateFormatter } from '@utils/formatters'
-import Link from 'next/link'
 
 export function ConvocatoryTable({
   convocatories,
@@ -66,20 +64,6 @@ export function ConvocatoryTable({
         }
       },
     },
-    {
-      accessorKey: 'actions',
-      header: 'Ver',
-      enableHiding: false,
-      enableSorting: false,
-      cell: ({ row }) => (
-        <Link
-          href={`/convocatories/edit/${row.original.id}`}
-          className={buttonStyle('secondary', 'xs')}
-        >
-          Ver
-        </Link>
-      ),
-    },
   ]
 
   return (
@@ -88,11 +72,12 @@ export function ConvocatoryTable({
       columns={columns}
       totalRecords={totalRecords}
       searchBarPlaceholder="Buscar por nombre de convocatoria"
+      rowAsLinkPath="/convocatories/edit/"
       initialVisibility={{
         name: true,
         year: true,
-        from: false,
-        to: false,
+        from: true,
+        to: true,
         id: false,
         isCurrent: false,
       }}
