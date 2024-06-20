@@ -7,6 +7,7 @@ import SectionTitle from '@protocol/elements/form-section-title'
 import InfoTooltip from '@protocol/elements/tooltip'
 import dynamic from 'next/dynamic'
 import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
+import { FormListbox } from '@shared/form/form-listbox'
 const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function DescriptionForm() {
@@ -23,13 +24,11 @@ export function DescriptionForm() {
       <SectionTitle title="Descripción del proyecto" />
 
       <>
-        <Select
-          path={path + 'discipline'}
-          label="disciplina general y área especifica"
-          options={disciplines}
-          conditionalCleanup={() =>
-            (form.values.sections.description.line = '')
-          }
+        <FormListbox
+          {...form.getInputProps(path + 'discipline')}
+          label="Disciplina general y área especifica"
+          options={disciplines.map((d) => ({ value: d, label: d }))}
+          onChange={() => (form.values.sections.description.line = '')}
         />
         <Select
           path={path + 'line'}

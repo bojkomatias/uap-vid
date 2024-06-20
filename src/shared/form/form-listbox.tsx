@@ -1,5 +1,5 @@
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
-import { Input, type InputProps } from '@components/input'
+import { Input } from '@components/input'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
@@ -18,8 +18,8 @@ export function FormListbox(
       <Description>{props.description}</Description>
       <Listbox
         invalid={!!props.error}
-        value={props.value}
-        onChange={props.onChange}
+        defaultValue={props.value}
+        onChange={(e) => props.onChange(e)}
       >
         {props.options.map(({ value, label }) => (
           <ListboxOption key={value} value={value}>
