@@ -1,4 +1,4 @@
-import Input from './input'
+import Input from './protocol-input'
 import { Plus, Trash } from 'tabler-icons-react'
 import { useProtocolContext } from '@utils/createContext'
 import { Button } from '@elements/button'

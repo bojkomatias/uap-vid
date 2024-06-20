@@ -2,12 +2,13 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/inputs/input'
-import Select from '@protocol/elements/inputs/select'
+import Select from '@protocol/elements/inputs/protocol-combobox'
 import InfoTooltip from '@protocol/elements/tooltip'
-import MultipleSelect from '@protocol/elements/inputs/multiple-select'
+import MultipleSelect from '@protocol/elements/inputs/protocol-multiple-combobox'
 import SectionTitle from '@protocol/elements/form-section-title'
 import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
+import { FormInput } from '@shared/form/form-input'
+import { FormListbox } from '@shared/form/form-listbox'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
@@ -22,7 +23,11 @@ export function IdentificationForm() {
     >
       <SectionTitle title="Identificación" />
       <>
-        <Input path={path + 'title'} label="titulo" />
+        <FormInput
+          {...form.getInputProps(path + 'title')}
+          label="Título"
+          description="Un título descriptivo de su proyecto"
+        />
         <Select
           path={path + 'career'}
           options={careers}
@@ -39,10 +44,10 @@ export function IdentificationForm() {
         />
         <TeamInfo />
         <TeamMemberListForm />
-        <MultipleSelect
-          path={path + 'sponsor'}
-          label="ente patrocinante"
-          options={sponsors}
+        <FormListbox
+          {...form.getInputProps(path + 'sponsor')}
+          label="Ente patrocinante"
+          options={[{ value: '1', label: 'sape' }]}
         />
       </>
     </motion.div>

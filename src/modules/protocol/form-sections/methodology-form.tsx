@@ -1,6 +1,6 @@
 'use client'
 import SectionTitle from '@protocol/elements/form-section-title'
-import Select from '@protocol/elements/inputs/select'
+import Select from '@protocol/elements/inputs/protocol-combobox'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { useProtocolContext } from 'utils/createContext'
