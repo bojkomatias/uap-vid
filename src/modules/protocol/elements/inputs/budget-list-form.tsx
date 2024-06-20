@@ -1,5 +1,5 @@
-import Input from './input'
-import Select from './select'
+import Input from './protocol-input'
+import Select from './protocol-combobox'
 import { Plus, Trash } from 'tabler-icons-react'
 import CurrencyInput from './currency-input'
 import { useProtocolContext } from '@utils/createContext'

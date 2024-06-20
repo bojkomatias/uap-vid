@@ -1,7 +1,7 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/select'
+import Select from '@protocol/elements/inputs/protocol-combobox'
 import InfoTooltip from '@protocol/elements/tooltip'
 import SectionTitle from '@protocol/elements/form-section-title'
 import { cache } from 'react'
