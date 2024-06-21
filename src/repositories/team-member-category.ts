@@ -17,7 +17,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 
 const getCategories = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,
@@ -61,6 +61,7 @@ const getCategories = cache(
             state: true,
             name: true,
             price: true,
+            amountIndex: true,
           },
           // Add all the globally searchable fields
           where: {
@@ -81,7 +82,6 @@ const getCategories = cache(
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
-
           orderBy,
         }),
       ])

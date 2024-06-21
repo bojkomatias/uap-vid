@@ -1,4 +1,5 @@
 'use client'
+
 import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
 import { ChevronRight } from 'tabler-icons-react'
@@ -56,17 +57,16 @@ export const Breadcrumbs = () => {
   )
 
   return (
-    <nav className="absolute left-24 top-8 flex" aria-label="Breadcrumb">
-      <ol role="list" className="flex rounded-md bg-white">
+    <nav aria-label="Breadcrumb" className="ml-4 lg:-mt-3 lg:mb-3 lg:ml-0.5">
+      <ol role="list" className="flex rounded-md">
         <li className="flex items-center">
           <Link
             href="/protocols"
-            className="ml-4 text-sm font-medium text-gray-500 hover:text-primary"
+            className="text-sm font-semibold text-gray-500 hover:text-primary"
           >
             Inicio
           </Link>
         </li>
-
         {breadcrumbs
           .filter((p) => p.name)
           .map((page) => (
@@ -78,7 +78,7 @@ export const Breadcrumbs = () => {
                   className={cx(
                     'ml-4 text-sm font-medium text-gray-500 hover:text-primary',
                     pathname === page.href &&
-                      'pointer-events-none text-gray-800 drop-shadow-sm'
+                      'pointer-events-none text-gray-700 drop-shadow-sm dark:text-gray-300'
                   )}
                 >
                   {page.name}

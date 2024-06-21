@@ -17,7 +17,7 @@ function getYears() {
 const years = getYears()
 
 export function BudgetYearCombobox() {
-  const [selected, setSelected] = useState('')
+  const [selected, setSelected] = useState(null)
 
   const [query, setQuery] = useState('')
   const update = useUpdateQuery()

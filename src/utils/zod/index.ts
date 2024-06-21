@@ -75,7 +75,9 @@ export const ConvocatorySchema = z
   .object({
     id: z.string().optional(),
     createdAt: z.coerce.date().optional(),
-    name: z.string(),
+    name: z.string().min(6, {
+      message: 'Debe tener mínimo 6 caracteres',
+    }),
     from: z.coerce.date().min(new Date(-1), {
       message: 'La fecha no puede ser menor a la actual',
     }),
@@ -92,6 +94,7 @@ export const ConvocatorySchema = z
     message: 'No puede preceder a fecha desde',
     path: ['to'],
   })
+
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 
 /////////////////////////////////////////
@@ -140,6 +143,25 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+/////////////////////////////////////////
+// HISTORIC INDEX SCHEMA
+/////////////////////////////////////////
+
+export const HistoricIndexSchema = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  price: z.coerce
+    .number()
+    .min(0, { message: 'El valor no puede ser negativo' }),
+})
+
+export const IndexSchema = z.object({
+  id: z.string(),
+  unit: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+  values: HistoricIndexSchema.array().min(1, {
+    message: 'El indice debe contener un valor',
+  }),
+})
 
 /////////////////////////////////////////
 // HISTORIC PRICE CATEGORY SCHEMA
@@ -150,6 +172,10 @@ export const HistoricCategoryPriceSchema = z.object({
   price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
   currency: z.string().default('ARS'),
 })
+
+const AmountIndexSchema = z
+  .object({ FCA: z.number(), FMR: z.number() })
+  .nullable()
 
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
@@ -162,6 +188,7 @@ export const TeamMemberCategorySchema = z.object({
   price: HistoricCategoryPriceSchema.array().min(1, {
     message: 'Configure un precio',
   }),
+  amountIndex: AmountIndexSchema, //Remove nullable
 })
 
 /////////////////////////////////////////

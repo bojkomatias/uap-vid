@@ -1,5 +1,5 @@
 'use client'
-/* eslint-disable react/no-unescaped-entities */
+
 import { Disclosure, Transition } from '@headlessui/react'
 import React from 'react'
 import { ChevronUp } from 'tabler-icons-react'
@@ -28,7 +28,7 @@ export default function DisclosureComponent({
                 <ChevronUp
                   className={`${
                     open ? 'rotate-180 transform' : ''
-                  } text-purple-500 h-4 w-4`}
+                  } h-4 w-4 text-purple-500`}
                 />
               </Disclosure.Button>
               <Transition

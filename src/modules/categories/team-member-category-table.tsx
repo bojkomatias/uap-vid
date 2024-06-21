@@ -1,6 +1,6 @@
 'use client'
 import type { TeamMemberCategory } from '@prisma/client'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import PriceUpdate from './price-update'
@@ -30,7 +30,6 @@ export default function CategoriesTable({
         header: 'Categoría',
         enableHiding: false,
       },
-
       {
         accessorKey: 'price',
         header: 'Valor hora',
@@ -45,7 +44,6 @@ export default function CategoriesTable({
           />
         ),
       },
-
       {
         accessorKey: 'actions',
         header: 'Acciones',

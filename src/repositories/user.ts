@@ -19,7 +19,7 @@ import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
 
 const getUsers = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,

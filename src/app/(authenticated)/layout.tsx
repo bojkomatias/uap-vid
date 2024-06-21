@@ -1,4 +1,4 @@
-import Navigation from '@auth/navigation'
+import { AppLayout } from '@auth/navigation'
 import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export default async function RootLayout({
@@ -9,10 +9,12 @@ export default async function RootLayout({
   drawer: React.ReactNode
 }) {
   return (
-    <Navigation>
-      <Breadcrumbs />
+    <AppLayout>
+      <div className="max-lg:hidden">
+        <Breadcrumbs />
+      </div>
       {children}
       {drawer}
-    </Navigation>
+    </AppLayout>
   )
 }
