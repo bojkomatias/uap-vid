@@ -259,17 +259,20 @@ type ProtocolSectionsDurationChronogramData {
 }
 
 type ProtocolSectionsIdentification {
-  assignment String
-  career     String
-  sponsor    String[]
-  team       ProtocolSectionsIdentificationTeam[]
-  title      String
+  assignment      String? /// @deprecated use courseId instead
+  courseId        String?                              @db.ObjectId
+  career          String? /// @deprecated use careerId instead
+  careerId        String?                              @db.ObjectId
+  sponsor         String[] /// @deprecated use academicUnitIds instead
+  academicUnitIds String[]                             @db.ObjectId
+  team            ProtocolSectionsIdentificationTeam[]
+  title           String
 }
 
 type ProtocolSectionsIdentificationTeam {
   hours         Float
-  last_name     String?
-  name          String?
+  last_name     String? /// @deprecated use relation teamMemberId instead
+  name          String? /// @deprecated use relation teamMemberId instead
   workingMonths Int?
   role          String
   teamMemberId  String? @db.ObjectId
