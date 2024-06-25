@@ -388,8 +388,16 @@ export const DurationSchema = z.object({
 
 export const IdentificationSchema = z.object({
   assignment: z.string().optional(),
+  courseId: z.string(),
   career: z.string().min(1, 'El campo no puede estar vacío'),
+  careerId: z
+    .string()
+    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
   sponsor: z.string().array(),
+  academicUnitIds: z
+    .string()
+    .array()
+    .min(1, 'Debe selecionar al menos una unidad academica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
   team: z
     .lazy(() =>

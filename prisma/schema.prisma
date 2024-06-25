@@ -178,6 +178,21 @@ model Index {
   values HistoricIndex[]
 }
 
+model Career {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  active Boolean  @default(true)
+  Course Course[]
+}
+
+model Course {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  active   Boolean @default(true)
+  career   Career  @relation(fields: [careerId], references: [id])
+  careerId String  @db.ObjectId
+}
+
 type HistoricIndex {
   from  DateTime
   to    DateTime?
