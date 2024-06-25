@@ -9,6 +9,7 @@ import {
   CurrencyDollar,
   Logout,
   Settings,
+  Businessplan,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -126,5 +127,11 @@ export const navigation = [
     icon: Users,
     href: '/users',
     scope: Access.USERS,
+  },
+  {
+    name: 'Indices',
+    icon: Businessplan,
+    href: '/indexes',
+    scope: Access.INDEXES,
   },
 ]

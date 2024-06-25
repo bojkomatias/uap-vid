@@ -61,6 +61,7 @@ const getCategories = cache(
             state: true,
             name: true,
             price: true,
+            amountIndex: true,
           },
           // Add all the globally searchable fields
           where: {
@@ -81,7 +82,6 @@ const getCategories = cache(
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
-
           orderBy,
         }),
       ])
