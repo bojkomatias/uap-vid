@@ -148,9 +148,9 @@ model AnualBudget {
 type AnualBudgetItem {
   type           String
   detail         String
-  amount         Float
+  amount         Float?       @default(0) /// @deprecated use `amountIndex` instead
+  remaining      Float?       @default(0) /// @deprecated use `remainingIndex` instead
   executions     Execution[]
-  remaining      Float
   amountIndex    AmountIndex?
   remainingIndex AmountIndex?
 }
@@ -290,7 +290,7 @@ type ProtocolSectionsIdentificationTeam {
   name          String? /// @deprecated use relation teamMemberId instead
   workingMonths Int?
   role          String
-  teamMemberId  String? @db.ObjectId
+  teamMemberId  String  @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {

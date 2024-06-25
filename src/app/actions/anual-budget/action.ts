@@ -39,35 +39,19 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
  */
 export const generateAnualBudget = async (protocolId: string, year: string) => {
   const protocol = await findProtocolById(protocolId)
-  //The next few lines of code are to check if there's a generated budget for the protocol already. The logic behind is as it follows: if it finds budgets, it's because there's already a created budget. I also check for the specific year, to be able to generate a new budget for the following year when necessary.
-  const anualBudgetIds = protocol?.anualBudgetIds
-  const anualBudgetsYears = await Promise.all(
-    (anualBudgetIds || []).map(async (id) => {
-      return await getAnualBudgetById(id).then((res) => {
-        return res?.year
-      })
-    })
-  )
-
-  if (!protocol || anualBudgetsYears.includes(new Date().getFullYear()))
-    return null
+  if (!protocol) return null
 
   // Create the annual budget with all the items listed in the protocol budget section.
   const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
-  // Create the relation between AC and AnualBudgets
-  const academicUnitsIds = await generateAnualBudgetAcademicUnitRelation(
-    protocol.sections.identification.sponsor
-  )
   const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
     protocolId: protocol.id,
     year: Number(year),
     budgetItems: ABI,
-    academicUnitsIds,
+    academicUnitsIds: protocol.sections.identification.academicUnitIds,
   }
+
   const newAnualBudget = await createAnualBudget(data)
-
   const duration = protocolDuration(protocol.sections.duration.duration)
-
   // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
   const ABT = generateAnualBudgetTeamMembersItems(
     protocol.sections.identification.team,
@@ -91,13 +75,12 @@ const generateAnualBudgetItems = (
       .map((d) => {
         return {
           type: item.type,
-          amount: d.amount,
           detail: d.detail,
-          remaining: d.amount,
+          amount: null,
+          remaining: null,
           executions: [] as Execution[],
-          //Esto es para que no jodan los tipos
-          amountIndex: null,
-          remainingIndex: null,
+          amountIndex: d.amountIndex,
+          remainingIndex: d.amountIndex,
         }
       })
     acc.push(...budgetItems)
@@ -111,33 +94,21 @@ const generateAnualBudgetTeamMembersItems = (
   duration: number
 ): Omit<AnualBudgetTeamMember, 'id'>[] => {
   return protocolTeam.map((item) => {
+    //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
+    const hours = Math.ceil(
+      item.workingMonths && item.workingMonths > 0 ?
+        item.hours * item.workingMonths * WEEKS_IN_MONTH
+      : item.hours * duration
+    )
     return {
       anualBudgetId: anualBudgetId,
-      teamMemberId: item.teamMemberId!,
+      teamMemberId: item.teamMemberId,
       memberRole: item.role,
-      //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
-      hours: Math.ceil(
-        item.workingMonths && item.workingMonths > 0 ?
-          item.hours * item.workingMonths * WEEKS_IN_MONTH
-        : item.hours * duration
-      ),
-      remainingHours: Math.ceil(
-        item.workingMonths && item.workingMonths > 0 ?
-          item.hours * item.workingMonths * WEEKS_IN_MONTH
-        : item.hours * duration
-      ),
+      hours: hours,
+      remainingHours: hours,
       executions: [] as Execution[],
     }
   })
-}
-
-const generateAnualBudgetAcademicUnitRelation = async (sponsors: string[]) => {
-  const parsedSponsors = sponsors.map((s) => s.split(' - ')[1])
-  const academicUnits = await getAcademicUnitsTabs()
-
-  return academicUnits
-    .filter((e) => parsedSponsors.includes(e.shortname))
-    .map((e) => e.id)
 }
 
 export const protocolToAnualBudgetPreview = async (
@@ -340,11 +311,11 @@ const getProjectedBudgetSummary = (
   }
 }
 
-function removeDuplicates(
+const removeDuplicates = (
   inputArray: (AnualBudget & {
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
   })[]
-) {
+) => {
   const uniqueArray = []
   const seenItems = new Set()
 

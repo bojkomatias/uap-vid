@@ -1,5 +1,4 @@
 'use server'
-
 import { AnualBudgetState, Prisma } from '@prisma/client'
 import type {
   AnualBudget,
