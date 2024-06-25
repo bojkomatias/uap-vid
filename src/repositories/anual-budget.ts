@@ -4,6 +4,7 @@ import type {
   AnualBudget,
   AnualBudgetTeamMember,
   AnualBudgetItem,
+  AmountIndex,
 } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
@@ -314,14 +315,14 @@ export const getAnualBudgetsByAcademicUnit = cache(
 
 export const newTeamMemberExecution = async (
   anualBudgetTeamMemberId: string,
-  amount: number,
+  amountIndex: AmountIndex,
   remainingHours: number,
   academicUnitId: string
 ) => {
   return await prisma.anualBudgetTeamMember.update({
     where: { id: anualBudgetTeamMemberId },
     data: {
-      executions: { push: { academicUnitId, amount, date: new Date() } },
+      executions: { push: { academicUnitId, amountIndex, date: new Date() } },
       remainingHours: remainingHours,
     },
   })

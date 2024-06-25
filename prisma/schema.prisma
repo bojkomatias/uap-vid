@@ -106,7 +106,7 @@ model TeamMemberCategory {
   state                      Boolean?
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
-  amountIndex                AmountIndex? //FCA or FMR
+  priceIndex                 AmountIndex? //FCA or FMR
 }
 
 /// @deprecated this won't be needed after indexing the whole app.
@@ -148,11 +148,11 @@ model AnualBudget {
 type AnualBudgetItem {
   type           String
   detail         String
-  amount         Float?       @default(0) /// @deprecated use `amountIndex` instead
-  remaining      Float?       @default(0) /// @deprecated use `remainingIndex` instead
+  amount         Float?      @default(0) /// @deprecated use `amountIndex` instead
+  remaining      Float?      @default(0) /// @deprecated use `remainingIndex` instead
   executions     Execution[]
-  amountIndex    AmountIndex?
-  remainingIndex AmountIndex?
+  amountIndex    AmountIndex
+  remainingIndex AmountIndex
 }
 
 type AmountIndex {
@@ -200,7 +200,8 @@ type HistoricIndex {
 }
 
 type Execution {
-  amount         Float
+  amount         Float?
+  amountIndex    AmountIndex?
   date           DateTime
   academicUnitId String
 }
@@ -243,7 +244,7 @@ type ProtocolSectionsBudgetExpenses {
 
 type ProtocolSectionsBudgetExpensesData {
   amount      Float /// @deprecated use `amountIndex` instead
-  amountIndex AmountIndex?
+  amountIndex AmountIndex
   detail      String
   year        String
 }

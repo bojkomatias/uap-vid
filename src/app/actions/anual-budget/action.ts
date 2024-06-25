@@ -1,5 +1,6 @@
 'use server'
 
+import type { AmountIndex } from '@prisma/client'
 import {
   type AnualBudget,
   type ProtocolSectionsBudget,
@@ -10,10 +11,7 @@ import {
   type AcademicUnit,
   AnualBudgetState,
 } from '@prisma/client'
-import {
-  getAcademicUnitById,
-  getAcademicUnitsTabs,
-} from '@repositories/academic-unit'
+import { getAcademicUnitById } from '@repositories/academic-unit'
 import {
   createAnualBudget,
   createManyAnualBudgetTeamMember,
@@ -22,6 +20,7 @@ import {
   newBudgetItemExecution,
   newTeamMemberExecution,
 } from '@repositories/anual-budget'
+import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
@@ -151,6 +150,19 @@ export const protocolToAnualBudgetPreview = async (
   }
 }
 
+const transformAmountToAmountIndex = async (amount: number) => {
+  const fcaPrice = (await getLatestIndexPriceByUnit('FCA')) || 0
+  const fmrPrice = (await getLatestIndexPriceByUnit('FMR')) || 0
+
+  const amountInFCA = amount / fcaPrice
+  const amountInFMR = amount / fmrPrice
+
+  return {
+    FCA: amountInFCA,
+    FMR: amountInFMR,
+  } as AmountIndex
+}
+
 export const saveNewTeamMemberExecution = async (
   amount: number,
   anualBudgetTeamMemberId: string
@@ -161,11 +173,14 @@ export const saveNewTeamMemberExecution = async (
 
   if (!anualBudgetTeamMember) return null
 
-  const hourlyRate =
-    anualBudgetTeamMember.teamMember.categories.at(-1)?.category.price.at(-1)
-      ?.price || 0
+  const amountIndex = await transformAmountToAmountIndex(amount)
 
-  const amountExcecutedInHours = hourlyRate ? amount / hourlyRate : 0
+  const hourlyRateInFCA =
+    anualBudgetTeamMember.teamMember.categories.at(-1)?.category.priceIndex
+      ?.FCA || 0
+
+  const amountExcecutedInHours =
+    hourlyRateInFCA ? amountIndex.FCA / hourlyRateInFCA : 0
 
   const remainingHours =
     anualBudgetTeamMember.remainingHours - amountExcecutedInHours
@@ -176,7 +191,7 @@ export const saveNewTeamMemberExecution = async (
 
   const updated = await newTeamMemberExecution(
     anualBudgetTeamMemberId,
-    amount,
+    amountIndex,
     remainingHours,
     anualBudgetTeamMember.teamMember.academicUnitId
   )
@@ -195,16 +210,22 @@ export const saveNewItemExecution = async (
 
   // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
   // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
+  const amountIndex = await transformAmountToAmountIndex(amount)
+
   const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
     if (index === budgetItemIndex) {
       item.executions.push({
         academicUnitId,
-        amount,
+        amount: null,
+        amountIndex,
         date: new Date(),
       })
-      item.remaining =
-        item.amount -
-        item.executions.reduce((acc, item) => acc + item.amount, 0)
+      const newFCA = item.remainingIndex.FCA - amountIndex.FCA
+      const newFMR = item.remainingIndex.FMR - amountIndex.FMR
+      item.remainingIndex = {
+        FCA: newFCA,
+        FMR: newFMR,
+      }
     }
     return item
   })

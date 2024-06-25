@@ -33,3 +33,11 @@ export async function updateIndexByUnit(
     return null
   }
 }
+
+export async function getLatestIndexPriceByUnit(unit: 'FCA' | 'FMR') {
+  const index = await getIndexByUnit(unit)
+
+  const price = index.values.find((value) => value.to === null)?.price
+
+  return price
+}
