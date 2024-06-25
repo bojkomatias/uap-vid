@@ -1,5 +1,5 @@
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
-import { Input } from '@components/input'
+import type { ListboxProps } from '@components/listbox'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
@@ -10,7 +10,8 @@ export function FormListbox(
     label: string
     description?: string
     options: Option[]
-  } & GetInputPropsReturnType
+  } & GetInputPropsReturnType &
+    ListboxProps<Option>
 ) {
   return (
     <Field>

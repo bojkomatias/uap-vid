@@ -1,4 +1,5 @@
 'use client'
+
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
@@ -47,7 +48,12 @@ export function IdentificationForm() {
         <FormListbox
           {...form.getInputProps(path + 'sponsor')}
           label="Ente patrocinante"
-          options={[{ value: '1', label: 'sape' }]}
+          options={[
+            { value: '1', label: 'Option 1' },
+            { value: '2', label: 'Option 2' },
+            { value: '3', label: 'Option 3' },
+          ]}
+          multiple
         />
       </>
     </motion.div>

@@ -49,9 +49,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
   const form = useProtocol({
     initialValues:
-      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
-        JSON.parse(localStorage.getItem('temp-protocol')!)
-      : protocol,
+      // path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+      //   JSON.parse(localStorage.getItem('temp-protocol')!)
+      protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
   })
@@ -158,6 +158,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         }}
         onSubmit={(e) => {
           e.preventDefault()
+          console.log(form.values)
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
@@ -168,10 +169,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
             return form.validate()
           }
-          typeof window !== 'undefined' ?
-            localStorage.removeItem('temp-protocol')
-          : null
-          upsertProtocol(form.values)
+          // typeof window !== 'undefined' ?
+          //   localStorage.removeItem('temp-protocol')
+          // : null
+          // upsertProtocol(form.values)
         }}
         className="w-full px-4 py-4"
       >
