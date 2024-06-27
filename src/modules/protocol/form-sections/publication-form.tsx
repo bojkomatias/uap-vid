@@ -1,12 +1,13 @@
 'use client'
-import SectionTitle from '@protocol/elements/form-section-title'
-import Select from '@protocol/elements/inputs/protocol-combobox'
+
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { FormListbox } from '@shared/form/form-listbox'
+import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
+import { useProtocolContext } from '@utils/createContext'
 import { motion } from 'framer-motion'
-import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function PublicationForm() {
-  const path = 'sections.publication.'
+  const form = useProtocolContext()
 
   return (
     <motion.div
@@ -14,16 +15,22 @@ export function PublicationForm() {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7 }}
     >
-      <SectionTitle title="Publicación científica" />
-      <span />
-      <>
-        <Select
-          path={path + 'result'}
-          options={results}
-          label="Producción científica esperada"
-        />
-        <Textarea path={path + 'title'} label="Titulo del libro o revista" />
-      </>
+      <Fieldset>
+        <Legend>Publicación científica</Legend>
+        <FieldGroup>
+          <FormListbox
+            label="Producción científica"
+            description="Qué se espera como producto final al cabo de realizar la investigación"
+            options={results.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.publication.result')}
+          />
+          <FormTitapTextarea
+            label="Título"
+            description="Titulación propuesta para el libro o revista a publicar"
+            {...form.getInputProps('sections.publication.title')}
+          />
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }
