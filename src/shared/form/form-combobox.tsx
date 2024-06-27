@@ -1,15 +1,10 @@
 import type { Option } from '@components/combobox'
+import { Combobox } from '@components/combobox'
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
 import type { ListboxProps } from '@components/listbox'
-import {
-  Listbox,
-  ListboxDescription,
-  ListboxLabel,
-  ListboxOption,
-} from '@components/listbox'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
-export function FormListbox(
+export function FormCombobox(
   props: {
     label: string
     description?: string
@@ -21,20 +16,12 @@ export function FormListbox(
     <Field>
       <Label>{props.label}</Label>
       <Description>{props.description}</Description>
-      <Listbox
+      <Combobox
         invalid={!!props.error}
-        defaultValue={props.value}
+        value={props.value}
         onChange={(e) => props.onChange(e)}
-      >
-        {props.options.map(({ value, label, description }) => (
-          <ListboxOption key={value} value={value}>
-            <ListboxLabel>{label}</ListboxLabel>
-            {description && (
-              <ListboxDescription>{description}</ListboxDescription>
-            )}
-          </ListboxOption>
-        ))}
-      </Listbox>
+        options={props.options}
+      />
       {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
     </Field>
   )

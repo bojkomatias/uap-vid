@@ -3,25 +3,26 @@
 import * as Headless from '@headlessui/react'
 import clsx from 'clsx'
 import { Fragment, useState } from 'react'
-import { Check } from 'tabler-icons-react'
 import { Input } from './input'
 
-type Option = { value: string; label: string; description?: string }
+export type Option = { value: string; label: string; description?: string }
 
-export function Combobox<TValue, TMultiple extends boolean | undefined>({
+export function Combobox<TValue>({
   className,
   placeholder,
   autoFocus,
   'aria-label': ariaLabel,
   options,
+  invalid,
   ...props
 }: {
   className?: string
-  placeholder?: React.ReactNode
+  placeholder?: string
   autoFocus?: boolean
   'aria-label'?: string
   options: Option[]
-} & Headless.ComboboxProps<TValue, TMultiple, typeof Fragment>) {
+  invalid?: boolean
+} & Omit<Headless.ComboboxProps<TValue, false, typeof Fragment>, 'multiple'>) {
   const [query, setQuery] = useState('')
 
   const filteredOptions =
@@ -32,16 +33,20 @@ export function Combobox<TValue, TMultiple extends boolean | undefined>({
     )
 
   return (
-    <Headless.Combobox {...props} onClose={() => setQuery('')}>
+    <Headless.Combobox {...props} onClose={() => setQuery('')} immediate>
       <div className="relative">
         <Headless.ComboboxInput
           as={Input}
           autoFocus={autoFocus}
           data-slot="control"
           aria-label={ariaLabel}
-          displayValue={(option: Option) => option?.label ?? placeholder}
+          displayValue={(selected: string) =>
+            options.find((e) => e.value === selected)?.label ?? ''
+          }
           onChange={(event) => setQuery(event.target.value)}
           className={className}
+          placeholder={placeholder}
+          invalid={invalid}
         />
         <Headless.ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
           <svg
@@ -71,12 +76,12 @@ export function Combobox<TValue, TMultiple extends boolean | undefined>({
         leaveTo="opacity-0"
       >
         <Headless.ComboboxOptions
-          anchor="bottom"
+          anchor="bottom start"
           className={clsx(
             // Anchor positioning
             '[--anchor-offset:-1.625rem] [--anchor-padding:theme(spacing.4)] sm:[--anchor-offset:-1.375rem]',
             // Base styles
-            'isolate w-full min-w-[calc(var(--button-width)+1.75rem)] select-none scroll-py-1 rounded-xl p-1',
+            'isolate mt-0.5 w-max min-w-[calc(var(--input-width)+1.75rem)] select-none scroll-py-1 rounded-xl p-1',
             // Invisible border that is only visible in `forced-colors` mode for accessibility purposes
             'outline outline-1 outline-transparent focus:outline-none',
             // Handle scrolling when menu won't fit in viewport

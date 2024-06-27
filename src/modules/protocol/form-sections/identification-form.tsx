@@ -10,6 +10,7 @@ import SectionTitle from '@protocol/elements/form-section-title'
 import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
 import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
+import { FormCombobox } from '@shared/form/form-combobox'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
@@ -28,6 +29,14 @@ export function IdentificationForm() {
           {...form.getInputProps(path + 'title')}
           label="Título"
           description="Un título descriptivo de su proyecto"
+        />
+        <FormCombobox
+          label={'Carrera'}
+          {...form.getInputProps(path + 'career')}
+          options={[
+            { value: '1', label: 'Option A' },
+            { value: '2', label: 'option b' },
+          ]}
         />
         <Select
           path={path + 'career'}
