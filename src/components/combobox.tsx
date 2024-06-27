@@ -7,7 +7,16 @@ import { Input } from './input'
 
 export type Option = { value: string; label: string; description?: string }
 
-export function Combobox<TValue>({
+export type ComboboxProps<TValue> = {
+  className?: string
+  placeholder?: string
+  autoFocus?: boolean
+  'aria-label'?: string
+  options: Option[]
+  invalid?: boolean
+} & Omit<Headless.ComboboxProps<TValue, false, typeof Fragment>, 'multiple'>
+
+export function Combobox<T>({
   className,
   placeholder,
   autoFocus,
@@ -15,14 +24,7 @@ export function Combobox<TValue>({
   options,
   invalid,
   ...props
-}: {
-  className?: string
-  placeholder?: string
-  autoFocus?: boolean
-  'aria-label'?: string
-  options: Option[]
-  invalid?: boolean
-} & Omit<Headless.ComboboxProps<TValue, false, typeof Fragment>, 'multiple'>) {
+}: ComboboxProps<T>) {
   const [query, setQuery] = useState('')
 
   const filteredOptions =
@@ -33,7 +35,12 @@ export function Combobox<TValue>({
     )
 
   return (
-    <Headless.Combobox {...props} onClose={() => setQuery('')} immediate>
+    <Headless.Combobox
+      as={'div'}
+      {...props}
+      onClose={() => setQuery('')}
+      immediate
+    >
       <div className="relative">
         <Headless.ComboboxInput
           as={Input}

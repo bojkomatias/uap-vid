@@ -11,6 +11,8 @@ import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
 import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { Heading, Subheading } from '@components/heading'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
@@ -23,48 +25,43 @@ export function IdentificationForm() {
       transition={{ duration: 0.7 }}
       className="space-y-3"
     >
-      <SectionTitle title="Identificación" />
-      <>
-        <FormInput
-          {...form.getInputProps(path + 'title')}
-          label="Título"
-          description="Un título descriptivo de su proyecto"
-        />
-        <FormCombobox
-          label={'Carrera'}
-          {...form.getInputProps(path + 'career')}
-          options={[
-            { value: '1', label: 'Option A' },
-            { value: '2', label: 'option b' },
-          ]}
-        />
-        <Select
-          path={path + 'career'}
-          options={careers}
-          label="carrera"
-          conditionalCleanup={() =>
-            (form.values.sections.identification.assignment = '')
-          }
-        />
-        <AssignmentInfo />
-        <Select
-          path={path + 'assignment'}
-          label="materia (solo en caso de PIC)"
-          options={assignments(form.values.sections.identification.career)}
-        />
-        <TeamInfo />
-        <TeamMemberListForm />
-        <FormListbox
-          {...form.getInputProps(path + 'sponsor')}
-          label="Ente patrocinante"
-          options={[
-            { value: '1', label: 'Option 1' },
-            { value: '2', label: 'Option 2' },
-            { value: '3', label: 'Option 3' },
-          ]}
-          multiple
-        />
-      </>
+      <Fieldset>
+        <Legend>Identificación</Legend>
+        <FieldGroup>
+          <FormInput
+            label="Título"
+            description="Un título descriptivo de su proyecto"
+            {...form.getInputProps('sections.identification.title')}
+          />
+          {/* TODO: Replace with CareerID */}
+          <FormCombobox
+            label="Carrera"
+            description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
+            options={careers.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.identification.career')}
+          />
+          <AssignmentInfo />
+          {/* TODO: Replace with CourseID */}
+          <FormCombobox
+            label="Materia"
+            description="Seleccione una materia si aplica (requerido en caso de PIC)"
+            disabled={!form.values.sections.identification.career}
+            options={assignments(
+              form.values.sections.identification.career
+            ).map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.identification.assignment')}
+          />
+          <TeamInfo />
+          <TeamMemberListForm />
+          <FormListbox
+            multiple
+            label="Ente patrocinante"
+            description="Seleccione una unidad académica o ente patrocinante auspicia el proyecto"
+            options={sponsors.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.identification.sponsor')}
+          />
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }
