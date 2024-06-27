@@ -6,7 +6,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import { upsertConvocatory } from '@repositories/convocatory'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
-import { useCallback, useTransition } from 'react'
+import { ChangeEvent, useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
 import { Button } from '@components/button'
 import type { z } from 'zod'
@@ -80,7 +80,7 @@ export function ConvocatoryForm({
             description="Año en la cual entraría en vigencia"
             type="number"
             {...form.getInputProps('year')}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               form.setFieldValue('year', Number(e.target.value))
             }
           />
@@ -94,7 +94,7 @@ export function ConvocatoryForm({
 
           <FormInput
             label="Hasta"
-            description="Fecha en la cual finzaliza"
+            description="Fecha en la cual finaliza"
             type="datetime-local"
             {...form.getInputProps('to')}
             onChange={(e: any) => form.setFieldValue('to', e.target.value)}

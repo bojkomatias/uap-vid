@@ -1,11 +1,11 @@
+/* eslint-disable no-console */
 'use server'
 
-import type { Convocatory } from '@prisma/client'
 import { orderByQuery } from '@utils/query-helper/orderBy'
-import { ConvocatorySchema } from '@utils/zod'
+import type { ConvocatorySchema } from '@utils/zod'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 export const getAllConvocatories = cache(
   async ({
