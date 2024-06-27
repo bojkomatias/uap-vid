@@ -1,11 +1,12 @@
 'use client'
+
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/protocol-combobox'
 import InfoTooltip from '@protocol/elements/tooltip'
-import SectionTitle from '@protocol/elements/form-section-title'
 import { cache } from 'react'
 import { ChronogramList } from '@protocol/elements/inputs/chronogram-list-form'
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { FormListbox } from '@shared/form/form-listbox'
 
 export function DurationForm() {
   const form = useProtocolContext()
@@ -18,31 +19,34 @@ export function DurationForm() {
       transition={{ duration: 0.7 }}
       className="space-y-3"
     >
-      <SectionTitle title="Duración" />
-      <Info />
-      <>
-        <Select
-          path={path + 'modality'}
-          label="modalidad"
-          options={modalities}
-          conditionalCleanup={() =>
-            (form.values.sections.duration.duration = '')
-          }
-        />
-        <Select
-          path={path + 'duration'}
-          label="duración"
-          options={duration(form.values.sections.duration.modality)}
-          conditionalCleanup={(e) => {
-            if (!e) return null
-            form.setFieldValue(
-              path + 'chronogram',
-              structureSemestersFromMonths(e)
-            )
-          }}
-        />
-        <ChronogramList />
-      </>
+      <Fieldset>
+        <Legend>Duración</Legend>
+        <Info />
+        <FieldGroup>
+          <FormListbox
+            label="Modalidad"
+            description="La modalidad que corresponde al proyecto"
+            options={modalities.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.duration.modality')}
+          />
+          <FormListbox
+            label="Duración"
+            description="Seleccione la duración en meses que el proyecto va a tomar"
+            options={duration(form.values.sections.duration.modality).map(
+              (e) => ({ value: e, label: e })
+            )}
+            {...form.getInputProps('sections.duration.duration')}
+            onChange={(e: any) => {
+              if (!e) return null
+              form.setFieldValue(
+                path + 'chronogram',
+                structureSemestersFromMonths(e)
+              )
+            }}
+          />
+          <ChronogramList />
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }

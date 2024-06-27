@@ -1,18 +1,15 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/protocol-combobox'
-import Input from '@protocol/elements/inputs/protocol-input'
-import SectionTitle from '@protocol/elements/form-section-title'
 import InfoTooltip from '@protocol/elements/tooltip'
-import dynamic from 'next/dynamic'
 import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
 import { FormListbox } from '@shared/form/form-listbox'
-const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { FormCombobox } from '@shared/form/form-combobox'
+import { FormInput } from '@shared/form/form-input'
 
 export function DescriptionForm() {
   const form = useProtocolContext()
-  const path = 'sections.description.'
 
   return (
     <motion.div
@@ -21,50 +18,74 @@ export function DescriptionForm() {
       transition={{ duration: 0.7 }}
       className="space-y-3"
     >
-      <SectionTitle title="Descripción del proyecto" />
-
-      <>
-        <FormListbox
-          {...form.getInputProps(path + 'discipline')}
-          label="Disciplina general y área especifica"
-          options={disciplines.map((d) => ({ value: d, label: d }))}
-          onChange={() => (form.values.sections.description.line = '')}
-        />
-        <Select
-          path={path + 'line'}
-          label="línea de investigación"
-          options={lines(form.values.sections.description.discipline) ?? []}
-        />
-        <FormTitapTextarea
-          {...form.getInputProps(path + 'technical')}
-          label="Resumen técnico"
-        />
-        <Input path={path + 'words'} label="palabras clave" />
-        <FieldInfo />
-        <Select
-          path={path + 'field'}
-          options={fields}
-          label="campo de aplicación"
-        />
-        <ObjectiveInfo />
-        <Select
-          path={path + 'objective'}
-          label="objetivo socioeconómico"
-          options={objective}
-        />
-        <TypeInfo />
-        <Select
-          path={path + 'type'}
-          label="tipo de investigación"
-          options={type}
-        />
-      </>
+      <Fieldset>
+        <Legend>Descripción del proyecto</Legend>
+        <FieldGroup>
+          <FormListbox
+            label="Disciplina y área"
+            description="Disciplina general y área especifica que involucra el proyecto"
+            options={disciplines.map((d) => ({ value: d, label: d }))}
+            {...form.getInputProps('sections.description.discipline')}
+            onBlur={() => {
+              form.setFieldValue('sections.description.line', '')
+            }}
+          />
+          <FormCombobox
+            label="Línea de investigación"
+            description="Seleccione la línea de investicación del proyecto"
+            options={
+              !lines(form.values.sections.description.discipline) ?
+                []
+                // @ts-ignore
+              : lines(form.values.sections.description.discipline).map((e) => ({
+                  value: e,
+                  label: e,
+                }))
+            }
+            disabled={
+              !form.getInputProps('sections.description.discipline').value
+            }
+            {...form.getInputProps('sections.description.line')}
+          />
+          <FormTitapTextarea
+            label="Resumen técnico"
+            description="Redacte un resumen breve entre 150 y 250 palabras"
+            {...form.getInputProps('sections.description.technical')}
+          />
+          <FormInput
+            label="Palabras clave"
+            description="Liste todas las palabras claves que ayuden a describir el proyecto"
+            {...form.getInputProps('sections.description.words')}
+          />
+          <FieldInfo />
+          <FormListbox
+            label="Aplicación"
+            description="El campo de aplicación del proyecto"
+            options={fields.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.description.field')}
+          />
+          <ObjectiveInfo />
+          <FormListbox
+            label="Objetivo socioeconómico"
+            description="Objetivo de la investigación en terminos socioeconómicos"
+            options={objective.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.description.objective')}
+          />
+          <TypeInfo />
+          <FormListbox
+            label="Tipo de investigación"
+            description="El tipo de la investigación a realizar"
+            options={type.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.description.type')}
+          />
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }
 
 const FieldInfo = () => (
-  <InfoTooltip className="fixed bottom-4">
+  <InfoTooltip>
     <p>
       <b>Ciencias exactas y naturales:</b> astronomía; ciencias espaciales;
       bacteriología; biología; bioquímica; biofísica; botánica; toxicología;
@@ -121,7 +142,7 @@ const FieldInfo = () => (
   </InfoTooltip>
 )
 const ObjectiveInfo = () => (
-  <InfoTooltip className="fixed bottom-4">
+  <InfoTooltip>
     <p>
       <b>Exploración y explotación de la tierra:</b> abarca la I+D cuyos
       objetivos estén relacionados con la exploración de la corteza y la
@@ -183,7 +204,7 @@ const ObjectiveInfo = () => (
   </InfoTooltip>
 )
 const TypeInfo = () => (
-  <InfoTooltip className="fixed bottom-4">
+  <InfoTooltip>
     <p>
       <b> Investigación básica:</b> consiste en trabajos experimentales o
       teóricos que se emprenden con el objetivo de obtener nuevos conocimientos

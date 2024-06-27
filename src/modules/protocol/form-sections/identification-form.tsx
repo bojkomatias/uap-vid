@@ -3,20 +3,15 @@
 import { useProtocolContext } from 'utils/createContext'
 import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/protocol-combobox'
 import InfoTooltip from '@protocol/elements/tooltip'
-import MultipleSelect from '@protocol/elements/inputs/protocol-multiple-combobox'
-import SectionTitle from '@protocol/elements/form-section-title'
 import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
 import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
-import { Heading, Subheading } from '@components/heading'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
-  const path = 'sections.identification.'
 
   return (
     <motion.div
@@ -39,6 +34,9 @@ export function IdentificationForm() {
             description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
             options={careers.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.identification.career')}
+            onBlur={() => {
+              form.setFieldValue('sections.identification.assignment', '')
+            }}
           />
           <AssignmentInfo />
           {/* TODO: Replace with CourseID */}
