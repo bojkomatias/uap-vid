@@ -17,7 +17,6 @@ export function DurationForm() {
       initial={{ opacity: 0, x: -5 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7 }}
-      className="space-y-3"
     >
       <Fieldset>
         <Legend>Duración</Legend>
