@@ -9,6 +9,7 @@ import { getAllTeamMembers } from '@repositories/team-member'
 import {
   Description,
   Field,
+  FieldGroup,
   Fieldset,
   Label,
   Legend,
@@ -38,7 +39,7 @@ export default function TeamMemberListForm() {
         Liste los miembros de equipo con la cantidad de horas semanales o meses
         totales a trabajar en su defecto
       </Text>
-      <div className="grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
+      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
         <Field className="col-span-4">
           <Label>Rol</Label>
           <Description>Rol del miembro</Description>
@@ -57,7 +58,7 @@ export default function TeamMemberListForm() {
           <Label>Meses</Label>
           <Description>En un año</Description>
         </Field>
-        <span className="col-span-1" />
+        <span />
         {form.values.sections.identification.team.map((_, index) => (
           <Fragment key={index}>
             <FormListbox
@@ -111,32 +112,32 @@ export default function TeamMemberListForm() {
           </Fragment>
         ))}
       </div>
-      <div className="flex justify-center py-2">
-        <Button
-          plain
-          onClick={() => {
-            form.insertListItem(path, {
-              hours: 0,
-              last_name: '',
-              name: '',
-              role: '',
-              teamMemberId: null,
-            })
 
-            setTimeout(() => {
-              document
-                .getElementById(
-                  `row-${form.values.sections.identification.team.length}`
-                )
-                ?.getElementsByTagName('input')[0]
-                .focus()
-            }, 10)
-          }}
-        >
-          Añadir otra fila
-          <Plus data-slot="icon" />
-        </Button>
-      </div>
+      <Button
+        plain
+        onClick={() => {
+          form.insertListItem(path, {
+            hours: 0,
+            last_name: '',
+            name: '',
+            role: '',
+            teamMemberId: null,
+          })
+
+          setTimeout(() => {
+            document
+              .getElementById(
+                `row-${form.values.sections.identification.team.length}`
+              )
+              ?.getElementsByTagName('input')[0]
+              .focus()
+          }, 10)
+        }}
+        className="my-1"
+      >
+        <Plus data-slot="icon" />
+        Añadir otro miembro de equipo
+      </Button>
     </Fieldset>
   )
 }

@@ -3,14 +3,12 @@
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
 import InfoTooltip from '@protocol/elements/tooltip'
-import { cache } from 'react'
 import { ChronogramList } from '@protocol/elements/inputs/chronogram-list-form'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
 import { FormListbox } from '@shared/form/form-listbox'
 
 export function DurationForm() {
   const form = useProtocolContext()
-  const path = 'sections.duration.'
 
   return (
     <motion.div
@@ -27,23 +25,31 @@ export function DurationForm() {
             description="La modalidad que corresponde al proyecto"
             options={modalities.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.duration.modality')}
+            onBlur={() => {
+              form.setFieldValue('sections.duration.duration', '')
+              form.setFieldValue('sections.duration.chronogram', [])
+            }}
           />
           <FormListbox
             label="Duración"
             description="Seleccione la duración en meses que el proyecto va a tomar"
+            disabled={!form.values.sections.duration.modality}
             options={duration(form.values.sections.duration.modality).map(
               (e) => ({ value: e, label: e })
             )}
             {...form.getInputProps('sections.duration.duration')}
-            onChange={(e: any) => {
-              if (!e) return null
+            onFocus={() => {
               form.setFieldValue(
-                path + 'chronogram',
-                structureSemestersFromMonths(e)
+                'sections.duration.chronogram',
+                structureSemestersFromMonths(
+                  form.getInputProps('sections.duration.duration').value
+                )
               )
             }}
           />
-          <ChronogramList />
+          {form.values.sections.duration.chronogram.length > 0 && (
+            <ChronogramList />
+          )}
         </FieldGroup>
       </Fieldset>
     </motion.div>
@@ -67,7 +73,7 @@ const duration = (value: string) => {
   else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
 }
 
-const structureSemestersFromMonths = cache((e: string) => {
+const structureSemestersFromMonths = (e: string) => {
   const semesters = Number(e.substring(0, 2)) / 6
 
   const allSemesters = []
@@ -75,7 +81,7 @@ const structureSemestersFromMonths = cache((e: string) => {
     allSemesters.push({ semester: `${i}º semestre`, data: [{ task: '' }] })
   }
   return allSemesters
-})
+}
 
 const Info = () => (
   <InfoTooltip>

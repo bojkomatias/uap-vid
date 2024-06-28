@@ -373,7 +373,7 @@ export const DurationSchema = z.object({
         data: z
           .object({
             task: z.string().min(1, {
-              message: 'El campo no puede estar vació',
+              message: 'El campo no puede estar vacío',
             }),
           })
           .array(),

@@ -1,6 +1,7 @@
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
 import { Input, InputGroup, type InputProps } from '@components/input'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { Icon } from 'tabler-icons-react'
 
 export function FormInput({
   label,
@@ -12,7 +13,7 @@ export function FormInput({
 }: {
   label: string
   description?: string
-  icon?: () => JSX.Element
+  icon?: Icon
 } & GetInputPropsReturnType &
   InputProps) {
   return (
