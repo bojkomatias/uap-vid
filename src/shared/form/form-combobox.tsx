@@ -7,6 +7,7 @@ export function FormCombobox({
   label,
   description,
   error,
+  disabled,
   ...props
 }: {
   label: string
@@ -15,7 +16,7 @@ export function FormCombobox({
 } & GetInputPropsReturnType &
   ComboboxProps<Option>) {
   return (
-    <Field>
+    <Field disabled={disabled}>
       <Label>{label}</Label>
       <Description>{description}</Description>
       <Combobox invalid={!!error} {...props} />

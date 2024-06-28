@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/button'
+
 import { notifications } from '@elements/notifications'
 import { zodResolver } from '@mantine/form'
 import type { Protocol } from '@prisma/client'
@@ -20,6 +20,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import {
   AlertCircle,
+  ArrowBarRight,
+  ArrowNarrowLeft,
+  ArrowNarrowRight,
   ChevronLeft,
   ChevronRight,
   CircleCheck,
@@ -28,6 +31,9 @@ import {
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
+import { BadgeButton } from '@components/badge'
+import { FormButton } from '@shared/form/form-button'
+import { Button } from '@components/button'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -126,13 +132,17 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
       label: string
       value: string
     }) => (
-      <Button
-        intent="outline"
-        size="xs"
+      <BadgeButton
+        color={
+          !form.isValid(path) ?
+            form.isDirty(path) ?
+              'amber'
+            : 'gray'
+          : 'teal'
+        }
         className={cx(
-          'hover:bg-primary-50',
-          section === value && 'font-bold shadow',
-          !form.isValid(path) && section !== value ? 'opacity-50' : ''
+          section == value && 'font-semibold',
+          !form.isValid(path) && section !== value ? 'opacity-80' : ''
         )}
         onClick={() => setSection(value)}
       >
@@ -140,10 +150,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
-          : <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
-        : <CircleCheck className="h-4 w-4 stroke-success-500/80" />}
-      </Button>
+            <AlertCircle className="size-4" data-slot="icon" />
+          : <CircleDashed className="size-4" data-slot="icon" />
+        : <CircleCheck className="size-4" data-slot="icon" />}
+      </BadgeButton>
     ),
     [form, section]
   )
@@ -174,7 +184,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
           // : null
           // upsertProtocol(form.values)
         }}
-        className="w-full px-4 py-4"
       >
         <InfoTooltip>
           <h4>Indicadores de sección</h4>
@@ -199,7 +208,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
           initial={{ opacity: 0, y: -7 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="mx-auto mb-6 flex w-fit flex-wrap items-center justify-center gap-1 rounded border bg-gray-50 p-1"
+          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border bg-gray-50 p-0.5"
         >
           <SectionButton
             path={'sections.identification'}
@@ -247,30 +256,27 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
         {sectionMapper[Number(section)]}
 
-        <div className="mb-8 mt-12 flex w-full justify-between">
+        <div className="mt-12 flex w-full justify-between">
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '0'}
             onClick={() => setSection((p) => (Number(p) - 1).toString())}
           >
-            <ChevronLeft className="h-4 text-gray-500" />
+            <ArrowNarrowLeft data-slot="icon" />
+            Sección previa
           </Button>
 
-          <div className="flex gap-2">
-            <Button type="submit" intent="secondary" loading={isPending}>
-              Guardar
-            </Button>
-          </div>
+          <FormButton isLoading={isPending}>Guardar</FormButton>
+
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '7'}
             onClick={() => setSection((p) => (Number(p) + 1).toString())}
           >
-            <ChevronRight className="h-4 text-gray-500" />
+            Sección siguiente
+            <ArrowNarrowRight data-slot="icon" />
           </Button>
         </div>
       </form>

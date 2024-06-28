@@ -2,23 +2,27 @@ import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
 import { Input, InputGroup, type InputProps } from '@components/input'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
-export function FormInput(
-  props: {
-    label: string
-    description?: string
-    icon?: () => JSX.Element
-  } & GetInputPropsReturnType &
-    InputProps
-) {
+export function FormInput({
+  label,
+  description,
+  error,
+  disabled,
+  ...props
+}: {
+  label: string
+  description?: string
+  icon?: () => JSX.Element
+} & GetInputPropsReturnType &
+  InputProps) {
   return (
-    <Field>
-      <Label>{props.label}</Label>
-      <Description>{props.description}</Description>
+    <Field disabled={disabled}>
+      <Label>{label}</Label>
+      <Description>{description}</Description>
       <InputGroup>
         {props.icon && <props.icon data-slot="icon" />}
-        <Input {...props} invalid={!!props.error} />
+        <Input {...props} invalid={!!error} />
       </InputGroup>
-      {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Field>
   )
 }

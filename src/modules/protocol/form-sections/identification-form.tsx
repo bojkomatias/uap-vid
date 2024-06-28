@@ -54,7 +54,11 @@ export function IdentificationForm() {
             multiple
             label="Ente patrocinante"
             description="Seleccione una unidad académica o ente patrocinante auspicia el proyecto"
-            options={sponsors.map((e) => ({ value: e, label: e }))}
+            options={sponsors.map((e) => ({
+              value: e,
+              label: e.split('-')[1],
+              description: e.split('-')[0],
+            }))}
             {...form.getInputProps('sections.identification.sponsor')}
           />
         </FieldGroup>

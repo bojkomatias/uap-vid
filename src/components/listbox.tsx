@@ -21,7 +21,7 @@ export function Listbox<T>({
   ...props
 }: ListboxProps<T>) {
   return (
-    <Headless.Listbox {...props}>
+    <Headless.Listbox {...props} as={'div'}>
       <Headless.ListboxButton
         autoFocus={autoFocus}
         data-slot="control"
@@ -71,6 +71,7 @@ export function Listbox<T>({
             'group-data-[disabled]:border-gray-950/20 group-data-[disabled]:opacity-100 group-data-[disabled]:dark:border-white/15 group-data-[disabled]:dark:bg-white/[2.5%] dark:data-[hover]:group-data-[disabled]:border-white/15',
           ])}
         />
+
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <svg
             className="size-5 stroke-gray-500 group-data-[disabled]:stroke-gray-600 dark:stroke-gray-400 sm:size-4 forced-colors:stroke-[CanvasText]"

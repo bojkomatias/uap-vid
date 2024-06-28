@@ -9,24 +9,25 @@ import {
 } from '@components/listbox'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
-export function FormListbox(
-  props: {
-    label: string
-    description?: string
-    options: Option[]
-  } & GetInputPropsReturnType &
-    ListboxProps<Option>
-) {
+export function FormListbox({
+  label,
+  description,
+  error,
+  disabled,
+  options,
+  ...props
+}: {
+  label: string
+  description?: string
+  options: Option[]
+} & GetInputPropsReturnType &
+  ListboxProps<Option>) {
   return (
-    <Field>
-      <Label>{props.label}</Label>
-      <Description>{props.description}</Description>
-      <Listbox
-        invalid={!!props.error}
-        defaultValue={props.value}
-        onChange={(e) => props.onChange(e)}
-      >
-        {props.options.map(({ value, label, description }) => (
+    <Field disabled={disabled}>
+      <Label>{label}</Label>
+      <Description>{description}</Description>
+      <Listbox invalid={!!error} {...props}>
+        {options.map(({ value, label, description }) => (
           <ListboxOption key={value} value={value}>
             <ListboxLabel>{label}</ListboxLabel>
             {description && (
@@ -35,7 +36,7 @@ export function FormListbox(
           </ListboxOption>
         ))}
       </Listbox>
-      {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Field>
   )
 }
