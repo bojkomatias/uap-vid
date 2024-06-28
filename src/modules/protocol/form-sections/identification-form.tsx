@@ -53,7 +53,7 @@ export function IdentificationForm() {
           <FormListbox
             multiple
             label="Ente patrocinante"
-            description="Seleccione una unidad académica o ente patrocinante auspicia el proyecto"
+            description="Seleccione una o más unidades académicas o entes patrocinantes que auspician el proyecto"
             options={sponsors.map((e) => ({
               value: e,
               label: e.split('-')[1],

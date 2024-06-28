@@ -7,6 +7,7 @@ export function FormInput({
   description,
   error,
   disabled,
+  className,
   ...props
 }: {
   label: string
@@ -15,7 +16,7 @@ export function FormInput({
 } & GetInputPropsReturnType &
   InputProps) {
   return (
-    <Field disabled={disabled}>
+    <Field disabled={disabled} className={className}>
       <Label>{label}</Label>
       <Description>{description}</Description>
       <InputGroup>

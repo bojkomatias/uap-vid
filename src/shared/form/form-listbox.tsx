@@ -15,6 +15,7 @@ export function FormListbox({
   error,
   disabled,
   options,
+  className,
   ...props
 }: {
   label: string
@@ -23,7 +24,7 @@ export function FormListbox({
 } & GetInputPropsReturnType &
   ListboxProps<Option>) {
   return (
-    <Field disabled={disabled}>
+    <Field disabled={disabled} className={className}>
       <Label>{label}</Label>
       <Description>{description}</Description>
       <Listbox invalid={!!error} {...props}>

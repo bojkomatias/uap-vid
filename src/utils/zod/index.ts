@@ -402,7 +402,7 @@ export const IdentificationSchema = z.object({
   team: z
     .lazy(() =>
       z.object({
-        hours: z
+        hours: z.coerce
           .number({
             invalid_type_error: 'Este campo debe ser numérico',
           })
@@ -416,7 +416,7 @@ export const IdentificationSchema = z.object({
         name: z.string().nullable(),
         role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
         teamMemberId: z.string().nullable(),
-        workingMonths: z.number().nullable(),
+        workingMonths: z.coerce.number().nullable(),
       })
     )
     .array()

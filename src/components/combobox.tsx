@@ -14,6 +14,9 @@ export type ComboboxProps<TValue> = {
   'aria-label'?: string
   options: Option[]
   invalid?: boolean
+  onFocus?: React.FocusEventHandler<HTMLElement>
+  onBlur?: React.FocusEventHandler<HTMLElement>
+  'data-path'?: string
 } & Omit<Headless.ComboboxProps<TValue, false, typeof Fragment>, 'multiple'>
 
 export function Combobox<T>({
@@ -23,6 +26,9 @@ export function Combobox<T>({
   'aria-label': ariaLabel,
   options,
   invalid,
+  onFocus,
+  onBlur,
+  'data-path': dataPath,
   ...props
 }: ComboboxProps<T>) {
   const [query, setQuery] = useState('')
@@ -35,17 +41,14 @@ export function Combobox<T>({
     )
 
   return (
-    <Headless.Combobox
-      as={'div'}
-      {...props}
-      onClose={() => setQuery('')}
-      immediate
-    >
-      <div className="relative">
+    <Headless.Combobox {...props} onClose={() => setQuery('')} immediate>
+      <div className="relative" data-slot="control">
         <Headless.ComboboxInput
           as={Input}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          data-path={dataPath}
           autoFocus={autoFocus}
-          data-slot="control"
           aria-label={ariaLabel}
           displayValue={(selected: string) =>
             options.find((e) => e.value === selected)?.label ?? ''

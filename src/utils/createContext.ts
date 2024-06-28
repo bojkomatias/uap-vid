@@ -8,8 +8,11 @@ export const [ProtocolProvider, useProtocolContext, useProtocol] =
 export const initialSectionValues: Sections = {
   identification: {
     assignment: '',
+    courseId: '',
     career: '',
+    careerId: '',
     sponsor: [],
+    academicUnitIds: [],
     team: [
       {
         hours: 0,

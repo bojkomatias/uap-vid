@@ -1,14 +1,23 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
-import React, { useEffect, useState } from 'react'
-import Select from './protocol-combobox'
-import NumberInput from './number-input'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Check, Plus, Selector, Trash, X } from 'tabler-icons-react'
-import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
 import { Combobox } from '@headlessui/react'
 import type { TeamMember } from '@prisma/client'
 import { getAllTeamMembers } from '@repositories/team-member'
+import {
+  Description,
+  Field,
+  Fieldset,
+  Label,
+  Legend,
+} from '@components/fieldset'
+import { Button } from '@components/button'
+import { FormListbox } from '@shared/form/form-listbox'
+import { FormInput } from '@shared/form/form-input'
+import { FormCombobox } from '@shared/form/form-combobox'
+import { Text } from '@components/text'
 
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
@@ -23,54 +32,88 @@ export default function TeamMemberListForm() {
   }, [])
 
   return (
-    <div>
-      <div className="label text-center">miembros de equipo</div>
-      <div className="space-y-3 rounded-xl border px-4 pb-2 pt-6">
+    <Fieldset>
+      <Legend>Miembros de Equipo</Legend>
+      <Text>
+        Liste los miembros de equipo con la cantidad de horas semanales o meses
+        totales a trabajar en su defecto
+      </Text>
+      <div className="grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
+        <Field className="col-span-4">
+          <Label>Rol</Label>
+          <Description>Rol del miembro</Description>
+        </Field>
+        <Field className="col-span-12">
+          <Label>Miembro</Label>
+          <Description>
+            Seleccione miembro de equipo si existe o uno genérico si no
+          </Description>
+        </Field>
+        <Field className="col-span-2">
+          <Label>Horas</Label>
+          <Description>En una semana</Description>
+        </Field>
+        <Field className="col-span-2">
+          <Label>Meses</Label>
+          <Description>En un año</Description>
+        </Field>
+        <span className="col-span-1" />
         {form.values.sections.identification.team.map((_, index) => (
-          <div
-            key={index}
-            id={`row-${index}`}
-            className="flex w-full items-start justify-around gap-2"
-          >
-            <div className="w-48">
-              <Select
-                options={[
-                  'Director',
-                  'Codirector',
-                  'Investigador UAP',
-                  'Investigador Externo UAP',
-                  'Técnico Asistente',
-                  'Técnico Asociado',
-                  'Técnico Principal',
-                  'Profesional Adjunto',
-                  'Profesional Principal',
-                  'Becario CONICET',
-                  'A definir',
-                ]}
-                path={`${path}.${index}.role`}
-                label={'rol'}
-              />
-            </div>
-            <TeamMemberSelector teamMembers={teamMembers} index={index} />
-            <div className="w-20">
-              <NumberInput path={`${path}.${index}.hours`} label={'Horas'} />
-            </div>
-            <div className="w-20">
-              <NumberInput
-                path={`${path}.${index}.workingMonths`}
-                label={'Meses'}
-              />
-            </div>
-            <Trash
-              onClick={() => form.removeListItem(path, index)}
-              className={`mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
-                index == 0 ? 'pointer-events-none invisible' : ''
-              }`}
+          <Fragment key={index}>
+            <FormListbox
+              className="col-span-4"
+              label=""
+              options={roleOptions.map((e) => ({ value: e, label: e }))}
+              {...form.getInputProps(
+                `sections.identification.team.${index}.role`
+              )}
             />
-          </div>
-        ))}
 
+            <FormCombobox
+              className="col-span-12"
+              label=""
+              options={teamMembers.map((e) => ({
+                value: e.id,
+                label: e.name,
+              }))}
+              {...form.getInputProps(
+                `sections.identification.team.${index}.teamMemberId`
+              )}
+            />
+
+            <FormInput
+              className="col-span-2"
+              label=""
+              type="number"
+              {...form.getInputProps(
+                `sections.identification.team.${index}.hours`
+              )}
+            />
+
+            <FormInput
+              className="col-span-2"
+              label=""
+              type="number"
+              {...form.getInputProps(
+                `sections.identification.team.${index}.workingMonths`
+              )}
+            />
+
+            {index === 0 ?
+              <span />
+            : <Button plain className="mt-1 self-start">
+                <Trash
+                  data-slot="icon"
+                  onClick={() => form.removeListItem(path, index)}
+                />
+              </Button>
+            }
+          </Fragment>
+        ))}
+      </div>
+      <div className="flex justify-center py-2">
         <Button
+          plain
           onClick={() => {
             form.insertListItem(path, {
               hours: 0,
@@ -89,16 +132,28 @@ export default function TeamMemberListForm() {
                 .focus()
             }, 10)
           }}
-          intent="outline"
-          className="mx-auto w-full max-w-xs"
         >
-          <p> Añadir otra fila </p>
-          <Plus className="h-4 text-gray-500" />
+          Añadir otra fila
+          <Plus data-slot="icon" />
         </Button>
       </div>
-    </div>
+    </Fieldset>
   )
 }
+
+const roleOptions = [
+  'Director',
+  'Codirector',
+  'Investigador UAP',
+  'Investigador Externo UAP',
+  'Técnico Asistente',
+  'Técnico Asociado',
+  'Técnico Principal',
+  'Profesional Adjunto',
+  'Profesional Principal',
+  'Becario CONICET',
+  'A definir',
+]
 
 function TeamMemberSelector({
   teamMembers,
@@ -120,7 +175,7 @@ function TeamMemberSelector({
     )
 
   return (
-    <div className="flex-grow">
+    <div className="col-span-5">
       <label htmlFor="select-user" className="label">
         Miembro del equipo
       </label>

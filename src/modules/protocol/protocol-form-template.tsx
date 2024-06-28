@@ -14,17 +14,14 @@ import {
   PublicationForm,
 } from '@protocol/form-sections'
 import type { Protocol as ProtocolZod } from '@utils/zod'
-import { ProtocolSchema } from '@utils/zod'
+import { IdentificationSchema, ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import {
   AlertCircle,
-  ArrowBarRight,
   ArrowNarrowLeft,
   ArrowNarrowRight,
-  ChevronLeft,
-  ChevronRight,
   CircleCheck,
   CircleDashed,
 } from 'tabler-icons-react'
@@ -133,16 +130,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
       value: string
     }) => (
       <BadgeButton
-        color={
-          !form.isValid(path) ?
-            form.isDirty(path) ?
-              'amber'
-            : 'gray'
-          : 'teal'
-        }
+        color={'light'}
         className={cx(
-          section == value && 'font-semibold',
-          !form.isValid(path) && section !== value ? 'opacity-80' : ''
+          'opacity-70',
+          section == value && 'font-semibold opacity-100'
         )}
         onClick={() => setSection(value)}
       >
@@ -150,9 +141,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="size-4" data-slot="icon" />
-          : <CircleDashed className="size-4" data-slot="icon" />
-        : <CircleCheck className="size-4" data-slot="icon" />}
+            <AlertCircle className="size-4 stroke-warning-500" />
+          : <CircleDashed className="size-3.5 stroke-gray-500" />
+        : <CircleCheck className="size-4 stroke-success-500" />}
       </BadgeButton>
     ),
     [form, section]
@@ -168,7 +159,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          console.log(form.values)
+          console.log(form.validateField('sections.identification'))
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
@@ -208,7 +199,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
           initial={{ opacity: 0, y: -7 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border bg-gray-50 p-0.5"
+          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border p-0.5"
         >
           <SectionButton
             path={'sections.identification'}
