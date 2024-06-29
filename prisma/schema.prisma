@@ -190,7 +190,7 @@ model Career {
 
 model Course {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
+  name     String @unique
   active   Boolean @default(true)
   career   Career  @relation(fields: [careerId], references: [id])
   careerId String  @db.ObjectId
