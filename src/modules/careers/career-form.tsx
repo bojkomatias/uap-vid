@@ -15,78 +15,78 @@ import type { Career, Course } from '@prisma/client'
 import { upsertCareer } from '@repositories/career'
 
 export function CareerForm({
-    career,
-    onSubmitCallback,
+  career,
+  onSubmitCallback,
 }: {
-    career: Career & { courses: Course[] }
-    onSubmitCallback?: () => void
+  career: Career & { courses: Course[] }
+  onSubmitCallback?: () => void
 }) {
-    const router = useRouter()
+  const router = useRouter()
 
-    const [isPending, startTransition] = useTransition()
-    const form = useForm<z.infer<typeof CareerSchema>>({
-        initialValues: {
-            id: career.id,
-            name: career.name,
-            courses: career.courses.map((x) => x.name),
-            active: career.active,
-        },
-        transformValues: (values) => CareerSchema.parse(values),
+  const [isPending, startTransition] = useTransition()
+  const form = useForm<z.infer<typeof CareerSchema>>({
+    initialValues: {
+      id: career.id,
+      name: career.name,
+      courses: career.courses.map((x) => x.name),
+      active: career.active,
+    },
+    transformValues: (values) => CareerSchema.parse(values),
 
-        validate: zodResolver(CareerSchema),
-    })
+    validate: zodResolver(CareerSchema),
+  })
 
-    const submitConvocatory = useCallback(
-        async (career: z.infer<typeof CareerSchema>) => {
-            const upserted = await upsertCareer(career)
-            if (upserted)
-                notifications.show({
-                    title: 'Carrera guardada',
-                    message: 'La carrera ha sido guardado con éxito',
-                    intent: 'success',
-                })
-            startTransition(() => {
-                router.refresh()
-                if (onSubmitCallback) onSubmitCallback()
-            })
-        },
-        [router, onSubmitCallback]
-    )
+  const submitConvocatory = useCallback(
+    async (career: z.infer<typeof CareerSchema>) => {
+      const upserted = await upsertCareer(career)
+      if (upserted)
+        notifications.show({
+          title: 'Carrera guardada',
+          message: 'La carrera ha sido guardado con éxito',
+          intent: 'success',
+        })
+      startTransition(() => {
+        router.refresh()
+        if (onSubmitCallback) onSubmitCallback()
+      })
+    },
+    [router, onSubmitCallback]
+  )
 
-    return (
-        <form
-            onSubmit={form.onSubmit(
-                // @ts-ignore --Overriding values
-                (values) => submitConvocatory(values)
-            )}
-            className="@container"
-        >
-            <Fieldset>
-                <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
-                    <FormInput
-                        label="Nombre"
-                        description="Nombre de la carrera"
-                        placeholder="Contabilidad I"
-                        {...form.getInputProps('name')}
-                    />
+  return (
+    <form
+      onSubmit={form.onSubmit(
+        // @ts-ignore --Overriding values
+        (values) => submitConvocatory(values)
+      )}
+      className="@container"
+    >
+      <Fieldset>
+        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+          <FormInput
+            label="Nombre"
+            description="Nombre de la carrera"
+            placeholder="Contabilidad I"
+            {...form.getInputProps('name')}
+          />
 
-                    <FormTextarea
-                        label="Materias de la carrera"
-                        description="Puede copiar y pegar un listado de carreras, separadas con coma"
-                        rows={5}
-                        {...form.getInputProps('courses')}
-                        onChange={(e: any) => {
-                            form.setFieldValue('courses', e.target.value)
-                        }}
-                    />
-                </FieldGroup>
-            </Fieldset>
+          <FormTextarea
+            label="Materias de la carrera"
+            description="Puede copiar y pegar un listado de carreras, separadas con coma"
+            rows={5}
+            {...form.getInputProps('courses')}
+            onChange={(e: any) => {
+              form.setFieldValue('courses', e.target.value)
+            }}
+          />
+        </FieldGroup>
+      </Fieldset>
 
-            <FormActions>
-                <FormButton isLoading={isPending}>
-                    {!career.id ? 'Crear carrera' : 'Actualizar carrera'}
-                </FormButton>
-            </FormActions>
-        </form>
-    )
+      <FormActions>
+        <FormButton isLoading={isPending}>
+          {!career.id ? 'Crear carrera' : 'Actualizar carrera'}
+        </FormButton>
+      </FormActions>
+    </form>
+  )
 }
