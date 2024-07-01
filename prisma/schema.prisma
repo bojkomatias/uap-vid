@@ -20,9 +20,10 @@ model AcademicUnit {
 }
 
 type AcademicUnitBudget {
-  amount Float
-  from   DateTime
-  to     DateTime?
+  amount      Float /// @deprecated use `amountIndex` instead
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex?
 }
 
 model Convocatory {
@@ -103,10 +104,12 @@ model TeamMemberCategory {
   id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
   name                       String                       @unique
   state                      Boolean?
-  price                      HistoricCategoryPrice[]
+  price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
+  amountIndex                AmountIndex? //FCA or FMR
 }
 
+/// @deprecated this won't be needed after indexing the whole app.
 type HistoricCategoryPrice {
   from     DateTime
   to       DateTime?
@@ -143,11 +146,18 @@ model AnualBudget {
 }
 
 type AnualBudgetItem {
-  type       String
-  detail     String
-  amount     Float
-  executions Execution[]
-  remaining  Float
+  type           String
+  detail         String
+  amount         Float
+  executions     Execution[]
+  remaining      Float
+  amountIndex    AmountIndex?
+  remainingIndex AmountIndex?
+}
+
+type AmountIndex {
+  FCA Float
+  FMR Float
 }
 
 model AnualBudgetTeamMember {
@@ -160,6 +170,33 @@ model AnualBudgetTeamMember {
   executions     Execution[]
   AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
   anualBudgetId  String?      @db.ObjectId
+}
+
+model Index {
+  id     String          @id @default(auto()) @map("_id") @db.ObjectId
+  unit   String
+  values HistoricIndex[]
+}
+
+model Career {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  active Boolean  @default(true)
+  Course Course[]
+}
+
+model Course {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  active   Boolean @default(true)
+  career   Career  @relation(fields: [careerId], references: [id])
+  careerId String  @db.ObjectId
+}
+
+type HistoricIndex {
+  from  DateTime
+  to    DateTime?
+  price Float
 }
 
 type Execution {
@@ -205,9 +242,10 @@ type ProtocolSectionsBudgetExpenses {
 }
 
 type ProtocolSectionsBudgetExpensesData {
-  amount Float
-  detail String
-  year   String
+  amount      Float /// @deprecated use `amountIndex` instead
+  amountIndex AmountIndex?
+  detail      String
+  year        String
 }
 
 type ProtocolSectionsDescription {
@@ -236,17 +274,20 @@ type ProtocolSectionsDurationChronogramData {
 }
 
 type ProtocolSectionsIdentification {
-  assignment String
-  career     String
-  sponsor    String[]
-  team       ProtocolSectionsIdentificationTeam[]
-  title      String
+  assignment      String? /// @deprecated use courseId instead
+  courseId        String?                              @db.ObjectId
+  career          String? /// @deprecated use careerId instead
+  careerId        String?                              @db.ObjectId
+  sponsor         String[] /// @deprecated use academicUnitIds instead
+  academicUnitIds String[]                             @db.ObjectId
+  team            ProtocolSectionsIdentificationTeam[]
+  title           String
 }
 
 type ProtocolSectionsIdentificationTeam {
   hours         Float
-  last_name     String?
-  name          String?
+  last_name     String? /// @deprecated use relation teamMemberId instead
+  name          String? /// @deprecated use relation teamMemberId instead
   workingMonths Int?
   role          String
   teamMemberId  String? @db.ObjectId
@@ -354,4 +395,5 @@ enum Access {
   TEAM_MEMBERS
   MEMBER_CATEGORIES
   ANUAL_BUDGETS
+  INDEXES
 }

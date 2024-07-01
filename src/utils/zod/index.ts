@@ -143,6 +143,25 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+/////////////////////////////////////////
+// HISTORIC INDEX SCHEMA
+/////////////////////////////////////////
+
+export const HistoricIndexSchema = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  price: z.coerce
+    .number()
+    .min(0, { message: 'El valor no puede ser negativo' }),
+})
+
+export const IndexSchema = z.object({
+  id: z.string(),
+  unit: z.string().min(1, { message: 'El campo no puede ser nulo' }),
+  values: HistoricIndexSchema.array().min(1, {
+    message: 'El indice debe contener un valor',
+  }),
+})
 
 /////////////////////////////////////////
 // HISTORIC PRICE CATEGORY SCHEMA
@@ -153,6 +172,10 @@ export const HistoricCategoryPriceSchema = z.object({
   price: z.number().min(0, { message: 'El valor no puede ser negativo' }),
   currency: z.string().default('ARS'),
 })
+
+const AmountIndexSchema = z
+  .object({ FCA: z.number(), FMR: z.number() })
+  .nullable()
 
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
@@ -165,6 +188,7 @@ export const TeamMemberCategorySchema = z.object({
   price: HistoricCategoryPriceSchema.array().min(1, {
     message: 'Configure un precio',
   }),
+  amountIndex: AmountIndexSchema, //Remove nullable
 })
 
 /////////////////////////////////////////
@@ -364,8 +388,16 @@ export const DurationSchema = z.object({
 
 export const IdentificationSchema = z.object({
   assignment: z.string().optional(),
+  courseId: z.string(),
   career: z.string().min(1, 'El campo no puede estar vacío'),
+  careerId: z
+    .string()
+    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
   sponsor: z.string().array(),
+  academicUnitIds: z
+    .string()
+    .array()
+    .min(1, 'Debe selecionar al menos una unidad academica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
   team: z
     .lazy(() =>
