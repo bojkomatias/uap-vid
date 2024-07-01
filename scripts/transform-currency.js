@@ -1,4 +1,5 @@
 import mongodb from 'mongodb'
+import { ObjectId } from 'mongodb'
 
 const MongoClient = mongodb.MongoClient
 const uri =
@@ -54,6 +55,24 @@ async function main() {
         },
       }
     })
+
+    for (const protocol of updatedProtocols) {
+      try {
+        const result = await protocols_collection.updateOne(
+          { _id: new ObjectId(protocol._id) },
+          {
+            $set: {
+              'sections.budget': protocol.sections.budget,
+            },
+          }
+        )
+        console.log(
+          `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+        )
+      } catch (error) {
+        console.error(`Error updating protocol ${protocol._id}:`, error)
+      }
+    }
 
     console.log(updatedProtocols[0].sections.budget[2].data[0].amountIndex)
   } catch (error) {
