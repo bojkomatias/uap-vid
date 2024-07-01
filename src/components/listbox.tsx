@@ -1,8 +1,20 @@
 'use client'
 
 import * as Headless from '@headlessui/react'
+import { cx } from '@utils/cx'
 import clsx from 'clsx'
 import { Fragment } from 'react'
+
+export type ListboxProps<T> = {
+  className?: string
+  placeholder?: React.ReactNode
+  autoFocus?: boolean
+  'aria-label'?: string
+  children?: React.ReactNode
+  onFocus?: React.FocusEventHandler<HTMLElement>
+  onBlur?: React.FocusEventHandler<HTMLElement>
+  'data-path'?: string
+} & Headless.ListboxProps<typeof Fragment, T>
 
 export function Listbox<T>({
   className,
@@ -10,22 +22,21 @@ export function Listbox<T>({
   autoFocus,
   'aria-label': ariaLabel,
   children: options,
+  onFocus,
+  onBlur,
+  'data-path': dataPath,
   ...props
-}: {
-  className?: string
-  placeholder?: React.ReactNode
-  autoFocus?: boolean
-  'aria-label'?: string
-  children?: React.ReactNode
-} & Omit<Headless.ListboxProps<typeof Fragment, T>, 'multiple'>) {
+}: ListboxProps<T>) {
   return (
-    <Headless.Listbox {...props} multiple={false}>
+    <Headless.Listbox {...props}>
       <Headless.ListboxButton
+        onFocus={onFocus}
+        onBlur={onBlur}
+        data-path={dataPath}
         autoFocus={autoFocus}
         data-slot="control"
         aria-label={ariaLabel}
-        className={clsx([
-          className,
+        className={cx([
           // Basic layout
           'group relative block w-full',
           // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
@@ -38,6 +49,7 @@ export function Listbox<T>({
           'after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-inset after:ring-transparent after:data-[focus]:ring-2 after:data-[focus]:ring-blue-500',
           // Disabled state
           'data-[disabled]:opacity-50 before:data-[disabled]:bg-gray-950/5 before:data-[disabled]:shadow-none',
+          className,
         ])}
       >
         <Headless.ListboxSelectedOption
@@ -52,11 +64,11 @@ export function Listbox<T>({
           }
           className={clsx([
             // Basic layout
-            'relative block w-full appearance-none rounded-lg py-[calc(theme(spacing[2.5])-1px)] sm:py-[calc(theme(spacing[1.5])-1px)]',
+            'relative flex w-full appearance-none flex-wrap rounded-lg py-[calc(theme(spacing[2.5])-1px)] sm:gap-[calc(theme(spacing.3)-1px)] sm:py-[calc(theme(spacing[1.5])-1px)]',
             // Set minimum height for when no value is selected
             'min-h-11 sm:min-h-9',
-            // Horizontal padding
-            'pl-[calc(theme(spacing[3.5])-1px)] pr-[calc(theme(spacing.7)-1px)] sm:pl-[calc(theme(spacing.3)-1px)]',
+            // Horizontal padding (Put the pl on childs to allow multiple)
+            'pl-[calc(theme(spacing[3.5])-1px)] pr-[calc(theme(spacing.7)-1px)] *:only:text-red-500 sm:pl-[calc(theme(spacing.3)-1px)]',
             // Typography
             'text-left text-base/6 text-gray-950 placeholder:text-gray-500 dark:text-white sm:text-sm/6 forced-colors:text-[CanvasText]',
             // Border
@@ -69,6 +81,7 @@ export function Listbox<T>({
             'group-data-[disabled]:border-gray-950/20 group-data-[disabled]:opacity-100 group-data-[disabled]:dark:border-white/15 group-data-[disabled]:dark:bg-white/[2.5%] dark:data-[hover]:group-data-[disabled]:border-white/15',
           ])}
         />
+
         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <svg
             className="size-5 stroke-gray-500 group-data-[disabled]:stroke-gray-600 dark:stroke-gray-400 sm:size-4 forced-colors:stroke-[CanvasText]"

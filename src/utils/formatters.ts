@@ -7,7 +7,8 @@ export const dateFormatter = new Intl.DateTimeFormat('es-AR', {
 export const relativeTimeFormatter = new Intl.RelativeTimeFormat('es-AR')
 
 export const currencyFormatter = new Intl.NumberFormat('es-AR', {
-  minimumFractionDigits: 2,
+  style: 'currency',
+  currency: 'ARS',
   maximumFractionDigits: 2,
 })
 

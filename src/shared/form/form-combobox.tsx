@@ -1,9 +1,9 @@
+import type { ComboboxProps, Option } from '@components/combobox'
+import { Combobox } from '@components/combobox'
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
-import { Input, InputGroup, type InputProps } from '@components/input'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
-import type { Icon } from 'tabler-icons-react'
 
-export function FormInput({
+export function FormCombobox({
   label,
   description,
   error,
@@ -13,17 +13,14 @@ export function FormInput({
 }: {
   label: string
   description?: string
-  icon?: Icon
+  options: Option[]
 } & GetInputPropsReturnType &
-  InputProps) {
+  ComboboxProps<Option>) {
   return (
     <Field disabled={disabled} className={className}>
       <Label>{label}</Label>
       <Description>{description}</Description>
-      <InputGroup>
-        {props.icon && <props.icon data-slot="icon" />}
-        <Input {...props} invalid={!!error} />
-      </InputGroup>
+      <Combobox invalid={!!error} {...props} />
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </Field>
   )

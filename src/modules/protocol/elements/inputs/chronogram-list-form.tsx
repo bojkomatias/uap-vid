@@ -1,8 +1,15 @@
-import Input from './input'
 import { Plus, Trash } from 'tabler-icons-react'
 import { useProtocolContext } from '@utils/createContext'
-import { Button } from '@elements/button'
-import { cx } from '@utils/cx'
+import { FormInput } from '@shared/form/form-input'
+import {
+  Description,
+  Field,
+  Fieldset,
+  Label,
+  Legend,
+} from '@components/fieldset'
+import { Text } from '@components/text'
+import { Button } from '@components/button'
 
 type LeafItemProps = { [key: string]: string | string[] | number }
 
@@ -33,63 +40,64 @@ export function ChronogramList() {
   const arraysOfData = preprocess(data, preprocessKey)
 
   return (
-    <div>
-      <div className="label text-center">cronograma de tareas</div>
-      <div className="space-y-3 rounded-xl border px-4 pb-2 pt-6">
-        {arraysOfData.map(({ key, array }, i) => (
-          <>
-            <label className="label text-sm text-gray-800">{key}</label>
+    <Fieldset>
+      <Legend>Cronograma de tareas</Legend>
+      <Text className="mb-2">
+        Cuadro de tareas átomicas por cada semestre de la investigación
+      </Text>
+      {arraysOfData.map(({ key, array }, i) => (
+        <Field key={i}>
+          <Label>{key}</Label>
+          <Description>Liste las tareas del {key}</Description>
+          {array.map((_, index) => (
+            <div key={`${i}.data` + index} className="flex gap-0.5">
+              <FormInput
+                className="grow"
+                label=""
+                {...form.getInputProps(
+                  `sections.duration.chronogram.${i}.data.${index}.task`
+                )}
+              />
 
-            {array.map((_, index) => (
-              <div
-                key={`${i}.data` + index}
-                id={`row-${i}.data.${index}`}
-                className="flex w-full items-start justify-around gap-2"
-              >
-                <div className="flex-grow">
-                  <Input
-                    path={`sections.duration.chronogram.${i}.data.${index}.task`}
-                    label={'Detalle'}
+              {index === 0 ?
+                <span />
+              : <Button plain className="mt-1 self-start">
+                  <Trash
+                    data-slot="icon"
+                    onClick={() =>
+                      form.removeListItem(
+                        `sections.duration.chronogram.${i}.data`,
+                        index
+                      )
+                    }
                   />
-                </div>
+                </Button>
+              }
+            </div>
+          ))}
 
-                <Trash
-                  onClick={() => {
-                    form.removeListItem(
-                      `sections.duration.chronogram.${i}.data`,
-                      index
-                    )
-                  }}
-                  className={cx(
-                    'mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90]',
-                    index === 0 && 'hidden'
-                  )}
-                />
-              </div>
-            ))}
-            <Button
-              onClick={() => {
-                form.insertListItem(
-                  `sections.duration.chronogram.${i}.data`,
-                  newLeafItemValue
-                )
+          <Button
+            plain
+            onClick={() => {
+              form.insertListItem(
+                `sections.duration.chronogram.${i}.data`,
+                newLeafItemValue
+              )
 
-                setTimeout(() => {
-                  document
-                    .getElementById(`row-${array.length}`)
-                    ?.getElementsByTagName('input')[0]
-                    .focus()
-                }, 10)
-              }}
-              intent="outline"
-              className="mx-auto w-full max-w-xs"
-            >
-              <p> Añadir otra fila </p>
-              <Plus className="h-4 text-gray-500" />
-            </Button>
-          </>
-        ))}
-      </div>
-    </div>
+              setTimeout(() => {
+                document
+                  .getElementById(`row-${array.length}`)
+                  ?.getElementsByTagName('input')[0]
+                  .focus()
+              }, 10)
+            }}
+            className="my-1"
+          >
+            <Plus data-slot="icon" />
+            Añadir otra tarea
+          </Button>
+        </Field>
+      ))}
+    </Fieldset>
   )
 }
