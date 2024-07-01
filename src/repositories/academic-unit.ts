@@ -3,6 +3,9 @@
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { AcademicUnit } from '@prisma/client'
+import { z } from 'zod'
+import { AcademicUnitSchema } from '@utils/zod'
 
 export const getAcademicUnitsTabs = cache(
   async () =>
@@ -160,13 +163,34 @@ export const getAcademicUnitsByUserId = async (id: string) => {
     return null
   }
 }
+
+export const upsertAcademicUnit = async (
+  academicUnit: z.infer<typeof AcademicUnitSchema>
+) => {
+  const { id, ...rest } = academicUnit
+  try {
+    if (!id)
+      return await prisma.academicUnit.create({
+        data: academicUnit,
+      })
+
+    return await prisma.academicUnit.update({ where: { id }, data: rest })
+  } catch (error) {
+    console.info(error)
+    return null
+  }
+}
+
 /**
  *
  * @param id
  * @param academicUnit can be any shape of academic Units (partials) only pass secretariesIds or only pass budgets works.
  * @returns
  */
-export const updateAcademicUnit = async (id: string, academicUnit: any) => {
+export const updateAcademicUnit = async (
+  id: string,
+  academicUnit: Omit<AcademicUnit, 'id'>
+) => {
   try {
     const unit = await prisma.academicUnit.update({
       where: {

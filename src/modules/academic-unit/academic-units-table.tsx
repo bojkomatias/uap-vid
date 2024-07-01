@@ -1,11 +1,20 @@
-/* eslint-disable react/jsx-no-undef */
 'use client'
+
 import type { AcademicUnit, User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
 import Currency from '@elements/currency'
-import AcademicUnitView from './academic-unit-view'
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownLabel,
+  DropdownMenu,
+} from '@components/dropdown'
+import { Dots, Edit, UserPlus } from 'tabler-icons-react'
+import { EditAcademicUnitFormDialog } from './edit-academic-unit-form-dialog'
+import { useState } from 'react'
 
 export default function AcademicUnitsTable({
   academicUnits,
@@ -16,17 +25,30 @@ export default function AcademicUnitsTable({
   secretaries: User[]
   totalRecords: number
 }) {
+  const [currentAcademicUnit, setCurrentAcademicUnit] = useState<
+    AcademicUnit | undefined
+  >()
+
   const columns: ColumnDef<AcademicUnit>[] = [
     {
       accessorKey: 'name',
       header: 'Unidad Académica',
-      enableHiding: false,
+      enableHiding: true,
+      enableSorting: true,
+    },
+    {
+      accessorKey: 'shortname',
+      header: 'Nombre corto',
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.shortname}</span>
+      ),
+      enableHiding: true,
       enableSorting: true,
     },
     {
       accessorKey: 'budgets',
       header: 'Presupuesto',
-      enableHiding: true,
+      enableHiding: false,
       enableSorting: false,
       cell: ({ row }) => (
         <>
@@ -48,33 +70,50 @@ export default function AcademicUnitsTable({
         </>
       ),
     },
-
     {
       accessorKey: 'actions',
-      header: 'Acciones',
+      header: '',
       cell: ({ row }) => (
-        <div className="flex items-center justify-between gap-1">
-          <AcademicUnitView
-            academicUnit={row.original}
-            secretaries={secretaries}
-          />
+        <div className="-mx-3 -my-1.5 sm:-mx-2.5">
+          <Dropdown>
+            <DropdownButton plain>
+              <Dots data-slot="icon" />
+            </DropdownButton>
+            <DropdownMenu anchor="bottom end">
+              <DropdownItem
+                onClick={() => {
+                  setCurrentAcademicUnit(row.original)
+                }}
+              >
+                Editar
+              </DropdownItem>
+              <DropdownItem>Actualizar presupuesto</DropdownItem>
+              <DropdownItem>Asignar secretarios</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       ),
-      enableHiding: true,
+      enableHiding: false,
       enableSorting: false,
     },
   ]
 
   return (
-    <TanStackTable
-      data={academicUnits}
-      columns={columns}
-      totalRecords={totalRecords}
-      initialVisibility={{
-        name: true,
-        secretariesIds: true,
-      }}
-      searchBarPlaceholder="Buscar por nombre de categoría"
-    />
+    <>
+      <TanStackTable
+        data={academicUnits}
+        columns={columns}
+        totalRecords={totalRecords}
+        initialVisibility={{
+          name: true,
+          secretariesIds: true,
+        }}
+        searchBarPlaceholder="Buscar por nombre de categoría"
+      />
+      <EditAcademicUnitFormDialog
+        academicUnit={currentAcademicUnit}
+        onClose={() => setCurrentAcademicUnit(undefined)}
+      />
+    </>
   )
 }
