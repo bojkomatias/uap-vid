@@ -14,7 +14,7 @@ import {
   PublicationForm,
 } from '@protocol/form-sections'
 import type { Protocol as ProtocolZod } from '@utils/zod'
-import { IdentificationSchema, ProtocolSchema } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -52,9 +52,9 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
   const form = useProtocol({
     initialValues:
-      // path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
-      //   JSON.parse(localStorage.getItem('temp-protocol')!)
-      protocol,
+      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+        JSON.parse(localStorage.getItem('temp-protocol')!)
+      : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
   })
@@ -159,7 +159,6 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          console.log(form.validateField('sections.identification'))
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
@@ -170,10 +169,10 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
             return form.validate()
           }
-          // typeof window !== 'undefined' ?
-          //   localStorage.removeItem('temp-protocol')
-          // : null
-          // upsertProtocol(form.values)
+          typeof window !== 'undefined' ?
+            localStorage.removeItem('temp-protocol')
+          : null
+          upsertProtocol(form.values)
         }}
       >
         <InfoTooltip>
@@ -199,7 +198,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
           initial={{ opacity: 0, y: -7 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border p-0.5"
+          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border border-black/5 p-0.5 dark:border-white/5"
         >
           <SectionButton
             path={'sections.identification'}
