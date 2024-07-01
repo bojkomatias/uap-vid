@@ -1,4 +1,4 @@
-import { PageHeading } from '@layout/page-heading'
+import { Heading } from '@components/heading'
 import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import { getTeamMemberById } from '@repositories/team-member'
 import {
@@ -21,23 +21,21 @@ export default async function Page({ params }: { params: { id: string } }) {
   const academicUnits = await getAcademicUnitsTabs()
 
   return (
-    <div className="w-full">
-      <div className="mx-auto max-w-3xl pt-5">
-        <PageHeading title={'Miembro de investigación'} />
-        <TeamMemberForm
+    <>
+      <Heading>Miembro de investigación</Heading>
+      <TeamMemberForm
+        member={member}
+        researchers={researchers}
+        academicUnits={academicUnits}
+      />
+      {member ?
+        <CategorizationForm
+          categories={categories}
+          obreroCategory={obreroCategory}
+          historicCategories={member.categories}
           member={member}
-          researchers={researchers}
-          academicUnits={academicUnits}
         />
-        {member ?
-          <CategorizationForm
-            categories={categories}
-            obreroCategory={obreroCategory}
-            historicCategories={member.categories}
-            member={member}
-          />
-        : null}
-      </div>
-    </div>
+      : null}
+    </>
   )
 }

@@ -8,7 +8,7 @@
     "lint": "next lint --fix"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.19",
+    "@headlessui/react": "^2.0.4",
     "@mantine/form": "^7.9.1",
     "@prisma/client": "^5.14.0",
     "@react-pdf/renderer": "^3.4.4",
@@ -24,10 +24,11 @@
     "@tiptap/starter-kit": "^2.4.0",
     "@types/nodemailer": "^6.4.15",
     "@types/react-csv": "^1.1.10",
+    "@tailwindcss/container-queries": "^0.1.1",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.1",
     "encoding": "^0.1.13",
-    "framer-motion": "^10.18.0",
+    "framer-motion": "^11.2.10",
     "mongodb": "^6.6.1",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
@@ -56,7 +57,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "prisma": "^5.14.0",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
     "zod-prisma-types": "^2.8.1"
   }

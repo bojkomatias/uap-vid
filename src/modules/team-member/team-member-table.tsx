@@ -1,10 +1,8 @@
 'use client'
 import type { Prisma } from '@prisma/client'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import Link from 'next/link'
-import { buttonStyle } from '@elements/button/styles'
 import { Check, Minus } from 'tabler-icons-react'
 import Currency from '@elements/currency'
 
@@ -93,20 +91,6 @@ export default function TeamMemberTable({
         header: 'Unidad Académica',
         enableSorting: true,
       },
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <Link
-            href={`/team-members/${row.original.id}`}
-            className={buttonStyle('secondary', 'xs')}
-          >
-            Ver
-          </Link>
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
     ],
     []
   )
@@ -125,6 +109,7 @@ export default function TeamMemberTable({
         totalRecords={totalRecords}
         initialVisibility={initialVisible}
         searchBarPlaceholder="Buscar por: Nombre, etc"
+        rowAsLinkPath="/team-members/"
       />
     </>
   )

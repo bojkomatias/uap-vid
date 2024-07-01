@@ -1,13 +1,13 @@
 'use client'
 
 import type { AcademicUnit, User } from '@prisma/client'
-import { Button } from '@elements/button'
 import { Badge } from '@elements/badge'
 import Currency from '@elements/currency'
 import { SecretaryMultipleSelect } from './secretary-multiple-select'
 import { AcademicUnitBudgetUpdate } from './academic-unit-budget-update'
 import CustomDrawer from '@elements/custom-drawer'
 import { useState } from 'react'
+import { BadgeButton } from '@components/badge'
 
 export default function AcademicUnitView({
   academicUnit,
@@ -83,15 +83,14 @@ export default function AcademicUnitView({
           </div>
         </section>
       </CustomDrawer>
-      <Button
+      <BadgeButton
         onClick={() => {
           setOpened(true)
         }}
-        intent="secondary"
-        size="xs"
+        color="teal"
       >
         Editar
-      </Button>
+      </BadgeButton>
     </>
   )
 }

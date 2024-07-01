@@ -68,7 +68,7 @@ export const getAcademicUnitById = async (id?: string) => {
 
 export const getAllAcademicUnits = cache(
   async ({
-    records = '5',
+    records = '10',
     page = '1',
     search,
     sort,

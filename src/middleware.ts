@@ -29,6 +29,10 @@ export default withAuth(
     }
 
     // It's includes(\'[x]'\) and not startsWith, to match /api/users and /users alike
+    if (req.nextUrl.pathname.includes('/indexes')) {
+      if (!canAccess(Access.INDEXES, token.user.role))
+        return NextResponse.redirect(new URL('/protocols', req.url))
+    }
 
     if (req.nextUrl.pathname.includes('/users')) {
       if (!canAccess(Access.USERS, token.user.role)) {

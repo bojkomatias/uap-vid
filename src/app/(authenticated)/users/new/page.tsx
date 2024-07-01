@@ -1,10 +1,10 @@
-import { PageHeading } from '@layout/page-heading'
+import { Heading } from '@components/heading'
 import UserForm from '@user/user-form'
 
 export default async function Page() {
   return (
     <>
-      <PageHeading title="Crear nuevo usuario" />
+      <Heading> Crear nuevo usuario</Heading>
       <UserForm />
     </>
   )

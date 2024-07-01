@@ -1,9 +1,8 @@
-import Link from 'next/link'
 import { getUsers } from '@repositories/user'
-import { PageHeading } from '@layout/page-heading'
 import { UserPlus } from 'tabler-icons-react'
 import UserTable from '@user/user-table'
-import { buttonStyle } from '@elements/button/styles'
+import { Heading } from '@components/heading'
+import { Button } from '@components/button'
 
 export default async function Page({
   searchParams,
@@ -14,13 +13,14 @@ export default async function Page({
 
   return (
     <>
-      <PageHeading title="Lista de usuarios" />
-      <div className="flex flex-row-reverse">
-        <Link href={'/users/new'} className={buttonStyle('secondary')}>
-          <UserPlus className="h-4 text-current" />
+      <div className="flex items-end">
+        <Heading>Lista de usuarios</Heading>
+        <Button href={'/users/new'}>
+          <UserPlus data-slot="icon" />
           Nuevo usuario
-        </Link>
+        </Button>
       </div>
+
       <UserTable users={users} totalRecords={totalRecords} />
     </>
   )

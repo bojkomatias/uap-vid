@@ -1,5 +1,5 @@
-/* eslint-disable react/no-unescaped-entities */
 'use client'
+
 import { Button } from '@elements/button'
 import { buttonStyle } from '@elements/button/styles'
 import CustomDrawer from '@elements/custom-drawer'
@@ -149,10 +149,10 @@ export function ProfileInfo({
             : <UserCircle width={48} height={48} />}
           </div>
         </div>
-        <p className="text-indigo-600 text-sm font-semibold leading-6">
+        <p className="text-sm font-semibold leading-6 text-indigo-600">
           {RolesDictionary[user.role]}
         </p>
-        <p className="text-indigo-600 text-sm font-semibold leading-6">
+        <p className="text-sm font-semibold leading-6 text-indigo-600">
           {user.email}
         </p>
       </div>

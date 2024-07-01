@@ -1,7 +1,7 @@
-import { PageHeading } from '@layout/page-heading'
-import Link from 'next/link'
 import Tabs from '@elements/tabs'
 import { getAcademicUnitsTabs } from '@repositories/academic-unit'
+import { Heading, Subheading } from '@components/heading'
+import { Text, TextLink } from '@components/text'
 
 export default async function AnualBudgetsLayout({
   children,
@@ -19,18 +19,17 @@ export default async function AnualBudgetsLayout({
 
   return (
     <>
-      <PageHeading title="Presupuestos anuales" />
-      <p className="ml-2 text-sm text-gray-500">
+      <Heading>Presupuestos anuales</Heading>
+      <Subheading>
         Lista de los presupuestos anuales de los distintos proyectos de
         investigación{' '}
-        <Link
+        <TextLink
           className="transition hover:underline"
           href="/protocols?page=1&filter=state&values=ACCEPTED"
         >
           aceptados
-        </Link>
-        .
-      </p>
+        </TextLink>
+      </Subheading>
       <Tabs tabs={tabs} />
       {children}
     </>

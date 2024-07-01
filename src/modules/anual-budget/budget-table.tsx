@@ -1,10 +1,9 @@
 'use client'
 import type { Prisma } from '@prisma/client'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { buttonStyle } from '@elements/button/styles'
 import { Badge } from '@elements/badge'
 import { dateFormatter } from '@utils/formatters'
 import { BudgetYearCombobox } from '@elements/years-combobox'
@@ -87,22 +86,6 @@ export default function AnualBudgetTable({
         header: 'Año',
         enableHiding: true,
       },
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        enableHiding: false,
-        enableSorting: false,
-        cell: ({ row }) => {
-          return (
-            <Link
-              className={buttonStyle('secondary', 'xs')}
-              href={`/anual-budgets/budget/${row.original.id}`}
-            >
-              Ver
-            </Link>
-          )
-        },
-      },
     ],
     []
   )
@@ -121,6 +104,7 @@ export default function AnualBudgetTable({
         initialVisibility={initialVisible}
         searchBarPlaceholder="Buscar por nombre de categoría"
         customFilterSlot2={yearFilter()}
+        rowAsLinkPath="/anual-bugdets/bugdet/"
       />
     </>
   )

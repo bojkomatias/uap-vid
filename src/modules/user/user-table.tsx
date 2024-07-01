@@ -2,7 +2,7 @@
 import type { Prisma } from '@prisma/client'
 import { RoleUpdater } from './elements/role-updater'
 import { DeleteUserButton } from './elements/delete-user-button'
-import TanStackTable from '@elements/tan-stack-table'
+import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'

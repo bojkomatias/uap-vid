@@ -1,4 +1,3 @@
-import { PageHeading } from '@layout/page-heading'
 import { canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
 import { type ReactNode } from 'react'
@@ -6,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { Action, ProtocolState } from '@prisma/client'
+import { Heading } from '@components/heading'
 
 async function Layout({
   params,
@@ -33,8 +33,8 @@ async function Layout({
       redirect('/protocols')
     return (
       <>
-        <PageHeading title={'Nuevo protocolo'} />
-        <div className="mx-auto w-full max-w-7xl">{children}</div>
+        <Heading>Nuevo protocolo</Heading>
+        {children}
       </>
     )
   }
@@ -43,7 +43,12 @@ async function Layout({
 
   return (
     <>
-      <PageHeading title={protocol.sections.identification.title} />
+      <Heading
+        className="truncate"
+        title={protocol.sections.identification.title}
+      >
+        {protocol.sections.identification.title}
+      </Heading>
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row">
         <div className="flex-grow">
           {metadata}
