@@ -56,13 +56,15 @@ async function main() {
       }
     })
 
+    console.log(updatedProtocols[0].sections.budget[2].data[0])
+
     for (const protocol of updatedProtocols) {
       try {
         const result = await protocols_collection.updateOne(
           { _id: new ObjectId(protocol._id) },
           {
             $set: {
-              'sections.budget': protocol.sections.budget,
+              'sections.budget.expenses': protocol.sections.budget,
             },
           }
         )
@@ -73,8 +75,6 @@ async function main() {
         console.error(`Error updating protocol ${protocol._id}:`, error)
       }
     }
-
-    console.log(updatedProtocols[0].sections.budget[2].data[0].amountIndex)
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
