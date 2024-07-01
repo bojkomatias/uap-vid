@@ -6,13 +6,12 @@ const uri =
   'mongodb+srv://admin:d8oZb8WbVYtiKUY5@research.kcnnb.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(uri)
 
-/**This script adds the amountIndex field in the Expenses array, inside the Budget of a Protocol.
- -Needs a little refactoring.
- */
-
 function getCollection(collection, db = 'develop') {
   return client.db(db).collection(collection)
 }
+/**This script adds the amountIndex field in the Expenses array, inside the Budget of a Protocol.
+ -Needs a little refactoring.
+ */
 
 async function main() {
   try {
