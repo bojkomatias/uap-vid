@@ -13,7 +13,6 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import type { Protocol as ProtocolZod } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
@@ -28,6 +27,7 @@ import {
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
+import type { z } from 'zod'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -40,7 +40,11 @@ const sectionMapper: { [key: number]: JSX.Element } = {
   7: <BibliographyForm />,
 }
 
-export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
+export default function ProtocolForm({
+  protocol,
+}: {
+  protocol: z.infer<typeof ProtocolSchema>
+}) {
   const router = useRouter()
   const path = usePathname()
   const [section, setSection] = useState(path?.split('/')[3])
@@ -66,7 +70,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
   }, [path, router])
 
   const upsertProtocol = useCallback(
-    async (protocol: ProtocolZod) => {
+    async (protocol: z.infer<typeof ProtocolSchema>) => {
       // flow for protocols that don't have ID
       if (!protocol.id) {
         const res = await fetch(`/api/protocol`, {

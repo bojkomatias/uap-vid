@@ -1,11 +1,12 @@
 'use client'
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/select'
-import Input from '@protocol/elements/inputs/input'
+import Select from '@protocol/elements/inputs/protocol-combobox'
+import Input from '@protocol/elements/inputs/protocol-input'
 import SectionTitle from '@protocol/elements/form-section-title'
 import InfoTooltip from '@protocol/elements/tooltip'
 import dynamic from 'next/dynamic'
+import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
 const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function DescriptionForm() {
@@ -35,7 +36,10 @@ export function DescriptionForm() {
           label="línea de investigación"
           options={lines(form.values.sections.description.discipline) ?? []}
         />
-        <Textarea path={path + 'technical'} label="Resumen técnico" />
+        <FormTitapTextarea
+          {...form.getInputProps(path + 'technical')}
+          label="Resumen técnico"
+        />
         <Input path={path + 'words'} label="palabras clave" />
         <FieldInfo />
         <Select

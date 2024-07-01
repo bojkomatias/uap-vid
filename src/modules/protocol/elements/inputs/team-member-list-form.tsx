@@ -1,7 +1,7 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
 import React, { useEffect, useState } from 'react'
-import Select from './select'
+import Select from './protocol-combobox'
 import NumberInput from './number-input'
 import { Check, Plus, Selector, Trash, X } from 'tabler-icons-react'
 import { Button } from '@elements/button'

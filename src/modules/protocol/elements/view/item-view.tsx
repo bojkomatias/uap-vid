@@ -2,12 +2,12 @@ import React from 'react'
 import { EmptyStateItem } from './empty-state-item'
 interface ShortDataProps {
   title: string
-  value: string
+  value: string | null
 }
 const ItemView = ({ title, value }: ShortDataProps) => {
   return (
     <div className="sm:col-span-1">
-      {title === 'Materia' && value.length <= 0 ? null : (
+      {title === 'Materia' && value && value.length <= 0 ? null : (
         <>
           <dt className="text-sm font-medium text-gray-500">{title}</dt>
           {value ?

@@ -3,7 +3,7 @@ import { cx } from '@utils/cx'
 import dynamic from 'next/dynamic'
 const Tiptap = dynamic(() => import('@elements/tiptap'))
 
-const Textarea = ({ path, label }: { path: string; label: string }) => {
+export const Textarea = ({ path, label }: { path: string; label: string }) => {
   const form = useProtocolContext()
 
   return (

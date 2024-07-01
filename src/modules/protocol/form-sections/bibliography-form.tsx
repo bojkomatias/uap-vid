@@ -5,7 +5,7 @@ import { useProtocolContext } from '@utils/createContext'
 import NumberInput from '@protocol/elements/inputs/number-input'
 import { Plus, Trash } from 'tabler-icons-react'
 import { Button } from '@elements/button'
-import Input from '@protocol/elements/inputs/input'
+import Input from '@protocol/elements/inputs/protocol-input'
 
 export function BibliographyForm() {
   const form = useProtocolContext()
