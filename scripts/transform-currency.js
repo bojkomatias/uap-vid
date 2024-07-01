@@ -1,71 +1,61 @@
 import mongodb from 'mongodb'
-import { ObjectId } from 'mongodb'
 
 const MongoClient = mongodb.MongoClient
 const uri =
   'mongodb+srv://admin:d8oZb8WbVYtiKUY5@research.kcnnb.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(uri)
 
-/**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
+/**This script adds the amountIndex field in the Expenses array, inside the Budget of a Protocol.
  -Needs a little refactoring.
  */
+
+function getCollection(collection, db = 'develop') {
+  return client.db(db).collection(collection)
+}
+
 async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to server')
+    console.log('Connected successfully to MongoDB')
 
-    const acCollection = client.db('develop').collection('AcademicUnit')
-    const academic_units = await acCollection.find().toArray()
-    const acs_dictionary = academic_units.reduce((acc, ac) => {
-      acc[ac.shortname] = ac._id
-      return acc
-    }, {})
+    const indexes_collection = getCollection('Index')
+    const indexes = await indexes_collection.find().toArray()
+    const indexes_latest_values = indexes.map((idx) => {
+      return { unit: idx.unit, latest_value: idx.values.at(-1) }
+    })
 
-    const protocolCollection = client.db('develop').collection('Protocol')
-    const protocols = await protocolCollection.find().toArray()
+    const latest_fca_price = indexes_latest_values.find((i) => i.unit === 'FCA')
+      .latest_value.price
+    const latest_fmr_price = indexes_latest_values.find((i) => i.unit === 'FMR')
+      .latest_value.price
 
-    const protocolsForMongo = protocols.map((p) => {
+    const protocols_collection = getCollection('Protocol')
+    const protocols = await protocols_collection.find().toArray()
+
+    const updatedProtocols = protocols.map((protocol) => {
       return {
-        ...p,
+        ...protocol,
         sections: {
-          ...p.sections,
-          identification: {
-            ...p.sections.identification,
-            academicUnitIds: p.sections.identification.sponsor
-              .map((s) => {
-                const shortname = s.split('-')[1]?.trim()
-                return acs_dictionary[shortname] ?
-                    acs_dictionary[shortname]
-                  : null
-              })
-              .filter((id) => id !== null),
-          },
+          ...protocol.sections,
+          budget: protocol.sections.budget.expenses.map((expense) => {
+            return {
+              ...expense,
+              data: expense.data.map((data) => {
+                return {
+                  ...data,
+                  amountIndex: {
+                    FCA: data.amount / latest_fca_price,
+                    FMR: data.amount / latest_fmr_price,
+                  },
+                }
+              }),
+            }
+          }),
         },
       }
     })
 
-    console.log('Prepared protocols for update:', protocolsForMongo.length)
-
-    for (const p of protocolsForMongo) {
-      try {
-        const result = await protocolCollection.updateOne(
-          { _id: new ObjectId(p._id) },
-          {
-            $set: {
-              'sections.identification.academicUnitIds':
-                p.sections.identification.academicUnitIds,
-            },
-          }
-        )
-        console.log(
-          `Updated protocol ${p._id}: ${result.modifiedCount} document modified`
-        )
-      } catch (error) {
-        console.error(`Error updating protocol ${p._id}:`, error)
-      }
-    }
-
-    console.log('Academic Units Dictionary:', acs_dictionary)
+    console.log(updatedProtocols[0].sections.budget[2].data[0].amountIndex)
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
