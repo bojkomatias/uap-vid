@@ -396,6 +396,7 @@ const objective = [
   'Educación',
   'Cultura, recreación, religión y medios de comunicación',
   'Estructuras, procesos y sistemas políticos y sociales',
+  'Producción general de conocimiento'
 ]
 const type = [
   'Investigación básica',
