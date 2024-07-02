@@ -2,6 +2,7 @@ import { Heading } from '@components/heading'
 import { getAllAcademicUnits } from '@repositories/academic-unit'
 import { getAllSecretaries } from '@repositories/user'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
+import { NewAcademicUnitFormDialog } from 'modules/academic-unit/new-academic-unit-form-dialog'
 
 export default async function Page({
   searchParams,
@@ -14,7 +15,10 @@ export default async function Page({
 
   return (
     <>
-      <Heading>Unidades Académicas</Heading>
+      <div className="flex items-end">
+        <Heading>Unidades Académicas</Heading>
+        <NewAcademicUnitFormDialog />
+      </div>
 
       {academicUnits && academicUnits.length > 0 ?
         <AcademicUnitsTable

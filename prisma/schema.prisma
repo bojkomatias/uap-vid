@@ -20,10 +20,10 @@ model AcademicUnit {
 }
 
 type AcademicUnitBudget {
-  amount      Float /// @deprecated use `amountIndex` instead
+  amount      Float? /// @deprecated use `amountIndex` instead
   from        DateTime
   to          DateTime?
-  amountIndex AmountIndex?
+  amountIndex AmountIndex
 }
 
 model Convocatory {

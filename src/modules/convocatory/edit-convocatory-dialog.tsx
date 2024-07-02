@@ -3,7 +3,7 @@
 import type { Convocatory } from '@prisma/client'
 import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
 import { useState } from 'react'
-import { Badge } from 'tabler-icons-react'
+import { Badge } from '@components/badge'
 import { ConvocatoryForm } from './convocatory-form'
 import { useRouter } from 'next/navigation'
 
