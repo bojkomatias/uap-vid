@@ -9,7 +9,6 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@components/dialog'
-import { Fieldset, FormActions } from '@components/fieldset'
 import {
   Table,
   TableBody,
@@ -21,10 +20,7 @@ import {
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnitBudget } from '@prisma/client'
-import {
-  updateAcademicUnit,
-  updateAcademicUnitBudget,
-} from '@repositories/academic-unit'
+import { updateAcademicUnitBudget } from '@repositories/academic-unit'
 import { FormButton } from '@shared/form/form-button'
 import { FormInput } from '@shared/form/form-input'
 import { currencyFormatter, dateFormatter } from '@utils/formatters'

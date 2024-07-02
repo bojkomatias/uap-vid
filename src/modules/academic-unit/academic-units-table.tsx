@@ -1,10 +1,7 @@
 'use client'
 
-import {
-  AcademicUnitBudget,
-  type AcademicUnit,
-  type User,
-} from '@prisma/client'
+import type { AcademicUnitBudget } from '@prisma/client'
+import { type AcademicUnit, type User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
@@ -13,10 +10,9 @@ import {
   Dropdown,
   DropdownButton,
   DropdownItem,
-  DropdownLabel,
   DropdownMenu,
 } from '@components/dropdown'
-import { Dots, Edit, UserPlus } from 'tabler-icons-react'
+import { Dots } from 'tabler-icons-react'
 import { EditAcademicUnitFormDialog } from './edit-academic-unit-form-dialog'
 import { useState } from 'react'
 import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-dialog'
