@@ -19,11 +19,9 @@ import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-di
 
 export default function AcademicUnitsTable({
   academicUnits,
-  secretaries,
   totalRecords,
 }: {
   academicUnits: AcademicUnit[]
-  secretaries: User[]
   totalRecords: number
 }) {
   // Controls the Academic Unit modal
@@ -108,7 +106,9 @@ export default function AcademicUnitsTable({
               >
                 Actualizar presupuesto
               </DropdownItem>
-              <DropdownItem>Asignar secretarios</DropdownItem>
+              <DropdownItem href={`/academic-units/edit/${row.original.id}`}>
+                Asignar secretarios
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>

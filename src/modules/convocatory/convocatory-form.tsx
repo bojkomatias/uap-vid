@@ -64,10 +64,9 @@ export function ConvocatoryForm({
         // @ts-ignore --Overriding values
         (values) => submitConvocatory(values)
       )}
-      className="@container"
     >
       <Fieldset>
-        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+        <FieldGroup>
           <FormInput
             label="Nombre"
             description="Nombre de la convocatoria"

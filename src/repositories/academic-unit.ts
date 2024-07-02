@@ -69,6 +69,20 @@ export const getAcademicUnitById = async (id?: string) => {
   }
 }
 
+export const getAcademicUnitWithSecretariesById = async (id: string) => {
+  return await prisma.academicUnit.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      shortname: true,
+      secretaries: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+  })
+}
+
 export const getAllAcademicUnits = cache(
   async ({
     records = '10',
