@@ -1,0 +1,399 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model AcademicUnit {
+  id                          String               @id @default(auto()) @map("_id") @db.ObjectId
+  name                        String
+  shortname                   String
+  secretaries                 User[]               @relation(fields: [secretariesIds], references: [id])
+  secretariesIds              String[]             @db.ObjectId
+  budgets                     AcademicUnitBudget[]
+  AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
+  academicUnitAnualBudgetsIds String[]             @db.ObjectId
+  TeamMembers                 TeamMember[]
+}
+
+type AcademicUnitBudget {
+  amount      Float /// @deprecated use `amountIndex` instead
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex?
+}
+
+model Convocatory {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime   @default(now())
+  from      DateTime   @db.Date
+  to        DateTime   @db.Date
+  year      Int
+  name      String
+  protocols Protocol[]
+}
+
+model Logs {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime @default(now())
+  message    String
+  protocol   Protocol @relation(fields: [protocolId], references: [id])
+  protocolId String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @db.ObjectId
+}
+
+model Protocol {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  protocolNumber String?
+  createdAt      DateTime?        @default(now()) @db.Date
+  researcherId   String           @db.ObjectId
+  researcher     User             @relation(fields: [researcherId], references: [id])
+  state          ProtocolState    @default(DRAFT)
+  reviews        Review[]
+  sections       ProtocolSections
+  convocatory    Convocatory      @relation(fields: [convocatoryId], references: [id])
+  convocatoryId  String           @db.ObjectId
+  anualBudgets   AnualBudget[]
+  anualBudgetIds String[]
+  logs           Logs[]
+}
+
+model User {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  email           String         @unique
+  lastLogin       DateTime?      @db.Date
+  name            String
+  password        String?
+  image           String?
+  role            Role           @default(RESEARCHER)
+  Review          Review[]
+  AcademicUnits   AcademicUnit[] @relation(fields: [AcademicUnitIds], references: [id])
+  AcademicUnitIds String[]       @db.ObjectId
+  protocols       Protocol[]
+  memberDetails   TeamMember?
+  logs            Logs[]
+}
+
+model TeamMember {
+  id                    String                       @id @default(auto()) @map("_id") @db.ObjectId
+  user                  User?                        @relation(fields: [userId], references: [id])
+  userId                String?                      @unique @db.ObjectId
+  name                  String
+  categories            HistoricTeamMemberCategory[]
+  AnualBudgetTeamMember AnualBudgetTeamMember[]
+  AcademicUnit          AcademicUnit?                @relation(fields: [academicUnitId], references: [id])
+  academicUnitId        String?                      @db.ObjectId
+}
+
+model HistoricTeamMemberCategory {
+  id           String             @id @default(auto()) @map("_id") @db.ObjectId
+  teamMember   TeamMember         @relation(fields: [teamMemberId], references: [id])
+  teamMemberId String             @db.ObjectId
+  category     TeamMemberCategory @relation(fields: [categoryId], references: [id])
+  categoryId   String             @db.ObjectId
+  pointsObrero Int?
+  from         DateTime
+  to           DateTime?
+}
+
+model TeamMemberCategory {
+  id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
+  name                       String                       @unique
+  state                      Boolean?
+  price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
+  HistoricTeamMemberCategory HistoricTeamMemberCategory[]
+  amountIndex                AmountIndex? //FCA or FMR
+}
+
+/// @deprecated this won't be needed after indexing the whole app.
+type HistoricCategoryPrice {
+  from     DateTime
+  to       DateTime?
+  price    Float
+  currency String    @default("ARS")
+}
+
+model Review {
+  id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @default(now())
+  type       ReviewType
+  questions  ReviewQuestion[]
+  revised    Boolean          @default(false)
+  verdict    ReviewVerdict    @default(NOT_REVIEWED)
+  reviewerId String           @db.ObjectId
+  reviewer   User             @relation(fields: [reviewerId], references: [id])
+  protocolId String           @db.ObjectId
+  protocol   Protocol         @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+}
+
+model AnualBudget {
+  id                String                  @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @default(now())
+  state             AnualBudgetState        @default(PENDING)
+  budgetItems       AnualBudgetItem[]
+  budgetTeamMembers AnualBudgetTeamMember[]
+  year              Int
+  protocolId        String                  @db.ObjectId
+  protocol          Protocol                @relation(fields: [protocolId], references: [id])
+  AcademicUnits     AcademicUnit[]          @relation(fields: [academicUnitsIds], references: [id])
+  academicUnitsIds  String[]                @db.ObjectId
+}
+
+type AnualBudgetItem {
+  type           String
+  detail         String
+  amount         Float
+  executions     Execution[]
+  remaining      Float
+  amountIndex    AmountIndex?
+  remainingIndex AmountIndex?
+}
+
+type AmountIndex {
+  FCA Float
+  FMR Float
+}
+
+model AnualBudgetTeamMember {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  teamMemberId   String       @db.ObjectId
+  teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
+  memberRole     String
+  hours          Float
+  remainingHours Float
+  executions     Execution[]
+  AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
+  anualBudgetId  String?      @db.ObjectId
+}
+
+model Index {
+  id     String          @id @default(auto()) @map("_id") @db.ObjectId
+  unit   String
+  values HistoricIndex[]
+}
+
+model Career {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  active Boolean  @default(true)
+  Course Course[]
+}
+
+model Course {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  active   Boolean @default(true)
+  career   Career  @relation(fields: [careerId], references: [id])
+  careerId String  @db.ObjectId
+}
+
+type HistoricIndex {
+  from  DateTime
+  to    DateTime?
+  price Float
+}
+
+type Execution {
+  amount         Float
+  date           DateTime
+  academicUnitId String
+}
+
+type ReviewQuestion {
+  id       String
+  approved Boolean
+  comment  String?
+}
+
+type ProtocolSections {
+  bibliography   ProtocolSectionsBibliography
+  budget         ProtocolSectionsBudget
+  description    ProtocolSectionsDescription
+  duration       ProtocolSectionsDuration
+  identification ProtocolSectionsIdentification
+  introduction   ProtocolSectionsIntroduction
+  methodology    ProtocolSectionsMethodology
+  publication    ProtocolSectionsPublication
+}
+
+type ProtocolSectionsBibliography {
+  chart ProtocolSectionsBibliographyChart[]
+}
+
+type ProtocolSectionsBibliographyChart {
+  author String
+  title  String
+  year   Int
+}
+
+type ProtocolSectionsBudget {
+  expenses ProtocolSectionsBudgetExpenses[]
+}
+
+type ProtocolSectionsBudgetExpenses {
+  type String
+  data ProtocolSectionsBudgetExpensesData[]
+}
+
+type ProtocolSectionsBudgetExpensesData {
+  amount      Float /// @deprecated use `amountIndex` instead
+  amountIndex AmountIndex?
+  detail      String
+  year        String
+}
+
+type ProtocolSectionsDescription {
+  discipline String
+  field      String
+  line       String
+  technical  String
+  objective  String
+  type       String
+  words      String
+}
+
+type ProtocolSectionsDuration {
+  chronogram ProtocolSectionsDurationChronogram[]
+  duration   String
+  modality   String
+}
+
+type ProtocolSectionsDurationChronogram {
+  semester String
+  data     ProtocolSectionsDurationChronogramData[]
+}
+
+type ProtocolSectionsDurationChronogramData {
+  task String
+}
+
+type ProtocolSectionsIdentification {
+  assignment      String? /// @deprecated use courseId instead
+  courseId        String?                              @db.ObjectId
+  career          String? /// @deprecated use careerId instead
+  careerId        String?                              @db.ObjectId
+  sponsor         String[] /// @deprecated use academicUnitIds instead
+  academicUnitIds String[]                             @db.ObjectId
+  team            ProtocolSectionsIdentificationTeam[]
+  title           String
+}
+
+type ProtocolSectionsIdentificationTeam {
+  hours         Float
+  last_name     String? /// @deprecated use relation teamMemberId instead
+  name          String? /// @deprecated use relation teamMemberId instead
+  workingMonths Int?
+  role          String
+  teamMemberId  String? @db.ObjectId
+}
+
+type ProtocolSectionsIntroduction {
+  justification String
+  objectives    String
+  problem       String
+  state         String
+}
+
+type ProtocolSectionsMethodology {
+  analysis        String?
+  design          String?
+  detail          String?
+  participants    String?
+  place           String?
+  type            String
+  humanAnimalOrDb Boolean?
+  procedures      String?
+  instruments     String?
+  considerations  String?
+}
+
+type ProtocolSectionsPublication {
+  title  String
+  result String
+}
+
+enum ReviewType {
+  METHODOLOGICAL
+  SCIENTIFIC_INTERNAL
+  SCIENTIFIC_EXTERNAL
+  SCIENTIFIC_THIRD
+}
+
+enum ReviewVerdict {
+  APPROVED
+  REJECTED
+  APPROVED_WITH_CHANGES
+  NOT_REVIEWED
+}
+
+enum Role {
+  RESEARCHER
+  SECRETARY
+  METHODOLOGIST
+  SCIENTIST
+  ADMIN
+}
+
+enum ProtocolState {
+  NOT_CREATED
+  DRAFT
+  PUBLISHED
+  METHODOLOGICAL_EVALUATION
+  SCIENTIFIC_EVALUATION
+  ACCEPTED
+  ON_GOING
+  DELETED
+  DISCONTINUED
+  FINISHED
+}
+
+enum AnualBudgetState {
+  PENDING
+  APPROVED
+  INTERRUPTED
+  REJECTED
+}
+
+// This is a Dummy modal to support exporting the Action to types
+// In the future we might change roles
+model Metadata {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  action Action
+  access Access // I believe Acces should be actions as well...
+}
+
+enum Action {
+  CREATE
+  EDIT
+  EDIT_BY_OWNER
+  PUBLISH
+  ASSIGN_TO_METHODOLOGIST
+  ASSIGN_TO_SCIENTIFIC
+  REVIEW
+  ACCEPT //This action is made by the secretary. Accept the protocol to be evalualuated by the VID committee
+  APPROVE //This approval is made by the admin and approve the protocol and mark it as ON_GOING
+  DISCONTINUE
+  FINISH
+  DELETE
+  GENERATE_ANUAL_BUDGET
+  VIEW_ANUAL_BUDGET
+}
+
+enum Access {
+  PROTOCOLS
+  USERS
+  EVALUATORS
+  REVIEWS
+  CONVOCATORIES
+  ACADEMIC_UNITS
+  TEAM_MEMBERS
+  MEMBER_CATEGORIES
+  ANUAL_BUDGETS
+  INDEXES
+}
