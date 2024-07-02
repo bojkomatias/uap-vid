@@ -89,20 +89,32 @@ export const getCareerById = cache(async (id: string) => {
 export const upsertCareer = cache(
   async (data: z.infer<typeof CareerSchema>) => {
     const { id, courses, ...career } = data
-    courses.map(async (c) => {
+    const courses_upsert = courses.map(async (c) => {
       console.log('Creating course: ', c.trim(), c.length)
       //If to catch extra commas added by mistake
       if (c.length > 0) {
-        return await prisma.course.create({
-          data: {
+        // return await prisma.course.create({
+        //   data: {
+        //     name: c.replaceAll(`"`, '').trim(),
+        //     active: true,
+        //     careerId: id!,
+        //   },
+        // })
+        return await prisma.course.upsert({
+          where: {
+            name: c,
+          },
+          create: {
             name: c.replaceAll(`"`, '').trim(),
             active: true,
             careerId: id!,
           },
+          //Don't pass anything since it won't update anything here
+          update: {},
         })
       }
     })
-
+    console.log(courses_upsert)
     try {
       if (!id) {
         return await prisma.career.create({
