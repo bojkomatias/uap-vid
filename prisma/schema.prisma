@@ -280,7 +280,7 @@ type ProtocolSectionsIdentification {
   assignment      String? /// @deprecated use courseId instead
   courseId        String?                              @db.ObjectId
   career          String? /// @deprecated use careerId instead
-  careerId        String?                              @db.ObjectId
+  careerId        String                               @db.ObjectId
   sponsor         String[] /// @deprecated use academicUnitIds instead
   academicUnitIds String[]                             @db.ObjectId
   team            ProtocolSectionsIdentificationTeam[]

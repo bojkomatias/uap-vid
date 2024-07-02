@@ -124,9 +124,6 @@ export const ProtocolSchema = z.object({
   convocatoryId: z.string(),
 })
 
-// .optional() to export type to create a Form (from new object, has no assigned Id yet)
-export type Protocol = z.infer<typeof ProtocolSchema>
-
 /////////////////////////////////////////
 // REVIEWS SCHEMA
 /////////////////////////////////////////
@@ -299,8 +296,6 @@ export const SectionsSchema = z
     }
   )
 
-export type Sections = z.infer<typeof SectionsSchema>
-
 /////////////////////////////////////////
 // PROTOCOL SECTIONS BIBLIOGRAPHY SCHEMA
 /////////////////////////////////////////
@@ -401,9 +396,9 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-  assignment: z.string().optional(),
-  courseId: z.string(),
-  career: z.string().min(1, 'El campo no puede estar vacío'),
+  assignment: z.string().nullable().optional(),
+  courseId: z.string().nullable().optional(),
+  career: z.string().nullable(), /// @deprecated
   careerId: z
     .string()
     .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
