@@ -200,6 +200,16 @@ export const TeamMemberCategorySchema = z.object({
 })
 
 /////////////////////////////////////////
+// ACADEMIC UNIT BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitBudget = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  amountIndex: AmountIndexSchema,
+})
+
+/////////////////////////////////////////
 // HISTORIC TEAM MEMBER CATEGORY SCHEMA
 /////////////////////////////////////////
 export const HistoricTeamMemberCategorySchema = z.object({

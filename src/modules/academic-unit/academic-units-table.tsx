@@ -1,6 +1,10 @@
 'use client'
 
-import type { AcademicUnit, User } from '@prisma/client'
+import {
+  AcademicUnitBudget,
+  type AcademicUnit,
+  type User,
+} from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
@@ -15,6 +19,7 @@ import {
 import { Dots, Edit, UserPlus } from 'tabler-icons-react'
 import { EditAcademicUnitFormDialog } from './edit-academic-unit-form-dialog'
 import { useState } from 'react'
+import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-dialog'
 
 export default function AcademicUnitsTable({
   academicUnits,
@@ -25,9 +30,19 @@ export default function AcademicUnitsTable({
   secretaries: User[]
   totalRecords: number
 }) {
+  // Controls the Academic Unit modal
   const [currentAcademicUnit, setCurrentAcademicUnit] = useState<
     AcademicUnit | undefined
   >()
+
+  // Controls budget modal
+  const [currenctAcademicUnitBudgets, setCurrentAcademicUnitBudgets] = useState<
+    | {
+        academicUnitId: string
+        academicUnitBudgets: AcademicUnitBudget[]
+      }
+    | undefined
+  >(undefined)
 
   const columns: ColumnDef<AcademicUnit>[] = [
     {
@@ -87,7 +102,16 @@ export default function AcademicUnitsTable({
               >
                 Editar
               </DropdownItem>
-              <DropdownItem>Actualizar presupuesto</DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  setCurrentAcademicUnitBudgets({
+                    academicUnitId: row.original.id,
+                    academicUnitBudgets: row.original.budgets.reverse(),
+                  })
+                }}
+              >
+                Actualizar presupuesto
+              </DropdownItem>
               <DropdownItem>Asignar secretarios</DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -113,6 +137,10 @@ export default function AcademicUnitsTable({
       <EditAcademicUnitFormDialog
         academicUnit={currentAcademicUnit}
         onClose={() => setCurrentAcademicUnit(undefined)}
+      />
+      <UpdateAcademicUnitBudgetDialog
+        {...currenctAcademicUnitBudgets}
+        onClose={() => setCurrentAcademicUnitBudgets(undefined)}
       />
     </>
   )

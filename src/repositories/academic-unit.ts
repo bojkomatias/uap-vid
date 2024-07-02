@@ -181,6 +181,61 @@ export const upsertAcademicUnit = async (
   }
 }
 
+export const updateAcademicUnitBudget = async (
+  id: string,
+  newValue: number
+) => {
+  try {
+    // Pull values
+    const [FCAValues, FMRValues] = await prisma.$transaction([
+      prisma.index.findFirstOrThrow({
+        where: { unit: 'FCA' },
+        select: { values: true },
+      }),
+      prisma.index.findFirstOrThrow({
+        where: { unit: 'FMR' },
+        select: { values: true },
+      }),
+    ])
+
+    const [currentFCA, currentFMR] = [
+      FCAValues.values.at(-1)?.price,
+      FMRValues.values.at(-1)?.price,
+    ]
+
+    if (!currentFCA || !currentFMR)
+      throw Error('There are no FCA / FMR indexes')
+
+    // Get the current budgets
+    const { budgets } = await prisma.academicUnit.findFirstOrThrow({
+      where: { id },
+      select: { budgets: true },
+    })
+
+    if (budgets.length > 0) {
+      // If has budget, end the period of the last one
+      budgets.at(-1)!.to = new Date()
+    }
+    // Append the new one
+    budgets.push({
+      from: new Date(),
+      to: null,
+      amount: null,
+      amountIndex: { FCA: newValue / currentFCA, FMR: newValue / currentFMR },
+    })
+    // update the array in the db
+    const result = await prisma.academicUnit.update({
+      where: { id },
+      data: { budgets },
+    })
+
+    return result
+  } catch (error) {
+    console.info(error)
+    return null
+  }
+}
+
 /**
  *
  * @param id
