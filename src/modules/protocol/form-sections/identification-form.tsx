@@ -35,7 +35,7 @@ export function IdentificationForm() {
         <Select
           path={path + 'assignment'}
           label="materia (solo en caso de PIC)"
-          options={assignments(form.values.sections.identification.career)}
+          options={assignments(form.values.sections.identification.career!)}
         />
         <TeamInfo />
         <TeamMemberListForm />
