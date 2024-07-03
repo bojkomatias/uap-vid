@@ -89,44 +89,58 @@ export const getCareerById = cache(async (id: string) => {
 export const upsertCareer = cache(
   async (data: z.infer<typeof CareerSchema>) => {
     const { id, courses, ...career } = data
-    const courses_upsert = courses.map(async (c) => {
-      console.log('Creating course: ', c.trim(), c.length)
-      //If to catch extra commas added by mistake
-      if (c.length > 0) {
-        // return await prisma.course.create({
-        //   data: {
-        //     name: c.replaceAll(`"`, '').trim(),
-        //     active: true,
-        //     careerId: id!,
-        //   },
-        // })
-        return await prisma.course.upsert({
-          where: {
-            name: c,
-          },
-          create: {
-            name: c.replaceAll(`"`, '').trim(),
-            active: true,
-            careerId: id!,
-          },
-          //Don't pass anything since it won't update anything here
-          update: {},
-        })
-      }
-    })
-    console.log(courses_upsert)
+
     try {
+      //If it's a new career, create it and return.
       if (!id) {
         return await prisma.career.create({
           data: { name: career.name, active: career.active },
         })
       }
+
+      //Handle courses bulk deletion
+      const courses_from_career = prisma.course.findMany({
+        where: { careerId: data.id },
+      })
+      const courses_to_delete = (await courses_from_career).filter(
+        (course) => !data.courses.includes(course.name)
+      )
+
+      courses_to_delete.map(async (c) => {
+        const deleted_course = await prisma.course.delete({
+          where: {
+            id: c.id,
+          },
+          //Don't pass anything since it won't update anything here
+          // data: {
+          //   active: false,
+          // },
+        })
+      })
+
+      //Handle bulk creation of courses
+      courses?.map(async (c) => {
+        //If to catch empty elements caused by extra commas added by mistake
+        if (c.length > 0) {
+          const created_course = await prisma.course.upsert({
+            where: {
+              name: c,
+            },
+            create: {
+              name: c.replaceAll(`"`, '').trim(),
+              active: true,
+              careerId: id!,
+            },
+            //Don't pass anything since it won't update anything here
+            update: {},
+          })
+          return created_course
+        }
+      })
+
       return await prisma.career.update({
         where: { id },
-        data: {
-          name: career.name,
-          active: career.active,
-        },
+        data: career,
       })
     } catch (e) {
       console.log(e)

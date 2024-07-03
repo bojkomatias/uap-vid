@@ -13,6 +13,8 @@ import { FormButton } from '@shared/form/form-button'
 import { FormTextarea } from '@shared/form/form-textarea'
 import type { Career, Course } from '@prisma/client'
 import { upsertCareer } from '@repositories/career'
+import { Switch } from '@components/switch'
+import { FormSwitch } from '@shared/form/form-switch'
 
 export function CareerForm({
   career,
@@ -28,7 +30,10 @@ export function CareerForm({
     initialValues: {
       id: career.id,
       name: career.name,
-      courses: career.courses.map((x) => x.name),
+      //This type assertion was the only way I could bypass the type mismatch between the input type and the proper type of the data model (string vs string[])
+      courses: career.courses
+        .map((x, index) => (index === 0 ? x.name : ` ${x.name}`))
+        .join(', ') as unknown as string[],
       active: career.active,
     },
     transformValues: (values) => CareerSchema.parse(values),
@@ -42,7 +47,7 @@ export function CareerForm({
       if (upserted)
         notifications.show({
           title: 'Carrera guardada',
-          message: 'La carrera ha sido guardado con éxito',
+          message: 'La carrera ha sido guardada con éxito',
           intent: 'success',
         })
       startTransition(() => {
@@ -53,6 +58,7 @@ export function CareerForm({
     [router, onSubmitCallback]
   )
 
+  console.log(form.getInputProps('courses'))
   return (
     <form
       onSubmit={form.onSubmit(
@@ -63,6 +69,15 @@ export function CareerForm({
     >
       <Fieldset>
         <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+          <FormSwitch
+            label="Estado de la carrera"
+            description={
+              form.getInputProps('active').value ? 'Activa' : 'Inactiva'
+            }
+            checked={form.getInputProps('active').value}
+            {...form.getInputProps('active')}
+          />
+
           <FormInput
             label="Nombre"
             description="Nombre de la carrera"

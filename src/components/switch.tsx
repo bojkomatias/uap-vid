@@ -138,14 +138,16 @@ const colors = {
 
 type Color = keyof typeof colors
 
+export type SwitchProps = {
+  color?: Color
+  className?: string
+} & Omit<Headless.SwitchProps, 'className' | 'children'>
+
 export function Switch({
   color = 'dark/gray',
   className,
   ...props
-}: {
-  color?: Color
-  className?: string
-} & Omit<Headless.SwitchProps, 'className' | 'children'>) {
+}: SwitchProps) {
   return (
     <Headless.Switch
       data-slot="control"
@@ -182,7 +184,7 @@ export function Switch({
           // Transition
           'translate-x-0 transition duration-200 ease-in-out',
           // Invisible border so the switch is still visible in forced-colors mode
-          'border border-transparent',
+          'border-transparent border',
           // Unchecked
           'bg-white shadow ring-1 ring-black/5',
           // Checked
