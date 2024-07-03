@@ -24,6 +24,15 @@ export function CareerTable({
       enableHiding: false,
       enableSorting: true,
     },
+    {
+      accessorKey: 'active',
+      header: 'Estado',
+      enableHiding: false,
+      enableSorting: true,
+      cell: ({ row }) => {
+        return row.original.active ? 'Activa' : 'Inactiva'
+      },
+    },
   ]
 
   return (
