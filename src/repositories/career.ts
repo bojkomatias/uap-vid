@@ -18,7 +18,8 @@ export const getAllCareers = cache(
     [key: string]: string
   }) => {
     try {
-      const orderBy = order && sort ? orderByQuery(sort, order) : {}
+      const orderBy =
+        order && sort ? orderByQuery(sort, order) : { active: 'desc' }
       return await prisma.$transaction([
         prisma.career.count({
           where: {
