@@ -102,6 +102,7 @@ export default function TanStackTable({
           <TableBody>
             {table.getRowModel().rows.map((row) => (
               <TableRow
+                className={row.original.active ? 'opacity-100' : 'opacity-35'}
                 key={row.id}
                 {...(rowAsLinkPath ?
                   { href: rowAsLinkPath + row.original.id }

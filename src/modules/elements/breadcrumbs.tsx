@@ -18,6 +18,8 @@ const newLinkMap: MapLink = {
   categories: 'Categorías docentes',
   'anual-budgets': 'Presupuestos anuales',
   budget: undefined,
+  indexes: 'Índices',
+  careers: 'Carreras',
 }
 /**
  * Some LOB is needed to check to see if breadcrumbs is View or Edit page [id]

@@ -17,6 +17,7 @@ model AcademicUnit {
   AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
   academicUnitAnualBudgetsIds String[]             @db.ObjectId
   TeamMembers                 TeamMember[]
+  Careers                     Career[]
 }
 
 type AcademicUnitBudget {
@@ -179,15 +180,17 @@ model Index {
 }
 
 model Career {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  active Boolean  @default(true)
-  Course Course[]
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  active         Boolean       @default(true)
+  courses        Course[]
+  academicUnitId String?       @db.ObjectId
+  AcademicUnit   AcademicUnit? @relation(fields: [academicUnitId], references: [id])
 }
 
 model Course {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
+  name     String  @unique
   active   Boolean @default(true)
   career   Career  @relation(fields: [careerId], references: [id])
   careerId String  @db.ObjectId
@@ -396,4 +399,5 @@ enum Access {
   MEMBER_CATEGORIES
   ANUAL_BUDGETS
   INDEXES
+  CAREERS
 }

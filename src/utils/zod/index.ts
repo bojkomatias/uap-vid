@@ -107,6 +107,22 @@ export const ConvocatorySchema = z
     path: ['to'],
   })
 
+export type Convocatory = z.infer<typeof ConvocatorySchema>
+
+export const CareerSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(10, {
+    message: 'Debe tener al menos 10 caracteres',
+  }),
+  active: z.boolean(),
+  courses: z
+    .string()
+    .transform((value) => value.split(',').map(String))
+    .pipe(z.string().array()),
+})
+
+export type Career = z.infer<typeof CareerSchema>
+
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
 /////////////////////////////////////////

@@ -106,9 +106,9 @@ const colors = {
     '[--switch-bg-ring:theme(colors.sky.600/80%)] [--switch-bg:theme(colors.sky.500)] dark:[--switch-bg-ring:transparent]',
     '[--switch:white] [--switch-ring:theme(colors.sky.600/80%)] [--switch-shadow:theme(colors.sky.900/20%)]',
   ],
-  blue: [
-    '[--switch-bg-ring:theme(colors.blue.700/90%)] [--switch-bg:theme(colors.blue.600)] dark:[--switch-bg-ring:transparent]',
-    '[--switch:white] [--switch-ring:theme(colors.blue.700/90%)] [--switch-shadow:theme(colors.blue.900/20%)]',
+  primary: [
+    '[--switch-bg-ring:theme(colors.primary.950)] [--switch-bg:theme(colors.primary.950)] dark:[--switch-bg-ring:transparent]',
+    '[--switch:white] [--switch-ring:theme(colors.primary.950)] [--switch-shadow:theme(colors.primary.900/20%)]',
   ],
   indigo: [
     '[--switch-bg-ring:theme(colors.indigo.600/90%)] [--switch-bg:theme(colors.indigo.500)] dark:[--switch-bg-ring:transparent]',
@@ -138,14 +138,16 @@ const colors = {
 
 type Color = keyof typeof colors
 
-export function Switch({
-  color = 'dark/gray',
-  className,
-  ...props
-}: {
+export type SwitchProps = {
   color?: Color
   className?: string
-} & Omit<Headless.SwitchProps, 'className' | 'children'>) {
+} & Omit<Headless.SwitchProps, 'className' | 'children'>
+
+export function Switch({
+  color = 'primary',
+  className,
+  ...props
+}: SwitchProps) {
   return (
     <Headless.Switch
       data-slot="control"
@@ -182,7 +184,7 @@ export function Switch({
           // Transition
           'translate-x-0 transition duration-200 ease-in-out',
           // Invisible border so the switch is still visible in forced-colors mode
-          'border border-transparent',
+          'border-transparent border',
           // Unchecked
           'bg-white shadow ring-1 ring-black/5',
           // Checked
