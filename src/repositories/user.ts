@@ -153,14 +153,10 @@ const getAllUsersWithoutResearchers = async () => {
 }
 
 const getAllSecretaries = cache(async () => {
-  try {
-    const secretaries = await prisma.user.findMany({
-      where: { role: Role.SECRETARY },
-    })
-    return secretaries
-  } catch (error) {
-    return null
-  }
+  return await prisma.user.findMany({
+    where: { role: Role.SECRETARY },
+    select: { id: true, name: true, email: true },
+  })
 })
 
 const findUserById = cache(async (id: string) => {
