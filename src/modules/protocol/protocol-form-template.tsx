@@ -13,7 +13,7 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import { ProtocolSchema } from '@utils/zod'
+import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -56,11 +56,33 @@ export default function ProtocolForm({
 
   const form = useProtocol({
     initialValues:
-      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+      (
+        path?.split('/')[2] === 'new' &&
+        typeof window !== 'undefined' &&
+        localStorage.getItem('temp-protocol')
+      ) ?
         JSON.parse(localStorage.getItem('temp-protocol')!)
       : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
+    transformValues: (values) => ({
+      ...values,
+      sections: {
+        ...values.sections,
+        identification: {
+          ...values.sections.identification,
+          team: values.sections.identification.team.map((e) =>
+            IdentificationTeamSchema.parse(e)
+          ),
+        },
+        bibliography: {
+          chart: values.sections.bibliography.chart.map((e) => ({
+            ...e,
+            year: Number(e.year),
+          })),
+        },
+      },
+    }),
   })
 
   useEffect(() => {
@@ -93,7 +115,7 @@ export default function ProtocolForm({
             intent: 'success',
           })
         }
-        return router.push(`/protocols/${id}/${section}`)
+        return router.push(`/protocols/${id}`)
       }
       const res = await fetch(`/api/protocol/${protocol.id}`, {
         method: 'PUT',
@@ -120,7 +142,7 @@ export default function ProtocolForm({
         }, 500)
       }
     },
-    [router, section]
+    [router]
   )
 
   const SectionButton = useCallback(
@@ -163,6 +185,7 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
+          console.log('===>', form.errors)
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({

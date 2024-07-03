@@ -64,6 +64,7 @@ export function BibliographyForm() {
               <FormInput
                 className="col-span-3"
                 label=""
+                type="number"
                 {...form.getInputProps(
                   `sections.bibliography.chart.${index}.year`
                 )}

@@ -91,6 +91,16 @@ export function BudgetList() {
                   {...form.getInputProps(
                     `sections.budget.expenses.${i}.data.${index}.amount`
                   )}
+                  onBlur={() => {
+                    form.setFieldValue(
+                      `sections.budget.expenses.${i}.data.${index}.amount`,
+                      parseFloat(
+                        form.getInputProps(
+                          `sections.budget.expenses.${i}.data.${index}.amount`
+                        ).value
+                      )
+                    )
+                  }}
                 />
                 <FormListbox
                   className="col-span-3"

@@ -55,60 +55,82 @@ export default function TeamMemberListForm() {
           <Description>En un año</Description>
         </Field>
         <span />
-        {form.values.sections.identification.team.map((_, index) => (
-          <Fragment key={index}>
-            <FormListbox
-              className="col-span-4"
-              label=""
-              options={roleOptions.map((e) => ({ value: e, label: e }))}
-              {...form.getInputProps(
-                `sections.identification.team.${index}.role`
-              )}
-            />
+        {form
+          .getValues()
+          .sections.identification.team.map((_: any, index: number) => (
+            <Fragment key={index}>
+              <FormListbox
+                className="col-span-4"
+                label=""
+                options={roleOptions.map((e) => ({ value: e, label: e }))}
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.role`
+                )}
+              />
 
-            <FormCombobox
-              className="col-span-12"
-              label=""
-              options={teamMembers.map((e) => ({
-                value: e.id,
-                label: e.name,
-              }))}
-              {...form.getInputProps(
-                `sections.identification.team.${index}.teamMemberId`
-              )}
-            />
+              <FormCombobox
+                className="col-span-12"
+                label=""
+                options={teamMembers.map((e) => ({
+                  value: e.id,
+                  label: e.name,
+                }))}
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.teamMemberId`
+                )}
+              />
 
-            <FormInput
-              className="col-span-2"
-              label=""
-              type="number"
-              {...form.getInputProps(
-                `sections.identification.team.${index}.hours`
-              )}
-            />
+              <FormInput
+                className="col-span-2"
+                label=""
+                type="number"
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.hours`
+                )}
+                onBlur={(e: any) => {
+                  form.setFieldValue(
+                    `sections.identification.team.${index}.hours`,
+                    parseInt(
+                      form.getInputProps(
+                        `sections.identification.team.${index}.hours`
+                      ).value
+                    )
+                  )
+                }}
+              />
 
-            <FormInput
-              className="col-span-2"
-              label=""
-              type="number"
-              {...form.getInputProps(
-                `sections.identification.team.${index}.workingMonths`
-              )}
-            />
+              <FormInput
+                className="col-span-2"
+                label=""
+                type="number"
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.workingMonths`
+                )}
+                onBlur={(e: any) => {
+                  form.setFieldValue(
+                    `sections.identification.team.${index}.workingMonths`,
+                    parseInt(
+                      form.getInputProps(
+                        `sections.identification.team.${index}.workingMonths`
+                      ).value
+                    )
+                  )
+                }}
+              />
 
-            {index === 0 ?
-              <span />
-            : <Button plain className="mt-1 self-start">
-                <Trash
-                  data-slot="icon"
-                  onClick={() =>
-                    form.removeListItem('sections.identification.team', index)
-                  }
-                />
-              </Button>
-            }
-          </Fragment>
-        ))}
+              {index === 0 ?
+                <span />
+              : <Button plain className="mt-1 self-start">
+                  <Trash
+                    data-slot="icon"
+                    onClick={() =>
+                      form.removeListItem('sections.identification.team', index)
+                    }
+                  />
+                </Button>
+              }
+            </Fragment>
+          ))}
       </div>
 
       <Button
@@ -120,6 +142,7 @@ export default function TeamMemberListForm() {
             name: '',
             role: '',
             teamMemberId: null,
+            workingMonths: 0,
           })
 
           setTimeout(() => {

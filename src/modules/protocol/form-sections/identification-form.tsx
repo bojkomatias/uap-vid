@@ -1,7 +1,6 @@
 'use client'
 
 import { useProtocolContext } from 'utils/createContext'
-import full from 'config/careers.json'
 import { motion } from 'framer-motion'
 import InfoTooltip from '@protocol/elements/tooltip'
 import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
@@ -9,16 +8,13 @@ import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
-import type { AcademicUnit, Career, Course } from '@prisma/client'
+import type { Career, Course } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import {
   getActiveCarrersForForm,
   getCoursesByCareerId,
 } from '@repositories/career'
-import {
-  getAcademicUnitsForForm,
-  getAcademicUnitsTabs,
-} from '@repositories/academic-unit'
+import { getAcademicUnitsForForm } from '@repositories/academic-unit'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
@@ -57,7 +53,7 @@ export function IdentificationForm() {
             label="Carrera"
             description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
             options={careers.map((e) => ({ value: e.id, label: e.name }))}
-            value={form.getInputProps('sections.identification.careerId').value}
+            {...form.getInputProps('sections.identification.careerId')}
             onChange={async (e: any) => {
               if (!e) return
               form.setFieldValue('sections.identification.careerId', e)
@@ -71,7 +67,7 @@ export function IdentificationForm() {
             label="Materia"
             description="Seleccione una materia si aplica (requerido en caso de PIC)"
             disabled={
-              !form.values.sections.identification.careerId ||
+              !form.getInputProps('sections.identification.careerId').value ||
               courses.length === 0
             }
             options={courses.map((e) => ({ value: e.id, label: e.name }))}
