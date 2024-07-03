@@ -7,18 +7,10 @@ export const [ProtocolProvider, useProtocolContext, useProtocol] =
 
 export const initialSectionValues: ProtocolSections = {
   identification: {
-<<<<<<< HEAD
-    assignment: '',
-    courseId: '',
-    career: '',
-    careerId: '',
-=======
     courseId: null,
     assignment: null,
     careerId: '',
     career: null,
-    academicUnitIds: [],
->>>>>>> feature/pq-266-ui-ux-review
     sponsor: [],
     academicUnitIds: [],
     team: [

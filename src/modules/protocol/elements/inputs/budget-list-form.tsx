@@ -150,7 +150,7 @@ export function BudgetList() {
                 val.data.reduce((prev, curr) => {
                   if (isNaN(curr.amount)) curr.amount = 0
                   else curr.amount
-                  return prev + parseFloat(curr.amount)
+                  return prev + curr.amount
                 }, 0)
               )
             }, 0) ?? 0

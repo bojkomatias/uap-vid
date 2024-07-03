@@ -44,7 +44,7 @@ export function IdentificationForm() {
             description="Seleccione una materia si aplica (requerido en caso de PIC)"
             disabled={!form.values.sections.identification.career}
             options={assignments(
-              form.values.sections.identification.career
+              form.values.sections.identification.career!
             ).map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.identification.assignment')}
           />
