@@ -10,6 +10,7 @@ import {
   Logout,
   Settings,
   Businessplan,
+  Car,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -132,6 +133,12 @@ export const navigation = [
     name: 'Indices',
     icon: Businessplan,
     href: '/indexes',
+    scope: Access.INDEXES,
+  },
+  {
+    name: 'Carreras',
+    icon: Car,
+    href: '/careers',
     scope: Access.INDEXES,
   },
 ]

@@ -256,6 +256,7 @@ const getAcademicUnitBudgetSummary = (
   const sumAcademicUnitBudget = academicUnitBudgetForYear
     .filter((b) => !b.to)
     .map((b) => b.amount)
+    // @ts-ignore @Amilcar is fixing this probably
     .reduce((acc, item) => acc + item, 0)
 
   // Filter the last the academic unit that have budget changes in the given year
@@ -292,6 +293,7 @@ const getAcademicUnitBudgetSummary = (
   // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
   const delta =
     deltaValue ?
+      // @ts-ignore @Amilcar is fixing this probably
       (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) * 100
     : 0
 

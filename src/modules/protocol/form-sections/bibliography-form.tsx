@@ -5,7 +5,6 @@ import { Plus, Trash } from 'tabler-icons-react'
 import {
   Description,
   Field,
-  FieldGroup,
   Fieldset,
   Label,
   Legend,

@@ -15,7 +15,7 @@ export function FormCombobox({
   description?: string
   options: Option[]
 } & GetInputPropsReturnType &
-  ComboboxProps<Option>) {
+  ComboboxProps<Option | null>) {
   return (
     <Field disabled={disabled} className={className}>
       <Label>{label}</Label>

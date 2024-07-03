@@ -1,7 +1,4 @@
-import Input from './protocol-input'
-import Select from './protocol-combobox'
-import { Currency, CurrencyDollar, Plus, Trash } from 'tabler-icons-react'
-import CurrencyInput from './currency-input'
+import { CurrencyDollar, Plus, Trash } from 'tabler-icons-react'
 import { useProtocolContext } from '@utils/createContext'
 import { currencyFormatter } from '@utils/formatters'
 import {

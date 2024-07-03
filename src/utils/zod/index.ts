@@ -68,6 +68,18 @@ const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
 /////////////////////////////////////////
 
 /////////////////////////////////////////
+// ACADEMIC UNIT SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, { message: 'El nombre no puede quedar vacío' }),
+  shortname: z.string().min(1, { message: '' }),
+  // secretariesIds: z.string().array(),
+  // academicUnitAnualBudgetsIds: z.string().array(),
+})
+
+/////////////////////////////////////////
 // CONVOCATORY SCHEMA
 /////////////////////////////////////////
 
@@ -97,6 +109,20 @@ export const ConvocatorySchema = z
 
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 
+export const CareerSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(10, {
+    message: 'Debe tener al menos 10 caracteres',
+  }),
+  active: z.boolean(),
+  courses: z
+    .string()
+    .transform((value) => value.split(',').map(String))
+    .pipe(z.string().array()),
+})
+
+export type Career = z.infer<typeof CareerSchema>
+
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
 /////////////////////////////////////////
@@ -109,9 +135,6 @@ export const ProtocolSchema = z.object({
   sections: z.lazy(() => SectionsSchema),
   convocatoryId: z.string(),
 })
-
-// .optional() to export type to create a Form (from new object, has no assigned Id yet)
-export type Protocol = z.infer<typeof ProtocolSchema>
 
 /////////////////////////////////////////
 // REVIEWS SCHEMA
@@ -143,6 +166,7 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
 /////////////////////////////////////////
@@ -189,6 +213,16 @@ export const TeamMemberCategorySchema = z.object({
     message: 'Configure un precio',
   }),
   amountIndex: AmountIndexSchema, //Remove nullable
+})
+
+/////////////////////////////////////////
+// ACADEMIC UNIT BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitBudget = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  amountIndex: AmountIndexSchema,
 })
 
 /////////////////////////////////////////
@@ -284,8 +318,6 @@ export const SectionsSchema = z
       path: ['identification', 'assignment'],
     }
   )
-
-export type Sections = z.infer<typeof SectionsSchema>
 
 /////////////////////////////////////////
 // PROTOCOL SECTIONS BIBLIOGRAPHY SCHEMA
@@ -387,9 +419,9 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 
 export const IdentificationSchema = z.object({
-  assignment: z.string().optional(),
-  courseId: z.string(),
-  career: z.string().min(1, 'El campo no puede estar vacío'),
+  assignment: z.string().nullable().optional(),
+  courseId: z.string().nullable().optional(),
+  career: z.string().nullable(), /// @deprecated
   careerId: z
     .string()
     .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
@@ -397,7 +429,7 @@ export const IdentificationSchema = z.object({
   academicUnitIds: z
     .string()
     .array()
-    .min(1, 'Debe selecionar al menos una unidad academica'),
+    .min(1, 'Debe selecionar al menos una unidad académica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
   team: z
     .lazy(() =>
