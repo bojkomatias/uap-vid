@@ -47,4 +47,9 @@ next-env.d.ts
 /.VSCodeCounter/*
 /.vscode
 
+<<<<<<< HEAD
 sensitive.json
+=======
+# scripts
+sensitive.json
+>>>>>>> d899eec6ef69f691babb1400f541af8cfd96482f

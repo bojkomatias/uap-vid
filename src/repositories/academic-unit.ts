@@ -3,6 +3,10 @@
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import type { AcademicUnit } from '@prisma/client'
+import type { z } from 'zod'
+import type { AcademicUnitSchema } from '@utils/zod'
+import { Secretary } from 'modules/academic-unit/edit-secretaries-form'
 
 export const getAcademicUnitsTabs = cache(
   async () =>
@@ -64,6 +68,20 @@ export const getAcademicUnitById = async (id?: string) => {
   } catch (error) {
     return null
   }
+}
+
+export const getAcademicUnitWithSecretariesById = async (id: string) => {
+  return await prisma.academicUnit.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      shortname: true,
+      secretaries: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+  })
 }
 
 export const getAllAcademicUnits = cache(
@@ -160,19 +178,89 @@ export const getAcademicUnitsByUserId = async (id: string) => {
     return null
   }
 }
-/**
- *
- * @param id
- * @param academicUnit can be any shape of academic Units (partials) only pass secretariesIds or only pass budgets works.
- * @returns
- */
-export const updateAcademicUnit = async (id: string, academicUnit: any) => {
+
+export const upsertAcademicUnit = async (
+  academicUnit: z.infer<typeof AcademicUnitSchema>
+) => {
+  const { id, ...rest } = academicUnit
+  try {
+    if (!id)
+      return await prisma.academicUnit.create({
+        data: academicUnit,
+      })
+
+    return await prisma.academicUnit.update({ where: { id }, data: rest })
+  } catch (error) {
+    console.info(error)
+    return null
+  }
+}
+
+export const updateAcademicUnitBudget = async (
+  id: string,
+  newValue: number
+) => {
+  try {
+    // Pull values
+    const [FCAValues, FMRValues] = await prisma.$transaction([
+      prisma.index.findFirstOrThrow({
+        where: { unit: 'FCA' },
+        select: { values: true },
+      }),
+      prisma.index.findFirstOrThrow({
+        where: { unit: 'FMR' },
+        select: { values: true },
+      }),
+    ])
+
+    const [currentFCA, currentFMR] = [
+      FCAValues.values.at(-1)?.price,
+      FMRValues.values.at(-1)?.price,
+    ]
+
+    if (!currentFCA || !currentFMR)
+      throw Error('There are no FCA / FMR indexes')
+
+    // Get the current budgets
+    const { budgets } = await prisma.academicUnit.findFirstOrThrow({
+      where: { id },
+      select: { budgets: true },
+    })
+
+    if (budgets.length > 0) {
+      // If has budget, end the period of the last one
+      budgets.at(-1)!.to = new Date()
+    }
+    // Append the new one
+    budgets.push({
+      from: new Date(),
+      to: null,
+      amount: null,
+      amountIndex: { FCA: newValue / currentFCA, FMR: newValue / currentFMR },
+    })
+    // update the array in the db
+    const result = await prisma.academicUnit.update({
+      where: { id },
+      data: { budgets },
+    })
+
+    return result
+  } catch (error) {
+    console.info(error)
+    return null
+  }
+}
+
+export const updateAcademicUnitSecretaries = async (
+  id: string,
+  secretaries: Secretary[]
+) => {
   try {
     const unit = await prisma.academicUnit.update({
       where: {
         id,
       },
-      data: academicUnit,
+      data: { secretariesIds: secretaries.map((e) => e.id) },
     })
     return unit
   } catch (error) {

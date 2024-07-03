@@ -68,6 +68,18 @@ const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
 /////////////////////////////////////////
 
 /////////////////////////////////////////
+// ACADEMIC UNIT SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, { message: 'El nombre no puede quedar vacío' }),
+  shortname: z.string().min(1, { message: '' }),
+  // secretariesIds: z.string().array(),
+  // academicUnitAnualBudgetsIds: z.string().array(),
+})
+
+/////////////////////////////////////////
 // CONVOCATORY SCHEMA
 /////////////////////////////////////////
 
@@ -94,6 +106,22 @@ export const ConvocatorySchema = z
     message: 'No puede preceder a fecha desde',
     path: ['to'],
   })
+
+export type Convocatory = z.infer<typeof ConvocatorySchema>
+
+export const CareerSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(10, {
+    message: 'Debe tener al menos 10 caracteres',
+  }),
+  active: z.boolean(),
+  courses: z
+    .string()
+    .transform((value) => value.split(',').map(String))
+    .pipe(z.string().array()),
+})
+
+export type Career = z.infer<typeof CareerSchema>
 
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
@@ -138,6 +166,7 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
 /////////////////////////////////////////
@@ -184,6 +213,16 @@ export const TeamMemberCategorySchema = z.object({
     message: 'Configure un precio',
   }),
   amountIndex: AmountIndexSchema, //Remove nullable
+})
+
+/////////////////////////////////////////
+// ACADEMIC UNIT BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitBudget = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  amountIndex: AmountIndexSchema,
 })
 
 /////////////////////////////////////////
@@ -390,7 +429,7 @@ export const IdentificationSchema = z.object({
   academicUnitIds: z
     .string()
     .array()
-    .min(1, 'Debe selecionar al menos una unidad academica'),
+    .min(1, 'Debe selecionar al menos una unidad académica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
   team: z
     .lazy(() =>
