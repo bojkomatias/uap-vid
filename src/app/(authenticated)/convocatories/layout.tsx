@@ -1,13 +1,13 @@
 export default function Layout({
   children,
-  drawer,
+  modal,
 }: {
   children: React.ReactNode
-  drawer: React.ReactNode
+  modal: React.ReactNode
 }) {
   return (
     <>
-      {drawer}
+      {modal}
       {children}
     </>
   )

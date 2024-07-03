@@ -10,11 +10,14 @@ import {
   TableHeader,
   TableRow,
 } from '@components/table'
+import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import type { Prisma } from '@prisma/client'
+import { updateAcademicUnitSecretaries } from '@repositories/academic-unit'
 import { FormButton } from '@shared/form/form-button'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { cx } from '@utils/cx'
+import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { CircleX, CirclePlus, CircleMinus } from 'tabler-icons-react'
 
@@ -42,6 +45,7 @@ export function EditSecretariesForm({
   secretaries: Secretary[]
   onSubmitCallback?: () => void
 }) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<{
@@ -56,7 +60,7 @@ export function EditSecretariesForm({
   })
 
   const submitSecretaries = useCallback(
-    (
+    async (
       secretaries: (Secretary & {
         added?: boolean
         removed?: boolean
@@ -64,7 +68,23 @@ export function EditSecretariesForm({
     ) => {
       // Diff the values, keep the ones not removed
       const diffedSecretaries = secretaries.filter((s) => !s.removed)
-      console.log(diffedSecretaries)
+      const updated = await updateAcademicUnitSecretaries(
+        academicUnit.id,
+        diffedSecretaries
+      )
+
+      if (updated)
+        notifications.show({
+          title: 'Secretarios actualizados',
+          message:
+            'Los secretarios de la unidad académica fueron actualizados con éxito',
+          intent: 'success',
+        })
+
+      startTransition(() => {
+        router.refresh()
+        if (onSubmitCallback) onSubmitCallback()
+      })
     },
     []
   )

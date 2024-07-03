@@ -3,9 +3,10 @@
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
-import { AcademicUnit } from '@prisma/client'
-import { z } from 'zod'
-import { AcademicUnitSchema } from '@utils/zod'
+import type { AcademicUnit } from '@prisma/client'
+import type { z } from 'zod'
+import type { AcademicUnitSchema } from '@utils/zod'
+import { Secretary } from 'modules/academic-unit/edit-secretaries-form'
 
 export const getAcademicUnitsTabs = cache(
   async () =>
@@ -250,22 +251,16 @@ export const updateAcademicUnitBudget = async (
   }
 }
 
-/**
- *
- * @param id
- * @param academicUnit can be any shape of academic Units (partials) only pass secretariesIds or only pass budgets works.
- * @returns
- */
-export const updateAcademicUnit = async (
+export const updateAcademicUnitSecretaries = async (
   id: string,
-  academicUnit: Omit<AcademicUnit, 'id'>
+  secretaries: Secretary[]
 ) => {
   try {
     const unit = await prisma.academicUnit.update({
       where: {
         id,
       },
-      data: academicUnit,
+      data: { secretariesIds: secretaries.map((e) => e.id) },
     })
     return unit
   } catch (error) {

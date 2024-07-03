@@ -73,7 +73,7 @@ export default function AcademicUnitsTable({
               : undefined
             }
             amount={
-              row.original.budgets[row.original.budgets.length - 1]?.amount
+              row.original.budgets[row.original.budgets.length - 1]?.amount || 0
             }
           />
         </>
