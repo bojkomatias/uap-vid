@@ -17,6 +17,11 @@ export default withAuth(
     requestHeaders.set('x-origin', origin)
     requestHeaders.set('x-pathname', pathname)
 
+    if (req.nextUrl.pathname === '/') {
+      if (token) return NextResponse.redirect(new URL('/home', req.url))
+      return null
+    }
+
     if (!token) {
       if (req.nextUrl.pathname.startsWith('/api'))
         return new Response('Unauthorized', { status: 401 })
