@@ -1,6 +1,6 @@
 import { getAcademicUnitWithSecretariesById } from '@repositories/academic-unit'
 import { getAllSecretaries } from '@repositories/user'
-import { EditSecretariesInAcademicUnitDialog } from 'modules/academic-unit/edit-secretaries-in-academic-unit-dialog'
+import { EditSecretariesDialog } from 'modules/academic-unit/edit-secretaries-dialog'
 
 export default async function Page({ params }: { params: { id: string } }) {
   const academicUnit = await getAcademicUnitWithSecretariesById(params.id)
@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!academicUnit) return
 
   return (
-    <EditSecretariesInAcademicUnitDialog
+    <EditSecretariesDialog
       academicUnit={academicUnit}
       secretaries={secretaries}
     />
