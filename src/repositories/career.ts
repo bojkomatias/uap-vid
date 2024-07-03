@@ -5,6 +5,20 @@ import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import type { z } from 'zod'
 
+export const getActiveCarrersForForm = cache(async () => {
+  return await prisma.career.findMany({
+    where: { active: true },
+    select: { id: true, name: true },
+  })
+})
+
+export const getCoursesByCareerId = cache(async (id: string) => {
+  return await prisma.career.findFirst({
+    where: { id },
+    select: { courses: { select: { id: true, name: true } } },
+  })
+})
+
 export const getAllCareers = cache(
   async ({
     records = '10',

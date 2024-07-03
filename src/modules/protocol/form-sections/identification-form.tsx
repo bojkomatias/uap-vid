@@ -9,9 +9,35 @@ import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import type { AcademicUnit, Career, Course } from '@prisma/client'
+import { useEffect, useState } from 'react'
+import {
+  getActiveCarrersForForm,
+  getCoursesByCareerId,
+} from '@repositories/career'
+import {
+  getAcademicUnitsForForm,
+  getAcademicUnitsTabs,
+} from '@repositories/academic-unit'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
+  const [careers, setCareers] = useState<
+    Omit<Career, 'academicUnitId' | 'active'>[]
+  >([])
+  const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(
+    []
+  )
+  const [academicUnits, setAcademicUnits] = useState<
+    { id: string; name: string; shortname: string }[]
+  >([])
+
+  useEffect(() => {
+    ;(async () => {
+      setCareers(await getActiveCarrersForForm())
+      setAcademicUnits(await getAcademicUnitsForForm())
+    })()
+  }, [])
 
   return (
     <motion.div
@@ -27,26 +53,29 @@ export function IdentificationForm() {
             description="Un título descriptivo de su proyecto"
             {...form.getInputProps('sections.identification.title')}
           />
-          {/* TODO: Replace with CareerID */}
           <FormCombobox
             label="Carrera"
             description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
-            options={careers.map((e) => ({ value: e, label: e }))}
-            {...form.getInputProps('sections.identification.career')}
-            onBlur={() => {
-              form.setFieldValue('sections.identification.assignment', '')
+            options={careers.map((e) => ({ value: e.id, label: e.name }))}
+            value={form.getInputProps('sections.identification.careerId').value}
+            onChange={async (e: any) => {
+              if (!e) return
+              form.setFieldValue('sections.identification.careerId', e)
+              const result = await getCoursesByCareerId(e)
+              setCourses(result ? result.courses : [])
+              form.setFieldValue('sections.identification.courseId', '')
             }}
           />
           <AssignmentInfo />
-          {/* TODO: Replace with CourseID */}
           <FormCombobox
             label="Materia"
             description="Seleccione una materia si aplica (requerido en caso de PIC)"
-            disabled={!form.values.sections.identification.career}
-            options={assignments(
-              form.values.sections.identification.career!
-            ).map((e) => ({ value: e, label: e }))}
-            {...form.getInputProps('sections.identification.assignment')}
+            disabled={
+              !form.values.sections.identification.careerId ||
+              courses.length === 0
+            }
+            options={courses.map((e) => ({ value: e.id, label: e.name }))}
+            {...form.getInputProps('sections.identification.courseId')}
           />
           <TeamInfo />
           <TeamMemberListForm />
@@ -54,12 +83,12 @@ export function IdentificationForm() {
             multiple
             label="Ente patrocinante"
             description="Seleccione una o más unidades académicas o entes patrocinantes que auspician el proyecto"
-            options={sponsors.map((e) => ({
-              value: e,
-              label: e.split('-')[1],
-              description: e.split('-')[0],
+            options={academicUnits.map((e) => ({
+              value: e.id,
+              label: e.shortname,
+              description: e.name,
             }))}
-            {...form.getInputProps('sections.identification.sponsor')}
+            {...form.getInputProps('sections.identification.academicUnitIds')}
           />
         </FieldGroup>
       </Fieldset>
@@ -108,21 +137,3 @@ const AssignmentInfo = () => (
     </p>
   </InfoTooltip>
 )
-
-const careers = full.map((x) => x.career)
-// conditional
-const assignments = (v: string) =>
-  full
-    .filter((x) => x.career === v)
-    .map((x) => x.assignment)
-    .flat()
-
-const sponsors = [
-  'Facultad de Ciencias Económicas y de la Administración - FACEA',
-  'Facultad de Ciencias de la Salud - FCS',
-  'Facultad de Humanidades, Educación y Ciencias Sociales - FHECIS',
-  'Facultad de Teología - FT',
-  'Consejo Nacional de Investigaciones Científicas y Técnicas - CONICET',
-  'Centro Interdisciplinario de Investigaciones en Ciencias de la Salud y del Comportamiento - CIICSAC',
-  'Escuela de Graduados - EG',
-]
