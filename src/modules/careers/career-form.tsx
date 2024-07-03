@@ -58,7 +58,6 @@ export function CareerForm({
     [router, onSubmitCallback]
   )
 
-  console.log(form.getInputProps('courses'))
   return (
     <form
       onSubmit={form.onSubmit(
