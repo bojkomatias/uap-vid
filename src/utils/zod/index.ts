@@ -159,6 +159,7 @@ export const ReviewSchema = z.object({
 export const UserSchema = z.object({
   id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   email: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  dni: z.number().nullable(),
   id_: z.string().nullable(),
   image: z.string().nullable(),
   lastLogin: z.coerce.date().nullable(),

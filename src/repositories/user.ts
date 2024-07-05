@@ -66,6 +66,7 @@ const getUsers = cache(
             id: true,
             name: true,
             email: true,
+            dni: true,
             password: true,
             role: true,
             lastLogin: true,
