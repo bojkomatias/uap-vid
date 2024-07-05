@@ -201,9 +201,7 @@ export const VerifyUserDataSchema = z
   .object({
     name: z.string().min(1, { message: 'No puede estar vacío' }),
     dni: z.string(),
-    currentPassword: z
-      .string()
-      .min(1, { message: 'Este campo no puede estar vacío' }),
+
     newPassword: z.string().min(4, {
       message: 'La contraseña debe contener al menos 4 caracteres',
     }),
@@ -213,14 +211,6 @@ export const VerifyUserDataSchema = z
     message: 'Las contraseñas no son iguales',
     path: ['newPasswordConfirm'],
   })
-  .refine(
-    (values) => values.newPassword !== values.currentPassword,
-
-    {
-      message: 'No puede ser la misma contraseña que la actual',
-      path: ['newPassword'],
-    }
-  )
 
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA

@@ -248,7 +248,7 @@ const updateUserEmailById = async (id: string, email: string) => {
 
 const verifyUserData = async (
   id: string,
-  data: z.infer<typeof VerifyUserDataSchema & typeof UserPasswordChangeSchema>
+  data: z.infer<typeof VerifyUserDataSchema>
 ) => {
   try {
     const newPasswordHash = await createHashScrypt(data.newPassword)

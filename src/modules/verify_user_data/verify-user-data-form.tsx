@@ -33,8 +33,6 @@ export function VerifyUserDataForm({
     initialValues: {
       name: user.name,
       dni: '',
-      //Current password won't be necessary but it's still needed to be given a value because of the zod schema and I don't want to create a whole new schema for this use case
-      currentPassword: '',
       newPassword: '',
       newPasswordConfirm: '',
     },
