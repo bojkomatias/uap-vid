@@ -7,7 +7,11 @@ import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
 import type { z } from 'zod'
-import type { UserPasswordChangeSchema, VerifyUserDataSchema } from '@utils/zod'
+import type {
+  UserPasswordChangeSchema,
+  VerifyUserDataMicrosoftUsersSchema,
+  VerifyUserDataSchema,
+} from '@utils/zod'
 
 /** This query returns all users that match the filtering criteria. The criteria includes:
 
@@ -267,7 +271,7 @@ const verifyUserData = async (
 
 const verifyUserDataMicrosoftUsers = async (
   id: string,
-  data: z.infer<typeof VerifyUserDataSchema>
+  data: z.infer<typeof VerifyUserDataMicrosoftUsersSchema>
 ) => {
   try {
     const user = await prisma.user.update({

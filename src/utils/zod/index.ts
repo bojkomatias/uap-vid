@@ -192,10 +192,35 @@ export const UserPasswordChangeSchema = z
   )
 //This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.
 
-export const VerifyUserDataSchema = z.object({
+export const VerifyUserDataMicrosoftUsersSchema = z.object({
   name: z.string().min(1, { message: 'No puede estar vacío' }),
   dni: z.string(),
 })
+
+export const VerifyUserDataSchema = z
+  .object({
+    name: z.string().min(1, { message: 'No puede estar vacío' }),
+    dni: z.string(),
+    currentPassword: z
+      .string()
+      .min(1, { message: 'Este campo no puede estar vacío' }),
+    newPassword: z.string().min(4, {
+      message: 'La contraseña debe contener al menos 4 caracteres',
+    }),
+    newPasswordConfirm: z.string(),
+  })
+  .refine((values) => values.newPassword === values.newPasswordConfirm, {
+    message: 'Las contraseñas no son iguales',
+    path: ['newPasswordConfirm'],
+  })
+  .refine(
+    (values) => values.newPassword !== values.currentPassword,
+
+    {
+      message: 'No puede ser la misma contraseña que la actual',
+      path: ['newPassword'],
+    }
+  )
 
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA

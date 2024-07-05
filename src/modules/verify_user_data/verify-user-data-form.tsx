@@ -6,8 +6,6 @@ import Image from 'next/image'
 import type { User } from '@prisma/client'
 import { useForm, zodResolver } from '@mantine/form'
 import type { z } from 'zod'
-import { VerifyUserDataSchema } from '@utils/zod'
-import type { UserPasswordChangeSchema } from '../../utils/zod/index'
 import { FormButton } from '@shared/form/form-button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
@@ -16,6 +14,10 @@ import {
   verifyUserData,
   verifyUserDataMicrosoftUsers,
 } from '@repositories/user'
+import {
+  VerifyUserDataMicrosoftUsersSchema,
+  VerifyUserDataSchema,
+} from '@utils/zod'
 
 export function VerifyUserDataForm({
   user,
@@ -26,9 +28,8 @@ export function VerifyUserDataForm({
 }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const form = useForm<
-    z.infer<typeof VerifyUserDataSchema & typeof UserPasswordChangeSchema>
-  >({
+
+  const form = useForm<z.infer<typeof VerifyUserDataSchema>>({
     initialValues: {
       name: user.name,
       dni: '',
@@ -42,11 +43,7 @@ export function VerifyUserDataForm({
   })
 
   const submitVerifyUserData = useCallback(
-    async (
-      userDataUpdated: z.infer<
-        typeof VerifyUserDataSchema & typeof UserPasswordChangeSchema
-      >
-    ) => {
+    async (userDataUpdated: z.infer<typeof VerifyUserDataSchema>) => {
       const updated = await verifyUserData(user.id, userDataUpdated)
       if (updated)
         notifications.show({
@@ -126,17 +123,19 @@ export function VerifyUserDataFormMicrosoftUsers({
 }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const form = useForm<z.infer<typeof VerifyUserDataSchema>>({
+  const form = useForm<z.infer<typeof VerifyUserDataMicrosoftUsersSchema>>({
     initialValues: {
       name: user.name,
       dni: '',
     },
-    validate: zodResolver(VerifyUserDataSchema),
+    validate: zodResolver(VerifyUserDataMicrosoftUsersSchema),
     validateInputOnBlur: true,
   })
 
   const submitVerifyUserData = useCallback(
-    async (userDataUpdated: z.infer<typeof VerifyUserDataSchema>) => {
+    async (
+      userDataUpdated: z.infer<typeof VerifyUserDataMicrosoftUsersSchema>
+    ) => {
       const updated = await verifyUserDataMicrosoftUsers(
         user.id,
         userDataUpdated
