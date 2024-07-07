@@ -6,8 +6,9 @@ import { useForm, zodResolver } from '@mantine/form'
 import { upsertConvocatory } from '@repositories/convocatory'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
-import { useCallback, useTransition } from 'react'
+import { ChangeEvent, useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
+import { Button } from '@components/button'
 import type { z } from 'zod'
 import { FormButton } from '@shared/form/form-button'
 
@@ -64,10 +65,9 @@ export function ConvocatoryForm({
         // @ts-ignore --Overriding values
         (values) => submitConvocatory(values)
       )}
-      className="@container"
     >
       <Fieldset>
-        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+        <FieldGroup>
           <FormInput
             label="Nombre"
             description="Nombre de la convocatoria"
@@ -79,7 +79,7 @@ export function ConvocatoryForm({
             description="Año en la cual entraría en vigencia"
             type="number"
             {...form.getInputProps('year')}
-            onChange={(e: any) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               form.setFieldValue('year', Number(e.target.value))
             }
           />
@@ -93,7 +93,7 @@ export function ConvocatoryForm({
 
           <FormInput
             label="Hasta"
-            description="Fecha en la cual finzaliza"
+            description="Fecha en la cual finaliza"
             type="datetime-local"
             {...form.getInputProps('to')}
             onChange={(e: any) => form.setFieldValue('to', e.target.value)}

@@ -1,18 +1,16 @@
 'use client'
 
-import type { Convocatory } from '@prisma/client'
+import type { Career, Course } from '@prisma/client'
 import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
 import { useState } from 'react'
-import { Badge } from '@components/badge'
-import { ConvocatoryForm } from './convocatory-form'
 import { useRouter } from 'next/navigation'
+import { CareerForm } from './career-form'
+import { Subheading } from '@components/heading'
 
-export function EditConvocatoryDialog({
-  convocatory,
-  isCurrent,
+export function EditCareerDialog({
+  career,
 }: {
-  convocatory: Convocatory
-  isCurrent?: boolean
+  career: Career & { courses: Course[] }
 }) {
   const router = useRouter()
   const [open, setOpen] = useState(() => true)
@@ -25,18 +23,12 @@ export function EditConvocatoryDialog({
   return (
     <Dialog open={open} onClose={closeDialog} size="xl">
       <div className="flex items-center gap-2">
-        <DialogTitle>{convocatory.name}</DialogTitle>
-        {isCurrent ?
-          <Badge color="teal">Activa</Badge>
-        : null}
+        <DialogTitle>{career.name}</DialogTitle>
       </div>
       <DialogDescription>
         Tenga en cuenta que esto puede afectar al resto de la applicación
       </DialogDescription>
-      <ConvocatoryForm
-        convocatory={convocatory}
-        onSubmitCallback={closeDialog}
-      />
+      <CareerForm career={career} onSubmitCallback={closeDialog} />
     </Dialog>
   )
 }

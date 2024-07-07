@@ -6,6 +6,12 @@ import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
+import type { z } from 'zod'
+import type {
+  UserPasswordChangeSchema,
+  VerifyUserDataMicrosoftUsersSchema,
+  VerifyUserDataSchema,
+} from '@utils/zod'
 
 /** This query returns all users that match the filtering criteria. The criteria includes:
 
@@ -66,6 +72,7 @@ const getUsers = cache(
             id: true,
             name: true,
             email: true,
+            dni: true,
             password: true,
             role: true,
             lastLogin: true,
@@ -153,14 +160,10 @@ const getAllUsersWithoutResearchers = async () => {
 }
 
 const getAllSecretaries = cache(async () => {
-  try {
-    const secretaries = await prisma.user.findMany({
-      where: { role: Role.SECRETARY },
-    })
-    return secretaries
-  } catch (error) {
-    return null
-  }
+  return await prisma.user.findMany({
+    where: { role: Role.SECRETARY },
+    select: { id: true, name: true, email: true },
+  })
 })
 
 const findUserById = cache(async (id: string) => {
@@ -234,6 +237,50 @@ const updateUserEmailById = async (id: string, email: string) => {
       },
       data: {
         email: email,
+      },
+    })
+
+    return user
+  } catch (error) {
+    return null
+  }
+}
+
+const verifyUserData = async (
+  id: string,
+  data: z.infer<typeof VerifyUserDataSchema>
+) => {
+  try {
+    const newPasswordHash = await createHashScrypt(data.newPassword)
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name!,
+        password: newPasswordHash,
+        dni: Number(data.dni),
+      },
+    })
+
+    return user
+  } catch (error) {
+    return null
+  }
+}
+
+const verifyUserDataMicrosoftUsers = async (
+  id: string,
+  data: z.infer<typeof VerifyUserDataMicrosoftUsersSchema>
+) => {
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name!,
+        dni: Number(data.dni),
       },
     })
 
@@ -327,4 +374,6 @@ export {
   deleteUserById,
   updateUserEmailById,
   updateUserPasswordById,
+  verifyUserData,
+  verifyUserDataMicrosoftUsers,
 }

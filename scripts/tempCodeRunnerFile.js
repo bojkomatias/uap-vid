@@ -1,4 +1,4 @@
-// @ts-ignore
+
 // console.log('Prepared protocols for update:', protocolsForMongo.length)
 
 // for (const p of protocolsForMongo) {

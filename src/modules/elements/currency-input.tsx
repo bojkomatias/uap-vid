@@ -53,10 +53,10 @@ export default function CurrencyInput({
 export function parseLocaleNumber(stringNumber: string, locale: string) {
   const thousandSeparator = Intl.NumberFormat(locale)
     .format(11111)
-    .replace(/\p{Number}/gu, '')
+    .replace(/\d{Number}/g, '')
   const decimalSeparator = Intl.NumberFormat(locale)
     .format(1.1)
-    .replace(/\p{Number}/gu, '')
+    .replace(/\d{Number}/g, '')
 
   return parseFloat(
     stringNumber
