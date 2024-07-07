@@ -17,8 +17,11 @@ export default withAuth(
     requestHeaders.set('x-origin', origin)
     requestHeaders.set('x-pathname', pathname)
 
+    if (req.nextUrl.pathname !== '/' && !token!.user.dni)
+      return NextResponse.redirect(new URL('/verify_user_data', req.url))
     if (req.nextUrl.pathname === '/') {
       if (token) return NextResponse.redirect(new URL('/protocols', req.url))
+
       return null
     }
 
