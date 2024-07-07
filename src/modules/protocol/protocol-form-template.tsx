@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/button'
+
 import { notifications } from '@elements/notifications'
 import { zodResolver } from '@mantine/form'
 import type { Protocol } from '@prisma/client'
@@ -13,20 +13,23 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import { ProtocolSchema } from '@utils/zod'
+import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import {
   AlertCircle,
-  ChevronLeft,
-  ChevronRight,
+  ArrowNarrowLeft,
+  ArrowNarrowRight,
   CircleCheck,
   CircleDashed,
 } from 'tabler-icons-react'
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
+import { BadgeButton } from '@components/badge'
+import { FormButton } from '@shared/form/form-button'
+import { Button } from '@components/button'
 import type { z } from 'zod'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
@@ -53,11 +56,33 @@ export default function ProtocolForm({
 
   const form = useProtocol({
     initialValues:
-      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+      (
+        path?.split('/')[2] === 'new' &&
+        typeof window !== 'undefined' &&
+        localStorage.getItem('temp-protocol')
+      ) ?
         JSON.parse(localStorage.getItem('temp-protocol')!)
       : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
+    transformValues: (values) => ({
+      ...values,
+      sections: {
+        ...values.sections,
+        identification: {
+          ...values.sections.identification,
+          team: values.sections.identification.team.map((e) =>
+            IdentificationTeamSchema.parse(e)
+          ),
+        },
+        bibliography: {
+          chart: values.sections.bibliography.chart.map((e) => ({
+            ...e,
+            year: Number(e.year),
+          })),
+        },
+      },
+    }),
   })
 
   useEffect(() => {
@@ -90,7 +115,7 @@ export default function ProtocolForm({
             intent: 'success',
           })
         }
-        return router.push(`/protocols/${id}/${section}`)
+        return router.push(`/protocols/${id}`)
       }
       const res = await fetch(`/api/protocol/${protocol.id}`, {
         method: 'PUT',
@@ -117,7 +142,7 @@ export default function ProtocolForm({
         }, 500)
       }
     },
-    [router, section]
+    [router]
   )
 
   const SectionButton = useCallback(
@@ -130,13 +155,11 @@ export default function ProtocolForm({
       label: string
       value: string
     }) => (
-      <Button
-        intent="outline"
-        size="xs"
+      <BadgeButton
+        color={'light'}
         className={cx(
-          'hover:bg-primary-50',
-          section === value && 'font-bold shadow',
-          !form.isValid(path) && section !== value ? 'opacity-50' : ''
+          'opacity-70',
+          section == value && 'font-semibold opacity-100'
         )}
         onClick={() => setSection(value)}
       >
@@ -144,10 +167,10 @@ export default function ProtocolForm({
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
-          : <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
-        : <CircleCheck className="h-4 w-4 stroke-success-500/80" />}
-      </Button>
+            <AlertCircle className="size-4 stroke-warning-500" />
+          : <CircleDashed className="size-3.5 stroke-gray-500" />
+        : <CircleCheck className="size-4 stroke-success-500" />}
+      </BadgeButton>
     ),
     [form, section]
   )
@@ -162,6 +185,7 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
+          console.log('===>', form.errors)
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
@@ -177,7 +201,6 @@ export default function ProtocolForm({
           : null
           upsertProtocol(form.values)
         }}
-        className="w-full px-4 py-4"
       >
         <InfoTooltip>
           <h4>Indicadores de sección</h4>
@@ -202,7 +225,7 @@ export default function ProtocolForm({
           initial={{ opacity: 0, y: -7 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="mx-auto mb-6 flex w-fit flex-wrap items-center justify-center gap-1 rounded border bg-gray-50 p-1"
+          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border border-black/5 p-0.5 dark:border-white/5"
         >
           <SectionButton
             path={'sections.identification'}
@@ -250,30 +273,27 @@ export default function ProtocolForm({
 
         {sectionMapper[Number(section)]}
 
-        <div className="mb-8 mt-12 flex w-full justify-between">
+        <div className="mt-12 flex w-full justify-between">
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '0'}
             onClick={() => setSection((p) => (Number(p) - 1).toString())}
           >
-            <ChevronLeft className="h-4 text-gray-500" />
+            <ArrowNarrowLeft data-slot="icon" />
+            Sección previa
           </Button>
 
-          <div className="flex gap-2">
-            <Button type="submit" intent="secondary" loading={isPending}>
-              Guardar
-            </Button>
-          </div>
+          <FormButton isLoading={isPending}>Guardar</FormButton>
+
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '7'}
             onClick={() => setSection((p) => (Number(p) + 1).toString())}
           >
-            <ChevronRight className="h-4 text-gray-500" />
+            Sección siguiente
+            <ArrowNarrowRight data-slot="icon" />
           </Button>
         </div>
       </form>
