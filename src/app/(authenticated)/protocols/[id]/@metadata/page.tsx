@@ -1,4 +1,4 @@
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import type { User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'

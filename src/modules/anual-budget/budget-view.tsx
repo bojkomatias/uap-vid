@@ -6,7 +6,7 @@ import type {
 import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants'
 
 export function BudgetView({

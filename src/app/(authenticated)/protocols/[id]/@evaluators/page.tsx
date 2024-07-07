@@ -9,7 +9,7 @@ import {
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import { UserSearch } from 'tabler-icons-react'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import { canAccess, canExecute } from '@utils/scopes'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { getServerSession } from 'next-auth'

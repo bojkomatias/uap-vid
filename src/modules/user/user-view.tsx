@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'

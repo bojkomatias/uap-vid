@@ -1,5 +1,5 @@
 'use client'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import { Button } from '@elements/button'
 import { Combobox, Listbox } from '@headlessui/react'
 import { useForm, zodResolver } from '@mantine/form'

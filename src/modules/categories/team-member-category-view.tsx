@@ -1,6 +1,6 @@
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import Currency from '@elements/currency'
 import { currencyFormatter } from '@utils/formatters'
 import CustomDrawer from '@elements/custom-drawer'
