@@ -159,6 +159,7 @@ export const ReviewSchema = z.object({
 export const UserSchema = z.object({
   id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   email: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  dni: z.number().nullable(),
   id_: z.string().nullable(),
   image: z.string().nullable(),
   lastLogin: z.coerce.date().nullable(),
@@ -166,6 +167,50 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+
+export const UserPasswordChangeSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, { message: 'Este campo no puede estar vacío' }),
+    newPassword: z.string().min(4, {
+      message: 'La contraseña debe contener al menos 4 caracteres',
+    }),
+    newPasswordConfirm: z.string(),
+  })
+  .refine((values) => values.newPassword === values.newPasswordConfirm, {
+    message: 'Las contraseñas no son iguales',
+    path: ['newPasswordConfirm'],
+  })
+  .refine(
+    (values) => values.newPassword !== values.currentPassword,
+
+    {
+      message: 'No puede ser la misma contraseña que la actual',
+      path: ['newPassword'],
+    }
+  )
+//This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.
+
+export const VerifyUserDataMicrosoftUsersSchema = z.object({
+  name: z.string().min(1, { message: 'No puede estar vacío' }),
+  dni: z.string(),
+})
+
+export const VerifyUserDataSchema = z
+  .object({
+    name: z.string().min(1, { message: 'No puede estar vacío' }),
+    dni: z.string(),
+
+    newPassword: z.string().min(4, {
+      message: 'La contraseña debe contener al menos 4 caracteres',
+    }),
+    newPasswordConfirm: z.string(),
+  })
+  .refine((values) => values.newPassword === values.newPasswordConfirm, {
+    message: 'Las contraseñas no son iguales',
+    path: ['newPasswordConfirm'],
+  })
 
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
@@ -564,27 +609,3 @@ export const UserEmailChangeSchema = z
     },
     { message: 'No puede ser el email actual', path: ['newEmail'] }
   )
-
-export const UserPasswordChangeSchema = z
-  .object({
-    currentPassword: z
-      .string()
-      .min(1, { message: 'Este campo no puede estar vacío' }),
-    newPassword: z.string().min(4, {
-      message: 'La contraseña debe contener al menos 4 caracteres',
-    }),
-    newPasswordConfirm: z.string(),
-  })
-  .refine((values) => values.newPassword === values.newPasswordConfirm, {
-    message: 'Las contraseñas no son iguales',
-    path: ['newPasswordConfirm'],
-  })
-  .refine(
-    (values) => values.newPassword !== values.currentPassword,
-
-    {
-      message: 'No puede ser la misma contraseña que la actual',
-      path: ['newPassword'],
-    }
-  )
-//This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.
