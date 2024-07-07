@@ -1,5 +1,5 @@
 'use client'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import { Button } from '@elements/button'
 import { Combobox, Listbox } from '@headlessui/react'
 import { useForm, zodResolver } from '@mantine/form'
@@ -181,9 +181,7 @@ export default function TeamMemberForm({
                           >
                             {value.name}
                           </span>
-                          <Badge className="ml-4">
-                            {RolesDictionary[value.role]}
-                          </Badge>
+                          <Badge>{RolesDictionary[value.role]}</Badge>
                           <span
                             title={value.email}
                             className={cx(

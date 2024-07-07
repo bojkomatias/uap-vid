@@ -156,7 +156,7 @@ export default function ProtocolForm({
       value: string
     }) => (
       <BadgeButton
-        color={'light'}
+        color="light"
         className={cx(
           'opacity-70',
           section == value && 'font-semibold opacity-100'
