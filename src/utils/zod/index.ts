@@ -194,13 +194,19 @@ export const UserPasswordChangeSchema = z
 
 export const VerifyUserDataMicrosoftUsersSchema = z.object({
   name: z.string().min(1, { message: 'No puede estar vacío' }),
-  dni: z.string(),
+  dni: z
+    .string()
+    .min(8, { message: 'Debe tener 8 dígitos' })
+    .max(8, { message: 'Debe tener 8 dígitos' }),
 })
 
 export const VerifyUserDataSchema = z
   .object({
     name: z.string().min(1, { message: 'No puede estar vacío' }),
-    dni: z.string(),
+    dni: z
+      .string()
+      .min(8, { message: 'Debe tener 8 dígitos' })
+      .max(8, { message: 'Debe tener 8 dígitos' }),
 
     newPassword: z.string().min(4, {
       message: 'La contraseña debe contener al menos 4 caracteres',
