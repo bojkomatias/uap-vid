@@ -30,7 +30,7 @@ export function IndexTable({ values }: { values: HistoricIndex[] }) {
               {currencyFormatter.format(value.price)}
             </TableCell>
             <TableCell className="font-medium">
-              {value.to ? null : <Badge color="green">Actual</Badge>}
+              {value.to ? null : <Badge color="teal">Actual</Badge>}
             </TableCell>
             <TableCell>
               Desde:{' '}

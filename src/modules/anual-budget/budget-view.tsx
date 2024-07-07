@@ -46,8 +46,7 @@ export function BudgetView({
       />
 
       <div className="flex justify-end pt-4">
-        <Badge className="flex gap-2 text-lg">
-          {' '}
+        <Badge>
           <span className="font-normal">Total de presupuesto (ARS):</span>
           <span className="font-semibold">
             ${currencyFormatter.format(calculations.total)}

@@ -181,9 +181,7 @@ export default function TeamMemberForm({
                           >
                             {value.name}
                           </span>
-                          <Badge className="ml-4">
-                            {RolesDictionary[value.role]}
-                          </Badge>
+                          <Badge>{RolesDictionary[value.role]}</Badge>
                           <span
                             title={value.email}
                             className={cx(

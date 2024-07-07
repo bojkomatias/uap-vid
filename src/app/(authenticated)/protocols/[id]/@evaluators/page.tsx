@@ -147,9 +147,7 @@ export default async function ReviewAssignation({
                   <span className="text-sm text-gray-500">-</span>
                 )}
               </div>
-              <Badge className="my-1 ml-4">
-                {EvaluatorsByReviewType[data.type]}
-              </Badge>
+              <Badge>{EvaluatorsByReviewType[data.type]}</Badge>
             </div>
             {data.enabled && (
               <ReviewAssignSelect

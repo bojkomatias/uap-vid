@@ -61,9 +61,7 @@ export default async function ProtocolMetadata({
             />
           )}
         </div>
-        <Badge className="text-sm">
-          {ProtocolStatesDictionary[protocol.state]}
-        </Badge>
+        <Badge>{ProtocolStatesDictionary[protocol.state]}</Badge>
       </div>
     </div>
   )

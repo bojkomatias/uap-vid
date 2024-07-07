@@ -26,7 +26,7 @@ export const BudgetMetadata = ({
           </span>
           {dateFormatter.format(updatedAt)}
         </div>
-        <Badge className="mb-1">{AnualBudgetStateDictionary[state]}</Badge>
+        <Badge>{AnualBudgetStateDictionary[state]}</Badge>
       </div>
       <span className="pr-2 font-medium underline underline-offset-2">
         Protocolo:
