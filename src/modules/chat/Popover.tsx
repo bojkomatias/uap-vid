@@ -12,9 +12,9 @@ export function ChatPopover({ children }: { children: React.ReactNode }) {
         onClick={() => {
           setOpen(!open)
         }}
-        className=" flex h-12 w-12 items-center justify-center text-white outline-primary-950 focus:outline-none"
+        className="flex h-12 w-12 items-center justify-center text-white outline-primary-950 focus:outline-none active:scale-75"
       >
-        <Message2 className="active:scale-75" />
+        <Message2 />
       </PopoverButton>
       <PopoverPanel
         transition
