@@ -7,14 +7,14 @@ export function ChatPopover({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <Popover className="fixed bottom-10 right-14 z-50 rounded-full border bg-primary drop-shadow-md">
+    <Popover className="fixed bottom-10 right-14 z-50 rounded-full border bg-primary drop-shadow-xl">
       <PopoverButton
         onClick={() => {
           setOpen(!open)
         }}
-        className="flex h-12 w-12 items-center justify-center text-white outline-primary-950 focus:outline-none active:scale-75"
+        className=" flex h-12 w-12 items-center justify-center text-white outline-primary-950 focus:outline-none"
       >
-        <Message2 />
+        <Message2 className="active:scale-75" />
       </PopoverButton>
       <PopoverPanel
         transition
