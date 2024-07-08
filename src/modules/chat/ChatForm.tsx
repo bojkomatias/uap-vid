@@ -93,7 +93,7 @@ export default function ChatForm({
                 className={`flex ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-3/4 rounded p-2 ${
+                  className={`max-w-[25vw] rounded p-2 ${
                     msg.userId == user.id ?
                       'bg-primary-950 text-white'
                     : 'bg-gray-200 text-gray-800'
@@ -104,19 +104,25 @@ export default function ChatForm({
                       className={`
                            text-xs ${
                              msg.userId == user.id ?
-                               'text-gray-300'
+                               'text-right text-gray-300'
                              : 'text-gray-500'
                            }`}
                     >
                       {msg.user?.name}
                     </h1>
-                    <div className="flex items-end gap-4">
-                      <p className="font-semibold">{msg.content}</p>
-                      <p className="text-right text-xs">
-                        {new Date(msg.createdAt).toLocaleTimeString()}
-                      </p>
-                    </div>
+
+                    <p className="break-words font-semibold">{msg.content}</p>
                   </div>
+                  <p
+                    className={`
+                           text-xs ${
+                             msg.userId == user.id ?
+                               'text-right text-gray-300'
+                             : 'text-gray-500'
+                           }`}
+                  >
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </p>
                 </div>
               </div>
             ))}
