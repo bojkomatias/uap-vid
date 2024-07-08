@@ -93,7 +93,7 @@ export default function ChatForm({
                 className={`flex ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[25vw] rounded p-2 ${
+                  className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
                     msg.userId == user.id ?
                       'bg-primary-950 text-white'
                     : 'bg-gray-200 text-gray-800'

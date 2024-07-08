@@ -14,14 +14,12 @@ export function ChatPopover({ children }: { children: React.ReactNode }) {
         }}
         className=" flex h-12 w-12 items-center justify-center text-white outline-primary-950 focus:outline-none"
       >
-        {!open ?
-          <Message2 className="active:scale-75" />
-        : <X className="active:scale-75" />}
+        <Message2 className="active:scale-75" />
       </PopoverButton>
       <PopoverPanel
         transition
         anchor="top"
-        className="mb-4 w-[30vw] -translate-x-8 -translate-y-4 rounded-xl border bg-white p-4 shadow-2xl transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+        className="mb-4 w-[80vw] -translate-x-8 -translate-y-4 rounded-xl border bg-white p-4 shadow-2xl transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 md:w-[50vw] xl:w-[30vw]"
       >
         {children}
       </PopoverPanel>
