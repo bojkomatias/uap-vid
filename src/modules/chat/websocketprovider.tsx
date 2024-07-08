@@ -14,12 +14,13 @@ const MESSAGE_TYPE = {
   SEND_MESSAGE: 'SEND_MESSAGE',
   NEW_MESSAGE: 'NEW_MESSAGE',
 }
-export const queryKey = ['messages']
 
 export const ChatMessagesProvider = ({
   children,
+  queryKey,
 }: {
   children: React.ReactNode
+  queryKey: any[]
 }) => {
   const {
     sendMessage: sM,

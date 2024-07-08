@@ -21,7 +21,9 @@ const getMessages = cache(async (protocolId: string) => {
   try {
     const messages = await prisma.chatMessage.findMany({
       where: { protocolId },
+      include: { user: { select: { name: true } } },
       orderBy: { createdAt: 'desc' },
+      take: 10,
     })
     console.log('MESSAGES FETCHED:', messages)
     return messages

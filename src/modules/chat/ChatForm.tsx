@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useChatMessagesContext } from './websocketprovider'
+/* eslint-disable no-constant-condition */
+'use client'
+import React, { useState, useRef, useEffect } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useChatMessagesContext } from './WebSocketProvider'
 import { getMessages, saveMessage } from '@repositories/message'
-import type { ChatMessage } from '@prisma/client'
+import { Fieldset } from '@components/fieldset'
+import { FormInput } from '@shared/form/form-input'
+import { FormButton } from '@shared/form/form-button'
+import type { User } from '@prisma/client'
+import { ChatPopover } from './Popover'
 
 interface ChatMessagesContextType {
   canSendMessages: boolean
@@ -15,22 +21,30 @@ type SendMessageType = {
     thread: string
     userId: string
     protocolId: string
+    createdAt: Date
+    user: { name: string }
   }
   type: 'SEND_MESSAGE'
 }
 
-export default function ChatForm() {
+export default function ChatForm({
+  user,
+  protocolId,
+}: {
+  user: User
+  protocolId: string
+}) {
   const [message, setMessage] = useState('')
-  const queryClient = useQueryClient()
 
   const { sendMessage, canSendMessages } =
     useChatMessagesContext() as ChatMessagesContextType
 
-  const { data: messages = [] } = useQuery<ChatMessage[] | null>({
-    queryKey: ['messages'],
-    queryFn: async () => await getMessages('111'),
+  const { data: messages } = useQuery({
+    queryKey: ['messages', protocolId],
+    queryFn: async () => {
+      return await getMessages(protocolId)
+    },
     initialData: [],
-    staleTime: Infinity,
   })
 
   const sendNewMessage = useMutation({
@@ -38,8 +52,8 @@ export default function ChatForm() {
       const savedMessage = await saveMessage({
         content: newMessage,
         thread: 'Test',
-        protocolId: '111',
-        userId: '222',
+        protocolId: protocolId,
+        userId: user.id,
       })
 
       if (savedMessage) {
@@ -47,24 +61,16 @@ export default function ChatForm() {
           content: {
             content: newMessage,
             thread: 'Test',
-            protocolId: '111',
-            userId: '222',
+            protocolId: protocolId,
+            userId: user.id,
+            createdAt: new Date(),
+            user: { name: user.name },
           },
           type: 'SEND_MESSAGE',
         }
         sendMessage(JSON.stringify(websocket_new_message))
       }
       return savedMessage
-    },
-    onSuccess: (savedMessage) => {
-      if (savedMessage) {
-        queryClient.setQueryData<ChatMessage[]>(
-          ['messages'],
-          (oldMessages = []) => {
-            return [savedMessage, ...oldMessages]
-          }
-        )
-      }
     },
   })
 
@@ -77,36 +83,63 @@ export default function ChatForm() {
   }
 
   return (
-    <div className="mx-auto max-w-md p-4">
-      <h1 className="mb-4 text-2xl font-bold">Chat Messages</h1>
-      <form onSubmit={onSubmit} className="mb-4">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded border p-2"
-          placeholder="Type a message..."
-        />
-        <button
-          type="submit"
-          disabled={
-            !canSendMessages || !message.trim() || sendNewMessage.isPending
-          }
-          className="mt-2 rounded bg-blue-500 px-4 py-2 text-white disabled:bg-gray-300"
-        >
-          {sendNewMessage.isPending ? 'Sending...' : 'Send Message'}
-        </button>
-      </form>
-      <div className="space-y-4">
-        {messages?.map((msg: ChatMessage) => (
-          <div key={msg.id} className="rounded border p-2">
-            <div className="text-sm text-gray-500">
-              <h1 className="text-xs font-bold">UserID: {msg.userId}</h1>
-              <p className="font-semibold text-primary-950">{msg.content}</p>
-            </div>
+    <ChatPopover>
+      <div className="flex flex-col rounded-xl">
+        <div className="flex max-h-[60vh] flex-col-reverse overflow-auto">
+          <div className="w-full space-y-4 pt-4">
+            {messages?.toReversed().map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-3/4 rounded p-2 ${
+                    msg.userId == user.id ?
+                      'bg-primary-950 text-white'
+                    : 'bg-gray-200 text-gray-800'
+                  }`}
+                >
+                  <div className="text-sm">
+                    <h1
+                      className={`
+                           text-xs ${
+                             msg.userId == user.id ?
+                               'text-gray-300'
+                             : 'text-gray-500'
+                           }`}
+                    >
+                      {msg.user?.name}
+                    </h1>
+                    <div className="flex items-end gap-4">
+                      <p className="font-semibold">{msg.content}</p>
+                      <p className="text-right text-xs">
+                        {new Date(msg.createdAt).toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="sticky bottom-0 bg-white shadow-lg">
+          <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
+            <Fieldset className="!mt-0">
+              <FormInput
+                type="text"
+                label=""
+                value={message}
+                className=" text-xs"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setMessage(e.target.value)
+                }
+                placeholder="Escriba un mensaje..."
+              />
+            </Fieldset>
+            <FormButton isLoading={sendNewMessage.isPending}>Enviar</FormButton>
+          </form>
+        </div>
       </div>
-    </div>
+    </ChatPopover>
   )
 }
