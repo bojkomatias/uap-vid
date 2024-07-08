@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@elements/button'
-import CurrencyInput from '@elements/currency-input'
+import CurrencyInput from '@shared/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import { insertCategory } from '@repositories/team-member-category'

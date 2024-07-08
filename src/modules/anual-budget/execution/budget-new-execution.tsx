@@ -5,7 +5,7 @@ import {
 } from '@actions/anual-budget/action'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import CurrencyInput from '@elements/currency-input'
+import CurrencyInput from '@shared/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnit } from '@prisma/client'
 import { ExecutionType } from '@utils/anual-budget'

@@ -1,7 +1,7 @@
 import { cx } from '@utils/cx'
 import type { PropsWithChildren } from 'react'
 import { useProtocolContext } from '../../../../utils/createContext'
-import CurrencyInputElement from '@elements/currency-input'
+import CurrencyInputElement from '@shared/currency-input'
 
 const CurrencyInput = ({
   path,

@@ -4,7 +4,7 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Check, Minus } from 'tabler-icons-react'
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
   include: {
@@ -77,9 +77,6 @@ export default function TeamMemberTable({
           <Currency
             amount={
               row.original.categories.at(-1)?.category.price.at(-1)?.price
-            }
-            currency={
-              row.original.categories.at(-1)?.category.price.at(-1)?.currency
             }
           />
         ),

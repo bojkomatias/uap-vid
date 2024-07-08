@@ -14,8 +14,7 @@ export default function CategoriesTable({
   categories: TeamMemberCategory[]
   totalRecords: number
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo<ColumnDef<any>[]>(
+  const columns = useMemo<ColumnDef<TeamMemberCategory>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -31,11 +30,11 @@ export default function CategoriesTable({
         enableHiding: false,
       },
       {
-        accessorKey: 'price',
+        accessorKey: 'amountIndex',
         header: 'Valor hora',
         enableHiding: false,
         enableSorting: false,
-        cell: ({ row }) => <Currency amountIndex={row.original.amountIndex} />,
+        cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
       },
       {
         accessorKey: 'actions',

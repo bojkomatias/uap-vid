@@ -5,7 +5,7 @@ import { type AcademicUnit, type User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { dateFormatter } from '@utils/formatters'
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 import {
   Dropdown,
   DropdownButton,
@@ -62,16 +62,6 @@ export default function AcademicUnitsTable({
       cell: ({ row }) => (
         <>
           <Currency
-            title={
-              row.original.budgets[row.original.budgets.length - 1] ?
-                `Desde ${dateFormatter.format(
-                  row.original.budgets[row.original.budgets.length - 1].from
-                )} hasta el ${dateFormatter.format(
-                  row.original.budgets[row.original.budgets.length - 1].to ??
-                    new Date()
-                )}`
-              : undefined
-            }
             amount={
               row.original.budgets[row.original.budgets.length - 1]?.amount || 0
             }

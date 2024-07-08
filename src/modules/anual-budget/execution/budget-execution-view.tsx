@@ -3,7 +3,7 @@
 import type { AcademicUnit, Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useMemo, useState } from 'react'

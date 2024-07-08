@@ -1,7 +1,7 @@
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'
 import { AlertCircle, CircleCheck } from 'tabler-icons-react'
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { buttonStyle } from '@elements/button/styles'
