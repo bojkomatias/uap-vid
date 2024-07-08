@@ -108,7 +108,7 @@ model TeamMemberCategory {
   state                      Boolean?
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
-  amountIndex                AmountIndex? //FCA or FMR
+  amountIndex                AmountIndex //FCA or FMR
 }
 
 /// @deprecated this won't be needed after indexing the whole app.

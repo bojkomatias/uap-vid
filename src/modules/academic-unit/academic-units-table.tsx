@@ -61,11 +61,7 @@ export default function AcademicUnitsTable({
       enableSorting: false,
       cell: ({ row }) => (
         <>
-          <Currency
-            amount={
-              row.original.budgets[row.original.budgets.length - 1]?.amount || 0
-            }
-          />
+          <Currency amountIndex={row.original.budgets.at(-1)!.amountIndex} />
         </>
       ),
     },

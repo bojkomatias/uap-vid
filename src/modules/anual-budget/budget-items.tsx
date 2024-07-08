@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@elements/button'
-import CurrencyInput from '@shared/currency-input'
+import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'

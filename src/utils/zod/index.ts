@@ -248,9 +248,7 @@ export const HistoricCategoryPriceSchema = z.object({
   currency: z.string().default('ARS'),
 })
 
-const AmountIndexSchema = z
-  .object({ FCA: z.number(), FMR: z.number() })
-  .nullable()
+const AmountIndexSchema = z.object({ FCA: z.number(), FMR: z.number() })
 
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
