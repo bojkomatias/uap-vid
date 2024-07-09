@@ -1,16 +1,17 @@
 'use client'
+
 import {
   BuildingCommunity,
   CalendarEvent,
-  List,
   UserSearch,
   Users,
-  Category,
-  CurrencyDollar,
+  FileDollar,
   Logout,
   Settings,
-  Businessplan,
-  Car,
+  Coin,
+  Notebook,
+  Certificate2,
+  FileDelta,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -28,6 +29,8 @@ import {
 import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
+import { Listbox } from '@components/listbox'
+import { IndexSwapper } from '@shared/index-swapper'
 
 export function AppSidebar({
   user,
@@ -59,9 +62,15 @@ export function AppSidebar({
             : null
           )}
         </SidebarSection>
+        {canAccess(Access.INDEXES, user.role) && (
+          <SidebarSection>
+            <SidebarHeading>Visulizar montos en indices</SidebarHeading>
+            <IndexSwapper />
+          </SidebarSection>
+        )}
         {convocatory ?
           <SidebarSection>
-            <SidebarHeading>Convocatoria activa</SidebarHeading>
+            <SidebarHeading> Convocatoria activa</SidebarHeading>
             <CurrentConvocatory convocatory={convocatory} />
           </SidebarSection>
         : null}
@@ -88,13 +97,13 @@ export function AppSidebar({
 
 export const navigation = [
   {
-    name: 'Proyectos de investigación',
-    icon: List,
+    name: 'Proyectos investigación',
+    icon: FileDelta,
     href: '/protocols',
     scope: Access.PROTOCOLS,
   },
   {
-    name: 'Panel de convocatorias',
+    name: 'Convocatorias',
     icon: CalendarEvent,
     href: '/convocatories',
     scope: Access.CONVOCATORIES,
@@ -106,10 +115,16 @@ export const navigation = [
     scope: Access.ACADEMIC_UNITS,
   },
   {
+    name: 'Carreras y materias',
+    icon: Notebook,
+    href: '/careers',
+    scope: Access.CAREERS,
+  },
+  {
     name: 'Presupuestos anuales',
-    icon: CurrencyDollar,
+    icon: FileDollar,
     href: '/anual-budgets',
-    scope: Access.TEAM_MEMBERS,
+    scope: Access.ANUAL_BUDGETS,
   },
   {
     name: 'Miembros de investigación',
@@ -118,27 +133,21 @@ export const navigation = [
     scope: Access.TEAM_MEMBERS,
   },
   {
-    name: 'Categorías de miembros de equipo de investigación',
-    icon: Category,
+    name: 'Categorías de miembros de investigación',
+    icon: Certificate2,
     href: '/categories',
     scope: Access.TEAM_MEMBERS,
   },
   {
-    name: 'Lista de usuarios',
+    name: 'Usuarios del sistema',
     icon: Users,
     href: '/users',
     scope: Access.USERS,
   },
   {
-    name: 'Indices',
-    icon: Businessplan,
+    name: 'Indices financieros',
+    icon: Coin,
     href: '/indexes',
-    scope: Access.INDEXES,
-  },
-  {
-    name: 'Carreras',
-    icon: Car,
-    href: '/careers',
     scope: Access.INDEXES,
   },
 ]
