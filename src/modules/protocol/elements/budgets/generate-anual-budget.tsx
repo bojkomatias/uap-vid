@@ -1,7 +1,7 @@
 import { TeamMemberRelation } from '@utils/zod'
 import Link from 'next/link'
 import { AlertCircle, CircleCheck } from 'tabler-icons-react'
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { buttonStyle } from '@elements/button/styles'
@@ -149,7 +149,9 @@ export async function GenerateAnualBudget({
                   <span>{i.detail}</span>
                   <span className="text-center">{i.type}</span>
                   <span className="text-right">
-                    <Currency amount={i.amount} />
+                    {/* To be INDEXED WHEN FINISHED! */}
+                    {/* <Currency amountIndex={i.amountIndex} /> */}
+                    Preview to be indexed
                   </span>
                 </div>
               ))}

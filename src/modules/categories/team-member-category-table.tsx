@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import PriceUpdate from './price-update'
 import TeamMemberCategoryView from './team-member-category-view'
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 
 export default function CategoriesTable({
   categories,
@@ -14,8 +14,7 @@ export default function CategoriesTable({
   categories: TeamMemberCategory[]
   totalRecords: number
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo<ColumnDef<any>[]>(
+  const columns = useMemo<ColumnDef<TeamMemberCategory>[]>(
     () => [
       {
         accessorKey: 'id',
@@ -31,18 +30,11 @@ export default function CategoriesTable({
         enableHiding: false,
       },
       {
-        accessorKey: 'price',
+        accessorKey: 'amountIndex',
         header: 'Valor hora',
         enableHiding: false,
         enableSorting: false,
-        cell: ({ row }) => (
-          <Currency
-            amount={row.original.price[row.original.price.length - 1]?.price}
-            currency={
-              row.original.price[row.original.price.length - 1]?.currency
-            }
-          />
-        ),
+        cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
       },
       {
         accessorKey: 'actions',

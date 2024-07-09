@@ -32,6 +32,7 @@
     "express": "^4.19.2",
     "expressjs": "^1.0.1",
     "framer-motion": "^11.2.10",
+    "jotai": "^2.8.4",
     "mongodb": "^6.6.1",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
