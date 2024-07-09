@@ -62,10 +62,12 @@ export function AppSidebar({
             : null
           )}
         </SidebarSection>
-        <SidebarSection>
-          <SidebarHeading>Visulizar montos en indices</SidebarHeading>
-          <IndexSwapper />
-        </SidebarSection>
+        {canAccess(Access.INDEXES, user.role) && (
+          <SidebarSection>
+            <SidebarHeading>Visulizar montos en indices</SidebarHeading>
+            <IndexSwapper />
+          </SidebarSection>
+        )}
         {convocatory ?
           <SidebarSection>
             <SidebarHeading> Convocatoria activa</SidebarHeading>
