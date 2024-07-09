@@ -247,7 +247,7 @@ type ProtocolSectionsBudgetExpenses {
 
 type ProtocolSectionsBudgetExpensesData {
   amount      Float /// @deprecated use `amountIndex` instead
-  amountIndex AmountIndex?
+  amountIndex AmountIndex
   detail      String
   year        String
 }

@@ -149,7 +149,9 @@ export async function GenerateAnualBudget({
                   <span>{i.detail}</span>
                   <span className="text-center">{i.type}</span>
                   <span className="text-right">
-                    <Currency amount={i.amount} />
+                    {/* To be INDEXED WHEN FINISHED! */}
+                    {/* <Currency amountIndex={i.amountIndex} /> */}
+                    Preview to be indexed
                   </span>
                 </div>
               ))}
