@@ -3,7 +3,6 @@ import useWebSocket, { ReadyState } from 'react-use-websocket'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface ChatMessagesContextType {
-  canSendMessages: boolean
   sendMessage: (content: string) => void
 }
 
@@ -15,7 +14,7 @@ const MESSAGE_TYPE = {
   NEW_MESSAGE: 'NEW_MESSAGE',
 }
 
-export const ChatMessagesProvider = ({
+export const WebSocketMessagesProvider = ({
   children,
   queryKey,
 }: {
@@ -67,7 +66,7 @@ export const ChatMessagesProvider = ({
   )
 
   return (
-    <ChatMessagesContext.Provider value={{ canSendMessages, sendMessage }}>
+    <ChatMessagesContext.Provider value={{ sendMessage }}>
       {children}
     </ChatMessagesContext.Provider>
   )

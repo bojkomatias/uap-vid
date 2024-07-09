@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ChatMessagesProvider } from './WebSocketProvider'
+import { WebSocketMessagesProvider } from './WebSocketProvider'
 import ChatComponent from './ChatForm'
 import type { User } from '@prisma/client'
 export default function ChatFullComponent({
@@ -15,9 +15,9 @@ export default function ChatFullComponent({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ChatMessagesProvider queryKey={['messages', protocolId]}>
+      <WebSocketMessagesProvider queryKey={['messages', protocolId]}>
         <ChatComponent protocolId={protocolId} user={user} />
-      </ChatMessagesProvider>
+      </WebSocketMessagesProvider>
     </QueryClientProvider>
   )
 }

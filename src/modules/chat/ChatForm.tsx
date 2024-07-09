@@ -14,167 +14,177 @@ import { Loader } from 'tabler-icons-react'
 import e from 'express'
 
 interface ChatMessagesContextType {
-    canSendMessages: boolean
-    sendMessage: (content: string) => void
+  canSendMessages: boolean
+  sendMessage: (content: string) => void
 }
 
 type SendMessageType = {
-    content: {
-        content: string
-        thread: string
-        userId: string
-        protocolId: string
-        createdAt: Date
-        user: { name: string }
-    }
-    type: 'SEND_MESSAGE'
+  content: {
+    content: string
+    thread: string
+    userId: string
+    protocolId: string
+    createdAt: Date
+    user: { name: string }
+  }
+  type: 'SEND_MESSAGE'
 }
 
 export default function ChatForm({
-    user,
-    protocolId,
+  user,
+  protocolId,
 }: {
-    user: User
-    protocolId: string
+  user: User
+  protocolId: string
 }) {
-    const [message, setMessage] = useState('')
-    const [take, setTake] = useState(10)
-    const chatcontainer = useRef(null)
+  const [message, setMessage] = useState('')
+  const [take, setTake] = useState(10)
+  const chatcontainer = useRef(null)
 
-    const { sendMessage, canSendMessages } =
-        useChatMessagesContext() as ChatMessagesContextType
+  const { sendMessage } = useChatMessagesContext() as ChatMessagesContextType
 
-    const {
-        data: messages,
-        refetch,
-        isFetching,
-    } = useQuery({
-        queryKey: ['messages', protocolId],
-        queryFn: async () => {
-            return await getMessages(protocolId, take)
-        },
-        initialData: [],
-    })
+  const {
+    data: messages,
+    refetch,
+    isFetching,
+  } = useQuery({
+    queryKey: ['messages', protocolId],
+    queryFn: async () => {
+      return await getMessages(protocolId, take)
+    },
+    initialData: [],
+  })
 
-    const sendNewMessage = useMutation({
-        mutationFn: async (newMessage: string) => {
-            const savedMessage = await saveMessage({
-                content: newMessage,
-                thread: 'Test',
-                protocolId: protocolId,
-                userId: user.id,
-            })
+  const sendNewMessage = useMutation({
+    mutationFn: async (newMessage: string) => {
+      const savedMessage = await saveMessage({
+        content: newMessage,
+        thread: 'Test',
+        protocolId: protocolId,
+        userId: user.id,
+      })
 
-            if (savedMessage) {
-                const websocket_new_message: SendMessageType = {
-                    content: {
-                        content: newMessage,
-                        thread: 'Test',
-                        protocolId: protocolId,
-                        userId: user.id,
-                        createdAt: new Date(),
-                        user: { name: user.name },
-                    },
-                    type: 'SEND_MESSAGE',
-                }
-                sendMessage(JSON.stringify(websocket_new_message))
-            }
-            return savedMessage
-        },
-    })
-
-    const onSubmit = (event: React.FormEvent) => {
-        event.preventDefault()
-        if (message.trim()) {
-            sendNewMessage.mutate(message)
-            setMessage('')
+      if (savedMessage) {
+        const websocket_new_message: SendMessageType = {
+          content: {
+            content: newMessage,
+            thread: 'Test',
+            protocolId: protocolId,
+            userId: user.id,
+            createdAt: new Date(),
+            user: { name: user.name },
+          },
+          type: 'SEND_MESSAGE',
         }
+        sendMessage(JSON.stringify(websocket_new_message))
+      }
+      return savedMessage
+    },
+  })
+
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    if (message.trim()) {
+      sendNewMessage.mutate(message)
+      setMessage('')
     }
+  }
 
-    return (
-        <ChatPopover>
-            <div className="flex flex-col rounded-xl">
-                <div className="flex max-h-[60vh] flex-col-reverse overflow-auto">
-                    <div ref={chatcontainer} className="w-full space-y-4 pt-4">
-                        <Button
-                            onClick={() => {
-                                setTake(take + 10)
-                                setTimeout(() => {
-                                    refetch()
-                                }, 100)
-                            }}
-                        >
-                            {isFetching ? (
-                                <Loader className="animate-spin" />
-                            ) : (
-                                'Cargar más mensajes'
-                            )}
-                        </Button>
-                        {messages?.toReversed().map((msg) => (
-                            <div
-                                key={msg.id}
-                                className={`flex ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
-                            >
-                                <div
-                                    className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
-                                        msg.userId == user.id
-                                            ? 'bg-primary-950 text-white'
-                                            : 'bg-gray-200 text-gray-800'
-                                    }`}
-                                >
-                                    <div className="text-sm">
-                                        <h1
-                                            className={`
+  return (
+    <ChatPopover>
+      <div className="flex flex-col rounded-xl">
+        <div
+          ref={chatcontainer}
+          onScroll={() => {
+            console.log(
+              'SCROLLTOP',
+              Math.abs((chatcontainer.current! as HTMLDivElement).scrollTop),
+              'HEIGHT',
+              (chatcontainer.current! as HTMLDivElement).clientHeight
+            )
+          }}
+          className="flex max-h-[60vh] flex-col-reverse overflow-auto"
+        >
+          <div className="w-full space-y-4 pt-4">
+            {messages!.length > 1 && (
+              <Button
+                onClick={() => {
+                  setTake(take + 10)
+                  setTimeout(() => {
+                    refetch()
+                  }, 100)
+                }}
+              >
+                {isFetching ?
+                  <Loader className="animate-spin" />
+                : 'Cargar más mensajes'}
+              </Button>
+            )}
+            {messages!.length < 1 && (
+              <p className="px-4 pb-6 text-sm text-gray-600">
+                Chat vacío. Puede comenzar una conversación enviando un mensaje.
+              </p>
+            )}
+            {messages?.toReversed().map((msg) => (
+              <div
+                onScroll={() => {}}
+                key={msg.id}
+                className={`flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
+                    msg.userId == user.id ?
+                      'bg-primary-950 text-white'
+                    : 'bg-gray-200 text-gray-800'
+                  }`}
+                >
+                  <div className="text-sm">
+                    <h1
+                      className={`
                            text-xs ${
-                               msg.userId == user.id
-                                   ? 'text-right text-gray-300'
-                                   : 'text-gray-500'
+                             msg.userId == user.id ?
+                               'text-right text-gray-300'
+                             : 'text-gray-500'
                            }`}
-                                        >
-                                            {msg.user?.name}
-                                        </h1>
+                    >
+                      {msg.user?.name}
+                    </h1>
 
-                                        <p className="break-words font-semibold">
-                                            {msg.content}
-                                        </p>
-                                    </div>
-                                    <p
-                                        className={`
+                    <p className="break-words font-semibold">{msg.content}</p>
+                  </div>
+                  <p
+                    className={`
                            text-xs ${
-                               msg.userId == user.id
-                                   ? 'text-right text-gray-300'
-                                   : 'text-gray-500'
+                             msg.userId == user.id ?
+                               'text-right text-gray-300'
+                             : 'text-gray-500'
                            }`}
-                                    >
-                                        {new Date(
-                                            msg.createdAt
-                                        ).toLocaleTimeString()}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                  >
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </p>
                 </div>
-                <div className="sticky bottom-0 bg-white shadow-lg">
-                    <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
-                        <Fieldset className="!mt-0">
-                            <FormInput
-                                type="text"
-                                label=""
-                                value={message}
-                                className=" text-xs"
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                ) => setMessage(e.target.value)}
-                                placeholder="Escriba un mensaje..."
-                            />
-                        </Fieldset>
-                        <FormButton isLoading={sendNewMessage.isPending}>
-                            Enviar
-                        </FormButton>
-                    </form>
-                </div>
-            </div>
-        </ChatPopover>
-    )
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="sticky bottom-0 bg-white shadow-lg">
+          <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
+            <Fieldset className="!mt-0">
+              <FormInput
+                type="text"
+                label=""
+                value={message}
+                className=" text-xs"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setMessage(e.target.value)
+                }
+                placeholder="Escriba un mensaje..."
+              />
+            </Fieldset>
+            <FormButton isLoading={sendNewMessage.isPending}>Enviar</FormButton>
+          </form>
+        </div>
+      </div>
+    </ChatPopover>
+  )
 }
