@@ -54,7 +54,7 @@ wss.on('connection', (ws) => {
 })
 
 // Start the server and listen on a specific port
-const port = process.env.NEXT_PUBLIC_WEBSOCKET_PORT || 3001
+const port = 3001
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`)
 })

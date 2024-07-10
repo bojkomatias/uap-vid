@@ -6,6 +6,8 @@ import { Message2, X } from 'tabler-icons-react'
 export function ChatPopover({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
 
+  console.log('NEXT PUBLIC URL', process.env.NEXT_PUBLIC_WEBSOCKET_URL)
+
   return (
     <Popover className="fixed bottom-10 right-14 z-50 rounded-full border bg-primary drop-shadow-xl">
       <PopoverButton

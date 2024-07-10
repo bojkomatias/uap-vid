@@ -127,9 +127,8 @@ export default function ChatForm({
             )}
             {messages?.toReversed().map((msg) => (
               <div
-                onScroll={() => {}}
                 key={msg.id}
-                className={`flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
+                className={` flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
               >
                 <div
                   className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${

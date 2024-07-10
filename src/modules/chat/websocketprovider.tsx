@@ -7,7 +7,7 @@ interface ChatMessagesContextType {
 }
 
 const ChatMessagesContext = createContext<ChatMessagesContextType | null>(null)
-const SOCKET_URL = `ws://${process.env.NEXT_PUBLIC_URL?.split(':')[0]}:${process.env.NEXT_PUBLIC_WEBSOCKET_PORT}`
+const SOCKET_URL = `ws://${process.env.NEXT_PUBLIC_WEBSOCKET_URL!}`
 const MESSAGE_TYPE = {
   INITIAL_DATA: 'INITIAL_DATA',
   SEND_MESSAGE: 'SEND_MESSAGE',
