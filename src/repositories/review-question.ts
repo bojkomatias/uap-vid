@@ -6,10 +6,9 @@ export const getAllQuestions = cache(async () => {
   try {
     const result = prisma.reviewQuestion.findMany()
     console.log(result)
-
     return result
   } catch (e) {
     console.log(e)
-    return null
+    return []
   }
 })

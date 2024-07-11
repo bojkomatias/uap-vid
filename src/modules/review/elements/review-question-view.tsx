@@ -1,30 +1,22 @@
-import type { ReviewQuestionType as ReviewQuestion } from '@prisma/client'
+'use client'
+import type { ReviewQuestion, ReviewQuestionType } from '@prisma/client'
 import { getAllQuestions } from '@repositories/review-question'
-import { QueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Check, X } from 'tabler-icons-react'
 
-export default async function ReviewQuestionView({
+export default function ReviewQuestionView({
   id,
   approved,
   comment,
   index,
-}: ReviewQuestion & { index: number }) {
-  const queryClient = new QueryClient()
-  const {
-    isLoading,
-    error,
-    data: questions,
-  } = useQuery<ReviewQuestion[]>({
-    queryKey: ['questions'],
-    queryFn: async () => await getAllQuestions(),
-  })
-
+  questions,
+}: ReviewQuestionType & { index: number; questions: ReviewQuestion[] }) {
   return (
     <div>
       <div className="flex gap-1 text-xs text-gray-600">
         <b>{index + 1}- </b>
         <div className="flex-grow">
-          {questions.find((question) => question.id === id)?.question}
+          {questions?.find((question) => question.id === id)?.question}
         </div>
 
         <div>
@@ -33,9 +25,12 @@ export default async function ReviewQuestionView({
           : <X className="h-4 w-4 text-error-600" />}
         </div>
       </div>
-      <div className="mt-1 pl-4 text-xs font-light text-gray-900">
-        {comment}
-      </div>
+      {comment && (
+        <div className="mt-1 rounded-lg bg-yellow-100 py-2 pl-4 text-xs font-light  text-gray-900">
+          <h3 className="font-semibold text-gray-500">Sugerencia:</h3>
+          <p className="italic">{comment}</p>
+        </div>
+      )}
     </div>
   )
 }
