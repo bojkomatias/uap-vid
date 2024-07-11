@@ -1,13 +1,24 @@
 import type { ReviewQuestionType as ReviewQuestion } from '@prisma/client'
-import { questions } from 'config/review-questions'
+import { getAllQuestions } from '@repositories/review-question'
+import { QueryClient, useQuery } from '@tanstack/react-query'
 import { Check, X } from 'tabler-icons-react'
 
-export default function ReviewQuestionView({
+export default async function ReviewQuestionView({
   id,
   approved,
   comment,
   index,
 }: ReviewQuestion & { index: number }) {
+  const queryClient = new QueryClient()
+  const {
+    isLoading,
+    error,
+    data: questions,
+  } = useQuery<ReviewQuestion[]>({
+    queryKey: ['questions'],
+    queryFn: async () => await getAllQuestions(),
+  })
+
   return (
     <div>
       <div className="flex gap-1 text-xs text-gray-600">
