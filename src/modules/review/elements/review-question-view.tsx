@@ -25,7 +25,9 @@ export default function ReviewQuestionView({
       </div>
       {comment && (
         <div className="mt-1 rounded-lg bg-yellow-100 py-2 pl-4 text-xs font-light  text-gray-900">
-          <h3 className="font-semibold text-gray-500">Sugerencia:</h3>
+          <h3 className="font-semibold text-gray-500">
+            Comentario del evaluador:
+          </h3>
           <p className="italic">{comment}</p>
         </div>
       )}
