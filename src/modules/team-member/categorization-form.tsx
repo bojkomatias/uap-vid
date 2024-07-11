@@ -149,8 +149,8 @@ export default function CategorizationForm({
                               active ? 'text-gray-700' : 'text-gray-500'
                             )}
                           >
-                            $ {value.price.at(-1)!.price}{' '}
-                            {value.price.at(-1)!.currency} / hora
+                            $ {value.price.at(-1).price}{' '}
+                            {value.price.at(-1).currency} / hora
                           </span>
                         </span>
 

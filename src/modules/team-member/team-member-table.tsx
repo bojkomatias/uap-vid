@@ -45,12 +45,9 @@ export default function TeamMemberTable({
         header: 'Email',
       },
       {
-        accessorKey: 'obrero',
-        header: 'Obrero',
-        cell: ({ row }) =>
-          row.original.categories.at(-1)?.pointsObrero ?
-            <Check className="ml-4 h-4 text-gray-600" />
-          : <Minus className="ml-4 h-4 text-gray-600" />,
+        id: 'category.name',
+        accessorFn: (row) => row.categories.at(-1)?.category.name,
+        header: 'Categoría',
         enableSorting: false,
       },
       {
@@ -64,18 +61,12 @@ export default function TeamMemberTable({
         enableSorting: false,
       },
       {
-        id: 'category.name',
-        accessorFn: (row) => row.categories.at(-1)?.category.name,
-        header: 'Categoría',
-        enableSorting: false,
-      },
-      {
         id: 'category.price',
-        accessorFn: (row) => row.categories.at(-1)?.category.price.at(-1),
+        accessorFn: (row) => row.categories.at(-1)?.category.amountIndex,
         header: 'Valor hora',
         cell: ({ row }) => (
           <Currency
-            amountIndex={row.original.categories.at(-1)!.category.amountIndex}
+            amountIndex={row.original.categories.at(-1).category.amountIndex}
           />
         ),
         enableSorting: false,
