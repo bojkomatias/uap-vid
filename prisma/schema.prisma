@@ -217,8 +217,7 @@ type ReviewQuestionType {
 
 model ReviewQuestion {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  approved Boolean
-  comment  String?
+  question String
   active   Boolean
   type     String
 }
