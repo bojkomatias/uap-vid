@@ -318,23 +318,16 @@ async function main() {
     //   }
     // })
 
-    // for (const protocol of updated_protocols) {
-    //   try {
-    //     const result = await protocol_collection.updateOne(
-    //       { _id: new ObjectId(protocol._id) },
-    //       {
-    //         $set: {
-    //           'sections.identification': protocol.sections.identification,
-    //         },
-    //       }
-    //     )
-    //     console.log(
-    //       `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
-    //     )
-    //   } catch (error) {
-    //     console.error(`Error updating protocol ${protocol._id}:`, error)
-    //   }
-    // }
+    for (const question of questions) {
+      try {
+        const result = await reviewquestion.create({ question })
+        console.log(
+          `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+        )
+      } catch (error) {
+        console.error(`Error updating protocol ${protocol._id}:`, error)
+      }
+    }
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
