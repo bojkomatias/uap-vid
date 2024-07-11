@@ -220,6 +220,8 @@ model ReviewQuestion {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   approved Boolean
   comment  String?
+  active   Boolean
+  type     String
   reviewId String  @db.ObjectId
   Review   Review  @relation(fields: [reviewId], references: [id])
 }
