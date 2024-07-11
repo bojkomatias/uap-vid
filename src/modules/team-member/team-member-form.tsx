@@ -1,20 +1,14 @@
 'use client'
-import { Badge } from '@elements/badge'
-import { Button } from '@elements/button'
-import { Combobox, Listbox } from '@headlessui/react'
+
 import { useForm, zodResolver } from '@mantine/form'
 import type {
   HistoricTeamMemberCategory,
   TeamMember,
   User,
 } from '@prisma/client'
-import { cx } from '@utils/cx'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { TeamMemberSchema } from '@utils/zod'
-import { useCallback, useState } from 'react'
-import { Check, Selector, X } from 'tabler-icons-react'
+import { useCallback } from 'react'
 import type { z } from 'zod'
-
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
 import { createTeamMember, updateTeamMember } from '@repositories/team-member'

@@ -143,7 +143,7 @@ export default function CategorizationForm({
                             {value.name}
                           </span>
 
-                          <span
+                          {/* <span
                             className={cx(
                               'ml-3 truncate text-xs font-light',
                               active ? 'text-gray-700' : 'text-gray-500'
@@ -151,7 +151,7 @@ export default function CategorizationForm({
                           >
                             $ {value.price.at(-1).price}{' '}
                             {value.price.at(-1).currency} / hora
-                          </span>
+                          </span> */}
                         </span>
 
                         {selected && (

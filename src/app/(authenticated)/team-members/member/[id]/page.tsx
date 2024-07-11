@@ -28,14 +28,14 @@ export default async function Page({ params }: { params: { id: string } }) {
         researchers={researchers}
         academicUnits={academicUnits}
       />
-      {member ?
+      {/* {member ?
         <CategorizationForm
           categories={categories}
           obreroCategory={obreroCategory}
           historicCategories={member.categories}
           member={member}
         />
-      : null}
+      : null} */}
     </>
   )
 }

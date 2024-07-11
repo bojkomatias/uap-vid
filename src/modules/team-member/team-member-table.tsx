@@ -65,9 +65,15 @@ export default function TeamMemberTable({
         accessorFn: (row) => row.categories.at(-1)?.category.amountIndex,
         header: 'Valor hora',
         cell: ({ row }) => (
-          <Currency
-            amountIndex={row.original.categories.at(-1).category.amountIndex}
-          />
+          <>
+            {row.original.categories.at(-1) ?
+              <Currency
+                amountIndex={
+                  row.original.categories.at(-1)!.category.amountIndex
+                }
+              />
+            : null}
+          </>
         ),
         enableSorting: false,
       },
@@ -95,7 +101,7 @@ export default function TeamMemberTable({
         totalRecords={totalRecords}
         initialVisibility={initialVisible}
         searchBarPlaceholder="Buscar por: Nombre, etc"
-        rowAsLinkPath="/team-members/"
+        rowAsLinkPath="/team-members/member/"
       />
     </>
   )
