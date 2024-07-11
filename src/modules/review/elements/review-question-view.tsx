@@ -1,7 +1,5 @@
 'use client'
 import type { ReviewQuestion, ReviewQuestionType } from '@prisma/client'
-import { getAllQuestions } from '@repositories/review-question'
-import { useQuery } from '@tanstack/react-query'
 import { Check, X } from 'tabler-icons-react'
 
 export default function ReviewQuestionView({
