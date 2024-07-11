@@ -1,4 +1,4 @@
-import type { ReviewQuestion } from '@prisma/client'
+import type { ReviewQuestionType as ReviewQuestion } from '@prisma/client'
 import { questions } from 'config/review-questions'
 import { Check, X } from 'tabler-icons-react'
 
