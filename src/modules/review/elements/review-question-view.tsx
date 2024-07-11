@@ -12,7 +12,7 @@ export default function ReviewQuestionView({
   questions,
 }: ReviewQuestionType & { index: number; questions: ReviewQuestion[] }) {
   return (
-    <div>
+    <div className="py-1">
       <div className="flex gap-1 text-xs text-gray-600">
         <b>{index + 1}- </b>
         <div className="flex-grow">
