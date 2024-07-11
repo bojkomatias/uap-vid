@@ -3,7 +3,7 @@ import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { RadioGroup } from '@headlessui/react'
 import { zodResolver } from '@mantine/form'
-import type { Review } from '@prisma/client'
+import type { Review, ReviewQuestion as RQuestion } from '@prisma/client'
 import { ReviewType, ReviewVerdict } from '@prisma/client'
 import { cx } from '@utils/cx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
@@ -12,18 +12,23 @@ import { ReviewSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import ReviewQuestion from './review-question'
-import { questions as rawQuestions } from 'config/review-questions'
 import { updateReview } from '@repositories/review'
 import { emailer } from '@utils/emailer'
 import { useCases } from '@utils/emailer/use-cases'
 
-export default function ReviewForm({ review }: { review: Review }) {
+export default function ReviewForm({
+  review,
+  questions,
+}: {
+  review: Review
+  questions: RQuestion[]
+}) {
   const form = useReview({
     initialValues: {
       ...review,
       //This filter passes only the active questions to the form values.
       questions: review.questions.filter((q) => {
-        const questionInfo = rawQuestions.find(
+        const questionInfo = questions.find(
           (rQuestion) => rQuestion.id === q.id
         )
         return questionInfo ? questionInfo.active : false

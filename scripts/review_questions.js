@@ -301,31 +301,43 @@ async function main() {
 
     const review_collection = getCollection('Review')
     const reviews = await review_collection.find().toArray()
+    const review_question_collection = getCollection('ReviewQuestion')
+    const review_questions = await review_question_collection.find().toArray()
 
-    console.log(reviews)
+    const question_id_dictionary = review_questions
+      .map((rq) => {
+        const id = questions.find((q) => q.question == rq.question).id
+        return { id: id, _id: rq._id }
+      })
+      .reduce((acc, ac) => {
+        acc[ac.id] = ac._id
+        return acc
+      })
 
-    // const updated_protocols = protocols.map((protocol) => {
-    //   return {
-    //     ...protocol,
-    //     sections: {
-    //       ...protocol.sections,
-    //       identification: {
-    //         ...protocol.sections.identification,
-    //         careerId:
-    //           career_id_dictionary[protocol.sections.identification.career],
-    //       },
-    //     },
-    //   }
-    // })
+    const updated_reviews = reviews.map((review) => {
+      return {
+        ...review,
+        questions: review.questions.map((q) => {
+          return { ...q, id: question_id_dictionary[q.id] }
+        }),
+      }
+    })
 
-    for (const question of questions) {
+    for (const review of updated_reviews) {
       try {
-        const result = await reviewquestion.create({ question })
+        const result = await review_collection.updateOne(
+          { _id: new ObjectId(review._id) },
+          {
+            $set: {
+              questions: review.questions,
+            },
+          }
+        )
         console.log(
-          `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+          `Updated review ${result._id}: ${result.modifiedCount} document modified`
         )
       } catch (error) {
-        console.error(`Error updating protocol ${protocol._id}:`, error)
+        console.error(`Error creating question ${review._id}:`, error)
       }
     }
   } catch (error) {
