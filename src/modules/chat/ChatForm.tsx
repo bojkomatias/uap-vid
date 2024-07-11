@@ -11,7 +11,6 @@ import type { User } from '@prisma/client'
 import { ChatPopover } from './Popover'
 import { Button } from '@components/button'
 import { Loader } from 'tabler-icons-react'
-import e from 'express'
 
 interface ChatMessagesContextType {
   canSendMessages: boolean
