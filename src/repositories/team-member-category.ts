@@ -4,6 +4,9 @@ import type { TeamMemberCategory } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { TeamMemberCategorySchema } from '@utils/zod'
+import { getCurrentIndexes } from './finance-index'
+import { z } from 'zod'
 
 /** This query returns all categories that match the filtering criteria. The criteria includes:
 
@@ -122,12 +125,24 @@ const deleteCategoryById = async (id: string, data: TeamMemberCategory) => {
   }
 }
 
-const insertCategory = async (data: Omit<TeamMemberCategory, 'id'>) => {
+const insertCategory = async (
+  data: z.infer<typeof TeamMemberCategorySchema>
+) => {
+  const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+  const newCategory = {
+    name: data.name,
+    state: data.state,
+    amountIndex: {
+      FCA: data.amount / currentFCA,
+      FMR: data.amount / currentFMR,
+    },
+  }
+
   try {
-    const category = await prisma.teamMemberCategory.create({
-      data,
+    return await prisma.teamMemberCategory.create({
+      data: newCategory,
     })
-    return category
   } catch (error) {
     return null
   }

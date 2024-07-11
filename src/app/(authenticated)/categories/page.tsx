@@ -3,6 +3,7 @@ import { getCategories } from '@repositories/team-member-category'
 import { Heading, Subheading } from '@components/heading'
 import { Button } from '@components/button'
 import { Plus } from 'tabler-icons-react'
+import { NewCategoryDialog } from 'modules/categories/new-category-dialog'
 
 export default async function Page({
   searchParams,
@@ -15,10 +16,7 @@ export default async function Page({
     <>
       <div className="flex items-end">
         <Heading>Categorías de miembros de equipo de investigación</Heading>
-        <Button scroll={false} href={'/categories/new'}>
-          <Plus data-slot="icon" />
-          Crear categoría
-        </Button>
+        <NewCategoryDialog />
       </div>
       <Subheading>
         Lista de las categorías asignables a los miembros de equipo de un
