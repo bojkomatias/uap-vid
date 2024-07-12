@@ -4,10 +4,12 @@ import type { TeamMember } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 
-export const createTeamMember = async (data: Omit<TeamMember, 'id'>) =>
-  await prisma.teamMember.create({
+export const createTeamMember = async (data: Omit<TeamMember, 'id'>) => {
+  console.log('===>', data)
+  return await prisma.teamMember.create({
     data,
   })
+}
 
 export const updateTeamMember = async (
   id: string,

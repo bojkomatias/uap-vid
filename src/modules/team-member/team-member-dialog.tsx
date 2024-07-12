@@ -36,13 +36,14 @@ export function TeamMemberDialog({
   }
 
   return (
-    <Dialog open={open} onClose={closeDialog} size="xl">
+    <Dialog open={open} onClose={closeDialog} size="2xl">
       <DialogTitle>Miembro de equipo</DialogTitle>
 
       <TeamMemberForm
         member={member}
         researchers={researchers}
         academicUnits={academicUnits}
+        onSubmitCallback={closeDialog}
       />
     </Dialog>
   )

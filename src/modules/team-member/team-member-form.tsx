@@ -7,7 +7,7 @@ import type {
   User,
 } from '@prisma/client'
 import { TeamMemberSchema } from '@utils/zod'
-import { useCallback } from 'react'
+import { useCallback, useTransition } from 'react'
 import type { z } from 'zod'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,7 @@ export default function TeamMemberForm({
   member,
   researchers,
   academicUnits,
+  onSubmitCallback,
 }: {
   member:
     | (TeamMember & {
@@ -36,8 +37,11 @@ export default function TeamMemberForm({
     name: string
     shortname: string
   }[]
+  onSubmitCallback?: () => void
 }) {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+
   const form = useForm({
     initialValues: {
       id: member ? member.id : '',
@@ -50,8 +54,10 @@ export default function TeamMemberForm({
 
   const saveTeamMember = useCallback(
     async (teamMember: z.infer<typeof TeamMemberSchema>) => {
-      if (teamMember.id) {
-        const updated = await updateTeamMember(teamMember.id, teamMember)
+      const { id, ...data } = teamMember
+
+      if (member) {
+        const updated = await updateTeamMember(id, data)
         if (updated) {
           notifications.show({
             title: 'Miembro actualizado',
@@ -59,7 +65,10 @@ export default function TeamMemberForm({
               'El miembro de investigación fue actualizado correctamente',
             intent: 'success',
           })
-          return router.refresh()
+          return startTransition(() => {
+            router.refresh()
+            if (onSubmitCallback) onSubmitCallback()
+          })
         }
         return notifications.show({
           title: 'Ocurrió un error',
@@ -68,8 +77,8 @@ export default function TeamMemberForm({
         })
       }
 
-      // If new teamMember flow
-      const created = await createTeamMember(teamMember)
+      // Only pass the data
+      const created = await createTeamMember(data)
 
       if (created) {
         notifications.show({
@@ -78,7 +87,10 @@ export default function TeamMemberForm({
           intent: 'success',
         })
 
-        return router.push(`/team-members/${created.id}`)
+        return startTransition(() => {
+          router.refresh()
+          if (onSubmitCallback) onSubmitCallback()
+        })
       }
       return notifications.show({
         title: 'Ha ocurrido un error',
@@ -86,7 +98,7 @@ export default function TeamMemberForm({
         intent: 'error',
       })
     },
-    [router]
+    [router, member, onSubmitCallback]
   )
 
   return (
@@ -94,10 +106,9 @@ export default function TeamMemberForm({
       <Fieldset>
         <FieldGroup>
           <Legend>
-            Relacione un usuario con el miembro de investigación o cree un nuevo
-            miembro de investigación sin relación con un usuario existente.
+            Relacione un usuario o cree un nuevo miembro de investigación.
           </Legend>
-          <Text>
+          <Text className="text-xs sm:text-xs">
             Notesé que es mutuamente excluyente, no puede relacionar un usuario
             y escribir un nombre para dar de alta. Si el nuevo investigador no
             es aún usuario del sistema, deje el primer campo en blanco.
@@ -108,6 +119,15 @@ export default function TeamMemberForm({
             disabled={!!form.values.name && !form.values.userId}
             options={researchers.map((e) => ({ value: e.id, label: e.name }))}
             {...form.getInputProps('userId')}
+            onBlur={() => {
+              if (form.getInputProps('userId').value)
+                form.setFieldValue(
+                  'name',
+                  researchers.find(
+                    (x) => x.id === form.getInputProps('userId').value
+                  )!.name
+                )
+            }}
           />
 
           <FormInput
@@ -128,7 +148,7 @@ export default function TeamMemberForm({
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={!form.isDirty()}>
+        <FormButton isLoading={isPending}>
           {member ?
             'Actualizar miembro de investigación'
           : 'Crear miembro de investigación'}

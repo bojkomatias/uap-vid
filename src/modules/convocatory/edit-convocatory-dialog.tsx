@@ -23,7 +23,7 @@ export function EditConvocatoryDialog({
   }
 
   return (
-    <Dialog open={open} onClose={closeDialog} size="xl">
+    <Dialog open={open} onClose={closeDialog} size="2xl">
       <div className="flex items-center gap-2">
         <DialogTitle>{convocatory.name}</DialogTitle>
         {isCurrent ?

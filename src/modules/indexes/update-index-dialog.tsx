@@ -58,7 +58,7 @@ export function UpdateIndexDialog({ index }: { index: 'FCA' | 'FMR' }) {
         <Refresh data-slot="icon" /> Actualizar
       </Button>
 
-      <Dialog open={open} onClose={setOpen} size="xl">
+      <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Actualizar indice de {index}</DialogTitle>
         <DialogDescription>
           La mayoría de la applicación responde en base a los indices cargados,

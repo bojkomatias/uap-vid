@@ -17,7 +17,7 @@ export function NewAcademicUnitFormDialog() {
         Unidad Académica
       </Button>
 
-      <Dialog open={open} onClose={setOpen} size="xl">
+      <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Crear unidad académica</DialogTitle>
         <DialogDescription>
           Aquí puede crear una nueva unidad académica, son los entes
