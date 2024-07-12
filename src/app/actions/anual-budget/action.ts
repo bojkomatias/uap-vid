@@ -24,6 +24,11 @@ import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
+  ZeroAmountIndex,
+  subtractAmountIndex,
+  sumAmountIndex,
+} from '@utils/amountIndex'
+import {
   calculateTotalBudgetAggregated,
   type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
@@ -220,12 +225,10 @@ export const saveNewItemExecution = async (
         amountIndex,
         date: new Date(),
       })
-      const newFCA = item.remainingIndex.FCA - amountIndex.FCA
-      const newFMR = item.remainingIndex.FMR - amountIndex.FMR
-      item.remainingIndex = {
-        FCA: newFCA,
-        FMR: newFMR,
-      }
+      item.remainingIndex = subtractAmountIndex(
+        item.remainingIndex,
+        amountIndex
+      )
     }
     return item
   })
@@ -247,8 +250,15 @@ const getAcademicUnitBudgetSummary = (
   // Calculate the sum of academic unit budget for the given year
   const sumAcademicUnitBudget = academicUnitBudgetForYear
     .filter((b) => !b.to)
-    .map((b) => b.amount)
-    .reduce((acc, item) => acc + item, 0)
+    .map((b) => b.amountIndex)
+    .filter(Boolean)
+    .reduce((acc, item) => {
+      //check null
+      if (!item) return acc
+      if (!acc) return item
+      acc = sumAmountIndex([acc, item])
+      return acc
+    }, {} as AmountIndex)
 
   // Filter the last the academic unit that have budget changes in the given year
   const academicUnitWithLastBudgetChange = academicUnits
@@ -271,21 +281,33 @@ const getAcademicUnitBudgetSummary = (
   const [before, actual] =
     academicUnitWithLastBudgetChange ?
       [
-        academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
-        academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
+        academicUnitWithLastBudgetChange.budgets.at(-2)?.amountIndex,
+        academicUnitWithLastBudgetChange.budgets.at(-1)?.amountIndex,
       ]
-    : [0, 0]
+    : [ZeroAmountIndex, ZeroAmountIndex]
 
   if (!actual) return { value: 0, delta: 0, changeDate: '' }
 
   // Calculate a delta value between the actual and the previous budget in the same year
-  const deltaValue = actual && before ? actual - before : actual
+  const deltaValue =
+    actual && before ? subtractAmountIndex(actual, before) : actual
 
   // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
   const delta =
-    deltaValue ?
-      (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) * 100
-    : 0
+    deltaValue && sumAcademicUnitBudget ?
+      {
+        FCA:
+          (sumAcademicUnitBudget.FCA /
+            (sumAcademicUnitBudget.FCA - deltaValue.FCA) -
+            1) *
+          100,
+        FMR:
+          (sumAcademicUnitBudget.FMR /
+            (sumAcademicUnitBudget.FMR - deltaValue.FMR) -
+            1) *
+          100,
+      }
+    : ZeroAmountIndex
 
   return {
     value: sumAcademicUnitBudget,
@@ -294,7 +316,7 @@ const getAcademicUnitBudgetSummary = (
 }
 
 const getProjectedBudgetSummary = (
-  total: number,
+  total: AmountIndex,
   anualBudgets: Array<
     AnualBudget & {
       budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
@@ -307,24 +329,30 @@ const getProjectedBudgetSummary = (
     .map((b) => b.budgetTeamMembers)
     .flat()
     .map((b) => b.teamMember.categories)
-    .flat()
-    .filter((c) => c.category.price.some((p) => p.to))
+    .filter((c) => c.some((p) => p.to))
     .sort((a, b) => {
-      const aLastPriceChange = a.category.price.filter((p) => p.to).at(-1)
-      const bLastPriceChange = b.category.price.filter((p) => p.to).at(-1)
+      const aLastPriceChange = a.filter((p) => p.to).at(-1)
+      const bLastPriceChange = b.filter((p) => p.to).at(-1)
       if (!aLastPriceChange || !bLastPriceChange) return 0
       return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
     })
     .at(-1)
   const [before, actual] = [
-    lastCategoryWithPriceChange?.category.price.at(-2),
-    lastCategoryWithPriceChange?.category.price.at(-1),
+    lastCategoryWithPriceChange?.at(-2)?.category.priceIndex,
+    lastCategoryWithPriceChange?.at(-1)?.category.priceIndex,
   ]
 
   const deltaValue =
-    actual && before ? actual.price - before.price : actual?.price
+    actual && before ? subtractAmountIndex(actual, before) : actual
 
-  const delta = deltaValue ? (total / (total - deltaValue) - 1) * 100 : 0
+  const delta =
+    deltaValue ?
+      {
+        FCA: (total.FCA / (total.FCA - deltaValue.FCA) - 1) * 100,
+        FMR: (total.FMR / (total.FMR - deltaValue.FMR) - 1) * 100,
+      }
+    : ZeroAmountIndex
+  // (total / (total - deltaValue) - 1) * 100 : 0
 
   return {
     value: total,
@@ -399,7 +427,10 @@ export const getBudgetSummary = async (
     academicUnitBudgetSummary,
     projectedBudgetSummary,
     projectedBudgetSummaryApproved,
-    spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
+    spendedBudget: sumAmountIndex([
+      protocolBudgetSummary.ABIe,
+      protocolBudgetSummary.ABTe,
+    ]),
   }
 }
 

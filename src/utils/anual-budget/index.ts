@@ -1,6 +1,12 @@
-import type { AnualBudget, Execution } from '@prisma/client'
+import type { AmountIndex, AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
+import {
+  ZeroAmountIndex,
+  multiplyAmountIndex,
+  subtractAmountIndex,
+  sumAmountIndex,
+} from '@utils/amountIndex'
 
 // Utils for calculating the total budget or intermediate values once the annual budget is created.
 // I must create a type using the Prisma validator to mantain consistency if
@@ -31,52 +37,68 @@ export type HistoricTeamMemberCategoryWithAllRelations =
     typeof HistoricTeamMemberCategoryWithAllRelations
   >
 
-const totalExecution = (ex: Execution[], academicUnitId?: string): number => {
+const totalExecution = (
+  ex: Execution[],
+  academicUnitId?: string
+): AmountIndex => {
   if (academicUnitId) {
     const executionAmountPerAcademicUnit = ex
       .filter((e) => e.academicUnitId === academicUnitId)
       .reduce((acc, item) => {
-        acc += item.amount
+        acc = sumAmountIndex([acc, item.amountIndex ?? ZeroAmountIndex])
         return acc
-      }, 0)
+      }, {} as AmountIndex)
     return executionAmountPerAcademicUnit
   }
   return ex.reduce((acc, item) => {
-    acc += item.amount
+    acc = sumAmountIndex([acc, item.amountIndex ?? ZeroAmountIndex])
     return acc
-  }, 0)
+  }, {} as AmountIndex)
 }
 
 const calculateRemainingABI = (
   abi: AnualBudgetItem[],
   amountAcademicUnits: number,
-  executionPerAcademicUnit?: number
-): number => {
+  executionPerAcademicUnit?: AmountIndex
+): AmountIndex => {
   const totalBudgetItemsAmount = abi.reduce((acc, item) => {
-    acc +=
-      executionPerAcademicUnit ? item.amount / amountAcademicUnits : item.amount
+    acc.FCA +=
+      executionPerAcademicUnit ?
+        item.amountIndex.FCA / amountAcademicUnits
+      : item.amountIndex.FCA
+    acc.FMR +=
+      executionPerAcademicUnit ?
+        item.amountIndex.FMR / amountAcademicUnits
+      : item.amountIndex.FMR
     return acc
-  }, 0)
-  const amountPerAcademicUnit = totalBudgetItemsAmount / amountAcademicUnits
+  }, {} as AmountIndex)
+  const amountPerAcademicUnit: AmountIndex = {
+    FCA: totalBudgetItemsAmount.FCA / amountAcademicUnits,
+    FMR: totalBudgetItemsAmount.FMR / amountAcademicUnits,
+  }
 
   if (executionPerAcademicUnit) {
-    return amountPerAcademicUnit - executionPerAcademicUnit
+    return {
+      FCA: amountPerAcademicUnit.FCA - executionPerAcademicUnit.FCA,
+      FMR: amountPerAcademicUnit.FMR - executionPerAcademicUnit.FMR,
+    }
   }
 
   const totalExecutionAmount = abi
     .map((bi) => bi.executions)
     .reduce((acc, item) => {
-      acc += totalExecution(item)
+      const totalEx = totalExecution(item)
+      acc = sumAmountIndex([acc, totalEx])
       return acc
-    }, 0)
+    }, {} as AmountIndex)
 
-  return totalBudgetItemsAmount - totalExecutionAmount
+  return subtractAmountIndex(totalBudgetItemsAmount, totalExecutionAmount)
 }
 
 const calculateRemainingABTM = (
   abtm: AnualBudgetTeamMemberWithAllRelations[],
   academicUnitId?: string
-): number => {
+): AmountIndex => {
   //This part is used to calculate the remaining budget for a specific academic unit in summary cards
   if (academicUnitId) {
     const abtmAcademicUnit = abtm.filter(
@@ -84,38 +106,51 @@ const calculateRemainingABTM = (
     )
     return abtmAcademicUnit ?
         abtmAcademicUnit.reduce((acc, item) => {
-          acc += item.remainingHours * getLastCategoryPrice(item)
+          const remainingIndex = multiplyAmountIndex(
+            getLastCategoryPriceIndex(item),
+            item.remainingHours
+          )
+          acc = sumAmountIndex([acc, remainingIndex])
           return acc
-        }, 0)
-      : 0
+        }, {} as AmountIndex)
+      : ZeroAmountIndex
   }
 
   return abtm ?
       abtm.reduce((acc, item) => {
-        acc += item.remainingHours * getLastCategoryPrice(item)
+        const remainingIndex = multiplyAmountIndex(
+          getLastCategoryPriceIndex(item),
+          item.remainingHours
+        )
+        acc = sumAmountIndex([acc, remainingIndex])
         return acc
-      }, 0)
-    : 0
+      }, {} as AmountIndex)
+    : ZeroAmountIndex
 }
 
-const getLastCategoryPrice = (abtm: AnualBudgetTeamMemberWithAllRelations) => {
+const getLastCategoryPriceIndex = (
+  abtm: AnualBudgetTeamMemberWithAllRelations
+): AmountIndex => {
   const category = abtm.teamMember.categories.find((c) => !c.to)
-  if (!category) return 0
+  if (!category) return ZeroAmountIndex
   return calculateHourRateGivenCategory(category)
 }
 
 export const calculateHourRateGivenCategory = (
   category: HistoricTeamMemberCategoryWithAllRelations | null
-) => {
-  if (!category) return 0
+): AmountIndex => {
+  if (!category) return ZeroAmountIndex
   const isObrero = Boolean(category.pointsObrero)
-  const categoryPrice = category.category.price.at(-1)?.price ?? 0
+  const categoryPrice = category.category.priceIndex ?? ZeroAmountIndex
 
   const calculateObreroHourlyRate = (
-    categoryPrice: number,
+    categoryPrice: AmountIndex,
     pointsObrero: number
   ) => {
-    return (pointsObrero * categoryPrice) / 176
+    return {
+      FCA: (pointsObrero * categoryPrice.FCA) / 176,
+      FMR: (pointsObrero * categoryPrice.FMR) / 176,
+    }
   }
 
   const hourRate =
@@ -163,7 +198,7 @@ export const calculateTotalBudget = (
     ABTe,
     ABIr,
     ABTr,
-    total: ABIe + ABTe + ABIr + ABTr,
+    total: sumAmountIndex([ABIe, ABTe, ABIr, ABTr]),
   }
 }
 
@@ -177,19 +212,19 @@ export const calculateTotalBudgetAggregated = (
     .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
     .reduce(
       (acc, item) => {
-        acc.ABIe += item.ABIe
-        acc.ABTe += item.ABTe
-        acc.ABIr += item.ABIr
-        acc.ABTr += item.ABTr
-        acc.total += item.total
+        acc.ABIe = sumAmountIndex([acc.ABIe, item.ABIe])
+        acc.ABTe = sumAmountIndex([acc.ABTe, item.ABTe])
+        acc.ABIr = sumAmountIndex([acc.ABIr, item.ABIr])
+        acc.ABTr = sumAmountIndex([acc.ABTr, item.ABTr])
+        acc.total = sumAmountIndex([acc.total, item.total])
         return acc
       },
       {
-        ABIe: 0,
-        ABTe: 0,
-        ABIr: 0,
-        ABTr: 0,
-        total: 0,
+        ABIe: ZeroAmountIndex,
+        ABTe: ZeroAmountIndex,
+        ABIr: ZeroAmountIndex,
+        ABTr: ZeroAmountIndex,
+        total: ZeroAmountIndex,
       }
     )
   return result
