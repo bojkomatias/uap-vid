@@ -28,6 +28,16 @@ export const divideAmountIndex = (
   }
 }
 
+export const divideAmountIndexByAmountIndex = (
+  amountIndex: AmountIndex,
+  divisor: AmountIndex
+) => {
+  return {
+    FCA: amountIndex.FCA / divisor.FCA,
+    FMR: amountIndex.FMR / divisor.FMR,
+  }
+}
+
 export const subtractAmountIndex = (
   amountIndex: AmountIndex,
   subtrahend: AmountIndex
@@ -42,3 +52,19 @@ export const ZeroAmountIndex = {
   FCA: 0,
   FMR: 0,
 } as AmountIndex
+
+export const BudgetSummaryZero = {
+  academicUnitBudgetSummary: {
+    value: ZeroAmountIndex,
+    delta: ZeroAmountIndex,
+  },
+  projectedBudgetSummary: {
+    value: ZeroAmountIndex,
+    delta: ZeroAmountIndex,
+  },
+  projectedBudgetSummaryApproved: {
+    value: ZeroAmountIndex,
+    delta: ZeroAmountIndex,
+  },
+  spendedBudget: ZeroAmountIndex,
+}

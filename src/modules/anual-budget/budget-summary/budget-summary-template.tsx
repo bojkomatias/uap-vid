@@ -3,11 +3,11 @@ import { currencyFormatter } from '@utils/formatters'
 import type { BudgetSummaryType } from '@actions/anual-budget/action'
 import BudgetCardDelta from './budget-card-delta'
 import BudgetCardDoughnut from './budget-card-doughnut'
-import { useMemo, useState } from 'react'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
 import { AnualBudgetState } from '@prisma/client'
+import useBudgetSummary from 'hooks/budgetSummaryHook'
 
 export const BudgetSummary = ({
   summary,
@@ -16,56 +16,10 @@ export const BudgetSummary = ({
   summary: BudgetSummaryType
   allAcademicUnits?: Boolean
 }) => {
-  const [approved, showApproved] = useState(false)
-  const stats = useMemo(
-    () => [
-      {
-        name:
-          allAcademicUnits ? 'Presupuesto total' : (
-            'Presupuesto de la Unidad Académica'
-          ),
-        total: summary?.academicUnitBudgetSummary.value ?? 0,
-        delta: summary?.academicUnitBudgetSummary.delta,
-        date: summary?.academicUnitBudgetSummary.changeDate,
-        indicator: 'number',
-      },
-      {
-        name: 'Consumo proyectado',
-        total:
-          approved ?
-            summary?.projectedBudgetSummaryApproved?.value
-          : summary.projectedBudgetSummary.value ?? 0,
-        of: summary?.academicUnitBudgetSummary.value ?? 0,
-        delta: summary.projectedBudgetSummary.delta ?? 0,
-        indicator: 'number',
-      },
-      {
-        name: 'Consumo ejecutado',
-        total: summary?.spendedBudget ?? 0,
-        of:
-          approved ?
-            summary?.projectedBudgetSummaryApproved?.value
-          : summary.projectedBudgetSummary.value ?? 0,
-        delta:
-          summary?.spendedBudget /
-          (approved ?
-            summary?.projectedBudgetSummaryApproved?.value
-          : summary.projectedBudgetSummary.value ?? 0),
-        indicator: 'graph',
-      },
-    ],
-    [
-      allAcademicUnits,
-      approved,
-      summary?.academicUnitBudgetSummary.changeDate,
-      summary?.academicUnitBudgetSummary.delta,
-      summary?.academicUnitBudgetSummary.value,
-      summary.projectedBudgetSummary.delta,
-      summary.projectedBudgetSummary.value,
-      summary?.projectedBudgetSummaryApproved?.value,
-      summary?.spendedBudget,
-    ]
-  )
+  const { approved, showApproved, stats } = useBudgetSummary({
+    summary,
+    allAcademicUnits,
+  })
   return (
     <div>
       <dl className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-3">
@@ -100,7 +54,7 @@ export const BudgetSummary = ({
                 : null}
               </div>
               {item.indicator === 'number' ?
-                <BudgetCardDelta delta={item.delta ?? 0} />
+                <BudgetCardDelta delta={item.delta} />
               : null}
 
               {item.indicator === 'graph' ?

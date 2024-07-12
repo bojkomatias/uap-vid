@@ -24,6 +24,7 @@ import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
 import { findProtocolById } from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
+  BudgetSummaryZero,
   ZeroAmountIndex,
   subtractAmountIndex,
   sumAmountIndex,
@@ -323,7 +324,7 @@ const getProjectedBudgetSummary = (
     }
   >,
   year: number
-) => {
+): { value: AmountIndex; delta: AmountIndex } => {
   const lastCategoryWithPriceChange = anualBudgets
     .filter((b) => b.year === year)
     .map((b) => b.budgetTeamMembers)
@@ -387,13 +388,8 @@ export const getBudgetSummary = async (
 ) => {
   const academicUnits = await getAcademicUnitById(academicUnitId)
 
-  if (!academicUnits)
-    return {
-      academicUnitBudgetSummary: { value: 0, delta: 0 },
-      projectedBudgetSummary: { value: 0, delta: 0 },
-      projectedBudgetSummaryApproved: { value: 0, delta: 0 },
-      spendedBudget: 0,
-    }
+  if (!academicUnits) return BudgetSummaryZero
+
   const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
   const anualBudgets = removeDuplicates(list).filter(
     (ab) => ab.state !== AnualBudgetState.REJECTED
