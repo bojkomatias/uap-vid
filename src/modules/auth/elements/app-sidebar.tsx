@@ -29,7 +29,6 @@ import {
 import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
-import { Listbox } from '@components/listbox'
 import { IndexSwapper } from '@shared/index-swapper'
 
 export function AppSidebar({

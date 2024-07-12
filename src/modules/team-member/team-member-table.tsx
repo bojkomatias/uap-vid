@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Check, Minus } from 'tabler-icons-react'
 import { Currency } from '@shared/currency'
+import { BadgeButton } from '@components/badge'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
   include: {
@@ -63,7 +64,7 @@ export default function TeamMemberTable({
       {
         id: 'category.price',
         accessorFn: (row) => row.categories.at(-1)?.category.amountIndex,
-        header: 'Valor hora',
+        header: 'Valor categoría',
         cell: ({ row }) => (
           <>
             {row.original.categories.at(-1) ?
@@ -82,6 +83,17 @@ export default function TeamMemberTable({
         accessorFn: (row) => row.AcademicUnit?.name,
         header: 'Unidad Académica',
         enableSorting: true,
+      },
+      {
+        accessorKey: 'action',
+        header: '',
+        cell: ({ row }) => (
+          <BadgeButton href={`/team-members/categorize/${row.original.id}`}>
+            Categorizar
+          </BadgeButton>
+        ),
+        enableHiding: false,
+        enableSorting: false,
       },
     ],
     []
