@@ -1,4 +1,3 @@
-import CreateButton from '@protocol/elements/action-buttons/create'
 import ProtocolTable from '@protocol/elements/view/protocol-table'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
