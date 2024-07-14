@@ -11,7 +11,7 @@ import { Fieldset } from '@components/fieldset'
 import { FormSwitch } from '@shared/form/form-switch'
 import { useForm, zodResolver } from '@mantine/form'
 import { ReviewQuestionSchema } from '@utils/zod'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 export default function EvaluationsTable({
   questions,
@@ -171,10 +171,7 @@ export default function EvaluationsTable({
                 }
                 checked={form.getInputProps('active').value}
                 {...form.getInputProps('active')}
-                onChange={() => {
-                  console.log(form.getInputProps('active'))
-                }}
-              />{' '}
+              />
             </div>
             <FormInput
               value={form.getInputProps('question').value}
