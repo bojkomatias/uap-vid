@@ -6,6 +6,8 @@ import { getProtocolsByRol } from 'repositories/protocol'
 import { canExecute } from '@utils/scopes'
 import { Action, ProtocolState } from '@prisma/client'
 import { Heading, Subheading } from '@components/heading'
+import { Button } from '@components/button'
+import { FileReport } from 'tabler-icons-react'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -31,7 +33,11 @@ export default async function Page({
           Action.CREATE,
           session.user.role,
           ProtocolState.NOT_CREATED
-        ) && <CreateButton role={session.user.role} />}
+        ) && (
+          <Button href={'/protocols/new/0'}>
+            <FileReport data-slot="icon" /> Nuevo proyecto
+          </Button>
+        )}
       </div>
       <Subheading>
         Lista de todos los protocolos cargados en el sistema, haz click en

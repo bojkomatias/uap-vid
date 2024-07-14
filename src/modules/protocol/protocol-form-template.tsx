@@ -31,6 +31,7 @@ import { BadgeButton } from '@components/badge'
 import { FormButton } from '@shared/form/form-button'
 import { Button } from '@components/button'
 import type { z } from 'zod'
+import { createProtocol, updateProtocolById } from '@repositories/protocol'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -49,15 +50,15 @@ export default function ProtocolForm({
   protocol: z.infer<typeof ProtocolSchema>
 }) {
   const router = useRouter()
-  const path = usePathname()
-  const [section, setSection] = useState(path?.split('/')[3])
+  const pathname = usePathname()
+  const [section, setSection] = useState(pathname?.split('/')[3])
 
   const [isPending, startTransition] = useTransition()
 
   const form = useProtocol({
     initialValues:
       (
-        path?.split('/')[2] === 'new' &&
+        pathname?.split('/')[2] === 'new' &&
         typeof window !== 'undefined' &&
         localStorage.getItem('temp-protocol')
       ) ?
@@ -88,59 +89,59 @@ export default function ProtocolForm({
   useEffect(() => {
     // Validate if not existing path goes to section 0
     if (
-      path &&
-      !['0', '1', '2', '3', '4', '5', '6', '7'].includes(path?.split('/')[3])
+      pathname &&
+      !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
+        pathname?.split('/')[3]
+      )
     )
-      router.push('/protocols/' + path?.split('/')[2] + '/0')
-  }, [path, router])
+      router.push('/protocols/' + pathname?.split('/')[2] + '/0')
+  }, [pathname, router])
 
   const upsertProtocol = useCallback(
     async (protocol: z.infer<typeof ProtocolSchema>) => {
+      const { id, ...restOfProtocol } = protocol
       // flow for protocols that don't have ID
-      if (!protocol.id) {
-        const res = await fetch(`/api/protocol`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(protocol),
-        })
-        const { id }: Protocol = await res.json()
+      if (!id) {
+        const created = await createProtocol(restOfProtocol as Protocol) // Its because enum from zod != prisma enum according to types
 
-        if (res.status === 200) {
+        if (created) {
           notifications.show({
             title: 'Protocolo creado',
             message: 'El protocolo ha sido creado con éxito',
             intent: 'success',
           })
-        }
-        return router.push(`/protocols/${id}`)
-      }
-      const res = await fetch(`/api/protocol/${protocol.id}`, {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(protocol),
-      })
 
-      if (res.status === 200) {
+          // Only when created remove from LocalStorage
+          localStorage.removeItem('temp-protocol')
+
+          return startTransition(() => {
+            router.push(`/protocols/${created.id}`)
+          })
+        }
+        return notifications.show({
+          title: 'Error al crear',
+          message: 'Hubo un error al crear el protocolo',
+          intent: 'error',
+        })
+      }
+
+      const updated = await updateProtocolById(id, restOfProtocol as Protocol)
+
+      if (updated) {
         notifications.show({
           title: 'Protocolo guardado',
           message: 'El protocolo ha sido guardado con éxito',
           intent: 'success',
         })
-
-        //Timeout is for UX purposes
-        setTimeout(() => {
+        return startTransition(() => {
           router.push(`/protocols/${protocol.id}`)
-          startTransition(() => {
-            router.refresh()
-          })
-        }, 500)
+        })
       }
+      return notifications.show({
+        title: 'Error al guardar',
+        message: 'Hubo un error al guardar el protocolo',
+        intent: 'error',
+      })
     },
     [router]
   )
@@ -161,7 +162,11 @@ export default function ProtocolForm({
           'opacity-70',
           section == value && 'font-semibold opacity-100'
         )}
-        onClick={() => setSection(value)}
+        onClick={() => {
+          startTransition(() => {
+            setSection(value)
+          })
+        }}
       >
         {label}
 
@@ -179,13 +184,12 @@ export default function ProtocolForm({
     <ProtocolProvider form={form}>
       <form
         onBlur={() => {
-          path?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
+          pathname?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
             localStorage.setItem('temp-protocol', JSON.stringify(form.values))
           : null
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          console.log('===>', form.errors)
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
@@ -196,9 +200,6 @@ export default function ProtocolForm({
             })
             return form.validate()
           }
-          typeof window !== 'undefined' ?
-            localStorage.removeItem('temp-protocol')
-          : null
           upsertProtocol(form.values)
         }}
       >
