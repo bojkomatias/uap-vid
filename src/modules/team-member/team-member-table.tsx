@@ -75,7 +75,7 @@ export default function TeamMemberTable({
         header: 'Valor hora',
         cell: ({ row }) => (
           <Currency
-            amountIndex={row.original.categories.at(-1)!.category.amountIndex}
+            amountIndex={row.original.categories.at(-1)?.category.amountIndex}
           />
         ),
         enableSorting: false,

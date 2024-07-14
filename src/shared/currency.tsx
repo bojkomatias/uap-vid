@@ -12,7 +12,7 @@ import { indexSwapAtom } from './index-swapper'
     @amountIndex the indexes values to map and display
     @amount the value to display if value is not indexed
   */
-export function Currency({ amountIndex }: { amountIndex: AmountIndex }) {
+export function Currency({ amountIndex }: { amountIndex?: AmountIndex }) {
   const [value] = useAtom(indexSwapAtom)
 
   const { isError, data } = useQuery({
@@ -21,6 +21,8 @@ export function Currency({ amountIndex }: { amountIndex: AmountIndex }) {
   })
 
   if (isError || !data) return
+
+  if (!amountIndex) return <Strong>-</Strong>
 
   return (
     <Strong>
