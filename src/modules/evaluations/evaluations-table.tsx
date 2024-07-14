@@ -5,6 +5,13 @@ import React, { useRef, useState } from 'react'
 import { Badge } from '@components/badge'
 import { Heading, Subheading } from '@components/heading'
 import { Divider } from '@components/divider'
+import { Dialog } from '@components/dialog'
+import { FormInput } from '@shared/form/form-input'
+import { Fieldset } from '@components/fieldset'
+import { FormSwitch } from '@shared/form/form-switch'
+import { useForm, zodResolver } from '@mantine/form'
+import { ReviewQuestionSchema } from '@utils/zod'
+import { z } from 'zod'
 
 export default function EvaluationsTable({
   questions,
@@ -13,6 +20,10 @@ export default function EvaluationsTable({
   questions: ReviewQuestion[]
   totalRecords: number
 }) {
+  const [open, setOpen] = useState(false)
+  const [questionToEdit, setQuestionToEdit] = useState<ReviewQuestion>(
+    questions[0]
+  )
   const [methodologicalQuestions, setMethodologicalQuestions] = useState(
     questions.filter((q) => q.type == 'METHODOLOGICAL')!.filter((q) => q.active)
   )
@@ -22,6 +33,15 @@ export default function EvaluationsTable({
 
   const methodologicalCheckbox = useRef<HTMLInputElement>(null)
   const scientificCheckbox = useRef<HTMLInputElement>(null)
+
+  const form = useForm<z.infer<typeof ReviewQuestionSchema>>({
+    initialValues: {
+      active: questionToEdit.active,
+      type: questionToEdit.type,
+      question: questionToEdit.question,
+    },
+    validate: zodResolver(ReviewQuestionSchema),
+  })
 
   return (
     <main>
@@ -74,7 +94,11 @@ export default function EvaluationsTable({
               return (
                 <div key={q.id} className="truncate">
                   <Badge
-                    className={`w-fit text-sm ${!q.active && 'bg-red-200'}`}
+                    onClick={() => {
+                      setOpen(true)
+                      setQuestionToEdit(q)
+                    }}
+                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100' : 'hover:bg-gray-100'}`}
                   >
                     {q.question}
                   </Badge>
@@ -121,13 +145,46 @@ export default function EvaluationsTable({
             {scientificQuestions.map((q) => {
               return (
                 <div key={q.id} className="truncate">
-                  <Badge className="w-fit  text-sm">{q.question}</Badge>
+                  <Badge
+                    onClick={() => {
+                      setOpen(true)
+                      setQuestionToEdit(q)
+                    }}
+                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100' : 'hover:bg-gray-100'}`}
+                  >
+                    {q.question}
+                  </Badge>
                 </div>
               )
             })}
           </div>
         </section>
       </div>
+      <Dialog open={open} onClose={setOpen}>
+        <form>
+          <Fieldset>
+            <div>
+              <FormSwitch
+                label="Estado de la pregunta"
+                description={
+                  form.getInputProps('active').value ? 'Activa' : 'Inactiva'
+                }
+                checked={form.getInputProps('active').value}
+                {...form.getInputProps('active')}
+                onChange={() => {
+                  console.log(form.getInputProps('active'))
+                }}
+              />{' '}
+            </div>
+            <FormInput
+              value={form.getInputProps('question').value}
+              description="Editar pregunta"
+              label="Texto de la pregunta"
+              {...form.getInputProps('question')}
+            />
+          </Fieldset>
+        </form>
+      </Dialog>
     </main>
   )
 }
