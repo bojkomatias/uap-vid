@@ -133,7 +133,7 @@ export const ProtocolSchema = z.object({
   state: ProtocolStateSchema,
   researcherId: z.string(),
   sections: z.lazy(() => SectionsSchema),
-  convocatoryId: z.string(),
+  convocatoryId: z.string().nullish(),
 })
 
 /////////////////////////////////////////

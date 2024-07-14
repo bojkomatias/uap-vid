@@ -9,19 +9,15 @@ import { Action, ProtocolState } from '@prisma/client'
 
 export default async function Page({
   params,
-  searchParams,
 }: {
   params: { id: string; section: string }
-  searchParams: { convocatory: string }
 }) {
   const session = await getServerSession(authOptions)
   if (!session) return
-  if (!searchParams.convocatory && params.id === 'new') redirect('/protocols')
 
   const protocol =
     params.id === 'new' ?
       {
-        convocatoryId: searchParams.convocatory,
         state: ProtocolState.DRAFT,
         researcherId: session.user.id,
         sections: initialSectionValues,
