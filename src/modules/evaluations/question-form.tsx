@@ -1,6 +1,7 @@
 import { Fieldset } from '@components/fieldset'
 import { useForm, zodResolver } from '@mantine/form'
 import type { ReviewQuestion } from '@prisma/client'
+import { updateQuestion } from '@repositories/review-question'
 import { FormInput } from '@shared/form/form-input'
 import { FormSwitch } from '@shared/form/form-switch'
 import { useMutation } from '@tanstack/react-query'
@@ -23,7 +24,16 @@ export default function QuestionForm({
   })
 
   const { data, isSuccess } = useMutation({
-    mutationFn: async () => {},
+    mutationKey: [question],
+    mutationFn: async ({
+      data,
+      id,
+    }: {
+      data: Omit<ReviewQuestion, 'id'>
+      id: string
+    }) => {
+      await updateQuestion(data, id)
+    },
   })
 
   return (
