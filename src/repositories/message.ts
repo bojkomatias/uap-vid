@@ -25,7 +25,6 @@ const getMessages = cache(async (protocolId: string, n: number) => {
       orderBy: { createdAt: 'desc' },
       take: n,
     })
-
     return messages
   } catch (e) {
     console.error('Error fetching messages:', e)
