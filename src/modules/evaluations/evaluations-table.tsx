@@ -6,12 +6,7 @@ import { Badge } from '@components/badge'
 import { Heading, Subheading } from '@components/heading'
 import { Divider } from '@components/divider'
 import { Dialog } from '@components/dialog'
-import { FormInput } from '@shared/form/form-input'
-import { Fieldset } from '@components/fieldset'
-import { FormSwitch } from '@shared/form/form-switch'
-import { useForm, zodResolver } from '@mantine/form'
-import { ReviewQuestionSchema } from '@utils/zod'
-import type { z } from 'zod'
+import QuestionForm from './question-form'
 
 export default function EvaluationsTable({
   questions,
@@ -33,15 +28,6 @@ export default function EvaluationsTable({
 
   const methodologicalCheckbox = useRef<HTMLInputElement>(null)
   const scientificCheckbox = useRef<HTMLInputElement>(null)
-
-  const form = useForm<z.infer<typeof ReviewQuestionSchema>>({
-    initialValues: {
-      active: questionToEdit.active,
-      type: questionToEdit.type,
-      question: questionToEdit.question,
-    },
-    validate: zodResolver(ReviewQuestionSchema),
-  })
 
   return (
     <main>
@@ -161,26 +147,7 @@ export default function EvaluationsTable({
         </section>
       </div>
       <Dialog open={open} onClose={setOpen}>
-        <form>
-          <Fieldset>
-            <div>
-              <FormSwitch
-                label="Estado de la pregunta"
-                description={
-                  form.getInputProps('active').value ? 'Activa' : 'Inactiva'
-                }
-                checked={form.getInputProps('active').value}
-                {...form.getInputProps('active')}
-              />
-            </div>
-            <FormInput
-              value={form.getInputProps('question').value}
-              description="Editar pregunta"
-              label="Texto de la pregunta"
-              {...form.getInputProps('question')}
-            />
-          </Fieldset>
-        </form>
+        <QuestionForm question={questionToEdit} />
       </Dialog>
     </main>
   )
