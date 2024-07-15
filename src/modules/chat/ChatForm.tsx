@@ -94,14 +94,6 @@ export default function ChatForm({
       <div className="flex flex-col rounded-xl">
         <div
           ref={chatcontainer}
-          onScroll={() => {
-            console.log(
-              'SCROLLTOP',
-              Math.abs((chatcontainer.current! as HTMLDivElement).scrollTop),
-              'HEIGHT',
-              (chatcontainer.current! as HTMLDivElement).clientHeight
-            )
-          }}
           className="flex max-h-[60vh] flex-col-reverse overflow-auto"
         >
           <div className="w-full space-y-4 pt-4">
@@ -119,11 +111,16 @@ export default function ChatForm({
                 : 'Cargar más mensajes'}
               </Button>
             )}
+
             {!messages ||
               (messages!.length < 1 && (
                 <p className="px-4 pb-6 text-sm text-gray-600">
-                  Chat vacío. Puede comenzar una conversación enviando un
-                  mensaje.
+                  {isFetching ?
+                    <div className="flex items-center gap-1 text-primary-950">
+                      Cargando <Loader className="animate-spin" />
+                    </div>
+                  : 'Chat vacío. Puede comenzar una conversación enviando un mensaje'
+                  }
                 </p>
               ))}
             {messages?.toReversed().map((msg) => (
