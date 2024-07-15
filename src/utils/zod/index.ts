@@ -258,10 +258,7 @@ export const TeamMemberCategorySchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
-  price: HistoricCategoryPriceSchema.array().min(1, {
-    message: 'Configure un precio',
-  }),
-  amountIndex: AmountIndexSchema, //Remove nullable
+  amount: z.coerce.number(), //Remove nullable
 })
 
 /////////////////////////////////////////
