@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      {/* <PDF protocol={protocol} /> */}
+      <PDF protocol={protocol} />
       <ChatFullComponent user={session!.user} protocolId={protocol.id} />
       <View sections={protocol.sections} />
     </>

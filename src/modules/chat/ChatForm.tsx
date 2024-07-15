@@ -105,7 +105,7 @@ export default function ChatForm({
           className="flex max-h-[60vh] flex-col-reverse overflow-auto"
         >
           <div className="w-full space-y-4 pt-4">
-            {messages!.length > 1 && (
+            {messages && messages.length > 9 && (
               <Button
                 onClick={() => {
                   setTake(take + 10)
@@ -119,11 +119,13 @@ export default function ChatForm({
                 : 'Cargar más mensajes'}
               </Button>
             )}
-            {messages!.length < 1 && (
-              <p className="px-4 pb-6 text-sm text-gray-600">
-                Chat vacío. Puede comenzar una conversación enviando un mensaje.
-              </p>
-            )}
+            {!messages ||
+              (messages!.length < 1 && (
+                <p className="px-4 pb-6 text-sm text-gray-600">
+                  Chat vacío. Puede comenzar una conversación enviando un
+                  mensaje.
+                </p>
+              ))}
             {messages?.toReversed().map((msg) => (
               <div
                 key={msg.id}

@@ -33,4 +33,17 @@ const getMessages = cache(async (protocolId: string, n: number) => {
   }
 })
 
-export { saveMessage, getMessages }
+const totalMessages = cache(async (protocolId: string) => {
+  try {
+    const messages = await prisma.chatMessage.count({
+      where: { protocolId },
+    })
+
+    return messages
+  } catch (e) {
+    console.error('Error fetching messages count:', e)
+    return null
+  }
+})
+
+export { saveMessage, getMessages, totalMessages }
