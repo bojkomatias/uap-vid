@@ -12,6 +12,7 @@ import {
   Notebook,
   Certificate2,
   FileDelta,
+  Message,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -29,7 +30,6 @@ import {
 import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
-import { Listbox } from '@components/listbox'
 import { IndexSwapper } from '@shared/index-swapper'
 
 export function AppSidebar({
@@ -149,5 +149,11 @@ export const navigation = [
     icon: Coin,
     href: '/indexes',
     scope: Access.INDEXES,
+  },
+  {
+    name: 'Evaluaciones',
+    icon: Message,
+    href: '/evaluations',
+    scope: Access.EVALUATIONS,
   },
 ]

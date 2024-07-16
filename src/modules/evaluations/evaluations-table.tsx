@@ -5,8 +5,11 @@ import React, { useRef, useState } from 'react'
 import { Badge } from '@components/badge'
 import { Heading } from '@components/heading'
 import { Divider } from '@components/divider'
-import { Dialog } from '@components/dialog'
-import QuestionForm from './question-form'
+import { Dialog, DialogTitle } from '@components/dialog'
+import UpdateQuestionForm from './question-form'
+import NewQuestionForm from './new-question.form'
+import { Button } from '@elements/button'
+import { Plus } from 'tabler-icons-react'
 
 export default function EvaluationsTable({
   questions,
@@ -16,6 +19,7 @@ export default function EvaluationsTable({
   totalRecords: number
 }) {
   const [open, setOpen] = useState(false)
+  const [newOpen, setNewOpen] = useState({ state: false, type: '' })
   const [questionToEdit, setQuestionToEdit] = useState<ReviewQuestion>(
     questions[0]
   )
@@ -28,6 +32,10 @@ export default function EvaluationsTable({
 
   const methodologicalCheckbox = useRef<HTMLInputElement>(null)
   const scientificCheckbox = useRef<HTMLInputElement>(null)
+
+  const handleNewClose = () => {
+    setNewOpen((prevState) => ({ ...prevState, state: false }))
+  }
 
   return (
     <main>
@@ -66,6 +74,13 @@ export default function EvaluationsTable({
             </div>
           </div>
           <Divider />
+          <Button
+            onClick={() => setNewOpen({ state: true, type: 'METHODOLOGICAL' })}
+            className="my-1 w-fit font-semibold"
+            intent="primary"
+          >
+            <Plus className="w-3" /> Nueva pregunta de evaluación
+          </Button>
           <div className="flex flex-col gap-2">
             {methodologicalQuestions.map((q) => {
               return (
@@ -118,6 +133,13 @@ export default function EvaluationsTable({
             </div>
           </div>
           <Divider />
+          <Button
+            onClick={() => setNewOpen({ state: true, type: 'SCIENTIFIC' })}
+            className="my-1 w-fit font-semibold"
+            intent="primary"
+          >
+            <Plus className="w-3" /> Nueva pregunta de evaluación
+          </Button>
           <div className="flex flex-col gap-2">
             {scientificQuestions.map((q) => {
               return (
@@ -138,7 +160,12 @@ export default function EvaluationsTable({
         </section>
       </div>
       <Dialog open={open} onClose={setOpen}>
-        <QuestionForm question={questionToEdit} />
+        <DialogTitle>Actualizar pregunta</DialogTitle>
+        <UpdateQuestionForm question={questionToEdit} />
+      </Dialog>
+      <Dialog open={newOpen.state} onClose={handleNewClose}>
+        <DialogTitle>Crear pregunta de evaluación</DialogTitle>
+        <NewQuestionForm type={newOpen.type} />
       </Dialog>
     </main>
   )
