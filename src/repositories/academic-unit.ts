@@ -6,10 +6,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import type { z } from 'zod'
 import type { AcademicUnitSchema } from '@utils/zod'
 import type { Secretary } from 'modules/academic-unit/edit-secretaries-form'
-<<<<<<< HEAD
-=======
 import { getCurrentIndexes } from './finance-index'
->>>>>>> develop
 
 export const getAcademicUnitsForForm = cache(
   async () =>
@@ -33,6 +30,18 @@ export const getAcademicUnitsTabs = cache(
       },
     })
 )
+
+export const getAcademicUnitByIdWithoutIncludes = async (id: string) => {
+  try {
+    return prisma.academicUnit.findUnique({
+      where: {
+        id,
+      },
+    })
+  } catch (error) {
+    return null
+  }
+}
 
 export const getAcademicUnitById = async (id?: string) => {
   try {

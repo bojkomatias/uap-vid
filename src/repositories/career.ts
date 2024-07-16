@@ -101,6 +101,18 @@ export const getCareerById = cache(async (id: string) => {
   }
 })
 
+export const getCourseById = cache(async (id: string) => {
+  try {
+    const result = prisma.course.findFirst({
+      where: { id },
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+})
+
 export const upsertCareer = cache(
   async (data: z.infer<typeof CareerSchema>) => {
     const { id, courses, ...career } = data
