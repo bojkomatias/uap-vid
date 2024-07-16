@@ -75,6 +75,7 @@ export default function TeamMemberTable({
               />
             : null}
           </>
+
         ),
         enableSorting: false,
       },

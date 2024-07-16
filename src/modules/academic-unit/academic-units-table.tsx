@@ -65,6 +65,7 @@ export default function AcademicUnitsTable({
             <Currency amountIndex={row.original.budgets.at(-1)!.amountIndex} />
           : null}
         </>
+
       ),
     },
     {

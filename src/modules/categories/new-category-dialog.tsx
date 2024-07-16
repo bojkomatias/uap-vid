@@ -65,6 +65,7 @@ export function NewCategoryDialog() {
       </Button>
 
       <Dialog open={open} onClose={setOpen} size="2xl">
+
         <DialogTitle>Crear categoria</DialogTitle>
         <DialogDescription>
           Aquí puede crear una nueva categoria para luego asignarla a los
