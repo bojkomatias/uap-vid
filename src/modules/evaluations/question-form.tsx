@@ -4,9 +4,8 @@ import { useForm, zodResolver } from '@mantine/form'
 import type { ReviewQuestion } from '@prisma/client'
 import { updateQuestion } from '@repositories/review-question'
 import { FormButton } from '@shared/form/form-button'
-import { FormCombobox } from '@shared/form/form-combobox'
-import { FormInput } from '@shared/form/form-input'
 import { FormSwitch } from '@shared/form/form-switch'
+import { FormTextarea } from '@shared/form/form-textarea'
 import { useMutation } from '@tanstack/react-query'
 import { ReviewQuestionSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -66,7 +65,7 @@ export default function QuestionForm({
             checked={form.getInputProps('active').value}
             {...form.getInputProps('active')}
           />
-          <FormInput
+          <FormTextarea
             value={form.getInputProps('question').value}
             description="Editar pregunta"
             label="Texto de la pregunta"

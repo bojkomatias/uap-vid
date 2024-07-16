@@ -4,9 +4,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import type { ReviewQuestion } from '@prisma/client'
 import { newQuestion } from '@repositories/review-question'
 import { FormButton } from '@shared/form/form-button'
-import { FormCombobox } from '@shared/form/form-combobox'
-import { FormInput } from '@shared/form/form-input'
-import { FormSwitch } from '@shared/form/form-switch'
+import { FormTextarea } from '@shared/form/form-textarea'
 import { useMutation } from '@tanstack/react-query'
 import { ReviewQuestionSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -48,7 +46,7 @@ export default function NewQuestionForm({ type }: { type: string }) {
     >
       <Fieldset>
         <FieldGroup>
-          <FormInput
+          <FormTextarea
             autoFocus
             value={form.getInputProps('question').value}
             description="Nueva pregunta"
