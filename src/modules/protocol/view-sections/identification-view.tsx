@@ -4,12 +4,23 @@ import ItemListView from '@protocol/elements/view/item-list-view'
 import SectionViewer from '../elements/view/section-viewer'
 import ItemView from '@protocol/elements/view/item-view'
 import { getTeamMembersByIds } from '@repositories/team-member'
+import { getAcademicUnitByIdWithoutIncludes } from '../../../repositories/academic-unit'
+import { getCareerById, getCourseById } from '@repositories/career'
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
 }
 export default async function IdentificationView({
   data,
 }: IdentificationProps) {
+  const academicUnits = await Promise.all(
+    data.academicUnitIds
+      .map(async (acId) => await getAcademicUnitByIdWithoutIncludes(acId))
+      .map((ac) => ac.then((a) => a?.name))
+  )
+
+  const career = await getCareerById(data.careerId)
+  const course = await getCourseById(data.courseId!)
+
   const shortData = [
     {
       title: 'Título',
@@ -17,15 +28,15 @@ export default async function IdentificationView({
     },
     {
       title: 'Carrera',
-      value: data.career,
+      value: career?.name,
     },
     {
       title: 'Materia',
-      value: data.assignment,
+      value: course?.name,
     },
     {
-      title: 'Ente Patrocinante',
-      value: data.sponsor.join(' | '),
+      title: 'Ente/s Patrocinante',
+      value: academicUnits.join(' - '),
     },
   ]
   const teamMembersIds = data.team
@@ -66,7 +77,7 @@ export default async function IdentificationView({
         <>
           {/* Details of project */}
           {shortData.map((item) => (
-            <ItemView key={item.title} title={item.title} value={item.value} />
+            <ItemView key={item.title} title={item.title} value={item.value!} />
           ))}
           {/* Team details */}
           <ItemListView data={tableData} />

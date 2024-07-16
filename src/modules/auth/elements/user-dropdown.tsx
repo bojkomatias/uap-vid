@@ -44,7 +44,7 @@ export function UserDropdown({ user }: { user: User }) {
               user.name.split(' ')[0].substring(0, 1) +
               user.name.split(' ').at(-1)?.substring(0, 1)
             }
-            className="size-10"
+            className="size-10 bg-primary-950 text-white dark:bg-white dark:text-primary-950"
           />
         }
         <span className="block text-left">

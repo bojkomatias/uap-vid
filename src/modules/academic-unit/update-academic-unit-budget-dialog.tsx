@@ -116,7 +116,7 @@ export function UpdateAcademicUnitBudgetDialog({
                     {currencyFormatter.format(value.amountIndex.FCA)}
                   </TableCell>
                   <TableCell className="font-medium">
-                    {value.to ? null : <Badge color="green">Actual</Badge>}
+                    {value.to ? null : <Badge color="teal">Actual</Badge>}
                   </TableCell>
                   <TableCell>
                     Desde:{' '}

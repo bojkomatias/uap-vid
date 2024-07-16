@@ -1,9 +1,9 @@
 'use client'
+
 import { motion } from 'framer-motion'
 import InfoTooltip from '@protocol/elements/tooltip'
-import SectionTitle from '@protocol/elements/form-section-title'
-
 import { BudgetList } from '@protocol/elements/inputs/budget-list-form'
+import { Fieldset, Legend } from '@components/fieldset'
 
 export function BudgetForm() {
   return (
@@ -11,13 +11,12 @@ export function BudgetForm() {
       initial={{ opacity: 0, x: -5 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7 }}
-      className="space-y-3"
     >
-      <SectionTitle title="Presupuesto de gastos directos" />
-      <>
+      <Fieldset>
+        <Legend>Presupuesto de gastos directos</Legend>
         <Info />
         <BudgetList />
-      </>
+      </Fieldset>
     </motion.div>
   )
 }

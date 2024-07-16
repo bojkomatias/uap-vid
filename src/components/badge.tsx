@@ -1,10 +1,12 @@
 import * as Headless from '@headlessui/react'
-import clsx from 'clsx'
 import React from 'react'
 import { TouchTarget } from './button'
 import { Link } from './link'
+import { cx } from '@utils/cx'
 
 const colors = {
+  light:
+    'bg-black/5 text-gray-700 group-data-[hover]:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:group-data-[hover]:bg-black/10',
   red: 'bg-red-500/15 text-red-700 group-data-[hover]:bg-red-500/25 dark:bg-red-500/10 dark:text-red-400 dark:group-data-[hover]:bg-red-500/20',
   orange:
     'bg-orange-500/15 text-orange-700 group-data-[hover]:bg-orange-500/25 dark:bg-orange-500/10 dark:text-orange-400 dark:group-data-[hover]:bg-orange-500/20',
@@ -44,10 +46,10 @@ export function Badge({
   return (
     <span
       {...props}
-      className={clsx(
-        className,
+      className={cx(
         'inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm/5 font-medium sm:text-xs/5 forced-colors:outline',
-        colors[color]
+        colors[color],
+        className
       )}
     />
   )
@@ -65,10 +67,8 @@ export const BadgeButton = React.forwardRef(function BadgeButton(
     ),
   ref: React.ForwardedRef<HTMLElement>
 ) {
-  const classes = clsx(
-    className,
+  const classes =
     'group relative inline-flex rounded-md focus:outline-none data-[focus]:outline data-[focus]:outline-2 data-[focus]:outline-offset-2 data-[focus]:outline-primary-950'
-  )
 
   return 'href' in props ?
       <Link
@@ -77,12 +77,16 @@ export const BadgeButton = React.forwardRef(function BadgeButton(
         ref={ref as React.ForwardedRef<HTMLAnchorElement>}
       >
         <TouchTarget>
-          <Badge color={color}>{children}</Badge>
+          <Badge color={color} className={className}>
+            {children}
+          </Badge>
         </TouchTarget>
       </Link>
     : <Headless.Button {...props} className={classes} ref={ref}>
         <TouchTarget>
-          <Badge color={color}>{children}</Badge>
+          <Badge color={color} className={className}>
+            {children}
+          </Badge>
         </TouchTarget>
       </Headless.Button>
 })

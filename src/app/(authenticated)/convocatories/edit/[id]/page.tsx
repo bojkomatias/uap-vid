@@ -1,6 +1,6 @@
 import { Badge } from '@components/badge'
 import { Heading, Subheading } from '@components/heading'
-import { Text } from '@components/text'
+
 import { ConvocatoryForm } from '@convocatory/convocatory-form'
 
 import {

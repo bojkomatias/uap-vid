@@ -31,6 +31,18 @@ export const getAcademicUnitsTabs = cache(
     })
 )
 
+export const getAcademicUnitByIdWithoutIncludes = async (id: string) => {
+  try {
+    return prisma.academicUnit.findUnique({
+      where: {
+        id,
+      },
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 export const getAcademicUnitById = async (id?: string) => {
   try {
     if (!id)
