@@ -15,7 +15,7 @@ export default async function Page({
     <>
       <div className="flex items-end">
         <Heading>Miembros del equipo de investigación</Heading>
-        <Button href={'/team-members/new'}>
+        <Button href={'/team-members/member/new'}>
           <UserPlus data-slot="icon" />
           Nuevo miembro
         </Button>

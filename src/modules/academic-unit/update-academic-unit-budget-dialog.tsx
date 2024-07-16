@@ -78,7 +78,7 @@ export function UpdateAcademicUnitBudgetDialog({
   )
 
   return (
-    <Dialog open={open} onClose={closeModal} size="xl">
+    <Dialog open={open} onClose={closeModal} size="2xl">
       <DialogTitle>Presupuesto de unidad académica</DialogTitle>
       <DialogDescription>
         Lista de presupuesto historicos de unidades académicas y la opción de

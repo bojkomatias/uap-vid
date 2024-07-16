@@ -3,7 +3,7 @@
 import type { AcademicUnit, Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
-import Currency from '@elements/currency'
+import { Currency } from '@shared/currency'
 import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useMemo, useState } from 'react'
@@ -12,6 +12,7 @@ import { Combobox } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
+import { Strong } from '@components/text'
 
 export default function BudgetExecutionView({
   title,
@@ -252,7 +253,9 @@ export default function BudgetExecutionView({
                               }
                             </td>
                             <td className="pt-2">
-                              <Currency amount={execution.amount} />
+                              <Strong>
+                                {currencyFormatter.format(execution.amount)}
+                              </Strong>
                             </td>
                           </tr>
                         </>

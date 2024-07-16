@@ -19,15 +19,8 @@ import {
   VerifyUserDataSchema,
 } from '@utils/zod'
 
-export function VerifyUserDataForm({
-  user,
-  onSubmitCallback,
-}: {
-  user: User
-  onSubmitCallback?: () => void
-}) {
+export function VerifyUserDataForm({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof VerifyUserDataSchema>>({
     initialValues: {
@@ -53,10 +46,9 @@ export function VerifyUserDataForm({
         setTimeout(() => {
           signOut({ callbackUrl: '/' })
         }, 2500)
-        if (onSubmitCallback) onSubmitCallback()
       })
     },
-    [router, onSubmitCallback]
+    [user.id]
   )
 
   return (
@@ -68,10 +60,7 @@ export function VerifyUserDataForm({
 
       <form
         className="flex w-full flex-col items-stretch gap-3"
-        onSubmit={form.onSubmit(
-          // @ts-ignore --Overriding values
-          (values) => submitVerifyUserData(values)
-        )}
+        onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}
       >
         <Fieldset>
           <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
@@ -112,15 +101,9 @@ export function VerifyUserDataForm({
   )
 }
 
-export function VerifyUserDataFormMicrosoftUsers({
-  user,
-  onSubmitCallback,
-}: {
-  user: User
-  onSubmitCallback?: () => void
-}) {
+export function VerifyUserDataFormMicrosoftUsers({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition()
-  const router = useRouter()
+
   const form = useForm<z.infer<typeof VerifyUserDataMicrosoftUsersSchema>>({
     initialValues: {
       name: user.name,
@@ -148,10 +131,9 @@ export function VerifyUserDataFormMicrosoftUsers({
         setTimeout(() => {
           signOut({ callbackUrl: '/' })
         }, 2500)
-        if (onSubmitCallback) onSubmitCallback()
       })
     },
-    [router, onSubmitCallback]
+    [user.id]
   )
 
   return (
@@ -163,10 +145,7 @@ export function VerifyUserDataFormMicrosoftUsers({
 
       <form
         className="flex w-full flex-col items-stretch gap-3"
-        onSubmit={form.onSubmit(
-          // @ts-ignore --Overriding values
-          (values) => submitVerifyUserData(values)
-        )}
+        onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}
       >
         <Fieldset>
           <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
