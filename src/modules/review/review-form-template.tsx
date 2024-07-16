@@ -15,7 +15,7 @@ export default async function ReviewFormTemplate({
   if (!review) return null
   return (
     <div className="w-full lg:w-[28rem] xl:w-[36rem]">
-      <ReviewForm review={review} questions={questions!} />
+      <ReviewForm review={review} questions={questions} />
     </div>
   )
 }
