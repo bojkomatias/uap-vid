@@ -16,7 +16,7 @@ export function NewCareerDialog() {
         Agregar carrera
       </Button>
 
-      <Dialog open={open} onClose={setOpen} size="xl">
+      <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Agregar carrera</DialogTitle>
         <DialogDescription>
           Agregar una nueva carrera con sus materias correspondientes
