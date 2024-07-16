@@ -25,7 +25,7 @@ export function EditAcademicUnitFormDialog({
   }
 
   return (
-    <Dialog open={open} onClose={closeModal} size="xl">
+    <Dialog open={open} onClose={closeModal} size="2xl">
       <DialogTitle>Crear unidad académica</DialogTitle>
       <DialogDescription>
         Aquí puede crear una nueva unidad académica, son los entes patrocinantes

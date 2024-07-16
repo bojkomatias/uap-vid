@@ -85,7 +85,7 @@ export function SidebarDivider({
       {...props}
       className={clsx(
         className,
-        'my-4 border-t border-gray-950/5 dark:border-white/5 lg:-mx-4'
+        'my-3 border-t border-gray-950/5 dark:border-white/5 lg:-mx-4'
       )}
     />
   )
@@ -99,7 +99,7 @@ export function SidebarSpacer({
     <div
       aria-hidden="true"
       {...props}
-      className={clsx(className, 'mt-8 flex-1')}
+      className={clsx(className, 'mt-4 flex-1')}
     />
   )
 }

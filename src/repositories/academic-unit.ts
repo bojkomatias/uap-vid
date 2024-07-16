@@ -3,10 +3,21 @@
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
-import type { AcademicUnit } from '@prisma/client'
 import type { z } from 'zod'
 import type { AcademicUnitSchema } from '@utils/zod'
-import { Secretary } from 'modules/academic-unit/edit-secretaries-form'
+import type { Secretary } from 'modules/academic-unit/edit-secretaries-form'
+import { getCurrentIndexes } from './finance-index'
+
+export const getAcademicUnitsForForm = cache(
+  async () =>
+    await prisma.academicUnit.findMany({
+      select: {
+        id: true,
+        name: true,
+        shortname: true,
+      },
+    })
+)
 
 export const getAcademicUnitsTabs = cache(
   async () =>
@@ -202,24 +213,7 @@ export const updateAcademicUnitBudget = async (
 ) => {
   try {
     // Pull values
-    const [FCAValues, FMRValues] = await prisma.$transaction([
-      prisma.index.findFirstOrThrow({
-        where: { unit: 'FCA' },
-        select: { values: true },
-      }),
-      prisma.index.findFirstOrThrow({
-        where: { unit: 'FMR' },
-        select: { values: true },
-      }),
-    ])
-
-    const [currentFCA, currentFMR] = [
-      FCAValues.values.at(-1)?.price,
-      FMRValues.values.at(-1)?.price,
-    ]
-
-    if (!currentFCA || !currentFMR)
-      throw Error('There are no FCA / FMR indexes')
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
 
     // Get the current budgets
     const { budgets } = await prisma.academicUnit.findFirstOrThrow({
