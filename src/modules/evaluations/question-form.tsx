@@ -66,6 +66,7 @@ export default function QuestionForm({
             {...form.getInputProps('active')}
           />
           <FormTextarea
+            rows={5}
             value={form.getInputProps('question').value}
             description="Editar pregunta"
             label="Texto de la pregunta"
