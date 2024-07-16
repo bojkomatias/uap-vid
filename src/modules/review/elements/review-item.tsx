@@ -105,9 +105,11 @@ export default function ReviewItem({
               : null}
             </span>
             <span className="font-light text-gray-500">
-              {getDuration(
-                new Date().getTime() - new Date(review.updatedAt).getTime()
-              )}
+              {new Date().getTime() - new Date(review.updatedAt).getTime() < 1 ?
+                getDuration(
+                  new Date().getTime() - new Date(review.updatedAt).getTime()
+                )
+              : 'hace un instante'}
             </span>
           </div>
         </div>
