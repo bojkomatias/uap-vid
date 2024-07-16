@@ -3,7 +3,7 @@
 import type { ReviewQuestion } from '@prisma/client'
 import React, { useRef, useState } from 'react'
 import { Badge } from '@components/badge'
-import { Heading, Subheading } from '@components/heading'
+import { Heading } from '@components/heading'
 import { Divider } from '@components/divider'
 import { Dialog } from '@components/dialog'
 import QuestionForm from './question-form'
@@ -31,15 +31,6 @@ export default function EvaluationsTable({
 
   return (
     <main>
-      <Subheading className="mb-3">
-        Listado de preguntas correspondientes a cada tipo de evaluación. Las
-        preguntas activas son las que los evaluadores (metodólogo, evaluador
-        interno, externo o extraordinario) utlilizan para evaluar un protocolo
-        de investigación. Para remover una pregunta de la evaluación, marque su
-        estado como inactivo. Esta acción no eliminará la pregunta, ya que
-        existe la posibilidad de que un protocolo haya sido evaluado previamente
-        con esa pregunta.
-      </Subheading>
       <div className="grid grid-cols-2 gap-6">
         <section className="flex flex-col gap-3 rounded-lg border p-3">
           <div className="flex justify-between">

@@ -61,7 +61,6 @@ export function UpdateAcademicUnitBudgetDialog({
     async ({ value }: { value: number }) => {
       const updated = await updateAcademicUnitBudget(academicUnitId!, value)
 
-      console.log(updated)
       if (updated)
         notifications.show({
           title: 'Unidad académica guardada',

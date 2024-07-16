@@ -329,8 +329,6 @@ async function main() {
         return acc
       }, {})
 
-    console.log(questions)
-
     const updated_reviews = reviews.map((review) => {
       return {
         ...review,

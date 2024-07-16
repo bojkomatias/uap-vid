@@ -77,7 +77,7 @@ export default function QuestionForm({
             value={form.getInputProps('type').value}
             options={[
               { value: 'SCIENTIFIC', label: 'Científica' },
-              { value: 'METHODOLOGIC', label: 'Metodológica' },
+              { value: 'METHODOLOGICAL', label: 'Metodológica' },
             ]}
             {...form.getInputProps('type')}
           />

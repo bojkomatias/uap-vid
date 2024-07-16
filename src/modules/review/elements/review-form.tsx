@@ -37,6 +37,7 @@ export default function ReviewForm({
     validate: zodResolver(ReviewSchema),
     validateInputOnChange: true,
   })
+
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
@@ -91,7 +92,12 @@ export default function ReviewForm({
         >
           <div className="space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
             {form.values.questions.map((q, index) => (
-              <ReviewQuestion key={q.id} index={index} id={q.id} />
+              <ReviewQuestion
+                questions={questions}
+                key={q.id}
+                index={index}
+                id={q.id}
+              />
             ))}
           </div>
           <RadioGroup {...form.getInputProps('verdict')} className={'mx-2'}>
