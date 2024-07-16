@@ -304,6 +304,21 @@ async function main() {
     const review_question_collection = getCollection('ReviewQuestion')
     const review_questions = await review_question_collection.find().toArray()
 
+    // for (const question of questions) {
+    //   try {
+    //     const result = await review_question_collection.insertOne({
+    //       active: question.active,
+    //       type: question.type,
+    //       question: question.question,
+    //     })
+    //     console.log(
+    //       `Created review question ${result._id}: ${result.modifiedCount} document modified`
+    //     )
+    //   } catch (error) {
+    //     console.error(`Error creating review question ${review._id}:`, error)
+    //   }
+    // }
+
     const question_id_dictionary = review_questions
       .map((rq) => {
         const id = questions.find((q) => q.question == rq.question).id
@@ -312,7 +327,9 @@ async function main() {
       .reduce((acc, ac) => {
         acc[ac.id] = ac._id
         return acc
-      })
+      }, {})
+
+    console.log(questions)
 
     const updated_reviews = reviews.map((review) => {
       return {
