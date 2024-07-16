@@ -3,11 +3,21 @@
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 import { orderByQuery } from '@utils/query-helper/orderBy'
-import type { AcademicUnit } from '@prisma/client'
 import type { z } from 'zod'
 import type { AcademicUnitSchema } from '@utils/zod'
-import { Secretary } from 'modules/academic-unit/edit-secretaries-form'
+import type { Secretary } from 'modules/academic-unit/edit-secretaries-form'
 import { getCurrentIndexes } from './finance-index'
+
+export const getAcademicUnitsForForm = cache(
+  async () =>
+    await prisma.academicUnit.findMany({
+      select: {
+        id: true,
+        name: true,
+        shortname: true,
+      },
+    })
+)
 
 export const getAcademicUnitsTabs = cache(
   async () =>
@@ -20,6 +30,18 @@ export const getAcademicUnitsTabs = cache(
       },
     })
 )
+
+export const getAcademicUnitByIdWithoutIncludes = async (id: string) => {
+  try {
+    return prisma.academicUnit.findUnique({
+      where: {
+        id,
+      },
+    })
+  } catch (error) {
+    return null
+  }
+}
 
 export const getAcademicUnitById = async (id?: string) => {
   try {

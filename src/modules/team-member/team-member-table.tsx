@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Check, Minus } from 'tabler-icons-react'
 import { Currency } from '@shared/currency'
+import { BadgeButton } from '@components/badge'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
   include: {
@@ -45,12 +46,9 @@ export default function TeamMemberTable({
         header: 'Email',
       },
       {
-        accessorKey: 'obrero',
-        header: 'Obrero',
-        cell: ({ row }) =>
-          row.original.categories.at(-1)?.pointsObrero ?
-            <Check className="ml-4 h-4 text-gray-600" />
-          : <Minus className="ml-4 h-4 text-gray-600" />,
+        id: 'category.name',
+        accessorFn: (row) => row.categories.at(-1)?.category.name,
+        header: 'Categoría',
         enableSorting: false,
       },
       {
@@ -64,19 +62,20 @@ export default function TeamMemberTable({
         enableSorting: false,
       },
       {
-        id: 'category.name',
-        accessorFn: (row) => row.categories.at(-1)?.category.name,
-        header: 'Categoría',
-        enableSorting: false,
-      },
-      {
         id: 'category.price',
-        accessorFn: (row) => row.categories.at(-1)?.category.price.at(-1),
-        header: 'Valor hora',
+        accessorFn: (row) => row.categories.at(-1)?.category.amountIndex,
+        header: 'Valor categoría',
         cell: ({ row }) => (
-          <Currency
-            amountIndex={row.original.categories.at(-1)?.category.amountIndex}
-          />
+          <>
+            {row.original.categories.at(-1) ?
+              <Currency
+                amountIndex={
+                  row.original.categories.at(-1)!.category.amountIndex
+                }
+              />
+            : null}
+          </>
+
         ),
         enableSorting: false,
       },
@@ -85,6 +84,17 @@ export default function TeamMemberTable({
         accessorFn: (row) => row.AcademicUnit?.name,
         header: 'Unidad Académica',
         enableSorting: true,
+      },
+      {
+        accessorKey: 'action',
+        header: '',
+        cell: ({ row }) => (
+          <BadgeButton href={`/team-members/categorize/${row.original.id}`}>
+            Categorizar
+          </BadgeButton>
+        ),
+        enableHiding: false,
+        enableSorting: false,
       },
     ],
     []
@@ -104,7 +114,7 @@ export default function TeamMemberTable({
         totalRecords={totalRecords}
         initialVisibility={initialVisible}
         searchBarPlaceholder="Buscar por: Nombre, etc"
-        rowAsLinkPath="/team-members/"
+        rowAsLinkPath="/team-members/member/"
       />
     </>
   )

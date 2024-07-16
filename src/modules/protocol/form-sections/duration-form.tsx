@@ -1,48 +1,57 @@
 'use client'
+
 import { useProtocolContext } from 'utils/createContext'
 import { motion } from 'framer-motion'
-import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
-import SectionTitle from '@protocol/elements/form-section-title'
-import { cache } from 'react'
 import { ChronogramList } from '@protocol/elements/inputs/chronogram-list-form'
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { FormListbox } from '@shared/form/form-listbox'
 
 export function DurationForm() {
   const form = useProtocolContext()
-  const path = 'sections.duration.'
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -5 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7 }}
-      className="space-y-3"
     >
-      <SectionTitle title="Duración" />
-      <Info />
-      <>
-        <Select
-          path={path + 'modality'}
-          label="modalidad"
-          options={modalities}
-          conditionalCleanup={() =>
-            (form.values.sections.duration.duration = '')
-          }
-        />
-        <Select
-          path={path + 'duration'}
-          label="duración"
-          options={duration(form.values.sections.duration.modality)}
-          conditionalCleanup={(e) => {
-            if (!e) return null
-            form.setFieldValue(
-              path + 'chronogram',
-              structureSemestersFromMonths(e)
-            )
-          }}
-        />
-        <ChronogramList />
-      </>
+      <Fieldset>
+        <Legend>Duración</Legend>
+        <Info />
+        <FieldGroup>
+          <FormListbox
+            label="Modalidad"
+            description="La modalidad que corresponde al proyecto"
+            options={modalities.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.duration.modality')}
+            onBlur={() => {
+              form.setFieldValue('sections.duration.duration', '')
+              form.setFieldValue('sections.duration.chronogram', [])
+            }}
+          />
+          <FormListbox
+            label="Duración"
+            description="Seleccione la duración en meses que el proyecto va a tomar"
+            disabled={!form.values.sections.duration.modality}
+            options={duration(form.values.sections.duration.modality).map(
+              (e) => ({ value: e, label: e })
+            )}
+            {...form.getInputProps('sections.duration.duration')}
+            onFocus={() => {
+              form.setFieldValue(
+                'sections.duration.chronogram',
+                structureSemestersFromMonths(
+                  form.getInputProps('sections.duration.duration').value
+                )
+              )
+            }}
+          />
+          {form.values.sections.duration.chronogram.length > 0 && (
+            <ChronogramList />
+          )}
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }
@@ -64,7 +73,7 @@ const duration = (value: string) => {
   else return ['12 meses', '24 meses', '36 meses', '48 meses', '60 meses']
 }
 
-const structureSemestersFromMonths = cache((e: string) => {
+const structureSemestersFromMonths = (e: string) => {
   const semesters = Number(e.substring(0, 2)) / 6
 
   const allSemesters = []
@@ -72,7 +81,7 @@ const structureSemestersFromMonths = cache((e: string) => {
     allSemesters.push({ semester: `${i}º semestre`, data: [{ task: '' }] })
   }
   return allSemesters
-})
+}
 
 const Info = () => (
   <InfoTooltip>

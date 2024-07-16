@@ -60,7 +60,12 @@ export default function AcademicUnitsTable({
       enableHiding: false,
       enableSorting: false,
       cell: ({ row }) => (
-        <Currency amountIndex={row.original.budgets.at(-1)?.amountIndex} />
+        <>
+          {row.original.budgets.length > 0 ?
+            <Currency amountIndex={row.original.budgets.at(-1)!.amountIndex} />
+          : null}
+        </>
+
       ),
     },
     {

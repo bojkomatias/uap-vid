@@ -32,7 +32,7 @@ export function DialogTableIndex({ values }: { values: HistoricIndex[] }) {
       >
         todos
       </button>
-      <Dialog open={open} onClose={setOpen} size="3xl">
+      <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Total de valores historicos</DialogTitle>
         <DialogDescription>
           Lista del total de valores historicos del indice FCA desde su
@@ -54,7 +54,7 @@ export function DialogTableIndex({ values }: { values: HistoricIndex[] }) {
                     {currencyFormatter.format(value.price)}
                   </TableCell>
                   <TableCell className="font-medium">
-                    {value.to ? null : <Badge color="green">Actual</Badge>}
+                    {value.to ? null : <Badge color="teal">Actual</Badge>}
                   </TableCell>
                   <TableCell>
                     Desde:{' '}

@@ -1,6 +1,6 @@
 'use client'
 import { generateAnualBudget } from '@actions/anual-budget/action'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import MultipleButton from '@elements/multiple-button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'

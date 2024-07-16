@@ -116,14 +116,16 @@ const colors = {
 
 type Color = keyof typeof colors
 
+export type CheckboxProps = {
+  color?: Color
+  className?: string
+} & Omit<Headless.CheckboxProps, 'className'>
+
 export function Checkbox({
   color = 'dark/gray',
   className,
   ...props
-}: {
-  color?: Color
-  className?: string
-} & Omit<Headless.CheckboxProps, 'className'>) {
+}: CheckboxProps) {
   return (
     <Headless.Checkbox
       data-slot="control"

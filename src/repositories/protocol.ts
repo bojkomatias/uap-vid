@@ -7,6 +7,8 @@ import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
+import { z } from 'zod'
+import { ProtocolSchema } from '@utils/zod'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>

@@ -158,7 +158,7 @@ const getAllCategories = async () =>
   })
 
 const getObreroCategory = async () => {
-  return await prisma.teamMemberCategory.findFirst({
+  return await prisma.teamMemberCategory.findFirstOrThrow({
     where: { name: 'Obrero' },
   })
 }

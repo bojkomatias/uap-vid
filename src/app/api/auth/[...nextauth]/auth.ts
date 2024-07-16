@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
 
         //Check hased password with DB password
         const checkPassword = await verifyHashScrypt(
-          credentials!.password,
+          credentials.password,
           result.password!
         )
 

@@ -2,7 +2,7 @@
 
 import type { Prisma } from '@prisma/client'
 import { Button } from '@elements/button'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { useState } from 'react'
 import CustomDrawer from '@elements/custom-drawer'
@@ -25,7 +25,7 @@ export default function UserView({
         <section className="flex flex-col gap-4 text-gray-600">
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
             <div className="flex items-end justify-between gap-2">
-              <Badge className="text-sm">{userInfo.name}</Badge>
+              <Badge>{userInfo.name}</Badge>
               <p>{RolesDictionary[userInfo.role]}</p>
             </div>
             <div className="flex items-end justify-between gap-2">
