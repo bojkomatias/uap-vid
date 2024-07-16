@@ -77,7 +77,7 @@ export function UpdateAcademicUnitBudgetDialog({
   )
 
   return (
-    <Dialog open={open} onClose={closeModal} size="xl">
+    <Dialog open={open} onClose={closeModal} size="2xl">
       <DialogTitle>Presupuesto de unidad académica</DialogTitle>
       <DialogDescription>
         Lista de presupuesto historicos de unidades académicas y la opción de
@@ -115,7 +115,7 @@ export function UpdateAcademicUnitBudgetDialog({
                     {currencyFormatter.format(value.amountIndex.FCA)}
                   </TableCell>
                   <TableCell className="font-medium">
-                    {value.to ? null : <Badge color="green">Actual</Badge>}
+                    {value.to ? null : <Badge color="teal">Actual</Badge>}
                   </TableCell>
                   <TableCell>
                     Desde:{' '}

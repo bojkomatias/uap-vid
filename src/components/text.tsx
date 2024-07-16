@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { Link } from './link'
+import { cx } from '@utils/cx'
 
 export function Text({
   className,
@@ -9,9 +10,9 @@ export function Text({
     <p
       data-slot="text"
       {...props}
-      className={clsx(
-        className,
-        'text-base/6 text-gray-500 dark:text-gray-400 sm:text-sm/6'
+      className={cx(
+        'text-base/6 text-gray-500 dark:text-gray-400 sm:text-sm/6',
+        className
       )}
     />
   )

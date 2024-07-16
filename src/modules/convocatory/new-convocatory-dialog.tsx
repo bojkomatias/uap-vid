@@ -16,7 +16,7 @@ export function NewConvocatoryDialog() {
         Convocatoria
       </Button>
 
-      <Dialog open={open} onClose={setOpen} size="xl">
+      <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Crear convocatoria</DialogTitle>
         <DialogDescription>
           Aquí puede crear una nueva convocatoria a cual asignar proyectos de

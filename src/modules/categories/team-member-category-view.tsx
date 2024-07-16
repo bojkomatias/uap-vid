@@ -1,7 +1,7 @@
 import type { TeamMemberCategory } from '@prisma/client'
 import { Button } from '@elements/button'
-import { Badge } from '@elements/badge'
-import { Currency } from '@shared/currency'
+import { Badge } from '@components/badge'
+import Currency from '@elements/currency'
 import { currencyFormatter } from '@utils/formatters'
 import CustomDrawer from '@elements/custom-drawer'
 
@@ -26,11 +26,11 @@ export default function TeamMemberCategoryView({
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
             <div className="flex  items-center gap-1">
               <p className="text-sm text-gray-600">Categoría:</p>
-              <Badge className="text-sm">{teamMemberCategory.name}</Badge>
+              <Badge>{teamMemberCategory.name}</Badge>
             </div>
             <div className="flex  items-center gap-2">
               <p className="text-sm text-gray-600">Valor hora:</p>
-              <Currency amountIndex={teamMemberCategory.amountIndex} />
+              <Currency amount={teamMemberCategory.price.at(-1)?.price} />
             </div>
           </div>
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">

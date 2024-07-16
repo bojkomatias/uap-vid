@@ -1,10 +1,9 @@
 'use client'
+
 import type { TeamMemberCategory } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import PriceUpdate from './price-update'
-import TeamMemberCategoryView from './team-member-category-view'
 import { Currency } from '@shared/currency'
 
 export default function CategoriesTable({
@@ -35,20 +34,6 @@ export default function CategoriesTable({
         enableHiding: false,
         enableSorting: false,
         cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
-      },
-      {
-        accessorKey: 'actions',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <div className="relative flex items-center justify-end gap-1">
-            {row.original.price.length > 1 && (
-              <TeamMemberCategoryView teamMemberCategory={row.original} />
-            )}
-            <PriceUpdate category={row.original} />
-          </div>
-        ),
-        enableHiding: false,
-        enableSorting: false,
       },
     ],
     []

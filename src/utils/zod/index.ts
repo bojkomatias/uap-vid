@@ -133,7 +133,7 @@ export const ProtocolSchema = z.object({
   state: ProtocolStateSchema,
   researcherId: z.string(),
   sections: z.lazy(() => SectionsSchema),
-  convocatoryId: z.string(),
+  convocatoryId: z.string().nullish(),
 })
 
 /////////////////////////////////////////
@@ -264,10 +264,7 @@ export const TeamMemberCategorySchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
-  price: HistoricCategoryPriceSchema.array().min(1, {
-    message: 'Configure un precio',
-  }),
-  amountIndex: AmountIndexSchema, //Remove nullable
+  amount: z.coerce.number(), //Remove nullable
 })
 
 /////////////////////////////////////////
@@ -358,8 +355,8 @@ export const SectionsSchema = z
         value.duration.modality ===
         'Proyecto de investigación desde las cátedras (PIC)'
       ) {
-        if (value.identification.assignment)
-          if (value.identification.assignment.length <= 0) return false
+        if (value.identification.courseId)
+          if (value.identification.courseId.length <= 0) return false
           else {
             return true
           }
@@ -384,7 +381,7 @@ export const BibliographySchema = z.object({
       z.object({
         author: z.string().min(1, { message: 'El campo no puede estar vació' }),
         title: z.string().min(1, { message: 'El campo no puede estar vació' }),
-        year: z
+        year: z.coerce
           .number({
             invalid_type_error: 'Este campo debe ser numérico',
           })
@@ -460,7 +457,7 @@ export const DurationSchema = z.object({
         data: z
           .object({
             task: z.string().min(1, {
-              message: 'El campo no puede estar vació',
+              message: 'El campo no puede estar vacío',
             }),
           })
           .array(),
@@ -473,40 +470,35 @@ export const DurationSchema = z.object({
 // PROTOCOL SECTIONS IDENTIFICATION SCHEMA
 /////////////////////////////////////////
 
+export const IdentificationTeamSchema = z.object({
+  hours: z.coerce
+    .number({
+      invalid_type_error: 'Este campo debe ser numérico',
+    })
+    .min(1, {
+      message: 'Debe ser un numero positivo',
+    })
+    .max(400, {
+      message: 'No se pueden asignar tantas horas',
+    }),
+  last_name: z.string().nullish(),
+  name: z.string().nullish(),
+  role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  teamMemberId: z.string().nullable(),
+  workingMonths: z.coerce.number().nullish(),
+})
+
 export const IdentificationSchema = z.object({
-  assignment: z.string().nullable().optional(),
   courseId: z.string().nullable().optional(),
-  career: z.string().nullable(), /// @deprecated
   careerId: z
     .string()
     .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
-  sponsor: z.string().array(),
   academicUnitIds: z
     .string()
     .array()
     .min(1, 'Debe selecionar al menos una unidad académica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
-  team: z
-    .lazy(() =>
-      z.object({
-        hours: z
-          .number({
-            invalid_type_error: 'Este campo debe ser numérico',
-          })
-          .min(1, {
-            message: 'Debe ser un numero positivo',
-          })
-          .max(400, {
-            message: 'No se pueden asignar tantas horas',
-          }),
-        last_name: z.string().nullable(),
-        name: z.string().nullable(),
-        role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-        teamMemberId: z.string().nullable(),
-        workingMonths: z.number().nullable(),
-      })
-    )
-    .array()
+  team: IdentificationTeamSchema.array()
     .min(1, { message: 'Debe tener al menos un integrante' })
     .refine(
       (value) => {

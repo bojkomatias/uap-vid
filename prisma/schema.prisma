@@ -56,8 +56,8 @@ model Protocol {
   state          ProtocolState    @default(DRAFT)
   reviews        Review[]
   sections       ProtocolSections
-  convocatory    Convocatory      @relation(fields: [convocatoryId], references: [id])
-  convocatoryId  String           @db.ObjectId
+  convocatory    Convocatory?     @relation(fields: [convocatoryId], references: [id])
+  convocatoryId  String?          @db.ObjectId
   anualBudgets   AnualBudget[]
   anualBudgetIds String[]
   logs           Logs[]
