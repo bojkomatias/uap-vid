@@ -1,4 +1,4 @@
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import type { AnualBudget } from '@prisma/client'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
@@ -26,7 +26,7 @@ export const BudgetMetadata = ({
           </span>
           {dateFormatter.format(updatedAt)}
         </div>
-        <Badge className="mb-1">{AnualBudgetStateDictionary[state]}</Badge>
+        <Badge>{AnualBudgetStateDictionary[state]}</Badge>
       </div>
       <span className="pr-2 font-medium underline underline-offset-2">
         Protocolo:

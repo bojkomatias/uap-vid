@@ -1,4 +1,4 @@
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import { ReviewVerdict } from '@prisma/client'
 import { cx } from '@utils/cx'
 import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'

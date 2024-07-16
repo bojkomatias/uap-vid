@@ -1,5 +1,4 @@
 'use client'
-
 import { useForm, zodResolver } from '@mantine/form'
 import type {
   HistoricTeamMemberCategory,

@@ -1,50 +1,93 @@
 'use client'
+
 import { useProtocolContext } from 'utils/createContext'
-import full from 'config/careers.json'
 import { motion } from 'framer-motion'
-import Input from '@protocol/elements/inputs/input'
-import Select from '@protocol/elements/inputs/select'
 import InfoTooltip from '@protocol/elements/tooltip'
-import MultipleSelect from '@protocol/elements/inputs/multiple-select'
-import SectionTitle from '@protocol/elements/form-section-title'
 import TeamMemberListForm from '@protocol/elements/inputs/team-member-list-form'
+import { FormInput } from '@shared/form/form-input'
+import { FormListbox } from '@shared/form/form-listbox'
+import { FormCombobox } from '@shared/form/form-combobox'
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import type { Career, Course } from '@prisma/client'
+import { useEffect, useState } from 'react'
+import {
+  getActiveCarrersForForm,
+  getCoursesByCareerId,
+} from '@repositories/career'
+import { getAcademicUnitsForForm } from '@repositories/academic-unit'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
-  const path = 'sections.identification.'
+  const [careers, setCareers] = useState<
+    Omit<Career, 'academicUnitId' | 'active'>[]
+  >([])
+  const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(
+    []
+  )
+  const [academicUnits, setAcademicUnits] = useState<
+    { id: string; name: string; shortname: string }[]
+  >([])
+
+  useEffect(() => {
+    ;(async () => {
+      setCareers(await getActiveCarrersForForm())
+      setAcademicUnits(await getAcademicUnitsForForm())
+    })()
+  }, [])
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -5 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.7 }}
-      className="space-y-3"
     >
-      <SectionTitle title="Identificación" />
-      <>
-        <Input path={path + 'title'} label="titulo" />
-        <Select
-          path={path + 'career'}
-          options={careers}
-          label="carrera"
-          conditionalCleanup={() =>
-            (form.values.sections.identification.assignment = '')
-          }
-        />
-        <AssignmentInfo />
-        <Select
-          path={path + 'assignment'}
-          label="materia (solo en caso de PIC)"
-          options={assignments(form.values.sections.identification.career!)}
-        />
-        <TeamInfo />
-        <TeamMemberListForm />
-        <MultipleSelect
-          path={path + 'sponsor'}
-          label="ente patrocinante"
-          options={sponsors}
-        />
-      </>
+      <Fieldset>
+        <Legend>Identificación</Legend>
+        <FieldGroup>
+          <FormInput
+            label="Título"
+            description="Un título descriptivo de su proyecto"
+            {...form.getInputProps('sections.identification.title')}
+          />
+          <FormCombobox
+            label="Carrera"
+            description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
+            options={careers.map((e) => ({ value: e.id, label: e.name }))}
+            {...form.getInputProps('sections.identification.careerId')}
+            onChange={async (e: any) => {
+              if (!e) return
+              form.setFieldValue('sections.identification.careerId', e)
+              const result = await getCoursesByCareerId(e)
+              setCourses(result ? result.courses : [])
+              form.setFieldValue('sections.identification.courseId', '')
+            }}
+          />
+          <AssignmentInfo />
+          <FormCombobox
+            label="Materia"
+            description="Seleccione una materia si aplica (requerido en caso de PIC)"
+            disabled={
+              !form.getInputProps('sections.identification.careerId').value ||
+              courses.length === 0
+            }
+            options={courses.map((e) => ({ value: e.id, label: e.name }))}
+            {...form.getInputProps('sections.identification.courseId')}
+          />
+          <TeamInfo />
+          <TeamMemberListForm />
+          <FormListbox
+            multiple
+            label="Ente patrocinante"
+            description="Seleccione una o más unidades académicas o entes patrocinantes que auspician el proyecto"
+            options={academicUnits.map((e) => ({
+              value: e.id,
+              label: e.shortname,
+              description: e.name,
+            }))}
+            {...form.getInputProps('sections.identification.academicUnitIds')}
+          />
+        </FieldGroup>
+      </Fieldset>
     </motion.div>
   )
 }
@@ -90,21 +133,3 @@ const AssignmentInfo = () => (
     </p>
   </InfoTooltip>
 )
-
-const careers = full.map((x) => x.career)
-// conditional
-const assignments = (v: string) =>
-  full
-    .filter((x) => x.career === v)
-    .map((x) => x.assignment)
-    .flat()
-
-const sponsors = [
-  'Facultad de Ciencias Económicas y de la Administración - FACEA',
-  'Facultad de Ciencias de la Salud - FCS',
-  'Facultad de Humanidades, Educación y Ciencias Sociales - FHECIS',
-  'Facultad de Teología - FT',
-  'Consejo Nacional de Investigaciones Científicas y Técnicas - CONICET',
-  'Centro Interdisciplinario de Investigaciones en Ciencias de la Salud y del Comportamiento - CIICSAC',
-  'Escuela de Graduados - EG',
-]

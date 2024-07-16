@@ -28,7 +28,7 @@ export function CurrentConvocatory({
   const remainingHours = differenceInHours % 24
 
   return (
-    <div className="mx-3 flex gap-1">
+    <div className="mx-3 flex gap-1 text-gray-800 dark:text-gray-200">
       <div className="flex-grow rounded-lg bg-gray-400/10 px-2 py-1 text-center">
         <div className="mt-1 font-bold">{differenceInDays}</div>
         <div className="text-[0.6rem] ">Días</div>

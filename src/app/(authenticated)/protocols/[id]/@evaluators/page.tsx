@@ -9,7 +9,7 @@ import {
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
 import { UserSearch } from 'tabler-icons-react'
-import { Badge } from '@elements/badge'
+import { Badge } from '@components/badge'
 import { canAccess, canExecute } from '@utils/scopes'
 import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { getServerSession } from 'next-auth'
@@ -147,9 +147,7 @@ export default async function ReviewAssignation({
                   <span className="text-sm text-gray-500">-</span>
                 )}
               </div>
-              <Badge className="my-1 ml-4">
-                {EvaluatorsByReviewType[data.type]}
-              </Badge>
+              <Badge>{EvaluatorsByReviewType[data.type]}</Badge>
             </div>
             {data.enabled && (
               <ReviewAssignSelect
