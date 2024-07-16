@@ -17,7 +17,6 @@ export default async function IdentificationView({
       .map(async (acId) => await getAcademicUnitByIdWithoutIncludes(acId))
       .map((ac) => ac.then((a) => a?.name))
   )
-
   const career = await getCareerById(data.careerId)
   const course = await getCourseById(data.courseId!)
 

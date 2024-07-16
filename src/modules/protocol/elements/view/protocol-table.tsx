@@ -128,18 +128,18 @@ export default function ProtocolTable({
         ),
         enableHiding: false,
       },
-      {
-        accessorKey: 'sections.identification.sponsor',
-        header: 'Unidades Académicas',
-        cell: ({ row }) => (
-          <ul className="text-xs">
-            {row.original.sections.identification.sponsor.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-        ),
-        enableSorting: false,
-      },
+      // {
+      //   accessorKey: 'sections.identification.sponsor',
+      //   header: 'Unidades Académicas',
+      //   cell: ({ row }) => (
+      //     <ul className="text-xs">
+      //       {row.original.sections.identification.sponsor.map((s) => (
+      //         <li key={s}>{s}</li>
+      //       ))}
+      //     </ul>
+      //   ),
+      //   enableSorting: false,
+      // },
       {
         accessorKey: 'sections.identification.career',
         header: 'Carrera',
