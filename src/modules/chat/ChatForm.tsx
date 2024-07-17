@@ -24,6 +24,7 @@ type SendMessageType = {
     userId: string
     protocolId: string
     createdAt: Date
+    read: boolean
     user: { name: string }
   }
   type: 'SEND_MESSAGE'
@@ -47,12 +48,15 @@ export default function ChatForm({
     refetch,
     isFetching,
   } = useQuery({
+    refetchOnMount: false,
     queryKey: ['messages', protocolId],
     queryFn: async () => {
       return await getMessages(protocolId, take)
     },
     initialData: [],
   })
+
+  const [unreadMessages, setUnreadMessages] = useState(0)
 
   const sendNewMessage = useMutation({
     mutationFn: async (newMessage: string) => {
@@ -71,6 +75,7 @@ export default function ChatForm({
             protocolId: protocolId,
             userId: user.id,
             createdAt: new Date(),
+            read: false,
             user: { name: user.name },
           },
           type: 'SEND_MESSAGE',
@@ -83,14 +88,19 @@ export default function ChatForm({
 
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault()
+
     if (message.trim()) {
       sendNewMessage.mutate(message)
       setMessage('')
+      setUnreadMessages(
+        messages?.filter((m) => m.read == false && m.user.name != user.name)
+          .length!
+      )
     }
   }
 
   return (
-    <ChatPopover>
+    <ChatPopover totalUnreadMessages={unreadMessages!}>
       <div className="flex flex-col rounded-xl">
         <div
           ref={chatcontainer}

@@ -36,10 +36,6 @@ export const WebSocketMessagesProvider = ({
       const { type, payload } = JSON.parse(lastMessage.data)
       switch (type) {
         case MESSAGE_TYPE.INITIAL_DATA:
-          console.log(
-            'PAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOAD',
-            payload
-          )
           queryClient.setQueryData(queryKey, payload.reverse())
           break
         case MESSAGE_TYPE.NEW_MESSAGE:

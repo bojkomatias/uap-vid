@@ -3,13 +3,24 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import React, { useState } from 'react'
 import { Message2, X } from 'tabler-icons-react'
 
-export function ChatPopover({ children }: { children: React.ReactNode }) {
+export function ChatPopover({
+  children,
+  totalUnreadMessages,
+}: {
+  children: React.ReactNode
+  totalUnreadMessages: number
+}) {
   const [open, setOpen] = useState(false)
 
   console.log('NEXT PUBLIC URL', process.env.NEXT_PUBLIC_WEBSOCKET_URL)
 
   return (
     <Popover className="fixed bottom-10 right-14 z-50 rounded-full border bg-primary drop-shadow-xl">
+      {totalUnreadMessages > 1 && (
+        <div className="absolute -left-2 -top-2 animate-bounce rounded-full bg-red-500 px-2 text-center font-bold text-white">
+          {totalUnreadMessages}
+        </div>
+      )}
       <PopoverButton
         onClick={() => {
           setOpen(!open)

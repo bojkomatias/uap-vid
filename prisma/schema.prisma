@@ -12,6 +12,7 @@ model ChatMessage {
   content    String
   thread     String //This is to separate multiple threads into a single protocol 
   createdAt  DateTime @default(now())
+  read       Boolean  @default(false)
   user       User     @relation(fields: [userId], references: [id])
   userId     String   @db.ObjectId
   protocolId String   @db.ObjectId
