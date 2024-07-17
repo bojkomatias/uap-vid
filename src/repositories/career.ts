@@ -82,7 +82,6 @@ export const getAllCareers = cache(
         }),
       ])
     } catch (e) {
-      console.log(e)
       return []
     }
   }
@@ -96,7 +95,6 @@ export const getCareerById = cache(async (id: string) => {
     })
     return result
   } catch (e) {
-    console.log(e)
     return null
   }
 })
@@ -170,7 +168,6 @@ export const upsertCareer = cache(
         data: career,
       })
     } catch (e) {
-      console.log(e)
       return null
     }
   }
