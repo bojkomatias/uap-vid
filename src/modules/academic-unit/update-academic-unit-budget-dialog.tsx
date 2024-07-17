@@ -61,7 +61,6 @@ export function UpdateAcademicUnitBudgetDialog({
     async ({ value }: { value: number }) => {
       const updated = await updateAcademicUnitBudget(academicUnitId!, value)
 
-      console.log(updated)
       if (updated)
         notifications.show({
           title: 'Unidad académica guardada',
@@ -78,7 +77,7 @@ export function UpdateAcademicUnitBudgetDialog({
   )
 
   return (
-    <Dialog open={open} onClose={closeModal} size="xl">
+    <Dialog open={open} onClose={closeModal} size="2xl">
       <DialogTitle>Presupuesto de unidad académica</DialogTitle>
       <DialogDescription>
         Lista de presupuesto historicos de unidades académicas y la opción de

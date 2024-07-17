@@ -82,7 +82,6 @@ export const getAllCareers = cache(
         }),
       ])
     } catch (e) {
-      console.log(e)
       return []
     }
   }
@@ -92,6 +91,17 @@ export const getCareerById = cache(async (id: string) => {
   try {
     const result = prisma.career.findFirst({
       include: { courses: true },
+      where: { id },
+    })
+    return result
+  } catch (e) {
+    return null
+  }
+})
+
+export const getCourseById = cache(async (id: string) => {
+  try {
+    const result = prisma.course.findFirst({
       where: { id },
     })
     return result
@@ -158,7 +168,6 @@ export const upsertCareer = cache(
         data: career,
       })
     } catch (e) {
-      console.log(e)
       return null
     }
   }

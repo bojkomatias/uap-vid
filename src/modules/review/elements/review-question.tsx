@@ -1,15 +1,17 @@
 import { RadioGroup } from '@headlessui/react'
 import { useReviewContext } from '@utils/reviewContext'
 import { cx } from '@utils/cx'
-import { questions } from 'config/review-questions'
 import React from 'react'
+import type { ReviewQuestion } from '@prisma/client'
 
 export default function ReviewQuestion({
   id,
   index,
+  questions,
 }: {
   id: string
   index: number
+  questions: ReviewQuestion[]
 }) {
   const form = useReviewContext()
   return (

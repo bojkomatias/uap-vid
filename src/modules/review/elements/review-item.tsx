@@ -1,5 +1,5 @@
 'use client'
-import type { Review, User } from '@prisma/client'
+import type { Review, ReviewQuestion, User } from '@prisma/client'
 import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
 import { cx } from '@utils/cx'
@@ -7,11 +7,13 @@ import { useCallback, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
-import { ChevronRight } from 'tabler-icons-react'
+import { ChevronRight, Loader } from 'tabler-icons-react'
 import ReviewVerdictBadge from './review-verdict-badge'
 import { emailer } from '@utils/emailer'
 import { markRevised } from '@repositories/review'
 import { useCases } from '@utils/emailer/use-cases'
+import { useQuery } from '@tanstack/react-query'
+import { getAllQuestions } from '@repositories/review-question'
 
 export default function ReviewItem({
   review,
@@ -34,6 +36,13 @@ export default function ReviewItem({
     )
   }
   const [showReviewQuestions, setShowReviewQuestions] = useState(false)
+
+  const { isLoading, data } = useQuery<ReviewQuestion[]>({
+    queryKey: ['questions', review],
+    queryFn: async () => {
+      return await getAllQuestions()
+    },
+  })
   if (review.verdict === ReviewVerdict.NOT_REVIEWED) return null
   return (
     <li>
@@ -72,13 +81,20 @@ export default function ReviewItem({
 
           {showReviewQuestions && (
             <div className="space-y-4 py-4 pl-2 pr-4">
-              {review.questions.map((question, index) => (
-                <ReviewQuestionView
-                  key={question.id}
-                  index={index}
-                  {...question}
-                />
-              ))}
+              {isLoading ?
+                <Loader />
+              : <div>
+                  {' '}
+                  {review.questions.map((question, index) => (
+                    <ReviewQuestionView
+                      key={question.id}
+                      index={index}
+                      questions={data!}
+                      {...question}
+                    />
+                  ))}
+                </div>
+              }
             </div>
           )}
 
@@ -89,9 +105,11 @@ export default function ReviewItem({
               : null}
             </span>
             <span className="font-light text-gray-500">
-              {getDuration(
-                new Date().getTime() - new Date(review.updatedAt).getTime()
-              )}
+              {new Date().getTime() - new Date(review.updatedAt).getTime() < 1 ?
+                getDuration(
+                  new Date().getTime() - new Date(review.updatedAt).getTime()
+                )
+              : 'hace un instante'}
             </span>
           </div>
         </div>

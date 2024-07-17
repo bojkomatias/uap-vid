@@ -9,28 +9,30 @@ import { Action, ProtocolState } from '@prisma/client'
 
 export default async function Page({
   params,
-  searchParams,
 }: {
   params: { id: string; section: string }
-  searchParams: { convocatory: string }
 }) {
   const session = await getServerSession(authOptions)
   if (!session) return
-  if (!searchParams.convocatory && params.id === 'new') redirect('/protocols')
 
-  const protocol =
-    params.id === 'new' ?
-      {
-        convocatoryId: searchParams.convocatory,
-        state: ProtocolState.DRAFT,
-        researcherId: session.user.id,
-        sections: initialSectionValues,
-      }
-    : await findProtocolById(params.id)
+  if (params.id === 'new') {
+    if (canExecute(Action.CREATE, session.user.role, ProtocolState.NOT_CREATED))
+      return (
+        <ProtocolForm
+          protocol={{
+            state: ProtocolState.DRAFT,
+            researcherId: session.user.id,
+            sections: initialSectionValues,
+          }}
+        />
+      )
+  }
 
+  const protocol = await findProtocolById(params.id)
   if (!protocol) redirect('/protocols')
+
   if (
-    !canExecute(
+    canExecute(
       session.user.id === protocol.researcherId ?
         Action.EDIT_BY_OWNER
       : Action.EDIT,
@@ -38,7 +40,7 @@ export default async function Page({
       protocol.state
     )
   )
-    redirect('/protocols')
+    return <ProtocolForm protocol={protocol} />
 
-  return <ProtocolForm protocol={protocol} />
+  redirect('/protocols')
 }

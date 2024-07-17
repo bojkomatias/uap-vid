@@ -6,6 +6,8 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import type { z } from 'zod'
 import type { AcademicUnitSchema } from '@utils/zod'
 import type { Secretary } from 'modules/academic-unit/edit-secretaries-form'
+import { getCurrentIndexes } from './finance-index'
+
 
 export const getAcademicUnitsForForm = cache(
   async () =>
@@ -29,6 +31,18 @@ export const getAcademicUnitsTabs = cache(
       },
     })
 )
+
+export const getAcademicUnitByIdWithoutIncludes = async (id: string) => {
+  try {
+    return prisma.academicUnit.findUnique({
+      where: {
+        id,
+      },
+    })
+  } catch (error) {
+    return null
+  }
+}
 
 export const getAcademicUnitById = async (id?: string) => {
   try {
@@ -124,7 +138,7 @@ export const getAllAcademicUnits = cache(
                     },
                   ],
                 }
-              : {},
+                : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -156,7 +170,7 @@ export const getAllAcademicUnits = cache(
                     },
                   ],
                 }
-              : {},
+                : {},
               filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
@@ -212,24 +226,7 @@ export const updateAcademicUnitBudget = async (
 ) => {
   try {
     // Pull values
-    const [FCAValues, FMRValues] = await prisma.$transaction([
-      prisma.index.findFirstOrThrow({
-        where: { unit: 'FCA' },
-        select: { values: true },
-      }),
-      prisma.index.findFirstOrThrow({
-        where: { unit: 'FMR' },
-        select: { values: true },
-      }),
-    ])
-
-    const [currentFCA, currentFMR] = [
-      FCAValues.values.at(-1)?.price,
-      FMRValues.values.at(-1)?.price,
-    ]
-
-    if (!currentFCA || !currentFMR)
-      throw Error('There are no FCA / FMR indexes')
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
 
     // Get the current budgets
     const { budgets } = await prisma.academicUnit.findFirstOrThrow({

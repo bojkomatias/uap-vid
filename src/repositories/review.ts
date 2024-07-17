@@ -4,6 +4,7 @@ import type { Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { getInitialQuestionsByType } from '@utils/reviewQuestionInitiator'
+import { getAllQuestions } from './review-question'
 
 export const getReviewsByProtocol = cache(async (protocolId: string) => {
   const reviews = await prisma.review.findMany({
@@ -44,7 +45,11 @@ export const assignReviewerToProtocol = async (
     data: {
       protocolId,
       reviewerId,
-      questions: getInitialQuestionsByType(type),
+      questions: await getInitialQuestionsByType(
+        type,
+        await getAllQuestions(),
+        true
+      ),
       type: type,
     },
     include: { reviewer: { select: { email: true } } },
@@ -65,7 +70,7 @@ export const reassignReviewerToProtocol = async (
     data: {
       protocolId,
       reviewerId,
-      questions: getInitialQuestionsByType(type),
+      questions: await getInitialQuestionsByType(type, await getAllQuestions()),
       type: type,
     },
     include: { reviewer: { select: { email: true } } },

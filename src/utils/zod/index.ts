@@ -133,7 +133,7 @@ export const ProtocolSchema = z.object({
   state: ProtocolStateSchema,
   researcherId: z.string(),
   sections: z.lazy(() => SectionsSchema),
-  convocatoryId: z.string(),
+  convocatoryId: z.string().nullish(),
 })
 
 /////////////////////////////////////////
@@ -194,13 +194,19 @@ export const UserPasswordChangeSchema = z
 
 export const VerifyUserDataMicrosoftUsersSchema = z.object({
   name: z.string().min(1, { message: 'No puede estar vacío' }),
-  dni: z.string(),
+  dni: z
+    .string()
+    .min(8, { message: 'Debe tener 8 dígitos' })
+    .max(8, { message: 'Debe tener 8 dígitos' }),
 })
 
 export const VerifyUserDataSchema = z
   .object({
     name: z.string().min(1, { message: 'No puede estar vacío' }),
-    dni: z.string(),
+    dni: z
+      .string()
+      .min(8, { message: 'Debe tener 8 dígitos' })
+      .max(8, { message: 'Debe tener 8 dígitos' }),
 
     newPassword: z.string().min(4, {
       message: 'La contraseña debe contener al menos 4 caracteres',
@@ -211,6 +217,12 @@ export const VerifyUserDataSchema = z
     message: 'Las contraseñas no son iguales',
     path: ['newPasswordConfirm'],
   })
+
+export const ReviewQuestionSchema = z.object({
+  active: z.boolean(),
+  type: z.string(),
+  question: z.string(),
+})
 
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
@@ -242,9 +254,7 @@ export const HistoricCategoryPriceSchema = z.object({
   currency: z.string().default('ARS'),
 })
 
-const AmountIndexSchema = z
-  .object({ FCA: z.number(), FMR: z.number() })
-  .nullable()
+const AmountIndexSchema = z.object({ FCA: z.number(), FMR: z.number() })
 
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
@@ -254,10 +264,7 @@ export const TeamMemberCategorySchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
-  price: HistoricCategoryPriceSchema.array().min(1, {
-    message: 'Configure un precio',
-  }),
-  amountIndex: AmountIndexSchema, //Remove nullable
+  amount: z.coerce.number(), //Remove nullable
 })
 
 /////////////////////////////////////////
