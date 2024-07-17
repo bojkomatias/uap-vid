@@ -1,5 +1,10 @@
 import { cx } from '@utils/cx'
 import { EmptyStateItem } from './empty-state-item'
+import {
+  DescriptionDetails,
+  DescriptionTerm,
+} from '@components/description-list'
+import { Strong, Text } from '@components/text'
 
 interface DeepValue {
   groupLabel: string
@@ -15,43 +20,34 @@ interface ItemListProps {
 }
 const ItemListView = ({ data, footer }: ItemListProps) => {
   return (
-    <div className="sm:col-span-2">
-      <dt className="text-sm font-medium text-gray-500">{data.title}</dt>
+    <>
+      <DescriptionTerm>{data.title}</DescriptionTerm>
       {data.values && data.values.length > 0 ?
-        <dd className="mt-1 text-sm text-gray-900">
-          <div className="mt-2 flex flex-col divide-y rounded-lg border pt-2">
-            {data.values.map((row, index) => (
-              <ListRow data={row} key={index} />
-            ))}
-          </div>
-        </dd>
+        <DescriptionDetails>
+          {data.values.map((row, index) => (
+            <ListRow data={row} key={index} />
+          ))}
+        </DescriptionDetails>
       : data.deepValues && data.deepValues.length > 0 ?
-        <dd className="mt-1 text-sm text-gray-900">
-          <div className="mt-2 flex flex-col divide-y overflow-hidden rounded-lg border">
-            {data.deepValues.some((e) => e.data.length > 0) ?
-              data.deepValues.map((item, i) => (
-                <>
-                  {item.data.length === 0 ? null : (
-                    <div key={i} className="space-y-0 pt-3">
-                      <span className="ml-4 text-sm font-semibold text-gray-500">
-                        {item.groupLabel}:
-                      </span>
-                      {item.data.map((row, index) => (
-                        <ListRow data={row} key={index} />
-                      ))}
-                    </div>
-                  )}
-                </>
-              ))
-            : <span className="mx-auto w-fit py-3 text-sm text-gray-400">
-                Sin elementos cargados.
-              </span>
-            }
-          </div>
-        </dd>
+        <DescriptionDetails>
+          {data.deepValues.some((e) => e.data.length > 0) ?
+            data.deepValues.map((item, i) => (
+              <>
+                {item.data.length === 0 ? null : (
+                  <div key={i} className="space-y-0 pt-3">
+                    <Strong>{item.groupLabel}:</Strong>
+                    {item.data.map((row, index) => (
+                      <ListRow data={row} key={index} />
+                    ))}
+                  </div>
+                )}
+              </>
+            ))
+          : <EmptyStateItem isOptional />}
+        </DescriptionDetails>
       : <EmptyStateItem />}
       {footer}
-    </div>
+    </>
   )
 }
 export type ListRowValues = {
@@ -64,7 +60,7 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
   return (
     <div
       className={cx(
-        'relative place-items-center space-y-2 px-4 py-2 sm:grid sm:space-y-0',
+        'relative place-items-center sm:grid sm:space-y-2',
         data.length == 2 && 'grid-cols-2',
         data.length == 3 && 'grid-cols-3',
         data.length == 4 && 'grid-cols-4'
@@ -75,22 +71,16 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
           key={index}
           className="first:place-self-start last:place-self-end last:text-right"
         >
-          <p
-            className={cx(
-              'text-sm text-gray-500',
-              !item.inverted && 'font-medium text-gray-900'
-            )}
-          >
-            {item.up}
-          </p>
-          <p
-            className={cx(
-              'text-sm text-gray-500',
-              !item.inverted && 'font-medium text-gray-900'
-            )}
-          >
-            {item.down}
-          </p>
+          {item.inverted ?
+            <>
+              <Strong>{item.up}</Strong>
+              <Text>{item.down}</Text>
+            </>
+          : <>
+              <Strong>{item.up}</Strong>
+              <Text>{item.down}</Text>
+            </>
+          }
         </div>
       ))}
     </div>
