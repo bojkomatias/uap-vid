@@ -14,7 +14,7 @@ import {
   getActiveCarrersForForm,
   getCoursesByCareerId,
 } from '@repositories/career'
-import { getAcademicUnitsForForm } from '@repositories/academic-unit'
+import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
@@ -31,7 +31,7 @@ export function IdentificationForm() {
   useEffect(() => {
     ;(async () => {
       setCareers(await getActiveCarrersForForm())
-      setAcademicUnits(await getAcademicUnitsForForm())
+      setAcademicUnits(await getAcademicUnitsNameAndShortname())
     })()
   }, [])
 

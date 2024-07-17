@@ -1,4 +1,5 @@
 'use client'
+
 import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
@@ -13,6 +14,9 @@ import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import ProtocolLogsDrawer from '../logs/log-drawer'
+import { useQuery } from '@tanstack/react-query'
+import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
+import { Strong, Text } from '@components/text'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -56,6 +60,11 @@ export default function ProtocolTable({
   protocols: ProtocolWithIncludes[]
   totalRecords: number
 }) {
+  const { isLoading, data: academicUnits } = useQuery({
+    queryKey: ['academic-units'],
+    queryFn: async () => await getAcademicUnitsNameAndShortname(),
+  })
+
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
       {
@@ -122,30 +131,33 @@ export default function ProtocolTable({
         accessorKey: 'sections.identification.title',
         header: 'Titulo',
         cell: ({ row }) => (
-          <div className="whitespace-normal font-medium sm:min-w-[24rem]">
+          <Strong
+            title={row.original.sections.identification.title}
+            className="line-clamp-2 max-w-96 whitespace-normal text-sm/5"
+          >
             {row.original.sections.identification.title}
-          </div>
+          </Strong>
         ),
         enableHiding: false,
       },
-      // {
-      //   accessorKey: 'sections.identification.sponsor',
-      //   header: 'Unidades Académicas',
-      //   cell: ({ row }) => (
-      //     <ul className="text-xs">
-      //       {row.original.sections.identification.sponsor.map((s) => (
-      //         <li key={s}>{s}</li>
-      //       ))}
-      //     </ul>
-      //   ),
-      //   enableSorting: false,
-      // },
       {
-        accessorKey: 'sections.identification.career',
+        accessorKey: 'sections.identification.academicUnitIds',
+        header: 'Unidades Académicas',
+        cell: ({ row }) => (
+          <Text>
+            {row.original.sections.identification.academicUnitIds
+              .map((s) => academicUnits?.find((x) => x.id === s)?.shortname)
+              .join(' - ')}
+          </Text>
+        ),
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'sections.identification.careerId',
         header: 'Carrera',
       },
       {
-        accessorKey: 'sections.identification.assignment',
+        accessorKey: 'sections.identification.cou',
         header: 'Asignatura',
       },
       {
