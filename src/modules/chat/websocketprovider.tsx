@@ -7,7 +7,7 @@ interface ChatMessagesContextType {
 }
 
 const ChatMessagesContext = createContext<ChatMessagesContextType | null>(null)
-const SOCKET_URL = `ws://${process.env.NEXT_PUBLIC_WEBSOCKET_URL!}`
+const SOCKET_URL = `${process.env.NEXT_PUBLIC_WEBSOCKET_URL!}`
 const MESSAGE_TYPE = {
   INITIAL_DATA: 'INITIAL_DATA',
   SEND_MESSAGE: 'SEND_MESSAGE',
@@ -36,7 +36,11 @@ export const WebSocketMessagesProvider = ({
       const { type, payload } = JSON.parse(lastMessage.data)
       switch (type) {
         case MESSAGE_TYPE.INITIAL_DATA:
-          queryClient.setQueryData(queryKey, payload)
+          console.log(
+            'PAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOADPAYLOAD',
+            payload
+          )
+          queryClient.setQueryData(queryKey, payload.reverse())
           break
         case MESSAGE_TYPE.NEW_MESSAGE:
           queryClient.setQueryData(queryKey, (oldData: any) => {
