@@ -63,7 +63,7 @@ export default function ProtocolForm({
         localStorage.getItem('temp-protocol')
       ) ?
         JSON.parse(localStorage.getItem('temp-protocol')!)
-        : protocol,
+      : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
     transformValues: (values) => ({
@@ -173,8 +173,8 @@ export default function ProtocolForm({
         {!form.isValid(path) ?
           form.isDirty(path) ?
             <AlertCircle className="size-4 stroke-warning-500" />
-            : <CircleDashed className="size-3.5 stroke-gray-500" />
-          : <CircleCheck className="size-4 stroke-success-500" />}
+          : <CircleDashed className="size-3.5 stroke-gray-500" />
+        : <CircleCheck className="size-4 stroke-success-500" />}
       </BadgeButton>
     ),
     [form, section]
@@ -186,11 +186,10 @@ export default function ProtocolForm({
         onBlur={() => {
           pathname?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
             localStorage.setItem('temp-protocol', JSON.stringify(form.values))
-            : null
+          : null
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          console.log('===>', form.errors)
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({

@@ -14,12 +14,12 @@ const SectionViewer = ({
   children,
 }: SectionLayoutProps) => {
   return (
-    <>
+    <div>
       <Heading>{title}</Heading>
       <Text>{description}</Text>
-      <Divider />
+      <Divider className="mt-2" />
       <DescriptionList>{children}</DescriptionList>
-    </>
+    </div>
   )
 }
 

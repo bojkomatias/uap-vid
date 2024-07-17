@@ -5,6 +5,7 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { Strong, Text } from '@components/text'
+import { Fragment } from 'react'
 
 interface DeepValue {
   groupLabel: string
@@ -34,12 +35,12 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
             data.deepValues.map((item, i) => (
               <>
                 {item.data.length === 0 ? null : (
-                  <div key={i} className="space-y-0 pt-3">
-                    <Strong>{item.groupLabel}:</Strong>
+                  <Fragment key={i}>
+                    <Text className="font-medium">{item.groupLabel}</Text>
                     {item.data.map((row, index) => (
                       <ListRow data={row} key={index} />
                     ))}
-                  </div>
+                  </Fragment>
                 )}
               </>
             ))
@@ -60,7 +61,7 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
   return (
     <div
       className={cx(
-        'relative place-items-center sm:grid sm:space-y-2',
+        'relative grid place-items-center',
         data.length == 2 && 'grid-cols-2',
         data.length == 3 && 'grid-cols-3',
         data.length == 4 && 'grid-cols-4'

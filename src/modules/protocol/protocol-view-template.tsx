@@ -19,7 +19,7 @@ export default async function View({
 
   if (session?.user.role === Role.METHODOLOGIST)
     return (
-      <div className="px-2">
+      <div className="space-y-6">
         <IdentificationView data={sections.identification} />
         <DurationView data={sections.duration} />
         <DescriptionView data={sections.description} />
@@ -27,7 +27,7 @@ export default async function View({
       </div>
     )
   return (
-    <div className="px-2">
+    <div className="space-y-6">
       <IdentificationView data={sections.identification} />
       <DurationView data={sections.duration} />
       <BudgetView data={sections.budget} />

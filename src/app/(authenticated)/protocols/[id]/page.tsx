@@ -6,7 +6,7 @@ import { PDF } from 'modules/protocol-pdf'
 export default async function Page({ params }: { params: { id: string } }) {
   if (params.id === 'new') redirect('/protocols/new/0')
   const protocol = await findProtocolById(params.id)
-  console.log(protocol?.sections.identification)
+
   if (!protocol) {
     redirect('/protocols')
   }
