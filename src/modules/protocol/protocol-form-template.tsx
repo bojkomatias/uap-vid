@@ -13,7 +13,7 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -66,24 +66,6 @@ export default function ProtocolForm({
       : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
-    transformValues: (values) => ({
-      ...values,
-      sections: {
-        ...values.sections,
-        identification: {
-          ...values.sections.identification,
-          team: values.sections.identification.team.map((e) =>
-            IdentificationTeamSchema.parse(e)
-          ),
-        },
-        bibliography: {
-          chart: values.sections.bibliography.chart.map((e) => ({
-            ...e,
-            year: Number(e.year),
-          })),
-        },
-      },
-    }),
   })
 
   useEffect(() => {

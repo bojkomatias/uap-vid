@@ -8,7 +8,7 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 import { z } from 'zod'
-import { ProtocolSchema } from '@utils/zod'
+import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
 
 const findProtocolByIdWithResearcher = cache(
@@ -79,6 +79,12 @@ const updateProtocolById = async (id: string, data: Protocol) => {
   try {
     const { currentFCA, currentFMR } = await getCurrentIndexes()
 
+    // Parsing the section to have correct formats
+    data.sections.identification.team = IdentificationTeamSchema.array().parse(
+      data.sections.identification.team
+    )
+
+    // Indexing the amount
     data.sections.budget.expenses.forEach((expenseType) => {
       expenseType.data.forEach((expense) => {
         expense.amount = parseFloat(expense.amount as any)
@@ -87,6 +93,10 @@ const updateProtocolById = async (id: string, data: Protocol) => {
           FMR: expense.amount / currentFMR,
         }
       })
+    })
+
+    data.sections.bibliography.chart.forEach((ref) => {
+      ref.year = parseInt(ref.year as any)
     })
 
     return await prisma.protocol.update({
@@ -129,6 +139,12 @@ const createProtocol = async (data: Protocol) => {
   try {
     const { currentFCA, currentFMR } = await getCurrentIndexes()
 
+    // Parsing the section to have correct formats
+    data.sections.identification.team = IdentificationTeamSchema.array().parse(
+      data.sections.identification.team
+    )
+
+    // Indexing the amounts
     data.sections.budget.expenses.forEach((expenseType) => {
       expenseType.data.forEach((expense) => {
         expense.amount = parseFloat(expense.amount as any)
@@ -137,6 +153,10 @@ const createProtocol = async (data: Protocol) => {
           FMR: expense.amount / currentFMR,
         }
       })
+    })
+
+    data.sections.bibliography.chart.forEach((ref) => {
+      ref.year = parseInt(ref.year as any)
     })
 
     const protocol = await prisma.protocol.create({

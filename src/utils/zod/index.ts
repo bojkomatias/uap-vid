@@ -483,11 +483,11 @@ export const IdentificationTeamSchema = z.object({
     .max(400, {
       message: 'No se pueden asignar tantas horas',
     }),
-  last_name: z.string().nullish(),
-  name: z.string().nullish(),
+  last_name: z.string().nullable(),
+  name: z.string().nullable(),
   role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   teamMemberId: z.string().nullable(),
-  workingMonths: z.coerce.number().nullish(),
+  workingMonths: z.coerce.number().nullable(),
 })
 
 export const IdentificationSchema = z.object({
