@@ -9,6 +9,7 @@ import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 import { z } from 'zod'
 import { ProtocolSchema } from '@utils/zod'
+import { getCurrentIndexes } from './finance-index'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>
@@ -74,13 +75,31 @@ const getResearcherEmailByProtocolId = cache(async (id: string) => {
   }
 })
 
-const updateProtocolById = async (id: string, data: Protocol) =>
-  await prisma.protocol.update({
-    where: {
-      id,
-    },
-    data,
-  })
+const updateProtocolById = async (id: string, data: Protocol) => {
+  try {
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    data.sections.budget.expenses.forEach((expenseType) => {
+      expenseType.data.forEach((expense) => {
+        expense.amount = parseFloat(expense.amount as any)
+        expense.amountIndex = {
+          FCA: expense.amount / currentFCA,
+          FMR: expense.amount / currentFMR,
+        }
+      })
+    })
+
+    return await prisma.protocol.update({
+      where: {
+        id,
+      },
+      data,
+    })
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
 
 const updateProtocolStateById = async (id: string, state: ProtocolState) => {
   try {
@@ -108,6 +127,18 @@ const patchProtocolNumber = async (id: string, protocolNumber: string) =>
 
 const createProtocol = async (data: Protocol) => {
   try {
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    data.sections.budget.expenses.forEach((expenseType) => {
+      expenseType.data.forEach((expense) => {
+        expense.amount = parseFloat(expense.amount as any)
+        expense.amountIndex = {
+          FCA: expense.amount / currentFCA,
+          FMR: expense.amount / currentFMR,
+        }
+      })
+    })
+
     const protocol = await prisma.protocol.create({
       data,
     })

@@ -407,7 +407,9 @@ export const BudgetSchema = z.object({
             detail: z.string().min(1, {
               message: 'El campo no puede estar vacío',
             }),
-            amount: z.any(),
+            amount: z.coerce
+              .number()
+              .min(1, { message: 'Debe completar el monto' }),
             year: z
               .string({
                 invalid_type_error: 'Debe seleccionar un año',

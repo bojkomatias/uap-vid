@@ -15,10 +15,11 @@ const TextItemView = ({ title, content, className }: TextItemProps) => {
     <>
       <DescriptionTerm>{title}</DescriptionTerm>
       {content ?
-        <DescriptionDetails
-          className={cx(className, 'prose max-w-none text-sm')}
-        >
-          <div dangerouslySetInnerHTML={{ __html: content }} />
+        <DescriptionDetails>
+          <div
+            className={cx(className, 'prose max-w-none text-sm')}
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </DescriptionDetails>
       : <DescriptionDetails>
           <EmptyStateItem />
