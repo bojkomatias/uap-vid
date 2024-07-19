@@ -2,7 +2,6 @@ import type { ProtocolSectionsBudget } from '@prisma/client'
 import type { ListRowValues } from '@protocol/elements/view/item-list-view'
 import ItemListView from '@protocol/elements/view/item-list-view'
 import SectionViewer from '../elements/view/section-viewer'
-import { currencyFormatter } from '@utils/formatters'
 import { Currency } from '@shared/currency'
 import { Text } from '@components/text'
 

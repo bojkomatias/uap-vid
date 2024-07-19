@@ -17,6 +17,7 @@ import ProtocolLogsDrawer from '../logs/log-drawer'
 import { useQuery } from '@tanstack/react-query'
 import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { Strong, Text } from '@components/text'
+import { getActiveCarrersForForm } from '@repositories/career'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -60,9 +61,13 @@ export default function ProtocolTable({
   protocols: ProtocolWithIncludes[]
   totalRecords: number
 }) {
-  const { isLoading, data: academicUnits } = useQuery({
+  const { data: academicUnits } = useQuery({
     queryKey: ['academic-units'],
-    queryFn: async () => await getAcademicUnitsNameAndShortname(),
+    queryFn: getAcademicUnitsNameAndShortname,
+  })
+  const { data: careers } = useQuery({
+    queryKey: ['careers'],
+    queryFn: getActiveCarrersForForm,
   })
 
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
@@ -155,10 +160,14 @@ export default function ProtocolTable({
       {
         accessorKey: 'sections.identification.careerId',
         header: 'Carrera',
-      },
-      {
-        accessorKey: 'sections.identification.cou',
-        header: 'Asignatura',
+        cell: ({ row }) => (
+          <Text>
+            {careers?.find(
+              (c) => c.id === row.original.sections.identification.careerId
+            )?.name ?? ''}
+          </Text>
+        ),
+        enableSorting: false,
       },
       {
         accessorKey: 'sections.duration.modality',
@@ -267,7 +276,6 @@ export default function ProtocolTable({
     convocatory_name: false,
     researcher_name: false,
     'sections_identification.career': false,
-    'sections_identification.assignment': false,
     'sections_duration.modality': false,
     'sections_duration.duration': false,
     'reviews_0.verdict': false,
