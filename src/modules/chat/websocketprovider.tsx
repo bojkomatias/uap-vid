@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import { useQueryClient } from '@tanstack/react-query'
+import { ChatMessage } from '@prisma/client'
 
 interface ChatMessagesContextType {
   sendMessage: (content: string) => void
@@ -40,12 +41,15 @@ export const WebSocketMessagesProvider = ({
           queryClient.setQueryData(queryKey, payload.reverse())
           break
         case MESSAGE_TYPE.NEW_MESSAGE:
-          queryClient.setQueryData(queryKey, (oldData: any) => {
+          queryClient.setQueryData(queryKey, (oldData: ChatMessage[]) => {
             if (Array.isArray(oldData)) {
+              console.log(oldData, payload)
               return [payload, ...oldData]
             }
+
             return [payload]
           })
+
           break
         default:
           break

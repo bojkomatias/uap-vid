@@ -62,7 +62,8 @@ export default function ChatForm({
     initialData: [],
   })
 
-  const { data: unreadMessages } = useQuery({
+  const { data: unreadMessages, refetch: refetchUnreadMessages } = useQuery({
+    refetchOnWindowFocus: 'always',
     refetchOnMount: 'always',
     queryKey: ['unreadMessages', protocolId],
     queryFn: async () => {
@@ -111,7 +112,8 @@ export default function ChatForm({
   return (
     <ChatPopover
       callbackFn={async () => {
-        return await setMessagesToRead(protocolId, user.id)
+        await refetchUnreadMessages()
+        await setMessagesToRead(protocolId, user.id)
       }}
       totalUnreadMessages={unreadMessages!}
     >
@@ -136,9 +138,9 @@ export default function ChatForm({
                   : 'Cargar más mensajes'}
                 </Button>
               )}{' '}
-              {messages?.toReversed().map((msg) => (
+              {messages?.toReversed().map((msg, idx) => (
                 <div
-                  key={msg.protocolId.concat(msg.id)}
+                  key={msg.protocolId.concat(idx.toString())}
                   className={` flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
