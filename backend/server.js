@@ -1,41 +1,51 @@
-// Import WebSocket and HTTP libraries
 const WebSocket = require('ws')
 const http = require('http')
+const { v4: uuidv4 } = require('uuid')
 
-// Create an HTTP server and a WebSocket server on top of it
 const server = http.createServer()
 const wss = new WebSocket.Server({ server })
 
-// Initialize an array to store chat messages
-let chatMessages = []
+// Initialize an object to store chat messages for each room
+let chatRooms = {}
+
 const MESSAGE_TYPE = {
   INITIAL_DATA: 'INITIAL_DATA',
   SEND_MESSAGE: 'SEND_MESSAGE',
   NEW_MESSAGE: 'NEW_MESSAGE',
 }
 
-// Listen for new WebSocket connections
-wss.on('connection', (ws) => {
-  console.log('Client connected.')
+wss.on('connection', (ws, req) => {
+  const chatId = req.url.split('/')[1]
+  console.log(`Client connected. Room ID: ${chatId}`)
 
-  // Send the initial chat messages to the newly connected client
+  // Initialize the chat room if it doesn't exist
+  if (!chatRooms[chatId]) {
+    chatRooms[chatId] = []
+  }
+
+  // Send the initial chat messages for this room to the newly connected client
   ws.send(
     JSON.stringify({
       type: MESSAGE_TYPE.INITIAL_DATA,
-      payload: chatMessages,
+      payload: chatRooms[chatId],
     })
   )
 
-  // Listen for incoming messages from the client
+  // Assign the chatId to the WebSocket connection
+  ws.chatId = chatId
+
   ws.on('message', (message) => {
     const parsedMessage = JSON.parse(message)
     if (parsedMessage.type === MESSAGE_TYPE.SEND_MESSAGE) {
       const { content } = JSON.parse(parsedMessage.content)
-      chatMessages.push(content)
-      console.log(chatMessages)
-      // Iterate through all connected clients and send the new message to them
+
+      // Add the new message to the room's message history
+      chatRooms[chatId].push(content)
+      console.log(`New message in room ${chatId}:`, content)
+
+      // Send the new message to all clients in the same room
       wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
+        if (client.readyState === WebSocket.OPEN && client.chatId === chatId) {
           client.send(
             JSON.stringify({
               type: MESSAGE_TYPE.NEW_MESSAGE,
@@ -47,13 +57,11 @@ wss.on('connection', (ws) => {
     }
   })
 
-  // Listen for the 'close' event to log when a client disconnects
   ws.on('close', () => {
-    console.log('Client disconnected.')
+    console.log(`Client disconnected from room ${chatId}`)
   })
 })
 
-// Start the server and listen on a specific port
 const port = 3001
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`)

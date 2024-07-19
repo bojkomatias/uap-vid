@@ -9,7 +9,6 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 export default async function Page({ params }: { params: { id: string } }) {
   if (params.id === 'new') redirect('/protocols/new/0')
   const protocol = await findProtocolById(params.id)
-  console.log(protocol?.sections.identification)
   if (!protocol) {
     redirect('/protocols')
   }
@@ -18,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <PDF protocol={protocol} />
+      {/* <PDF protocol={protocol} /> */}
       <ChatFullComponent user={session!.user} protocolId={protocol.id} />
       <View sections={protocol.sections} />
     </>

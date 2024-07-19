@@ -3,7 +3,6 @@
 import type { ChatMessage } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
-import { equal } from 'assert'
 
 const saveMessage = async (
   data: Omit<ChatMessage, 'id' | 'createdAt' | 'read'>
@@ -12,7 +11,7 @@ const saveMessage = async (
     const message = await prisma.chatMessage.create({
       data,
     })
-    console.log('MESSAGE CREATED:', message)
+    console.log(message)
     return message
   } catch (e) {
     console.error('Error creating message:', e)
@@ -35,28 +34,32 @@ const getMessages = cache(async (protocolId: string, n: number) => {
     return null
   }
 })
-
 const getTotalUnreadMessages = cache(
   async (protocolId: string, userId: string) => {
     try {
       const totalUnreadMessages = await prisma.chatMessage.count({
         where: { protocolId: protocolId, userId: { not: userId }, read: false },
       })
-
+      console.log('UNREAD MESSAGES:', totalUnreadMessages)
       return totalUnreadMessages
-    } catch (e) {}
+    } catch (e) {
+      console.log(e)
+      return null
+    }
   }
 )
 
-const setMessagesToRead = cache(async (protocolId: string) => {
+const setMessagesToRead = cache(async (protocolId: string, userId: string) => {
   try {
-    const readMessages = await prisma.chatMessage.updateMany({
-      where: { protocolId: { contains: protocolId } },
+    const updatedMessages = await prisma.chatMessage.updateMany({
+      where: { protocolId: protocolId, userId: { not: userId }, read: false },
       data: {
         read: true,
       },
     })
+    return updatedMessages
   } catch (e) {
+    console.log(e)
     return null
   }
 })
@@ -74,4 +77,10 @@ const totalMessages = cache(async (protocolId: string) => {
   }
 })
 
-export { saveMessage, getMessages, totalMessages }
+export {
+  saveMessage,
+  getMessages,
+  totalMessages,
+  getTotalUnreadMessages,
+  setMessagesToRead,
+}

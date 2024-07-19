@@ -3,7 +3,12 @@
 import React, { useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useChatMessagesContext } from './WebSocketProvider'
-import { getMessages, saveMessage } from '@repositories/message'
+import {
+  getMessages,
+  getTotalUnreadMessages,
+  saveMessage,
+  setMessagesToRead,
+} from '@repositories/message'
 import { Fieldset } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
 import { FormButton } from '@shared/form/form-button'
@@ -41,14 +46,15 @@ export default function ChatForm({
   const [take, setTake] = useState(10)
   const chatcontainer = useRef(null)
 
-  const { sendMessage } = useChatMessagesContext() as ChatMessagesContextType
+  const { sendMessage, canSendMessages } =
+    useChatMessagesContext() as ChatMessagesContextType
 
   const {
     data: messages,
     refetch,
     isFetching,
   } = useQuery({
-    refetchOnMount: false,
+    refetchOnMount: 'always',
     queryKey: ['messages', protocolId],
     queryFn: async () => {
       return await getMessages(protocolId, take)
@@ -56,7 +62,14 @@ export default function ChatForm({
     initialData: [],
   })
 
-  const [unreadMessages, setUnreadMessages] = useState(0)
+  const { data: unreadMessages } = useQuery({
+    refetchOnMount: 'always',
+    queryKey: ['unreadMessages', protocolId],
+    queryFn: async () => {
+      return await getTotalUnreadMessages(protocolId, user.id)
+    },
+    initialData: 0,
+  })
 
   const sendNewMessage = useMutation({
     mutationFn: async (newMessage: string) => {
@@ -92,87 +105,82 @@ export default function ChatForm({
     if (message.trim()) {
       sendNewMessage.mutate(message)
       setMessage('')
-      setUnreadMessages(
-        messages?.filter((m) => m.read == false && m.user.name != user.name)
-          .length!
-      )
     }
   }
 
   return (
-    <ChatPopover totalUnreadMessages={unreadMessages!}>
+    <ChatPopover
+      callbackFn={async () => {
+        return await setMessagesToRead(protocolId, user.id)
+      }}
+      totalUnreadMessages={unreadMessages!}
+    >
       <div className="flex flex-col rounded-xl">
         <div
           ref={chatcontainer}
           className="flex max-h-[60vh] flex-col-reverse overflow-auto"
         >
-          <div className="w-full space-y-4 pt-4">
-            {messages && messages.length > 9 && (
-              <Button
-                onClick={() => {
-                  setTake(take + 10)
-                  setTimeout(() => {
-                    refetch()
-                  }, 100)
-                }}
-              >
-                {isFetching ?
-                  <Loader className="animate-spin" />
-                : 'Cargar más mensajes'}
-              </Button>
-            )}
-
-            {!messages ||
-              (messages!.length < 1 && (
-                <p className="px-4 pb-6 text-sm text-gray-600">
-                  {isFetching ?
-                    <div className="flex items-center gap-1 text-primary-950">
-                      Cargando <Loader className="animate-spin" />
-                    </div>
-                  : 'Chat vacío. Puede comenzar una conversación enviando un mensaje'
-                  }
-                </p>
-              ))}
-            {messages?.toReversed().map((msg) => (
-              <div
-                key={msg.id}
-                className={` flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
-                    msg.userId == user.id ?
-                      'bg-primary-950 text-white'
-                    : 'bg-gray-200 text-gray-800'
-                  }`}
+          {messages!.length > 0 ?
+            <div className="w-full space-y-4 pt-4">
+              {messages && messages.length > 9 && (
+                <Button
+                  onClick={() => {
+                    setTake(take + 10)
+                    setTimeout(() => {
+                      refetch()
+                    }, 100)
+                  }}
                 >
-                  <div className="text-sm">
-                    <h1
-                      className={`
-                           text-xs ${
-                             msg.userId == user.id ?
-                               'text-right text-gray-300'
-                             : 'text-gray-500'
-                           }`}
-                    >
-                      {msg.user?.name}
-                    </h1>
-
-                    <p className="break-words font-semibold">{msg.content}</p>
-                  </div>
-                  <p
-                    className={`
-                           text-xs ${
-                             msg.userId == user.id ?
-                               'text-right text-gray-300'
-                             : 'text-gray-500'
-                           }`}
+                  {isFetching ?
+                    <Loader className="animate-spin" />
+                  : 'Cargar más mensajes'}
+                </Button>
+              )}{' '}
+              {messages?.toReversed().map((msg) => (
+                <div
+                  key={msg.protocolId.concat(msg.id)}
+                  className={` flex pb-2 ${msg.userId == user.id ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
+                      msg.userId == user.id ?
+                        'bg-primary-950 text-white'
+                      : 'bg-gray-200 text-gray-800'
+                    }`}
                   >
-                    {new Date(msg.createdAt).toLocaleTimeString()}
-                  </p>
+                    <div className="text-sm">
+                      <h1
+                        className={`
+                       text-xs ${
+                         msg.userId == user.id ?
+                           'text-right text-gray-300'
+                         : 'text-gray-500'
+                       }`}
+                      >
+                        {msg.user?.name}
+                      </h1>
+
+                      <p className="break-words font-semibold">{msg.content}</p>
+                    </div>
+                    <p
+                      className={`
+                       text-xs ${
+                         msg.userId == user.id ?
+                           'text-right text-gray-300'
+                         : 'text-gray-500'
+                       }`}
+                    >
+                      {new Date(msg.createdAt).toLocaleTimeString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          : <p className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400">
+              Chat vacío. Puede comenzar una nueva conversación enviando un
+              mensaje nuevo.
+            </p>
+          }
         </div>
         <div className="sticky bottom-0 bg-white shadow-lg">
           <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
@@ -188,7 +196,9 @@ export default function ChatForm({
                 placeholder="Escriba un mensaje..."
               />
             </Fieldset>
-            <FormButton isLoading={sendNewMessage.isPending}>Enviar</FormButton>
+            <Button type="submit" disabled={!canSendMessages}>
+              Enviar
+            </Button>
           </form>
         </div>
       </div>

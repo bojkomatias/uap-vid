@@ -4,15 +4,10 @@ import { useQueryClient } from '@tanstack/react-query'
 
 interface ChatMessagesContextType {
   sendMessage: (content: string) => void
+  canSendMessages: boolean
 }
 
 const ChatMessagesContext = createContext<ChatMessagesContextType | null>(null)
-const SOCKET_URL = `${process.env.NEXT_PUBLIC_WEBSOCKET_URL!}`
-const MESSAGE_TYPE = {
-  INITIAL_DATA: 'INITIAL_DATA',
-  SEND_MESSAGE: 'SEND_MESSAGE',
-  NEW_MESSAGE: 'NEW_MESSAGE',
-}
 
 export const WebSocketMessagesProvider = ({
   children,
@@ -21,6 +16,12 @@ export const WebSocketMessagesProvider = ({
   children: React.ReactNode
   queryKey: any[]
 }) => {
+  const SOCKET_URL = `${process.env.NEXT_PUBLIC_WEBSOCKET_URL!}/${queryKey[1]}`
+  const MESSAGE_TYPE = {
+    INITIAL_DATA: 'INITIAL_DATA',
+    SEND_MESSAGE: 'SEND_MESSAGE',
+    NEW_MESSAGE: 'NEW_MESSAGE',
+  }
   const {
     sendMessage: sM,
     lastMessage,
@@ -66,7 +67,7 @@ export const WebSocketMessagesProvider = ({
   )
 
   return (
-    <ChatMessagesContext.Provider value={{ sendMessage }}>
+    <ChatMessagesContext.Provider value={{ sendMessage, canSendMessages }}>
       {children}
     </ChatMessagesContext.Provider>
   )
