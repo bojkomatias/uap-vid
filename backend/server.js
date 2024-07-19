@@ -1,6 +1,5 @@
 const WebSocket = require('ws')
 const http = require('http')
-const { v4: uuidv4 } = require('uuid')
 
 const server = http.createServer()
 const wss = new WebSocket.Server({ server })
