@@ -5,7 +5,7 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { Strong, Text } from '@components/text'
-import { Fragment } from 'react'
+import { Fragment, ReactNode } from 'react'
 
 interface DeepValue {
   groupLabel: string
@@ -53,7 +53,7 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
 }
 export type ListRowValues = {
   up: string
-  down: string | number
+  down: string | number | ReactNode
   inverted?: boolean
 }[]
 

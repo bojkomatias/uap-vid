@@ -3,6 +3,8 @@ import type { ListRowValues } from '@protocol/elements/view/item-list-view'
 import ItemListView from '@protocol/elements/view/item-list-view'
 import SectionViewer from '../elements/view/section-viewer'
 import { currencyFormatter } from '@utils/formatters'
+import { Currency } from '@shared/currency'
+import { Text } from '@components/text'
 
 interface BudgetViewProps {
   data: ProtocolSectionsBudget
@@ -29,7 +31,7 @@ const BudgetView = ({ data }: BudgetViewProps) => {
             },
             {
               up: 'Monto',
-              down: `$${currencyFormatter.format(item.amount)}`,
+              down: <Currency amountIndex={item.amountIndex} />,
               inverted: true,
             },
           ])
@@ -39,26 +41,25 @@ const BudgetView = ({ data }: BudgetViewProps) => {
     }),
   }
 
+  const totalAmountIndex = data.expenses.reduce(
+    (acc, current) => {
+      const reduceFCA =
+        acc.FCA + current.data.reduce((a, c) => a + c.amountIndex.FCA, 0)
+      const reduceFMR =
+        acc.FMR + current.data.reduce((a, c) => a + c.amountIndex.FMR, 0)
+      return { FCA: reduceFCA, FMR: reduceFMR }
+    },
+    { FCA: 0, FMR: 0 }
+  )
+
   return (
     <SectionViewer title="Presupuesto" description="Detalles del presupuesto">
       <ItemListView
         data={tableData}
         footer={
-          <div className="ml-auto mr-4 flex w-fit gap-2 py-4 text-xl">
-            <p className="text-gray-400">Total: </p> $
-            {currencyFormatter.format(
-              data.expenses.reduce((acc, val) => {
-                return (
-                  acc +
-                  val.data.reduce((prev, curr) => {
-                    if (isNaN(curr.amount)) curr.amount = 0
-                    else curr.amount
-                    return prev + curr.amount
-                  }, 0)
-                )
-              }, 0)
-            )}
-          </div>
+          <Text className="col-span-full ml-auto !text-base/6">
+            Total: <Currency amountIndex={totalAmountIndex} />
+          </Text>
         }
       />
     </SectionViewer>
