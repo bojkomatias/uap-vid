@@ -2,7 +2,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
-import { ProfileInfo } from 'modules/profile/profile-info-drawer'
+import { ProfileInfo } from 'modules/profile/profile-info'
 import { Role } from '@prisma/client'
 import { Heading } from '@components/heading'
 

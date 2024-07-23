@@ -2,7 +2,6 @@
 
 import { Button } from '@elements/button'
 import { buttonStyle } from '@elements/button/styles'
-import CustomDrawer from '@elements/custom-drawer'
 import DisclosureComponent from '@elements/disclosure'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
@@ -17,20 +16,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { Mail, Password, UserCircle } from 'tabler-icons-react'
-
-export default function ProfileDrawer({
-  certificate,
-  user,
-}: {
-  certificate: React.ReactNode
-  user: User
-}) {
-  return (
-    <CustomDrawer title="Perfil de usuario" path="/profile">
-      <ProfileInfo certificate={certificate} user={user} />
-    </CustomDrawer>
-  )
-}
 
 export function ProfileInfo({
   certificate,
