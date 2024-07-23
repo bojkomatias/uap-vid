@@ -30,21 +30,21 @@
       "@components/*": ["./components/*"],
       "@shared/*": ["./shared/*"]
     },
-    "include": [
-      "next-env.d.ts",
-      "**/*.ts",
-      "**/*.tsx",
-      "pages/index.tsx",
-      "config/exhibit.js",
-      ".next/types/**/*.ts",
-      "server.ts",
-      "socketServer.ts"
-    ],
-    "exclude": ["node_modules", "server.js"],
     "plugins": [
       {
         "name": "next"
       }
     ]
-  }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/index.tsx",
+    "config/exhibit.js",
+    ".next/types/**/*.ts",
+    "server.ts",
+    "socketServer.ts"
+  ],
+  "exclude": ["node_modules", "server.js"]
 }
