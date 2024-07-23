@@ -7,6 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ChatMessage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  thread     String //This is to separate multiple threads into a single protocol 
+  createdAt  DateTime @default(now())
+  read       Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @db.ObjectId
+  protocolId String   @db.ObjectId
+  protocol   Protocol @relation(fields: [protocolId], references: [id])
+}
+
 model AcademicUnit {
   id                          String               @id @default(auto()) @map("_id") @db.ObjectId
   name                        String
@@ -61,6 +73,7 @@ model Protocol {
   anualBudgets   AnualBudget[]
   anualBudgetIds String[]
   logs           Logs[]
+  ChatMessage    ChatMessage[]
 }
 
 model User {
@@ -78,6 +91,7 @@ model User {
   protocols       Protocol[]
   memberDetails   TeamMember?
   logs            Logs[]
+  chat_messages   ChatMessage[]
 }
 
 model TeamMember {
