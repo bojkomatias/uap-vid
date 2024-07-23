@@ -8,7 +8,7 @@ import type { AcademicUnitSchema } from '@utils/zod'
 import type { Secretary } from 'modules/academic-unit/edit-secretaries-form'
 import { getCurrentIndexes } from './finance-index'
 
-export const getAcademicUnitsForForm = cache(
+export const getAcademicUnitsNameAndShortname = cache(
   async () =>
     await prisma.academicUnit.findMany({
       select: {

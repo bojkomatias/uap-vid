@@ -87,16 +87,6 @@ export default function TeamMemberListForm() {
                 {...form.getInputProps(
                   `sections.identification.team.${index}.hours`
                 )}
-                onBlur={(e: any) => {
-                  form.setFieldValue(
-                    `sections.identification.team.${index}.hours`,
-                    parseInt(
-                      form.getInputProps(
-                        `sections.identification.team.${index}.hours`
-                      ).value
-                    )
-                  )
-                }}
               />
 
               <FormInput
@@ -106,16 +96,6 @@ export default function TeamMemberListForm() {
                 {...form.getInputProps(
                   `sections.identification.team.${index}.workingMonths`
                 )}
-                onBlur={(e: any) => {
-                  form.setFieldValue(
-                    `sections.identification.team.${index}.workingMonths`,
-                    parseInt(
-                      form.getInputProps(
-                        `sections.identification.team.${index}.workingMonths`
-                      ).value
-                    )
-                  )
-                }}
               />
 
               {index === 0 ?

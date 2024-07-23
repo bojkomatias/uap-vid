@@ -8,32 +8,30 @@ import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
-import type { Career, Course } from '@prisma/client'
-import { useEffect, useState } from 'react'
+import type { Course } from '@prisma/client'
+import { useState } from 'react'
 import {
   getActiveCarrersForForm,
   getCoursesByCareerId,
 } from '@repositories/career'
-import { getAcademicUnitsForForm } from '@repositories/academic-unit'
+import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
+import { useQuery } from '@tanstack/react-query'
 
 export function IdentificationForm() {
   const form = useProtocolContext()
-  const [careers, setCareers] = useState<
-    Omit<Career, 'academicUnitId' | 'active'>[]
-  >([])
+
+  const { data: academicUnits } = useQuery({
+    queryKey: ['academic-units'],
+    queryFn: getAcademicUnitsNameAndShortname,
+  })
+  const { data: careers } = useQuery({
+    queryKey: ['careers'],
+    queryFn: getActiveCarrersForForm,
+  })
+
   const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(
     []
   )
-  const [academicUnits, setAcademicUnits] = useState<
-    { id: string; name: string; shortname: string }[]
-  >([])
-
-  useEffect(() => {
-    ;(async () => {
-      setCareers(await getActiveCarrersForForm())
-      setAcademicUnits(await getAcademicUnitsForForm())
-    })()
-  }, [])
 
   return (
     <motion.div
@@ -52,7 +50,9 @@ export function IdentificationForm() {
           <FormCombobox
             label="Carrera"
             description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
-            options={careers.map((e) => ({ value: e.id, label: e.name }))}
+            options={
+              careers?.map((e) => ({ value: e.id, label: e.name })) ?? []
+            }
             {...form.getInputProps('sections.identification.careerId')}
             onChange={async (e: any) => {
               if (!e) return
@@ -79,11 +79,13 @@ export function IdentificationForm() {
             multiple
             label="Ente patrocinante"
             description="Seleccione una o más unidades académicas o entes patrocinantes que auspician el proyecto"
-            options={academicUnits.map((e) => ({
-              value: e.id,
-              label: e.shortname,
-              description: e.name,
-            }))}
+            options={
+              academicUnits?.map((e) => ({
+                value: e.id,
+                label: e.shortname,
+                description: e.name,
+              })) ?? []
+            }
             {...form.getInputProps('sections.identification.academicUnitIds')}
           />
         </FieldGroup>

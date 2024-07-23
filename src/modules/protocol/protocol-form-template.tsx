@@ -13,7 +13,7 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
+import { ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -66,24 +66,6 @@ export default function ProtocolForm({
       : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
-    transformValues: (values) => ({
-      ...values,
-      sections: {
-        ...values.sections,
-        identification: {
-          ...values.sections.identification,
-          team: values.sections.identification.team.map((e) =>
-            IdentificationTeamSchema.parse(e)
-          ),
-        },
-        bibliography: {
-          chart: values.sections.bibliography.chart.map((e) => ({
-            ...e,
-            year: Number(e.year),
-          })),
-        },
-      },
-    }),
   })
 
   useEffect(() => {
@@ -190,6 +172,12 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
+          console.log(
+            'The protocol on client ==>',
+            JSON.stringify(form.values.sections.budget, null, 2)
+          )
+          console.log('ERRORS:', form.errors)
+
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
