@@ -1,7 +1,10 @@
-export function EmptyStateItem() {
+import { Badge } from '@components/badge'
+import { DescriptionDetails } from '@components/description-list'
+
+export function EmptyStateItem({ isOptional }: { isOptional?: true }) {
   return (
-    <div className="w-full rounded bg-gray-50 px-4 pb-1 pt-2 text-center text-xs font-light uppercase italic text-gray-400">
-      falta completar
-    </div>
+    <Badge className="flex h-8 w-full justify-center bg-gray-500/5">
+      {isOptional ? 'Sin elementos cargados' : 'FALTA COMPLETAR'}
+    </Badge>
   )
 }

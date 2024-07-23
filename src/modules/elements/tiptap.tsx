@@ -1,4 +1,5 @@
 'use client'
+
 import TextAlign from '@tiptap/extension-text-align'
 import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
