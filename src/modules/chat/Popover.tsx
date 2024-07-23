@@ -34,7 +34,6 @@ export function ChatPopover({
         onBlur={() => {
           callbackFn()
         }}
-        transition
         anchor="top"
         className="mb-4 w-[80vw] -translate-x-8 -translate-y-4 rounded-xl border bg-white p-4 shadow-2xl transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 md:w-[50vw] xl:w-[30vw]"
       >
