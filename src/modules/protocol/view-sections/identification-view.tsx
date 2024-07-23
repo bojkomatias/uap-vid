@@ -19,7 +19,9 @@ export default async function IdentificationView({
   )
 
   const career = await getCareerById(data.careerId)
-  const course = await getCourseById(data.courseId!)
+  const course = await getCourseById(
+    data.courseId! || '667f2ac48c447a843759f876'
+  )
 
   const shortData = [
     {

@@ -11,7 +11,6 @@ const saveMessage = async (
     const message = await prisma.chatMessage.create({
       data,
     })
-    console.log(message)
     return message
   } catch (e) {
     console.error('Error creating message:', e)
@@ -40,7 +39,6 @@ const getTotalUnreadMessages = cache(
       const totalUnreadMessages = await prisma.chatMessage.count({
         where: { protocolId: protocolId, userId: { not: userId }, read: false },
       })
-      console.log('UNREAD MESSAGES:', totalUnreadMessages)
       return totalUnreadMessages
     } catch (e) {
       console.log(e)

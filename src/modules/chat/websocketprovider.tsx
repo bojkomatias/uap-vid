@@ -43,7 +43,6 @@ export const WebSocketMessagesProvider = ({
         case MESSAGE_TYPE.NEW_MESSAGE:
           queryClient.setQueryData(queryKey, (oldData: ChatMessage[]) => {
             if (Array.isArray(oldData)) {
-              console.log(oldData, payload)
               return [payload, ...oldData]
             }
 

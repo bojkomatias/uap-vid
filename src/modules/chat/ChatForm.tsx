@@ -2,7 +2,7 @@
 'use client'
 import React, { useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useChatMessagesContext } from './WebSocketProvider'
+import { useChatMessagesContext } from './websocketprovider'
 import {
   getMessages,
   getTotalUnreadMessages,
@@ -65,6 +65,9 @@ export default function ChatForm({
   const { data: unreadMessages, refetch: refetchUnreadMessages } = useQuery({
     refetchOnWindowFocus: 'always',
     refetchOnMount: 'always',
+    gcTime: 1000,
+    staleTime: 1000,
+
     queryKey: ['unreadMessages', protocolId],
     queryFn: async () => {
       return await getTotalUnreadMessages(protocolId, user.id)
@@ -100,9 +103,9 @@ export default function ChatForm({
     },
   })
 
-  const onSubmit = (event: React.FormEvent) => {
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-
+    await refetchUnreadMessages()
     if (message.trim()) {
       sendNewMessage.mutate(message)
       setMessage('')
@@ -112,8 +115,8 @@ export default function ChatForm({
   return (
     <ChatPopover
       callbackFn={async () => {
-        await refetchUnreadMessages()
         await setMessagesToRead(protocolId, user.id)
+        await refetchUnreadMessages()
       }}
       totalUnreadMessages={unreadMessages!}
     >
