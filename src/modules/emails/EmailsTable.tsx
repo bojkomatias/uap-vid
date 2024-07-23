@@ -28,6 +28,7 @@ export default function EmailsTable({
       <div className="flex flex-wrap gap-2">
         {useCases?.map((uc) => (
           <Button
+            key={uc}
             onClick={() => {
               setOpen(true)
               setDialogContent(emails.find((e) => e.useCase == uc))
