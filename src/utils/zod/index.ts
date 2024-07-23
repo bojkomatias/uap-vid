@@ -218,6 +218,12 @@ export const VerifyUserDataSchema = z
     path: ['newPasswordConfirm'],
   })
 
+export const ReviewQuestionSchema = z.object({
+  active: z.boolean(),
+  type: z.string(),
+  question: z.string(),
+})
+
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
 /////////////////////////////////////////
