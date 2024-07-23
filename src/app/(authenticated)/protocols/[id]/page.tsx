@@ -9,6 +9,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 export default async function Page({ params }: { params: { id: string } }) {
   if (params.id === 'new') redirect('/protocols/new/0')
   const protocol = await findProtocolById(params.id)
+
   if (!protocol) {
     redirect('/protocols')
   }

@@ -1,29 +1,14 @@
-import { Role, type ProtocolSections } from '@prisma/client'
-import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
-import dynamic from 'next/dynamic'
-const IdentificationView = dynamic(
-  () => import('@protocol/view-sections/identification-view')
-)
-const BibliographyView = dynamic(
-  () => import('@protocol/view-sections/bibliography-view')
-)
-const DescriptionView = dynamic(
-  () => import('@protocol/view-sections/description-view')
-)
-const BudgetView = dynamic(() => import('@protocol/view-sections/budget-view'))
-const DurationView = dynamic(
-  () => import('@protocol/view-sections/duration-view')
-)
-const IntroductionView = dynamic(
-  () => import('@protocol/view-sections/introduction-view')
-)
-const MethodologyView = dynamic(
-  () => import('@protocol/view-sections/methodology-view')
-)
-const PublicationView = dynamic(
-  () => import('@protocol/view-sections/publication-view')
-)
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
+import { Role, type ProtocolSections } from '@prisma/client'
+import BibliographyView from './view-sections/bibliography-view'
+import DescriptionView from './view-sections/description-view'
+import DurationView from './view-sections/duration-view'
+import IdentificationView from './view-sections/identification-view'
+import IntroductionView from './view-sections/introduction-view'
+import MethodologyView from './view-sections/methodology-view'
+import PublicationView from './view-sections/publication-view'
+import BudgetView from './view-sections/budget-view'
 
 export default async function View({
   sections,
@@ -34,7 +19,7 @@ export default async function View({
 
   if (session?.user.role === Role.METHODOLOGIST)
     return (
-      <div className="px-2">
+      <div className="space-y-6">
         <IdentificationView data={sections.identification} />
         <DurationView data={sections.duration} />
         <DescriptionView data={sections.description} />
@@ -42,7 +27,7 @@ export default async function View({
       </div>
     )
   return (
-    <div className="px-2">
+    <div className="space-y-6">
       <IdentificationView data={sections.identification} />
       <DurationView data={sections.duration} />
       <BudgetView data={sections.budget} />
