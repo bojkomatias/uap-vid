@@ -27,6 +27,13 @@ type AcademicUnitBudget {
   amountIndex AmountIndex
 }
 
+model EmailContentTemplate {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  useCase String
+  subject String
+  content String
+}
+
 model Convocatory {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime   @default(now())
