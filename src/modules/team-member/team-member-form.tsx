@@ -1,4 +1,5 @@
 'use client'
+
 import { useForm, zodResolver } from '@mantine/form'
 import type {
   HistoricTeamMemberCategory,
@@ -26,10 +27,10 @@ export default function TeamMemberForm({
   onSubmitCallback,
 }: {
   member:
-    | (TeamMember & {
-        categories: HistoricTeamMemberCategory[]
-      } & { user: User | null })
-    | null
+  | (TeamMember & {
+    categories: HistoricTeamMemberCategory[]
+  } & { user: User | null })
+  | null
   researchers: User[]
   academicUnits: {
     id: string
@@ -128,7 +129,6 @@ export default function TeamMemberForm({
                 )
             }}
           />
-
           <FormInput
             label="Nombre completo"
             description="Nombre completo del investigador"
@@ -145,14 +145,14 @@ export default function TeamMemberForm({
             {...form.getInputProps('academicUnitId')}
           />
         </FieldGroup>
-      </Fieldset>
+      </Fieldset >
       <FormActions>
         <FormButton isLoading={isPending}>
           {member ?
             'Actualizar miembro de investigación'
-          : 'Crear miembro de investigación'}
+            : 'Crear miembro de investigación'}
         </FormButton>
       </FormActions>
-    </form>
+    </form >
   )
 }

@@ -18,7 +18,8 @@ export default async function IdentificationView({
       .map((ac) => ac.then((a) => a?.name))
   )
   const career = await getCareerById(data.careerId)
-  const course = await getCourseById(data.courseId!)
+
+  const course = data.courseId ? await getCourseById(data.courseId) : null
 
   const shortData = [
     {

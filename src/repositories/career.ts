@@ -5,6 +5,15 @@ import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import type { z } from 'zod'
 
+export const getAllForReal = async () => {
+  try {
+    const careers = await prisma.career.findMany({})
+    return careers
+  } catch (e) {
+    return []
+  }
+}
+
 export const getActiveCarrersForForm = cache(async () => {
   return await prisma.career.findMany({
     where: { active: true },
@@ -106,7 +115,6 @@ export const getCourseById = cache(async (id: string) => {
     })
     return result
   } catch (e) {
-    console.log(e)
     return null
   }
 })

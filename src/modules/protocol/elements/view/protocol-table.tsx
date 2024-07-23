@@ -1,4 +1,5 @@
 'use client'
+
 import type { Prisma, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
@@ -13,6 +14,10 @@ import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import ProtocolLogsDrawer from '../logs/log-drawer'
+import { useQuery } from '@tanstack/react-query'
+import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
+import { Strong, Text } from '@components/text'
+import { getActiveCarrersForForm } from '@repositories/career'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -56,6 +61,15 @@ export default function ProtocolTable({
   protocols: ProtocolWithIncludes[]
   totalRecords: number
 }) {
+  const { data: academicUnits } = useQuery({
+    queryKey: ['academic-units'],
+    queryFn: getAcademicUnitsNameAndShortname,
+  })
+  const { data: careers } = useQuery({
+    queryKey: ['careers'],
+    queryFn: getActiveCarrersForForm,
+  })
+
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
       {
@@ -122,31 +136,38 @@ export default function ProtocolTable({
         accessorKey: 'sections.identification.title',
         header: 'Titulo',
         cell: ({ row }) => (
-          <div className="whitespace-normal font-medium sm:min-w-[24rem]">
+          <Strong
+            title={row.original.sections.identification.title}
+            className="line-clamp-2 max-w-96 whitespace-normal text-sm/5"
+          >
             {row.original.sections.identification.title}
-          </div>
+          </Strong>
         ),
         enableHiding: false,
       },
-      // {
-      //   accessorKey: 'sections.identification.sponsor',
-      //   header: 'Unidades Académicas',
-      //   cell: ({ row }) => (
-      //     <ul className="text-xs">
-      //       {row.original.sections.identification.sponsor.map((s) => (
-      //         <li key={s}>{s}</li>
-      //       ))}
-      //     </ul>
-      //   ),
-      //   enableSorting: false,
-      // },
       {
-        accessorKey: 'sections.identification.career',
-        header: 'Carrera',
+        accessorKey: 'sections.identification.academicUnitIds',
+        header: 'Unidades Académicas',
+        cell: ({ row }) => (
+          <Text>
+            {row.original.sections.identification.academicUnitIds
+              .map((s) => academicUnits?.find((x) => x.id === s)?.shortname)
+              .join(' - ')}
+          </Text>
+        ),
+        enableSorting: false,
       },
       {
-        accessorKey: 'sections.identification.assignment',
-        header: 'Asignatura',
+        accessorKey: 'sections.identification.careerId',
+        header: 'Carrera',
+        cell: ({ row }) => (
+          <Text>
+            {careers?.find(
+              (c) => c.id === row.original.sections.identification.careerId
+            )?.name ?? ''}
+          </Text>
+        ),
+        enableSorting: false,
       },
       {
         accessorKey: 'sections.duration.modality',
@@ -255,7 +276,6 @@ export default function ProtocolTable({
     convocatory_name: false,
     researcher_name: false,
     'sections_identification.career': false,
-    'sections_identification.assignment': false,
     'sections_duration.modality': false,
     'sections_duration.duration': false,
     'reviews_0.verdict': false,
