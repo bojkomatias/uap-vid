@@ -74,6 +74,13 @@ model Protocol {
   anualBudgetIds String[]
   logs           Logs[]
   ChatMessage    ChatMessage[]
+  flags          ProtocolFlag[]
+}
+
+type ProtocolFlag {
+  flagName  String
+  state     Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Date
 }
 
 model User {

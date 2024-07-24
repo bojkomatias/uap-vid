@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import { type Protocol, ProtocolState } from '@prisma/client'
+import { type Protocol, ProtocolFlag, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -37,6 +37,7 @@ const getProtocolMetadata = cache(
         protocolNumber: true,
         createdAt: true,
         state: true,
+        flags: true,
         convocatory: { select: { id: true, name: true } },
         researcher: {
           select: { name: true, email: true, id: true, role: true },
@@ -121,6 +122,27 @@ const updateProtocolStateById = async (id: string, state: ProtocolState) => {
         state: state,
       },
       include: { researcher: { select: { email: true } } },
+    })
+    return protocol
+  } catch (e) {
+    return null
+  }
+}
+
+const upsertProtocolFlag = async (
+  id: string,
+  flag: Omit<ProtocolFlag, 'createdAt'>
+) => {
+  const protocol = await prisma.protocol.findFirst({ where: { id } })
+  const protocol_flags = protocol?.flags
+  try {
+    const protocol = await prisma.protocol.update({
+      where: {
+        id,
+      },
+      data: {
+        flags: protocol_flags ? [...protocol_flags, flag] : [flag],
+      },
     })
     return protocol
   } catch (e) {
@@ -499,4 +521,5 @@ export {
   getProtocolsByRol,
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
+  upsertProtocolFlag,
 }

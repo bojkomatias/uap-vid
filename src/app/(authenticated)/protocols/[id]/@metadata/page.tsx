@@ -1,5 +1,5 @@
 import { Badge } from '@components/badge'
-import type { User } from '@prisma/client'
+import type { Protocol, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { Calendar, User as UserIcon } from 'tabler-icons-react'
@@ -9,6 +9,8 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { ResearcherReassignation } from '@protocol/elements/action-buttons/researcher-reassignation'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
+import CucytFlag from '@protocol/elements/flags/cucyt-flag'
+import CiFlag from '@protocol/elements/flags/ci-flag'
 
 export default async function ProtocolMetadata({
   params,
@@ -32,7 +34,14 @@ export default async function ProtocolMetadata({
             protocolNumber={protocol.protocolNumber}
             role={session.user.role}
           />
-
+          <CucytFlag
+            protocolId={protocol.id}
+            protocolFlag={protocol.flags.find((f) => f.flagName == 'CUCYT')}
+          />
+          <CiFlag
+            protocolId={protocol.id}
+            protocolFlag={protocol.flags.find((f) => f.flagName == 'CI')}
+          />
           <span>
             <Calendar className="mr-2 inline h-4 text-gray-600" />
             <span className="mt-0.5 text-xs text-gray-600">
