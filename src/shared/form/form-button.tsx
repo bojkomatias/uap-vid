@@ -4,12 +4,14 @@ import { Button } from '@components/button'
 export function FormButton({
   children,
   isLoading,
+  form,
 }: {
   children: ReactNode
   isLoading: boolean
+  form?: string
 }) {
   return (
-    <Button type="submit" disabled={isLoading}>
+    <Button form={form} type="submit" disabled={isLoading}>
       {children}
     </Button>
   )

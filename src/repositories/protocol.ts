@@ -133,19 +133,37 @@ const upsertProtocolFlag = async (
   id: string,
   flag: Omit<ProtocolFlag, 'createdAt'>
 ) => {
-  const protocol = await prisma.protocol.findFirst({ where: { id } })
-  const protocol_flags = protocol?.flags
   try {
-    const protocol = await prisma.protocol.update({
-      where: {
-        id,
-      },
-      data: {
-        flags: protocol_flags ? [...protocol_flags, flag] : [flag],
-      },
+    const protocol = await prisma.protocol.findFirst({ where: { id } })
+    const protocol_flags = protocol?.flags || []
+
+    // Check if the flag already exists
+    const existingFlagIndex = protocol_flags.findIndex(
+      (f) => f.flagName === flag.flagName
+    )
+
+    let updatedFlags
+    if (existingFlagIndex !== -1) {
+      // Update the existing flag
+      updatedFlags = [...protocol_flags]
+      updatedFlags[existingFlagIndex] = {
+        ...updatedFlags[existingFlagIndex],
+        ...flag,
+      }
+    } else {
+      // Add the new flag
+      updatedFlags = [...protocol_flags, flag]
+    }
+
+    // Update the protocol with the new flags
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id },
+      data: { flags: updatedFlags },
     })
-    return protocol
+
+    return updatedProtocol
   } catch (e) {
+    console.log(e)
     return null
   }
 }

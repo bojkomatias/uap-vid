@@ -80,6 +80,7 @@ model Protocol {
 type ProtocolFlag {
   flagName  String
   state     Boolean  @default(false)
+  comment   String?
   createdAt DateTime @default(now()) @db.Date
 }
 
