@@ -11,7 +11,6 @@ import {
 } from '@repositories/message'
 import { Fieldset } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
-import { FormButton } from '@shared/form/form-button'
 import type { User } from '@prisma/client'
 import { ChatPopover } from './Popover'
 import { Button } from '@components/button'
