@@ -25,6 +25,7 @@ const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
     Access.INDEXES,
     Access.CAREERS,
     Access.EVALUATIONS,
+    Access.EMAILS,
   ],
 }
 
