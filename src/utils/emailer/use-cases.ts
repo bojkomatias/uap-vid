@@ -8,7 +8,7 @@ export enum useCases {
 }
 
 export const useCasesDictionary = {
-  onReview: 'Revisión de protocolo',
+  onReview: 'Evaluación de protocolo',
   onRevised: 'Corrección de protocolo',
   onAssignation: 'Asignación de evaluador',
   onPublish: 'Publicación de protocolo',
