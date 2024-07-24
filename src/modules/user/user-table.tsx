@@ -1,6 +1,6 @@
 'use client'
+
 import type { Prisma } from '@prisma/client'
-import { DeleteUserButton } from './delete-user-button'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -67,13 +67,6 @@ export default function UserTable({
         accessorKey: 'role',
         header: 'Rol',
         cell: ({ row }) => <span>{RolesDictionary[row.original.role]} </span>,
-      },
-      {
-        accessorKey: 'delete',
-        header: 'Acciones',
-        cell: ({ row }) => <DeleteUserButton userId={row.original.id} />,
-        enableHiding: false,
-        enableSorting: false,
       },
     ],
     []

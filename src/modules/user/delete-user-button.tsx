@@ -1,6 +1,6 @@
 'use client'
-import { BadgeButton } from '@components/badge'
-import { Button } from '@elements/button'
+
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { deleteUserById } from '@repositories/user'
 import { useRouter } from 'next/navigation'
@@ -36,8 +36,9 @@ export function DeleteUserButton({ userId }: { userId: string }) {
   }, [router, userId])
 
   return deleting ?
-      <BadgeButton
+      <Button
         color="red"
+        className="w-40 whitespace-nowrap"
         onClick={() => {
           clearTimeout(timeout)
           setDeleting(false)
@@ -46,9 +47,10 @@ export function DeleteUserButton({ userId }: { userId: string }) {
       >
         <Loader2 data-slot="icon" className="size-3 animate-spin" />
         Cancelar
-      </BadgeButton>
-    : <BadgeButton
+      </Button>
+    : <Button
         color="red"
+        className="w-40 whitespace-nowrap"
         onClick={() => {
           setDeleting(true)
           timeout = setTimeout(() => {
@@ -57,6 +59,6 @@ export function DeleteUserButton({ userId }: { userId: string }) {
         }}
         disabled={isPending}
       >
-        Eliminar
-      </BadgeButton>
+        Eliminar usuario
+      </Button>
 }
