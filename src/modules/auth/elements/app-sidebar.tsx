@@ -13,6 +13,7 @@ import {
   Certificate2,
   FileDelta,
   Message,
+  At,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -154,6 +155,13 @@ export const navigation = [
     name: 'Evaluaciones',
     icon: Message,
     href: '/evaluations',
+    scope: Access.EVALUATIONS,
+  },
+
+  {
+    name: 'Emails',
+    icon: At,
+    href: '/emails',
     scope: Access.EVALUATIONS,
   },
 ]

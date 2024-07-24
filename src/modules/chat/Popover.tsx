@@ -31,6 +31,7 @@ export function ChatPopover({
         <Message2 className="active:scale-75" />
       </PopoverButton>
       <PopoverPanel
+        transition
         onBlur={() => {
           callbackFn()
         }}
