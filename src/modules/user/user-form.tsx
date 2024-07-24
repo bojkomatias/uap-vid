@@ -90,9 +90,9 @@ export function UserForm() {
           <FormListbox
             label="Rol"
             description="El rol mediante el cual el usuario va a interactuar sobre el sistema"
-            options={Object.entries(RolesDictionary).map(([key, name]) => ({
-              value: key,
-              label: name,
+            options={Object.entries(RolesDictionary).map(([value, label]) => ({
+              value,
+              label,
             }))}
             {...form.getInputProps('role')}
           />
