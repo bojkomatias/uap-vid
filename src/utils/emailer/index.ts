@@ -2,6 +2,7 @@
 
 import nodemailer from 'nodemailer'
 import { useCases } from './use-cases'
+import { getEmails } from '@repositories/email'
 
 const messages = {
   [useCases.onReview]: 'Tu protocolo fue revisado por un evaluador.',
@@ -19,7 +20,7 @@ const subjects = {
   [useCases.onReview]: 'Proyecto evaluado',
   [useCases.onRevised]: 'Correcciones revisadas',
   [useCases.onAssignation]: 'Nuevo proyecto asignado',
-  [useCases.onPublish]: 'Nuevo protocolo publicado.',
+  [useCases.onPublish]: 'Nuevo protocolo publicado',
   [useCases.onApprove]: 'Proyecto aprobado',
   [useCases.changeUserEmail]: 'Cambio de email - Código de confirmación',
 }
@@ -29,6 +30,24 @@ export type Emailer = {
   email: string
   protocolId?: string
   randomString?: string
+}
+
+export async function getEmailSubjects() {
+  const emails = await getEmails()
+  const subjects = emails?.reduce<Record<string, string>>((acc, ac) => {
+    acc[ac.useCase] = ac.subject
+    return acc
+  }, {})
+  return subjects
+}
+
+export async function getEmailContent() {
+  const emails = await getEmails()
+  const contents = emails?.reduce<Record<string, string>>((acc, ac) => {
+    acc[ac.useCase] = ac.content
+    return acc
+  }, {})
+  return contents
 }
 
 export async function emailer({
@@ -206,7 +225,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}</h1>
 
           </td>
         </tr>
@@ -414,7 +433,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${messages[useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
 
           </td>
         </tr>
@@ -454,29 +473,29 @@ export async function emailer({
 
     </html>`
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_ADDRESS,
-    port: Number(process.env.SMTP_PORT),
-    secure: false,
-    ignoreTLS: true,
-  })
-
-  // //This transporter can be used for developing.
   // const transporter = nodemailer.createTransport({
-  //   host: 'smtp.gmail.com',
-  //   port: 587,
+  //   host: process.env.SMTP_ADDRESS,
+  //   port: Number(process.env.SMTP_PORT),
   //   secure: false,
-  //   auth: {
-  //     user: 'nicoskate000@gmail.com',
-  //     pass: 'luqj vdtt kqgp mbof',
-  //   },
+  //   ignoreTLS: true,
   // })
+
+  //This transporter can be used for developing.
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'nicoskate000@gmail.com',
+      pass: 'alrg hkso hivq bgvn',
+    },
+  })
 
   const emailObject = {
     from: '"Portal VID - UAP" no-reply@uap.edu.ar',
     to: email,
-    subject: subjects[useCase],
-    text: messages[useCase],
+    subject: (await getEmailSubjects())![useCase],
+    text: (await getEmailContent())![useCase],
     html: randomString ? htmlEmailUpdate : html,
   }
 

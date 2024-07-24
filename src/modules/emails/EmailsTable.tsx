@@ -619,12 +619,7 @@ export default function EmailsTable({
           ]
         }
         <Subheading className=" my-2">Email</Subheading>
-        <EmailForm
-          email={dialogContent}
-          callbackFn={() => {
-            setDialogContent
-          }}
-        />
+        <EmailForm email={dialogContent} callbackFn={setDialogContent} />
         <Subheading className="mt-3">Vista previa del email</Subheading>
         <div className="my-2 rounded-lg border p-4">
           <div
