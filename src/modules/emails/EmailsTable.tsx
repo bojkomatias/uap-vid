@@ -10,10 +10,8 @@ import EmailForm from './EmailForm'
 
 export default function EmailsTable({
   emails,
-  randomString,
 }: {
   emails: EmailContentTemplate[]
-  randomString: string
 }) {
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState<EmailContentTemplate>(
@@ -398,7 +396,7 @@ export default function EmailsTable({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}: <span style="font-weight: 800;"> ${randomString}</span></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}: <span style="font-weight: 800;"> ${Math.random().toString().split('.')[1].slice(0, 6)}</span></h1>
 
           </td>
         </tr>
@@ -440,7 +438,7 @@ export default function EmailsTable({
 
   const useCasesExplanation = {
     onReview: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Evaluador</h3>{' '}
@@ -466,7 +464,7 @@ export default function EmailsTable({
       </div>
     ),
     onRevised: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Investigador</h3>{' '}
@@ -493,7 +491,7 @@ export default function EmailsTable({
       </div>
     ),
     onAssignation: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
@@ -519,7 +517,7 @@ export default function EmailsTable({
       </div>
     ),
     onPublish: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Investigador</h3>{' '}
@@ -546,7 +544,7 @@ export default function EmailsTable({
       </div>
     ),
     onApprove: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
@@ -572,7 +570,7 @@ export default function EmailsTable({
       </div>
     ),
     changeUserEmail: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-primary-950 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Usuario</h3>{' '}
@@ -621,7 +619,12 @@ export default function EmailsTable({
           ]
         }
         <Subheading className=" my-2">Email</Subheading>
-        <EmailForm email={dialogContent} callbackFn={setDialogContent} />
+        <EmailForm
+          email={dialogContent}
+          callbackFn={() => {
+            setDialogContent
+          }}
+        />
         <Subheading className="mt-3">Vista previa del email</Subheading>
         <div className="my-2 rounded-lg border p-4">
           <div
