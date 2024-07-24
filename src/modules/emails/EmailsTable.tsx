@@ -10,8 +10,10 @@ import EmailForm from './EmailForm'
 
 export default function EmailsTable({
   emails,
+  randomString,
 }: {
   emails: EmailContentTemplate[]
+  randomString: string
 }) {
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState<EmailContentTemplate>(
@@ -396,7 +398,7 @@ export default function EmailsTable({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}: <span style="font-weight: 800;"> ${Math.random().toString().split('.')[1].slice(0, 6)}</span></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}: <span style="font-weight: 800;"> ${randomString}</span></h1>
 
           </td>
         </tr>
