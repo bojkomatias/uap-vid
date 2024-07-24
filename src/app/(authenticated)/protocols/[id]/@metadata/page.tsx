@@ -9,7 +9,7 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { ResearcherReassignation } from '@protocol/elements/action-buttons/researcher-reassignation'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
-import FlagsDropdown from '@protocol/elements/flags/flags-dropdown'
+import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 
 export default async function ProtocolMetadata({
   params,
@@ -33,7 +33,7 @@ export default async function ProtocolMetadata({
             protocolNumber={protocol.protocolNumber}
             role={session.user.role}
           />
-          <FlagsDropdown
+          <FlagsDialog
             protocolId={protocol.id}
             protocolFlags={protocol.flags}
           />

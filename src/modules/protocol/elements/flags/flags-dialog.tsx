@@ -7,7 +7,7 @@ import { Dialog } from '@components/dialog'
 import { Button } from '@components/button'
 import { Divider } from '@components/divider'
 
-export default function FlagsDropdown({
+export default function FlagsDialog({
   protocolId,
   protocolFlags,
 }: {
