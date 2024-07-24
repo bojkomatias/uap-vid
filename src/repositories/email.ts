@@ -9,12 +9,14 @@ const updateEmail = async (
   id: string
 ) => {
   try {
-    const log = await prisma.emailContentTemplate.update({
-      data,
+    const email = await prisma.emailContentTemplate.update({
       where: { id },
+      data,
     })
-    return log
+
+    return email
   } catch (e) {
+    console.log(e)
     return null
   }
 }
