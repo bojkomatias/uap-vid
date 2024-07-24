@@ -2,12 +2,10 @@ import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
-import { ProfileInfo } from 'modules/profile/profile-info'
 import { Role } from '@prisma/client'
 import { Heading, Subheading } from '@components/heading'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import Image from 'next/image'
-import { UserCircle } from 'tabler-icons-react'
 import {
   DescriptionDetails,
   DescriptionList,
@@ -15,6 +13,8 @@ import {
 } from '@components/description-list'
 import { Button } from '@components/button'
 import { Text } from '@components/text'
+import { NewEmailForm } from 'modules/profile/new-email-form'
+import { NewPasswordForm } from 'modules/profile/new-password-form'
 
 export default async function Page() {
   const session = await getServerSession(authOptions)
@@ -26,7 +26,7 @@ export default async function Page() {
     <>
       <Heading>Cuenta</Heading>
       <Subheading className="mb-4">
-        Datos del usuario con el cual se encuentra autenticado en el sistema.
+        Datos del usuario que se encuentra autenticado en el sistema.
       </Subheading>
       {user.image ?
         <Image
@@ -74,7 +74,11 @@ export default async function Page() {
             />
           </Button>
         </div>
-      : <ProfileInfo user={user} />}
+      : <>
+          <NewEmailForm id={user.id} email={user.email} />
+          <NewPasswordForm id={user.id} password={user.password} />
+        </>
+      }
 
       {/*  Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page. */}
       {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
