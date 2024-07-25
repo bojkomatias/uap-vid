@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import { type Protocol, ProtocolState } from '@prisma/client'
+import { type Protocol, ProtocolFlag, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -37,6 +37,7 @@ const getProtocolMetadata = cache(
         protocolNumber: true,
         createdAt: true,
         state: true,
+        flags: true,
         convocatory: { select: { id: true, name: true } },
         researcher: {
           select: { name: true, email: true, id: true, role: true },
@@ -124,6 +125,45 @@ const updateProtocolStateById = async (id: string, state: ProtocolState) => {
     })
     return protocol
   } catch (e) {
+    return null
+  }
+}
+
+const upsertProtocolFlag = async (
+  id: string,
+  flag: Omit<ProtocolFlag, 'createdAt'>
+) => {
+  try {
+    const protocol = await prisma.protocol.findFirst({ where: { id } })
+    const protocol_flags = protocol?.flags || []
+
+    // Check if the flag already exists
+    const existingFlagIndex = protocol_flags.findIndex(
+      (f) => f.flagName === flag.flagName
+    )
+
+    let updatedFlags
+    if (existingFlagIndex !== -1) {
+      // Update the existing flag
+      updatedFlags = [...protocol_flags]
+      updatedFlags[existingFlagIndex] = {
+        ...updatedFlags[existingFlagIndex],
+        ...flag,
+      }
+    } else {
+      // Add the new flag
+      updatedFlags = [...protocol_flags, flag]
+    }
+
+    // Update the protocol with the new flags
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id },
+      data: { flags: updatedFlags },
+    })
+
+    return updatedProtocol
+  } catch (e) {
+    console.log(e)
     return null
   }
 }
@@ -499,4 +539,5 @@ export {
   getProtocolsByRol,
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
+  upsertProtocolFlag,
 }

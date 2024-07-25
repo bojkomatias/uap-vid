@@ -2,15 +2,15 @@ import type { ReactNode } from 'react'
 import { Button } from '@components/button'
 
 export function FormButton({
-  children,
-  isLoading,
+    children,
+    isLoading,
 }: {
-  children: ReactNode
-  isLoading: boolean
+    children: ReactNode
+    isLoading: boolean
 }) {
-  return (
-    <Button type="submit" disabled={isLoading}>
-      {children}
-    </Button>
-  )
+    return (
+        <Button type="submit" disabled={isLoading}>
+            {children}
+        </Button>
+    )
 }
