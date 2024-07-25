@@ -21,7 +21,7 @@ export default async function RootLayout({
     return (
         <html className={`${font.variable} font-sans`}>
             {process.env.NEXTAUTH_URL === 'https://uap-vid.vercel.app' ? (
-                <div className="bg-transparent pointer-events-none fixed inset-0 z-50 backdrop-hue-rotate-60">
+                <div className="bg-transparent pointer-events-none fixed inset-0 z-50 backdrop-hue-rotate-60 print:hidden">
                     <div className="fixed inset-x-0 top-0 -mt-1 h-6 bg-black/90 text-center text-lg font-black text-white">
                         TESTING
                     </div>

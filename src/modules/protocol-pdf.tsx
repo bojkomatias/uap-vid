@@ -708,13 +708,15 @@ const PDFDocument = ({ protocol }: { protocol: Protocol }) => {
 }
 
 export const PDF = ({ protocol }: { protocol: Protocol }) => {
-
     return (
         <PDFDownloadLink
             fileName={`proyecto-${protocol.id}`}
-            document={<PDFDocument protocol={protocol}/>}
+            document={<PDFDocument protocol={protocol} />}
         >
-            <Button intent="outline" className="float-right mr-3 mt-8">
+            <Button
+                intent="outline"
+                className="float-right mr-3 mt-8 print:hidden"
+            >
                 Descargar PDF
             </Button>
         </PDFDownloadLink>

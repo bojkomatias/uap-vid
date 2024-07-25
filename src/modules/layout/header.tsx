@@ -7,7 +7,7 @@ import Link from 'next/link'
 export const Header = async () => {
     const session = await getServerSession(authOptions)
     return (
-        <nav className="w-screen bg-primary">
+        <nav className="w-screen bg-primary print:hidden">
             <div className="mx-6 flex h-24 max-w-7xl items-center justify-between text-white lg:mx-16 2xl:mx-auto">
                 <div className="text-center text-[10.3px] font-[500] uppercase tracking-wider">
                     <Link href="/protocols" passHref>
@@ -24,9 +24,7 @@ export const Header = async () => {
                     </Link>
                 </div>
                 <div className="flex items-center gap-2">
-                    {session ?
-                        <UserDropdown user={session.user} />
-                        : null}
+                    {session ? <UserDropdown user={session.user} /> : null}
                 </div>
             </div>
         </nav>

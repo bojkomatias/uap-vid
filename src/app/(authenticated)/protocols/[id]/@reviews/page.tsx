@@ -20,7 +20,7 @@ export default async function ReviewsPage({
     return (
         <aside
             className={cx(
-                'min-w-fit space-y-3 overflow-y-auto py-3 pl-4 pr-1 lg:sticky lg:top-0 lg:h-screen lg:pl-0',
+                'min-w-fit space-y-3 overflow-y-auto py-3 pl-4 pr-1 lg:sticky lg:top-0 lg:h-screen lg:pl-0 print:hidden',
                 (protocol.state === State.DRAFT ||
                     protocol.state === State.PUBLISHED) &&
                     'hidden'
