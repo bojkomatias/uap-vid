@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <>
-            <PDF protocol={protocol} />
+            <PDF />
             <View sections={protocol.sections} />
         </>
     )
