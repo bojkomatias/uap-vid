@@ -70,12 +70,14 @@ export async function PUT(
         null
       : await updateProtocolStateById(
           params.id,
-          newStateByReviewType[data.type]
+          data.protocolState,
+          newStateByReviewType[data.type],
+          token!.user.id
         )
 
     if (data.type !== ReviewType.SCIENTIFIC_THIRD)
       await logProtocolUpdate({
-        user: token!.user,
+        userId: token!.user.id,
         fromState:
           data.type === ReviewType.METHODOLOGICAL ?
             ProtocolState.PUBLISHED
