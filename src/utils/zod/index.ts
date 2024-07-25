@@ -4,7 +4,7 @@ import { z } from 'zod'
 // ENUMS
 /////////////////////////////////////////
 
-const RoleSchema = z.enum([
+export const RoleSchema = z.enum([
   'RESEARCHER',
   'SECRETARY',
   'METHODOLOGIST',
