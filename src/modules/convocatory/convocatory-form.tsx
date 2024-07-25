@@ -71,7 +71,6 @@ export function ConvocatoryForm({
           <FormInput
             label="Nombre"
             description="Nombre de la convocatoria"
-            placeholder="Convocatoria 20XX"
             {...form.getInputProps('name')}
           />
           <FormInput

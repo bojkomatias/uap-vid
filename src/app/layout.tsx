@@ -1,7 +1,6 @@
 import './globals.css'
 import { Montserrat } from 'next/font/google'
 import Providers from './providers'
-import Script from 'next/script'
 
 export const metadata = {
   title: {

@@ -1,12 +1,10 @@
 'use client'
+
 import type { Prisma } from '@prisma/client'
-import { RoleUpdater } from './elements/role-updater'
-import { DeleteUserButton } from './elements/delete-user-button'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import UserView from './user-view'
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: { _count: true }
@@ -68,24 +66,7 @@ export default function UserTable({
       {
         accessorKey: 'role',
         header: 'Rol',
-        // Guard for not changing your own role.
         cell: ({ row }) => <span>{RolesDictionary[row.original.role]} </span>,
-      },
-      {
-        accessorKey: 'delete',
-        header: 'Acciones',
-        cell: ({ row }) => (
-          <div className="flex gap-2">
-            <UserView userInfo={row.original}>
-              {' '}
-              <p>Cambiar rol del usuario</p>
-              <RoleUpdater user={row.original} />
-            </UserView>
-            <DeleteUserButton userId={row.original.id} />
-          </div>
-        ),
-        enableHiding: false,
-        enableSorting: false,
       },
     ],
     []
@@ -100,6 +81,7 @@ export default function UserTable({
         columns={columns}
         totalRecords={totalRecords}
         initialVisibility={initialVisible}
+        rowAsLinkPath="/users/edit/"
         filterableByKey={{
           filter: 'role',
           values: Object.entries(RolesDictionary),
