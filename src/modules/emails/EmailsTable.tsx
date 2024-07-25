@@ -1,42 +1,27 @@
-'use server'
+'use client'
+import React, { useState } from 'react'
+import { Heading, Subheading } from '../../components/heading'
+import { useCasesDictionary } from '@utils/emailer/use-cases'
+import { Dialog } from '@components/dialog'
+import { Button } from '@headlessui/react'
+import { ArrowDown, ArrowRight, User } from 'tabler-icons-react'
+import type { EmailContentTemplate } from '@prisma/client'
+import EmailForm from './EmailForm'
 
-import nodemailer from 'nodemailer'
-import type { useCases } from './use-cases'
-import { getEmails } from '@repositories/email'
-
-export type Emailer = {
-  useCase: useCases
-  email: string
-  protocolId?: string
-  randomString?: string
-}
-
-export async function getEmailSubjects() {
-  const emails = await getEmails()
-  const subjects = emails?.reduce<Record<string, string>>((acc, ac) => {
-    acc[ac.useCase] = ac.subject
-    return acc
-  }, {})
-  return subjects
-}
-
-export async function getEmailContent() {
-  const emails = await getEmails()
-  const contents = emails?.reduce<Record<string, string>>((acc, ac) => {
-    acc[ac.useCase] = ac.content
-    return acc
-  }, {})
-  return contents
-}
-
-export async function emailer({
-  useCase,
-  email,
-  protocolId,
+export default function EmailsTable({
+  emails,
   randomString,
-}: Emailer) {
-  // Variable used in template to redirect (hardcoded cause process.env failed.)
-  const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
+}: {
+  emails: EmailContentTemplate[]
+  randomString: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [dialogContent, setDialogContent] = useState<EmailContentTemplate>(
+    emails[0]
+  )
+  const useCases = emails?.map((e) => e.useCase)
+
+  const href = `https://vidonline.uap.edu.ar/protocols/id_del_protocolo`
   const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
@@ -204,7 +189,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}</h1>
 
           </td>
         </tr>
@@ -245,6 +230,7 @@ export async function emailer({
     </body>
 
     </html>`
+
   const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
@@ -412,7 +398,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${dialogContent?.content}: <span style="font-weight: 800;"> ${randomString}</span></h1>
 
           </td>
         </tr>
@@ -452,49 +438,202 @@ export async function emailer({
 
     </html>`
 
-  // const transporter = nodemailer.createTransport({
-  //   host: process.env.SMTP_ADDRESS,
-  //   port: Number(process.env.SMTP_PORT),
-  //   secure: false,
-  //   ignoreTLS: true,
-  // })
-
-  //This transporter can be used for developing.
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: 'nicoskate000@gmail.com',
-      pass: 'alrg hkso hivq bgvn',
-    },
-  })
-
-  const emailObject = {
-    from: '"Portal VID - UAP" no-reply@uap.edu.ar',
-    to: email,
-    subject: (await getEmailSubjects())![useCase],
-    text: (await getEmailContent())![useCase],
-    html: randomString ? htmlEmailUpdate : html,
+  const useCasesExplanation = {
+    onReview: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Evaluador</h3>{' '}
+          <p className="text-xs">
+            Evaluador (metodólogo, evaluador interno, externo o extraordinario)
+            completa una evaluación.
+          </p>
+        </div>
+        <div className="hidden place-self-center self-center md:block">
+          <ArrowRight />
+        </div>
+        <div className="block place-self-center self-center md:hidden">
+          <ArrowDown />
+        </div>
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Investigador</h3>{' '}
+          <p className="text-xs ">
+            El investigador al que está asociado el protocolo recibe una
+            notificación por email informándole que su protocolo fue evaluado.
+          </p>
+        </div>
+      </div>
+    ),
+    onRevised: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Investigador</h3>{' '}
+          <p className="text-xs">
+            Si un evaluador requirió cambios en el protocolo, el investigador
+            los corrige y guarda el protocolo marcándolo como {`'revisado'`}.
+          </p>
+        </div>
+        <div className="hidden place-self-center self-center md:block">
+          <ArrowRight />
+        </div>
+        <div className="block place-self-center self-center md:hidden">
+          <ArrowDown />
+        </div>
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Evaluador</h3>{' '}
+          <p className="text-xs ">
+            El evaluador recibe una notificación por email informándole que el
+            protocolo donde indicó que era necesario hacer cambios fue revisado
+            y corregido.
+          </p>
+        </div>
+      </div>
+    ),
+    onAssignation: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
+          <p className="text-xs">
+            Un secretario o administrador asigna un evaluador (metodólogo,
+            evaluador interno, externo o extaordinario) a un protocolo.
+          </p>
+        </div>
+        <div className="hidden place-self-center self-center md:block">
+          <ArrowRight />
+        </div>
+        <div className="block place-self-center self-center md:hidden">
+          <ArrowDown />
+        </div>
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Evaluador</h3>{' '}
+          <p className="text-xs ">
+            El evaluador recibe una notificación por email informándole que le
+            fue asignado un protocolo para evaluar.
+          </p>
+        </div>
+      </div>
+    ),
+    onPublish: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Investigador</h3>{' '}
+          <p className="text-xs">
+            El investigador completa todos los datos de un protocolo y lo
+            publica para ser evaluado.
+          </p>
+        </div>
+        <div className="hidden place-self-center self-center md:block">
+          <ArrowRight />
+        </div>
+        <div className="block place-self-center self-center md:hidden">
+          <ArrowDown />
+        </div>
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Secretarios</h3>{' '}
+          <p className="text-xs ">
+            Los secretarios asociados a la Unidad Académica a la que pertenece
+            el protocolo reciben un email donde se les informa que se publicó un
+            nuevo protocolo.
+          </p>
+        </div>
+      </div>
+    ),
+    onApprove: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
+          <p className="text-xs">
+            Luego de pasar todas las evaluaciones y ser aprobado el presupuesto,
+            un secretario o administrador aprueba el protocolo.
+          </p>
+        </div>
+        <div className="hidden place-self-center self-center md:block">
+          <ArrowRight />
+        </div>
+        <div className="block place-self-center self-center md:hidden">
+          <ArrowDown />
+        </div>
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Investigador</h3>{' '}
+          <p className="text-xs ">
+            El investigador recibe una notificación por email informándole que
+            su protocolo fue aprobado.
+          </p>
+        </div>
+      </div>
+    ),
+    changeUserEmail: (
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+        <div className="flex flex-1 flex-col items-center">
+          <User className="h-10 w-10" />{' '}
+          <h3 className="text-sm font-bold">Usuario</h3>{' '}
+          <p className="text-xs">
+            El usuario al que pertenece la cuenta desea cambiar de email recibe
+            un código de confirmación en su email actual.
+          </p>
+        </div>
+      </div>
+    ),
   }
 
-  transporter.sendMail(emailObject, (err) => {
-    if (err) {
-      return new Response('Error sending email', { status: 500 })
-    } else {
-      return new Response(`Successfully sent email to ${email}`, {
-        status: 250,
-      })
-    }
-  })
-
-  transporter.verify(function (error, success) {
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.log(`Error sending the email: ${error}`)
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(`Email sent: ${success}`)
-    }
-  })
+  return (
+    <div className="text-primary-950">
+      <Heading>Emails</Heading>
+      <Subheading>
+        Puede editar el asunto y contenido de los emails que salen del sistema
+        dependiendo del caso de uso.
+      </Subheading>
+      <p className="my-2 text-lg font-semibold text-gray-600">Casos de uso:</p>
+      <div className="flex flex-wrap gap-2">
+        {useCases?.map((uc) => (
+          <Button
+            key={uc}
+            onClick={() => {
+              setOpen(true)
+              setDialogContent(emails.find((e) => e.useCase == uc)!)
+            }}
+            className="cursor-pointer rounded-lg border p-4 text-lg font-medium drop-shadow-sm transition hover:shadow-lg"
+          >
+            {useCasesDictionary[uc as keyof typeof useCasesDictionary]}
+          </Button>
+        ))}
+      </div>
+      <Dialog size="2xl" open={open} onClose={setOpen}>
+        <Heading className="text-primary-950">
+          {
+            useCasesDictionary[
+              dialogContent?.useCase as keyof typeof useCasesDictionary
+            ]
+          }
+        </Heading>
+        {
+          useCasesExplanation[
+            dialogContent?.useCase as keyof typeof useCasesExplanation
+          ]
+        }
+        <Subheading className=" my-2">Email</Subheading>
+        <EmailForm email={dialogContent} callbackFn={setDialogContent} />
+        <Subheading className="mt-3">Vista previa del email</Subheading>
+        <div className="my-2 rounded-lg border p-4">
+          <div
+            dangerouslySetInnerHTML={{
+              __html:
+                dialogContent?.useCase == 'changeUserEmail' ?
+                  htmlEmailUpdate
+                : html,
+            }}
+          />
+        </div>
+      </Dialog>
+    </div>
+  )
 }
