@@ -1,7 +1,7 @@
 'use client'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import React, { useState } from 'react'
-import { Message2, X } from 'tabler-icons-react'
+import { Message2 } from 'tabler-icons-react'
 
 export function ChatPopover({
     children,
@@ -15,7 +15,7 @@ export function ChatPopover({
     const [open, setOpen] = useState(false)
 
     return (
-        <Popover className="fixed bottom-10 right-14 z-50 rounded-full border bg-primary drop-shadow-xl print:hidden">
+        <Popover className="fixed bottom-10 right-14 z-50 rounded-full  bg-primary drop-shadow-xl  print:hidden">
             {totalUnreadMessages > 0 && !open && (
                 <div className="bg-red-500 absolute -left-2 -top-2 animate-bounce rounded-full px-2 text-center font-bold text-white">
                     {totalUnreadMessages}
@@ -36,7 +36,7 @@ export function ChatPopover({
                     callbackFn()
                 }}
                 anchor="top"
-                className="mb-4 w-[80vw] -translate-x-8 -translate-y-4 rounded-xl border bg-white p-4 shadow-2xl transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 md:w-[50vw] xl:w-[30vw]"
+                className="mb-4 w-[80vw]  -translate-x-8 -translate-y-4 rounded-xl border bg-white p-4 shadow-2xl transition duration-200 ease-out data-[closed]:scale-95 data-[closed]:opacity-0 md:w-[50vw] xl:w-[30vw] dark:border-white/10 dark:lg:bg-gray-900"
             >
                 {children}
             </PopoverPanel>

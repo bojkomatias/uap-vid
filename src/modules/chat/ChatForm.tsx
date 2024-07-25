@@ -150,8 +150,8 @@ export default function ChatForm({
                                     <div
                                         className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
                                             msg.userId == user.id
-                                                ? 'bg-primary-950 text-white'
-                                                : 'bg-gray-200 text-gray-800'
+                                                ? 'bg-primary-950 text-gray-100'
+                                                : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
                                         }`}
                                     >
                                         <div className="text-sm">
@@ -160,7 +160,7 @@ export default function ChatForm({
                        text-xs ${
                            msg.userId == user.id
                                ? 'text-right text-gray-300'
-                               : 'text-gray-500'
+                               : 'text-gray-500 dark:text-gray-200'
                        }`}
                                             >
                                                 {msg.user?.name}
@@ -175,7 +175,7 @@ export default function ChatForm({
                        text-xs ${
                            msg.userId == user.id
                                ? 'text-right text-gray-300'
-                               : 'text-gray-500'
+                               : 'text-gray-500 dark:text-gray-200'
                        }`}
                                         >
                                             {new Date(
@@ -187,7 +187,7 @@ export default function ChatForm({
                             ))}
                         </div>
                     ) : (
-                        <p className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400">
+                        <p className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400 dark:border-white/10">
                             Chat vacío. Puede comenzar una nueva conversación
                             enviando un mensaje nuevo.
                         </p>
@@ -195,12 +195,12 @@ export default function ChatForm({
                 </div>
                 <div className="sticky bottom-0 bg-white">
                     <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
-                        <FieldGroup className="!mt-0 flex items-center gap-1 space-y-0">
+                        <FieldGroup className="!mt-0 flex items-center gap-1 space-y-0 dark:lg:bg-gray-900 ">
                             <FormInput
                                 type="text"
                                 label=""
                                 value={message}
-                                className="!mt-0 grow text-xs"
+                                className="!mt-0 grow text-xs "
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
                                 ) => setMessage(e.target.value)}
