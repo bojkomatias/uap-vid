@@ -79,11 +79,11 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
           {item.inverted ?
             <>
               <Strong>{item.up}</Strong>
-              <Text className="print:!text-xs">{item.down}</Text>
+              <Text>{item.down}</Text>
             </>
           : <>
               <Strong>{item.up}</Strong>
-              <Text className="print:!text-xs">{item.down}</Text>
+              <Text>{item.down}</Text>
             </>
           }
         </div>
