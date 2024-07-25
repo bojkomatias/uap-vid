@@ -7,6 +7,7 @@ export const theme = {
     fontFamily: {
       sans: ['var(--font-sans)'],
     },
+
     colors: {
       current: 'currentColor',
       primary: {

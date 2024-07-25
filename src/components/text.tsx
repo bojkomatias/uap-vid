@@ -11,7 +11,7 @@ export function Text({
       data-slot="text"
       {...props}
       className={cx(
-        'text-base/6 text-gray-500 dark:text-gray-400 sm:text-sm/6',
+        'text-base/6 text-gray-500 dark:text-gray-400 sm:text-sm/6 ',
         className
       )}
     />
