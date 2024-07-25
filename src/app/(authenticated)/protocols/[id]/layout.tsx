@@ -41,7 +41,7 @@ async function Layout({
     return (
         <>
             <PageHeading title={protocol.sections.identification.title} />
-            <div className="flex w-full flex-col items-start gap-3 lg:flex-row">
+            <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
                 <div className="flex-grow">
                     {metadata}
                     {evaluators}

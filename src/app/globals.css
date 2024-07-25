@@ -6,6 +6,14 @@ body {
     overflow-x: hidden;
 }
 
+@media print{
+    @page {
+        size: A4;
+        margin: 2cm 1cm;
+    }
+
+}
+
 @layer base {
     html {
         @apply subpixel-antialiased;

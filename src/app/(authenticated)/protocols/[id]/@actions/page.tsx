@@ -23,7 +23,7 @@ export default async function ActionsPage({
     const reviews = await getReviewsByProtocol(protocol.id)
 
     return (
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1">
+        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1 print:hidden">
             <FinishButton
                 role={session.user.role}
                 protocol={{

@@ -314,7 +314,7 @@ export const PDF = ({
                 />
             }
         >
-            <Button intent="outline" className="float-right mr-3">
+            <Button intent="outline" className="float-right mr-3 print:hidden">
                 Descargar PDF
             </Button>
         </PDFDownloadLink>

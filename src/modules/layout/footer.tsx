@@ -55,7 +55,7 @@ const navigation = [
 ]
 
 export const Footer = () => (
-    <footer className="bg-primary ">
+    <footer className="bg-primary print:hidden">
         <div className="mx-6 flex h-28 max-w-7xl items-center justify-between lg:mx-16 2xl:mx-auto">
             <div className="flex justify-center space-x-6 md:order-2">
                 {navigation.map((item) => (
