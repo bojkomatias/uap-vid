@@ -317,9 +317,7 @@ export default function ProtocolTable({
                 ),
             }}
             customFilterSlot={
-                user.role === 'ADMIN' || user.role === 'SECRETARY' ? (
-                    <AcademicUnitFilter />
-                ) : null
+                user.role === 'ADMIN' ? <AcademicUnitFilter /> : null
             }
             searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
         />
