@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@components/button'
 import {
   DescriptionDetails,
   DescriptionList,
@@ -27,6 +26,8 @@ import { Divider } from '@components/divider'
 import { DeleteUserButton } from './delete-user-button'
 import { Subheading } from '@components/heading'
 import { Text } from '@components/text'
+import { Clipboard } from 'tabler-icons-react'
+import { Button } from '@components/button'
 
 export function UserDetailsDialog({ user }: { user: Omit<User, 'password'> }) {
   const router = useRouter()
@@ -73,6 +74,9 @@ export function UserDetailsDialog({ user }: { user: Omit<User, 'password'> }) {
           <DescriptionTerm>UUID</DescriptionTerm>
           <DescriptionDetails>
             <span className="font-mono text-xs">{user.id}</span>
+            <Button>
+              <Clipboard />
+            </Button>
           </DescriptionDetails>
           <DescriptionTerm>Nombre</DescriptionTerm>
           <DescriptionDetails>{user.name}</DescriptionDetails>

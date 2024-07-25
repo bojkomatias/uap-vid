@@ -15,6 +15,7 @@ import { Button } from '@components/button'
 import { Text } from '@components/text'
 import { NewEmailForm } from 'modules/profile/new-email-form'
 import { NewPasswordForm } from 'modules/profile/new-password-form'
+import Clipboard from '@elements/clipboard'
 
 export default async function Page() {
   const session = await getServerSession(authOptions)
@@ -39,8 +40,9 @@ export default async function Page() {
       : null}
       <DescriptionList className="mt-4">
         <DescriptionTerm>UUID</DescriptionTerm>
-        <DescriptionDetails>
+        <DescriptionDetails className="flex items-center gap-2">
           <span className="font-mono text-xs">{user.id}</span>
+          <Clipboard content={user.id} />
         </DescriptionDetails>
         <DescriptionTerm>Nombre</DescriptionTerm>
         <DescriptionDetails>{user.name}</DescriptionDetails>
