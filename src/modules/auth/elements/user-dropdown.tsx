@@ -5,14 +5,7 @@ import { MenuButton } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 import type { User } from '@prisma/client'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import {
-  Logout,
-  Moon,
-  Moon2,
-  Selector,
-  Settings,
-  Sun,
-} from 'tabler-icons-react'
+import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
 import {
   Dropdown,
   DropdownMenu,
@@ -48,7 +41,7 @@ export function UserDropdown({ user }: { user: User }) {
           />
         }
         <span className="block text-left">
-          <span className="block text-sm/5 font-medium">
+          <span className="block text-sm/5 font-medium text-black dark:text-white">
             {user.name.split(' ')[0]} {user.name.split(' ')[2]}
           </span>
           <span className="block text-xs/5 text-zinc-500">
