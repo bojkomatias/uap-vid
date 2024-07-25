@@ -69,6 +69,14 @@ export default async function Page() {
           >
             Editar cuenta en
             <Image
+              className="hidden dark:block"
+              src={'/blackbackgroundmicrosoft.png'}
+              alt="Microsoft Logo"
+              width={90}
+              height={50}
+            />
+            <Image
+              className="dark:hidden"
               src={'/whitebackgroundmicrosoft.png'}
               alt="Microsoft Logo"
               width={90}
