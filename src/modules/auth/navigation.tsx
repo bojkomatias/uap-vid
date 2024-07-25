@@ -25,7 +25,10 @@ export default async function Navigation({
                 <CurrentConvocatory convocatory={currentConvocatory} />
             ) : null}
             <div
-                className={cx('flex flex-1 flex-col', hasNavigation && 'pl-16')}
+                className={cx(
+                    'flex flex-1 flex-col ',
+                    hasNavigation && 'pl-16 print:pl-0'
+                )}
             >
                 <main className="w-full flex-1 px-4 pb-20 sm:px-6 xl:px-10">
                     {children}
