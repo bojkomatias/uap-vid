@@ -43,19 +43,16 @@ async function Layout({
 
   return (
     <>
-      <Heading title={protocol.sections.identification.title}>
-        {protocol.sections.identification.title}
-      </Heading>
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">
-          {metadata}
-          {evaluators}
+          {/* {metadata} */}
+          {/* {evaluators} */}
         </div>
-        {actions}
-        {modal}
+        {/* {actions}
+        {modal} */}
       </div>
 
-      <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x print:block print:py-2 ">
+      <div className="relative z-0 flex flex-col-reverse lg:flex-row lg:gap-2 lg:divide-x print:block print:py-2 ">
         <div className="w-full">{children}</div>
         <div className="print:hidden">{reviews}</div>
       </div>
