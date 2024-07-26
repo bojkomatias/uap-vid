@@ -2,7 +2,6 @@ import type { AmountIndex, AnualBudget, Execution } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 import {
-  ZeroAmountIndex,
   multiplyAmountIndex,
   subtractAmountIndex,
   sumAmountIndex,
@@ -44,16 +43,29 @@ const totalExecution = (
   if (academicUnitId) {
     const executionAmountPerAcademicUnit = ex
       .filter((e) => e.academicUnitId === academicUnitId)
-      .reduce((acc, item) => {
-        acc = sumAmountIndex([acc, item.amountIndex ?? ZeroAmountIndex])
-        return acc
-      }, {} as AmountIndex)
+      .filter((e) => e.amountIndex)
+      .reduce(
+        (acc, item) => {
+          acc = sumAmountIndex([
+            acc,
+            item.amountIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex),
+          ])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
     return executionAmountPerAcademicUnit
   }
-  return ex.reduce((acc, item) => {
-    acc = sumAmountIndex([acc, item.amountIndex ?? ZeroAmountIndex])
-    return acc
-  }, {} as AmountIndex)
+  return ex.reduce(
+    (acc, item) => {
+      acc = sumAmountIndex([
+        acc,
+        item.amountIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex),
+      ])
+      return acc
+    },
+    { FCA: 0, FMR: 0 } as AmountIndex
+  )
 }
 
 const calculateRemainingABI = (
@@ -61,17 +73,20 @@ const calculateRemainingABI = (
   amountAcademicUnits: number,
   executionPerAcademicUnit?: AmountIndex
 ): AmountIndex => {
-  const totalBudgetItemsAmount = abi.reduce((acc, item) => {
-    acc.FCA +=
-      executionPerAcademicUnit ?
-        item.amountIndex.FCA / amountAcademicUnits
-      : item.amountIndex.FCA
-    acc.FMR +=
-      executionPerAcademicUnit ?
-        item.amountIndex.FMR / amountAcademicUnits
-      : item.amountIndex.FMR
-    return acc
-  }, {} as AmountIndex)
+  const totalBudgetItemsAmount = abi.reduce(
+    (acc, item) => {
+      acc.FCA +=
+        executionPerAcademicUnit ?
+          item.amountIndex.FCA / amountAcademicUnits
+        : item.amountIndex.FCA
+      acc.FMR +=
+        executionPerAcademicUnit ?
+          item.amountIndex.FMR / amountAcademicUnits
+        : item.amountIndex.FMR
+      return acc
+    },
+    { FCA: 0, FMR: 0 } as AmountIndex
+  )
   const amountPerAcademicUnit: AmountIndex = {
     FCA: totalBudgetItemsAmount.FCA / amountAcademicUnits,
     FMR: totalBudgetItemsAmount.FMR / amountAcademicUnits,
@@ -86,11 +101,14 @@ const calculateRemainingABI = (
 
   const totalExecutionAmount = abi
     .map((bi) => bi.executions)
-    .reduce((acc, item) => {
-      const totalEx = totalExecution(item)
-      acc = sumAmountIndex([acc, totalEx])
-      return acc
-    }, {} as AmountIndex)
+    .reduce(
+      (acc, item) => {
+        const totalEx = totalExecution(item)
+        acc = sumAmountIndex([acc, totalEx])
+        return acc
+      },
+      { FCA: 0, FMR: 0 } as AmountIndex
+    )
 
   return subtractAmountIndex(totalBudgetItemsAmount, totalExecutionAmount)
 }
@@ -105,43 +123,50 @@ const calculateRemainingABTM = (
       (item) => item.teamMember.academicUnitId === academicUnitId
     )
     return abtmAcademicUnit ?
-        abtmAcademicUnit.reduce((acc, item) => {
+        abtmAcademicUnit.reduce(
+          (acc, item) => {
+            const remainingIndex = multiplyAmountIndex(
+              getLastCategoryPriceIndex(item),
+              item.remainingHours
+            )
+            acc = sumAmountIndex([acc, remainingIndex])
+            return acc
+          },
+          { FCA: 0, FMR: 0 } as AmountIndex
+        )
+      : ({ FCA: 0, FMR: 0 } as AmountIndex)
+  }
+
+  return abtm ?
+      abtm.reduce(
+        (acc, item) => {
           const remainingIndex = multiplyAmountIndex(
             getLastCategoryPriceIndex(item),
             item.remainingHours
           )
           acc = sumAmountIndex([acc, remainingIndex])
           return acc
-        }, {} as AmountIndex)
-      : ZeroAmountIndex
-  }
-
-  return abtm ?
-      abtm.reduce((acc, item) => {
-        const remainingIndex = multiplyAmountIndex(
-          getLastCategoryPriceIndex(item),
-          item.remainingHours
-        )
-        acc = sumAmountIndex([acc, remainingIndex])
-        return acc
-      }, {} as AmountIndex)
-    : ZeroAmountIndex
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
+    : ({ FCA: 0, FMR: 0 } as AmountIndex)
 }
 
 const getLastCategoryPriceIndex = (
   abtm: AnualBudgetTeamMemberWithAllRelations
 ): AmountIndex => {
   const category = abtm.teamMember.categories.find((c) => !c.to)
-  if (!category) return ZeroAmountIndex
+  if (!category) return { FCA: 0, FMR: 0 } as AmountIndex
   return calculateHourRateGivenCategory(category)
 }
 
 export const calculateHourRateGivenCategory = (
   category: HistoricTeamMemberCategoryWithAllRelations | null
 ): AmountIndex => {
-  if (!category) return ZeroAmountIndex
+  if (!category) return { FCA: 0, FMR: 0 } as AmountIndex
   const isObrero = Boolean(category.pointsObrero)
-  const categoryPrice = category.category.priceIndex ?? ZeroAmountIndex
+  const categoryPrice =
+    category.category.priceIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex)
 
   const calculateObreroHourlyRate = (
     categoryPrice: AmountIndex,
@@ -220,11 +245,11 @@ export const calculateTotalBudgetAggregated = (
         return acc
       },
       {
-        ABIe: ZeroAmountIndex,
-        ABTe: ZeroAmountIndex,
-        ABIr: ZeroAmountIndex,
-        ABTr: ZeroAmountIndex,
-        total: ZeroAmountIndex,
+        ABIe: { FCA: 0, FMR: 0 } as AmountIndex,
+        ABTe: { FCA: 0, FMR: 0 } as AmountIndex,
+        ABIr: { FCA: 0, FMR: 0 } as AmountIndex,
+        ABTr: { FCA: 0, FMR: 0 } as AmountIndex,
+        total: { FCA: 0, FMR: 0 } as AmountIndex,
       }
     )
   return result

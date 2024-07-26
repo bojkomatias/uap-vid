@@ -1,51 +1,65 @@
 import type { AmountIndex } from '@prisma/client'
 
 export const sumAmountIndex = (indexes: AmountIndex[]): AmountIndex => {
-  return indexes.reduce((acc, item) => {
-    acc.FCA += item.FCA
-    acc.FMR += item.FMR
-    return acc
-  }, {} as AmountIndex)
+  const result = indexes.reduce(
+    (acc, item) => {
+      acc.FCA += item.FCA ?? 0
+      acc.FMR += item.FMR ?? 0
+
+      return acc
+    },
+    { FCA: 0, FMR: 0 }
+  )
+
+  return result
 }
 
 export const multiplyAmountIndex = (
   amountIndex: AmountIndex,
   multiplier: number
 ) => {
-  return {
+  const result = {
     FCA: amountIndex.FCA * multiplier,
     FMR: amountIndex.FMR * multiplier,
   }
+
+  return result
 }
 
 export const divideAmountIndex = (
   amountIndex: AmountIndex,
   divisor: number
 ) => {
-  return {
+  const result = {
     FCA: amountIndex.FCA / divisor,
     FMR: amountIndex.FMR / divisor,
   }
+
+  return result
 }
 
 export const divideAmountIndexByAmountIndex = (
   amountIndex: AmountIndex,
   divisor: AmountIndex
 ) => {
-  return {
+  const result = {
     FCA: amountIndex.FCA / divisor.FCA,
     FMR: amountIndex.FMR / divisor.FMR,
   }
+
+  return result
 }
 
 export const subtractAmountIndex = (
   amountIndex: AmountIndex,
   subtrahend: AmountIndex
 ) => {
-  return {
+  const result = {
     FCA: amountIndex.FCA - subtrahend.FCA,
     FMR: amountIndex.FMR - subtrahend.FMR,
   }
+
+  return result
 }
 
 export const ZeroAmountIndex = {
@@ -55,16 +69,16 @@ export const ZeroAmountIndex = {
 
 export const BudgetSummaryZero = {
   academicUnitBudgetSummary: {
-    value: ZeroAmountIndex,
-    delta: ZeroAmountIndex,
+    value: { FCA: 0, FMR: 0 } as AmountIndex,
+    delta: { FCA: 0, FMR: 0 } as AmountIndex,
   },
   projectedBudgetSummary: {
-    value: ZeroAmountIndex,
-    delta: ZeroAmountIndex,
+    value: { FCA: 0, FMR: 0 } as AmountIndex,
+    delta: { FCA: 0, FMR: 0 } as AmountIndex,
   },
   projectedBudgetSummaryApproved: {
-    value: ZeroAmountIndex,
-    delta: ZeroAmountIndex,
+    value: { FCA: 0, FMR: 0 } as AmountIndex,
+    delta: { FCA: 0, FMR: 0 } as AmountIndex,
   },
-  spendedBudget: ZeroAmountIndex,
+  spendedBudget: { FCA: 0, FMR: 0 } as AmountIndex,
 }
