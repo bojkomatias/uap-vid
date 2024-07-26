@@ -21,6 +21,7 @@ import {
   Badge,
   ChevronDown,
   ClockPause,
+  Dots,
   Edit,
   FileDollar,
   FileTime,
@@ -167,7 +168,7 @@ export function ActionsDropdown({
   return (
     <Dropdown>
       <DropdownButton outline>
-        Options
+        Acciones
         <ChevronDown data-slot="icon" />
       </DropdownButton>
       <DropdownMenu anchor="bottom end">
