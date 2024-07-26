@@ -6,7 +6,7 @@ const uri = sensitive.mongo_uri
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
-export const questions = [
+export const rawQuestions = [
   {
     id: '0',
     active: false,
@@ -63,7 +63,7 @@ export const questions = [
   },
   {
     id: '8',
-    active: false,
+    active: true,
     type: 'METHODOLOGICAL',
     question:
       '¿El diseño metodológico es adecuado para alcanzar los objetivos propuestos?',
@@ -82,13 +82,7 @@ export const questions = [
     question:
       '¿La propuesta se presenta redactada correctamente, está bien organizada y sigue una secuencia lógica?',
   },
-  {
-    id: '10',
-    active: true,
-    type: 'SCIENTIFIC',
-    question:
-      '¿El proyecto muestra solidez interna, está fundamentado adecuadamente e incluye una revisión bibliográfica pertinente, actualizada y suficiente?',
-  },
+
   {
     id: '11',
     active: true,
@@ -262,28 +256,28 @@ export const questions = [
     active: true,
     type: 'METHODOLOGICAL',
     question:
-      '¿El diseño metodológico es adecuado para alcanzar los objetivos propuestos?',
+      '¿La justificación del estudio es suficiente para validar el desarrollo del proyecto?',
   },
   {
     id: '36',
     active: true,
     type: 'METHODOLOGICAL',
     question:
-      '¿La justificación del estudio es suficiente para validar el desarrollo del proyecto?',
+      '¿El cronograma propuesto es consistente con la magnitud de cada etapa del estudio, incluida la de la publica en el tiempo programado para el desarrollo del proyecto?',
   },
   {
     id: '37',
     active: true,
     type: 'METHODOLOGICAL',
     question:
-      '¿La metodología propuesta parece viable de aplicar, a priori, en el tiempo programado para el desarrollo del proyecto?',
+      '¿El cronograma propuesto es consistente con la magnitud de cada etapa del estudio, incluida la de la publicación de resultados, y contiene la descripción de responsabilidades de cada investigador, en el caso de que se trate de un equipo de investigación?',
   },
   {
     id: '38',
     active: true,
-    type: 'METHODOLOGICAL',
+    type: 'SCIENTIFIC',
     question:
-      '¿El cronograma propuesto es consistente con la magnitud de cada etapa del estudio, incluida la de la publicación de resultados, y contiene la descripción de responsabilidades de cada investigador, en el caso de que se trate de un equipo de investigación?',
+      '¿El proyecto muestra solidez interna, está fundamentado adecuadamente e incluye una revisión bibliográfica pertinente, actualizada y suficiente?',
   },
 ]
 
@@ -302,59 +296,50 @@ async function main() {
     const review_collection = getCollection('Review')
     const reviews = await review_collection.find().toArray()
     const review_question_collection = getCollection('ReviewQuestion')
-    const review_questions = await review_question_collection.find().toArray()
 
-    // for (const question of questions) {
-    //   try {
-    //     const result = await review_question_collection.insertOne({
-    //       active: question.active,
-    //       type: question.type,
-    //       question: question.question,
-    //     })
-    //     console.log(
-    //       `Created review question ${result._id}: ${result.modifiedCount} document modified`
-    //     )
-    //   } catch (error) {
-    //     console.error(`Error creating review question ${review._id}:`, error)
-    //   }
-    // }
+    async function create_review_questions() {
+      const result = await review_question_collection.insertMany(
+        rawQuestions.map(({ active, question, type }) => ({
+          active,
+          question,
+          type,
+        }))
+      )
+      console.log('RESULT BULK INSERT REVIEW QUESTIONS', result)
+    }
+
+    const review_questions = await review_question_collection.find().toArray()
+    console.log('REVIEW QUESTIONS IN DATABASE', review_questions.length)
 
     const question_id_dictionary = review_questions
       .map((rq) => {
-        const id = questions.find((q) => q.question == rq.question).id
-        return { id: id, _id: rq._id }
+        const id = rawQuestions.find(
+          (q) => q.question == rq.question && q.type == rq.type
+        ).id
+        return { id: id, _id: rq._id.toString() }
       })
       .reduce((acc, ac) => {
         acc[ac.id] = ac._id
         return acc
       }, {})
 
-    const updated_reviews = reviews.map((review) => {
-      return {
-        ...review,
-        questions: review.questions.map((q) => {
-          return { ...q, id: question_id_dictionary[q.id] }
-        }),
-      }
-    })
+    async function update_reviews() {
+      const updated_reviews = reviews.map((review) => {
+        return {
+          ...review,
+          questions: review.questions.map((q) => {
+            return { ...q, id: question_id_dictionary[q.id] }
+          }),
+        }
+      })
 
-    for (const review of updated_reviews) {
-      try {
-        const result = await review_collection.updateOne(
-          { _id: new ObjectId(review._id) },
-          {
-            $set: {
-              questions: review.questions,
-            },
-          }
-        )
-        console.log(
-          `Updated review ${result._id}: ${result.modifiedCount} document modified`
-        )
-      } catch (error) {
-        console.error(`Error creating question ${review._id}:`, error)
-      }
+      const update_reviews_result =
+        await review_collection.updateMany(updated_reviews)
+      console.log('Operation result: ', update_reviews_result)
     }
+
+    await create_review_questions()
+    await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
