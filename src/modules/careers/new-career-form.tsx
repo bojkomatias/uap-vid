@@ -11,9 +11,7 @@ import { FormInput } from '@shared/form/form-input'
 import type { z } from 'zod'
 import { FormButton } from '@shared/form/form-button'
 import { FormTextarea } from '@shared/form/form-textarea'
-import type { Career, Course } from '@prisma/client'
 import { upsertCareer } from '@repositories/career'
-import { Switch } from '@components/switch'
 import { FormSwitch } from '@shared/form/form-switch'
 
 export function NewCareerForm({
