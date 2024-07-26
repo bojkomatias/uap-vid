@@ -558,6 +558,7 @@ const getProtocolsByRol = cache(
     try {
       return await queryBuilder()
     } catch (error) {
+      console.log(error)
       return []
     }
   }
