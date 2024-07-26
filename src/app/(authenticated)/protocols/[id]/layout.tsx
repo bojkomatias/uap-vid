@@ -8,6 +8,7 @@ import { Action, ProtocolState } from '@prisma/client'
 import { Heading } from '@components/heading'
 import { ChatFullComponent } from 'modules/chat/ChatFullComponent'
 import { cx } from '@utils/cx'
+import { Divider } from '@components/divider'
 
 async function Layout({
   params,
@@ -54,10 +55,10 @@ async function Layout({
         {modal} */}
       </div>
 
-      <div className="relative mt-8 grid grid-cols-1 gap-8 lg:grid-cols-10">
+      <div className="relative mt-8 gap-8 lg:grid lg:grid-cols-10">
         <aside
           className={cx(
-            'col-span-4 space-y-2 overflow-y-auto rounded-r-lg bg-gray-500/5 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:px-4 lg:py-8',
+            'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-500/5 p-6 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8',
             (protocol.state === ProtocolState.DRAFT ||
               protocol.state === ProtocolState.PUBLISHED) &&
               'hidden'
@@ -65,7 +66,8 @@ async function Layout({
         >
           {reviews}
         </aside>
-        <div className="col-span-6">{children}</div>
+
+        <div className="col-span-6 mt-12 lg:mt-0">{children}</div>
       </div>
     </>
   )

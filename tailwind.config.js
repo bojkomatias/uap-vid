@@ -37,6 +37,17 @@ module.exports = {
         DEFAULT: theme('colors.gray.300', 'currentColor'),
         ...theme('colors'),
       }),
+      keyframes: {
+        animation: {
+          ping: 'ping .1s cubic-bezier(0, 0, 0.5, 1) infinite',
+        },
+        ping: {
+          '75%, 100%': {
+            transform: 'scale(1.1)',
+            opacity: '0',
+          },
+        },
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
