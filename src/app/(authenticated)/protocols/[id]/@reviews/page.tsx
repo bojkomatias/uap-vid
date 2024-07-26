@@ -1,6 +1,6 @@
 import { Access, Action, ProtocolState } from '@prisma/client'
 import { getProtocolMetadata } from '@repositories/protocol'
-import ReviewList from '@review/elements/review-list'
+import { ReviewList } from '@review/elements/review-list'
 import ReviewFormTemplate from '@review/review-form-template'
 import { cx } from '@utils/cx'
 import { canAccess, canExecute } from '@utils/scopes'
@@ -17,14 +17,7 @@ export default async function ReviewsPage({
   if (!session || !protocol) return
 
   return (
-    <aside
-      className={cx(
-        'min-w-fit space-y-3 overflow-y-auto py-3 pl-4 pr-1 outline-none dark:!border-gray-800 lg:sticky lg:top-0 lg:h-screen lg:pl-0 print:hidden',
-        (protocol.state === ProtocolState.DRAFT ||
-          protocol.state === ProtocolState.PUBLISHED) &&
-          'hidden'
-      )}
-    >
+    <>
       {(
         session.user.id !== protocol.researcher.id &&
         canExecute(Action.REVIEW, session.user.role, protocol.state)
@@ -42,6 +35,6 @@ export default async function ReviewsPage({
           isOwner={session.user.id === protocol.researcher.id}
         />
       : null}
-    </aside>
+    </>
   )
 }

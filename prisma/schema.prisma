@@ -10,7 +10,7 @@ datasource db {
 model ChatMessage {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   content    String
-  thread     String //This is to separate multiple threads into a single protocol 
+  thread     String //This is to separate multiple threads into a single protocol
   createdAt  DateTime @default(now())
   read       Boolean  @default(false)
   user       User     @relation(fields: [userId], references: [id])

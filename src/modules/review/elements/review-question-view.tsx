@@ -10,21 +10,20 @@ export default function ReviewQuestionView({
   index,
   questions,
 }: ReviewQuestionType & { index: number; questions: ReviewQuestion[] }) {
-  console.log('--->', id, questions)
   return (
     <div>
-      <Strong className="inline text-xs/6">
-        {index + 1}-{' '}
+      <div className="flex items-start">
+        <Strong className="pr-0.5 text-sm/6">{index + 1}) </Strong>
+        <Text className="grow">
+          {questions.find((question) => question.id == id)?.question}
+        </Text>
         {approved ?
-          <Check className="inline size-4 text-success-500/80" />
-        : <X className="inline size-4 text-error-500/80" />}
-      </Strong>
-
-      <Text>{questions.find((question) => question.id == id)?.question}</Text>
-
+          <Check className="size-5 shrink-0 text-success-500/80" />
+        : <X className="size-5 shrink-0 text-error-500/80" />}
+      </div>
       {comment && (
-        <div className="mt-1 rounded-lg bg-yellow-500/10 py-2 pl-4">
-          <Strong>Comentario del evaluador:</Strong>
+        <div className="mt-1 rounded-lg bg-yellow-500/10 px-2.5 py-1">
+          <Strong className="text-sm/6">Comentario del evaluador:</Strong>
           <Text>{comment}</Text>
         </div>
       )}

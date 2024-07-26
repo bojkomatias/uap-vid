@@ -16,9 +16,8 @@ import { useCases } from '@utils/emailer/use-cases'
 import { useQuery } from '@tanstack/react-query'
 import { getAllQuestions } from '@repositories/review-question'
 import { Subheading } from '@components/heading'
-import { Subheading } from '@components/heading'
 import { BadgeButton } from '@components/badge'
-import { Text } from '@components/text'
+import { Strong, Text } from '@components/text'
 
 export default function ReviewItem({
   review,
@@ -43,21 +42,33 @@ export default function ReviewItem({
   const [showReviewQuestions, setShowReviewQuestions] = useState(false)
 
   const { isLoading, data } = useQuery<ReviewQuestion[]>({
-    queryKey: ['questions', review],
-    queryFn: async () => {
-      return await getAllQuestions()
-    },
+    queryKey: ['questions', review.id],
+    queryFn: async () => await getAllQuestions(),
   })
 
   if (review.verdict === ReviewVerdict.NOT_REVIEWED) return null
 
   return (
-    <li className="pr-px">
+    <li className="px-px">
       <Subheading className="flex justify-between">
         {ReviewTypesDictionary[review.type]}
-        <ReviewVerdictBadge verdict={review.verdict} />
+        <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
+          <Strong className="text-xs/6">
+            {role === Role.ADMIN || role === Role.SECRETARY ?
+              review.reviewer.name
+            : null}
+          </Strong>
+          <Text className="!text-xs/6">
+            {new Date().getTime() - new Date(review.updatedAt).getTime() > 1 ?
+              getDuration(
+                new Date().getTime() - new Date(review.updatedAt).getTime()
+              )
+            : 'hace un instante'}
+          </Text>
+        </div>
       </Subheading>
       <div className="mt-1 flex justify-between">
+        <ReviewVerdictBadge verdict={review.verdict} />
         {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ?
           isOwner ?
             <ReviseCheckbox id={review.id} revised={review.revised} />
@@ -72,7 +83,7 @@ export default function ReviewItem({
         </BadgeButton>
       </div>
       {showReviewQuestions && data && (
-        <div className="space-y-2">
+        <div className="mt-4 space-y-4">
           {isLoading ?
             <Loader />
           : review.questions.map((question, index) => (
@@ -88,21 +99,6 @@ export default function ReviewItem({
           }
         </div>
       )}
-
-      <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
-        <span className="font-semibold text-gray-700">
-          {role === Role.ADMIN || role === Role.SECRETARY ?
-            review.reviewer.name
-          : null}
-        </span>
-        <span className="font-light text-gray-500">
-          {new Date().getTime() - new Date(review.updatedAt).getTime() > 1 ?
-            getDuration(
-              new Date().getTime() - new Date(review.updatedAt).getTime()
-            )
-          : 'hace un instante'}
-        </span>
-      </div>
     </li>
   )
 }
