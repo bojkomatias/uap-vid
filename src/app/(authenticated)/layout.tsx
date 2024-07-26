@@ -3,7 +3,6 @@ import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export default async function RootLayout({
   children,
-  drawer,
 }: {
   children: React.ReactNode
   drawer: React.ReactNode
@@ -14,7 +13,6 @@ export default async function RootLayout({
         <Breadcrumbs />
       </div>
       {children}
-      {drawer}
     </AppLayout>
   )
 }

@@ -17,14 +17,7 @@ export default async function ReviewsPage({
   if (!session || !protocol) return
 
   return (
-    <aside
-      className={cx(
-        'min-w-fit space-y-3 overflow-y-auto lg:sticky lg:top-0 lg:h-screen lg:pl-0',
-        (protocol.state === ProtocolState.DRAFT ||
-          protocol.state === ProtocolState.PUBLISHED) &&
-          'hidden'
-      )}
-    >
+    <>
       {(
         session.user.id !== protocol.researcher.id &&
         canExecute(Action.REVIEW, session.user.role, protocol.state)
@@ -42,6 +35,6 @@ export default async function ReviewsPage({
           isOwner={session.user.id === protocol.researcher.id}
         />
       : null}
-    </aside>
+    </>
   )
 }
