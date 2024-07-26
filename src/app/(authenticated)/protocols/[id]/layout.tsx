@@ -5,14 +5,8 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { Action, ProtocolState } from '@prisma/client'
-<<<<<<< HEAD
 import { Heading } from '@components/heading'
-import { PDF } from 'modules/protocol-pdf'
 import { ChatFullComponent } from 'modules/chat/ChatFullComponent'
-=======
-import { Heading, Subheading } from '@components/heading'
-import { Number } from 'tabler-icons-react'
->>>>>>> develop
 
 async function Layout({
   params,
@@ -61,7 +55,6 @@ async function Layout({
         </div>
         {actions}
         {modal}
-        <PDF />
       </div>
 
       <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-4">
