@@ -172,12 +172,6 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          console.log(
-            'The protocol on client ==>',
-            JSON.stringify(form.values.sections.budget, null, 2)
-          )
-          console.log('ERRORS:', form.errors)
-
           // Enforce validity only on first section to Save
           if (!form.isValid('sections.identification')) {
             notifications.show({
