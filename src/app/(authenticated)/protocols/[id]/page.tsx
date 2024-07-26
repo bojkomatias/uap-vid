@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="space-y-6 @container">
+    <div className="@container space-y-6">
       <View sections={protocol.sections} />
     </div>
   )
