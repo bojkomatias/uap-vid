@@ -19,7 +19,7 @@ const TextItemView = ({ title, content, className }: TextItemProps) => {
           <div
             className={cx(
               className,
-              'prose text-sm dark:prose-invert prose-strong:font-medium'
+              'prose dark:prose-invert prose-strong:font-medium text-sm'
             )}
             dangerouslySetInnerHTML={{ __html: content }}
           />
