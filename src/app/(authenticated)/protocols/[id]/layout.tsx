@@ -5,9 +5,14 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { Action, ProtocolState } from '@prisma/client'
+<<<<<<< HEAD
 import { Heading } from '@components/heading'
 import { PDF } from 'modules/protocol-pdf'
 import { ChatFullComponent } from 'modules/chat/ChatFullComponent'
+=======
+import { Heading, Subheading } from '@components/heading'
+import { Number } from 'tabler-icons-react'
+>>>>>>> develop
 
 async function Layout({
   params,
@@ -48,6 +53,7 @@ async function Layout({
       <Heading title={protocol.sections.identification.title}>
         {protocol.sections.identification.title}
       </Heading>
+
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row">
         <div className="flex-grow">
           {metadata}

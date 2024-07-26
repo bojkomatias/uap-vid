@@ -16,19 +16,24 @@ export async function PUT(
   const id = params.id
   const protocol = await request.json()
   if (token && canExecute(Action.APPROVE, token.user.role, protocol.state)) {
-    const updated = await updateProtocolStateById(id, ProtocolState.ON_GOING)
+    const updated = await updateProtocolStateById(
+      id,
+      protocol.state,
+      ProtocolState.ON_GOING,
+      token.user.id
+    )
 
     if (updated) {
       emailer({
         useCase: useCases.onApprove,
-        email: updated.researcher.email,
-        protocolId: updated.id,
+        email: updated.data?.researcher.email ?? '',
+        protocolId: updated.data?.id,
       })
     } else {
       console.log('No se envió el email al investigador')
     }
     await logProtocolUpdate({
-      user: token.user,
+      userId: token.user.id,
       fromState: ProtocolState.ACCEPTED,
       toState: ProtocolState.ON_GOING,
       protocolId: id,
