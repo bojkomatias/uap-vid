@@ -12,14 +12,8 @@ type ReviewStateProps = {
   role: Role
   isOwner: boolean
 }
-async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
+export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
   const reviews = await getReviewsByProtocol(id)
-
-  if (
-    !reviews ||
-    reviews.every((r) => r.verdict === ReviewVerdict.NOT_REVIEWED)
-  )
-    return null
 
   return (
     <>
@@ -45,5 +39,3 @@ async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
     </>
   )
 }
-
-export default ReviewList

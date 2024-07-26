@@ -10,5 +10,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect('/protocols')
   }
 
-  return <View sections={protocol.sections} />
+  return (
+    <div className="@container space-y-6">
+      <View sections={protocol.sections} />
+    </div>
+  )
 }
