@@ -49,7 +49,7 @@ export function BibliographyForm() {
                 className="col-span-5"
                 label=""
                 {...form.getInputProps(
-                  'sections.bibliography.chart.${index}.author'
+                  `sections.bibliography.chart.${index}.author`
                 )}
               />
 

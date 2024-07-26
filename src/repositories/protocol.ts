@@ -10,6 +10,7 @@ import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary
 import { z } from 'zod'
 import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
+import { logProtocolUpdate } from '@utils/logger'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>
@@ -112,20 +113,53 @@ const updateProtocolById = async (id: string, data: Protocol) => {
   }
 }
 
-const updateProtocolStateById = async (id: string, state: ProtocolState) => {
+const updateProtocolStateById = async (
+  id: string,
+  fromState: ProtocolState,
+  toState: ProtocolState,
+  userId: string
+) => {
   try {
     const protocol = await prisma.protocol.update({
       where: {
         id,
       },
       data: {
-        state: state,
+        state: toState,
       },
-      include: { researcher: { select: { email: true } } },
+      select: {
+        id: true,
+        state: true,
+        sections: { select: { identification: true } },
+        researcher: { select: { email: true } },
+      },
     })
-    return protocol
+
+    await logProtocolUpdate({
+      userId,
+      fromState,
+      toState,
+      protocolId: id,
+    })
+
+    return {
+      status: true,
+      data: protocol,
+      notification: {
+        title: 'Estado modificado',
+        message: 'El estado del protocolo fue modificado con éxito',
+        intent: 'success',
+      } as const,
+    }
   } catch (e) {
-    return null
+    return {
+      status: false,
+      notification: {
+        title: 'Error',
+        message: 'Ocurrio un error al intentar pasar de estado el protocolo',
+        intent: 'error',
+      } as const,
+    }
   }
 }
 
@@ -204,6 +238,7 @@ const createProtocol = async (data: Protocol) => {
     })
     return protocol
   } catch (e) {
+    console.log(e)
     return null
   }
 }
