@@ -1,14 +1,14 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import { type Protocol, ProtocolFlag, ProtocolState } from '@prisma/client'
+import type { ProtocolFlag } from '@prisma/client'
+import { type Protocol, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
-import { z } from 'zod'
-import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
+import { IdentificationTeamSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
 import { logProtocolUpdate } from '@utils/logger'
 

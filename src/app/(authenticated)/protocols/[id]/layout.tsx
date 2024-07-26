@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import { Action, ProtocolState } from '@prisma/client'
-import { Heading, Subheading } from '@components/heading'
-import { Number } from 'tabler-icons-react'
+import { Heading } from '@components/heading'
+import { ChatFullComponent } from 'modules/chat/ChatFullComponent'
 
 async function Layout({
   params,
@@ -56,7 +56,6 @@ async function Layout({
       <div className="relative z-0 flex flex-col-reverse lg:flex-row lg:gap-2 lg:divide-x print:block print:py-2 ">
         <div className="w-full">{children}</div>
         <div className="print:hidden">{reviews}</div>
-
       </div>
     </>
   )
