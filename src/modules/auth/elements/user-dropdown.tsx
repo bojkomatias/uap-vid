@@ -2,22 +2,22 @@
 
 import { signOut } from 'next-auth/react'
 import { MenuButton } from '@headlessui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { User } from '@prisma/client'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import { Logout, Selector, Settings } from 'tabler-icons-react'
+import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
 import {
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownDivider,
-  DropdownHeader,
-  DropdownLabel,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
+    DropdownDivider,
+    DropdownHeader,
+    DropdownLabel,
 } from '@components/dropdown'
 import { Avatar } from '@components/avatar'
 
 export function UserDropdown({ user }: { user: User }) {
-  const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
   return (
     <Dropdown>
@@ -37,11 +37,11 @@ export function UserDropdown({ user }: { user: User }) {
               user.name.split(' ')[0].substring(0, 1) +
               user.name.split(' ').at(-1)?.substring(0, 1)
             }
-            className="size-10"
+            className="size-10 bg-primary-950 text-white dark:bg-white dark:text-primary-950"
           />
         }
         <span className="block text-left">
-          <span className="block text-sm/5 font-medium">
+          <span className="block text-sm/5 font-medium text-black dark:text-white">
             {user.name.split(' ')[0]} {user.name.split(' ')[2]}
           </span>
           <span className="block text-xs/5 text-zinc-500">
@@ -66,6 +66,7 @@ export function UserDropdown({ user }: { user: User }) {
           <Settings data-slot="icon" />
           <DropdownLabel>Cuenta</DropdownLabel>
         </DropdownItem>
+        <DarkModeToggler />
         <DropdownDivider />
         <DropdownItem
           onClick={() => {
@@ -79,4 +80,31 @@ export function UserDropdown({ user }: { user: User }) {
       </DropdownMenu>
     </Dropdown>
   )
+}
+
+const DarkModeToggler = () => {
+    const htmlTag = document.querySelector('html')!
+    const isDark = htmlTag.classList.contains('dark')
+
+    useEffect(() => {}, [])
+
+    return (
+        <DropdownItem
+            onClick={() => {
+                if (isDark) {
+                    htmlTag.classList.remove('dark')
+                    localStorage.removeItem('dark-mode')
+                } else {
+                    htmlTag.classList.add('dark')
+                    localStorage.setItem('dark-mode', 'true')
+                }
+            }}
+        >
+            {isDark ? <Sun data-slot="icon" /> : <Moon data-slot="icon" />}
+            <DropdownLabel>
+                {' '}
+                {isDark ? 'Modo claro' : 'Modo oscuro'}
+            </DropdownLabel>
+        </DropdownItem>
+    )
 }

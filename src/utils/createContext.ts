@@ -1,20 +1,21 @@
 'use client'
 import { createFormContext } from '@mantine/form'
-import type { Protocol, Sections } from './zod'
+import type { ProtocolSchema, SectionsSchema } from './zod'
+import { z } from 'zod'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
-  createFormContext<Protocol>()
+  createFormContext<z.infer<typeof ProtocolSchema>>()
 
-export const initialSectionValues: Sections = {
+export const initialSectionValues: z.infer<typeof SectionsSchema> = {
   identification: {
-    assignment: '',
-    career: '',
-    sponsor: [],
+    courseId: null,
+    careerId: '',
+    academicUnitIds: [],
     team: [
       {
         hours: 0,
-        last_name: '',
-        name: '',
+        last_name: null,
+        name: null,
         role: 'Director',
         teamMemberId: null,
         workingMonths: null,

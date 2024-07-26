@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/button'
+
 import { notifications } from '@elements/notifications'
 import { zodResolver } from '@mantine/form'
 import type { Protocol } from '@prisma/client'
@@ -13,21 +13,25 @@ import {
   MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
-import type { Protocol as ProtocolZod } from '@utils/zod'
 import { ProtocolSchema } from '@utils/zod'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import {
   AlertCircle,
-  ChevronLeft,
-  ChevronRight,
+  ArrowNarrowLeft,
+  ArrowNarrowRight,
   CircleCheck,
   CircleDashed,
 } from 'tabler-icons-react'
 import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
+import { BadgeButton } from '@components/badge'
+import { FormButton } from '@shared/form/form-button'
+import { Button } from '@components/button'
+import type { z } from 'zod'
+import { createProtocol, updateProtocolById } from '@repositories/protocol'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -40,16 +44,24 @@ const sectionMapper: { [key: number]: JSX.Element } = {
   7: <BibliographyForm />,
 }
 
-export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
+export default function ProtocolForm({
+  protocol,
+}: {
+  protocol: z.infer<typeof ProtocolSchema>
+}) {
   const router = useRouter()
-  const path = usePathname()
-  const [section, setSection] = useState(path?.split('/')[3])
+  const pathname = usePathname()
+  const [section, setSection] = useState(pathname?.split('/')[3])
 
   const [isPending, startTransition] = useTransition()
 
   const form = useProtocol({
     initialValues:
-      path?.split('/')[2] === 'new' && localStorage.getItem('temp-protocol') ?
+      (
+        pathname?.split('/')[2] === 'new' &&
+        typeof window !== 'undefined' &&
+        localStorage.getItem('temp-protocol')
+      ) ?
         JSON.parse(localStorage.getItem('temp-protocol')!)
       : protocol,
     validate: zodResolver(ProtocolSchema),
@@ -59,61 +71,61 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
   useEffect(() => {
     // Validate if not existing path goes to section 0
     if (
-      path &&
-      !['0', '1', '2', '3', '4', '5', '6', '7'].includes(path?.split('/')[3])
+      pathname &&
+      !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
+        pathname?.split('/')[3]
+      )
     )
-      router.push('/protocols/' + path?.split('/')[2] + '/0')
-  }, [path, router])
+      router.push('/protocols/' + pathname?.split('/')[2] + '/0')
+  }, [pathname, router])
 
   const upsertProtocol = useCallback(
-    async (protocol: ProtocolZod) => {
+    async (protocol: z.infer<typeof ProtocolSchema>) => {
+      const { id, ...restOfProtocol } = protocol
       // flow for protocols that don't have ID
-      if (!protocol.id) {
-        const res = await fetch(`/api/protocol`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(protocol),
-        })
-        const { id }: Protocol = await res.json()
+      if (!id) {
+        const created = await createProtocol(restOfProtocol as Protocol) // Its because enum from zod != prisma enum according to types
 
-        if (res.status === 200) {
+        if (created) {
           notifications.show({
             title: 'Protocolo creado',
             message: 'El protocolo ha sido creado con éxito',
             intent: 'success',
           })
-        }
-        return router.push(`/protocols/${id}/${section}`)
-      }
-      const res = await fetch(`/api/protocol/${protocol.id}`, {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(protocol),
-      })
 
-      if (res.status === 200) {
+          // Only when created remove from LocalStorage
+          localStorage.removeItem('temp-protocol')
+
+          return startTransition(() => {
+            router.push(`/protocols/${created.id}`)
+          })
+        }
+        return notifications.show({
+          title: 'Error al crear',
+          message: 'Hubo un error al crear el protocolo',
+          intent: 'error',
+        })
+      }
+
+      const updated = await updateProtocolById(id, restOfProtocol as Protocol)
+
+      if (updated) {
         notifications.show({
           title: 'Protocolo guardado',
           message: 'El protocolo ha sido guardado con éxito',
           intent: 'success',
         })
-
-        //Timeout is for UX purposes
-        setTimeout(() => {
+        return startTransition(() => {
           router.push(`/protocols/${protocol.id}`)
-          startTransition(() => {
-            router.refresh()
-          })
-        }, 500)
+        })
       }
+      return notifications.show({
+        title: 'Error al guardar',
+        message: 'Hubo un error al guardar el protocolo',
+        intent: 'error',
+      })
     },
-    [router, section]
+    [router]
   )
 
   const SectionButton = useCallback(
@@ -126,24 +138,26 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
       label: string
       value: string
     }) => (
-      <Button
-        intent="outline"
-        size="xs"
+      <BadgeButton
+        color="light"
         className={cx(
-          'hover:bg-primary-50',
-          section === value && 'font-bold shadow',
-          !form.isValid(path) && section !== value ? 'opacity-50' : ''
+          'opacity-70',
+          section == value && 'font-semibold opacity-100'
         )}
-        onClick={() => setSection(value)}
+        onClick={() => {
+          startTransition(() => {
+            setSection(value)
+          })
+        }}
       >
         {label}
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="h-4 w-4 stroke-warning-500/80" />
-          : <CircleDashed className="h-4 w-4 stroke-gray-500/80" />
-        : <CircleCheck className="h-4 w-4 stroke-success-500/80" />}
-      </Button>
+            <AlertCircle className="size-4 stroke-warning-500" />
+          : <CircleDashed className="size-3.5 stroke-gray-500" />
+        : <CircleCheck className="size-4 stroke-success-500" />}
+      </BadgeButton>
     ),
     [form, section]
   )
@@ -152,7 +166,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
     <ProtocolProvider form={form}>
       <form
         onBlur={() => {
-          path?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
+          pathname?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
             localStorage.setItem('temp-protocol', JSON.stringify(form.values))
           : null
         }}
@@ -168,12 +182,8 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
             })
             return form.validate()
           }
-          typeof window !== 'undefined' ?
-            localStorage.removeItem('temp-protocol')
-          : null
           upsertProtocol(form.values)
         }}
-        className="w-full px-4 py-4"
       >
         <InfoTooltip>
           <h4>Indicadores de sección</h4>
@@ -198,7 +208,7 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
           initial={{ opacity: 0, y: -7 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="mx-auto mb-6 flex w-fit flex-wrap items-center justify-center gap-1 rounded border bg-gray-50 p-1"
+          className="mx-auto mt-2 flex w-fit flex-wrap items-center justify-center gap-0.5 rounded-lg border border-black/5 p-0.5 dark:border-white/5"
         >
           <SectionButton
             path={'sections.identification'}
@@ -246,30 +256,27 @@ export default function ProtocolForm({ protocol }: { protocol: ProtocolZod }) {
 
         {sectionMapper[Number(section)]}
 
-        <div className="mb-8 mt-12 flex w-full justify-between">
+        <div className="mt-12 flex w-full justify-between">
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '0'}
             onClick={() => setSection((p) => (Number(p) - 1).toString())}
           >
-            <ChevronLeft className="h-4 text-gray-500" />
+            <ArrowNarrowLeft data-slot="icon" />
+            Sección previa
           </Button>
 
-          <div className="flex gap-2">
-            <Button type="submit" intent="secondary" loading={isPending}>
-              Guardar
-            </Button>
-          </div>
+          <FormButton isLoading={isPending}>Guardar</FormButton>
+
           <Button
             type="button"
-            intent="outline"
-            size="icon"
+            plain
             disabled={section === '7'}
             onClick={() => setSection((p) => (Number(p) + 1).toString())}
           >
-            <ChevronRight className="h-4 text-gray-500" />
+            Sección siguiente
+            <ArrowNarrowRight data-slot="icon" />
           </Button>
         </div>
       </form>

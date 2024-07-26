@@ -3,6 +3,27 @@
 import { prisma } from '../utils/bd'
 import { IndexSchema } from '@utils/zod'
 import type { HistoricIndex } from '@prisma/client'
+import { cache } from 'react'
+
+export const getCurrentIndexes = cache(async () => {
+  const [FCAValues, FMRValues] = await prisma.$transaction([
+    prisma.index.findFirstOrThrow({
+      where: { unit: 'FCA' },
+      select: { values: true },
+    }),
+    prisma.index.findFirstOrThrow({
+      where: { unit: 'FMR' },
+      select: { values: true },
+    }),
+  ])
+
+  const [currentFCA, currentFMR] = [
+    FCAValues.values.at(-1)!.price,
+    FMRValues.values.at(-1)!.price,
+  ]
+
+  return { currentFCA, currentFMR }
+})
 
 export async function getIndexByUnit(unit: 'FCA' | 'FMR') {
   return await prisma.index.findFirstOrThrow({

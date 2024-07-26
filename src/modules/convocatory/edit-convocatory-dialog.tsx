@@ -3,7 +3,7 @@
 import type { Convocatory } from '@prisma/client'
 import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
 import { useState } from 'react'
-import { Badge } from 'tabler-icons-react'
+import { Badge } from '@components/badge'
 import { ConvocatoryForm } from './convocatory-form'
 import { useRouter } from 'next/navigation'
 
@@ -23,7 +23,7 @@ export function EditConvocatoryDialog({
   }
 
   return (
-    <Dialog open={open} onClose={closeDialog} size="xl">
+    <Dialog open={open} onClose={closeDialog} size="2xl">
       <div className="flex items-center gap-2">
         <DialogTitle>{convocatory.name}</DialogTitle>
         {isCurrent ?

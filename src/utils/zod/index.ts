@@ -4,7 +4,7 @@ import { z } from 'zod'
 // ENUMS
 /////////////////////////////////////////
 
-const RoleSchema = z.enum([
+export const RoleSchema = z.enum([
   'RESEARCHER',
   'SECRETARY',
   'METHODOLOGIST',
@@ -68,6 +68,18 @@ const ReviewVerdictSchema = z.enum(['APPROVED', 'REJECTED', 'PENDING'])
 /////////////////////////////////////////
 
 /////////////////////////////////////////
+// ACADEMIC UNIT SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, { message: 'El nombre no puede quedar vacío' }),
+  shortname: z.string().min(1, { message: '' }),
+  // secretariesIds: z.string().array(),
+  // academicUnitAnualBudgetsIds: z.string().array(),
+})
+
+/////////////////////////////////////////
 // CONVOCATORY SCHEMA
 /////////////////////////////////////////
 
@@ -97,6 +109,27 @@ export const ConvocatorySchema = z
 
 export type Convocatory = z.infer<typeof ConvocatorySchema>
 
+export const CareerSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(10, {
+    message: 'Debe tener al menos 10 caracteres',
+  }),
+  active: z.boolean(),
+  courses: z
+    .string()
+    .transform((value) => value.split(',').map(String))
+    .pipe(z.string().array()),
+})
+
+export type Career = z.infer<typeof CareerSchema>
+
+export const EmailContentTemplateSchema = z.object({
+  content: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  subject: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  useCase: z.string(),
+  id: z.string().nullable(),
+})
+
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
 /////////////////////////////////////////
@@ -107,11 +140,8 @@ export const ProtocolSchema = z.object({
   state: ProtocolStateSchema,
   researcherId: z.string(),
   sections: z.lazy(() => SectionsSchema),
-  convocatoryId: z.string(),
+  convocatoryId: z.string().nullish(),
 })
-
-// .optional() to export type to create a Form (from new object, has no assigned Id yet)
-export type Protocol = z.infer<typeof ProtocolSchema>
 
 /////////////////////////////////////////
 // REVIEWS SCHEMA
@@ -136,6 +166,7 @@ export const ReviewSchema = z.object({
 export const UserSchema = z.object({
   id: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   email: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  dni: z.number().nullable(),
   id_: z.string().nullable(),
   image: z.string().nullable(),
   lastLogin: z.coerce.date().nullable(),
@@ -143,6 +174,63 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: RoleSchema,
 })
+
+export const UserPasswordChangeSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, { message: 'Este campo no puede estar vacío' }),
+    newPassword: z.string().min(4, {
+      message: 'La contraseña debe contener al menos 4 caracteres',
+    }),
+    newPasswordConfirm: z.string(),
+  })
+  .refine((values) => values.newPassword === values.newPasswordConfirm, {
+    message: 'Las contraseñas no son iguales',
+    path: ['newPasswordConfirm'],
+  })
+  .refine(
+    (values) => values.newPassword !== values.currentPassword,
+
+    {
+      message: 'No puede ser la misma contraseña que la actual',
+      path: ['newPassword'],
+    }
+  )
+//This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.
+
+export const VerifyUserDataMicrosoftUsersSchema = z.object({
+  name: z.string().min(1, { message: 'No puede estar vacío' }),
+  dni: z
+    .string()
+    .min(8, { message: 'Debe tener 8 dígitos' })
+    .max(8, { message: 'Debe tener 8 dígitos' }),
+})
+
+export const VerifyUserDataSchema = z
+  .object({
+    name: z.string().min(1, { message: 'No puede estar vacío' }),
+    dni: z
+      .string()
+      .min(8, { message: 'Debe tener 8 dígitos' })
+      .max(8, { message: 'Debe tener 8 dígitos' }),
+
+    newPassword: z.string().min(4, {
+      message: 'La contraseña debe contener al menos 4 caracteres',
+    }),
+    newPasswordConfirm: z.string(),
+  })
+  .refine((values) => values.newPassword === values.newPasswordConfirm, {
+    message: 'Las contraseñas no son iguales',
+    path: ['newPasswordConfirm'],
+  })
+
+export const ReviewQuestionSchema = z.object({
+  active: z.boolean(),
+  type: z.string(),
+  question: z.string(),
+})
+
 /////////////////////////////////////////
 // HISTORIC INDEX SCHEMA
 /////////////////////////////////////////
@@ -173,9 +261,7 @@ export const HistoricCategoryPriceSchema = z.object({
   currency: z.string().default('ARS'),
 })
 
-const AmountIndexSchema = z
-  .object({ FCA: z.number(), FMR: z.number() })
-  .nullable()
+const AmountIndexSchema = z.object({ FCA: z.number(), FMR: z.number() })
 
 /////////////////////////////////////////
 // TEAM MEMBER CATEGORY SCHEMA
@@ -185,10 +271,17 @@ export const TeamMemberCategorySchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
-  price: HistoricCategoryPriceSchema.array().min(1, {
-    message: 'Configure un precio',
-  }),
-  amountIndex: AmountIndexSchema, //Remove nullable
+  amount: z.coerce.number(), //Remove nullable
+})
+
+/////////////////////////////////////////
+// ACADEMIC UNIT BUDGET SCHEMA
+/////////////////////////////////////////
+
+export const AcademicUnitBudget = z.object({
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+  amountIndex: AmountIndexSchema,
 })
 
 /////////////////////////////////////////
@@ -269,8 +362,8 @@ export const SectionsSchema = z
         value.duration.modality ===
         'Proyecto de investigación desde las cátedras (PIC)'
       ) {
-        if (value.identification.assignment)
-          if (value.identification.assignment.length <= 0) return false
+        if (value.identification.courseId)
+          if (value.identification.courseId.length <= 0) return false
           else {
             return true
           }
@@ -285,8 +378,6 @@ export const SectionsSchema = z
     }
   )
 
-export type Sections = z.infer<typeof SectionsSchema>
-
 /////////////////////////////////////////
 // PROTOCOL SECTIONS BIBLIOGRAPHY SCHEMA
 /////////////////////////////////////////
@@ -297,7 +388,7 @@ export const BibliographySchema = z.object({
       z.object({
         author: z.string().min(1, { message: 'El campo no puede estar vació' }),
         title: z.string().min(1, { message: 'El campo no puede estar vació' }),
-        year: z
+        year: z.coerce
           .number({
             invalid_type_error: 'Este campo debe ser numérico',
           })
@@ -323,7 +414,9 @@ export const BudgetSchema = z.object({
             detail: z.string().min(1, {
               message: 'El campo no puede estar vacío',
             }),
-            amount: z.any(),
+            amount: z.coerce
+              .number()
+              .min(1, { message: 'Debe completar el monto' }),
             year: z
               .string({
                 invalid_type_error: 'Debe seleccionar un año',
@@ -373,7 +466,7 @@ export const DurationSchema = z.object({
         data: z
           .object({
             task: z.string().min(1, {
-              message: 'El campo no puede estar vació',
+              message: 'El campo no puede estar vacío',
             }),
           })
           .array(),
@@ -386,40 +479,35 @@ export const DurationSchema = z.object({
 // PROTOCOL SECTIONS IDENTIFICATION SCHEMA
 /////////////////////////////////////////
 
+export const IdentificationTeamSchema = z.object({
+  hours: z.coerce
+    .number({
+      invalid_type_error: 'Este campo debe ser numérico',
+    })
+    .min(1, {
+      message: 'Debe ser un numero positivo',
+    })
+    .max(400, {
+      message: 'No se pueden asignar tantas horas',
+    }),
+  last_name: z.string().nullable(),
+  name: z.string().nullable(),
+  role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  teamMemberId: z.string().nullable(),
+  workingMonths: z.coerce.number().nullable(),
+})
+
 export const IdentificationSchema = z.object({
-  assignment: z.string().optional(),
-  courseId: z.string(),
-  career: z.string().min(1, 'El campo no puede estar vacío'),
+  courseId: z.string().nullable().optional(),
   careerId: z
     .string()
     .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
-  sponsor: z.string().array(),
   academicUnitIds: z
     .string()
     .array()
-    .min(1, 'Debe selecionar al menos una unidad academica'),
+    .min(1, 'Debe selecionar al menos una unidad académica'),
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
-  team: z
-    .lazy(() =>
-      z.object({
-        hours: z
-          .number({
-            invalid_type_error: 'Este campo debe ser numérico',
-          })
-          .min(1, {
-            message: 'Debe ser un numero positivo',
-          })
-          .max(400, {
-            message: 'No se pueden asignar tantas horas',
-          }),
-        last_name: z.string().nullable(),
-        name: z.string().nullable(),
-        role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-        teamMemberId: z.string().nullable(),
-        workingMonths: z.number().nullable(),
-      })
-    )
-    .array()
+  team: IdentificationTeamSchema.array()
     .min(1, { message: 'Debe tener al menos un integrante' })
     .refine(
       (value) => {
@@ -537,27 +625,3 @@ export const UserEmailChangeSchema = z
     },
     { message: 'No puede ser el email actual', path: ['newEmail'] }
   )
-
-export const UserPasswordChangeSchema = z
-  .object({
-    currentPassword: z
-      .string()
-      .min(1, { message: 'Este campo no puede estar vacío' }),
-    newPassword: z.string().min(4, {
-      message: 'La contraseña debe contener al menos 4 caracteres',
-    }),
-    newPasswordConfirm: z.string(),
-  })
-  .refine((values) => values.newPassword === values.newPasswordConfirm, {
-    message: 'Las contraseñas no son iguales',
-    path: ['newPasswordConfirm'],
-  })
-  .refine(
-    (values) => values.newPassword !== values.currentPassword,
-
-    {
-      message: 'No puede ser la misma contraseña que la actual',
-      path: ['newPassword'],
-    }
-  )
-//This last check is not a security measure, just a help to the end user if by mistake he's entering the same password as its current one.

@@ -182,7 +182,7 @@ export const saveNewTeamMemberExecution = async (
   const amountIndex = await transformAmountToAmountIndex(amount)
 
   const hourlyRateInFCA =
-    anualBudgetTeamMember.teamMember.categories.at(-1)?.category.priceIndex
+    anualBudgetTeamMember.teamMember.categories.at(-1)?.category.amountIndex
       ?.FCA || 0
 
   const amountExcecutedInHours =
@@ -339,8 +339,8 @@ const getProjectedBudgetSummary = (
     })
     .at(-1)
   const [before, actual] = [
-    lastCategoryWithPriceChange?.at(-2)?.category.priceIndex,
-    lastCategoryWithPriceChange?.at(-1)?.category.priceIndex,
+    lastCategoryWithPriceChange?.at(-2)?.category.amountIndex,
+    lastCategoryWithPriceChange?.at(-1)?.category.amountIndex,
   ]
 
   const deltaValue =

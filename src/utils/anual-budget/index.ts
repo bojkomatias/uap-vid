@@ -166,7 +166,7 @@ export const calculateHourRateGivenCategory = (
   if (!category) return { FCA: 0, FMR: 0 } as AmountIndex
   const isObrero = Boolean(category.pointsObrero)
   const categoryPrice =
-    category.category.priceIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex)
+    category.category.amountIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex)
 
   const calculateObreroHourlyRate = (
     categoryPrice: AmountIndex,

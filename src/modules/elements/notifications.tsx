@@ -1,4 +1,6 @@
 'use client'
+import { Heading, Subheading } from '@components/heading'
+import { Text } from '@components/text'
 import { cx } from '@utils/cx'
 import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -45,7 +47,7 @@ function Notification({ title, message, intent }: NotificationProps) {
   return (
     <div
       id="custom-notification"
-      className="fade-in-right fixed bottom-[3%] right-[2%] z-[150] mx-auto flex w-[20rem] gap-2 rounded-md border bg-white p-2 text-sm shadow-lg"
+      className="fade-in-right fixed bottom-[3%] right-[2%] z-[150] mx-auto flex w-[20rem] gap-2 rounded-md border bg-white p-2 text-sm shadow-lg dark:border-gray-700 dark:bg-gray-800"
     >
       <div
         className={cx(
@@ -54,19 +56,17 @@ function Notification({ title, message, intent }: NotificationProps) {
         )}
       ></div>
       <div className="flex flex-grow flex-col">
-        <div className="flex items-center gap-1 border-b pb-1">
+        <div className="flex items-center gap-1 border-b pb-1 dark:border-gray-700">
           {intent == 'error' ?
             <X className={cx(`text-${colors[intent]}`)} />
           : intent == 'primary' ?
             <InfoCircle className={cx(`text-${colors[intent]}`)} />
           : <Check className={cx(`text-${colors[intent]}`)} />}
-          <h3 className={cx('font-semibold', `text-${colors[intent]}`)}>
+          <Subheading className={cx('font-semibold', `text-${colors[intent]}`)}>
             {title}
-          </h3>
+          </Subheading>
         </div>
-        <p className="my-auto py-1 text-[13px] font-[500] text-black/70">
-          {message}
-        </p>
+        <Text className="my-auto font-semibold">{message}</Text>
       </div>
     </div>
   )

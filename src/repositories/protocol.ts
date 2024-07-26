@@ -1,12 +1,15 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import { type Protocol, ProtocolState } from '@prisma/client'
+import { type Protocol, ProtocolFlag, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
+import { z } from 'zod'
+import { IdentificationTeamSchema, ProtocolSchema } from '@utils/zod'
+import { getCurrentIndexes } from './finance-index'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>
@@ -34,6 +37,7 @@ const getProtocolMetadata = cache(
         protocolNumber: true,
         createdAt: true,
         state: true,
+        flags: true,
         convocatory: { select: { id: true, name: true } },
         researcher: {
           select: { name: true, email: true, id: true, role: true },
@@ -72,13 +76,41 @@ const getResearcherEmailByProtocolId = cache(async (id: string) => {
   }
 })
 
-const updateProtocolById = async (id: string, data: Protocol) =>
-  await prisma.protocol.update({
-    where: {
-      id,
-    },
-    data,
-  })
+const updateProtocolById = async (id: string, data: Protocol) => {
+  try {
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    // Parsing the section to have correct formats
+    data.sections.identification.team = IdentificationTeamSchema.array().parse(
+      data.sections.identification.team
+    )
+
+    // Indexing the amount
+    data.sections.budget.expenses.forEach((expenseType) => {
+      expenseType.data.forEach((expense) => {
+        expense.amount = parseFloat(expense.amount as any)
+        expense.amountIndex = {
+          FCA: expense.amount / currentFCA,
+          FMR: expense.amount / currentFMR,
+        }
+      })
+    })
+
+    data.sections.bibliography.chart.forEach((ref) => {
+      ref.year = parseInt(ref.year as any)
+    })
+
+    return await prisma.protocol.update({
+      where: {
+        id,
+      },
+      data,
+    })
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
 
 const updateProtocolStateById = async (id: string, state: ProtocolState) => {
   try {
@@ -97,6 +129,45 @@ const updateProtocolStateById = async (id: string, state: ProtocolState) => {
   }
 }
 
+const upsertProtocolFlag = async (
+  id: string,
+  flag: Omit<ProtocolFlag, 'createdAt'>
+) => {
+  try {
+    const protocol = await prisma.protocol.findFirst({ where: { id } })
+    const protocol_flags = protocol?.flags || []
+
+    // Check if the flag already exists
+    const existingFlagIndex = protocol_flags.findIndex(
+      (f) => f.flagName === flag.flagName
+    )
+
+    let updatedFlags
+    if (existingFlagIndex !== -1) {
+      // Update the existing flag
+      updatedFlags = [...protocol_flags]
+      updatedFlags[existingFlagIndex] = {
+        ...updatedFlags[existingFlagIndex],
+        ...flag,
+      }
+    } else {
+      // Add the new flag
+      updatedFlags = [...protocol_flags, flag]
+    }
+
+    // Update the protocol with the new flags
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id },
+      data: { flags: updatedFlags },
+    })
+
+    return updatedProtocol
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 const patchProtocolNumber = async (id: string, protocolNumber: string) =>
   await prisma.protocol.update({
     where: { id },
@@ -106,6 +177,28 @@ const patchProtocolNumber = async (id: string, protocolNumber: string) =>
 
 const createProtocol = async (data: Protocol) => {
   try {
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    // Parsing the section to have correct formats
+    data.sections.identification.team = IdentificationTeamSchema.array().parse(
+      data.sections.identification.team
+    )
+
+    // Indexing the amounts
+    data.sections.budget.expenses.forEach((expenseType) => {
+      expenseType.data.forEach((expense) => {
+        expense.amount = parseFloat(expense.amount as any)
+        expense.amountIndex = {
+          FCA: expense.amount / currentFCA,
+          FMR: expense.amount / currentFMR,
+        }
+      })
+    })
+
+    data.sections.bibliography.chart.forEach((ref) => {
+      ref.year = parseInt(ref.year as any)
+    })
+
     const protocol = await prisma.protocol.create({
       data,
     })
@@ -446,4 +539,5 @@ export {
   getProtocolsByRol,
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
+  upsertProtocolFlag,
 }

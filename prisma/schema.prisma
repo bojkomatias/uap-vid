@@ -7,6 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ChatMessage {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  thread     String //This is to separate multiple threads into a single protocol 
+  createdAt  DateTime @default(now())
+  read       Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @db.ObjectId
+  protocolId String   @db.ObjectId
+  protocol   Protocol @relation(fields: [protocolId], references: [id])
+}
+
 model AcademicUnit {
   id                          String               @id @default(auto()) @map("_id") @db.ObjectId
   name                        String
@@ -17,13 +29,21 @@ model AcademicUnit {
   AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
   academicUnitAnualBudgetsIds String[]             @db.ObjectId
   TeamMembers                 TeamMember[]
+  Careers                     Career[]
 }
 
 type AcademicUnitBudget {
-  amount      Float /// @deprecated use `amountIndex` instead
+  amount      Float? /// @deprecated use `amountIndex` instead
   from        DateTime
   to          DateTime?
-  amountIndex AmountIndex?
+  amountIndex AmountIndex
+}
+
+model EmailContentTemplate {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  useCase String
+  subject String
+  content String
 }
 
 model Convocatory {
@@ -55,11 +75,20 @@ model Protocol {
   state          ProtocolState    @default(DRAFT)
   reviews        Review[]
   sections       ProtocolSections
-  convocatory    Convocatory      @relation(fields: [convocatoryId], references: [id])
-  convocatoryId  String           @db.ObjectId
+  convocatory    Convocatory?     @relation(fields: [convocatoryId], references: [id])
+  convocatoryId  String?          @db.ObjectId
   anualBudgets   AnualBudget[]
   anualBudgetIds String[]
   logs           Logs[]
+  ChatMessage    ChatMessage[]
+  flags          ProtocolFlag[]
+}
+
+type ProtocolFlag {
+  flagName  String
+  state     Boolean  @default(false)
+  comment   String?
+  createdAt DateTime @default(now()) @db.Date
 }
 
 model User {
@@ -67,6 +96,7 @@ model User {
   email           String         @unique
   lastLogin       DateTime?      @db.Date
   name            String
+  dni             Int?
   password        String?
   image           String?
   role            Role           @default(RESEARCHER)
@@ -76,6 +106,7 @@ model User {
   protocols       Protocol[]
   memberDetails   TeamMember?
   logs            Logs[]
+  chat_messages   ChatMessage[]
 }
 
 model TeamMember {
@@ -106,7 +137,7 @@ model TeamMemberCategory {
   state                      Boolean?
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
-  priceIndex                 AmountIndex? //FCA or FMR
+  amountIndex                AmountIndex //FCA or FMR
 }
 
 /// @deprecated this won't be needed after indexing the whole app.
@@ -118,17 +149,17 @@ type HistoricCategoryPrice {
 }
 
 model Review {
-  id         String           @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @default(now())
+  id         String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @default(now())
   type       ReviewType
-  questions  ReviewQuestion[]
-  revised    Boolean          @default(false)
-  verdict    ReviewVerdict    @default(NOT_REVIEWED)
-  reviewerId String           @db.ObjectId
-  reviewer   User             @relation(fields: [reviewerId], references: [id])
-  protocolId String           @db.ObjectId
-  protocol   Protocol         @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  questions  ReviewQuestionType[]
+  revised    Boolean              @default(false)
+  verdict    ReviewVerdict        @default(NOT_REVIEWED)
+  reviewerId String               @db.ObjectId
+  reviewer   User                 @relation(fields: [reviewerId], references: [id])
+  protocolId String               @db.ObjectId
+  protocol   Protocol             @relation(fields: [protocolId], references: [id], onDelete: Cascade)
 }
 
 model AnualBudget {
@@ -179,15 +210,17 @@ model Index {
 }
 
 model Career {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
-  name   String
-  active Boolean  @default(true)
-  Course Course[]
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  active         Boolean       @default(true)
+  courses        Course[]
+  academicUnitId String?       @db.ObjectId
+  AcademicUnit   AcademicUnit? @relation(fields: [academicUnitId], references: [id])
 }
 
 model Course {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
+  name     String  @unique
   active   Boolean @default(true)
   career   Career  @relation(fields: [careerId], references: [id])
   careerId String  @db.ObjectId
@@ -206,10 +239,17 @@ type Execution {
   academicUnitId String
 }
 
-type ReviewQuestion {
+type ReviewQuestionType {
   id       String
   approved Boolean
   comment  String?
+}
+
+model ReviewQuestion {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  question String
+  active   Boolean
+  type     String
 }
 
 type ProtocolSections {
@@ -243,7 +283,7 @@ type ProtocolSectionsBudgetExpenses {
 }
 
 type ProtocolSectionsBudgetExpensesData {
-  amount      Float /// @deprecated use `amountIndex` instead
+  amount      Float /// @description use `amountIndex`, 'amount' is still used to save the data
   amountIndex AmountIndex
   detail      String
   year        String
@@ -278,7 +318,7 @@ type ProtocolSectionsIdentification {
   assignment      String? /// @deprecated use courseId instead
   courseId        String?                              @db.ObjectId
   career          String? /// @deprecated use careerId instead
-  careerId        String?                              @db.ObjectId
+  careerId        String                               @db.ObjectId
   sponsor         String[] /// @deprecated use academicUnitIds instead
   academicUnitIds String[]                             @db.ObjectId
   team            ProtocolSectionsIdentificationTeam[]
@@ -397,4 +437,7 @@ enum Access {
   MEMBER_CATEGORIES
   ANUAL_BUDGETS
   INDEXES
+  CAREERS
+  EVALUATIONS
+  EMAILS
 }

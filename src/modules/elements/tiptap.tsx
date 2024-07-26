@@ -1,4 +1,5 @@
 'use client'
+
 import TextAlign from '@tiptap/extension-text-align'
 import type { Editor } from '@tiptap/react'
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -41,7 +42,7 @@ const Tiptap = ({
     ],
     editorProps: {
       attributes: {
-        class: 'pt-4 input min-h-[10rem] focus:outline-0 bg-white',
+        class: 'pt-8 input min-h-[10rem] focus:outline-0 bg-white',
       },
     },
     content: value,
@@ -74,7 +75,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border  bg-gray-100 px-0.5 ">
+    <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border bg-gray-100 px-0.5 ">
       {/* Mark text */}
       <button
         type="button"

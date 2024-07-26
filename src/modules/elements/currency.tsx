@@ -1,7 +1,8 @@
 import React from 'react'
-import { Badge } from './badge'
+
 import { currencyFormatter } from '@utils/formatters'
 import { cx } from '@utils/cx'
+import { Badge } from '@components/badge'
 
 export default function Currency({
   amount = 0,
