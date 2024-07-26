@@ -1,6 +1,6 @@
 'use client'
 
-import type { AcademicUnit, Execution } from '@prisma/client'
+import type { AcademicUnit, AmountIndex, Execution } from '@prisma/client'
 import { Button } from '@elements/button'
 
 import { Currency } from '@shared/currency'
@@ -13,6 +13,9 @@ import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Strong } from '@components/text'
+import { subtractAmountIndex, sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import { useQuery } from '@tanstack/react-query'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
 export default function BudgetExecutionView({
   title,
@@ -29,20 +32,26 @@ export default function BudgetExecutionView({
 }: {
   title: string
   itemName: string
-  remaining: number
+  remaining: AmountIndex
   executions: Execution[]
   positionIndex: number
   executionType: ExecutionType
-  obrero?: { pointsObrero: number; pointPrice: number; hourlyRate: number }
+  obrero?: { pointsObrero: number; pointPrice: AmountIndex; hourlyRate: AmountIndex }
   anualBudgetTeamMemberId?: string
   academicUnits?: AcademicUnit[]
-  maxAmountPerAcademicUnit?: number
+  maxAmountPerAcademicUnit?: AmountIndex
   allExecutions?: Execution[]
 }) {
   const [opened, setOpened] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedAcademicUnit, setSelectedAcademicUnit] =
     useState<AcademicUnit>()
+
+  const { data:priceData } = useQuery({
+    queryKey: ['indexes'],
+    queryFn: async () => await getCurrentIndexes(),
+  })
+  
   useEffect(() => {
     if (!academicUnits) return
     setSelectedAcademicUnit(academicUnits[0])
@@ -57,19 +66,20 @@ export default function BudgetExecutionView({
         )
       })
   const executionAmountByAcademicUnit = useMemo(() => {
-    if (!allExecutions) return 0
+    if (!allExecutions) return ZeroAmountIndex
     return allExecutions
       .filter(
         (execution) => execution.academicUnitId === selectedAcademicUnit?.id
       )
       .reduce((acc, curr) => {
-        return acc + curr.amount
-      }, 0)
+        acc = sumAmountIndex([acc, curr.amountIndex ?? ZeroAmountIndex])
+        return acc
+      }, { FCA: 0, FMR: 0 } as AmountIndex)
   }, [allExecutions, selectedAcademicUnit])
 
   const maxExecutionAmount = useMemo(() => {
     if (!maxAmountPerAcademicUnit) return remaining
-    return maxAmountPerAcademicUnit - executionAmountByAcademicUnit
+    return subtractAmountIndex(maxAmountPerAcademicUnit,executionAmountByAcademicUnit)
   }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
   return (
     <>
@@ -102,16 +112,16 @@ export default function BudgetExecutionView({
                   Puntos: {obrero.pointsObrero}
                 </p>
                 <p className="text-sm font-semibold text-gray-600">
-                  Precio Punto: ${obrero.pointPrice}
+                  Precio Punto: <Currency amountIndex={obrero.pointPrice} />
                 </p>
                 <p className="text-sm font-semibold text-gray-600">
-                  Precio Hora: ${obrero.hourlyRate}
+                  Precio Hora: <Currency amountIndex={obrero.hourlyRate} />  
                 </p>
               </div>
             )}
           </div>
           <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
-            {remaining > 0 ?
+            {remaining !== ZeroAmountIndex ?
               <>
                 <h1 className="text-xl font-semibold">Nueva Ejecución:</h1>
                 {academicUnits ?
@@ -119,15 +129,11 @@ export default function BudgetExecutionView({
                     <div className="flex flex-col items-start gap-2">
                       <p className="text-sm font-semibold text-gray-600">
                         Presupuesto asignado: $
-                        {currencyFormatter.format(
-                          maxAmountPerAcademicUnit ?? 0
-                        )}
+                        <Currency amountIndex={maxAmountPerAcademicUnit ?? ZeroAmountIndex} />
                       </p>
                       <p className="text-sm font-semibold text-gray-600">
                         Presupuesto utilizado: $
-                        {currencyFormatter.format(
-                          executionAmountByAcademicUnit
-                        )}
+                        <Currency amountIndex={executionAmountByAcademicUnit ?? ZeroAmountIndex} />
                       </p>
                     </div>
                     <Combobox
@@ -219,7 +225,7 @@ export default function BudgetExecutionView({
                 : null}
                 <BudgetNewExecution
                   academicUnit={selectedAcademicUnit}
-                  maxAmount={maxExecutionAmount}
+                  maxAmount={priceData ? maxExecutionAmount.FCA * priceData.currentFCA : 0}
                   anualBudgetTeamMemberId={anualBudgetTeamMemberId}
                   executionType={executionType}
                   budgetItemPositionIndex={positionIndex}
@@ -254,7 +260,10 @@ export default function BudgetExecutionView({
                             </td>
                             <td className="pt-2">
                               <Strong>
-                                {currencyFormatter.format(execution.amount)}
+                                {execution.amountIndex 
+                                ? <Currency amountIndex={execution.amountIndex ?? ZeroAmountIndex} />
+                                : currencyFormatter.format(execution.amount ?? 0)
+                                }
                               </Strong>
                             </td>
                           </tr>

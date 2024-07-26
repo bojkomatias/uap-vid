@@ -3,13 +3,14 @@ import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
+import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
-import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
 import { useRouter } from 'next/navigation'
+import { Currency } from '@shared/currency'
+import { divideAmountIndex, subtractAmountIndex, sumAmountIndex } from '@utils/amountIndex'
 
 export function BudgetItems({
   budgetId,
@@ -22,8 +23,8 @@ export function BudgetItems({
   budgetId: string
   editable: boolean
   budgetItems: AnualBudgetItem[]
-  ABIe: number
-  ABIr: number
+  ABIe: AmountIndex
+  ABIr: AmountIndex
   academicUnits: AcademicUnit[]
 }) {
   const router = useRouter()
@@ -132,7 +133,7 @@ export function BudgetItems({
           </thead>
           <tbody>
             {budgetItems.map(
-              ({ detail, type, amount, remaining, executions }, i) => (
+              ({ detail, type, amountIndex:amount, remainingIndex:remaining, executions }, i) => (
                 <tr key={i} className="border-b border-gray-200 text-gray-600">
                   <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
                     <div className="font-medium text-gray-700">{detail}</div>
@@ -144,7 +145,7 @@ export function BudgetItems({
                       !editable && 'table-cell'
                     )}
                   >
-                    ${currencyFormatter.format(remaining)}
+                    <Currency amountIndex={remaining} />
                   </td>
                   <td
                     className={cx(
@@ -152,7 +153,7 @@ export function BudgetItems({
                       !editable && 'table-cell'
                     )}
                   >
-                    ${currencyFormatter.format(amount - remaining)}
+                    <Currency amountIndex={subtractAmountIndex(amount, remaining)} />
                   </td>
                   <td
                     className={cx(
@@ -172,15 +173,16 @@ export function BudgetItems({
                   </td>
 
                   <td className="table-cell px-3 py-5 text-right text-sm">
-                    ${currencyFormatter.format(amount)}
+                    <Currency amountIndex={amount} />
                   </td>
                   <td className={cx('hidden', !editable && 'table-cell')}>
                     <BudgetExecutionView
                       academicUnits={academicUnits}
                       maxAmountPerAcademicUnit={
-                        budgetItems
-                          .map((bi) => bi.amount)
-                          .reduce((a, b) => a + b, 0) / academicUnits.length
+                        divideAmountIndex(
+                          sumAmountIndex(budgetItems.map((bi) => bi.amountIndex)),
+                          academicUnits.length
+                        )
                       }
                       allExecutions={budgetItems
                         .map((bi) => bi.executions)
@@ -209,7 +211,7 @@ export function BudgetItems({
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
                 {!editable ?
-                  <>${currencyFormatter.format(ABIe)}</>
+                  <Currency amountIndex={ABIe} />
                 : '-'}
               </td>
             </tr>
@@ -222,7 +224,7 @@ export function BudgetItems({
                 Restante
               </th>
               <td className="px-3 pt-4 text-right text-sm text-gray-500">
-                ${currencyFormatter.format(ABIr)}
+                <Currency amountIndex={ABIr} />
               </td>
             </tr>
             <tr>
@@ -234,7 +236,7 @@ export function BudgetItems({
                 Total
               </th>
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
-                ${currencyFormatter.format(ABIr + ABIe)}
+                <Currency amountIndex={sumAmountIndex([ABIe, ABIr])} />
               </td>
             </tr>
           </tfoot>
