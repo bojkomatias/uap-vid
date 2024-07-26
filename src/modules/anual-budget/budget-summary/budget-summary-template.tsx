@@ -6,6 +6,7 @@ import BudgetCardDoughnut from './budget-card-doughnut'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
+import type { AmountIndex } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import useBudgetSummary from 'hooks/budgetSummaryHook'
 
@@ -46,21 +47,30 @@ export const BudgetSummary = ({
             </dt>
             <dd className="relative mt-1 block items-baseline justify-between lg:flex">
               <div className="flex items-baseline text-2xl font-semibold text-black/70">
-                ${currencyFormatter.format(item.total)}
+                ${currencyFormatter.format((item.total as AmountIndex).FCA)}
                 {item.of ?
                   <span className="ml-2 text-sm font-medium text-gray-500">
-                    de ${item.of ? currencyFormatter.format(item.of) : 0}
+                    de $
+                    {item.of ?
+                      currencyFormatter.format((item.of as AmountIndex).FCA)
+                    : 0}
                   </span>
                 : null}
               </div>
               {item.indicator === 'number' ?
-                <BudgetCardDelta delta={item.delta} />
+                <BudgetCardDelta delta={item.delta as AmountIndex} />
               : null}
 
               {item.indicator === 'graph' ?
+                // TODO: Change FCA o FMR
                 <BudgetCardDoughnut
                   percentage={
-                    item.of ? ((item.total / item.of) * 100).toFixed(1) : '0'
+                    item.of ?
+                      (
+                        (item.total.FCA / (item.of as AmountIndex).FCA) *
+                        100
+                      ).toFixed(1)
+                    : '0'
                   }
                 />
               : null}
