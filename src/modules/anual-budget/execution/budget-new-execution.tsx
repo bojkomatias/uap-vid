@@ -5,15 +5,15 @@ import {
 } from '@actions/anual-budget/action'
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnit } from '@prisma/client'
 import { ExecutionType } from '@utils/anual-budget'
-import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useTransition } from 'react'
 import { z } from 'zod'
+import { FormInput } from '@shared/form/form-input'
+import { parseLocaleNumber } from '@elements/currency-input'
 
 const BudgetNewExecution = ({
   academicUnit,
@@ -39,9 +39,9 @@ const BudgetNewExecution = ({
     },
     validate: zodResolver(
       z.object({
-        amount: z
+        amount: z.coerce
           .number()
-          .min(0, { message: 'El valor debe ser mayor a 0' })
+          .min(1, { message: 'El valor debe ser mayor a 0' })
           .max(maxAmount, {
             message: `Monto restante: $${
               !maxAmount ? 0 : currencyFormatter.format(maxAmount)
@@ -83,25 +83,21 @@ const BudgetNewExecution = ({
       })
     }
   }
+  const updateOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    form.setFieldValue('amount', parseLocaleNumber(e.target.value, 'es-AR'))
+  }
   return (
     <form className="flex items-baseline gap-2">
-      <div className="flex flex-col ">
-        <CurrencyInput
-          maxAmount={maxAmount}
-          defaultPrice={0}
-          className={cx(
-            'min-w-[7rem] rounded-md py-2.5 text-xs',
-            !form.isValid('amount') && 'border-error-200 bg-error-50'
-          )}
-          priceSetter={(e) => form.setFieldValue('amount', e)}
-        />
-        <p className="mt-2 text-xs text-error-500">
-          {form.getInputProps('amount').error}
-        </p>
-      </div>
+      <FormInput
+        className="flex flex-row items-center gap-2"
+        type="number"
+        label="Monto"
+        {...form.getInputProps('amount')}
+        onBlur={updateOnBlur}
+      />
 
       <Button
-        className="py-2.5 text-xs shadow-sm"
+        className=" py-2.5 text-xs shadow-sm"
         intent="secondary"
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}

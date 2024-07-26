@@ -13,7 +13,11 @@ import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { Strong } from '@components/text'
-import { subtractAmountIndex, sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import {
+  subtractAmountIndex,
+  sumAmountIndex,
+  ZeroAmountIndex,
+} from '@utils/amountIndex'
 import { useQuery } from '@tanstack/react-query'
 import { getCurrentIndexes } from '@repositories/finance-index'
 
@@ -36,7 +40,11 @@ export default function BudgetExecutionView({
   executions: Execution[]
   positionIndex: number
   executionType: ExecutionType
-  obrero?: { pointsObrero: number; pointPrice: AmountIndex; hourlyRate: AmountIndex }
+  obrero?: {
+    pointsObrero: number
+    pointPrice: AmountIndex
+    hourlyRate: AmountIndex
+  }
   anualBudgetTeamMemberId?: string
   academicUnits?: AcademicUnit[]
   maxAmountPerAcademicUnit?: AmountIndex
@@ -47,11 +55,11 @@ export default function BudgetExecutionView({
   const [selectedAcademicUnit, setSelectedAcademicUnit] =
     useState<AcademicUnit>()
 
-  const { data:priceData } = useQuery({
+  const { data: priceData } = useQuery({
     queryKey: ['indexes'],
     queryFn: async () => await getCurrentIndexes(),
   })
-  
+
   useEffect(() => {
     if (!academicUnits) return
     setSelectedAcademicUnit(academicUnits[0])
@@ -71,15 +79,21 @@ export default function BudgetExecutionView({
       .filter(
         (execution) => execution.academicUnitId === selectedAcademicUnit?.id
       )
-      .reduce((acc, curr) => {
-        acc = sumAmountIndex([acc, curr.amountIndex ?? ZeroAmountIndex])
-        return acc
-      }, { FCA: 0, FMR: 0 } as AmountIndex)
+      .reduce(
+        (acc, curr) => {
+          acc = sumAmountIndex([acc, curr.amountIndex ?? ZeroAmountIndex])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
   }, [allExecutions, selectedAcademicUnit])
 
   const maxExecutionAmount = useMemo(() => {
     if (!maxAmountPerAcademicUnit) return remaining
-    return subtractAmountIndex(maxAmountPerAcademicUnit,executionAmountByAcademicUnit)
+    return subtractAmountIndex(
+      maxAmountPerAcademicUnit,
+      executionAmountByAcademicUnit
+    )
   }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
   return (
     <>
@@ -115,7 +129,7 @@ export default function BudgetExecutionView({
                   Precio Punto: <Currency amountIndex={obrero.pointPrice} />
                 </p>
                 <p className="text-sm font-semibold text-gray-600">
-                  Precio Hora: <Currency amountIndex={obrero.hourlyRate} />  
+                  Precio Hora: <Currency amountIndex={obrero.hourlyRate} />
                 </p>
               </div>
             )}
@@ -127,13 +141,21 @@ export default function BudgetExecutionView({
                 {academicUnits ?
                   <>
                     <div className="flex flex-col items-start gap-2">
-                      <p className="text-sm font-semibold text-gray-600">
-                        Presupuesto asignado: $
-                        <Currency amountIndex={maxAmountPerAcademicUnit ?? ZeroAmountIndex} />
+                      <p className="gap-2 text-sm font-semibold text-gray-600">
+                        Presupuesto asignado:
+                        <Currency
+                          amountIndex={
+                            maxAmountPerAcademicUnit ?? ZeroAmountIndex
+                          }
+                        />
                       </p>
-                      <p className="text-sm font-semibold text-gray-600">
-                        Presupuesto utilizado: $
-                        <Currency amountIndex={executionAmountByAcademicUnit ?? ZeroAmountIndex} />
+                      <p className="gap-2 text-sm font-semibold text-gray-600">
+                        Presupuesto utilizado:
+                        <Currency
+                          amountIndex={
+                            executionAmountByAcademicUnit ?? ZeroAmountIndex
+                          }
+                        />
                       </p>
                     </div>
                     <Combobox
@@ -225,7 +247,11 @@ export default function BudgetExecutionView({
                 : null}
                 <BudgetNewExecution
                   academicUnit={selectedAcademicUnit}
-                  maxAmount={priceData ? maxExecutionAmount.FCA * priceData.currentFCA : 0}
+                  maxAmount={
+                    priceData ?
+                      maxExecutionAmount.FCA * priceData.currentFCA
+                    : 0
+                  }
                   anualBudgetTeamMemberId={anualBudgetTeamMemberId}
                   executionType={executionType}
                   budgetItemPositionIndex={positionIndex}
@@ -260,9 +286,15 @@ export default function BudgetExecutionView({
                             </td>
                             <td className="pt-2">
                               <Strong>
-                                {execution.amountIndex 
-                                ? <Currency amountIndex={execution.amountIndex ?? ZeroAmountIndex} />
-                                : currencyFormatter.format(execution.amount ?? 0)
+                                {execution.amountIndex ?
+                                  <Currency
+                                    amountIndex={
+                                      execution.amountIndex ?? ZeroAmountIndex
+                                    }
+                                  />
+                                : currencyFormatter.format(
+                                    execution.amount ?? 0
+                                  )
                                 }
                               </Strong>
                             </td>
