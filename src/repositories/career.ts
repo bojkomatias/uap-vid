@@ -14,11 +14,17 @@ export const getAllForReal = async () => {
   }
 }
 
-export const getActiveCarrersForForm = cache(async () => {
-  return await prisma.career.findMany({
-    where: { active: true },
-    select: { id: true, name: true },
-  })
+export const getActiveCareersForForm = cache(async () => {
+  try {
+    console.log('TRY DE CAREERS')
+    return await prisma.career.findMany({
+      where: { active: true },
+      select: { id: true, name: true },
+    })
+  } catch (e) {
+    console.error(e)
+    return []
+  }
 })
 
 export const getCoursesByCareerId = cache(async (id: string) => {
