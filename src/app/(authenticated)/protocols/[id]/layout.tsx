@@ -55,9 +55,9 @@ async function Layout({
         {modal}
       </div>
 
-      <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x print:py-2">
+      <div className="relative z-0 flex flex-col-reverse gap-10 py-6 lg:flex-row lg:gap-2 lg:divide-x print:block print:py-2 ">
         <div className="w-full">{children}</div>
-        {reviews}
+        <div className="print:hidden">{reviews}</div>
       </div>
     </>
   )

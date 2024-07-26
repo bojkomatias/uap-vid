@@ -72,17 +72,17 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
         <div
           key={index}
           className={cx(
-            'first:place-self-start ',
+            'text-wrap first:place-self-start',
             data.length > 1 && 'last:place-self-end last:text-right'
           )}
         >
           {item.inverted ?
             <>
-              <Strong>{item.up}</Strong>
+              <Strong className="!break-all">{item.up}</Strong>
               <Text>{item.down}</Text>
             </>
           : <>
-              <Strong>{item.up}</Strong>
+              <Strong className="!break-all">{item.up}</Strong>
               <Text>{item.down}</Text>
             </>
           }
