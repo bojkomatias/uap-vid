@@ -10,9 +10,9 @@ import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { AnualBudgetState } from '@prisma/client'
 import { Heading } from '@components/heading'
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Budget({ params }: { params: { id: string } }) {
   const anualBudget = await getAnualBudgetById(params.id)
-  if (!anualBudget) redirect('/anual-budgets')
+  if (!anualBudget) redirect('/')
 
   const { budgetItems, budgetTeamMembers, protocol, ...rest } = anualBudget
 
