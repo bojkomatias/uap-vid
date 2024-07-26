@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           {/* If remainings are 0 then budget is finished */}
           {(
             meta.state === AnualBudgetState.APPROVED &&
-            (calculations.ABIr !== 0 || calculations.ABTr !== 0)
+            (calculations.ABIr.FCA !== 0 || calculations.ABTr.FCA !== 0)
           ) ?
             <InterruptAnualBudget id={meta.id} protocolId={meta.protocolId} />
           : null}

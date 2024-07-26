@@ -1,5 +1,4 @@
 'use client'
-import { currencyFormatter } from '@utils/formatters'
 import type { BudgetSummaryType } from '@actions/anual-budget/action'
 import BudgetCardDelta from './budget-card-delta'
 import BudgetCardDoughnut from './budget-card-doughnut'
@@ -9,6 +8,7 @@ import { cx } from '@utils/cx'
 import type { AmountIndex } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import useBudgetSummary from 'hooks/budgetSummaryHook'
+import { Currency } from '@shared/currency'
 
 export const BudgetSummary = ({
   summary,
@@ -46,23 +46,23 @@ export const BudgetSummary = ({
               )}
             </dt>
             <dd className="relative mt-1 block items-baseline justify-between lg:flex">
-              <div className="flex items-baseline text-2xl font-semibold text-black/70">
-                ${currencyFormatter.format((item.total as AmountIndex).FCA)}
+              <div className="flex flex-col items-baseline text-2xl font-semibold text-black/70">
+                <Currency amountIndex={item.total} />
                 {item.of ?
-                  <span className="ml-2 text-sm font-medium text-gray-500">
-                    de $
+                  <span className="self-end ml-2 text-sm font-medium text-gray-500">
+                    de
                     {item.of ?
-                      currencyFormatter.format((item.of as AmountIndex).FCA)
+                <Currency amountIndex={item.of} />
                     : 0}
                   </span>
                 : null}
               </div>
               {item.indicator === 'number' ?
-                <BudgetCardDelta delta={item.delta as AmountIndex} />
+                <BudgetCardDelta delta={item.delta} />
               : null}
 
               {item.indicator === 'graph' ?
-                // TODO: Change FCA o FMR
+                // All the indexes must be percentually the same
                 <BudgetCardDoughnut
                   percentage={
                     item.of ?

@@ -287,7 +287,7 @@ const getAcademicUnitBudgetSummary = (
       ]
     : [ZeroAmountIndex, ZeroAmountIndex]
 
-  if (!actual) return { value: 0, delta: 0, changeDate: '' }
+  if (!actual) return { value: ZeroAmountIndex, delta: ZeroAmountIndex, changeDate: '' }
 
   // Calculate a delta value between the actual and the previous budget in the same year
   const deltaValue =

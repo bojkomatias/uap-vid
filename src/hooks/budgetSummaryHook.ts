@@ -1,5 +1,5 @@
 import type { BudgetSummaryType } from '@actions/anual-budget/action'
-import { divideAmountIndexByAmountIndex } from '@utils/amountIndex'
+import { divideAmountIndexByAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
 import { useMemo, useState } from 'react'
 
 export default function useBudgetSummary({
@@ -17,7 +17,7 @@ export default function useBudgetSummary({
           allAcademicUnits ? 'Presupuesto total' : (
             'Presupuesto de la Unidad Académica'
           ),
-        total: summary?.academicUnitBudgetSummary.value ?? 0,
+        total: summary?.academicUnitBudgetSummary.value ?? ZeroAmountIndex,
         delta: summary?.academicUnitBudgetSummary.delta,
         indicator: 'number',
       },
@@ -26,18 +26,18 @@ export default function useBudgetSummary({
         total:
           approved ?
             summary?.projectedBudgetSummaryApproved?.value
-          : summary.projectedBudgetSummary.value ?? 0,
-        of: summary?.academicUnitBudgetSummary.value ?? 0,
-        delta: summary.projectedBudgetSummary.delta ?? 0,
+          : summary.projectedBudgetSummary.value ?? ZeroAmountIndex,
+        of: summary?.academicUnitBudgetSummary.value ?? ZeroAmountIndex,
+        delta: summary.projectedBudgetSummary.delta ?? ZeroAmountIndex,
         indicator: 'number',
       },
       {
         name: 'Consumo ejecutado',
-        total: summary?.spendedBudget ?? 0,
+        total: summary?.spendedBudget ?? ZeroAmountIndex,
         of:
           approved ?
             summary?.projectedBudgetSummaryApproved?.value
-          : summary.projectedBudgetSummary.value ?? 0,
+          : summary.projectedBudgetSummary.value ?? ZeroAmountIndex,
         delta:
           approved ?
             divideAmountIndexByAmountIndex(
