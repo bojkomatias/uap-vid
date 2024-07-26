@@ -39,7 +39,7 @@ export function DescriptionDetails({
       {...props}
       className={clsx(
         className,
-        'max-w-3xl pb-3 pt-1 text-gray-950 dark:text-white sm:border-t sm:border-gray-950/5 sm:py-3 dark:sm:border-white/5 print:max-w-2xl sm:[&:nth-child(2)]:border-none'
+        'pb-3 pt-1 text-gray-950 dark:text-white sm:border-t sm:border-gray-950/5 sm:py-3 dark:sm:border-white/5 print:max-w-2xl sm:[&:nth-child(2)]:border-none'
       )}
     />
   )
