@@ -22,11 +22,11 @@ export function IdentificationForm() {
 
   const { data: academicUnits } = useQuery({
     queryKey: ['academic-units'],
-    queryFn: getAcademicUnitsNameAndShortname,
+    queryFn: async () => await getAcademicUnitsNameAndShortname(),
   })
   const { data: careers } = useQuery({
     queryKey: ['careers'],
-    queryFn: getActiveCarrersForForm,
+    queryFn: async () => await getActiveCarrersForForm(),
   })
 
   const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(
