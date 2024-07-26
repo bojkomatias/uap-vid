@@ -7,7 +7,7 @@ export enum useCases {
   changeUserEmail = 'changeUserEmail',
 }
 
-export const useCasesDictionary = {
+export const useCasesDictionary: { [key: string]: string } = {
   onReview: 'Evaluación de protocolo',
   onRevised: 'Corrección de protocolo',
   onAssignation: 'Asignación de evaluador',
