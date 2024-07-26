@@ -324,18 +324,22 @@ async function main() {
       }, {})
 
     async function update_reviews() {
-      const updated_reviews = reviews.map((review) => {
-        return {
-          ...review,
-          questions: review.questions.map((q) => {
-            return { ...q, id: question_id_dictionary[q.id] }
-          }),
-        }
-      })
+      const bulkOps = reviews.map((review) => ({
+        updateOne: {
+          filter: { _id: review._id },
+          update: {
+            $set: {
+              questions: review.questions.map((q) => ({
+                ...q,
+                id: question_id_dictionary[q.id],
+              })),
+            },
+          },
+        },
+      }))
+      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
 
-      const update_reviews_result =
-        await review_collection.updateMany(updated_reviews)
-      console.log('Operation result: ', update_reviews_result)
+      console.log('Operation result: ', updated_reviews_result)
     }
 
     await create_review_questions()
