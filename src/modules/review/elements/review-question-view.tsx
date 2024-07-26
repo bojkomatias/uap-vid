@@ -10,6 +10,7 @@ export default function ReviewQuestionView({
   index,
   questions,
 }: ReviewQuestionType & { index: number; questions: ReviewQuestion[] }) {
+  console.log('--->', id, questions)
   return (
     <div>
       <div className="flex items-start">
