@@ -83,7 +83,6 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
     Action.ASSIGN_TO_METHODOLOGIST,
     Action.EDIT,
     Action.DISCONTINUE,
-    Action.DELETE,
   ],
   [ProtocolState.METHODOLOGICAL_EVALUATION]: [
     Action.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation

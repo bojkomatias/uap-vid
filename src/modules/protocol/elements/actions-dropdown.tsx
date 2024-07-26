@@ -20,6 +20,7 @@ import { useTransition, type ReactNode } from 'react'
 import {
   Badge,
   ChevronDown,
+  ClockPause,
   Edit,
   FileDollar,
   FileTime,
@@ -32,6 +33,7 @@ type ActionOption = {
   action: Action
   icon: ReactNode
   callback: () => void
+  color?: string
 }
 
 export function ActionsDropdown({
@@ -39,18 +41,21 @@ export function ActionsDropdown({
   protocolId,
   protocolState,
   userId,
-  canEdit,
 }: {
   actions: Action[]
   protocolId: string
   protocolState: ProtocolState
   userId: string
-  canEdit: boolean
 }) {
   const router = useRouter()
   const [isPending, startTranstion] = useTransition()
 
-  const actionsToOptions: ActionOption[] = [
+  const actionsToOptions: (ActionOption | 'divider')[] = [
+    {
+      action: Action.EDIT,
+      callback: async () => router.push(`/protocols/${protocolId}/0`),
+      icon: <Edit data-slot="icon" />,
+    },
     {
       action: Action.PUBLISH,
       callback: async () => {
@@ -118,6 +123,7 @@ export function ActionsDropdown({
         router.push(`/generate-budget/${protocolId}`, { scroll: false }),
       icon: <FileDollar data-slot="icon" />,
     },
+    'divider',
     {
       action: Action.FINISH,
       callback: async () => {
@@ -129,7 +135,7 @@ export function ActionsDropdown({
         )
         notifications.show(updated.notification)
       },
-      icon: <Flag2 data-slot="icon" />,
+      icon: <Flag2 data-slot="icon" className="stroke-green-500" />,
     },
     {
       action: Action.DISCONTINUE,
@@ -142,7 +148,7 @@ export function ActionsDropdown({
         )
         notifications.show(updated.notification)
       },
-      icon: <Shape data-slot="icon" />,
+      icon: <ClockPause data-slot="icon" className="stroke-yellow-500" />,
     },
     {
       action: Action.DELETE,
@@ -155,7 +161,7 @@ export function ActionsDropdown({
         )
         notifications.show(updated.notification)
       },
-      icon: <Trash data-slot="icon" />,
+      icon: <Trash data-slot="icon" className="stroke-red-500" />,
     },
   ]
 
@@ -166,35 +172,26 @@ export function ActionsDropdown({
         <ChevronDown data-slot="icon" />
       </DropdownButton>
       <DropdownMenu anchor="bottom end">
-        {canEdit && (
-          <>
-            <DropdownItem
-              disabled={isPending}
-              href={`/protocols/${protocolId}/0`}
-            >
-              <Edit data-slot="icon" />
-              <DropdownLabel>Editar</DropdownLabel>
-            </DropdownItem>
-            <DropdownDivider />
-          </>
-        )}
         {actionsToOptions
-          .filter((a) => actions.includes(a.action))
-          .map((x) => (
-            <DropdownItem
-              key={x.action}
-              disabled={isPending}
-              onClick={() => {
-                if (x.callback) {
-                  x.callback()
-                  startTranstion(() => router.refresh())
-                }
-              }}
-            >
-              {x.icon}
-              <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
-            </DropdownItem>
-          ))}
+          .filter((a) => a == 'divider' || actions.includes(a.action))
+          .map((x, i) =>
+            x !== 'divider' ?
+              <DropdownItem
+                key={i}
+                disabled={isPending}
+                onClick={() => {
+                  if (x.callback) {
+                    x.callback()
+                    startTranstion(() => router.refresh())
+                  }
+                }}
+              >
+                {x.icon}
+                <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
+              </DropdownItem>
+            : i > 0 ? <DropdownDivider key={i} />
+            : null
+          )}
       </DropdownMenu>
     </Dropdown>
   )

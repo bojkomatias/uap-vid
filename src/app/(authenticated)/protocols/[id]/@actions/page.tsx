@@ -20,6 +20,8 @@ export default async function ActionsPage({
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
 
   console.log(actions)
+  // Edit by owner
+  // Accept only if review have correct verdicts
 
   return (
     <>
@@ -28,13 +30,6 @@ export default async function ActionsPage({
         protocolId={protocol.id}
         protocolState={protocol.state}
         userId={session.user.id}
-        canEdit={canExecute(
-          session.user.id === protocol.researcherId ?
-            Action.EDIT_BY_OWNER
-          : Action.EDIT,
-          session.user.role,
-          protocol.state
-        )}
       />
       {canExecute(
         Action.VIEW_ANUAL_BUDGET,
