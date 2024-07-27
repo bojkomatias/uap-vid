@@ -59,27 +59,3 @@ export async function PATCH(
   }
   return NextResponse.json({ success: true })
 }
-
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const token = await getToken({ req: request })
-  // Deleted in in disguise an ProtocolState transition => 'DELETED'
-  const { state } = await request.json()
-
-  const id = params.id
-  const deleted = await updateProtocolStateById(id, ProtocolState.DELETED)
-
-  await logProtocolUpdate({
-    user: token!.user,
-    fromState: state,
-    toState: ProtocolState.DELETED,
-    protocolId: id,
-  })
-
-  if (!deleted)
-    return new Response("We couldn't delete the protocol", { status: 500 })
-
-  return NextResponse.json({ success: true })
-}
