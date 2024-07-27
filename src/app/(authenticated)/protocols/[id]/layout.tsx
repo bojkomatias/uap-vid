@@ -109,6 +109,8 @@ async function Layout({
           {children}
         </div>
       </div>
+
+      <ChatFullComponent user={session.user} protocolId={protocol.id} />
     </>
   )
 }
