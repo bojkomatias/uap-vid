@@ -19,11 +19,11 @@ export default withAuth(
 
     if (req.nextUrl.pathname !== '/' && !token!.user.dni)
       return NextResponse.redirect(new URL('/verify_user_data', req.url))
-    if (req.nextUrl.pathname === '/') {
-      if (token) return NextResponse.redirect(new URL('/protocols', req.url))
+    // if (req.nextUrl.pathname === '/') {
+    //   if (token) return NextResponse.redirect(new URL('/protocols', req.url))
 
-      return null
-    }
+    //   return null
+    // }
 
     if (!token) {
       if (req.nextUrl.pathname.startsWith('/api'))
@@ -101,7 +101,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/',
     '/api/:path*',
     '/protocols/:path*',
     '/convocatories/:path*',
