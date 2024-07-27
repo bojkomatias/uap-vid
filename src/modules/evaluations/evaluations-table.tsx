@@ -40,7 +40,7 @@ export default function EvaluationsTable({
   return (
     <main>
       <div className="grid grid-cols-2 gap-6">
-        <section className="flex flex-col gap-3 rounded-lg border p-3">
+        <section className="flex flex-col gap-3 rounded-lg border p-3 dark:border-gray-700 ">
           <div className="flex justify-between">
             {' '}
             <Heading className=" grow-0 text-primary-950">
@@ -49,7 +49,7 @@ export default function EvaluationsTable({
             <div className="flex items-center gap-3">
               <label
                 htmlFor="inactive-methodological"
-                className="text-xs text-gray-600"
+                className="text-xs text-gray-600 dark:text-gray-400"
               >
                 Mostrar preguntas inactivas
               </label>
@@ -90,7 +90,7 @@ export default function EvaluationsTable({
                       setOpen(true)
                       setQuestionToEdit(q)
                     }}
-                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100' : 'hover:bg-gray-100'}`}
+                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100 dark:bg-red-900/70' : 'hover:bg-gray-100'}`}
                   >
                     {q.question}
                   </Badge>
@@ -99,7 +99,7 @@ export default function EvaluationsTable({
             })}
           </div>
         </section>
-        <section className="flex flex-col gap-3 rounded-lg border p-3">
+        <section className="flex flex-col gap-3 rounded-lg border p-3 dark:border-gray-700">
           <div className="flex justify-between">
             {' '}
             <Heading className=" grow-0 text-primary-950">
@@ -108,7 +108,7 @@ export default function EvaluationsTable({
             <div className="flex items-center gap-3">
               <label
                 htmlFor="inactive-scientific"
-                className="text-xs text-gray-600"
+                className="text-xs text-gray-600 dark:text-gray-400"
               >
                 Mostrar preguntas inactivas
               </label>
@@ -149,7 +149,7 @@ export default function EvaluationsTable({
                       setOpen(true)
                       setQuestionToEdit(q)
                     }}
-                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100' : 'hover:bg-gray-100'}`}
+                    className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100 dark:bg-red-900/70' : 'hover:bg-gray-100'}`}
                   >
                     {q.question}
                   </Badge>

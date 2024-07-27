@@ -17,7 +17,7 @@ import ProtocolLogsDrawer from '../logs/log-drawer'
 import { useQuery } from '@tanstack/react-query'
 import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { Strong, Text } from '@components/text'
-import { getActiveCarrersForForm } from '@repositories/career'
+import { getActiveCareersForForm } from '@repositories/career'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -67,7 +67,7 @@ export default function ProtocolTable({
   })
   const { data: careers } = useQuery({
     queryKey: ['careers'],
-    queryFn: getActiveCarrersForForm,
+    queryFn: getActiveCareersForForm,
   })
 
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(

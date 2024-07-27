@@ -1,100 +1,95 @@
 import { cx } from '@utils/cx'
 import { EmptyStateItem } from './empty-state-item'
 import {
-    DescriptionDetails,
-    DescriptionTerm,
+  DescriptionDetails,
+  DescriptionTerm,
 } from '@components/description-list'
 import { Strong, Text } from '@components/text'
 import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 
 interface DeepValue {
-    groupLabel: string
-    data: ListRowValues[]
+  groupLabel: string
+  data: ListRowValues[]
 }
 interface ItemListProps {
-    data: {
-        title: string
-        values?: ListRowValues[]
-        deepValues?: DeepValue[]
-    }
-    footer?: React.ReactNode
+  data: {
+    title: string
+    values?: ListRowValues[]
+    deepValues?: DeepValue[]
+  }
+  footer?: React.ReactNode
 }
 const ItemListView = ({ data, footer }: ItemListProps) => {
-    return (
-        <>
-            <DescriptionTerm>{data.title}</DescriptionTerm>
-            {data.values && data.values.length > 0 ? (
-                <DescriptionDetails>
-                    {data.values.map((row, index) => (
-                        <Fragment key={index}>
-                            <ListRow data={row} />
-                        </Fragment>
-                    ))}
-                </DescriptionDetails>
-            ) : data.deepValues && data.deepValues.length > 0 ? (
-                <DescriptionDetails>
-                    {data.deepValues.some((e) => e.data.length > 0) ? (
-                        data.deepValues.map((item, i) =>
-                            item.data.length === 0 ? null : (
-                                <Fragment key={i}>
-                                    <Strong>{item.groupLabel}</Strong>
-                                    {item.data.map((row, index) => (
-                                        <ListRow data={row} key={index} />
-                                    ))}
-                                </Fragment>
-                            )
-                        )
-                    ) : (
-                        <EmptyStateItem isOptional />
-                    )}
-                </DescriptionDetails>
-            ) : (
-                <EmptyStateItem />
-            )}
-            {footer}
-        </>
-    )
+  return (
+    <>
+      <DescriptionTerm>{data.title}</DescriptionTerm>
+      {data.values && data.values.length > 0 ?
+        <DescriptionDetails>
+          {data.values.map((row, index) => (
+            <Fragment key={index}>
+              <ListRow data={row} />
+            </Fragment>
+          ))}
+        </DescriptionDetails>
+      : data.deepValues && data.deepValues.length > 0 ?
+        <DescriptionDetails>
+          {data.deepValues.some((e) => e.data.length > 0) ?
+            data.deepValues.map((item, i) =>
+              item.data.length === 0 ?
+                null
+              : <Fragment key={i}>
+                  <Strong>{item.groupLabel}</Strong>
+                  {item.data.map((row, index) => (
+                    <ListRow data={row} key={index} />
+                  ))}
+                </Fragment>
+            )
+          : <EmptyStateItem isOptional />}
+        </DescriptionDetails>
+      : <EmptyStateItem />}
+      {footer}
+    </>
+  )
 }
 export type ListRowValues = {
-    up: string
-    down: string | number | ReactNode
-    inverted?: boolean
+  up: string
+  down: string | number | ReactNode
+  inverted?: boolean
 }[]
 
 const ListRow = ({ data }: { data: ListRowValues }) => {
-    return (
+  return (
+    <div
+      className={cx(
+        'relative grid place-items-center ',
+        data.length == 2 && 'grid-cols-2',
+        data.length == 3 && 'grid-cols-3',
+        data.length == 4 && 'grid-cols-4'
+      )}
+    >
+      {data.map((item, index) => (
         <div
-            className={cx(
-                'relative grid place-items-center ',
-                data.length == 2 && 'grid-cols-2',
-                data.length == 3 && 'grid-cols-3',
-                data.length == 4 && 'grid-cols-4'
-            )}
+          key={index}
+          className={cx(
+            'text-wrap first:place-self-start',
+            data.length > 1 && 'last:place-self-end last:text-right'
+          )}
         >
-            {data.map((item, index) => (
-                <div
-                    key={index}
-                    className={cx(
-                        'first:place-self-start ',
-                        data.length > 1 && 'last:place-self-end last:text-right'
-                    )}
-                >
-                    {item.inverted ? (
-                        <>
-                            <Strong>{item.up}</Strong>
-                            <Text>{item.down}</Text>
-                        </>
-                    ) : (
-                        <>
-                            <Strong>{item.up}</Strong>
-                            <Text>{item.down}</Text>
-                        </>
-                    )}
-                </div>
-            ))}
+          {item.inverted ?
+            <>
+              <Strong className="!break-all">{item.up}</Strong>
+              <Text>{item.down}</Text>
+            </>
+          : <>
+              <Strong className="!break-all">{item.up}</Strong>
+              <Text>{item.down}</Text>
+            </>
+          }
         </div>
-    )
+      ))}
+    </div>
+  )
 }
 
 export default ItemListView

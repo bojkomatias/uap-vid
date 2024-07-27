@@ -1,18 +1,18 @@
-import type { Logs, ProtocolState, User } from '@prisma/client'
+import type { Logs, ProtocolState } from '@prisma/client'
 import { newLog } from '@repositories/log'
 import ProtocolStatesDictionary from './dictionaries/ProtocolStatesDictionary'
 interface LoggerArguments {
-  user: User
+  userId: string
   fromState: ProtocolState
   toState: ProtocolState
   protocolId: string
 }
 export const logProtocolUpdate = async ({
-  user,
+  userId,
   fromState,
   toState,
   protocolId,
 }: LoggerArguments) => {
   const message = `${ProtocolStatesDictionary[fromState]} --> ${ProtocolStatesDictionary[toState]}`
-  await newLog({ message, protocolId, userId: user.id } as Logs)
+  await newLog({ message, protocolId, userId } as Logs)
 }

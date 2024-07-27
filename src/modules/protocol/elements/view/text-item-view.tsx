@@ -17,7 +17,7 @@ const TextItemView = ({ title, content, className }: TextItemProps) => {
       {content ?
         <DescriptionDetails>
           <div
-            className={cx(className, 'prose max-w-none text-sm')}
+            className={cx(className, 'prose max-w-none text-sm !font-normal')}
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </DescriptionDetails>

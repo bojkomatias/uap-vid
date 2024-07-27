@@ -61,7 +61,7 @@ export default function EmailForm({
           id: form.getValues().id!,
         })
       }}
-      className="rounded-lg border p-4"
+      className="rounded-lg border p-4 dark:border-gray-700"
     >
       <Fieldset>
         <FormInput
