@@ -234,7 +234,7 @@ body {
 
 .container {
   --uib-size: 45px;
-  --uib-color: rgb(182, 182, 182);
+  --uib-color: #003c71;
   --uib-speed: 1.75s;
   position: relative;
   height: var(--uib-size);

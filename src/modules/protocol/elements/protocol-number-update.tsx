@@ -41,14 +41,14 @@ export default function ProtocolNumberUpdate({
 
   if (role !== 'ADMIN')
     return (
-      <Badge className="mr-1 flex items-center">
+      <Badge className="mr-1 flex w-fit items-center">
         <Number />
         <Text className="mr-1 mt-0.5 font-medium ">{protocolNumber}</Text>
       </Badge>
     )
 
   return (
-    <Badge className="mr-1 flex items-center">
+    <Badge className="mr-1 flex w-fit items-center">
       <Number />
       <Text className={cx('mt-0.5  font-medium  ')}>{pNumber}</Text>
 

@@ -6,6 +6,7 @@ import ChatFullComponent from 'modules/chat/ChatFullComponent'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import ProtocolMetadata from '@protocol/elements/protocol-metadata'
+import { ContainerAnimations } from '@elements/container-animations'
 
 export default async function Page({ params }: { params: { id: string } }) {
   if (params.id === 'new') redirect('/protocols/new/0')
@@ -19,10 +20,14 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <ProtocolMetadata params={params} />
-      <PDF />
-      <ChatFullComponent user={session!.user} protocolId={protocol.id} />
-      <View sections={protocol.sections} />
+      <ContainerAnimations animation={3}>
+        <ProtocolMetadata params={params} />
+      </ContainerAnimations>
+      <ContainerAnimations animation={2} delay={0.2}>
+        <PDF />
+        <ChatFullComponent user={session!.user} protocolId={protocol.id} />
+        <View sections={protocol.sections} />
+      </ContainerAnimations>
     </>
   )
 }
