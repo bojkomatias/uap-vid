@@ -195,11 +195,7 @@ export function ActionsDropdown({
         <DropdownDivider />
         <DropdownItem
           onClick={() => {
-            const htmlTag = document.querySelector('html')!
-            const isDark = htmlTag.classList.contains('dark')
-            if (isDark) htmlTag.classList.remove('dark')
             window.print()
-            if (isDark) htmlTag.classList.add('dark')
           }}
         >
           <FileDownload data-slot="icon" />
