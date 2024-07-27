@@ -1,3 +1,4 @@
+'use client'
 import {
   Alert,
   AlertActions,
@@ -13,8 +14,8 @@ export default function Info({
   content,
 }: {
   children: React.ReactNode
-  title: string
-  content: string
+  title?: string
+  content: string | React.ReactNode
 }) {
   const [isOpen, setIsOpen] = useState(false)
 
