@@ -15,6 +15,9 @@ import ReviewQuestion from './review-question'
 import { updateReview } from '@repositories/review'
 import { emailer } from '@utils/emailer'
 import { useCases } from '@utils/emailer/use-cases'
+import { Heading } from '@components/heading'
+import { Text } from '@components/text'
+import { Fieldset } from '@components/fieldset'
 
 export default function ReviewForm({
   review,
@@ -74,9 +77,7 @@ export default function ReviewForm({
 
   return (
     <>
-      <h3 className="ml-2 text-lg font-semibold text-gray-900">
-        Realizar revisión
-      </h3>
+      <Heading>Realizar revisión</Heading>
 
       <ReviewProvider form={form}>
         <form
@@ -90,16 +91,17 @@ export default function ReviewForm({
             })
           }}
         >
-          <div className="space-y-3 divide-y overflow-y-auto border-y bg-white px-2 pb-3">
+          <Fieldset>
             {form.values.questions.map((q, index) => (
               <ReviewQuestion
-                questions={questions}
                 key={q.id}
+                questions={questions}
                 index={index}
                 id={q.id}
               />
             ))}
-          </div>
+          </Fieldset>
+
           <RadioGroup {...form.getInputProps('verdict')} className={'mx-2'}>
             <RadioGroup.Label className="label">Veredicto</RadioGroup.Label>
             <div className="-space-y-px bg-white">
