@@ -60,17 +60,13 @@ async function Layout({
 
   return (
     <>
-      <Heading title={protocol.sections.identification.title}>
-        {protocol.sections.identification.title}
-      </Heading>
-
-      <div className="flex w-full flex-col items-start gap-3 lg:flex-row">
+      <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">
-          {metadata}
-          {evaluators}
+          {/* {metadata} */}
+          {/* {evaluators} */}
         </div>
-        {actions}
-        {modal}
+        {/* {actions}
+        {modal} */}
       </div>
 
       <div className="relative mt-8 gap-8 lg:grid lg:grid-cols-10">

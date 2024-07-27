@@ -11,6 +11,7 @@ import {
 } from 'tabler-icons-react'
 import { Button } from '@components/button'
 import { cx } from '@utils/cx'
+import { Text } from '@components/text'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
   totalRecords,
@@ -135,7 +136,7 @@ export default function Pagination({
           currentPage={currentPage}
         />
       </div>
-      <span className="flex gap-1 text-xs text-gray-700">
+      <Text className="flex gap-1 !text-xs text-gray-700">
         {shownRecords * Number(searchParams?.get('page') || 1) -
           shownRecords +
           1 <
@@ -168,7 +169,7 @@ export default function Pagination({
             </p>
           </>
         )}
-      </span>
+      </Text>
     </div>
   )
 }

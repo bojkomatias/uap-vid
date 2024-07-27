@@ -1,4 +1,4 @@
-import { rose, teal, amber } from 'tailwindcss/colors'
+const { rose, teal, amber } = require('tailwindcss/colors')
 
 module.exports = {
   darkMode: 'class',
@@ -12,7 +12,6 @@ module.exports = {
         current: 'currentColor',
         primary: {
           DEFAULT: '#003C71',
-          // Generated with uicolors.app ... we are the darkest one
           50: '#e9fcff',
           100: '#cef7ff',
           200: '#a7f3ff',
