@@ -30,6 +30,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.7",
     "jotai": "^2.9.0",
+    "ldrs": "^1.0.2",
     "mongodb": "^6.8.0",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
@@ -40,8 +41,8 @@
     "react-dom": "^18.3.1",
     "react-use-websocket": "^4.8.1",
     "tabler-icons-react": "^1.56.0",
-    "ws": "^8.18.0",
     "tailwind-merge": "^2.4.0",
+    "ws": "^8.18.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -57,9 +58,9 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "ts-node": "^10.9.2",
     "prisma": "^5.17.0",
     "tailwindcss": "^3.4.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "zod-prisma-types": "^2.8.1"
   }

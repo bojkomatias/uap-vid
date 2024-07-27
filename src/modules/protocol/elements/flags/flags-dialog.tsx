@@ -19,6 +19,7 @@ export default function FlagsDialog({
   return (
     <div className="print:hidden">
       <Button
+        outline
         onClick={() => {
           setOpen(true)
         }}

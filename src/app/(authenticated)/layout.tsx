@@ -10,7 +10,7 @@ export default async function RootLayout({
 }) {
   return (
     <AppLayout>
-      <div className="max-lg:hidden">
+      <div className="max-lg:hidden ">
         <Breadcrumbs />
       </div>
       {children}
