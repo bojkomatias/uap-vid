@@ -11,6 +11,7 @@ import { cx } from '@utils/cx'
 import { ReviewFormTemplate } from '@review/review-form-template'
 import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
+import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 
 async function Layout({
   params,
@@ -60,6 +61,8 @@ async function Layout({
 
   return (
     <>
+      <ProtocolMetadata params={params} />
+
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">
           {/* {metadata} */}
@@ -74,7 +77,7 @@ async function Layout({
         {isReviewFormShown && (
           <aside
             className={cx(
-              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-500/5 p-6 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8'
+              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8'
             )}
           >
             <ReviewFormTemplate
@@ -85,7 +88,7 @@ async function Layout({
         )}
         {/* Review list */}
         {isReviewListShown && (
-          <aside className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-500/5 p-6 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8">
+          <aside className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8">
             <ReviewList
               role={session.user.role}
               id={protocol.id}
