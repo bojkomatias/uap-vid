@@ -9,7 +9,7 @@ export function DescriptionList({
       {...props}
       className={clsx(
         className,
-        '@3xl:grid-cols-[min(50%,theme(spacing.80))_auto] grid grid-cols-1 text-base/6 sm:text-sm/6 print:grid-cols-1'
+        'grid grid-cols-1 text-base/6 @3xl:grid-cols-[min(50%,theme(spacing.80))_auto] sm:text-sm/6 print:grid-cols-1'
       )}
     />
   )
