@@ -26,10 +26,12 @@ export default function ReviewQuestion({
           </Text>
         </Label>
         <RadioField>
+          {/* @ts-ignore */}
           <Radio value={true} color="teal" />
           <Label>Correcto</Label>
         </RadioField>
         <RadioField>
+          {/* @ts-ignore */}
           <Radio value={false} color="red" />
           <Label>Incompleto / Incorrecto</Label>
         </RadioField>

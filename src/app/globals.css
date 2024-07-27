@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   overflow-x: hidden;
 }
@@ -29,7 +28,7 @@ body {
   }
 
   .error {
-    @apply pl-2 pt-1 text-xs font-medium text-error-500;
+    @apply pl-2 pt-1 text-xs font-medium text-red-500;
   }
 }
 

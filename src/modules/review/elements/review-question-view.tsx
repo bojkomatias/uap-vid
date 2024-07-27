@@ -18,8 +18,8 @@ export default function ReviewQuestionView({
           {questions.find((question) => question.id == id)?.question}
         </Text>
         {approved ?
-          <Check className="size-5 shrink-0 text-success-500/80" />
-        : <X className="size-5 shrink-0 text-error-500/80" />}
+          <Check className="size-5 shrink-0 text-teal-500/80" />
+        : <X className="size-5 shrink-0 text-red-500/80" />}
       </div>
       {comment && (
         <div className="mt-1 rounded-lg bg-yellow-500/10 px-2.5 py-1">

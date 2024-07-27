@@ -94,7 +94,7 @@ export default function ProtocolNumberUpdate({
                 setOpen(false)
               }}
               type="submit"
-              className="float-right mt-2 bg-success-100 p-0.5 text-success-600"
+              className="float-right mt-2 bg-teal-100 p-0.5 text-teal-600"
             >
               Guardar
             </Button>

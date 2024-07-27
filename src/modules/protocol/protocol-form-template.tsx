@@ -154,9 +154,9 @@ export default function ProtocolForm({
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="size-4 stroke-warning-500" />
+            <AlertCircle className="size-4 stroke-yellow-500" />
           : <CircleDashed className="size-3.5 stroke-gray-500" />
-        : <CircleCheck className="size-4 stroke-success-500" />}
+        : <CircleCheck className="size-4 stroke-teal-500" />}
       </BadgeButton>
     ),
     [form, section]
@@ -188,13 +188,13 @@ export default function ProtocolForm({
         <InfoTooltip>
           <h4>Indicadores de sección</h4>
           <p>
-            <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
+            <CircleCheck className="mr-2 inline h-4 w-4 stroke-teal-500 stroke-2" />
             Indica que la sección se encuentra completada y sin errores. Cuando
             todas las secciones tengan este indicador, se permite publicar un
             protocolo.
           </p>
           <p>
-            <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
+            <AlertCircle className="mr-2 inline h-4 w-4 stroke-yellow-500 stroke-2" />
             Indica que la sección fue modificada pero necesita ser completada
             correctamente, falta algún campo obligatorio o tiene algún error.
           </p>

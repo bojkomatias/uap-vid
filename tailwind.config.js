@@ -24,9 +24,6 @@ module.exports = {
           900: '#005cb3',
           950: '#003c71',
         },
-        error: rose,
-        success: teal,
-        warning: amber,
       },
       borderRadius: { DEFAULT: '0.5rem' },
       borderColor: ({ theme }) => ({

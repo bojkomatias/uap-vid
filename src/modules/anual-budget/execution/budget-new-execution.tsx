@@ -91,11 +91,11 @@ const BudgetNewExecution = ({
           defaultPrice={0}
           className={cx(
             'min-w-[7rem] rounded-md py-2.5 text-xs',
-            !form.isValid('amount') && 'border-error-200 bg-error-50'
+            !form.isValid('amount') && 'border-red-200 bg-red-50'
           )}
           priceSetter={(e) => form.setFieldValue('amount', e)}
         />
-        <p className="mt-2 text-xs text-error-500">
+        <p className="mt-2 text-xs text-red-500">
           {form.getInputProps('amount').error}
         </p>
       </div>
