@@ -40,13 +40,6 @@ export default async function ProtocolMetadata({
         />
       </div>
       <Divider />
-      <Info content="Convocatoria a la que pertenece el protocolo">
-        <Badge className="w-fit !text-[14px] font-semibold">
-          {protocol.convocatory ?
-            protocol.convocatory.name
-          : 'Sin convocatoria'}
-        </Badge>
-      </Info>
       <Info
         title="Estado del protocolo"
         content={
@@ -106,6 +99,13 @@ export default async function ProtocolMetadata({
       >
         <Badge className="w-fit !text-[14px] font-semibold">
           {ProtocolStatesDictionary[protocol.state]}
+        </Badge>
+      </Info>
+      <Info content="Convocatoria a la que pertenece el protocolo">
+        <Badge className="w-fit !text-[14px] font-semibold">
+          {protocol.convocatory ?
+            protocol.convocatory.name
+          : 'Sin convocatoria'}
         </Badge>
       </Info>
 
