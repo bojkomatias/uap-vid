@@ -20,9 +20,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <ContainerAnimations animation={3}>
-        <ProtocolMetadata params={params} />
-      </ContainerAnimations>
+      <ProtocolMetadata params={params} />
+
       <ContainerAnimations animation={2} delay={0.2}>
         <PDF />
         <ChatFullComponent user={session!.user} protocolId={protocol.id} />

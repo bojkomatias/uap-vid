@@ -415,3 +415,13 @@ body {
     opacity: 0.65;
   }
 }
+
+::-moz-selection { /* Code for Firefox */
+  color: white;
+  background: #003c71;
+}
+
+::selection {
+  color: white;
+  background: #003c71;
+}
