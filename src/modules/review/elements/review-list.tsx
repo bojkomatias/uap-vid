@@ -5,7 +5,8 @@ import ReviewItem from './review-item'
 import { Heading } from '@components/heading'
 import { Divider } from '@components/divider'
 import { Text } from '@components/text'
-import { LayoutSidebarLeftCollapse } from 'tabler-icons-react'
+
+import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 
 type ReviewStateProps = {
   id: string
@@ -20,9 +21,9 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
       <div>
         <Heading className="flex items-center justify-between">
           Revisiones
-          <LayoutSidebarLeftCollapse className="size-5 stroke-gray-500" />
+          <HideReviewsButton />
         </Heading>
-        <Text>Las revisiones realizadas por metodologo y evaluadores</Text>
+        <Text>Las revisiones realizadas por evaluadores</Text>
       </div>
       {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ?
         <ul role="list" className="space-y-6">

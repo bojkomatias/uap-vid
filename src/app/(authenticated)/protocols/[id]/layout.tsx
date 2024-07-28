@@ -72,12 +72,15 @@ async function Layout({
         {modal} */}
       </div>
 
-      <div className="relative mt-8 gap-8 lg:grid lg:grid-cols-10">
+      <div
+        id="protocol-and-reviews-container"
+        className="relative mt-8 gap-8 lg:grid lg:grid-cols-10 "
+      >
         {/* Review form */}
         {isReviewFormShown && (
           <aside
             className={cx(
-              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8'
+              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
             )}
           >
             <ReviewFormTemplate
@@ -88,7 +91,10 @@ async function Layout({
         )}
         {/* Review list */}
         {isReviewListShown && (
-          <aside className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8">
+          <aside
+            id="reviews-container"
+            className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
+          >
             <ReviewList
               role={session.user.role}
               id={protocol.id}
