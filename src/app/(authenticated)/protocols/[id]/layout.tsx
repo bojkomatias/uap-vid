@@ -7,9 +7,8 @@ import { getProtocolMetadata } from '@repositories/protocol'
 import { Action, ProtocolState } from '@prisma/client'
 import { Heading } from '@components/heading'
 
-async function Layout({
+export default async function Layout({
   params,
-  metadata,
   evaluators,
   actions,
   reviews,
@@ -17,7 +16,6 @@ async function Layout({
   children,
 }: {
   params: { id: string }
-  metadata: ReactNode
   evaluators: ReactNode
   actions: ReactNode
   reviews: ReactNode
@@ -59,5 +57,3 @@ async function Layout({
     </>
   )
 }
-
-export default Layout
