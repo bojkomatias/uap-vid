@@ -9,10 +9,12 @@ import {
   calculateHourRateGivenCategory,
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
-import { currencyFormatter } from '@utils/formatters'
 import BudgetExecutionView from './execution/budget-execution-view'
 import { useRouter } from 'next/navigation'
 import type { WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
+import type { AmountIndex } from '@prisma/client'
+import { Currency } from '@shared/currency'
+import { multiplyAmountIndex, sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
 
 export function BudgetTeamMemberFees({
   editable,
@@ -23,8 +25,8 @@ export function BudgetTeamMemberFees({
 }: {
   editable: boolean
   budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-  ABTe: number
-  ABTr: number
+  ABTe: AmountIndex
+  ABTr: AmountIndex
   duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
 }) {
   const router = useRouter()
@@ -203,10 +205,7 @@ export function BudgetTeamMemberFees({
                     {remainingHours.toFixed(2)}
                   </td>
                   <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
-                    $
-                    {currencyFormatter.format(
-                      calculateHourRateGivenCategory(categories.at(-1) ?? null)
-                    )}
+                    <Currency amountIndex={calculateHourRateGivenCategory(categories.at(-1) ?? null)} />
                   </td>
                   <td
                     className={cx(
@@ -214,28 +213,22 @@ export function BudgetTeamMemberFees({
                       !editable && 'sm:table-cell'
                     )}
                   >
-                    $
-                    {currencyFormatter.format(
-                      calculateHourRateGivenCategory(
-                        categories.at(-1) ?? null
-                      ) * remainingHours
-                    )}
+                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1) ?? null), remainingHours
+                    )}/>
+                    
+                      
                   </td>
                   <td className="px-3 py-5 text-right text-sm text-gray-600 ">
-                    $
-                    {currencyFormatter.format(
-                      calculateHourRateGivenCategory(
-                        categories.at(-1) ?? null
-                      ) * hours
-                    )}
+                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1)??null) , hours)} />
                   </td>
                   <td className={cx('hidden', !editable && 'table-cell')}>
                     <BudgetExecutionView
                       positionIndex={i}
                       remaining={
+                        multiplyAmountIndex(
                         calculateHourRateGivenCategory(
                           categories.at(-1) ?? null
-                        ) * remainingHours
+                        ), remainingHours)
                       }
                       executions={executions}
                       anualBudgetTeamMemberId={anualBudgetTeamMemberId}
@@ -249,8 +242,8 @@ export function BudgetTeamMemberFees({
                           {
                             pointsObrero: categories.at(-1)?.pointsObrero ?? 0,
                             pointPrice:
-                              categories.at(-1)?.category.price.at(-1)?.price ??
-                              0,
+                              categories.at(-1)?.category.amountIndex ??
+                              ZeroAmountIndex,
                             hourlyRate: calculateHourRateGivenCategory(
                               categories.at(-1) ?? null
                             ),
@@ -274,7 +267,7 @@ export function BudgetTeamMemberFees({
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
                 {!editable ?
-                  <> ${currencyFormatter.format(ABTe)}</>
+                  <Currency amountIndex={ABTe} />
                 : '-'}
               </td>
             </tr>
@@ -287,7 +280,7 @@ export function BudgetTeamMemberFees({
                 Restante
               </th>
               <td className="px-3 pt-4 text-right text-sm text-gray-500">
-                ${currencyFormatter.format(ABTr)}
+                <Currency amountIndex={ABTr} />
               </td>
             </tr>
             <tr>
@@ -300,7 +293,7 @@ export function BudgetTeamMemberFees({
               </th>
 
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
-                ${currencyFormatter.format(ABTr + ABTe)}
+                <Currency amountIndex={sumAmountIndex([ABTr,ABTe])} />
               </td>
             </tr>
           </tfoot>

@@ -28,7 +28,7 @@ export const notifications = new Notifications()
 
 const colors = {
   primary: 'primary',
-  success: 'green-800',
+  success: 'teal-500',
   error: 'red-500',
 }
 

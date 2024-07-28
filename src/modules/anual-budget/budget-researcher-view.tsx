@@ -1,7 +1,8 @@
 import { calculateTotalBudget } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 import { getAnualBudgetById } from '@repositories/anual-budget'
-import { PDF } from 'modules/budget-pdf'
+import { Currency } from '@shared/currency'
+import { sumAmountIndex } from '@utils/amountIndex'
 
 export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
   const anualBudget = await getAnualBudgetById(budgetId)
@@ -17,13 +18,13 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
         <h1 className="text-lg font-semibold leading-7 text-gray-900">
           Presupuesto anual {anualBudget.year}
         </h1>
-        <PDF
+        {/* <PDF
           budgetItems={budgetItems}
           budgetTeamMembers={budgetTeamMembers}
           year={anualBudget.year}
           protocolTitle={anualBudget.protocol.sections.identification.title}
           calculations={calculations}
-        />
+        /> */}
       </div>
       <div>
         <h2 className="text-base font-semibold leading-6 text-gray-800">
@@ -110,10 +111,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                 </th>
 
                 <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-900">
-                  $
-                  {currencyFormatter.format(
-                    calculations.ABTr + calculations.ABTe
-                  )}
+                  <Currency amountIndex={sumAmountIndex([calculations.ABTr, calculations.ABTe])} />
                 </td>
               </tr>
             </tfoot>
@@ -149,7 +147,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                 </tr>
               </thead>
               <tbody>
-                {budgetItems.map(({ detail, amount }, i) => (
+                {budgetItems.map(({ detail, amountIndex:amount }, i) => (
                   <tr
                     key={i}
                     className="border-b border-gray-200 text-gray-600"
@@ -159,7 +157,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                     </td>
 
                     <td className="table-cell px-3 py-5 text-right text-sm">
-                      ${currencyFormatter.format(amount)}
+                      <Currency amountIndex={amount} />
                     </td>
                   </tr>
                 ))}
@@ -174,10 +172,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
                     Subtotal
                   </th>
                   <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-900">
-                    $
-                    {currencyFormatter.format(
-                      calculations.ABIr + calculations.ABIe
-                    )}
+                    <Currency amountIndex={sumAmountIndex([calculations.ABIr, calculations.ABIe])} />
                   </td>
                 </tr>
               </tfoot>
@@ -189,7 +184,7 @@ export async function BudgetResearcherView({ budgetId }: { budgetId: string }) {
       <div className="flex justify-between text-lg font-medium">
         <span>Total de presupuesto:</span>
         <span className="font-semibold">
-          ARS ${currencyFormatter.format(calculations.total)}
+          <Currency amountIndex={calculations.total} />
         </span>
       </div>
     </div>
