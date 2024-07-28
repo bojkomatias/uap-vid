@@ -14,6 +14,13 @@ import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
+import ContextMenu from '../../../../shared/context-menu'
+import { DropdownItem, DropdownMenu } from '@components/dropdown'
+import { Button } from '@components/button'
+import FlagsDialog from '@protocol/elements/flags/flags-dialog'
+import { BadgeButton } from '@components/badge'
+import { Mail } from 'tabler-icons-react'
+import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 
 async function Layout({
   params,
@@ -62,7 +69,29 @@ async function Layout({
   )
 
   return (
-    <>
+    <ContextMenu
+      menu={
+        <>
+          <ProtocolNumberUpdate
+            context_menu
+            role={session.user.role}
+            protocolId={protocol.id}
+            protocolNumber={protocol.protocolNumber}
+          />
+          <BadgeButton
+            href={`mailto:${protocol.researcher.email}`}
+            className="flex grow justify-between gap-2 shadow-sm"
+          >
+            Enviar email al investigador <Mail size={18} />
+          </BadgeButton>
+          <FlagsDialog
+            protocolFlags={protocol.flags}
+            protocolId={protocol.id}
+            context_menu={true}
+          />
+        </>
+      }
+    >
       <ProtocolMetadata params={params} />
 
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
@@ -128,7 +157,7 @@ async function Layout({
       </div>
 
       <ChatFullComponent user={session.user} protocolId={protocol.id} />
-    </>
+    </ContextMenu>
   )
 }
 
