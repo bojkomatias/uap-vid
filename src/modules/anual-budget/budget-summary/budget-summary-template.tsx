@@ -23,7 +23,9 @@ export const BudgetSummary = ({
   })
   return (
     <div>
-      <dl className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-3">
+      <dl
+        className={`mt-5 grid grid-cols-1 gap-5 ${approved ? 'xl:grid-cols-3' : 'xl:grid-cols-2'}`}
+      >
         {stats.map((item, i) => (
           <div
             key={item.name}
@@ -57,11 +59,8 @@ export const BudgetSummary = ({
                   </span>
                 : null}
               </div>
-              {item.indicator === 'number' ?
-                <BudgetCardDelta delta={item.delta} />
-              : null}
 
-              {item.indicator === 'graph' ?
+              {approved && item.indicator === 'graph' ?
                 // All the indexes must be percentually the same
                 <BudgetCardDoughnut
                   percentage={
