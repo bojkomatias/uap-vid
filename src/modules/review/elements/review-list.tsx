@@ -6,8 +6,6 @@ import { Heading } from '@components/heading'
 import { Divider } from '@components/divider'
 import { Text } from '@components/text'
 
-import HideReviewsButton from '@protocol/elements/hide-reviews-button'
-
 type ReviewStateProps = {
   id: string
   role: Role
@@ -17,11 +15,10 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
   const reviews = await getReviewsByProtocol(id)
 
   return (
-    <>
+    <div className="pl-6">
       <div>
-        <Heading className="flex items-center justify-between">
+        <Heading className="relative flex items-center justify-between">
           Revisiones
-          <HideReviewsButton />
         </Heading>
         <Text>Las revisiones realizadas por evaluadores</Text>
       </div>
@@ -37,6 +34,6 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
           ))}
         </ul>
       : null}
-    </>
+    </div>
   )
 }

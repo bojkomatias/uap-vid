@@ -12,6 +12,8 @@ import { ReviewFormTemplate } from '@review/review-form-template'
 import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
+import HideReviewsButton from '@protocol/elements/hide-reviews-button'
+import { ContainerAnimations } from '@elements/container-animations'
 
 async function Layout({
   params,
@@ -71,16 +73,19 @@ async function Layout({
         {/* {actions}
         {modal} */}
       </div>
-
+      <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
+        <HideReviewsButton />
+      </ContainerAnimations>
       <div
         id="protocol-and-reviews-container"
-        className="relative mt-8 gap-8 lg:grid lg:grid-cols-10 "
+        className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
       >
         {/* Review form */}
         {isReviewFormShown && (
           <aside
+            id="reviews-form-container"
             className={cx(
-              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
+              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
             )}
           >
             <ReviewFormTemplate
@@ -91,22 +96,26 @@ async function Layout({
         )}
         {/* Review list */}
         {isReviewListShown && (
-          <aside
+          <ContainerAnimations
             id="reviews-container"
-            className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
+            className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
+            animation={4}
+            duration={0.2}
+            delay={0.1}
           >
             <ReviewList
               role={session.user.role}
               id={protocol.id}
               isOwner={session.user.id === protocol.researcher.id}
             />
-          </aside>
+          </ContainerAnimations>
         )}
 
         {/* Protocol page */}
         <div
+          id="protocol-container"
           className={cx(
-            'mt-12 lg:mt-0',
+            'mt-12 transition lg:mt-0',
             isReviewListShown || isReviewFormShown ? 'col-span-6' : (
               'col-span-full'
             )

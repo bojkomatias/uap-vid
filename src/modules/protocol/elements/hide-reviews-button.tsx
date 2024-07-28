@@ -1,20 +1,51 @@
 'use client'
-import React from 'react'
-import { LayoutSidebarLeftCollapse } from 'tabler-icons-react'
+import { Button } from '@components/button'
+import React, { useState } from 'react'
+import {
+  LayoutSidebarLeftCollapse,
+  LayoutSidebarRightCollapse,
+} from 'tabler-icons-react'
 
 export default function HideReviewsButton() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <LayoutSidebarLeftCollapse
+    <Button
+      title={open ? 'Mostrar revisiones' : 'Ocultar revisiones'}
+      className="-translate-y-2 print:hidden"
+      outline
       onClick={() => {
         const container = document.getElementById(
           'protocol-and-reviews-container'
         )
         const child = document.getElementById('reviews-container')
+        const protocol = document.getElementById('col-span-full')
 
-        container?.classList.toggle('lg:grid-cols-10')
-        child?.classList.toggle('cols-span-4')
+        const condition = child?.classList.contains('hidden')
+
+        if (!condition) {
+          child?.classList.toggle('!-translate-x-[120%]')
+          protocol?.classList.toggle('cols-span-full')
+
+          setTimeout(() => {
+            child?.classList.toggle('hidden')
+            container?.classList.toggle('lg:grid-cols-10')
+            setOpen(true)
+          }, 300)
+        } else {
+          child?.classList.toggle('hidden')
+          container?.classList.toggle('lg:grid-cols-10')
+          setTimeout(() => {
+            child?.classList.toggle('!-translate-x-[120%]')
+            protocol?.classList.toggle('cols-span-full')
+            setOpen(false)
+          }, 50)
+        }
       }}
-      className="size-5 stroke-gray-500"
-    />
+    >
+      {open ?
+        <LayoutSidebarRightCollapse data-slot="icon" />
+      : <LayoutSidebarLeftCollapse data-slot="icon" />}
+    </Button>
   )
 }

@@ -12,17 +12,21 @@ export function ContainerAnimations({
   children,
   duration,
   delay,
-
   animation,
+  className,
+  id,
 }: {
   children: React.ReactNode
   duration?: number
   delay?: number
   animation?: number
+  className?: string
+  id?: string
 }) {
   if (!animation)
     return (
       <motion.div
+        id={id}
         initial={{ opacity: 0, x: -5 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
@@ -33,6 +37,8 @@ export function ContainerAnimations({
   if (animation == 1)
     return (
       <motion.div
+        id={id}
+        className={className}
         initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
@@ -44,6 +50,8 @@ export function ContainerAnimations({
   if (animation == 2)
     return (
       <motion.div
+        id={id}
+        className={className}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
@@ -54,6 +62,8 @@ export function ContainerAnimations({
   if (animation == 3)
     return (
       <motion.div
+        id={id}
+        className={className}
         initial={{ opacity: 0, y: -50, scale: 0.9, rotateX: 45 }}
         animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
         transition={{
@@ -63,6 +73,19 @@ export function ContainerAnimations({
           opacity: { duration: 0.4 },
           scale: { duration: 0.4 },
         }}
+      >
+        {children}
+      </motion.div>
+    )
+
+  if (animation == 4)
+    return (
+      <motion.div
+        id={id}
+        className={className}
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
       >
         {children}
       </motion.div>
