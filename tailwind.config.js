@@ -24,9 +24,6 @@ module.exports = {
           900: '#005cb3',
           950: '#003c71',
         },
-        error: rose,
-        success: teal,
-        warning: amber,
       },
       borderRadius: { DEFAULT: '0.5rem' },
       borderColor: ({ theme }) => ({
@@ -37,7 +34,21 @@ module.exports = {
         DEFAULT: theme('colors.gray.300', 'currentColor'),
         ...theme('colors'),
       }),
+      keyframes: {
+        animation: {
+          ping: 'ping .1s cubic-bezier(0, 0, 0.5, 1) infinite',
+        },
+        ping: {
+          '75%, 100%': {
+            transform: 'scale(1.1)',
+            opacity: '0',
+          },
+        },
+      },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries'),
+  ],
 }
