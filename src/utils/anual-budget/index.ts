@@ -233,6 +233,28 @@ export const calculateTotalBudgetAggregated = (
   })[],
   academicUnitId?: string
 ) => {
+  const totalPending = anualBudgets
+    .filter((anualBudget) => anualBudget.state === 'PENDING')
+    .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
+    .reduce(
+      (acc, item) => {
+        acc.totalPeding = sumAmountIndex([acc.totalPeding, item.total])
+        return acc
+      },
+      { totalPeding: { FCA: 0, FMR: 0 } as AmountIndex }
+    )
+
+  const totalApproved = anualBudgets
+    .filter((anualBudget) => anualBudget.state === 'APPROVED')
+    .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
+    .reduce(
+      (acc, item) => {
+        acc.totalApproved = sumAmountIndex([acc.totalApproved, item.total])
+        return acc
+      },
+      { totalApproved: { FCA: 0, FMR: 0 } as AmountIndex }
+    )
+
   const result = anualBudgets
     .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
     .reduce(
@@ -252,7 +274,7 @@ export const calculateTotalBudgetAggregated = (
         total: { FCA: 0, FMR: 0 } as AmountIndex,
       }
     )
-  return result
+  return {...result, ...totalPending, ...totalApproved}
 }
 
 export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>

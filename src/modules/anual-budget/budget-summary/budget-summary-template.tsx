@@ -49,10 +49,10 @@ export const BudgetSummary = ({
               <div className="flex flex-col items-baseline text-2xl font-semibold text-black/70">
                 <Currency amountIndex={item.total} />
                 {item.of ?
-                  <span className="self-end ml-2 text-sm font-medium text-gray-500">
+                  <span className="ml-2 text-sm font-medium text-gray-500">
                     de
                     {item.of ?
-                <Currency amountIndex={item.of} />
+                      <Currency amountIndex={item.of} />
                     : 0}
                   </span>
                 : null}

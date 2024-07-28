@@ -287,7 +287,8 @@ const getAcademicUnitBudgetSummary = (
       ]
     : [ZeroAmountIndex, ZeroAmountIndex]
 
-  if (!actual) return { value: ZeroAmountIndex, delta: ZeroAmountIndex, changeDate: '' }
+  if (!actual)
+    return { value: ZeroAmountIndex, delta: ZeroAmountIndex, changeDate: '' }
 
   // Calculate a delta value between the actual and the previous budget in the same year
   const deltaValue =
@@ -313,51 +314,6 @@ const getAcademicUnitBudgetSummary = (
   return {
     value: sumAcademicUnitBudget,
     delta,
-  }
-}
-
-const getProjectedBudgetSummary = (
-  total: AmountIndex,
-  anualBudgets: Array<
-    AnualBudget & {
-      budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    }
-  >,
-  year: number
-): { value: AmountIndex; delta: AmountIndex } => {
-  const lastCategoryWithPriceChange = anualBudgets
-    .filter((b) => b.year === year)
-    .map((b) => b.budgetTeamMembers)
-    .flat()
-    .map((b) => b.teamMember.categories)
-    .filter((c) => c.some((p) => p.to))
-    .sort((a, b) => {
-      const aLastPriceChange = a.filter((p) => p.to).at(-1)
-      const bLastPriceChange = b.filter((p) => p.to).at(-1)
-      if (!aLastPriceChange || !bLastPriceChange) return 0
-      return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
-    })
-    .at(-1)
-  const [before, actual] = [
-    lastCategoryWithPriceChange?.at(-2)?.category.amountIndex,
-    lastCategoryWithPriceChange?.at(-1)?.category.amountIndex,
-  ]
-
-  const deltaValue =
-    actual && before ? subtractAmountIndex(actual, before) : actual
-
-  const delta =
-    deltaValue ?
-      {
-        FCA: (total.FCA / (total.FCA - deltaValue.FCA) - 1) * 100,
-        FMR: (total.FMR / (total.FMR - deltaValue.FMR) - 1) * 100,
-      }
-    : ZeroAmountIndex
-  // (total / (total - deltaValue) - 1) * 100 : 0
-
-  return {
-    value: total,
-    delta: delta,
   }
 }
 
@@ -407,17 +363,11 @@ export const getBudgetSummary = async (
     year
   )
 
-  const projectedBudgetSummary = getProjectedBudgetSummary(
-    protocolBudgetSummary.total,
-    anualBudgets,
-    year
-  )
+  const projectedBudgetSummary = { value: protocolBudgetSummary.totalPeding }
 
-  const projectedBudgetSummaryApproved = getProjectedBudgetSummary(
-    protocolBudgetSummary.total,
-    anualBudgets.filter((e) => e.state !== AnualBudgetState.PENDING),
-    year
-  )
+  const projectedBudgetSummaryApproved = {
+    value: protocolBudgetSummary.totalApproved,
+  }
 
   return {
     academicUnitBudgetSummary,
