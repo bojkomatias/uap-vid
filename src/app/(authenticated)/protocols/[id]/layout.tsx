@@ -13,14 +13,16 @@ import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 
-export default async function Layout({
+async function Layout({
   params,
+  metadata,
   evaluators,
   actions,
   modal,
   children,
 }: {
   params: { id: string }
+  metadata: ReactNode
   evaluators: ReactNode
   actions: ReactNode
   modal: ReactNode
@@ -112,3 +114,5 @@ export default async function Layout({
     </>
   )
 }
+
+export default Layout
