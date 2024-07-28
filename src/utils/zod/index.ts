@@ -13,7 +13,6 @@ export const RoleSchema = z.enum([
 ])
 
 const ProtocolStateSchema = z.enum([
-  'NOT_CREATED',
   'DRAFT',
   'PUBLISHED',
   'METHODOLOGICAL_EVALUATION',

@@ -1,7 +1,6 @@
 import { ProtocolState } from '@prisma/client'
 
 export default {
-  [ProtocolState.NOT_CREATED]: null,
   [ProtocolState.DRAFT]: 'Borrador',
   [ProtocolState.PUBLISHED]: 'Publicado',
   [ProtocolState.METHODOLOGICAL_EVALUATION]: 'Evaluación metodológica',

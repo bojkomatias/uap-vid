@@ -36,10 +36,7 @@ export default async function Layout({
   const session = await getServerSession(authOptions)
   if (!session) return
   if (params.id === 'new') {
-    if (
-      !canExecute(Action.CREATE, session.user.role, ProtocolState.NOT_CREATED)
-    )
-      redirect('/protocols')
+    if (!canExecute(Action.CREATE, session.user.role)) redirect('/protocols')
     return (
       <>
         <Heading>Nuevo protocolo</Heading>

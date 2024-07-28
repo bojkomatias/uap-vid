@@ -21,8 +21,11 @@ export default function RecordsDropdown({
           value={o}
           onClick={() =>
             update({
-              records: o,
-              page: o * currentPage > options.at(-1)! ? 1 : currentPage,
+              records: o.toString(),
+              page:
+                o * currentPage > options.at(-1)! ?
+                  '1'
+                : currentPage.toString(),
             })
           }
         >
@@ -33,9 +36,8 @@ export default function RecordsDropdown({
         value="all-records"
         onClick={() =>
           update({
-            records: options.at(-1),
-
-            page: 1,
+            records: options.at(-1)!.toString(),
+            page: '1',
           })
         }
       >

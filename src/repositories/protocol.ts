@@ -7,7 +7,6 @@ import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
-import AcademicUnitsDictionary from '@utils/dictionaries/AcademicUnitsDictionary'
 import { IdentificationTeamSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
 import { logProtocolUpdate } from '@utils/logger'
@@ -251,7 +250,7 @@ const getAllProtocols = cache(async () => {
   }
 })
 
-const getProtocolsByRol = cache(
+const getProtocolsByRole = cache(
   async (
     role: Role,
     id: string,
@@ -261,9 +260,8 @@ const getProtocolsByRol = cache(
       search,
       sort,
       order,
-      filter,
-      values,
-      units, // - separated string (FACEA-FCS)
+      states,
+      units,
     }: { [key: string]: string }
   ) => {
     if (!id) throw Error('No ID passed')
@@ -355,21 +353,19 @@ const getProtocolsByRol = cache(
           ],
         }
       : {}
-    // filter reusable
-    const whereFilter =
-      filter && values ? { [filter]: { in: values.split('-') } } : {}
 
-    const whereUnits =
+    const stateFilter =
+      states ? { state: { in: states.split('-') as ProtocolState[] } } : {}
+
+    const acUnitFilter =
       units ?
         {
           sections: {
             is: {
               identification: {
                 is: {
-                  sponsor: {
-                    hasSome: units
-                      .split('-')
-                      .map((e) => AcademicUnitsDictionary[e]),
+                  academicUnitIds: {
+                    hasSome: units.split('-'),
                   },
                 },
               },
@@ -388,7 +384,7 @@ const getProtocolsByRol = cache(
                 { researcherId: id },
                 // According to table features (search, filter)
                 whereSearch,
-                whereFilter,
+                stateFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -404,7 +400,7 @@ const getProtocolsByRol = cache(
                 { researcherId: id },
                 // According to table features (search, filter)
                 whereSearch,
-                whereFilter,
+                stateFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -430,7 +426,7 @@ const getProtocolsByRol = cache(
                 },
                 // Table feature
                 whereSearch,
-                whereFilter,
+                stateFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -457,7 +453,7 @@ const getProtocolsByRol = cache(
                 },
                 // Table feature
                 whereSearch,
-                whereFilter,
+                stateFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -491,8 +487,8 @@ const getProtocolsByRol = cache(
                   ],
                 },
                 whereSearch,
-                whereFilter,
-                whereUnits,
+                stateFilter,
+                acUnitFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -527,8 +523,8 @@ const getProtocolsByRol = cache(
                   ],
                 },
                 whereSearch,
-                whereFilter,
-                whereUnits,
+                stateFilter,
+                acUnitFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -540,7 +536,7 @@ const getProtocolsByRol = cache(
       return prisma.$transaction([
         prisma.protocol.count({
           where: {
-            AND: [whereSearch, whereFilter, whereUnits],
+            AND: [whereSearch, stateFilter, acUnitFilter],
           },
         }),
         prisma.protocol.findMany({
@@ -548,7 +544,7 @@ const getProtocolsByRol = cache(
           take,
           select,
           where: {
-            AND: [whereSearch, whereFilter, whereUnits],
+            AND: [whereSearch, stateFilter, acUnitFilter],
           },
           orderBy,
         }),
@@ -572,7 +568,7 @@ export {
   createProtocol,
   getAllProtocols,
   updateProtocolStateById,
-  getProtocolsByRol,
+  getProtocolsByRole,
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,

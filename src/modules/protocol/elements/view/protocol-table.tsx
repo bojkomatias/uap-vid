@@ -1,6 +1,6 @@
 'use client'
 
-import type { Prisma, User } from '@prisma/client'
+import type { Prisma, ProtocolState, User } from '@prisma/client'
 import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
@@ -9,14 +9,10 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
-import { cx } from '@utils/cx'
-import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { useSearchParams } from 'next/navigation'
 import ProtocolLogsDrawer from '../logs/log-drawer'
 import { Strong, Text } from '@components/text'
 import SearchBar from '@shared/data-table/search-bar'
-import { Dropdown } from '@components/dropdown'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
@@ -291,67 +287,58 @@ export default function ProtocolTable({
       rowAsLinkPath="/protocols/"
     >
       <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
-      <AcademicUnitFilterV2 academicUnits={academicUnits} />
+      <AcademicUnitFilter academicUnits={academicUnits} />
+      <StateFilter />
     </TanStackTable>
   )
 }
-/**
- * Academic unit filter, specific to business in protocol table
- * @returns
- */
-const AcademicUnitFilter = () => {
-  const update = useUpdateQuery()
-  const searchParams = useSearchParams()
-  const currentValues = searchParams?.get('units')?.split('-')
 
-  const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
-
-  return (
-    <div className="relative mt-4 flex flex-col items-start text-sm">
-      <div className="relative flex flex-wrap gap-2">
-        {values.map((value, i) => {
-          return (
-            <Button
-              onClick={() => {
-                update({
-                  units:
-                    currentValues ?
-                      currentValues.includes(value) ?
-                        currentValues.filter((e) => e !== value).join('-')
-                      : currentValues.join('-').concat('-', value)
-                    : value,
-                })
-              }}
-              intent="unset"
-              key={i}
-            >
-              <Badge
-                className={cx(
-                  'cursor-pointer transition hover:bg-primary-100',
-                  currentValues?.includes(value) &&
-                    'bg-primary-50 ring-primary/50'
-                )}
-              >
-                {value}
-              </Badge>
-            </Button>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-const AcademicUnitFilterV2 = ({
+const AcademicUnitFilter = ({
   academicUnits,
 }: {
   academicUnits: { id: string; name: string; shortname: string }[]
 }) => {
+  const update = useUpdateQuery()
+
   return (
-    <Listbox placeholder="Unidad académica">
+    <Listbox
+      multiple
+      placeholder="Unidad académica"
+      onChange={(value: string[]) => {
+        console.log(value.join('-'))
+        update({
+          units: value.join('-'),
+        })
+      }}
+      className="max-w-xs"
+    >
       {academicUnits.map((e) => (
         <ListboxOption key={e.id} value={e.id}>
           <ListboxLabel>{e.shortname}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+const StateFilter = () => {
+  const update = useUpdateQuery()
+
+  const states = Object.keys(ProtocolStatesDictionary) as ProtocolState[]
+  return (
+    <Listbox
+      multiple
+      placeholder="Estado"
+      onChange={(value: string[]) => {
+        update({
+          states: value.join('-'),
+        })
+      }}
+      className="max-w-xs"
+    >
+      {states.map((e) => (
+        <ListboxOption key={e} value={e}>
+          <ListboxLabel>{ProtocolStatesDictionary[e]}</ListboxLabel>
         </ListboxOption>
       ))}
     </Listbox>

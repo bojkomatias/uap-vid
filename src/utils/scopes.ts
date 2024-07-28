@@ -76,7 +76,6 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
  * - Check if an action can be performed according current protocol state
  */
 const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
-  [ProtocolState.NOT_CREATED]: [Action.CREATE],
   [ProtocolState.DRAFT]: [Action.EDIT_BY_OWNER, Action.PUBLISH, Action.DELETE],
   [ProtocolState.PUBLISHED]: [
     Action.ASSIGN_TO_METHODOLOGIST,
@@ -130,8 +129,14 @@ export const canAccess = (access: Access, role: Role) =>
  * @param state
  * @returns
  */
-export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
-  Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
+export const canExecute = (
+  action: Action,
+  role: Role,
+  state?: ProtocolState
+) =>
+  Role_SCOPE[role].includes(action) && state ?
+    STATE_SCOPE[state].includes(action)
+  : true
 
 export const getActionsByRoleAndState = (role: Role, state: ProtocolState) =>
   Role_SCOPE[role].filter((action) => STATE_SCOPE[state].includes(action))

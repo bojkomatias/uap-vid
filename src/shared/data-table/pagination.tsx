@@ -60,7 +60,7 @@ export default function Pagination({
         : <>
             <Button
               title="Primer página"
-              onClick={() => update({ page: 1 })}
+              onClick={() => update({ page: '1' })}
               plain
             >
               <ChevronsLeft data-slot="icon" />
@@ -69,7 +69,7 @@ export default function Pagination({
               title="Página anterior"
               onClick={() =>
                 update({
-                  page: currentPage > 1 ? currentPage - 1 : 1,
+                  page: currentPage > 1 ? (currentPage - 1).toString() : '1',
                 })
               }
               plain
@@ -83,7 +83,8 @@ export default function Pagination({
             <Button
               key={page}
               onClick={() => {
-                if (Number(currentPage) !== page) update({ page: page })
+                if (Number(currentPage) !== page)
+                  update({ page: page.toString() })
               }}
               {...(Number(currentPage) === page ?
                 { outline: true }
@@ -108,8 +109,8 @@ export default function Pagination({
                 update({
                   page:
                     currentPage < allPages.length ?
-                      currentPage + 1
-                    : allPages[allPages.length - 1],
+                      (currentPage + 1).toString()
+                    : allPages[allPages.length - 1].toString(),
                 })
               }
               plain
@@ -121,7 +122,7 @@ export default function Pagination({
               title="Última página"
               onClick={() =>
                 update({
-                  page: allPages[allPages.length - 1],
+                  page: allPages[allPages.length - 1].toString(),
                 })
               }
               plain
@@ -136,7 +137,7 @@ export default function Pagination({
           currentPage={currentPage}
         />
       </div>
-      <Text className="flex gap-1 !text-xs text-gray-700">
+      <div className="flex gap-1 !text-xs text-gray-700 dark:text-gray-300">
         {shownRecords * Number(searchParams?.get('page') || 1) -
           shownRecords +
           1 <
@@ -160,8 +161,8 @@ export default function Pagination({
               className="cursor-pointer border-b border-b-primary/0 transition-all duration-150 hover:border-b-primary"
               onClick={() =>
                 update({
-                  records: totalRecords,
-                  page: 1,
+                  records: totalRecords.toString(),
+                  page: '1',
                 })
               }
             >
@@ -169,7 +170,7 @@ export default function Pagination({
             </p>
           </>
         )}
-      </Text>
+      </div>
     </div>
   )
 }
