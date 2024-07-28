@@ -14,11 +14,7 @@ import { Divider } from '@components/divider'
 import Info from 'modules/info'
 import Clipboard from '@elements/clipboard'
 
-export default async function ProtocolMetadata({
-  params,
-}: {
-  params: { id: string }
-}) {
+export async function ProtocolMetadata({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
   if (!session || !protocol) return

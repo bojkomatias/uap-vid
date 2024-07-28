@@ -61,7 +61,6 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
     Action.EDIT_BY_OWNER,
     Action.PUBLISH,
     Action.ACCEPT,
-    Action.REVIEW,
     Action.APPROVE,
     Action.ASSIGN_TO_METHODOLOGIST,
     Action.ASSIGN_TO_SCIENTIFIC,
