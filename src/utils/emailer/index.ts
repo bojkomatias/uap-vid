@@ -498,3 +498,59 @@ export async function emailer({
     }
   })
 }
+
+export async function bug_report({
+  description,
+}: {
+  description: { user_description: string; context: object }
+}) {
+  // const transporter = nodemailer.createTransport({
+  //   host: process.env.SMTP_ADDRESS,
+  //   port: Number(process.env.SMTP_PORT),
+  //   secure: false,
+  //   ignoreTLS: true,
+  // })
+
+  //This transporter can be used for developing.
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'nicoskate000@gmail.com',
+      pass: 'alrg hkso hivq bgvn',
+    },
+  })
+
+  const emailObject = {
+    from: '"ERROR Sistema VID UAP" no-reply@uap.edu.ar',
+    to: 'contact@nicohorn.com',
+    subject: 'Reporte de error',
+    text: description.user_description,
+    html: JSON.stringify(description, null, '&nbsp;').split('\n').join('<br>'),
+  }
+
+  transporter.sendMail(emailObject, (err) => {
+    if (err) {
+      return new Response('Error sending email', { status: 500 })
+    } else {
+      return new Response(`Successfully sent email to developer`, {
+        status: 250,
+      })
+    }
+  })
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.log(`Error sending the email: ${error}`)
+      return false
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Email sent: ${success}`)
+      return true
+    }
+  })
+
+  return true
+}

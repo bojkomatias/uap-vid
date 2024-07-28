@@ -70,6 +70,10 @@ async function Layout({
 
   return (
     <ContextMenu
+      context={{
+        protocol_id: protocol.id,
+        user: session.user,
+      }}
       menu={
         <>
           <ProtocolNumberUpdate

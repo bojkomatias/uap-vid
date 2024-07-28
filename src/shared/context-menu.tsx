@@ -1,15 +1,25 @@
 'use client'
 import { BadgeButton } from '@components/badge'
+import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
 import { Divider } from '@components/divider'
+import { DialogPanel } from '@headlessui/react'
 import React, { useState, useEffect, useRef } from 'react'
-import { Clipboard, Copy, Download, File } from 'tabler-icons-react'
+import { Bug, Clipboard, Copy, Download, File } from 'tabler-icons-react'
+import { FormTextarea } from './form/form-textarea'
+import { FormButton } from './form/form-button'
+import { FormActions } from '@components/fieldset'
+import { useForm } from '@mantine/form'
+import { bug_report } from '@utils/emailer'
+import { notifications } from '@elements/notifications'
 
 export default function ContextMenu({
   children,
   menu,
+  context,
 }: {
   children: React.ReactNode
   menu: React.ReactNode
+  context?: any
 }) {
   const [showMenu, setShowMenu] = useState(false)
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
@@ -37,6 +47,14 @@ export default function ContextMenu({
     }
   }, [])
 
+  const [open, setOpen] = useState(false)
+
+  const form = useForm({
+    initialValues: {
+      content: '',
+    },
+  })
+
   return (
     <section onContextMenu={handleContextMenu}>
       {children}
@@ -63,7 +81,7 @@ export default function ContextMenu({
           <Divider className="my-2" />
 
           <BadgeButton
-            className="flex grow justify-between shadow-sm active:opacity-50"
+            className="flex grow justify-between shadow-sm transition active:opacity-50"
             onClick={() => {
               navigator.clipboard.writeText(window.getSelection()!.toString())
             }}
@@ -71,7 +89,7 @@ export default function ContextMenu({
             Copiar <Copy size={18} />
           </BadgeButton>
           <BadgeButton
-            className="flex grow justify-between shadow-sm "
+            className="flex grow justify-between shadow-sm transition active:opacity-50"
             onClick={async () => {
               const text = await navigator.clipboard.readText()
               console.log(text)
@@ -79,6 +97,54 @@ export default function ContextMenu({
           >
             Pegar <Clipboard size={18} />
           </BadgeButton>
+          <Divider className="my-2" />
+          <BadgeButton
+            className="flex grow justify-between shadow-sm "
+            onClick={async () => {
+              setOpen(!open)
+            }}
+          >
+            Reportar un error <Bug size={18} />
+          </BadgeButton>
+          <Dialog onClose={setOpen} open={open}>
+            <DialogTitle className="flex justify-between">
+              Reportar un error <Bug />
+            </DialogTitle>
+            <DialogPanel>
+              <DialogDescription>
+                Provea una descripción detallada del error que ocurrió. También
+                puede incluir sugerencias.
+              </DialogDescription>
+              <form
+                onSubmit={form.onSubmit(async () => {
+                  const email = await bug_report({
+                    description: {
+                      user_description: form.getValues().content,
+                      context: context,
+                    },
+                  })
+                  if (email) {
+                    notifications.show({
+                      title: 'Email enviado',
+                      message:
+                        'Se notificó a los desarrolladores sobre el problema o la sugerencia',
+                      intent: 'success',
+                    })
+                    setOpen(false)
+                  }
+                })}
+                className="mt-2"
+              >
+                <FormTextarea
+                  label="Descripción"
+                  {...form.getInputProps('content')}
+                />
+                <FormActions>
+                  <FormButton isLoading={false}>Enviar</FormButton>
+                </FormActions>
+              </form>
+            </DialogPanel>
+          </Dialog>
         </div>
       )}
     </section>
