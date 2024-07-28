@@ -588,11 +588,6 @@ export default function EmailsTable({
 
   return (
     <div className="dark:text-gray-200">
-      <Heading>Emails</Heading>
-      <Subheading>
-        Puede editar el asunto y contenido de los emails que salen del sistema
-        dependiendo del caso de uso.
-      </Subheading>
       <Text className="my-2 text-lg font-semibold ">Casos de uso:</Text>
       <div className="flex flex-wrap gap-2">
         {useCases?.map((uc) => (

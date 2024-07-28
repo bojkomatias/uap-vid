@@ -41,7 +41,7 @@ export default function ReviewItem({
   }
   const [showReviewQuestions, setShowReviewQuestions] = useState(false)
 
-  const { isLoading, data } = useQuery<ReviewQuestion[]>({
+  const { isLoading, isFetching, data } = useQuery<ReviewQuestion[]>({
     queryKey: ['questions', review.id],
     queryFn: async () => await getAllQuestions(),
   })
@@ -78,13 +78,16 @@ export default function ReviewItem({
           Ver evaluación
           <ChevronRight
             data-slot="icon"
-            className={cx('size-4', showReviewQuestions ? 'rotate-90' : '')}
+            className={cx(
+              'size-4 transition',
+              showReviewQuestions ? 'rotate-90' : ''
+            )}
           />
         </BadgeButton>
       </div>
       {showReviewQuestions && data && (
-        <div className="mt-4 space-y-4">
-          {isLoading ?
+        <div className="slide-in-fwd-center mt-4 space-y-4">
+          {isLoading || isFetching ?
             <Loader />
           : review.questions.map((question, index) => (
               <ReviewQuestionView

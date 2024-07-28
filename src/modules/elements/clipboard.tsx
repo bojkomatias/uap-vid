@@ -4,7 +4,13 @@ import React from 'react'
 import { Clipboard as ClipboardCopy } from 'tabler-icons-react'
 import { notifications } from './notifications'
 
-export default function Clipboard({ content }: { content: string }) {
+export default function Clipboard({
+  content,
+  notification_message,
+}: {
+  content: string
+  notification_message?: string
+}) {
   return (
     <BadgeButton
       title="Copiar"
@@ -12,7 +18,10 @@ export default function Clipboard({ content }: { content: string }) {
         navigator.clipboard.writeText(content)
         notifications.show({
           title: 'Texto copiado',
-          message: 'Se copió el texto seleccionado',
+          message:
+            notification_message ? notification_message : (
+              'Se copió el texto seleccionado'
+            ),
           intent: 'success',
         })
       }}

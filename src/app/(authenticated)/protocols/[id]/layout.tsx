@@ -12,6 +12,15 @@ import { ReviewFormTemplate } from '@review/review-form-template'
 import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
+import HideReviewsButton from '@protocol/elements/hide-reviews-button'
+import { ContainerAnimations } from '@elements/container-animations'
+import ContextMenu from '../../../../shared/context-menu'
+import { DropdownItem, DropdownMenu } from '@components/dropdown'
+import { Button } from '@components/button'
+import FlagsDialog from '@protocol/elements/flags/flags-dialog'
+import { BadgeButton } from '@components/badge'
+import { Mail } from 'tabler-icons-react'
+import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 
 async function Layout({
   params,
@@ -60,7 +69,33 @@ async function Layout({
   )
 
   return (
-    <>
+    <ContextMenu
+      context={{
+        protocol_id: protocol.id,
+        user: session.user,
+      }}
+      menu={
+        <>
+          <ProtocolNumberUpdate
+            context_menu
+            role={session.user.role}
+            protocolId={protocol.id}
+            protocolNumber={protocol.protocolNumber}
+          />
+          <BadgeButton
+            href={`mailto:${protocol.researcher.email}`}
+            className="flex grow justify-between gap-2 shadow-sm"
+          >
+            Enviar email al investigador <Mail size={18} />
+          </BadgeButton>
+          <FlagsDialog
+            protocolFlags={protocol.flags}
+            protocolId={protocol.id}
+            context_menu={true}
+          />
+        </>
+      }
+    >
       <ProtocolMetadata params={params} />
 
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
@@ -71,13 +106,21 @@ async function Layout({
         {/* {actions}
         {modal} */}
       </div>
-
-      <div className="relative mt-8 gap-8 lg:grid lg:grid-cols-10">
+      {reviews.length > 0 && (
+        <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
+          <HideReviewsButton />
+        </ContainerAnimations>
+      )}
+      <div
+        id="protocol-and-reviews-container"
+        className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
+      >
         {/* Review form */}
         {isReviewFormShown && (
           <aside
+            id="reviews-form-container"
             className={cx(
-              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8'
+              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
             )}
           >
             <ReviewFormTemplate
@@ -88,19 +131,26 @@ async function Layout({
         )}
         {/* Review list */}
         {isReviewListShown && (
-          <aside className="col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/50 p-6 dark:bg-gray-800/50 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8">
+          <ContainerAnimations
+            id="reviews-container"
+            className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
+            animation={4}
+            duration={0.2}
+            delay={0.1}
+          >
             <ReviewList
               role={session.user.role}
               id={protocol.id}
               isOwner={session.user.id === protocol.researcher.id}
             />
-          </aside>
+          </ContainerAnimations>
         )}
 
         {/* Protocol page */}
         <div
+          id="protocol-container"
           className={cx(
-            'mt-12 lg:mt-0',
+            'mt-12 transition lg:mt-0',
             isReviewListShown || isReviewFormShown ? 'col-span-6' : (
               'col-span-full'
             )
@@ -111,7 +161,7 @@ async function Layout({
       </div>
 
       <ChatFullComponent user={session.user} protocolId={protocol.id} />
-    </>
+    </ContextMenu>
   )
 }
 

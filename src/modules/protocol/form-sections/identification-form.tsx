@@ -27,7 +27,6 @@ export function IdentificationForm() {
   const { data: careers } = useQuery({
     queryKey: ['careers'],
     queryFn: async () => await getActiveCareersForForm()!,
-
   })
 
   const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(

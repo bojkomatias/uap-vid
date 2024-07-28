@@ -56,19 +56,25 @@ export default function ProtocolTable({
   user,
   protocols,
   totalRecords,
+  academicUnits,
+  careers,
 }: {
   user: User
   protocols: ProtocolWithIncludes[]
   totalRecords: number
+  academicUnits: { id: string; name: string; shortname: string }[]
+  careers: { id: string; name: string }[]
 }) {
-  const { data: academicUnits } = useQuery({
-    queryKey: ['academic-units'],
-    queryFn: getAcademicUnitsNameAndShortname,
-  })
-  const { data: careers } = useQuery({
-    queryKey: ['careers'],
-    queryFn: getActiveCareersForForm,
-  })
+  // const { data: academicUnits } = useQuery({
+  //   queryKey: ['academic-units'],
+  //   queryFn: async () => await getAcademicUnitsNameAndShortname(),
+  // })
+  // const { data: careers } = useQuery({
+  //   queryKey: ['careers'],
+  //   queryFn: async () => await getActiveCareersForForm(),
+  // })
+
+  console.log(careers)
 
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
