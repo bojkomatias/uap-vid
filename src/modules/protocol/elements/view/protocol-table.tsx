@@ -14,10 +14,10 @@ import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import ProtocolLogsDrawer from '../logs/log-drawer'
-import { useQuery } from '@tanstack/react-query'
-import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { Strong, Text } from '@components/text'
-import { getActiveCareersForForm } from '@repositories/career'
+import SearchBar from '@shared/data-table/search-bar'
+import { Dropdown } from '@components/dropdown'
+import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -65,17 +65,6 @@ export default function ProtocolTable({
   academicUnits: { id: string; name: string; shortname: string }[]
   careers: { id: string; name: string }[]
 }) {
-  // const { data: academicUnits } = useQuery({
-  //   queryKey: ['academic-units'],
-  //   queryFn: async () => await getAcademicUnitsNameAndShortname(),
-  // })
-  // const { data: careers } = useQuery({
-  //   queryKey: ['careers'],
-  //   queryFn: async () => await getActiveCareersForForm(),
-  // })
-
-  console.log(careers)
-
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
       {
@@ -300,21 +289,10 @@ export default function ProtocolTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
       rowAsLinkPath="/protocols/"
-      filterableByKey={{
-        filter: 'state',
-        // Slice to avoid NOT_CREATED
-        values: Object.entries(ProtocolStatesDictionary).slice(
-          1,
-          user.role === 'ADMIN' ? undefined : -1
-        ),
-      }}
-      customFilterSlot={
-        user.role === 'ADMIN' || user.role === 'SECRETARY' ?
-          <AcademicUnitFilter />
-        : null
-      }
-      searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-    />
+    >
+      <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
+      <AcademicUnitFilterV2 academicUnits={academicUnits} />
+    </TanStackTable>
   )
 }
 /**
@@ -361,5 +339,21 @@ const AcademicUnitFilter = () => {
         })}
       </div>
     </div>
+  )
+}
+
+const AcademicUnitFilterV2 = ({
+  academicUnits,
+}: {
+  academicUnits: { id: string; name: string; shortname: string }[]
+}) => {
+  return (
+    <Listbox placeholder="Unidad académica">
+      {academicUnits.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.shortname}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
   )
 }

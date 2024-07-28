@@ -5,6 +5,7 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Currency } from '@shared/currency'
+import SearchBar from '@shared/data-table/search-bar'
 
 export default function CategoriesTable({
   categories,
@@ -46,7 +47,8 @@ export default function CategoriesTable({
       columns={columns}
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
-      searchBarPlaceholder="Buscar por nombre de categoría"
-    />
+    >
+      <SearchBar placeholder="buscar" />
+    </TanStackTable>
   )
 }

@@ -8,6 +8,7 @@ import { Badge } from '@components/badge'
 import { dateFormatter } from '@utils/formatters'
 import { BudgetYearCombobox } from '@elements/years-combobox'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
+import SearchBar from '@shared/data-table/search-bar'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
   select: {
@@ -96,16 +97,15 @@ export default function AnualBudgetTable({
   }
 
   return (
-    <>
-      <TanStackTable
-        data={anualBudgets}
-        columns={columns}
-        totalRecords={totalRecords}
-        initialVisibility={initialVisible}
-        searchBarPlaceholder="Buscar por nombre de categoría"
-        customFilterSlot2={yearFilter()}
-        rowAsLinkPath="/anual-budgets/budget/"
-      />
-    </>
+    <TanStackTable
+      data={anualBudgets}
+      columns={columns}
+      totalRecords={totalRecords}
+      initialVisibility={initialVisible}
+      // customFilterSlot2={yearFilter()}
+      rowAsLinkPath="/anual-budgets/budget/"
+    >
+      <SearchBar placeholder="Buscar" />
+    </TanStackTable>
   )
 }

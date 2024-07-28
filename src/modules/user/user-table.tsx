@@ -5,6 +5,7 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import SearchBar from '@shared/data-table/search-bar'
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: { _count: true }
@@ -75,19 +76,18 @@ export default function UserTable({
   const initialVisible = { id: false, protocols: false, Review: false }
 
   return (
-    <>
-      <TanStackTable
-        data={users}
-        columns={columns}
-        totalRecords={totalRecords}
-        initialVisibility={initialVisible}
-        rowAsLinkPath="/users/edit/"
-        filterableByKey={{
-          filter: 'role',
-          values: Object.entries(RolesDictionary),
-        }}
-        searchBarPlaceholder="Buscar por: Nombre, Email"
-      />
-    </>
+    <TanStackTable
+      data={users}
+      columns={columns}
+      totalRecords={totalRecords}
+      initialVisibility={initialVisible}
+      rowAsLinkPath="/users/edit/"
+      // filterableByKey={{
+      //   filter: 'role',
+      //   values: Object.entries(RolesDictionary),
+      // }}
+    >
+      <SearchBar placeholder="buscar" />
+    </TanStackTable>
   )
 }
