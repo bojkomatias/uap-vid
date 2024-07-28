@@ -14,6 +14,24 @@ body {
   }
 }
 
+@layer components {
+  .input {
+    @apply w-full self-start rounded border border-gray-200 px-3 py-1.5 text-sm transition placeholder:text-[0.72rem] placeholder:uppercase placeholder:text-gray-400/50 focus:border-gray-100 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-0 disabled:pointer-events-none disabled:select-none;
+  }
+
+  .label {
+    @apply select-none p-1 text-[0.72rem] font-normal uppercase text-gray-600;
+  }
+
+  .required {
+    @apply after:pl-0.5 after:text-gray-400 after:content-['*'];
+  }
+
+  .error {
+    @apply pl-2 pt-1 text-xs font-medium text-red-500;
+  }
+}
+
 /* ==== Unset helper ===== */
 .unset {
   all: unset;

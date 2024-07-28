@@ -79,7 +79,7 @@ export function ActionGenerateButton({
 
   if (hasNoValidOptions)
     return (
-      <Badge className="bg-warning-50 ring-warning-300">
+      <Badge className="bg-yellow-50 ring-yellow-300">
         Presupuestos ya han sido generados
       </Badge>
     )

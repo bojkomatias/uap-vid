@@ -26,7 +26,7 @@ export async function GenerateAnualBudget({
           <h1 className="text-lg font-semibold leading-7 text-gray-900">
             Previsualización del presupuesto anual
           </h1>
-          <div className="rounded-md bg-error-400 px-6 py-2 text-sm text-white shadow">
+          <div className="rounded-md bg-red-400 px-6 py-2 text-sm text-white shadow">
             <p className="mb-3 mt-2 flex items-center justify-between text-lg font-bold">
               {parsedObject.error.issues[0].message}
               <AlertCircle />
@@ -75,7 +75,7 @@ export async function GenerateAnualBudget({
           Previsualización del presupuesto anual
         </h1>
         <div>
-          <div className="rounded-md bg-success-300 px-6 py-3 text-sm shadow-sm">
+          <div className="rounded-md bg-teal-300 px-6 py-3 text-sm shadow-sm">
             <span className="flex items-center justify-between text-lg font-semibold">
               {' '}
               <p>
