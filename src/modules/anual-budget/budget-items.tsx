@@ -166,7 +166,7 @@ export function BudgetItems({
                       className={cx(
                         'w-32 text-xs',
                         form.isDirty(`${i}.amount`) &&
-                          'border-warning-200 bg-warning-50'
+                          'border-yellow-200 bg-yellow-50'
                       )}
                     />
                   </td>
