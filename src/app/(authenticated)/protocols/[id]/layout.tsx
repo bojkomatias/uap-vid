@@ -73,9 +73,11 @@ async function Layout({
         {/* {actions}
         {modal} */}
       </div>
-      <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
-        <HideReviewsButton />
-      </ContainerAnimations>
+      {reviews.length > 0 && (
+        <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
+          <HideReviewsButton />
+        </ContainerAnimations>
+      )}
       <div
         id="protocol-and-reviews-container"
         className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
