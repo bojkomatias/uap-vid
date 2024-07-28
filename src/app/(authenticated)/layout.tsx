@@ -5,7 +5,6 @@ export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
-  drawer: React.ReactNode
 }) {
   return (
     <AppLayout>
