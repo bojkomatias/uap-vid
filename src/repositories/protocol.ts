@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import type { ProtocolFlag} from '@prisma/client';
+import type { ProtocolFlag } from '@prisma/client'
 import { type Protocol, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
@@ -558,6 +558,7 @@ const getProtocolsByRol = cache(
     try {
       return await queryBuilder()
     } catch (error) {
+      console.log(error)
       return []
     }
   }

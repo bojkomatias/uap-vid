@@ -40,11 +40,12 @@
     "react-dom": "^18.3.1",
     "react-use-websocket": "^4.8.1",
     "tabler-icons-react": "^1.56.0",
-    "ws": "^8.18.0",
     "tailwind-merge": "^2.4.0",
+    "ws": "^8.18.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.14.11",
     "@types/react": "^18.3.3",
@@ -57,9 +58,9 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "ts-node": "^10.9.2",
     "prisma": "^5.17.0",
     "tailwindcss": "^3.4.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "zod-prisma-types": "^2.8.1"
   }

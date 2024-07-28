@@ -190,7 +190,7 @@ export function BudgetTeamMemberFees({
                         className={cx(
                           'input w-16 text-right text-xs',
                           form.isDirty(`${i}.hours`) &&
-                            'border-warning-200 bg-warning-50'
+                            'border-yellow-200 bg-yellow-50'
                         )}
                         placeholder="24"
                       />

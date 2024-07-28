@@ -2,22 +2,22 @@
 
 import { signOut } from 'next-auth/react'
 import { MenuButton } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { User } from '@prisma/client'
 import RolesDictionary from '@utils/dictionaries/RolesDictionary'
 import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
 import {
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    DropdownDivider,
-    DropdownHeader,
-    DropdownLabel,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownDivider,
+  DropdownHeader,
+  DropdownLabel,
 } from '@components/dropdown'
 import { Avatar } from '@components/avatar'
 
 export function UserDropdown({ user }: { user: User }) {
-    const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   return (
     <Dropdown>
@@ -83,28 +83,25 @@ export function UserDropdown({ user }: { user: User }) {
 }
 
 const DarkModeToggler = () => {
-    const htmlTag = document.querySelector('html')!
-    const isDark = htmlTag.classList.contains('dark')
+  const htmlTag = document.querySelector('html')!
+  const isDark = htmlTag.classList.contains('dark')
 
-    useEffect(() => {}, [])
-
-    return (
-        <DropdownItem
-            onClick={() => {
-                if (isDark) {
-                    htmlTag.classList.remove('dark')
-                    localStorage.removeItem('dark-mode')
-                } else {
-                    htmlTag.classList.add('dark')
-                    localStorage.setItem('dark-mode', 'true')
-                }
-            }}
-        >
-            {isDark ? <Sun data-slot="icon" /> : <Moon data-slot="icon" />}
-            <DropdownLabel>
-                {' '}
-                {isDark ? 'Modo claro' : 'Modo oscuro'}
-            </DropdownLabel>
-        </DropdownItem>
-    )
+  return (
+    <DropdownItem
+      onClick={() => {
+        if (isDark) {
+          htmlTag.classList.remove('dark')
+          localStorage.removeItem('dark-mode')
+        } else {
+          htmlTag.classList.add('dark')
+          localStorage.setItem('dark-mode', 'true')
+        }
+      }}
+    >
+      {isDark ?
+        <Sun data-slot="icon" />
+      : <Moon data-slot="icon" />}
+      <DropdownLabel> {isDark ? 'Modo claro' : 'Modo oscuro'}</DropdownLabel>
+    </DropdownItem>
+  )
 }

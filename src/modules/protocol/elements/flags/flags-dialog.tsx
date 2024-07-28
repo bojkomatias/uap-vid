@@ -17,7 +17,7 @@ export default function FlagsDialog({
   const [open, setOpen] = useState(false)
 
   return (
-    <>
+    <div className="print:hidden">
       <Button
         onClick={() => {
           setOpen(true)
@@ -42,6 +42,6 @@ export default function FlagsDialog({
           />
         </div>
       </Dialog>
-    </>
+    </div>
   )
 }

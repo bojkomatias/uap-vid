@@ -1,7 +1,6 @@
 'use client'
 import type { BudgetSummaryType } from '@actions/anual-budget/action'
 import BudgetCardDelta from './budget-card-delta'
-import BudgetCardDoughnut from './budget-card-doughnut'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { Button } from '@elements/button'
 import { cx } from '@utils/cx'
@@ -9,6 +8,8 @@ import type { AmountIndex } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import useBudgetSummary from 'hooks/budgetSummaryHook'
 import { Currency } from '@shared/currency'
+import Info from 'modules/info'
+import { BudgetCardDoughnut } from './budget-card-doughnut'
 
 export const BudgetSummary = ({
   summary,
@@ -21,15 +22,28 @@ export const BudgetSummary = ({
     summary,
     allAcademicUnits,
   })
+
+  const info_content: { [key: string]: string } = {
+    presupuestototal:
+      'El presupuesto total de la Vicerrectoría de Investigación y Desarrollo destinado a proyectos de investigación.',
+    consumoproyectado:
+      'Sumatoria de todos los presupuestos aprobados hasta el momento.',
+    consumoejecutado:
+      'Sumatoria de ejecuciones realizadas en todos los presupuestos. Para cada presupuesto aprobado, se realizan ejecuciones (gastos directos, sueldos, etc), cuando estas se realizan, es un consumo ejecutado.',
+  }
   return (
     <div>
       <dl
         className={`mt-5 grid grid-cols-1 gap-5 ${approved ? 'xl:grid-cols-3' : 'xl:grid-cols-2'}`}
       >
         {stats.map((item, i) => (
-          <div
+          <Info
+            content={
+              info_content[item.name.replace(' ', '').toLowerCase()] ??
+              'Presupuesto que corresponde a la Unidad Académica de la pestaña seleccionada.'
+            }
+            title={item.name}
             key={item.name}
-            className="flex flex-col overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
           >
             <dt className="flex flex-grow justify-between text-base font-normal text-gray-900">
               {item.name}
@@ -74,7 +88,7 @@ export const BudgetSummary = ({
                 />
               : null}
             </dd>
-          </div>
+          </Info>
         ))}
       </dl>
     </div>

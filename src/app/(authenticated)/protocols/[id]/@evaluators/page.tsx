@@ -134,7 +134,7 @@ export default async function ReviewAssignation({
     // Checks if enabled to assign or re-assign, and if has review, it's data is visible (But not necessarily the action)
 
     return (
-      <div className="relative z-10 my-1 ml-2 max-w-3xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
+      <div className="relative z-10 my-1 ml-2 max-w-3xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm print:hidden">
         {reviewAssignSelectsData.map((data) => (
           <div
             key={data.type}

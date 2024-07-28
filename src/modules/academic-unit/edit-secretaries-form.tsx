@@ -112,8 +112,8 @@ export function EditSecretariesForm({
             <TableRow
               key={value.id}
               className={cx(
-                value.added && 'bg-success-500/20',
-                value.removed && 'bg-error-500/20'
+                value.added && 'bg-teal-500/20',
+                value.removed && 'bg-red-500/20'
               )}
             >
               <TableCell className="font-medium">{value.name}</TableCell>

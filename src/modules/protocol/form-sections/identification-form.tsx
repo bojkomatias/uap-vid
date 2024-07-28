@@ -11,7 +11,7 @@ import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
 import type { Course } from '@prisma/client'
 import { useState } from 'react'
 import {
-  getActiveCarrersForForm,
+  getActiveCareersForForm,
   getCoursesByCareerId,
 } from '@repositories/career'
 import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
@@ -26,7 +26,8 @@ export function IdentificationForm() {
   })
   const { data: careers } = useQuery({
     queryKey: ['careers'],
-    queryFn: async () => await getActiveCarrersForForm(),
+    queryFn: async () => await getActiveCareersForForm()!,
+
   })
 
   const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(

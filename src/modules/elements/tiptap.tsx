@@ -32,9 +32,21 @@ const Tiptap = ({
   onChange: (a: string) => void
 }) => {
   const editor = useEditor({
+    injectCSS: false,
     extensions: [
       // @ts-ignore
-      StarterKit,
+      StarterKit.configure({
+        bold: {
+          HTMLAttributes: {
+            class: 'dark:text-gray-200',
+          },
+        },
+        heading: {
+          HTMLAttributes: {
+            class: 'dark:text-gray-200',
+          },
+        },
+      }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -42,7 +54,8 @@ const Tiptap = ({
     ],
     editorProps: {
       attributes: {
-        class: 'pt-8 input min-h-[10rem] focus:outline-0 bg-white',
+        class:
+          'pt-8 input min-h-[10rem] focus:outline-0 bg-white dark:bg-gray-800 dark:border-gray-700 dark:!text-gray-200',
       },
     },
     content: value,
@@ -50,14 +63,14 @@ const Tiptap = ({
   })
   if (!editor) return <></>
   return (
-    <div className="prose relative max-w-none">
+    <div className="prose relative max-w-none ">
       <MenuBar editor={editor} />
       <EditorContent
         value={value}
         onBlur={() => onChange(editor.getHTML().replace('<p></p>', ''))}
         editor={editor}
       />
-      <div className="absolute bottom-1 right-0 px-3 text-xs text-black/30">
+      <div className="absolute bottom-1 right-0 px-3 text-xs text-black/30 ">
         {(
           editor.storage.characterCount.words() <= 1 &&
           editor.storage.characterCount.words() !== 0
@@ -74,8 +87,17 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
     return null
   }
 
+  const editor_option_styles =
+    'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-700'
+
+  const editor_option_active_styles =
+    'bg-gray-300 text-gray-700 ring-inset hover:ring-offset-0 dark:bg-gray-600 dark:text-gray-200'
+
+  const editor_option_inactive_styles =
+    'text-gray-500 dark:text-gray-200 bg-white dark:bg-gray-800'
+
   return (
-    <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border bg-gray-100 px-0.5 ">
+    <div className="absolute inset-x-0 top-0 z-10 flex w-full gap-0.5 overflow-x-auto rounded-t border bg-gray-100 px-0.5 dark:border-gray-700 dark:bg-gray-800 ">
       {/* Mark text */}
       <button
         type="button"
@@ -84,10 +106,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         }}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('bold') ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <Bold className="h-4 w-5" />
@@ -97,10 +119,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('italic') ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <Italic className="h-4 w-5" />
@@ -110,10 +132,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('heading', { level: 2 }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <H1 className="h-4 w-5" />
@@ -122,10 +144,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('heading', { level: 3 }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <H2 className="h-4 w-5" />
@@ -134,10 +156,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('heading', { level: 4 }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <H3 className="h-4 w-5" />
@@ -147,10 +169,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('bulletList') ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <List className="h-4 w-5" />
@@ -159,10 +181,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive('orderedList') ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <ListNumbers className="h-4 w-5" />
@@ -172,10 +194,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive({ textAlign: 'left' }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <AlignLeft className="h-4 w-5" />
@@ -184,10 +206,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive({ textAlign: 'center' }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <AlignCenter className="h-4 w-5" />
@@ -196,10 +218,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive({ textAlign: 'right' }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <AlignRight className="h-4 w-5" />
@@ -208,10 +230,10 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign('justify').run()}
         className={cx(
-          'my-px h-fit rounded-md p-1 hover:bg-gray-200 hover:text-gray-800',
+          editor_option_styles,
           editor.isActive({ textAlign: 'justify' }) ?
-            'bg-white text-gray-700 ring-1 ring-inset  hover:ring-offset-0'
-          : 'text-gray-500'
+            editor_option_active_styles
+          : editor_option_inactive_styles
         )}
       >
         <AlignJustified className="h-4 w-5" />
@@ -219,7 +241,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
       {/* divider */}
       <button
         type="button"
-        className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
+        className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
       >
         <Separator className="h-4 w-5" />
@@ -227,7 +249,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
       {/* undo */}
       <button
         type="button"
-        className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800"
+        className="my-px h-fit rounded-md p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-600 dark:hover:text-gray-200"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
       >

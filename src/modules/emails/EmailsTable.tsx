@@ -7,6 +7,7 @@ import { Button } from '@headlessui/react'
 import { ArrowDown, ArrowRight, User } from 'tabler-icons-react'
 import type { EmailContentTemplate } from '@prisma/client'
 import EmailForm from './EmailForm'
+import { Text } from '@components/text'
 
 export default function EmailsTable({
   emails,
@@ -438,9 +439,9 @@ export default function EmailsTable({
 
     </html>`
 
-  const useCasesExplanation = {
+  const useCasesExplanation: { [key: string]: React.ReactNode } = {
     onReview: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Evaluador</h3>{' '}
@@ -466,7 +467,7 @@ export default function EmailsTable({
       </div>
     ),
     onRevised: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Investigador</h3>{' '}
@@ -493,7 +494,7 @@ export default function EmailsTable({
       </div>
     ),
     onAssignation: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
@@ -519,7 +520,7 @@ export default function EmailsTable({
       </div>
     ),
     onPublish: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Investigador</h3>{' '}
@@ -546,7 +547,7 @@ export default function EmailsTable({
       </div>
     ),
     onApprove: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Secretario o Administrador</h3>{' '}
@@ -572,7 +573,7 @@ export default function EmailsTable({
       </div>
     ),
     changeUserEmail: (
-      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 md:flex-row">
+      <div className="relative mx-auto my-5 flex w-fit flex-col items-center gap-3 text-justify text-gray-700 dark:text-gray-200 md:flex-row">
         <div className="flex flex-1 flex-col items-center">
           <User className="h-10 w-10" />{' '}
           <h3 className="text-sm font-bold">Usuario</h3>{' '}
@@ -586,13 +587,13 @@ export default function EmailsTable({
   }
 
   return (
-    <div className="text-primary-950">
+    <div className="dark:text-gray-200">
       <Heading>Emails</Heading>
       <Subheading>
         Puede editar el asunto y contenido de los emails que salen del sistema
         dependiendo del caso de uso.
       </Subheading>
-      <p className="my-2 text-lg font-semibold text-gray-600">Casos de uso:</p>
+      <Text className="my-2 text-lg font-semibold ">Casos de uso:</Text>
       <div className="flex flex-wrap gap-2">
         {useCases?.map((uc) => (
           <Button
@@ -601,29 +602,19 @@ export default function EmailsTable({
               setOpen(true)
               setDialogContent(emails.find((e) => e.useCase == uc)!)
             }}
-            className="cursor-pointer rounded-lg border p-4 text-lg font-medium drop-shadow-sm transition hover:shadow-lg"
+            className="cursor-pointer rounded-lg border p-4 text-lg font-medium drop-shadow-sm transition hover:shadow-lg dark:border-gray-700"
           >
-            {useCasesDictionary[uc as keyof typeof useCasesDictionary]}
+            {useCasesDictionary[uc]}
           </Button>
         ))}
       </div>
       <Dialog size="2xl" open={open} onClose={setOpen}>
-        <Heading className="text-primary-950">
-          {
-            useCasesDictionary[
-              dialogContent?.useCase as keyof typeof useCasesDictionary
-            ]
-          }
-        </Heading>
-        {
-          useCasesExplanation[
-            dialogContent?.useCase as keyof typeof useCasesExplanation
-          ]
-        }
+        <Heading>{useCasesDictionary[dialogContent?.useCase]}</Heading>
+        {useCasesExplanation[dialogContent?.useCase]}
         <Subheading className=" my-2">Email</Subheading>
         <EmailForm email={dialogContent} callbackFn={setDialogContent} />
         <Subheading className="mt-3">Vista previa del email</Subheading>
-        <div className="my-2 rounded-lg border p-4">
+        <div className="my-2 rounded-lg border p-4 dark:border-gray-700">
           <div
             dangerouslySetInnerHTML={{
               __html:
