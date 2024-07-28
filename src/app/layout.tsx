@@ -1,10 +1,6 @@
 import './globals.css'
 import { Montserrat } from 'next/font/google'
 import Providers from './providers'
-import { getServerSession } from 'next-auth'
-import { authOptions } from './api/auth/[...nextauth]/auth'
-import { Breadcrumbs } from '@elements/breadcrumbs'
-import { AppLayout } from '@auth/navigation'
 
 export const metadata = {
   title: {
@@ -18,13 +14,9 @@ const font = Montserrat({ subsets: ['latin'], variable: '--font-sans' })
 
 export default async function RootLayout({
   children,
-  sign_in,
 }: {
   children: React.ReactNode
-  sign_in: React.ReactNode
 }) {
-  const session = await getServerSession(authOptions)
-
   return (
     <html className={`${font.variable} font-sans antialiased`}>
       <head>
@@ -39,16 +31,7 @@ export default async function RootLayout({
       : null}
       <body>
         <div id="notifications-container" className="relative" />
-        {session ?
-          <Providers>
-            <AppLayout>
-              <div className="max-lg:hidden">
-                <Breadcrumbs />
-              </div>
-              {children}
-            </AppLayout>
-          </Providers>
-        : sign_in}
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

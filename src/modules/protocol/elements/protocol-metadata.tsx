@@ -18,11 +18,7 @@ import { ResearcherReassignation } from './action-buttons/researcher-reassignati
 import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 
-export default async function ProtocolMetadata({
-  params,
-}: {
-  params: { id: string }
-}) {
+export async function ProtocolMetadata({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
   if (!session || !protocol) return

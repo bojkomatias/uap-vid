@@ -52,7 +52,7 @@ export default function PopoverComponent({
           /*If no classes are passed as an argument, the panel where the children are being rendered, will be styled automatically to be shown on top of the button being called upon. If classes are being passed, the developer can specify where it wants the panel to appear. */
           className={cx(
             !className &&
-              'absolute -top-9 right-0 z-30 rounded-md bg-success-50 px-2 py-2 shadow-md',
+              'absolute -top-9 right-0 z-30 rounded-md bg-teal-50 px-2 py-2 shadow-md',
             className
           )}
         >

@@ -9,7 +9,7 @@ export function DescriptionList({
       {...props}
       className={clsx(
         className,
-        'grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,theme(spacing.80))_auto] sm:text-sm/6 print:grid-cols-1'
+        'grid grid-cols-1 text-base/6 @3xl:grid-cols-[min(50%,theme(spacing.80))_auto] sm:text-sm/6 print:grid-cols-1'
       )}
     />
   )
@@ -39,7 +39,7 @@ export function DescriptionDetails({
       {...props}
       className={clsx(
         className,
-        'max-w-3xl pb-3 pt-1 text-gray-950 dark:text-white sm:border-t sm:border-gray-950/5 sm:py-3 dark:sm:border-white/5 print:max-w-2xl print:!font-medium print:sm:py-0 sm:[&:nth-child(2)]:border-none'
+        'pb-3 pt-1 text-gray-950 dark:text-white sm:border-t sm:border-gray-950/5 sm:py-3 dark:sm:border-white/5 print:max-w-2xl print:!font-medium print:sm:py-0 sm:[&:nth-child(2)]:border-none'
       )}
     />
   )

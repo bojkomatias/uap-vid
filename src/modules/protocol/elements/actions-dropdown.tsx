@@ -21,12 +21,12 @@ import {
   Badge,
   ChevronDown,
   ClockPause,
-  Dots,
   Edit,
   FileDollar,
   FileTime,
   Flag2,
   Trash,
+  FileDownload,
 } from 'tabler-icons-react'
 
 type ActionOption = {
@@ -192,6 +192,15 @@ export function ActionsDropdown({
             : i > 0 ? <DropdownDivider key={i} />
             : null
           )}
+        <DropdownDivider />
+        <DropdownItem
+          onClick={() => {
+            window.print()
+          }}
+        >
+          <FileDownload data-slot="icon" />
+          <DropdownLabel>Descargar PDF</DropdownLabel>
+        </DropdownItem>
       </DropdownMenu>
     </Dropdown>
   )
