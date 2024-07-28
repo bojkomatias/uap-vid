@@ -9,7 +9,13 @@ import { AnualBudgetState } from '@prisma/client'
 import useBudgetSummary from 'hooks/budgetSummaryHook'
 import { Currency } from '@shared/currency'
 import Info from 'modules/info'
-import { BudgetCardDoughnut } from './budget-card-doughnut'
+import {
+  BudgetCardDoughnut,
+  BudgetCardDoughnutDark,
+} from './budget-card-doughnut'
+import { Heading } from '@components/heading'
+import { Text } from '@components/text'
+import { BadgeButton } from '@components/badge'
 
 export const BudgetSummary = ({
   summary,
@@ -45,49 +51,70 @@ export const BudgetSummary = ({
             title={item.name}
             key={item.name}
           >
-            <dt className="flex flex-grow justify-between text-base font-normal text-gray-900">
-              {item.name}
+            <div className="flex h-full flex-col overflow-hidden rounded-lg border px-4 py-5 shadow-md dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+              <dt className="flex flex-grow justify-between text-base font-normal text-gray-900">
+                <Heading>{item.name}</Heading>
 
-              {i === 1 && (
-                <Button
-                  intent="secondary"
-                  size="xs"
-                  onClick={() => showApproved((prev) => !prev)}
-                  className={cx(approved ? 'bg-success-200' : 'bg-warning-200')}
-                >
-                  {approved ?
-                    AnualBudgetStateDictionary[AnualBudgetState.APPROVED]
-                  : AnualBudgetStateDictionary[AnualBudgetState.PENDING]}
-                </Button>
-              )}
-            </dt>
-            <dd className="relative mt-1 block items-baseline justify-between lg:flex">
-              <div className="flex flex-col items-baseline text-2xl font-semibold text-black/70">
-                <Currency amountIndex={item.total} />
-                {item.of ?
-                  <span className="ml-2 text-sm font-medium text-gray-500">
-                    de
-                    {item.of ?
-                      <Currency amountIndex={item.of} />
-                    : 0}
-                  </span>
-                : null}
-              </div>
+                {i === 1 && (
+                  <BadgeButton
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation()
+                      showApproved((prev) => !prev)
+                    }}
+                    color={approved ? 'teal' : 'yellow'}
+                  >
+                    {approved ?
+                      AnualBudgetStateDictionary[AnualBudgetState.APPROVED]
+                    : AnualBudgetStateDictionary[AnualBudgetState.PENDING]}
+                  </BadgeButton>
+                )}
+              </dt>
 
-              {approved && item.indicator === 'graph' ?
-                // All the indexes must be percentually the same
-                <BudgetCardDoughnut
-                  percentage={
-                    item.of ?
-                      (
-                        (item.total.FCA / (item.of as AmountIndex).FCA) *
-                        100
-                      ).toFixed(1)
-                    : '0'
-                  }
-                />
-              : null}
-            </dd>
+              <dd className="relative mt-1 block items-baseline justify-between lg:flex">
+                <div className="flex flex-col items-baseline text-2xl font-semibold text-black/70">
+                  <Currency amountIndex={item.total} />
+                  {item.of ?
+                    <Text className="ml-2 text-sm font-medium text-gray-500">
+                      de
+                      {item.of ?
+                        <Currency amountIndex={item.of} />
+                      : 0}
+                    </Text>
+                  : null}
+                </div>
+                <div className="dark:hidden">
+                  {approved && item.indicator === 'graph' ?
+                    // All the indexes must be percentually the same
+                    <BudgetCardDoughnut
+                      percentage={
+                        item.of ?
+                          (
+                            (item.total.FCA / (item.of as AmountIndex).FCA) *
+                            100
+                          ).toFixed(1)
+                        : '0'
+                      }
+                    />
+                  : null}
+                </div>
+                <div className="hidden dark:block">
+                  {' '}
+                  {approved && item.indicator === 'graph' ?
+                    // All the indexes must be percentually the same
+                    <BudgetCardDoughnutDark
+                      percentage={
+                        item.of ?
+                          (
+                            (item.total.FCA / (item.of as AmountIndex).FCA) *
+                            100
+                          ).toFixed(1)
+                        : '0'
+                      }
+                    />
+                  : null}
+                </div>
+              </dd>
+            </div>
           </Info>
         ))}
       </dl>
