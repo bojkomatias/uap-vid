@@ -1,7 +1,7 @@
 const { rose, teal, amber } = require('tailwindcss/colors')
 
 module.exports = {
-  darkMode: 'class',
+  darkMode: null,
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -50,5 +50,8 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
+    function ({ addUtilities, addVariant }) {
+      addVariant('dark', '@media not print { .dark & }')
+    },
   ],
 }

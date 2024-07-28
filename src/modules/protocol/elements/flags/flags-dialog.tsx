@@ -6,25 +6,40 @@ import type { ProtocolFlag } from '@prisma/client'
 import { Dialog } from '@components/dialog'
 import { Button } from '@components/button'
 import { Divider } from '@components/divider'
+import { BadgeButton } from '@components/badge'
+import { Checks, Flag } from 'tabler-icons-react'
 
 export default function FlagsDialog({
   protocolId,
   protocolFlags,
+  context_menu,
 }: {
   protocolId: string
   protocolFlags: ProtocolFlag[]
+  context_menu?: boolean
 }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="print:hidden">
-      <Button
-        onClick={() => {
-          setOpen(true)
-        }}
-      >
-        Votos
-      </Button>
+    <>
+      {context_menu ?
+        <BadgeButton
+          onClick={() => {
+            setOpen(true)
+          }}
+          className="flex grow justify-between shadow-sm"
+        >
+          Votos <Flag size={18} />
+        </BadgeButton>
+      : <Button
+          outline
+          onClick={() => {
+            setOpen(true)
+          }}
+        >
+          Votos
+        </Button>
+      }
       <Dialog open={open} onClose={setOpen}>
         <div className="flex flex-col gap-3 p-3">
           <CucytFlag
@@ -42,6 +57,6 @@ export default function FlagsDialog({
           />
         </div>
       </Dialog>
-    </div>
+    </>
   )
 }
