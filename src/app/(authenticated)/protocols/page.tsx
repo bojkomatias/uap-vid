@@ -8,6 +8,8 @@ import { Heading, Subheading } from '@components/heading'
 import { Button } from '@components/button'
 import { FileReport } from 'tabler-icons-react'
 import { ContainerAnimations } from '@elements/container-animations'
+import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
+import { getActiveCareersForForm } from '@repositories/career'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -24,6 +26,9 @@ export default async function Page({
     session.user.id,
     searchParams
   )
+
+  const academicUnits = await getAcademicUnitsNameAndShortname()
+  const careers = await getActiveCareersForForm()
 
   return (
     <>
@@ -49,6 +54,8 @@ export default async function Page({
 
       <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
         <ProtocolTable
+          careers={careers}
+          academicUnits={academicUnits}
           user={session.user}
           protocols={protocols}
           totalRecords={totalRecords}
