@@ -33,6 +33,7 @@ import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
 import { IndexSwapper } from '@shared/index-swapper'
 import Info from 'modules/info'
+import { AnimationsSwapper } from '@shared/animations-swapper'
 
 export function AppSidebar({
   user,
@@ -68,6 +69,8 @@ export function AppSidebar({
           <SidebarSection>
             <SidebarHeading>Visulizar montos en indices</SidebarHeading>
             <IndexSwapper />
+            <SidebarHeading>Mostrar animaciones</SidebarHeading>
+            <AnimationsSwapper />
           </SidebarSection>
         )}
         {convocatory ?

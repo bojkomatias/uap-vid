@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useAtom } from 'jotai'
+import { animationsSwapAtom } from '@shared/animations-swapper'
 
 /**
  * @param Default_animation: 5px smooth entrance from left to right, opacity from 0 to 1 too.
@@ -23,6 +25,16 @@ export function ContainerAnimations({
   className?: string
   id?: string
 }) {
+  const [value] = useAtom(animationsSwapAtom)
+
+  if (value === 'false') {
+    return (
+      <div id={id} className={className}>
+        {children}
+      </div>
+    )
+  }
+
   if (!animation)
     return (
       <motion.div
@@ -34,6 +46,7 @@ export function ContainerAnimations({
         {children}
       </motion.div>
     )
+
   if (animation == 1)
     return (
       <motion.div
