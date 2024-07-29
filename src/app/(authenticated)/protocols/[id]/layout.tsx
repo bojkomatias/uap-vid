@@ -15,11 +15,10 @@ import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
 import ContextMenu from '../../../../shared/context-menu'
-import { DropdownItem, DropdownMenu } from '@components/dropdown'
-import { Button } from '@components/button'
+
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
-import { Download, Mail } from 'tabler-icons-react'
+import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 

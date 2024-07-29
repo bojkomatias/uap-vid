@@ -10,9 +10,9 @@ import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { AnualBudgetState } from '@prisma/client'
 import { Heading } from '@components/heading'
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Budget({ params }: { params: { id: string } }) {
   const anualBudget = await getAnualBudgetById(params.id)
-  if (!anualBudget) redirect('/anual-budgets')
+  if (!anualBudget) redirect('/')
 
   const { budgetItems, budgetTeamMembers, protocol, ...rest } = anualBudget
 
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           {/* If remainings are 0 then budget is finished */}
           {(
             meta.state === AnualBudgetState.APPROVED &&
-            (calculations.ABIr !== 0 || calculations.ABTr !== 0)
+            (calculations.ABIr.FCA !== 0 || calculations.ABTr.FCA !== 0)
           ) ?
             <InterruptAnualBudget id={meta.id} protocolId={meta.protocolId} />
           : null}
