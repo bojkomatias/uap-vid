@@ -1,4 +1,6 @@
 import { Badge } from '@components/badge'
+import { Heading, Subheading } from '@components/heading'
+import { Text } from '@components/text'
 import type { AnualBudget } from '@prisma/client'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
@@ -9,34 +11,45 @@ export const BudgetMetadata = ({
   createdAt,
   updatedAt,
   state,
+  year,
+  children,
 }: Omit<AnualBudget, 'budgetItems'> & {
   title: string
   sponsor: string[]
+  year: number
+  children: React.ReactNode
 }) => {
   return (
-    <div className="w-full max-w-3xl rounded-lg bg-gray-50 p-4 text-xs leading-loose">
-      <div className="flex items-baseline">
-        <div className="flex-grow">
-          <span className="pr-2 font-medium underline underline-offset-2">
-            Creado:
-          </span>
-          {dateFormatter.format(createdAt)}
-          <span className="ml-4 pr-2 font-medium underline underline-offset-2">
-            Última edición:
-          </span>
-          {dateFormatter.format(updatedAt)}
+    <div className="mb-8 mt-2 flex w-full justify-between gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
+      <div>
+        {' '}
+        <Heading>{title}</Heading>
+        <Subheading>{`Presupuesto ${year}`}</Subheading>
+        <div className="flex items-baseline">
+          <div className="flex-grow">
+            <div className="flex gap-2">
+              <div className="flex gap-2">
+                <Text>Creado:</Text>
+                <Subheading>{dateFormatter.format(createdAt)}</Subheading>
+              </div>
+              <div className="flex gap-2">
+                <Text>Última edición:</Text>
+                <Subheading>{dateFormatter.format(updatedAt)}</Subheading>
+              </div>
+            </div>
+          </div>
         </div>
-        <Badge>{AnualBudgetStateDictionary[state]}</Badge>
+        <div className="flex gap-2">
+          <Text>Ente patrocinante:</Text>
+          <Subheading>{sponsor.join(', ')}</Subheading>
+        </div>
       </div>
-      <span className="pr-2 font-medium underline underline-offset-2">
-        Protocolo:
-      </span>
-      {title}
-      <br />
-      <span className="pr-2 font-medium underline underline-offset-2">
-        Ente patrocinante:
-      </span>
-      {sponsor.join(', ')}
+      <div>
+        <Badge className="h-fit w-fit text-clip !text-[14px] font-semibold">
+          {AnualBudgetStateDictionary[state]}
+        </Badge>
+        {children}
+      </div>
     </div>
   )
 }
