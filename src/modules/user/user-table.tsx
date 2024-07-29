@@ -4,8 +4,12 @@ import type { Prisma } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import {
+  RolesColorDictionary,
+  RolesDictionary,
+} from '@utils/dictionaries/RolesDictionary'
 import SearchBar from '@shared/data-table/search-bar'
+import { Badge } from '@components/badge'
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: { _count: true }
@@ -67,7 +71,11 @@ export default function UserTable({
       {
         accessorKey: 'role',
         header: 'Rol',
-        cell: ({ row }) => <span>{RolesDictionary[row.original.role]} </span>,
+        cell: ({ row }) => (
+          <Badge color={RolesColorDictionary[row.original.role]}>
+            {RolesDictionary[row.original.role]}
+          </Badge>
+        ),
       },
     ],
     []
@@ -82,10 +90,6 @@ export default function UserTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
       rowAsLinkPath="/users/edit/"
-      // filterableByKey={{
-      //   filter: 'role',
-      //   values: Object.entries(RolesDictionary),
-      // }}
     >
       <SearchBar placeholder="buscar" />
     </TanStackTable>

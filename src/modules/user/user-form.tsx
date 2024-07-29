@@ -2,9 +2,7 @@
 import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
-import { RoleSelector } from './elements/role-selector'
-import { Role } from '@prisma/client'
+import { useTransition } from 'react'
 import { z } from 'zod'
 import { RoleSchema } from '@utils/zod'
 import { useForm, zodResolver } from '@mantine/form'
@@ -12,7 +10,7 @@ import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
 import { FormButton } from '@shared/form/form-button'
 import { FormListbox } from '@shared/form/form-listbox'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 
 const CreateUserSchema = z.object({
   name: z
