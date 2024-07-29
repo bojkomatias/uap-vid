@@ -7,6 +7,10 @@ import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import type { z } from 'zod'
 
+export const getConvocatoriesForFilter = cache(async () => {
+  return await prisma.convocatory.findMany({ select: { id: true, name: true } })
+})
+
 export const getAllConvocatories = cache(
   async ({
     records = '10',

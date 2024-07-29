@@ -1,5 +1,5 @@
 import { Badge, BadgeButton } from '@components/badge'
-import { PageFilterDictionary } from '@utils/dictionaries/PageFilterDictionary'
+import { TableFilterDictionary } from '@utils/dictionaries/TableFilterDictionary'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
@@ -16,10 +16,10 @@ export function TableFilterRemover() {
   return (
     <div className="-mb-2 mt-1 flex h-6 gap-1">
       {filters.map(([filter]) =>
-        PageFilterDictionary[filter] ?
+        TableFilterDictionary[filter] ?
           <div key={filter} className="flex gap-px">
             <Badge className="rounded-r-none">
-              {PageFilterDictionary[filter]}
+              {TableFilterDictionary[filter]}
             </Badge>
             <BadgeButton
               className="h-full rounded-l-none"

@@ -6,7 +6,7 @@ import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
@@ -15,6 +15,11 @@ import { Strong, Text } from '@components/text'
 import SearchBar from '@shared/data-table/search-bar'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import {
+  getAllConvocatories,
+  getConvocatoriesForFilter,
+} from '@repositories/convocatory'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -288,17 +293,18 @@ export default function ProtocolTable({
       rowAsLinkPath="/protocols/"
     >
       <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
+      <ConvocatoryFilter />
       <AcademicUnitFilter academicUnits={academicUnits} />
       <StateFilter />
     </TanStackTable>
   )
 }
 
-const AcademicUnitFilter = ({
+function AcademicUnitFilter({
   academicUnits,
 }: {
   academicUnits: { id: string; name: string; shortname: string }[]
-}) => {
+}) {
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
 
@@ -321,7 +327,7 @@ const AcademicUnitFilter = ({
   )
 }
 
-const StateFilter = () => {
+function StateFilter() {
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
 
@@ -339,6 +345,32 @@ const StateFilter = () => {
       {states.map((e) => (
         <ListboxOption key={e} value={e}>
           <ListboxLabel>{ProtocolStatesDictionary[e]}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+function ConvocatoryFilter() {
+  const { data } = useQuery({
+    queryKey: ['convocatories'],
+    queryFn: async () => await getConvocatoriesForFilter(),
+  })
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+  return (
+    <Listbox
+      placeholder="Convocatoria"
+      value={searchParams.get('convocatory')}
+      onChange={(value: string) => {
+        update({
+          convocatory: value,
+        })
+      }}
+    >
+      {data?.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.name}</ListboxLabel>
         </ListboxOption>
       ))}
     </Listbox>
