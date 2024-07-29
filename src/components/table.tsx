@@ -175,6 +175,7 @@ export function TableCell({
           className="absolute inset-0 focus:outline-none"
         />
       )}
+
       {children}
     </td>
   )

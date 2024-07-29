@@ -23,4 +23,15 @@ const getLogs = cache(async () => {
   }
 })
 
-export { newLog, getLogs }
+const getLogsByProtocolId = cache(async (protocolId: string) => {
+  try {
+    return await prisma.logs.findMany({
+      where: { protocolId },
+      include: { user: true },
+    })
+  } catch (e) {
+    return null
+  }
+})
+
+export { newLog, getLogs, getLogsByProtocolId }

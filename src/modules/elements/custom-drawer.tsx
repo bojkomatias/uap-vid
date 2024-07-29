@@ -1,6 +1,7 @@
 'use client'
 import { usePathname, useRouter } from 'next/navigation'
 import { Dialog } from '@headlessui/react'
+import { Heading } from '@components/heading'
 
 /**This drawer takes 2 required arguments: title and children, the title will be, well, the title of the drawer and the children can be anything that goes inside it, forms, static elements, etc. The path argument is needed when the drawer will be consumed by an intercepted route (server side), otherwise, an "open" argument will be needed, to open and close the drawer in the client*/
 export default function CustomDrawer({
@@ -50,13 +51,9 @@ export default function CustomDrawer({
           className="fade-in-right fixed inset-0 overflow-y-auto"
         >
           <div className="flex items-center justify-end text-center">
-            <Dialog.Panel className="h-screen w-full max-w-lg transform overflow-hidden bg-white p-6 text-left align-middle shadow-md transition-all">
-              <Dialog.Title className="font-semibold text-gray-600">
-                {title}
-              </Dialog.Title>
-              <div className="mt-2 rounded-md border border-gray-100 bg-gray-50 p-4 shadow-md">
-                {children}
-              </div>
+            <Dialog.Panel className="h-screen w-full max-w-lg transform overflow-hidden bg-white p-6 text-left align-middle shadow-md transition-all dark:bg-gray-800">
+              <Heading>{title}</Heading>
+              <div className="mt-2 rounded-md ">{children}</div>
             </Dialog.Panel>
           </div>
         </div>

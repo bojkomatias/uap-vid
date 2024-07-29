@@ -19,7 +19,7 @@ import { DropdownItem, DropdownMenu } from '@components/dropdown'
 import { Button } from '@components/button'
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
-import { Mail } from 'tabler-icons-react'
+import { Download, Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 
 async function Layout({
