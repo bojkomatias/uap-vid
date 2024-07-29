@@ -4,8 +4,10 @@ import { notifications } from '@elements/notifications'
 import { zodResolver } from '@mantine/form'
 import type { Review, ReviewQuestion as RQuestion } from '@prisma/client'
 import { ReviewType, ReviewVerdict } from '@prisma/client'
-import { cx } from '@utils/cx'
-import ReviewVerdictsDictionary from '@utils/dictionaries/ReviewVerdictsDictionary'
+import {
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 import { ReviewProvider, useReview } from '@utils/reviewContext'
 import { ReviewSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
@@ -125,10 +127,11 @@ export default function ReviewForm({
             </Text>
             <RadioGroup {...form.getInputProps('verdict')}>
               <RadioField>
-                <Radio value={ReviewVerdict.APPROVED} color="teal" />
-                <Label>
-                  {ReviewVerdictsDictionary[ReviewVerdict.APPROVED]}
-                </Label>
+                <Radio
+                  value={ReviewVerdict.APPROVED}
+                  color={ReviewVerdictColorDictionary[ReviewVerdict.APPROVED]}
+                />
+                <Label>{ReviewVerdictDictionary[ReviewVerdict.APPROVED]}</Label>
                 <Description>
                   Hacer devolución del proyecto como válido y apto para
                   continuar el proceso.
@@ -137,14 +140,14 @@ export default function ReviewForm({
               <RadioField>
                 <Radio
                   value={ReviewVerdict.APPROVED_WITH_CHANGES}
-                  color="yellow"
-                />
-                <Label>
-                  {
-                    ReviewVerdictsDictionary[
+                  color={
+                    ReviewVerdictColorDictionary[
                       ReviewVerdict.APPROVED_WITH_CHANGES
                     ]
                   }
+                />
+                <Label>
+                  {ReviewVerdictDictionary[ReviewVerdict.APPROVED_WITH_CHANGES]}
                 </Label>
                 <Description>
                   Enviar correcciones, si los cambios son abordados
@@ -156,10 +159,11 @@ export default function ReviewForm({
                   review.type === ReviewType.METHODOLOGICAL ? 'hidden' : ''
                 }
               >
-                <Radio value={ReviewVerdict.REJECTED} color="red" />
-                <Label>
-                  {ReviewVerdictsDictionary[ReviewVerdict.REJECTED]}
-                </Label>
+                <Radio
+                  value={ReviewVerdict.REJECTED}
+                  color={ReviewVerdictColorDictionary[ReviewVerdict.REJECTED]}
+                />
+                <Label>{ReviewVerdictDictionary[ReviewVerdict.REJECTED]}</Label>
                 <Description>
                   Marcar protocolo de investigación como rechazado.
                 </Description>

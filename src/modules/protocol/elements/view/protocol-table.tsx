@@ -7,7 +7,6 @@ import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import ProtocolLogsDrawer from '../logs/log-drawer'
@@ -16,10 +15,11 @@ import SearchBar from '@shared/data-table/search-bar'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import { useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
+import { getConvocatoriesForFilter } from '@repositories/convocatory'
 import {
-  getAllConvocatories,
-  getConvocatoriesForFilter,
-} from '@repositories/convocatory'
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -192,9 +192,17 @@ export default function ProtocolTable({
         id: 'reviews_0.verdict',
         accessorFn: (row) => row.reviews[0]?.verdict,
         header: 'Veredicto Metodológico',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[0]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[0] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[0].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[0].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -213,9 +221,17 @@ export default function ProtocolTable({
         id: 'reviews_1.verdict',
         accessorFn: (row) => row.reviews[1]?.verdict,
         header: 'Veredicto Interno',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[1]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[1] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[1].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[1].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -233,9 +249,17 @@ export default function ProtocolTable({
         id: 'reviews_2.verdict',
         accessorFn: (row) => row.reviews[2]?.verdict,
         header: 'Veredicto Externo',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[2]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[2] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[2].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[2].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -253,9 +277,17 @@ export default function ProtocolTable({
         id: 'reviews_3.verdict',
         accessorFn: (row) => row.reviews[3]?.verdict,
         header: 'Veredicto Tercero',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[3]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[3] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[3].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[3].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
