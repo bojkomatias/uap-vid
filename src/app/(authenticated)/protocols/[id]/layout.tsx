@@ -21,6 +21,7 @@ import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
 import { Download, Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
+import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 
 async function Layout({
   params,
@@ -92,6 +93,11 @@ async function Layout({
             protocolFlags={protocol.flags}
             protocolId={protocol.id}
             context_menu={true}
+          />
+          <ProtocolLogsDrawer
+            protocolId={protocol.id}
+            context_menu
+            userId={session.user.id}
           />
         </>
       }
