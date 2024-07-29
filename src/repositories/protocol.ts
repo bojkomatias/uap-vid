@@ -260,8 +260,8 @@ const getProtocolsByRole = cache(
       search,
       sort,
       order,
-      states,
-      units,
+      state,
+      unit,
     }: { [key: string]: string }
   ) => {
     if (!id) throw Error('No ID passed')
@@ -354,18 +354,17 @@ const getProtocolsByRole = cache(
         }
       : {}
 
-    const stateFilter =
-      states ? { state: { in: states.split('-') as ProtocolState[] } } : {}
+    const stateFilter = state ? { state: state as ProtocolState } : {}
 
     const acUnitFilter =
-      units ?
+      unit ?
         {
           sections: {
             is: {
               identification: {
                 is: {
                   academicUnitIds: {
-                    hasSome: units.split('-'),
+                    has: unit,
                   },
                 },
               },

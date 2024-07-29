@@ -24,6 +24,7 @@ import {
   TableRow,
 } from '@components/table'
 import { Text } from '@components/text'
+import { TableFilterRemover } from './table-filter-remover'
 
 export default function TanStackTable({
   data,
@@ -59,12 +60,12 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className="mb-2 mt-4 flex items-center gap-1">
+      <div className="mt-4 flex items-center gap-1">
         {children}
         <span className="grow" />
         <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
       </div>
-
+      <TableFilterRemover />
       {data?.length >= 1 ?
         <Table
           bleed

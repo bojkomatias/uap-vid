@@ -6,7 +6,7 @@ import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
@@ -14,6 +14,7 @@ import ProtocolLogsDrawer from '../logs/log-drawer'
 import { Strong, Text } from '@components/text'
 import SearchBar from '@shared/data-table/search-bar'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+import { useSearchParams } from 'next/navigation'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -299,18 +300,17 @@ const AcademicUnitFilter = ({
   academicUnits: { id: string; name: string; shortname: string }[]
 }) => {
   const update = useUpdateQuery()
+  const searchParams = useSearchParams()
 
   return (
     <Listbox
-      multiple
       placeholder="Unidad académica"
-      onChange={(value: string[]) => {
-        console.log(value.join('-'))
+      value={searchParams.get('unit')}
+      onChange={(value: string) => {
         update({
-          units: value.join('-'),
+          unit: value,
         })
       }}
-      className="max-w-xs"
     >
       {academicUnits.map((e) => (
         <ListboxOption key={e.id} value={e.id}>
@@ -323,18 +323,18 @@ const AcademicUnitFilter = ({
 
 const StateFilter = () => {
   const update = useUpdateQuery()
+  const searchParams = useSearchParams()
 
   const states = Object.keys(ProtocolStatesDictionary) as ProtocolState[]
   return (
     <Listbox
-      multiple
       placeholder="Estado"
-      onChange={(value: string[]) => {
+      value={searchParams.get('state')}
+      onChange={(value: string) => {
         update({
-          states: value.join('-'),
+          state: value,
         })
       }}
-      className="max-w-xs"
     >
       {states.map((e) => (
         <ListboxOption key={e} value={e}>
