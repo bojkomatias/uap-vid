@@ -136,14 +136,14 @@ export default function Pagination({
           currentPage={currentPage}
         />
       </div>
-      <Text className="flex gap-1 !text-xs text-gray-700">
+      <div className="flex gap-1 !text-xs text-gray-700">
         {shownRecords * Number(searchParams?.get('page') || 1) -
           shownRecords +
           1 <
           totalRecords && (
           <>
-            Mostrando registros
-            <span className="font-semibold">
+            <Text>Mostrando registros</Text>
+            <Text className="font-semibold">
               {shownRecords * Number(searchParams?.get('page') || 1) -
                 shownRecords +
                 1}
@@ -154,9 +154,9 @@ export default function Pagination({
               ) ?
                 totalRecords
               : shownRecords * Number(searchParams?.get('page') || 1)}{' '}
-            </span>
-            de{' '}
-            <p
+            </Text>
+            <Text>de</Text>
+            <Text
               className="cursor-pointer border-b border-b-primary/0 transition-all duration-150 hover:border-b-primary"
               onClick={() =>
                 update({
@@ -166,10 +166,10 @@ export default function Pagination({
               }
             >
               {totalRecords} en total
-            </p>
+            </Text>
           </>
         )}
-      </Text>
+      </div>
     </div>
   )
 }
