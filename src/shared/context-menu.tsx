@@ -70,10 +70,12 @@ export default function ContextMenu({
           }}
         >
           {menu}
+
           <BadgeButton
             className="flex grow justify-between shadow-sm"
             onClick={() => {
               window.print()
+              setShowMenu(false)
             }}
           >
             Descargar PDF <Download size={18} />
@@ -84,6 +86,7 @@ export default function ContextMenu({
             className="flex grow justify-between shadow-sm transition active:opacity-50"
             onClick={() => {
               navigator.clipboard.writeText(window.getSelection()!.toString())
+              setShowMenu(false)
             }}
           >
             Copiar <Copy size={18} />
@@ -92,6 +95,7 @@ export default function ContextMenu({
             className="flex grow justify-between shadow-sm transition active:opacity-50"
             onClick={async () => {
               const text = await navigator.clipboard.readText()
+              setShowMenu(false)
               console.log(text)
             }}
           >
@@ -101,52 +105,53 @@ export default function ContextMenu({
           <BadgeButton
             className="flex grow justify-between shadow-sm "
             onClick={async () => {
-              setOpen(!open)
+              setOpen(true)
+              setShowMenu(false)
             }}
           >
             Reportar un error <Bug size={18} />
           </BadgeButton>
-          <Dialog onClose={setOpen} open={open}>
-            <DialogTitle className="flex justify-between">
-              Reportar un error <Bug />
-            </DialogTitle>
-            <DialogPanel>
-              <DialogDescription>
-                Provea una descripción detallada del error que ocurrió. También
-                puede incluir sugerencias.
-              </DialogDescription>
-              <form
-                onSubmit={form.onSubmit(async () => {
-                  const email = await bug_report({
-                    description: {
-                      user_description: form.getValues().content,
-                      context: context,
-                    },
-                  })
-                  if (email) {
-                    notifications.show({
-                      title: 'Email enviado',
-                      message:
-                        'Se notificó a los desarrolladores sobre el problema o la sugerencia',
-                      intent: 'success',
-                    })
-                    setOpen(false)
-                  }
-                })}
-                className="mt-2"
-              >
-                <FormTextarea
-                  label="Descripción"
-                  {...form.getInputProps('content')}
-                />
-                <FormActions>
-                  <FormButton isLoading={false}>Enviar</FormButton>
-                </FormActions>
-              </form>
-            </DialogPanel>
-          </Dialog>
         </div>
       )}
+      <Dialog onClose={setOpen} open={open}>
+        <DialogTitle className="flex justify-between">
+          Reportar un error <Bug />
+        </DialogTitle>
+        <DialogPanel>
+          <DialogDescription>
+            Provea una descripción detallada del error que ocurrió. También
+            puede incluir sugerencias.
+          </DialogDescription>
+          <form
+            onSubmit={form.onSubmit(async () => {
+              const email = await bug_report({
+                description: {
+                  user_description: form.getValues().content,
+                  context: context,
+                },
+              })
+              if (email) {
+                notifications.show({
+                  title: 'Email enviado',
+                  message:
+                    'Se notificó a los desarrolladores sobre el problema o la sugerencia',
+                  intent: 'success',
+                })
+                setOpen(false)
+              }
+            })}
+            className="mt-2"
+          >
+            <FormTextarea
+              label="Descripción"
+              {...form.getInputProps('content')}
+            />
+            <FormActions>
+              <FormButton isLoading={false}>Enviar</FormButton>
+            </FormActions>
+          </form>
+        </DialogPanel>
+      </Dialog>
     </section>
   )
 }
