@@ -18,7 +18,13 @@ import { ResearcherReassignation } from './action-buttons/researcher-reassignati
 import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 
-export async function ProtocolMetadata({ params }: { params: { id: string } }) {
+export async function ProtocolMetadata({
+  params,
+  actions,
+}: {
+  params: { id: string }
+  actions: any
+}) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
   if (!session || !protocol) return
@@ -159,6 +165,7 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className="flex gap-2">
+              {actions}
               <div>
                 <FlagsDialog
                   protocolId={protocol.id}

@@ -1,6 +1,6 @@
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { type ReactNode } from 'react'
+import { act, type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
@@ -101,7 +101,7 @@ async function Layout({
         </>
       }
     >
-      <ProtocolMetadata params={params} />
+      <ProtocolMetadata params={params} actions={actions} />
 
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">
