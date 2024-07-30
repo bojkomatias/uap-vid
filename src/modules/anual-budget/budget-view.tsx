@@ -1,4 +1,4 @@
-import type { AcademicUnit, AnualBudgetItem} from '@prisma/client';
+import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import type {
   AnualBudgetTeamMemberWithAllRelations,
@@ -48,9 +48,9 @@ export function BudgetView({
 
       <div className="flex justify-end pt-4">
         <Badge>
-          <span className="font-normal">Total de presupuesto (ARS):</span>
+          <span className="font-normal">Total del presupuesto:</span>
           <span className="font-semibold">
-            <Currency amountIndex={calculations.total}/>
+            <Currency amountIndex={calculations.total} />
           </span>
         </Badge>
       </div>

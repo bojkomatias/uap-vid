@@ -4,12 +4,6 @@ import { motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { animationsSwapAtom } from '@shared/animations-swapper'
 
-/**
- * @param Default_animation: 5px smooth entrance from left to right, opacity from 0 to 1 too.
- * @param Animation1: 5px smooth entrance from top to bottom, opacity from 0 to 1 too.
- * @param Animation2: 5px smooth entrance from bottom to top, opacity from 0 to 1 too.
- * @param Animation3: Awesome animation!!!.
- */
 export function ContainerAnimations({
   children,
   duration,
@@ -35,72 +29,63 @@ export function ContainerAnimations({
     )
   }
 
-  if (!animation)
-    return (
-      <motion.div
-        id={id}
-        initial={{ opacity: 0, x: -5 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
-      >
-        {children}
-      </motion.div>
-    )
+  const getAnimationProps = () => {
+    const baseProps = {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { duration: duration ?? 0.4, delay: delay ?? 0 },
+    }
 
-  if (animation == 1)
-    return (
-      <motion.div
-        id={id}
-        className={className}
-        initial={{ opacity: 0, y: -5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
-      >
-        {children}
-      </motion.div>
-    )
+    switch (animation) {
+      case 1:
+        return {
+          ...baseProps,
+          initial: { ...baseProps.initial, y: -5 },
+          animate: { ...baseProps.animate, y: 0 },
+          exit: { ...baseProps.exit, y: -5 },
+        }
+      case 2:
+        return {
+          ...baseProps,
+          initial: { ...baseProps.initial, y: 5 },
+          animate: { ...baseProps.animate, y: 0 },
+          exit: { ...baseProps.exit, y: 5 },
+        }
+      case 3:
+        return {
+          ...baseProps,
+          initial: { opacity: 0, y: -50, scale: 0.9, rotateX: 45 },
+          animate: { opacity: 1, y: 0, scale: 1, rotateX: 0 },
+          exit: { opacity: 0, y: 50, scale: 0.9, rotateX: -45 },
+          transition: {
+            duration: 0.3,
+            delay: 0,
+            ease: [0.6, 0.01, -0.05, 0.95],
+            opacity: { duration: 0.4 },
+            scale: { duration: 0.4 },
+          },
+        }
+      case 4:
+        return {
+          ...baseProps,
+          initial: { ...baseProps.initial, x: -10 },
+          animate: { ...baseProps.animate, x: 0 },
+          exit: { ...baseProps.exit, x: -10 },
+        }
+      default:
+        return {
+          ...baseProps,
+          initial: { ...baseProps.initial, x: -5 },
+          animate: { ...baseProps.animate, x: 0 },
+          exit: { ...baseProps.exit, x: -5 },
+        }
+    }
+  }
 
-  if (animation == 2)
-    return (
-      <motion.div
-        id={id}
-        className={className}
-        initial={{ opacity: 0, y: 5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
-      >
-        {children}
-      </motion.div>
-    )
-  if (animation == 3)
-    return (
-      <motion.div
-        id={id}
-        className={className}
-        initial={{ opacity: 0, y: -50, scale: 0.9, rotateX: 45 }}
-        animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-        transition={{
-          duration: 0.3,
-          delay: 0,
-          ease: [0.6, 0.01, -0.05, 0.95],
-          opacity: { duration: 0.4 },
-          scale: { duration: 0.4 },
-        }}
-      >
-        {children}
-      </motion.div>
-    )
-
-  if (animation == 4)
-    return (
-      <motion.div
-        id={id}
-        className={className}
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: duration ?? 0.4, delay: delay ?? 0 }}
-      >
-        {children}
-      </motion.div>
-    )
+  return (
+    <motion.div id={id} className={className} {...getAnimationProps()}>
+      {children}
+    </motion.div>
+  )
 }

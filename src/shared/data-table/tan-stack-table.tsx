@@ -13,7 +13,7 @@ import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
-import { Mouse } from 'tabler-icons-react'
+import { ArticleOff, EyeOff, Mouse, SearchOff } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
@@ -25,6 +25,9 @@ import {
   TableRow,
 } from '@components/table'
 import { Text } from '@components/text'
+import ContextMenu from '@shared/context-menu'
+import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
+import { Heading } from '@components/heading'
 
 export default function TanStackTable({
   data,
@@ -116,32 +119,43 @@ export default function TanStackTable({
             ))}
           </TableBody>
         </Table>
-      : <div className="fade-in mx-auto mt-8 flex min-h-[400px] flex-col items-center justify-center gap-4 text-gray-500">
-          <h1 className="font-semibold">
-            No se encontraron registros con los criterios de búsqueda
-            especificados
-          </h1>
-          <p className="text-xs">
-            Pruebe nuevamente con otros criterios de filtrado
-          </p>
+      : <div className="fade-in mt-8 flex w-fit flex-col gap-4 rounded-lg bg-gray-200 p-5 dark:bg-gray-800">
+          <div className="flex items-center gap-4">
+            <div>
+              <Heading className="font-semibold">
+                No se encontraron registros con los criterios de búsqueda
+                especificados
+              </Heading>
+              <Text className="text-xs">
+                Vuelva a intentar con nuevos filtros o recargando la página
+              </Text>
+            </div>
+            <ArticleOff size={35} className="mx-4 dark:text-gray-200" />
+          </div>
         </div>
       }
-      <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
-        <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
-          Shift
-        </kbd>
-        +
-        <Mouse className="mx-0.5 h-4 text-gray-400" />
-        para navegar lateralmente.
-      </Text>
+      {data?.length >= 1 && (
+        <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
+          <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
+            Shift
+          </kbd>
+          +
+          <Mouse className="mx-0.5 h-4 text-gray-400" />
+          para navegar lateralmente.
+        </Text>
+      )}
       <div className="mt-3 flex flex-col items-start justify-between sm:flex-row">
         <span className="w-20" />
-        <Pagination totalRecords={totalRecords} />
-        <DownloadCSVButton
-          totalRecordsCheck={totalRecordsCheck}
-          data={data}
-          columns={columns}
-        />
+        {data?.length >= 1 && (
+          <>
+            <Pagination totalRecords={totalRecords} />{' '}
+            <DownloadCSVButton
+              totalRecordsCheck={totalRecordsCheck}
+              data={data}
+              columns={columns}
+            />{' '}
+          </>
+        )}
       </div>
     </>
   )

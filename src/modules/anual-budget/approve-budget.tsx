@@ -1,17 +1,17 @@
 'use client'
-import { Button } from '@elements/button'
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { approveAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
+import { Check } from 'tabler-icons-react'
 
 export function ApproveAnualBudget({ id }: { id: string }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   return (
     <Button
-      loading={isPending}
-      intent="secondary"
+      outline
       onClick={async () => {
         const res = await approveAnualBudget(id)
 
@@ -37,7 +37,7 @@ export function ApproveAnualBudget({ id }: { id: string }) {
         }
       }}
     >
-      Aprobar presupuesto
+      Aprobar presupuesto <Check />
     </Button>
   )
 }

@@ -18,7 +18,13 @@ import { ResearcherReassignation } from './action-buttons/researcher-reassignati
 import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 
-export async function ProtocolMetadata({ params }: { params: { id: string } }) {
+export async function ProtocolMetadata({
+  params,
+  actions,
+}: {
+  params: { id: string }
+  actions: any
+}) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
   if (!session || !protocol) return
@@ -30,7 +36,7 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
   return (
     <div className="-top-6 z-50" id="metadata-container">
       <ContainerAnimations animation={3}>
-        <div className=" mb-8 mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
+        <div className="mb-8 mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <Heading
               className="truncate md:text-clip"
@@ -159,6 +165,7 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
               </div>
             </div>
             <div className="flex gap-2">
+              {actions}
               <div>
                 <FlagsDialog
                   protocolId={protocol.id}

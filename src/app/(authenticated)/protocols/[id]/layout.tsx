@@ -1,6 +1,6 @@
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { type ReactNode } from 'react'
+import { act, type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
@@ -15,12 +15,12 @@ import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
 import ContextMenu from '../../../../shared/context-menu'
-import { DropdownItem, DropdownMenu } from '@components/dropdown'
-import { Button } from '@components/button'
+
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
 import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
+import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 
 async function Layout({
   params,
@@ -93,10 +93,15 @@ async function Layout({
             protocolId={protocol.id}
             context_menu={true}
           />
+          <ProtocolLogsDrawer
+            protocolId={protocol.id}
+            context_menu
+            userId={session.user.id}
+          />
         </>
       }
     >
-      <ProtocolMetadata params={params} />
+      <ProtocolMetadata params={params} actions={actions} />
 
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">
