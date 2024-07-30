@@ -1,13 +1,14 @@
-import { AcademicUnit, AnualBudgetItem, AnualBudgetState } from '@prisma/client'
+import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
+import { AnualBudgetState } from '@prisma/client'
 import type {
   AnualBudgetTeamMemberWithAllRelations,
   TotalBudgetCalculation,
 } from '@utils/anual-budget'
-import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
 import { Badge } from '@components/badge'
 import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants'
+import { Currency } from '@shared/currency'
 
 export function BudgetView({
   budgetId,
@@ -47,9 +48,9 @@ export function BudgetView({
 
       <div className="flex justify-end pt-4">
         <Badge>
-          <span className="font-normal">Total de presupuesto (ARS):</span>
+          <span className="font-normal">Total del presupuesto:</span>
           <span className="font-semibold">
-            ${currencyFormatter.format(calculations.total)}
+            <Currency amountIndex={calculations.total} />
           </span>
         </Badge>
       </div>

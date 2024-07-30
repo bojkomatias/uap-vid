@@ -15,19 +15,24 @@ import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
 import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
 import ContextMenu from '../../../../shared/context-menu'
+
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
 import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
+import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 
 export default async function Layout({
   params,
   evaluators,
+  actions,
   modal,
   children,
 }: {
   params: { id: string }
+  metadata: ReactNode
   evaluators: ReactNode
+  actions: ReactNode
   modal: ReactNode
   children: ReactNode
 }) {
@@ -60,93 +65,103 @@ export default async function Layout({
   )
 
   return (
-    <>
-      {modal}
-      <ContextMenu
-        context={{
-          protocol_id: protocol.id,
-          user: session.user,
-        }}
-        menu={
-          <>
-            <ProtocolNumberUpdate
-              context_menu
-              role={session.user.role}
-              protocolId={protocol.id}
-              protocolNumber={protocol.protocolNumber}
-            />
-            <BadgeButton
-              href={`mailto:${protocol.researcher.email}`}
-              className="flex grow justify-between gap-2 shadow-sm"
-            >
-              Enviar email al investigador <Mail size={18} />
-            </BadgeButton>
-            <FlagsDialog
-              protocolFlags={protocol.flags}
-              protocolId={protocol.id}
-              context_menu={true}
-            />
-          </>
-        }
+    <ContextMenu
+      context={{
+        protocol_id: protocol.id,
+        user: session.user,
+      }}
+      menu={
+        <>
+          <ProtocolNumberUpdate
+            context_menu
+            role={session.user.role}
+            protocolId={protocol.id}
+            protocolNumber={protocol.protocolNumber}
+          />
+          <BadgeButton
+            href={`mailto:${protocol.researcher.email}`}
+            className="flex grow justify-between gap-2 shadow-sm"
+          >
+            Enviar email al investigador <Mail size={18} />
+          </BadgeButton>
+          <FlagsDialog
+            protocolFlags={protocol.flags}
+            protocolId={protocol.id}
+            context_menu={true}
+          />
+          <ProtocolLogsDrawer
+            protocolId={protocol.id}
+            context_menu
+            userId={session.user.id}
+          />
+        </>
+      }
+    >
+      <ProtocolMetadata params={params} actions={actions} />
+
+      <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
+        <div className="flex-grow">
+          {/* {metadata} */}
+          {/* {evaluators} */}
+        </div>
+        {/* {actions}
+        {modal} */}
+      </div>
+      {reviews.length > 0 && (
+        <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
+          <HideReviewsButton />
+        </ContainerAnimations>
+      )}
+      <div
+        id="protocol-and-reviews-container"
+        className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
       >
-        <ProtocolMetadata params={params} />
-
-        {reviews.length > 0 && (
-          <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
-            <HideReviewsButton />
-          </ContainerAnimations>
-        )}
-        <div
-          id="protocol-and-reviews-container"
-          className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
-        >
-          {/* Review form */}
-          {isReviewFormShown && (
-            <aside
-              id="reviews-form-container"
-              className={cx(
-                'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
-              )}
-            >
-              <ReviewFormTemplate
-                protocolId={protocol.id}
-                userId={session.user.id}
-              />
-            </aside>
-          )}
-          {/* Review list */}
-          {isReviewListShown && (
-            <ContainerAnimations
-              id="reviews-container"
-              className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
-              animation={4}
-              duration={0.2}
-              delay={0.1}
-            >
-              <ReviewList
-                role={session.user.role}
-                id={protocol.id}
-                isOwner={session.user.id === protocol.researcher.id}
-              />
-            </ContainerAnimations>
-          )}
-
-          {/* Protocol page */}
-          <div
-            id="protocol-container"
+        {/* Review form */}
+        {isReviewFormShown && (
+          <aside
+            id="reviews-form-container"
             className={cx(
-              'mt-12 transition lg:mt-0',
-              isReviewListShown || isReviewFormShown ? 'col-span-6' : (
-                'col-span-full'
-              )
+              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
             )}
           >
-            {children}
-          </div>
-        </div>
+            <ReviewFormTemplate
+              protocolId={protocol.id}
+              userId={session.user.id}
+            />
+          </aside>
+        )}
+        {/* Review list */}
+        {isReviewListShown && (
+          <ContainerAnimations
+            id="reviews-container"
+            className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
+            animation={4}
+            duration={0.2}
+            delay={0.1}
+          >
+            <ReviewList
+              role={session.user.role}
+              id={protocol.id}
+              isOwner={session.user.id === protocol.researcher.id}
+            />
+          </ContainerAnimations>
+        )}
 
-        <ChatFullComponent user={session.user} protocolId={protocol.id} />
-      </ContextMenu>
-    </>
+        {/* Protocol page */}
+        <div
+          id="protocol-container"
+          className={cx(
+            'mt-12 transition lg:mt-0',
+            isReviewListShown || isReviewFormShown ? 'col-span-6' : (
+              'col-span-full'
+            )
+          )}
+        >
+          {children}
+        </div>
+      </div>
+
+      <ChatFullComponent user={session.user} protocolId={protocol.id} />
+    </ContextMenu>
   )
 }

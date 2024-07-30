@@ -8,11 +8,11 @@ import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
 import { RejectAnualBudget } from 'modules/anual-budget/reject-budget'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { AnualBudgetState } from '@prisma/client'
-import { Heading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Budget({ params }: { params: { id: string } }) {
   const anualBudget = await getAnualBudgetById(params.id)
-  if (!anualBudget) redirect('/anual-budgets')
+  if (!anualBudget) redirect('/')
 
   const { budgetItems, budgetTeamMembers, protocol, ...rest } = anualBudget
 
@@ -25,24 +25,25 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Heading>{`Presupuesto ${meta.year}`}</Heading>
-      <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row">
-        <BudgetMetadata {...meta} />
-        <div className="flex gap-2">
-          {meta.state === AnualBudgetState.PENDING && (
-            <ApproveAnualBudget id={meta.id} />
-          )}
-          {meta.state === AnualBudgetState.PENDING && (
-            <RejectAnualBudget id={meta.id} />
-          )}
-          {/* If remainings are 0 then budget is finished */}
-          {(
-            meta.state === AnualBudgetState.APPROVED &&
-            (calculations.ABIr !== 0 || calculations.ABTr !== 0)
-          ) ?
-            <InterruptAnualBudget id={meta.id} protocolId={meta.protocolId} />
-          : null}
-        </div>
+      <div className="relative w-full">
+        <BudgetMetadata {...meta}>
+          {' '}
+          <div className="flex gap-2">
+            {meta.state === AnualBudgetState.PENDING && (
+              <ApproveAnualBudget id={meta.id} />
+            )}
+            {meta.state === AnualBudgetState.PENDING && (
+              <RejectAnualBudget id={meta.id} />
+            )}
+            {/* If remainings are 0 then budget is finished */}
+            {(
+              meta.state === AnualBudgetState.APPROVED &&
+              (calculations.ABIr.FCA !== 0 || calculations.ABTr.FCA !== 0)
+            ) ?
+              <InterruptAnualBudget id={meta.id} protocolId={meta.protocolId} />
+            : null}
+          </div>
+        </BudgetMetadata>
       </div>
       <BudgetView
         budgetId={meta.id}

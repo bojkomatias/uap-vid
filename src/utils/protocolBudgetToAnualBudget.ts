@@ -3,12 +3,14 @@ import type {
   ProtocolSectionsBudget,
   ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
-export const protocolBudgetToAnualBudget = (
+export const protocolBudgetToAnualBudget = async (
   id: string,
   protocolBudgetItems: ProtocolSectionsBudget,
   protocolTeamMembers: ProtocolSectionsIdentificationTeam[]
 ) => {
+  const prices = await getCurrentIndexes()
   const budgetItems: AnualBudgetItem[] = protocolBudgetItems['expenses']
     .map((e) => {
       return e.data.map((d) => {
@@ -18,8 +20,14 @@ export const protocolBudgetToAnualBudget = (
           amount: d.amount,
           remaining: d.amount,
           executions: [],
-          amountIndex: null,
-          remainingIndex: null,
+          amountIndex: {
+            FCA: d.amount * prices.currentFCA,
+            FMR: d.amount * prices.currentFMR,
+          },
+          remainingIndex: {
+            FCA: d.amount * prices.currentFCA,
+            FMR: d.amount * prices.currentFMR,
+          },
         }
       })
     })

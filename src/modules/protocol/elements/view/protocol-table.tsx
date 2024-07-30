@@ -91,11 +91,7 @@ export default function ProtocolTable({
         accessorKey: 'logs',
         header: '',
         cell: ({ row }) => (
-          <ProtocolLogsDrawer
-            logs={row.original.logs}
-            userId={user.id}
-            protocolId={row.original.id}
-          />
+          <ProtocolLogsDrawer userId={user.id} protocolId={row.original.id} />
         ),
         enableHiding: false,
         enableSorting: false,

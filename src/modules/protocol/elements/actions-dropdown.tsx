@@ -167,7 +167,7 @@ export function ActionsDropdown({
 
   return (
     <Dropdown>
-      <DropdownButton outline>
+      <DropdownButton className="h-9" outline>
         Acciones
         <ChevronDown data-slot="icon" />
       </DropdownButton>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { Button } from '@elements/button'
-import type { AnualBudgetItem, AnualBudgetTeamMember } from '@prisma/client'
+import type { AmountIndex, AnualBudgetItem, AnualBudgetTeamMember } from '@prisma/client'
 import {
   Document,
   Page,
@@ -25,11 +25,11 @@ const PDFDocument = ({
   year: number
   protocolTitle: string
   calculations: {
-    ABIe: number
-    ABTe: number
-    ABIr: number
-    ABTr: number
-    total: number
+    ABIe: AmountIndex
+    ABTe: AmountIndex
+    ABIr: AmountIndex
+    ABTr: AmountIndex
+    total: AmountIndex
   }
 }) => {
   return (
@@ -214,7 +214,7 @@ const PDFDocument = ({
                                   textAlign: 'right',
                                 }}
                               >
-                                ${currencyFormatter.format(item.amount)}
+                                👷🏻 {/* ${currencyFormatter.format(item.amount)} */}
                               </Text>
                             </View>
                           )
@@ -236,7 +236,7 @@ const PDFDocument = ({
               </Text>
               <Text style={{ fontSize: 13 }}>
                 {' '}
-                ARS ${currencyFormatter.format(calculations.total)}
+                ARS 👀
               </Text>
             </View>
           </View>
@@ -258,11 +258,11 @@ export const PDF = ({
   year: number
   protocolTitle: string
   calculations: {
-    ABIe: number
-    ABTe: number
-    ABIr: number
-    ABTr: number
-    total: number
+    ABIe: AmountIndex
+    ABTe: AmountIndex
+    ABIr: AmountIndex
+    ABTr: AmountIndex
+    total: AmountIndex
   }
 }) => {
   return (

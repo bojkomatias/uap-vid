@@ -2,13 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-type UpdateEvent = {
-  page?: string
-  records?: string
-  search?: string
-  sort?: string
-  order?: 'asc' | 'desc' | ''
-} & { [key: string]: string } // This is to add stackable filters (eg: Academic Unit + Protocol State) without having to add every single key
+type UpdateEvent = { [key: string]: string } // This is to add stackable filters (eg: Academic Unit + Protocol State) without having to add every single key
 
 export const useUpdateQuery = () => {
   const router = useRouter()

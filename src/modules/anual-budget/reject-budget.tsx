@@ -1,17 +1,17 @@
 'use client'
-import { Button } from '@elements/button'
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { rejectAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
+import { X } from 'tabler-icons-react'
 
 export function RejectAnualBudget({ id }: { id: string }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   return (
     <Button
-      loading={isPending}
-      intent="destructive"
+      outline
       onClick={async () => {
         const res = await rejectAnualBudget(id)
 
@@ -46,7 +46,7 @@ export function RejectAnualBudget({ id }: { id: string }) {
         }
       }}
     >
-      Rechazar presupuesto
+      Rechazar presupuesto <X />
     </Button>
   )
 }
