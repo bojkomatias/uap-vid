@@ -12,10 +12,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="@container space-y-6">
-      <ContainerAnimations animation={2} delay={0.2}>
+    <ContainerAnimations animation={2} delay={0.2}>
+      <div className="space-y-6 @container">
         <View sections={protocol.sections} />
-      </ContainerAnimations>
-    </div>
+      </div>
+    </ContainerAnimations>
   )
 }
