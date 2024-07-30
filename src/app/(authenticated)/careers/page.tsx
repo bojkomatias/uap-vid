@@ -1,6 +1,6 @@
 import { CareerTable } from 'modules/careers/careers-table'
 import { getAllCareers } from '@repositories/career'
-import { Heading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
 import { NewCareerDialog } from 'modules/careers/new-career-dialog'
 import { ContainerAnimations } from '@elements/container-animations'
 
@@ -18,6 +18,10 @@ export default async function Page({
           <Heading>Carreras</Heading>
           <NewCareerDialog />
         </div>
+        <Subheading>
+          La lista de carreras de la Universidad Adventista del plata. A su vez
+          cada carrera tiene su lista de asignaturas.
+        </Subheading>
       </ContainerAnimations>
       <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
         <CareerTable totalRecords={totalRecords} careers={careers} />

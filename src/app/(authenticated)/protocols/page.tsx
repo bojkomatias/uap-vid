@@ -43,8 +43,8 @@ export default async function Page({
         </div>
 
         <Subheading>
-          Lista de todos los protocolos cargados en el sistema, haz click en
-          &apos;ver&apos; para ver todos los detalles del protocolo.
+          Lista de todos los protocolos cargados en el sistema, puede clickear
+          sobre uno de la lista para ver todos los detalles del protocolo.
         </Subheading>
       </ContainerAnimations>
 

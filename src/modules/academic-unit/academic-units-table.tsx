@@ -117,7 +117,7 @@ export default function AcademicUnitsTable({
           secretariesIds: true,
         }}
       >
-        <SearchBar placeholder="Buscar..." />
+        <SearchBar placeholder="Buscar por: Nombre, etc." />
       </TanStackTable>
       <EditAcademicUnitFormDialog
         academicUnit={currentAcademicUnit}

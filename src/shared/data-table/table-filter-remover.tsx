@@ -1,4 +1,5 @@
 import { Badge, BadgeButton } from '@components/badge'
+import { Strong, Text, TextLink } from '@components/text'
 import { TableFilterDictionary } from '@utils/dictionaries/TableFilterDictionary'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
@@ -14,7 +15,7 @@ export function TableFilterRemover() {
   const update = useUpdateQuery()
 
   return (
-    <div className="-mb-2 mt-1 flex h-6 gap-1">
+    <div className="mt-1 flex gap-1">
       {filters.map(([filter]) =>
         TableFilterDictionary[filter] ?
           <div key={filter} className="flex gap-px">
@@ -32,6 +33,7 @@ export function TableFilterRemover() {
           </div>
         : null
       )}
+      <Badge className="invisible">0</Badge>
     </div>
   )
 }

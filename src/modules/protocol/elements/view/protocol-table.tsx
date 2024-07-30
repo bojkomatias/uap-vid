@@ -1,7 +1,10 @@
 'use client'
 
 import type { Prisma, ProtocolState, User } from '@prisma/client'
-import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
+import {
+  ProtocolStatesColorDictionary,
+  ProtocolStatesDictionary,
+} from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
@@ -178,7 +181,9 @@ export default function ProtocolTable({
         accessorKey: 'state',
         header: 'Estado',
         cell: ({ row }) => (
-          <Badge>{ProtocolStatesDictionary[row.original.state]}</Badge>
+          <Badge color={ProtocolStatesColorDictionary[row.original.state]}>
+            {ProtocolStatesDictionary[row.original.state]}
+          </Badge>
         ),
       },
       {

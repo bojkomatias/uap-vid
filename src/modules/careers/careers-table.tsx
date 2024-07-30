@@ -47,7 +47,7 @@ export function CareerTable({
         id: false,
       }}
     >
-      <SearchBar placeholder="Buscar" />
+      <SearchBar placeholder="Buscar por: Nombre, etc." />
     </TanStackTable>
   )
 }

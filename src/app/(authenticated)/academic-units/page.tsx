@@ -1,4 +1,4 @@
-import { Heading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
 import { ContainerAnimations } from '@elements/container-animations'
 import { getAllAcademicUnits } from '@repositories/academic-unit'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
@@ -18,6 +18,10 @@ export default async function Page({
           <Heading>Unidades Académicas</Heading>
           <NewAcademicUnitFormDialog />
         </div>
+        <Subheading>
+          Lista de las unidades académicas dadas de alta en el sistema. Puede
+          asignarse secretarios así como un presupuesto anual a las mismas.
+        </Subheading>
       </ContainerAnimations>
       <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
         {academicUnits && academicUnits.length > 0 ?

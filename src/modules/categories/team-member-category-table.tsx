@@ -48,7 +48,7 @@ export default function CategoriesTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
     >
-      <SearchBar placeholder="buscar" />
+      <SearchBar placeholder="Buscar por: Nombre, etc." />
     </TanStackTable>
   )
 }

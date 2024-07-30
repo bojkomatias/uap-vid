@@ -1,6 +1,9 @@
 import { Badge } from '@components/badge'
-import type { User } from '@prisma/client'
-import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
+import { ProtocolState, type User } from '@prisma/client'
+import {
+  ProtocolStatesColorDictionary,
+  ProtocolStatesDictionary,
+} from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { Calendar, User as UserIcon } from 'tabler-icons-react'
 import { getAllOwners } from '@repositories/user'
@@ -51,7 +54,10 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
               content={
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={ProtocolStatesColorDictionary[ProtocolState.DRAFT]}
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.DRAFT}
                     </Badge>
                     <Text className="flex-1">
@@ -59,7 +65,12 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                     </Text>
                   </div>
                   <div className="flex flex-col ">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={
+                        ProtocolStatesColorDictionary[ProtocolState.PUBLISHED]
+                      }
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.PUBLISHED}
                     </Badge>
                     <Text className="flex-1">
@@ -67,7 +78,14 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                     </Text>
                   </div>
                   <div className="flex flex-col">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={
+                        ProtocolStatesColorDictionary[
+                          ProtocolState.METHODOLOGICAL_EVALUATION
+                        ]
+                      }
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.METHODOLOGICAL_EVALUATION}
                     </Badge>
                     <Text className="flex-1">
@@ -76,7 +94,14 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                     </Text>
                   </div>
                   <div className="flex flex-col ">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={
+                        ProtocolStatesColorDictionary[
+                          ProtocolState.SCIENTIFIC_EVALUATION
+                        ]
+                      }
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.SCIENTIFIC_EVALUATION}
                     </Badge>
                     <Text className="flex-1">
@@ -85,7 +110,12 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                     </Text>
                   </div>
                   <div className="flex flex-col">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={
+                        ProtocolStatesColorDictionary[ProtocolState.ACCEPTED]
+                      }
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.ACCEPTED}
                     </Badge>
                     <Text className="flex-1">
@@ -94,7 +124,12 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                     </Text>
                   </div>
                   <div className="flex flex-col">
-                    <Badge className="w-fit whitespace-nowrap">
+                    <Badge
+                      color={
+                        ProtocolStatesColorDictionary[ProtocolState.ON_GOING]
+                      }
+                      className="w-fit whitespace-nowrap"
+                    >
                       {ProtocolStatesDictionary.ON_GOING}
                     </Badge>
                     <Text className="flex-1">
@@ -105,7 +140,10 @@ export async function ProtocolMetadata({ params }: { params: { id: string } }) {
                 </div>
               }
             >
-              <Badge className="w-fit !text-[14px] font-semibold">
+              <Badge
+                color={ProtocolStatesColorDictionary[protocol.state]}
+                className="w-fit !text-[14px] font-semibold"
+              >
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>
             </Info>

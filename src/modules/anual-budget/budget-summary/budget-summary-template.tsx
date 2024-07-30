@@ -3,9 +3,6 @@ import { currencyFormatter } from '@utils/formatters'
 import type { BudgetSummaryType } from '@actions/anual-budget/action'
 import BudgetCardDelta from './budget-card-delta'
 import { useMemo, useState } from 'react'
-import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
-import { AnualBudgetState } from '@prisma/client'
-import { Button } from '@components/button'
 import { Heading, Subheading } from '@components/heading'
 import {
   BudgetCardDoughnut,

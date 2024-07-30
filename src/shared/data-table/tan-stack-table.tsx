@@ -12,7 +12,6 @@ import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import { Mouse } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
@@ -60,7 +59,7 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className="mt-4 flex items-center gap-1">
+      <div className="mt-2 flex items-center gap-1">
         {children}
         <span className="grow" />
         <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
@@ -109,13 +108,8 @@ export default function TanStackTable({
           </p>
         </div>
       }
-      <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
-        <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
-          Shift
-        </kbd>
-        +
-        <Mouse className="mx-0.5 h-4 text-gray-400" />
-        para navegar lateralmente.
+      <Text className="mt-3 !text-xs/6">
+        Tip: Puede navegar lateralmente con shift y la rueda del cursor.
       </Text>
       <div className="mt-3 flex flex-col items-start justify-between sm:flex-row">
         <span className="w-20" />

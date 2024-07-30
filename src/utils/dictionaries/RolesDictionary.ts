@@ -9,7 +9,7 @@ export const RolesDictionary = {
 } as const
 
 export const RolesColorDictionary = {
-  [Role.RESEARCHER]: 'sky',
+  [Role.RESEARCHER]: 'purple',
   [Role.SCIENTIST]: 'violet',
   [Role.METHODOLOGIST]: 'lime',
   [Role.SECRETARY]: 'cyan',
