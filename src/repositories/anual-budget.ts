@@ -10,6 +10,10 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 
+export const getAnualBudgetYears = cache(async () => {
+  return await prisma.anualBudget.findMany({ select: { year: true } })
+})
+
 export const getAnualBudgets = cache(
   async ({
     records = '10',
