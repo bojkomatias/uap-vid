@@ -16,7 +16,7 @@ export default async function Page({
   if (!session) return
 
   if (params.id === 'new') {
-    if (canExecute(Action.CREATE, session.user.role))
+    if (session.user.role !== 'SCIENTIST')
       return (
         <ProtocolForm
           protocol={{

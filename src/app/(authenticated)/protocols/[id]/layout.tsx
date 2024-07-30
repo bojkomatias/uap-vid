@@ -37,7 +37,7 @@ export default async function Layout({
   const session = await getServerSession(authOptions)
   if (!session) return
   if (params.id === 'new') {
-    if (!canExecute(Action.CREATE, session.user.role)) redirect('/protocols')
+    if (session.user.role === 'SCIENTIST') redirect('/protocols')
     return (
       <>
         <Heading>Nuevo protocolo</Heading>
@@ -134,12 +134,14 @@ export default async function Layout({
           >
             {children}
           </ContainerAnimations>
-          <ContainerAnimations
-            delay={0.5}
-            className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
-          >
-            <ReviewDisclose />
-          </ContainerAnimations>
+          {isReviewFormShown || isReviewListShown ?
+            <ContainerAnimations
+              delay={0.5}
+              className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
+            >
+              <ReviewDisclose />
+            </ContainerAnimations>
+          : null}
         </div>
 
         <ChatFullComponent user={session.user} protocolId={protocol.id} />
