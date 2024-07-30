@@ -4,4 +4,5 @@ export const TableFilterDictionary = {
   state: 'Estado',
   convocatory: 'Convocatoria',
   role: 'Rol de usuario',
+  year: 'Año',
 } as { [key: string]: string }
