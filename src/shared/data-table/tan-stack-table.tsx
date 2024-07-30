@@ -13,7 +13,7 @@ import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
 import EnumFilterOptions from './enum-filter-options'
-import { EyeOff, Mouse } from 'tabler-icons-react'
+import { ArticleOff, EyeOff, Mouse, SearchOff } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
@@ -130,7 +130,7 @@ export default function TanStackTable({
                 Vuelva a intentar con nuevos filtros o recargando la página
               </Text>
             </div>
-            <EyeOff size={35} className="mx-4 dark:text-gray-200" />
+            <ArticleOff size={35} className="mx-4 dark:text-gray-200" />
           </div>
         </div>
       }

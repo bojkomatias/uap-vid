@@ -4,6 +4,7 @@ import { Text } from '@components/text'
 import type { AnualBudget } from '@prisma/client'
 import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
+import { calculateHourRateGivenCategory } from '../../utils/anual-budget/index'
 
 export const BudgetMetadata = ({
   title,
@@ -20,7 +21,7 @@ export const BudgetMetadata = ({
   children: React.ReactNode
 }) => {
   return (
-    <div className="mb-8 mt-2 flex w-full justify-between gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
+    <div className="mb-8 mt-2 flex w-full justify-between gap-2 rounded-lg bg-gray-200/75 px-4 py-4 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
       <div>
         {' '}
         <Heading>{title}</Heading>
@@ -44,11 +45,13 @@ export const BudgetMetadata = ({
           <Subheading>{sponsor.join(', ')}</Subheading>
         </div>
       </div>
-      <div>
-        <Badge className="h-fit w-fit text-clip !text-[14px] font-semibold">
-          {AnualBudgetStateDictionary[state]}
-        </Badge>
-        {children}
+      <div className="flex grow flex-col justify-between">
+        <div className="self-end">
+          <Badge className="h-fit w-fit text-clip !text-[14px] font-semibold">
+            {AnualBudgetStateDictionary[state]}
+          </Badge>
+        </div>
+        <div className="self-end">{children}</div>
       </div>
     </div>
   )
