@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
@@ -14,7 +13,17 @@ import { useRouter } from 'next/navigation'
 import type { WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
 import type { AmountIndex } from '@prisma/client'
 import { Currency } from '@shared/currency'
-import { multiplyAmountIndex, sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import {
+  multiplyAmountIndex,
+  sumAmountIndex,
+  ZeroAmountIndex,
+} from '@utils/amountIndex'
+import { Button } from '@components/button'
+import { Heading, Subheading } from '@components/heading'
+import { Divider } from '@components/divider'
+import { FormInput } from '@shared/form/form-input'
+import { Badge } from '@components/badge'
+import { Text } from '@components/text'
 
 export function BudgetTeamMemberFees({
   editable,
@@ -58,9 +67,7 @@ export function BudgetTeamMemberFees({
     >
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-700">
-            Honorarios
-          </h1>
+          <Heading>Honorarios</Heading>
         </div>
       </div>
 
@@ -68,7 +75,7 @@ export function BudgetTeamMemberFees({
         {editable ?
           <Button
             type="submit"
-            intent="secondary"
+            outline
             disabled={!form.isDirty()}
             className="float-right px-2 py-1.5 text-xs"
           >
@@ -85,19 +92,20 @@ export function BudgetTeamMemberFees({
             <col className={!editable ? 'w-[12%]' : 'hidden'} />
             <col className={!editable ? 'w-[10%]' : 'hidden'} />
           </colgroup>
-          <thead className="border-b border-gray-300 text-gray-700">
+
+          <thead className=" text-gray-700">
             <tr>
               <th
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
               >
-                Miembro
+                <Subheading>Miembro</Subheading>
               </th>
               <th
                 scope="col"
                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
               >
-                Horas anuales
+                <Subheading>Horas anuales</Subheading>
               </th>
               <th
                 scope="col"
@@ -106,13 +114,13 @@ export function BudgetTeamMemberFees({
                   !editable && 'sm:table-cell'
                 )}
               >
-                Horas restantes
+                <Subheading>Horas restantes</Subheading>
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700 sm:table-cell"
               >
-                Valor hora
+                <Subheading>Valor hora</Subheading>
               </th>
               <th
                 scope="col"
@@ -121,13 +129,13 @@ export function BudgetTeamMemberFees({
                   !editable && 'sm:table-cell'
                 )}
               >
-                Restante
+                <Subheading>Restante</Subheading>
               </th>
               <th
                 scope="col"
                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
               >
-                Total
+                <Subheading>Total</Subheading>
               </th>
               <th
                 scope="col"
@@ -140,6 +148,7 @@ export function BudgetTeamMemberFees({
               </th>
             </tr>
           </thead>
+
           <tbody>
             {budgetTeamMembers.map(
               (
@@ -153,32 +162,34 @@ export function BudgetTeamMemberFees({
                 },
                 i
               ) => (
-                <tr key={id} className="border-b border-gray-200">
-                  <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                    <div className="font-medium text-gray-700">{name}</div>
-                    <div className="mt-1 truncate text-gray-500">
-                      <b>Rol: </b>
-                      {memberRole}
-                      {' - '}
-                      <b>Categoría: </b>
-                      <span className="font-medium text-gray-700">
-                        {categories.at(-1)?.category.name}
-                      </span>{' '}
-                      <span>
-                        {categories.at(-1)?.pointsObrero ?
-                          <span className="text-gray-600">
-                            {'['}
-                            {categories.at(-1)?.pointsObrero}
-                            {']'}
-                          </span>
-                        : null}
-                      </span>
+                <tr className="border-b dark:border-gray-700" key={id}>
+                  <td className="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0">
+                    <Subheading>{name}</Subheading>
+                    <div className="mt-1.5 flex flex-col gap-1 truncate text-gray-500">
+                      <div className="flex gap-2">
+                        <Badge>Rol: </Badge>
+                        <Text>{memberRole}</Text>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Badge>Categoría: </Badge>
+                        <Text>{categories.at(-1)?.category.name}</Text>
+                        <Text>
+                          {categories.at(-1)?.pointsObrero ?
+                            <Text className="text-gray-600">
+                              {'[ '}
+                              {categories.at(-1)?.pointsObrero}
+                              {' ]'}
+                            </Text>
+                          : null}
+                        </Text>
+                      </div>
                     </div>
                   </td>
                   <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
                     {!editable ?
                       hours
-                    : <input
+                    : <FormInput
                         type="number"
                         defaultValue={form.getInputProps(`${i}.hours`).value}
                         onBlur={(e) =>
@@ -187,12 +198,12 @@ export function BudgetTeamMemberFees({
                             Number(e.target.value)
                           )
                         }
+                        {...form.getInputProps(`${i}.hours`)}
                         className={cx(
-                          'input w-16 text-right text-xs',
-                          form.isDirty(`${i}.hours`) &&
-                            'border-yellow-200 bg-yellow-50'
+                          form.isDirty(`${i}.hours`) && '!border-yellow-200',
+                          'ml-full float-right w-20'
                         )}
-                        placeholder="24"
+                        placeholder={form.getInputProps(`${i}.hours`).value}
                       />
                     }
                   </td>
@@ -205,7 +216,11 @@ export function BudgetTeamMemberFees({
                     {remainingHours.toFixed(2)}
                   </td>
                   <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
-                    <Currency amountIndex={calculateHourRateGivenCategory(categories.at(-1) ?? null)} />
+                    <Currency
+                      amountIndex={calculateHourRateGivenCategory(
+                        categories.at(-1) ?? null
+                      )}
+                    />
                   </td>
                   <td
                     className={cx(
@@ -213,23 +228,34 @@ export function BudgetTeamMemberFees({
                       !editable && 'sm:table-cell'
                     )}
                   >
-                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1) ?? null), remainingHours
-                    )}/>
-                    
-                      
+                    <Currency
+                      amountIndex={multiplyAmountIndex(
+                        calculateHourRateGivenCategory(
+                          categories.at(-1) ?? null
+                        ),
+                        remainingHours
+                      )}
+                    />
                   </td>
                   <td className="px-3 py-5 text-right text-sm text-gray-600 ">
-                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1)??null) , hours)} />
+                    <Currency
+                      amountIndex={multiplyAmountIndex(
+                        calculateHourRateGivenCategory(
+                          categories.at(-1) ?? null
+                        ),
+                        hours
+                      )}
+                    />
                   </td>
                   <td className={cx('hidden', !editable && 'table-cell')}>
                     <BudgetExecutionView
                       positionIndex={i}
-                      remaining={
-                        multiplyAmountIndex(
+                      remaining={multiplyAmountIndex(
                         calculateHourRateGivenCategory(
                           categories.at(-1) ?? null
-                        ), remainingHours)
-                      }
+                        ),
+                        remainingHours
+                      )}
                       executions={executions}
                       anualBudgetTeamMemberId={anualBudgetTeamMemberId}
                       title={name}
@@ -293,7 +319,7 @@ export function BudgetTeamMemberFees({
               </th>
 
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
-                <Currency amountIndex={sumAmountIndex([ABTr,ABTe])} />
+                <Currency amountIndex={sumAmountIndex([ABTr, ABTe])} />
               </td>
             </tr>
           </tfoot>

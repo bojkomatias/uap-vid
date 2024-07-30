@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@elements/button'
 import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
@@ -10,7 +9,14 @@ import { cx } from '@utils/cx'
 import BudgetExecutionView from './execution/budget-execution-view'
 import { useRouter } from 'next/navigation'
 import { Currency } from '@shared/currency'
-import { divideAmountIndex, subtractAmountIndex, sumAmountIndex } from '@utils/amountIndex'
+import {
+  divideAmountIndex,
+  subtractAmountIndex,
+  sumAmountIndex,
+} from '@utils/amountIndex'
+import { Button } from '@components/button'
+import { Text } from '@components/text'
+import { Subheading } from '@components/heading'
 
 export function BudgetItems({
   budgetId,
@@ -63,8 +69,8 @@ export function BudgetItems({
       <div className="-mx-4 mt-8 flow-root sm:mx-0">
         {editable ?
           <Button
+            outline
             type="submit"
-            intent="secondary"
             disabled={!form.isDirty()}
             className="float-right px-2 py-1.5 text-xs"
           >
@@ -85,7 +91,7 @@ export function BudgetItems({
                 scope="col"
                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
               >
-                Detalle
+                <Subheading>Detalle</Subheading>
               </th>
               <th
                 scope="col"
@@ -94,7 +100,7 @@ export function BudgetItems({
                   !editable && 'table-cell'
                 )}
               >
-                Restante
+                <Subheading>Restante</Subheading>
               </th>
               <th
                 scope="col"
@@ -103,7 +109,7 @@ export function BudgetItems({
                   !editable && 'table-cell'
                 )}
               >
-                Ejecutado
+                <Subheading>Ejecutado</Subheading>
               </th>
               <th
                 scope="col"
@@ -112,13 +118,13 @@ export function BudgetItems({
                   !!editable && 'table-cell'
                 )}
               >
-                A aprobar
+                <Subheading>A aprobar</Subheading>
               </th>
               <th
                 scope="col"
                 className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
               >
-                Total
+                <Subheading>Total</Subheading>
               </th>
               <th
                 scope="col"
@@ -133,7 +139,16 @@ export function BudgetItems({
           </thead>
           <tbody>
             {budgetItems.map(
-              ({ detail, type, amountIndex:amount, remainingIndex:remaining, executions }, i) => (
+              (
+                {
+                  detail,
+                  type,
+                  amountIndex: amount,
+                  remainingIndex: remaining,
+                  executions,
+                },
+                i
+              ) => (
                 <tr key={i} className="border-b border-gray-200 text-gray-600">
                   <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
                     <div className="font-medium text-gray-700">{detail}</div>
@@ -153,7 +168,9 @@ export function BudgetItems({
                       !editable && 'table-cell'
                     )}
                   >
-                    <Currency amountIndex={subtractAmountIndex(amount, remaining)} />
+                    <Currency
+                      amountIndex={subtractAmountIndex(amount, remaining)}
+                    />
                   </td>
                   <td
                     className={cx(
@@ -178,12 +195,10 @@ export function BudgetItems({
                   <td className={cx('hidden', !editable && 'table-cell')}>
                     <BudgetExecutionView
                       academicUnits={academicUnits}
-                      maxAmountPerAcademicUnit={
-                        divideAmountIndex(
-                          sumAmountIndex(budgetItems.map((bi) => bi.amountIndex)),
-                          academicUnits.length
-                        )
-                      }
+                      maxAmountPerAcademicUnit={divideAmountIndex(
+                        sumAmountIndex(budgetItems.map((bi) => bi.amountIndex)),
+                        academicUnits.length
+                      )}
                       allExecutions={budgetItems
                         .map((bi) => bi.executions)
                         .flat()}

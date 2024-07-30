@@ -11,14 +11,14 @@ export function FormInput({
   className,
   ...props
 }: {
-  label: string
+  label?: string
   description?: string
   icon?: Icon
 } & GetInputPropsReturnType &
   InputProps) {
   return (
     <Field disabled={disabled} className={className}>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <Description>{description}</Description>
       <InputGroup>
         {props.icon && <props.icon data-slot="icon" />}
