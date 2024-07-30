@@ -40,8 +40,6 @@ export const getAllCareers = cache(
     search,
     sort,
     order,
-    filter,
-    values,
   }: {
     [key: string]: string
   }) => {
@@ -64,7 +62,6 @@ export const getAllCareers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -88,7 +85,6 @@ export const getAllCareers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
 

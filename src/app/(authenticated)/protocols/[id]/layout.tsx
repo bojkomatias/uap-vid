@@ -23,13 +23,11 @@ import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 export default async function Layout({
   params,
   evaluators,
-  actions,
   modal,
   children,
 }: {
   params: { id: string }
   evaluators: ReactNode
-  actions: ReactNode
   modal: ReactNode
   children: ReactNode
 }) {

@@ -21,8 +21,7 @@ export const getAnualBudgets = cache(
     search,
     sort,
     order,
-    filter,
-    values,
+    year,
   }: {
     [key: string]: string
   }) => {
@@ -52,7 +51,7 @@ export const getAnualBudgets = cache(
                   },
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              year ? { year: parseInt(year) } : {},
             ],
           },
         }),
@@ -83,7 +82,7 @@ export const getAnualBudgets = cache(
                   },
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              year ? { year: parseInt(year) } : {},
             ],
           },
           select: {

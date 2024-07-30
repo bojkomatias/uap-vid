@@ -97,10 +97,6 @@ export default function AnualBudgetTable({
   )
   const initialVisible = { id: false, createdAt: false }
 
-  const distinctYears = Array.from(
-    new Set(anualBudgets.map((e) => e.year.toString()))
-  )
-
   return (
     <TanStackTable
       data={anualBudgets}
