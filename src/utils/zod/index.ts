@@ -492,7 +492,7 @@ export const IdentificationTeamSchema = z.object({
   last_name: z.string().nullable(),
   name: z.string().nullable(),
   role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
-  teamMemberId: z.string(),
+  teamMemberId: z.string().nullable(),
   workingMonths: z.coerce.number().nullable(),
 })
 

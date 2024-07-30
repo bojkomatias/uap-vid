@@ -98,6 +98,7 @@ const generateAnualBudgetTeamMembersItems = (
   anualBudgetId: string | null,
   duration: number
 ): Omit<AnualBudgetTeamMember, 'id'>[] => {
+  // @ts-ignore (remove later)
   return protocolTeam.map((item) => {
     //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
     const hours = Math.ceil(
