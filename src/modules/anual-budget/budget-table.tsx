@@ -119,6 +119,8 @@ function BudgetYearFilter() {
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
 
+  const years = Array.from(new Set(data?.map((y) => y.year.toString())))
+
   return (
     <Listbox
       placeholder="Año presupuestado"
@@ -129,7 +131,7 @@ function BudgetYearFilter() {
         })
       }}
     >
-      {data?.map(({ year }) => (
+      {years.map((year) => (
         <ListboxOption key={year} value={year.toString()}>
           <ListboxLabel>{year}</ListboxLabel>
         </ListboxOption>
