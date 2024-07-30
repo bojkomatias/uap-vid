@@ -1,10 +1,19 @@
 'use client'
 
-import type { Prisma } from '@prisma/client'
+import type { Prisma, ProtocolState, Role } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import {
+  RolesColorDictionary,
+  RolesDictionary,
+} from '@utils/dictionaries/RolesDictionary'
+import SearchBar from '@shared/data-table/search-bar'
+import { Badge } from '@components/badge'
+import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+import { ProtocolStatesDictionary } from '@utils/dictionaries/ProtocolStatesDictionary'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { useSearchParams } from 'next/navigation'
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: { _count: true }
@@ -66,7 +75,11 @@ export default function UserTable({
       {
         accessorKey: 'role',
         header: 'Rol',
-        cell: ({ row }) => <span>{RolesDictionary[row.original.role]} </span>,
+        cell: ({ row }) => (
+          <Badge color={RolesColorDictionary[row.original.role]}>
+            {RolesDictionary[row.original.role]}
+          </Badge>
+        ),
       },
     ],
     []
@@ -75,19 +88,39 @@ export default function UserTable({
   const initialVisible = { id: false, protocols: false, Review: false }
 
   return (
-    <>
-      <TanStackTable
-        data={users}
-        columns={columns}
-        totalRecords={totalRecords}
-        initialVisibility={initialVisible}
-        rowAsLinkPath="/users/edit/"
-        filterableByKey={{
-          filter: 'role',
-          values: Object.entries(RolesDictionary),
-        }}
-        searchBarPlaceholder="Buscar por: Nombre, Email"
-      />
-    </>
+    <TanStackTable
+      data={users}
+      columns={columns}
+      totalRecords={totalRecords}
+      initialVisibility={initialVisible}
+      rowAsLinkPath="/users/edit/"
+    >
+      <SearchBar placeholder="Buscar por: Nombre, Email, etc." />
+      <RoleFilter />
+    </TanStackTable>
+  )
+}
+
+function RoleFilter() {
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+
+  const states = Object.keys(RolesDictionary) as Role[]
+  return (
+    <Listbox
+      placeholder="Rol de usuario"
+      value={searchParams.get('role')}
+      onChange={(value: string) => {
+        update({
+          role: value,
+        })
+      }}
+    >
+      {states.map((e) => (
+        <ListboxOption key={e} value={e}>
+          <ListboxLabel>{RolesDictionary[e]}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
   )
 }

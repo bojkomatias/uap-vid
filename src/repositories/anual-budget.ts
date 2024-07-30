@@ -11,6 +11,10 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 
+export const getAnualBudgetYears = cache(async () => {
+  return await prisma.anualBudget.findMany({ select: { year: true } })
+})
+
 export const getAnualBudgets = cache(
   async ({
     records = '10',
@@ -18,8 +22,7 @@ export const getAnualBudgets = cache(
     search,
     sort,
     order,
-    filter,
-    values,
+    year,
   }: {
     [key: string]: string
   }) => {
@@ -49,7 +52,7 @@ export const getAnualBudgets = cache(
                   },
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              year ? { year: parseInt(year) } : {},
             ],
           },
         }),
@@ -80,7 +83,7 @@ export const getAnualBudgets = cache(
                   },
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              year ? { year: parseInt(year) } : {},
             ],
           },
           select: {

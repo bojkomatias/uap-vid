@@ -1,10 +1,10 @@
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { act, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
-import { Access, Action, ProtocolState, ReviewVerdict } from '@prisma/client'
+import { Access, Action, ReviewVerdict } from '@prisma/client'
 import { Heading } from '@components/heading'
 import { ChatFullComponent } from 'modules/chat/ChatFullComponent'
 import { cx } from '@utils/cx'
@@ -22,9 +22,8 @@ import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 
-async function Layout({
+export default async function Layout({
   params,
-  metadata,
   evaluators,
   actions,
   modal,
@@ -40,10 +39,7 @@ async function Layout({
   const session = await getServerSession(authOptions)
   if (!session) return
   if (params.id === 'new') {
-    if (
-      !canExecute(Action.CREATE, session.user.role, ProtocolState.NOT_CREATED)
-    )
-      redirect('/protocols')
+    if (!canExecute(Action.CREATE, session.user.role)) redirect('/protocols')
     return (
       <>
         <Heading>Nuevo protocolo</Heading>
@@ -169,5 +165,3 @@ async function Layout({
     </ContextMenu>
   )
 }
-
-export default Layout

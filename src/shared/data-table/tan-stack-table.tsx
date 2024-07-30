@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-prototype-builtins */
 'use client'
+
 import type { ColumnDef, VisibilityState } from '@tanstack/react-table'
 import {
   flexRender,
@@ -9,11 +10,9 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
-import SearchBar from './search-bar'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import EnumFilterOptions from './enum-filter-options'
-import { ArticleOff, EyeOff, Mouse, SearchOff } from 'tabler-icons-react'
+import { ArticleOff } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {
@@ -25,8 +24,8 @@ import {
   TableRow,
 } from '@components/table'
 import { Text } from '@components/text'
-import ContextMenu from '@shared/context-menu'
-import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
+import { TableFilterRemover } from './table-filter-remover'
+
 import { Heading } from '@components/heading'
 
 export default function TanStackTable({
@@ -34,21 +33,15 @@ export default function TanStackTable({
   columns,
   totalRecords,
   initialVisibility,
-  filterableByKey,
-  searchBarPlaceholder,
-  customFilterSlot,
-  customFilterSlot2,
   rowAsLinkPath,
+  children,
 }: {
   data: unknown[]
   columns: ColumnDef<any, unknown>[]
   totalRecords: number
   initialVisibility: VisibilityState
-  filterableByKey?: { filter: string; values: any[][] | any[] }
-  searchBarPlaceholder: string
-  customFilterSlot?: React.ReactNode
-  customFilterSlot2?: React.ReactNode
   rowAsLinkPath?: string
+  children?: React.ReactNode
 }) {
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>(initialVisibility)
@@ -69,23 +62,12 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className="mx-auto my-4 flex flex-wrap items-center justify-between gap-4">
-        <SearchBar placeholderMessage={searchBarPlaceholder} />
-        <div className="flex flex-wrap gap-2">
-          {customFilterSlot2}
-          <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
-        </div>
+      <div className="mt-2 flex items-center gap-1">
+        {children}
+        <span className="grow" />
+        <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />
       </div>
-
-      {customFilterSlot}
-
-      {filterableByKey && (
-        <EnumFilterOptions
-          filter={filterableByKey.filter}
-          values={filterableByKey.values}
-        />
-      )}
-
+      <TableFilterRemover />
       {data?.length >= 1 ?
         <Table
           bleed
@@ -134,16 +116,13 @@ export default function TanStackTable({
           </div>
         </div>
       }
+
       {data?.length >= 1 && (
-        <Text className="mt-3 hidden items-center justify-end !text-xs opacity-80 sm:flex">
-          <kbd className="mx-1 rounded-sm bg-gray-50 px-1.5 py-0.5 text-[0.6rem] ring-1">
-            Shift
-          </kbd>
-          +
-          <Mouse className="mx-0.5 h-4 text-gray-400" />
-          para navegar lateralmente.
+        <Text className="mt-3 !text-xs/6">
+          Tip: Puede navegar lateralmente con shift y la rueda del cursor.
         </Text>
       )}
+
       <div className="mt-3 flex flex-col items-start justify-between sm:flex-row">
         <span className="w-20" />
         {data?.length >= 1 && (

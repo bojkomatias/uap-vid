@@ -25,8 +25,6 @@ const getCategories = cache(
     search,
     sort,
     order,
-    filter,
-    values,
   }: {
     [key: string]: string
   }) => {
@@ -50,7 +48,6 @@ const getCategories = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -82,7 +79,6 @@ const getCategories = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
           orderBy,

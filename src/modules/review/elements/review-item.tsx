@@ -9,15 +9,18 @@ import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight, Loader } from 'tabler-icons-react'
-import ReviewVerdictBadge from './review-verdict-badge'
 import { emailer } from '@utils/emailer'
 import { markRevised } from '@repositories/review'
 import { useCases } from '@utils/emailer/use-cases'
 import { useQuery } from '@tanstack/react-query'
 import { getAllQuestions } from '@repositories/review-question'
 import { Subheading } from '@components/heading'
-import { BadgeButton } from '@components/badge'
+import { Badge, BadgeButton } from '@components/badge'
 import { Strong, Text } from '@components/text'
+import {
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 
 export default function ReviewItem({
   review,
@@ -68,7 +71,9 @@ export default function ReviewItem({
         </div>
       </Subheading>
       <div className="mt-1 flex justify-between">
-        <ReviewVerdictBadge verdict={review.verdict} />
+        <Badge dot color={ReviewVerdictColorDictionary[review.verdict]}>
+          {ReviewVerdictDictionary[review.verdict]}
+        </Badge>
         {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ?
           isOwner ?
             <ReviseCheckbox id={review.id} revised={review.revised} />

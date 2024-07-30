@@ -2,7 +2,7 @@ import { Badge } from '@components/badge'
 import { Heading, Subheading } from '@components/heading'
 import { Text } from '@components/text'
 import type { AnualBudget } from '@prisma/client'
-import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
+import { AnualBudgetStateDictionary } from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { calculateHourRateGivenCategory } from '../../utils/anual-budget/index'
 

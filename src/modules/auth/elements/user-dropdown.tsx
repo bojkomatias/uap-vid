@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react'
 import { MenuButton } from '@headlessui/react'
 import { useState } from 'react'
 import type { User } from '@prisma/client'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
 import {
   Dropdown,

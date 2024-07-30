@@ -15,6 +15,7 @@ import { Dots } from 'tabler-icons-react'
 import { EditAcademicUnitFormDialog } from './edit-academic-unit-form-dialog'
 import { useState } from 'react'
 import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-dialog'
+import SearchBar from '@shared/data-table/search-bar'
 
 export default function AcademicUnitsTable({
   academicUnits,
@@ -115,8 +116,9 @@ export default function AcademicUnitsTable({
           name: true,
           secretariesIds: true,
         }}
-        searchBarPlaceholder="Buscar por nombre de categoría"
-      />
+      >
+        <SearchBar placeholder="Buscar por: Nombre, etc." />
+      </TanStackTable>
       <EditAcademicUnitFormDialog
         academicUnit={currentAcademicUnit}
         onClose={() => setCurrentAcademicUnit(undefined)}

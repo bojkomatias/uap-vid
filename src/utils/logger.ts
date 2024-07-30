@@ -1,6 +1,6 @@
 import type { Logs, ProtocolState } from '@prisma/client'
 import { newLog } from '@repositories/log'
-import ProtocolStatesDictionary from './dictionaries/ProtocolStatesDictionary'
+import { ProtocolStatesDictionary } from './dictionaries/ProtocolStatesDictionary'
 interface LoggerArguments {
   userId: string
   fromState: ProtocolState
