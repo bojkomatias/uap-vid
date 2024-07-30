@@ -18,7 +18,6 @@ import Info from 'modules/info'
 import Clipboard from '@elements/clipboard'
 import FlagsDialog from './flags/flags-dialog'
 import { ResearcherReassignation } from './action-buttons/researcher-reassignation'
-import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 
 export async function ProtocolMetadata({
@@ -206,9 +205,8 @@ export async function ProtocolMetadata({
                 <FlagsDialog
                   protocolId={protocol.id}
                   protocolFlags={protocol.flags}
-                />{' '}
+                />
               </div>
-              <PinComponent />
             </div>
           </div>
         </div>

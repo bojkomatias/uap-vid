@@ -15,7 +15,7 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
   const reviews = await getReviewsByProtocol(id)
 
   return (
-    <div id="review-list-container" className="max-w-md">
+    <>
       <div>
         <Heading className="relative flex items-center justify-between">
           Revisiones
@@ -34,6 +34,6 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
           ))}
         </ul>
       : null}
-    </div>
+    </>
   )
 }

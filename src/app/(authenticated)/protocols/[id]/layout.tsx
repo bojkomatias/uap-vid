@@ -12,7 +12,6 @@ import { ReviewFormTemplate } from '@review/review-form-template'
 import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
-import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
 import ContextMenu from '../../../../shared/context-menu'
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
@@ -20,8 +19,7 @@ import { BadgeButton } from '@components/badge'
 import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
-import { ReviewDisclosure } from '@review/reviews-disclosure'
-import { DisclosurePanel } from '@headlessui/react'
+import { ReviewDisclose } from '@review/review-disclose'
 
 export default async function Layout({
   params,
@@ -101,60 +99,47 @@ export default async function Layout({
       >
         <ProtocolMetadata params={params} actions={actions} />
 
-        {/* <div
-          id="protocol-and-reviews-container"
-          className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10"
-        >
-          {isReviewFormShown && (
-            <aside
-              id="reviews-form-container"
-              className={cx(
-                'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
-              )}
-            >
+        <div className="h-[98svh] xl:relative">
+          <ContainerAnimations
+            animation={4}
+            duration={0.2}
+            id="reviews-container"
+            className={cx(
+              'bottom-0 left-0 right-2/3 top-0 overflow-x-auto overflow-y-auto bg-gray-500/5 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4',
+              isReviewFormShown || isReviewListShown ? '' : 'hidden'
+            )}
+          >
+            {isReviewFormShown && (
               <ReviewFormTemplate
                 protocolId={protocol.id}
                 userId={session.user.id}
               />
-            </aside>
-          )}
-
-          {isReviewListShown && (
-            <ContainerAnimations
-              id="reviews-container"
-              className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
-              animation={4}
-              duration={0.2}
-              delay={0.1}
-            >
+            )}
+            {isReviewListShown && (
               <ReviewList
                 role={session.user.role}
                 id={protocol.id}
                 isOwner={session.user.id === protocol.researcher.id}
               />
-            </ContainerAnimations>
-          )}
-
-          <div
+            )}
+          </ContainerAnimations>
+          <ContainerAnimations
+            animation={2}
+            duration={0.2}
             id="protocol-container"
             className={cx(
-              'mt-12 transition lg:mt-0',
-              isReviewListShown || isReviewFormShown ? 'col-span-6' : (
-                'col-span-full'
-              )
+              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8',
+              isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
             )}
           >
             {children}
-          </div>
-        </div> */}
-        <div className="flex">
-          <ReviewList
-            role={session.user.role}
-            id={protocol.id}
-            isOwner={session.user.id === protocol.researcher.id}
-          />
-
-          <div className="grow">{children}</div>
+          </ContainerAnimations>
+          <ContainerAnimations
+            delay={0.5}
+            className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
+          >
+            <ReviewDisclose />
+          </ContainerAnimations>
         </div>
 
         <ChatFullComponent user={session.user} protocolId={protocol.id} />
