@@ -16,7 +16,8 @@ import {
 } from '@utils/amountIndex'
 import { Button } from '@components/button'
 import { Text } from '@components/text'
-import { Subheading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
+import { FormInput } from '@shared/form/form-input'
 
 export function BudgetItems({
   budgetId,
@@ -38,6 +39,7 @@ export function BudgetItems({
 
   return (
     <form
+      className="mt-10 rounded-lg border p-4 dark:border-gray-800"
       onSubmit={form.onSubmit(async (values) => {
         if (!editable) return
         const itemsWithRemainingUpdated = values.map((item) => {
@@ -59,24 +61,22 @@ export function BudgetItems({
       })}
     >
       <div className="flex items-center">
-        <div className="flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-700">
-            Lista de gastos directos
-          </h1>
+        <div className="flex w-full items-center justify-between">
+          <Heading>Lista de gastos directos</Heading>
+          {editable && (
+            <Button
+              outline
+              type="submit"
+              disabled={!form.isDirty()}
+              className="print:hidden"
+            >
+              Guardar valores actualizados
+            </Button>
+          )}
         </div>
       </div>
 
       <div className="-mx-4 mt-8 flow-root sm:mx-0">
-        {editable ?
-          <Button
-            outline
-            type="submit"
-            disabled={!form.isDirty()}
-            className="float-right px-2 py-1.5 text-xs"
-          >
-            Guardar valores actualizados
-          </Button>
-        : null}
         <table className="min-w-full">
           <colgroup>
             <col className={cx(!editable ? 'w-[45%]' : 'w-[50%]')} />
@@ -85,7 +85,7 @@ export function BudgetItems({
             <col className={cx(!editable ? 'w-[15%]' : 'hidden')} />
             <col className={cx(!editable ? 'w-[10%]' : 'hidden')} />
           </colgroup>
-          <thead className="border-b border-gray-300 text-gray-700">
+          <thead className="border-b text-gray-700 dark:border-gray-700">
             <tr>
               <th
                 scope="col"
@@ -149,10 +149,13 @@ export function BudgetItems({
                 },
                 i
               ) => (
-                <tr key={i} className="border-b border-gray-200 text-gray-600">
-                  <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0">
-                    <div className="font-medium text-gray-700">{detail}</div>
-                    <div className="mt-1 truncate text-gray-500">{type}</div>
+                <tr
+                  key={i}
+                  className="border-b text-gray-600 dark:border-gray-800"
+                >
+                  <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
+                    <Subheading>{detail}</Subheading>
+                    <Text>{type}</Text>
                   </td>
                   <td
                     className={cx(
@@ -174,18 +177,16 @@ export function BudgetItems({
                   </td>
                   <td
                     className={cx(
-                      'hidden px-3 py-5 text-right text-sm',
-                      !!editable && 'float-right table-cell'
+                      'hidden px-3 py-5 text-right text-sm ',
+                      !!editable && 'float-right flex items-center gap-2'
                     )}
                   >
-                    <CurrencyInput
-                      defaultPrice={form.getInputProps(`${i}.amount`).value}
-                      priceSetter={(e) => form.setFieldValue(`${i}.amount`, e)}
-                      className={cx(
-                        'w-32 text-xs',
-                        form.isDirty(`${i}.amount`) &&
-                          'border-yellow-200 bg-yellow-50'
-                      )}
+                    $
+                    <FormInput
+                      type="number"
+                      defaultValue={form.getInputProps(`${i}.amount`).value}
+                      className={cx('ml-full float-right w-32')}
+                      {...form.getInputProps(`${i}.amount`)}
                     />
                   </td>
 

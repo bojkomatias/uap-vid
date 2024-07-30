@@ -40,8 +40,10 @@ export function BudgetTeamMemberFees({
 }) {
   const router = useRouter()
   const form = useForm({ initialValues: budgetTeamMembers })
+  console.log(form.getValues())
   return (
     <form
+      className="rounded-lg border p-4 dark:border-gray-800"
       onSubmit={form.onSubmit(async (values) => {
         if (!editable) return
 
@@ -65,23 +67,23 @@ export function BudgetTeamMemberFees({
         }
       })}
     >
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
+      <div className="flex items-center">
+        <div className="flex w-full items-center justify-between">
           <Heading>Honorarios</Heading>
+          {editable && (
+            <Button
+              type="submit"
+              outline
+              disabled={!form.isDirty()}
+              className="float-right px-2 py-1.5 text-xs print:hidden"
+            >
+              Guardar valores actualizados
+            </Button>
+          )}
         </div>
       </div>
 
       <div className="-mx-4 mt-8 flow-root sm:mx-0">
-        {editable ?
-          <Button
-            type="submit"
-            outline
-            disabled={!form.isDirty()}
-            className="float-right px-2 py-1.5 text-xs"
-          >
-            Guardar valores actualizados
-          </Button>
-        : null}
         <table className="min-w-full">
           <colgroup>
             <col className={cx(!editable ? ' w-[30%]' : ' w-[38%]')} />
@@ -93,7 +95,7 @@ export function BudgetTeamMemberFees({
             <col className={!editable ? 'w-[10%]' : 'hidden'} />
           </colgroup>
 
-          <thead className=" text-gray-700">
+          <thead className=" border-b text-gray-700 dark:border-gray-700">
             <tr>
               <th
                 scope="col"
@@ -162,8 +164,8 @@ export function BudgetTeamMemberFees({
                 },
                 i
               ) => (
-                <tr className="border-b dark:border-gray-700" key={id}>
-                  <td className="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0">
+                <tr className="border-b dark:border-gray-800" key={id}>
+                  <td className="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
                     <Subheading>{name}</Subheading>
                     <div className="mt-1.5 flex flex-col gap-1 truncate text-gray-500">
                       <div className="flex gap-2">
@@ -191,17 +193,10 @@ export function BudgetTeamMemberFees({
                       hours
                     : <FormInput
                         type="number"
-                        defaultValue={form.getInputProps(`${i}.hours`).value}
-                        onBlur={(e) =>
-                          form.setFieldValue(
-                            `${i}.hours`,
-                            Number(e.target.value)
-                          )
-                        }
                         {...form.getInputProps(`${i}.hours`)}
                         className={cx(
                           form.isDirty(`${i}.hours`) && '!border-yellow-200',
-                          'ml-full float-right w-20'
+                          'float-right w-20'
                         )}
                         placeholder={form.getInputProps(`${i}.hours`).value}
                       />

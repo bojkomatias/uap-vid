@@ -9,6 +9,8 @@ import { BudgetItems } from './budget-items'
 import { Badge } from '@components/badge'
 import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants'
 import { Currency } from '@shared/currency'
+import { Text } from '@components/text'
+import { Subheading } from '@components/heading'
 
 export function BudgetView({
   budgetId,
@@ -28,7 +30,7 @@ export function BudgetView({
   academicUnits: AcademicUnit[]
 }) {
   return (
-    <div className="mt-10 space-y-6 ">
+    <div>
       <BudgetTeamMemberFees
         editable={state === AnualBudgetState.PENDING}
         budgetTeamMembers={budgetTeamMembers}
@@ -46,12 +48,14 @@ export function BudgetView({
         ABIr={calculations.ABIr}
       />
 
-      <div className="flex justify-end pt-4">
-        <Badge>
-          <span className="font-normal">Total del presupuesto:</span>
-          <span className="font-semibold">
+      <div className="my-10 mb-20 flex justify-end pt-4">
+        <Badge color="teal">
+          <Subheading className="!text-xl !font-normal">
+            Total del presupuesto:
+          </Subheading>
+          <Text className="!text-xl">
             <Currency amountIndex={calculations.total} />
-          </span>
+          </Text>
         </Badge>
       </div>
     </div>
