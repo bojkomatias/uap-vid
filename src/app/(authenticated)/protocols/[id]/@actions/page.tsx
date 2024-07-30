@@ -20,7 +20,6 @@ export default async function ActionsPage({
 
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
 
-  console.log('Actions from scope', actions)
   // Edit by owner
   if (!actions.includes('EDIT') && actions.includes('EDIT_BY_OWNER')) {
     if (session.user.id === protocol.researcherId) actions.push('EDIT') // I only check for edit in Dropdown, but add it only if is owner.
@@ -35,7 +34,6 @@ export default async function ActionsPage({
     if (reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED))
       actions.filter((e) => e !== 'ACCEPT')
   }
-  console.log('Filtered actions', actions)
 
   return (
     <>

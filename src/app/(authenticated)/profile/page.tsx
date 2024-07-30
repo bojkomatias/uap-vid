@@ -4,7 +4,7 @@ import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
 import { Role } from '@prisma/client'
 import { Heading, Subheading } from '@components/heading'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 import Image from 'next/image'
 import {
   DescriptionDetails,

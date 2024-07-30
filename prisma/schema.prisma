@@ -382,7 +382,6 @@ enum Role {
 }
 
 enum ProtocolState {
-  NOT_CREATED
   DRAFT
   PUBLISHED
   METHODOLOGICAL_EVALUATION

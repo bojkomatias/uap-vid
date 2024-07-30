@@ -16,7 +16,6 @@ export const getAllForReal = async () => {
 
 export const getActiveCareersForForm = cache(async () => {
   try {
-    console.log('TRY DE CAREERS')
     return await prisma.career.findMany({
       where: { active: true },
       select: { id: true, name: true },
@@ -41,8 +40,6 @@ export const getAllCareers = cache(
     search,
     sort,
     order,
-    filter,
-    values,
   }: {
     [key: string]: string
   }) => {
@@ -65,7 +62,6 @@ export const getAllCareers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -89,7 +85,6 @@ export const getAllCareers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
 

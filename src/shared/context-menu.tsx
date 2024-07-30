@@ -4,7 +4,7 @@ import { Dialog, DialogDescription, DialogTitle } from '@components/dialog'
 import { Divider } from '@components/divider'
 import { DialogPanel } from '@headlessui/react'
 import React, { useState, useEffect, useRef } from 'react'
-import { Bug, Clipboard, Copy, Download, File } from 'tabler-icons-react'
+import { Bug, Clipboard, Copy, Download } from 'tabler-icons-react'
 import { FormTextarea } from './form/form-textarea'
 import { FormButton } from './form/form-button'
 import { FormActions } from '@components/fieldset'
@@ -31,7 +31,6 @@ export default function ContextMenu({
     const y = e.pageY
     setMenuPosition({ x, y })
     setShowMenu(true)
-    console.log('right click')
   }
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -94,9 +93,8 @@ export default function ContextMenu({
           <BadgeButton
             className="flex grow justify-between shadow-sm transition active:opacity-50"
             onClick={async () => {
-              const text = await navigator.clipboard.readText()
+              await navigator.clipboard.readText()
               setShowMenu(false)
-              console.log(text)
             }}
           >
             Pegar <Clipboard size={18} />

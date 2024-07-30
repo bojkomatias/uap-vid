@@ -26,12 +26,12 @@ export default function HeaderSorter({
               sort: header.id,
               order:
                 (
-                  searchParams?.get('sort') == null ||
+                  searchParams?.get('sort') == '' ||
                   searchParams.get('sort') !== header.id
                 ) ?
                   'asc'
                 : searchParams?.get('order') == 'asc' ? 'desc'
-                : searchParams?.get('order') == 'desc' ? null
+                : searchParams?.get('order') == 'desc' ? ''
                 : 'asc',
             }),
         }}

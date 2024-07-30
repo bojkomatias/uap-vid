@@ -8,7 +8,6 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { createHashScrypt, verifyHashScrypt } from '@utils/hash'
 import type { z } from 'zod'
 import type {
-  UserPasswordChangeSchema,
   VerifyUserDataMicrosoftUsersSchema,
   VerifyUserDataSchema,
 } from '@utils/zod'
@@ -30,8 +29,7 @@ const getUsers = cache(
     search,
     sort,
     order,
-    filter,
-    values,
+    role,
   }: {
     [key: string]: string
   }) => {
@@ -60,7 +58,7 @@ const getUsers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              role ? { role: role as Role } : {},
             ],
           },
         }),
@@ -101,7 +99,7 @@ const getUsers = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
+              role ? { role: role as Role } : {},
             ],
           },
 

@@ -1,23 +1,28 @@
 'use client'
 
-import type { Prisma, User } from '@prisma/client'
-import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
+import type { Prisma, ProtocolState, User } from '@prisma/client'
+import {
+  ProtocolStatesColorDictionary,
+  ProtocolStatesDictionary,
+} from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
-import { cx } from '@utils/cx'
-import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { useSearchParams } from 'next/navigation'
 import ProtocolLogsDrawer from '../logs/log-drawer'
-import { useQuery } from '@tanstack/react-query'
-import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { Strong, Text } from '@components/text'
-import { getActiveCareersForForm } from '@repositories/career'
+import SearchBar from '@shared/data-table/search-bar'
+import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { getConvocatoriesForFilter } from '@repositories/convocatory'
+import {
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -65,17 +70,6 @@ export default function ProtocolTable({
   academicUnits: { id: string; name: string; shortname: string }[]
   careers: { id: string; name: string }[]
 }) {
-  // const { data: academicUnits } = useQuery({
-  //   queryKey: ['academic-units'],
-  //   queryFn: async () => await getAcademicUnitsNameAndShortname(),
-  // })
-  // const { data: careers } = useQuery({
-  //   queryKey: ['careers'],
-  //   queryFn: async () => await getActiveCareersForForm(),
-  // })
-
-  console.log(careers)
-
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
       {
@@ -183,7 +177,9 @@ export default function ProtocolTable({
         accessorKey: 'state',
         header: 'Estado',
         cell: ({ row }) => (
-          <Badge>{ProtocolStatesDictionary[row.original.state]}</Badge>
+          <Badge color={ProtocolStatesColorDictionary[row.original.state]}>
+            {ProtocolStatesDictionary[row.original.state]}
+          </Badge>
         ),
       },
       {
@@ -197,9 +193,17 @@ export default function ProtocolTable({
         id: 'reviews_0.verdict',
         accessorFn: (row) => row.reviews[0]?.verdict,
         header: 'Veredicto Metodológico',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[0]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[0] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[0].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[0].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -218,9 +222,17 @@ export default function ProtocolTable({
         id: 'reviews_1.verdict',
         accessorFn: (row) => row.reviews[1]?.verdict,
         header: 'Veredicto Interno',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[1]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[1] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[1].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[1].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -238,9 +250,17 @@ export default function ProtocolTable({
         id: 'reviews_2.verdict',
         accessorFn: (row) => row.reviews[2]?.verdict,
         header: 'Veredicto Externo',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[2]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[2] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[2].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[2].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -258,9 +278,17 @@ export default function ProtocolTable({
         id: 'reviews_3.verdict',
         accessorFn: (row) => row.reviews[3]?.verdict,
         header: 'Veredicto Tercero',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[3]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[3] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[3].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[3].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -296,66 +324,88 @@ export default function ProtocolTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
       rowAsLinkPath="/protocols/"
-      filterableByKey={{
-        filter: 'state',
-        // Slice to avoid NOT_CREATED
-        values: Object.entries(ProtocolStatesDictionary).slice(
-          1,
-          user.role === 'ADMIN' ? undefined : -1
-        ),
-      }}
-      customFilterSlot={
-        user.role === 'ADMIN' || user.role === 'SECRETARY' ?
-          <AcademicUnitFilter />
-        : null
-      }
-      searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-    />
+    >
+      <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
+      <ConvocatoryFilter />
+      <AcademicUnitFilter academicUnits={academicUnits} />
+      <StateFilter />
+    </TanStackTable>
   )
 }
-/**
- * Academic unit filter, specific to business in protocol table
- * @returns
- */
-const AcademicUnitFilter = () => {
+
+function AcademicUnitFilter({
+  academicUnits,
+}: {
+  academicUnits: { id: string; name: string; shortname: string }[]
+}) {
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
-  const currentValues = searchParams?.get('units')?.split('-')
-
-  const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
 
   return (
-    <div className="relative mt-4 flex flex-col items-start text-sm">
-      <div className="relative flex flex-wrap gap-2">
-        {values.map((value, i) => {
-          return (
-            <Button
-              onClick={() => {
-                update({
-                  units:
-                    currentValues ?
-                      currentValues.includes(value) ?
-                        currentValues.filter((e) => e !== value).join('-')
-                      : currentValues.join('-').concat('-', value)
-                    : value,
-                })
-              }}
-              intent="unset"
-              key={i}
-            >
-              <Badge
-                className={cx(
-                  'cursor-pointer transition hover:bg-primary-100',
-                  currentValues?.includes(value) &&
-                    'bg-primary-50 ring-primary/50'
-                )}
-              >
-                {value}
-              </Badge>
-            </Button>
-          )
-        })}
-      </div>
-    </div>
+    <Listbox
+      placeholder="Unidad académica"
+      value={searchParams.get('unit')}
+      onChange={(value: string) => {
+        update({
+          unit: value,
+        })
+      }}
+    >
+      {academicUnits.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.shortname}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+function StateFilter() {
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+
+  const states = Object.keys(ProtocolStatesDictionary) as ProtocolState[]
+  return (
+    <Listbox
+      placeholder="Estado"
+      value={searchParams.get('state')}
+      onChange={(value: string) => {
+        update({
+          state: value,
+        })
+      }}
+    >
+      {states.map((e) => (
+        <ListboxOption key={e} value={e}>
+          <ListboxLabel>{ProtocolStatesDictionary[e]}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+function ConvocatoryFilter() {
+  const { data } = useQuery({
+    queryKey: ['convocatories'],
+    queryFn: async () => await getConvocatoriesForFilter(),
+  })
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+  return (
+    <Listbox
+      placeholder="Convocatoria"
+      value={searchParams.get('convocatory')}
+      onChange={(value: string) => {
+        update({
+          convocatory: value,
+        })
+      }}
+    >
+      {data?.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.name}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
   )
 }

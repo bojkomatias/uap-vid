@@ -1,9 +1,9 @@
 import ProtocolTable from '@protocol/elements/view/protocol-table'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
-import { getProtocolsByRol } from 'repositories/protocol'
+import { getProtocolsByRole } from 'repositories/protocol'
 import { canExecute } from '@utils/scopes'
-import { Action, ProtocolState } from '@prisma/client'
+import { Action } from '@prisma/client'
 import { Heading, Subheading } from '@components/heading'
 import { Button } from '@components/button'
 import { FileReport } from 'tabler-icons-react'
@@ -21,7 +21,7 @@ export default async function Page({
 
   if (!session) return
 
-  const [totalRecords, protocols] = await getProtocolsByRol(
+  const [totalRecords, protocols] = await getProtocolsByRole(
     session.user.role,
     session.user.id,
     searchParams
@@ -35,11 +35,7 @@ export default async function Page({
       <ContainerAnimations duration={0.4} delay={0}>
         <div className="flex items-end">
           <Heading>Lista de proyectos de investigación</Heading>
-          {canExecute(
-            Action.CREATE,
-            session.user.role,
-            ProtocolState.NOT_CREATED
-          ) && (
+          {canExecute(Action.CREATE, session.user.role) && (
             <Button href={'/protocols/new/0'}>
               <FileReport data-slot="icon" /> Nuevo proyecto
             </Button>
@@ -47,8 +43,8 @@ export default async function Page({
         </div>
 
         <Subheading>
-          Lista de todos los protocolos cargados en el sistema, haz click en
-          &apos;ver&apos; para ver todos los detalles del protocolo.
+          Lista de todos los protocolos cargados en el sistema, puede clickear
+          sobre uno de la lista para ver todos los detalles del protocolo.
         </Subheading>
       </ContainerAnimations>
 

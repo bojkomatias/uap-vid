@@ -4,7 +4,7 @@ import {
   getCurrentConvocatory,
 } from '@repositories/convocatory'
 import { NewConvocatoryDialog } from '@convocatory/new-convocatory-dialog'
-import { Heading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
 import { ContainerAnimations } from '@elements/container-animations'
 
 export default async function Page({
@@ -22,6 +22,10 @@ export default async function Page({
           <Heading>Convocatorias</Heading>
           <NewConvocatoryDialog />
         </div>
+        <Subheading>
+          Lista de las convocatorias que fueron dadas de alta a lo largo de la
+          vida del sistema.
+        </Subheading>
       </ContainerAnimations>
       <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
         <ConvocatoryTable
