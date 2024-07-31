@@ -1,5 +1,6 @@
 'use client'
-import { Heading, Subheading } from '@components/heading'
+
+import { Subheading } from '@components/heading'
 import { Text } from '@components/text'
 import { cx } from '@utils/cx'
 import React, { useEffect } from 'react'
