@@ -18,7 +18,6 @@ import Info from 'modules/info'
 import Clipboard from '@elements/clipboard'
 import FlagsDialog from './flags/flags-dialog'
 import { ResearcherReassignation } from './action-buttons/researcher-reassignation'
-import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 
 export async function ProtocolMetadata({
@@ -173,34 +172,32 @@ export async function ProtocolMetadata({
 
           <div className="flex flex-col justify-between gap-3 md:flex-row md:gap-0">
             <div className="flex items-center gap-2">
-              <UserIcon data-slot="icon" className="h-4 text-gray-600" />
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col">
-                  <Info
-                    title="Usuario que creó el protocolo"
-                    content={
-                      <div className="mx-3 mt-1 flex-grow">
-                        {session.user.role === 'ADMIN' && (
-                          <ResearcherReassignation
-                            protocolId={params.id}
-                            researcherId={protocol.researcher.id}
-                            researchers={researcherList}
-                          />
-                        )}
-                      </div>
-                    }
-                  >
-                    <Subheading>{protocol.researcher.name}</Subheading>
-                    <Text className="-mt-1.5 ml-px flex gap-2 text-xs font-light">
-                      {protocol.researcher.email}
-                    </Text>
-                  </Info>
-                </div>
-                <Clipboard
-                  content={protocol.researcher.email}
-                  notification_message={`Email del investigador/a copiado: ${protocol.researcher.email}`}
-                />
+              <UserIcon data-slot="icon" className="size-4 text-gray-500" />
+              <div className="flex flex-col">
+                <Info
+                  title="Usuario que creó el protocolo"
+                  content={
+                    <div className="mx-3 flex-grow">
+                      {session.user.role === 'ADMIN' && (
+                        <ResearcherReassignation
+                          protocolId={params.id}
+                          researcherId={protocol.researcher.id}
+                          researchers={researcherList}
+                        />
+                      )}
+                    </div>
+                  }
+                >
+                  <Subheading>{protocol.researcher.name}</Subheading>
+                  <Text className="-mt-1.5 ml-px flex gap-2 text-xs font-light">
+                    {protocol.researcher.email}
+                  </Text>
+                </Info>
               </div>
+              <Clipboard
+                content={protocol.researcher.email}
+                notification_message={`Email del investigador/a copiado: ${protocol.researcher.email}`}
+              />
             </div>
             <div className="flex gap-2">
               {actions}
@@ -208,9 +205,8 @@ export async function ProtocolMetadata({
                 <FlagsDialog
                   protocolId={protocol.id}
                   protocolFlags={protocol.flags}
-                />{' '}
+                />
               </div>
-              <PinComponent />
             </div>
           </div>
         </div>
