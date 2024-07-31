@@ -87,7 +87,7 @@ export default function ReviewForm({
   )
 
   return (
-    <>
+    <div id="review-inside-container">
       <div>
         <Heading>Realizar revisión</Heading>
         <Text>
@@ -201,6 +201,6 @@ export default function ReviewForm({
           </Fieldset>
         </form>
       </ReviewProvider>
-    </>
+    </div>
   )
 }
