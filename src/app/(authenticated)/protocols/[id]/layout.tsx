@@ -105,7 +105,7 @@ export default async function Layout({
             duration={0.2}
             id="reviews-container"
             className={cx(
-              'bottom-0 left-0 right-2/3 top-0 overflow-x-auto overflow-y-auto bg-gray-500/5 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
+              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
               isReviewFormShown || isReviewListShown ? '' : 'hidden'
             )}
           >
