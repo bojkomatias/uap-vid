@@ -97,7 +97,11 @@ export default async function Layout({
         </>
       }
     >
-      <ProtocolMetadata params={params} actions={actions} />
+      <ProtocolMetadata
+        params={params}
+        actions={actions}
+        evaluators={evaluators}
+      />
 
       <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
         <div className="flex-grow">

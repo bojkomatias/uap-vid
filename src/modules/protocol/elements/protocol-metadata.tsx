@@ -1,40 +1,37 @@
 import { Badge } from '@components/badge'
-import { ProtocolState, type User } from '@prisma/client'
+import { ProtocolState } from '@prisma/client'
 import {
   ProtocolStatesColorDictionary,
   ProtocolStatesDictionary,
 } from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
-import { Calendar, User as UserIcon } from 'tabler-icons-react'
-import { getAllOwners } from '@repositories/user'
+import { Calendar } from 'tabler-icons-react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
-import { Heading, Subheading } from '@components/heading'
+import { Heading } from '@components/heading'
 import { Text } from '@components/text'
 import { Divider } from '@components/divider'
 import Info from 'modules/info'
-import Clipboard from '@elements/clipboard'
 import FlagsDialog from './flags/flags-dialog'
-import { ResearcherReassignation } from './action-buttons/researcher-reassignation'
 import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
+import type { ReactNode } from 'react'
+import { Researcher } from './researcher'
 
 export async function ProtocolMetadata({
   params,
+  evaluators,
   actions,
 }: {
   params: { id: string }
-  actions: any
+  evaluators: ReactNode
+  actions: ReactNode
 }) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
   if (!session || !protocol) return
-  let researcherList: User[] = []
-  if (session.user.role === 'ADMIN') {
-    researcherList = await getAllOwners()
-  }
 
   return (
     <div className="-top-6 z-50" id="metadata-container">
@@ -172,36 +169,14 @@ export async function ProtocolMetadata({
           </div>
 
           <div className="flex flex-col justify-between gap-3 md:flex-row md:gap-0">
-            <div className="flex items-center gap-2">
-              <UserIcon data-slot="icon" className="h-4 text-gray-600" />
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col">
-                  <Info
-                    title="Usuario que creó el protocolo"
-                    content={
-                      <div className="mx-3 mt-1 flex-grow">
-                        {session.user.role === 'ADMIN' && (
-                          <ResearcherReassignation
-                            protocolId={params.id}
-                            researcherId={protocol.researcher.id}
-                            researchers={researcherList}
-                          />
-                        )}
-                      </div>
-                    }
-                  >
-                    <Subheading>{protocol.researcher.name}</Subheading>
-                    <Text className="-mt-1.5 ml-px flex gap-2 text-xs font-light">
-                      {protocol.researcher.email}
-                    </Text>
-                  </Info>
-                </div>
-                <Clipboard
-                  content={protocol.researcher.email}
-                  notification_message={`Email del investigador/a copiado: ${protocol.researcher.email}`}
-                />
-              </div>
-            </div>
+            {/* Researcher */}
+            <Researcher
+              researcher={protocol.researcher}
+              protocolId={protocol.id}
+              isAdmin={session.user.role === 'ADMIN'}
+            />
+            {/* Evaluators */}
+            {/* {evaluators} */}
             <div className="flex gap-2">
               {actions}
               <div>

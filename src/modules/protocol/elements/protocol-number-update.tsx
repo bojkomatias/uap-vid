@@ -3,7 +3,6 @@
 import { Badge, BadgeButton } from '@components/badge'
 import { Button } from '@components/button'
 import { Dialog, DialogBody, DialogTitle } from '@components/dialog'
-import { Fieldset } from '@components/fieldset'
 import { Text } from '@components/text'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
@@ -12,7 +11,7 @@ import { patchProtocolNumber } from '@repositories/protocol'
 import { FormInput } from '@shared/form/form-input'
 import { cx } from '@utils/cx'
 import { useState } from 'react'
-import { Check, Edit, Number, Numbers, X } from 'tabler-icons-react'
+import { Edit, Number } from 'tabler-icons-react'
 import { z } from 'zod'
 
 export default function ProtocolNumberUpdate({

@@ -7,7 +7,7 @@ import { Dialog } from '@components/dialog'
 import { Button } from '@components/button'
 import { Divider } from '@components/divider'
 import { BadgeButton } from '@components/badge'
-import { Checks, Flag } from 'tabler-icons-react'
+import { Flag } from 'tabler-icons-react'
 
 export default function FlagsDialog({
   protocolId,
