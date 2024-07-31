@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@elements/button'
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { interruptAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
@@ -16,8 +16,7 @@ export function InterruptAnualBudget({
   const [isPending, startTransition] = useTransition()
   return (
     <Button
-      loading={isPending}
-      intent="warning"
+      color="red"
       onClick={async () => {
         const res = await interruptAnualBudget(id)
 

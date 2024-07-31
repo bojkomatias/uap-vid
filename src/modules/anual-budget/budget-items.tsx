@@ -39,7 +39,7 @@ export function BudgetItems({
 
   return (
     <form
-      className="mt-10 rounded-lg border p-4 dark:border-gray-800"
+      className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
       onSubmit={form.onSubmit(async (values) => {
         if (!editable) return
         const itemsWithRemainingUpdated = values.map((item) => {
@@ -129,11 +129,11 @@ export function BudgetItems({
               <th
                 scope="col"
                 className={cx(
-                  'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0',
+                  'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0 print:hidden',
                   !editable && 'table-cell'
                 )}
               >
-                Ejecuciones
+                <Subheading>Ejecuciones</Subheading>
               </th>
             </tr>
           </thead>
@@ -193,7 +193,12 @@ export function BudgetItems({
                   <td className="table-cell px-3 py-5 text-right text-sm">
                     <Currency amountIndex={amount} />
                   </td>
-                  <td className={cx('hidden', !editable && 'table-cell')}>
+                  <td
+                    className={cx(
+                      'hidden print:hidden',
+                      !editable && 'table-cell'
+                    )}
+                  >
                     <BudgetExecutionView
                       academicUnits={academicUnits}
                       maxAmountPerAcademicUnit={divideAmountIndex(
@@ -223,7 +228,7 @@ export function BudgetItems({
                 colSpan={!editable ? 3 : 2}
                 className="table-cell pl-4 pt-6 text-left text-sm font-normal text-gray-500 sm:text-right"
               >
-                Ejecutado
+                <Text>Ejecutado</Text>{' '}
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
                 {!editable ?
@@ -237,7 +242,7 @@ export function BudgetItems({
                 colSpan={!editable ? 3 : 2}
                 className="table-cell pl-4 pt-4 text-left text-sm font-normal text-gray-500 sm:text-right"
               >
-                Restante
+                <Text>Restante</Text>
               </th>
               <td className="px-3 pt-4 text-right text-sm text-gray-500">
                 <Currency amountIndex={ABIr} />
@@ -249,7 +254,7 @@ export function BudgetItems({
                 colSpan={!editable ? 3 : 2}
                 className="table-cell pl-4 pt-4 text-left text-sm font-semibold text-gray-700 sm:text-right"
               >
-                Total
+                <Subheading>Total</Subheading>
               </th>
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
                 <Currency amountIndex={sumAmountIndex([ABIe, ABIr])} />

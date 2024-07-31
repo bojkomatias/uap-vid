@@ -20,7 +20,6 @@ import {
 } from '@utils/amountIndex'
 import { Button } from '@components/button'
 import { Heading, Subheading } from '@components/heading'
-import { Divider } from '@components/divider'
 import { FormInput } from '@shared/form/form-input'
 import { Badge } from '@components/badge'
 import { Text } from '@components/text'
@@ -43,7 +42,7 @@ export function BudgetTeamMemberFees({
   console.log(form.getValues())
   return (
     <form
-      className="rounded-lg border p-4 dark:border-gray-800"
+      className="rounded-lg border p-4 dark:border-gray-800 print:border-none"
       onSubmit={form.onSubmit(async (values) => {
         if (!editable) return
 
@@ -142,11 +141,11 @@ export function BudgetTeamMemberFees({
               <th
                 scope="col"
                 className={cx(
-                  'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0',
+                  'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0 print:hidden',
                   !editable && 'table-cell'
                 )}
               >
-                Ejecuciones
+                <Subheading>Ejecuciones</Subheading>
               </th>
             </tr>
           </thead>
@@ -190,7 +189,7 @@ export function BudgetTeamMemberFees({
                   </td>
                   <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
                     {!editable ?
-                      hours
+                      <Text>{hours}</Text>
                     : <FormInput
                         type="number"
                         {...form.getInputProps(`${i}.hours`)}
@@ -208,7 +207,7 @@ export function BudgetTeamMemberFees({
                       !editable && 'sm:table-cell'
                     )}
                   >
-                    {remainingHours.toFixed(2)}
+                    <Text>{remainingHours.toFixed(2)}</Text>
                   </td>
                   <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
                     <Currency
@@ -242,7 +241,12 @@ export function BudgetTeamMemberFees({
                       )}
                     />
                   </td>
-                  <td className={cx('hidden', !editable && 'table-cell')}>
+                  <td
+                    className={cx(
+                      'hidden print:hidden',
+                      !editable && 'table-cell'
+                    )}
+                  >
                     <BudgetExecutionView
                       positionIndex={i}
                       remaining={multiplyAmountIndex(
@@ -282,9 +286,9 @@ export function BudgetTeamMemberFees({
               <th
                 scope="row"
                 colSpan={!editable ? 5 : 3}
-                className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
+                className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right "
               >
-                Ejecutado
+                <Text>Ejecutado</Text>
               </th>
               <td className="px-3 pt-6 text-right text-sm text-gray-500">
                 {!editable ?
@@ -298,7 +302,7 @@ export function BudgetTeamMemberFees({
                 colSpan={!editable ? 5 : 3}
                 className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
               >
-                Restante
+                <Text>Restante</Text>
               </th>
               <td className="px-3 pt-4 text-right text-sm text-gray-500">
                 <Currency amountIndex={ABTr} />
@@ -310,7 +314,7 @@ export function BudgetTeamMemberFees({
                 colSpan={!editable ? 5 : 3}
                 className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-700 sm:table-cell sm:pl-0 sm:text-right"
               >
-                Total
+                <Subheading>Total</Subheading>
               </th>
 
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
