@@ -8,7 +8,6 @@ import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
 import { RejectAnualBudget } from 'modules/anual-budget/reject-budget'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { AnualBudgetState } from '@prisma/client'
-import { Heading, Subheading } from '@components/heading'
 
 export default async function Budget({ params }: { params: { id: string } }) {
   const anualBudget = await getAnualBudgetById(params.id)
