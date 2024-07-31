@@ -177,15 +177,7 @@ export async function ProtocolMetadata({
             {/* Evaluators */}
             {/* {evaluators} */}
 
-            <div className="flex gap-2">
-              {actions}
-              <div>
-                <FlagsDialog
-                  protocolId={protocol.id}
-                  protocolFlags={protocol.flags}
-                />
-              </div>
-            </div>
+            {actions}
           </div>
         </div>
       </ContainerAnimations>

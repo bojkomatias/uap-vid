@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState } from 'react'
 import CucytFlag from './cucyt-flag'
 import CiFlag from './ci-flag'
@@ -9,11 +10,10 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@components/dialog'
-import { Button } from '@components/button'
 import { Divider } from '@components/divider'
 import { BadgeButton } from '@components/badge'
-import { Flag } from 'tabler-icons-react'
-import { Fieldset } from '@components/fieldset'
+import { Flag, HandStop } from 'tabler-icons-react'
+import { DropdownItem, DropdownLabel } from '@components/dropdown'
 
 export default function FlagsDialog({
   protocolId,
@@ -37,14 +37,15 @@ export default function FlagsDialog({
         >
           Votos <Flag size={18} />
         </BadgeButton>
-      : <Button
-          outline
-          onClick={() => {
+      : <DropdownItem
+          onClick={(e: any) => {
+            e.stopPropagation()
             setOpen(true)
           }}
         >
-          Votos
-        </Button>
+          <HandStop data-slot="icon" />
+          <DropdownLabel>Votos de comisión</DropdownLabel>
+        </DropdownItem>
       }
       <Dialog open={open} onClose={setOpen} size="xl">
         <DialogTitle>Votos de parte de la comisión</DialogTitle>
