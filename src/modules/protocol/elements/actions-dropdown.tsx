@@ -167,7 +167,7 @@ export function ActionsDropdown({
 
   return (
     <Dropdown>
-      <DropdownButton className="h-9" outline>
+      <DropdownButton className="h-9" color="light">
         Acciones
         <ChevronDown data-slot="icon" />
       </DropdownButton>
@@ -192,6 +192,7 @@ export function ActionsDropdown({
             : i > 0 ? <DropdownDivider key={i} />
             : null
           )}
+
         <DropdownDivider />
         <DropdownItem
           onClick={() => {

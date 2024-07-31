@@ -102,6 +102,7 @@ export default async function Layout({
           actions={actions}
           evaluators={evaluators}
         />
+        {evaluators}
 
         <div className="h-[98svh] xl:relative">
           <ContainerAnimations

@@ -104,12 +104,14 @@ export default function ProtocolNumberUpdate({
             </DialogBody>
           </Dialog>
         </>
-      : <Badge className="mr-1 flex w-fit items-center">
-          <Number />
-          <Text className={cx('mt-0.5 font-medium')}>{pNumber}</Text>
-
-          <Button className="ml-2 h-6" outline onClick={() => setOpen(true)}>
-            <Edit data-slot="icon" className={cx('ml-2h-[1.1rem]')} />
+      : <>
+          <Button
+            plain
+            className="bg-black/10 dark:bg-white/5"
+            onClick={() => setOpen(true)}
+          >
+            <Number />
+            <Text className={cx('mt-0.5 font-medium')}>{pNumber}</Text>
           </Button>
 
           <Dialog open={open} onClose={setOpen}>
@@ -156,7 +158,7 @@ export default function ProtocolNumberUpdate({
               </form>
             </DialogBody>
           </Dialog>
-        </Badge>
+        </>
       }
     </>
   )

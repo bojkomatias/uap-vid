@@ -44,11 +44,7 @@ export const Researcher = ({
       />
     )
 
-  return (
-    <Info title="Usuario creador del protocolo" content={<div>Jijo!</div>}>
-      <ResearcherData researcher={researcher} />
-    </Info>
-  )
+  return <ResearcherData researcher={researcher} />
 }
 
 const ResearcherData = ({ researcher }: ResearcherProps) => (
@@ -151,7 +147,9 @@ const ResearcherReassignation = ({
             >
               Cerrar
             </Button>
-            <FormButton isLoading={false}>Cambiar investigador</FormButton>
+            <FormButton isLoading={isPending || form.isDirty()}>
+              Cambiar investigador
+            </FormButton>
           </DialogActions>
         </form>
       </Dialog>
