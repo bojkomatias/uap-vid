@@ -106,17 +106,15 @@ export default function ProtocolNumberUpdate({
         </>
       : <Badge className="mr-1 flex w-fit items-center">
           <Number />
-          <Text className={cx('mt-0.5  font-medium  ')}>{pNumber}</Text>
+          <Text className={cx('mt-0.5 font-medium')}>{pNumber}</Text>
 
           <Button className="ml-2 h-6" outline onClick={() => setOpen(true)}>
-            {' '}
             <Edit data-slot="icon" className={cx('ml-2h-[1.1rem]')} />
           </Button>
 
           <Dialog open={open} onClose={setOpen}>
             <DialogTitle>Editar número de protocolo</DialogTitle>
             <DialogBody>
-              {' '}
               <form
                 onSubmit={async (e) => {
                   e.preventDefault()

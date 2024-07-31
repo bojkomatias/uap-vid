@@ -129,14 +129,8 @@ export const canAccess = (access: Access, role: Role) =>
  * @param state
  * @returns
  */
-export const canExecute = (
-  action: Action,
-  role: Role,
-  state?: ProtocolState
-) =>
-  Role_SCOPE[role].includes(action) && state ?
-    STATE_SCOPE[state].includes(action)
-  : true
+export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
+  Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
 
 export const getActionsByRoleAndState = (role: Role, state: ProtocolState) =>
   Role_SCOPE[role].filter((action) => STATE_SCOPE[state].includes(action))

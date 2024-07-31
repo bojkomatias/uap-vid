@@ -15,7 +15,7 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
   const reviews = await getReviewsByProtocol(id)
 
   return (
-    <div className="pl-6">
+    <div id="reviews-inside-container" className="opacity-100 transition">
       <div>
         <Heading className="relative flex items-center justify-between">
           Revisiones

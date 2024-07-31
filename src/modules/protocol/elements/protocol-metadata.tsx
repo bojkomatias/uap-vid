@@ -15,7 +15,6 @@ import { Text } from '@components/text'
 import { Divider } from '@components/divider'
 import Info from 'modules/info'
 import FlagsDialog from './flags/flags-dialog'
-import PinComponent from '@elements/pin-component'
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'
@@ -177,15 +176,15 @@ export async function ProtocolMetadata({
             />
             {/* Evaluators */}
             {/* {evaluators} */}
+
             <div className="flex gap-2">
               {actions}
               <div>
                 <FlagsDialog
                   protocolId={protocol.id}
                   protocolFlags={protocol.flags}
-                />{' '}
+                />
               </div>
-              <PinComponent />
             </div>
           </div>
         </div>

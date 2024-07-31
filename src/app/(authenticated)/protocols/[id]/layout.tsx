@@ -12,15 +12,14 @@ import { ReviewFormTemplate } from '@review/review-form-template'
 import { ReviewList } from '@review/elements/review-list'
 import { getReviewsByProtocol } from '@repositories/review'
 import { ProtocolMetadata } from '@protocol/elements/protocol-metadata'
-import HideReviewsButton from '@protocol/elements/hide-reviews-button'
 import { ContainerAnimations } from '@elements/container-animations'
 import ContextMenu from '../../../../shared/context-menu'
-
 import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
 import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
+import { ReviewDisclose } from '@review/review-disclose'
 
 export default async function Layout({
   params,
@@ -30,7 +29,6 @@ export default async function Layout({
   children,
 }: {
   params: { id: string }
-  metadata: ReactNode
   evaluators: ReactNode
   actions: ReactNode
   modal: ReactNode
@@ -39,7 +37,7 @@ export default async function Layout({
   const session = await getServerSession(authOptions)
   if (!session) return
   if (params.id === 'new') {
-    if (!canExecute(Action.CREATE, session.user.role)) redirect('/protocols')
+    if (session.user.role === 'SCIENTIST') redirect('/protocols')
     return (
       <>
         <Heading>Nuevo protocolo</Heading>
@@ -65,107 +63,93 @@ export default async function Layout({
   )
 
   return (
-    <ContextMenu
-      context={{
-        protocol_id: protocol.id,
-        user: session.user,
-      }}
-      menu={
-        <>
-          <ProtocolNumberUpdate
-            context_menu
-            role={session.user.role}
-            protocolId={protocol.id}
-            protocolNumber={protocol.protocolNumber}
-          />
-          <BadgeButton
-            href={`mailto:${protocol.researcher.email}`}
-            className="flex grow justify-between gap-2 shadow-sm"
-          >
-            Enviar email al investigador <Mail size={18} />
-          </BadgeButton>
-          <FlagsDialog
-            protocolFlags={protocol.flags}
-            protocolId={protocol.id}
-            context_menu={true}
-          />
-          <ProtocolLogsDrawer
-            protocolId={protocol.id}
-            context_menu
-            userId={session.user.id}
-          />
-        </>
-      }
-    >
-      <ProtocolMetadata
-        params={params}
-        actions={actions}
-        evaluators={evaluators}
-      />
-
-      <div className="flex w-full flex-col items-start gap-3 lg:flex-row print:hidden">
-        <div className="flex-grow">
-          {/* {metadata} */}
-          {/* {evaluators} */}
-        </div>
-        {/* {actions}
-        {modal} */}
-      </div>
-      {reviews.length > 0 && (
-        <ContainerAnimations animation={1} duration={0.2} delay={0.1}>
-          <HideReviewsButton />
-        </ContainerAnimations>
-      )}
-      <div
-        id="protocol-and-reviews-container"
-        className="relative mt-8 grid-cols-1 gap-8 lg:grid lg:grid-cols-10 "
-      >
-        {/* Review form */}
-        {isReviewFormShown && (
-          <aside
-            id="reviews-form-container"
-            className={cx(
-              'col-span-4 -m-6 space-y-2 overflow-y-auto bg-gray-200/75 p-6 dark:bg-gray-800/90 lg:sticky lg:-top-8 lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden'
-            )}
-          >
-            <ReviewFormTemplate
+    <>
+      {modal}
+      <ContextMenu
+        context={{
+          protocol_id: protocol.id,
+          user: session.user,
+        }}
+        menu={
+          <>
+            <ProtocolNumberUpdate
+              context_menu
+              role={session.user.role}
               protocolId={protocol.id}
+              protocolNumber={protocol.protocolNumber}
+            />
+            <BadgeButton
+              href={`mailto:${protocol.researcher.email}`}
+              className="flex grow justify-between gap-2 shadow-sm"
+            >
+              Enviar email al investigador <Mail size={18} />
+            </BadgeButton>
+            <FlagsDialog
+              protocolFlags={protocol.flags}
+              protocolId={protocol.id}
+              context_menu={true}
+            />
+            <ProtocolLogsDrawer
+              protocolId={protocol.id}
+              context_menu
               userId={session.user.id}
             />
-          </aside>
-        )}
-        {/* Review list */}
-        {isReviewListShown && (
+          </>
+        }
+      >
+        <ProtocolMetadata
+          params={params}
+          actions={actions}
+          evaluators={evaluators}
+        />
+
+        <div className="h-[98svh] xl:relative">
           <ContainerAnimations
-            id="reviews-container"
-            className="col-span-4 -m-6 space-y-2 overflow-y-auto  bg-gray-200/75 p-6 transition dark:bg-gray-800/90 lg:sticky lg:-top-8  lg:-mb-8 lg:-ml-8 lg:-mr-4 lg:-mt-8 lg:h-[100svh] lg:rounded-r-lg lg:px-4 lg:pb-8 lg:pt-8 print:hidden"
             animation={4}
             duration={0.2}
-            delay={0.1}
+            id="reviews-container"
+            className={cx(
+              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
+              isReviewFormShown || isReviewListShown ? '' : 'hidden'
+            )}
           >
-            <ReviewList
-              role={session.user.role}
-              id={protocol.id}
-              isOwner={session.user.id === protocol.researcher.id}
-            />
+            {isReviewFormShown && (
+              <ReviewFormTemplate
+                protocolId={protocol.id}
+                userId={session.user.id}
+              />
+            )}
+            {isReviewListShown && (
+              <ReviewList
+                role={session.user.role}
+                id={protocol.id}
+                isOwner={session.user.id === protocol.researcher.id}
+              />
+            )}
           </ContainerAnimations>
-        )}
-
-        {/* Protocol page */}
-        <div
-          id="protocol-container"
-          className={cx(
-            'mt-12 transition lg:mt-0',
-            isReviewListShown || isReviewFormShown ? 'col-span-6' : (
-              'col-span-full'
-            )
-          )}
-        >
-          {children}
+          <ContainerAnimations
+            animation={2}
+            duration={0.2}
+            id="protocol-container"
+            className={cx(
+              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8 print:left-full',
+              isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
+            )}
+          >
+            {children}
+          </ContainerAnimations>
+          {isReviewFormShown || isReviewListShown ?
+            <ContainerAnimations
+              delay={0.5}
+              className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
+            >
+              <ReviewDisclose />
+            </ContainerAnimations>
+          : null}
         </div>
-      </div>
 
-      <ChatFullComponent user={session.user} protocolId={protocol.id} />
-    </ContextMenu>
+        <ChatFullComponent user={session.user} protocolId={protocol.id} />
+      </ContextMenu>
+    </>
   )
 }

@@ -35,7 +35,7 @@ export default async function Page({
       <ContainerAnimations duration={0.4} delay={0}>
         <div className="flex items-end">
           <Heading>Lista de proyectos de investigación</Heading>
-          {canExecute(Action.CREATE, session.user.role) && (
+          {session.user.role !== 'SCIENTIST' && (
             <Button href={'/protocols/new/0'}>
               <FileReport data-slot="icon" /> Nuevo proyecto
             </Button>

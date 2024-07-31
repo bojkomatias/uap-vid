@@ -26,8 +26,7 @@ import { Divider } from '@components/divider'
 import { DeleteUserButton } from './delete-user-button'
 import { Subheading } from '@components/heading'
 import { Text } from '@components/text'
-import { Clipboard } from 'tabler-icons-react'
-import { Button } from '@components/button'
+import Clipboard from '@elements/clipboard'
 
 export function UserDetailsDialog({ user }: { user: Omit<User, 'password'> }) {
   const router = useRouter()
@@ -65,18 +64,19 @@ export function UserDetailsDialog({ user }: { user: Omit<User, 'password'> }) {
 
   return (
     <Dialog open={open} onClose={closeDialog} size="2xl">
-      <DialogTitle>Detalles de usuario</DialogTitle>
+      <DialogTitle>Detalles del usuario</DialogTitle>
       <DialogDescription>
         Los detalles de usuario y la opción de modificar el rol del mismo.
       </DialogDescription>
       <DialogBody>
         <DescriptionList>
           <DescriptionTerm>UUID</DescriptionTerm>
-          <DescriptionDetails>
+          <DescriptionDetails className="flex items-center gap-1">
             <span className="font-mono text-xs">{user.id}</span>
-            <Button>
-              <Clipboard />
-            </Button>
+            <Clipboard
+              content={user.id}
+              notification_message={`UUID del usuario copiado: ${user.id}`}
+            />
           </DescriptionDetails>
           <DescriptionTerm>Nombre</DescriptionTerm>
           <DescriptionDetails>{user.name}</DescriptionDetails>
