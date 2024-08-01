@@ -10,7 +10,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
-import { Heading, Subheading } from '@components/heading'
+import { Heading } from '@components/heading'
 import { Text } from '@components/text'
 import { Divider } from '@components/divider'
 import Info from 'modules/info'
@@ -166,16 +166,16 @@ export async function ProtocolMetadata({
             </Info>
           </div>
 
-          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-end md:gap-0">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:gap-1">
             {/* Researcher */}
             <Researcher
               researcher={protocol.researcher}
               protocolId={protocol.id}
               isAdmin={session.user.role === 'ADMIN'}
             />
+            <span className="grow" />
             {/* Evaluators */}
-            {/* {evaluators} */}
-
+            {evaluators}
             {actions}
           </div>
         </div>

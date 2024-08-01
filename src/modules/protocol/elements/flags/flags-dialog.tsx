@@ -39,6 +39,7 @@ export default function FlagsDialog({
         </BadgeButton>
       : <DropdownItem
           onClick={(e: any) => {
+            e.preventDefault()
             e.stopPropagation()
             setOpen(true)
           }}
@@ -47,7 +48,7 @@ export default function FlagsDialog({
           <DropdownLabel>Votos de comisión</DropdownLabel>
         </DropdownItem>
       }
-      <Dialog open={open} onClose={setOpen} size="xl">
+      <Dialog open={open} onClose={() => setOpen(false)} size="xl">
         <DialogTitle>Votos de parte de la comisión</DialogTitle>
         <DialogDescription>
           Aquí se registran los votos emitidos por la comisión encargada de
