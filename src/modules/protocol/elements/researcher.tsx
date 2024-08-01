@@ -147,7 +147,7 @@ const ResearcherReassignation = ({
             >
               Cerrar
             </Button>
-            <FormButton isLoading={isPending || !form.isDirty()}>
+            <FormButton enabled={!form.isDirty()} isLoading={isPending}>
               Cambiar investigador
             </FormButton>
           </DialogActions>
