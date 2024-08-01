@@ -9,7 +9,8 @@ import {
   DropdownMenu,
 } from '@components/dropdown'
 import { notifications } from '@elements/notifications'
-import { Action, Prisma, Protocol, ProtocolState } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { Action, ProtocolState } from '@prisma/client'
 import { getSecretariesEmailsByAcademicUnit } from '@repositories/academic-unit'
 import { updateProtocolStateById } from '@repositories/protocol'
 import { ActionDictionary } from '@utils/dictionaries/ActionDictionary'
