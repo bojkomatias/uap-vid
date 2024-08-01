@@ -126,7 +126,7 @@ const ResearcherReassignation = ({
         <form onSubmit={form.onSubmit((values) => submitReassignation(values))}>
           <DialogBody>
             <FormCombobox
-              label="Re asignar investigador"
+              label="Reasignar investigador"
               description="Seleccione un nuevo usuario el cual pasara a ser dueño del proyecto"
               options={
                 data?.map((e) => ({
@@ -147,7 +147,7 @@ const ResearcherReassignation = ({
             >
               Cerrar
             </Button>
-            <FormButton isLoading={isPending || form.isDirty()}>
+            <FormButton isLoading={isPending || !form.isDirty()}>
               Cambiar investigador
             </FormButton>
           </DialogActions>
