@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { useSelectedLayoutSegment } from 'next/navigation'
 
 const inactive_tab_styles =
-  'border-transparent text-gray-400 hover:border-gray-300 hover:text-gray-600 dark:text-gray-500 hover:bg-gray-200/60 dark:hover:bg-primary/40 dark:hover:text-gray-200 z-10'
+  'border-transparent text-gray-400 hover:border-gray-300 hover:text-gray-600 dark:text-gray-500  dark:hover:text-gray-200 z-10'
 const active_tab_styles =
-  'border-primary bg-gray-300/50 text-primary shadow-[5px_3px_5px_0px_#dfdfdf] dark:shadow-[5px_3px_5px_0px_#1a202c] dark:border-white dark:bg-primary-950/40 dark:text-white z-20'
+  'border-primary text-primary dark:border-white  dark:text-white z-20'
 
 export default function Tabs({
   tabs,

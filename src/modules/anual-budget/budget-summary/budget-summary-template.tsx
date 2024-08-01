@@ -39,7 +39,7 @@ export const BudgetSummary = ({
   return (
     <div>
       <dl
-        className={`mt-5 grid grid-cols-1 gap-5 ${approved ? 'xl:grid-cols-3' : 'xl:grid-cols-2'}`}
+        className={`my-8 grid grid-cols-1 gap-5 ${approved ? 'xl:grid-cols-3' : 'xl:grid-cols-2'}`}
       >
         {stats.map((item, i) => (
           <Info
@@ -51,7 +51,7 @@ export const BudgetSummary = ({
             key={item.name}
           >
             <ContainerAnimations className="h-full" animation={3}>
-              <div className="flex h-full flex-col overflow-hidden rounded-lg border px-4 py-5 shadow-md dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+              <div className="flex h-full flex-col overflow-hidden rounded-lg border px-4 py-5 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
                 <dt className="flex flex-grow justify-between text-base font-normal text-gray-900">
                   <Heading>{item.name}</Heading>
 

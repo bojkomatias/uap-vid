@@ -11,7 +11,6 @@ export default function HideReviewsButton() {
 
   return (
     <Button
-      title={open ? 'Mostrar revisiones' : 'Ocultar revisiones'}
       className="-translate-y-2 print:hidden"
       outline
       onClick={() => {
