@@ -21,7 +21,7 @@ import { getCurrentIndexes } from '@repositories/finance-index'
 import { Button } from '@components/button'
 import { Dialog } from '@components/dialog'
 import { Heading, Subheading } from '@components/heading'
-import { Badge } from '@components/badge'
+import { Badge, BadgeButton } from '@components/badge'
 import { Divider } from '@components/divider'
 
 export default function BudgetExecutionView({
@@ -114,7 +114,7 @@ export default function BudgetExecutionView({
             <div className="flex items-center gap-2">
               <p className="text-sm font-semibold text-gray-600">
                 {executionType === ExecutionType.TeamMember ?
-                  <Badge className="!text-lg">{title}</Badge>
+                  <Subheading className="!text-lg">{title}</Subheading>
                 : <>
                     <Subheading className="font-semibold">Detalle</Subheading>
                     <Text>{title}</Text>
@@ -148,9 +148,9 @@ export default function BudgetExecutionView({
           <div className="flex flex-col gap-3 rounded-md ">
             {remaining !== ZeroAmountIndex ?
               <>
-                <Heading className="text-xl font-semibold">
+                <Subheading className="text-xl font-semibold">
                   Nueva ejecución:
-                </Heading>
+                </Subheading>
                 {academicUnits ?
                   <>
                     <div className="flex flex-col items-start gap-2">
@@ -275,7 +275,7 @@ export default function BudgetExecutionView({
             {executions.reverse().length > 0 ?
               <>
                 <Divider />
-                <Heading>Ejecuciones históricas</Heading>
+                <Subheading>Ejecuciones históricas</Subheading>
 
                 <table className="w-full table-auto">
                   <thead>
@@ -330,15 +330,14 @@ export default function BudgetExecutionView({
         </section>
       </Dialog>
 
-      <Button
-        outline
-        className="float-right px-2 py-0.5 text-xs "
+      <BadgeButton
+        className="!font-bold"
         onClick={() => {
           setOpened(true)
         }}
       >
         Ver
-      </Button>
+      </BadgeButton>
     </>
   )
 }

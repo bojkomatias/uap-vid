@@ -243,7 +243,7 @@ export function BudgetTeamMemberFees({
                   </td>
                   <td
                     className={cx(
-                      'hidden print:hidden',
+                      'hidden text-right print:hidden',
                       !editable && 'table-cell'
                     )}
                   >
@@ -260,7 +260,7 @@ export function BudgetTeamMemberFees({
                       title={name}
                       executionType={ExecutionType.TeamMember}
                       itemName={
-                        categories.at(-1)?.category.name ?? 'Sin Categoría'
+                        categories.at(-1)?.category.name ?? 'Sin categoría'
                       }
                       obrero={
                         categories.at(-1)?.pointsObrero ?

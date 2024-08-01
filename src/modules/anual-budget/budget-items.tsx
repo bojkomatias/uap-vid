@@ -37,6 +37,8 @@ export function BudgetItems({
   const router = useRouter()
   const form = useForm({ initialValues: budgetItems })
 
+  if (budgetItems.length < 1) return null
+
   return (
     <form
       className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
@@ -151,7 +153,7 @@ export function BudgetItems({
               ) => (
                 <tr
                   key={i}
-                  className="border-b text-gray-600 dark:border-gray-800"
+                  className="relative border-b text-gray-600 dark:border-gray-800"
                 >
                   <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
                     <Subheading>{detail}</Subheading>
@@ -195,7 +197,7 @@ export function BudgetItems({
                   </td>
                   <td
                     className={cx(
-                      'hidden print:hidden',
+                      'hidden text-right print:hidden',
                       !editable && 'table-cell'
                     )}
                   >

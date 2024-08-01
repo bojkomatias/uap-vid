@@ -97,7 +97,17 @@ export default async function Layout({
           </>
         }
       >
-        <ProtocolMetadata params={params} actions={actions} />
+        <ProtocolMetadata
+          review_disclose_button={
+            isReviewFormShown || isReviewListShown ?
+              <ContainerAnimations delay={0.5}>
+                <ReviewDisclose />
+              </ContainerAnimations>
+            : null
+          }
+          params={params}
+          actions={actions}
+        />
 
         <div className="h-[98svh] xl:relative">
           <ContainerAnimations
@@ -105,7 +115,7 @@ export default async function Layout({
             duration={0.2}
             id="reviews-container"
             className={cx(
-              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
+              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-r-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
               isReviewFormShown || isReviewListShown ? '' : 'hidden'
             )}
           >
@@ -128,20 +138,12 @@ export default async function Layout({
             duration={0.2}
             id="protocol-container"
             className={cx(
-              '@container inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:py-8 print:left-full',
+              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8 print:left-full',
               isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
             )}
           >
             {children}
           </ContainerAnimations>
-          {isReviewFormShown || isReviewListShown ?
-            <ContainerAnimations
-              delay={0.5}
-              className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
-            >
-              <ReviewDisclose />
-            </ContainerAnimations>
-          : null}
         </div>
 
         <ChatFullComponent user={session.user} protocolId={protocol.id} />
