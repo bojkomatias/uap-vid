@@ -4,7 +4,6 @@ import type { Prisma } from '@prisma/client'
 import { calculateTotalBudget } from '@utils/anual-budget'
 import { Currency } from '@shared/currency'
 import { multiplyAmountIndex, sumAmountIndex } from '@utils/amountIndex'
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Dialog,
@@ -22,7 +21,6 @@ import {
   TableRow,
 } from '@components/table'
 import { Subheading } from '@components/heading'
-import { Divider } from '@components/divider'
 import { Button } from '@components/button'
 
 type Budget = Prisma.AnualBudgetGetPayload<{
