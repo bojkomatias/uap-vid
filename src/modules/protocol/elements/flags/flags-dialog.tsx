@@ -1,14 +1,23 @@
 'use client'
-import React, { useState } from 'react'
+
+import React from 'react'
 import CucytFlag from './cucyt-flag'
 import CiFlag from './ci-flag'
 import type { ProtocolFlag } from '@prisma/client'
-import { Dialog } from '@components/dialog'
-import { Button } from '@components/button'
+import {
+  Dialog,
+  DialogBody,
+  DialogDescription,
+  DialogTitle,
+} from '@components/dialog'
 import { Divider } from '@components/divider'
 import { BadgeButton } from '@components/badge'
-import { Checks, Flag } from 'tabler-icons-react'
+import { Flag } from 'tabler-icons-react'
 
+import { atom, useAtom } from 'jotai'
+import { ContextMenuAtom } from '@shared/context-menu'
+
+export const FlagsDialogAtom = atom<boolean>(false)
 export default function FlagsDialog({
   protocolId,
   protocolFlags,
@@ -18,44 +27,43 @@ export default function FlagsDialog({
   protocolFlags: ProtocolFlag[]
   context_menu?: boolean
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useAtom(FlagsDialogAtom)
+  const [_, setContextMenu] = useAtom(ContextMenuAtom)
 
   return (
     <>
-      {context_menu ?
+      {context_menu && (
         <BadgeButton
           onClick={() => {
             setOpen(true)
+            setContextMenu(false)
           }}
           className="flex grow justify-between shadow-sm"
         >
           Votos <Flag size={18} />
         </BadgeButton>
-      : <Button
-          outline
-          onClick={() => {
-            setOpen(true)
-          }}
-        >
-          Votos
-        </Button>
-      }
-      <Dialog open={open} onClose={setOpen}>
-        <div className="flex flex-col gap-3 p-3">
+      )}
+      <Dialog open={open} onClose={setOpen} size="xl">
+        <DialogTitle>Votos de las comisiones</DialogTitle>
+        <DialogDescription>
+          Votos emitidos por las comisiones encargadas de aprobar los
+          prespuestos para el proyecto.
+        </DialogDescription>
+        <DialogBody>
           <CucytFlag
             protocolId={protocolId}
             protocolFlag={protocolFlags.find(
               (f: ProtocolFlag) => f.flagName == 'CUCYT'
             )}
           />
-          <Divider className="mt-2" />
+          <Divider className="my-4" />
           <CiFlag
             protocolId={protocolId}
             protocolFlag={protocolFlags.find(
               (f: ProtocolFlag) => f.flagName == 'CI'
             )}
           />
-        </div>
+        </DialogBody>
       </Dialog>
     </>
   )

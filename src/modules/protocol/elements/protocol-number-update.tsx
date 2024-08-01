@@ -3,7 +3,6 @@
 import { Badge, BadgeButton } from '@components/badge'
 import { Button } from '@components/button'
 import { Dialog, DialogBody, DialogTitle } from '@components/dialog'
-import { Fieldset } from '@components/fieldset'
 import { Text } from '@components/text'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
@@ -12,7 +11,7 @@ import { patchProtocolNumber } from '@repositories/protocol'
 import { FormInput } from '@shared/form/form-input'
 import { cx } from '@utils/cx'
 import { useState } from 'react'
-import { Check, Edit, Number, Numbers, X } from 'tabler-icons-react'
+import { Edit, Number } from 'tabler-icons-react'
 import { z } from 'zod'
 
 export default function ProtocolNumberUpdate({
@@ -105,12 +104,14 @@ export default function ProtocolNumberUpdate({
             </DialogBody>
           </Dialog>
         </>
-      : <Badge className="mr-1 flex w-fit items-center">
-          <Number />
-          <Text className={cx('mt-0.5 font-medium')}>{pNumber}</Text>
-
-          <Button className="ml-2 h-6" outline onClick={() => setOpen(true)}>
-            <Edit data-slot="icon" className={cx('ml-2h-[1.1rem]')} />
+      : <>
+          <Button
+            plain
+            className="ml-4 bg-black/10 dark:bg-white/5"
+            onClick={() => setOpen(true)}
+          >
+            <Number />
+            <Text className={cx('mt-0.5 font-medium')}>{pNumber}</Text>
           </Button>
 
           <Dialog open={open} onClose={setOpen}>
@@ -157,7 +158,7 @@ export default function ProtocolNumberUpdate({
               </form>
             </DialogBody>
           </Dialog>
-        </Badge>
+        </>
       }
     </>
   )

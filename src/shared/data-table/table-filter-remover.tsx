@@ -1,5 +1,4 @@
 import { Badge, BadgeButton } from '@components/badge'
-import { Strong, Text, TextLink } from '@components/text'
 import { TableFilterDictionary } from '@utils/dictionaries/TableFilterDictionary'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'

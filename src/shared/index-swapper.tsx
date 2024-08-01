@@ -1,9 +1,7 @@
 'use client'
 
-import { Field, Label } from '@components/fieldset'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import { atom, useAtom } from 'jotai'
-import { CurrencyDollar } from 'tabler-icons-react'
 
 type swapType = 'default' | 'fca' | 'fmr'
 

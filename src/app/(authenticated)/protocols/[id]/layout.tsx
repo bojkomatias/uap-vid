@@ -1,6 +1,6 @@
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { act, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
@@ -23,13 +23,13 @@ import { ReviewDisclose } from '@review/review-disclose'
 
 export default async function Layout({
   params,
-  // evaluators,
+  evaluators,
   actions,
   modal,
   children,
 }: {
   params: { id: string }
-  // evaluators: ReactNode
+  evaluators: ReactNode
   actions: ReactNode
   modal: ReactNode
   children: ReactNode
@@ -65,6 +65,7 @@ export default async function Layout({
   return (
     <>
       {modal}
+      <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
       <ContextMenu
         context={{
           protocol_id: protocol.id,
@@ -107,6 +108,7 @@ export default async function Layout({
           }
           params={params}
           actions={actions}
+          evaluators={evaluators}
         />
 
         <div className="h-[98svh] xl:relative">
