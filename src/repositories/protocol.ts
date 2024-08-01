@@ -162,6 +162,20 @@ const updateProtocolStateById = async (
   }
 }
 
+const updateProtocolResearcher = async (id: string, researcherId: string) => {
+  try {
+    const result = await prisma.protocol.update({
+      where: { id },
+      data: {
+        researcherId,
+      },
+    })
+    return result.researcherId
+  } catch (e) {
+    return null
+  }
+}
+
 const upsertProtocolFlag = async (
   id: string,
   flag: Omit<ProtocolFlag, 'createdAt'>
@@ -564,6 +578,7 @@ export {
   getProtocolMetadata,
   findProtocolByIdWithResearcher,
   updateProtocolById,
+  updateProtocolResearcher,
   createProtocol,
   getAllProtocols,
   updateProtocolStateById,

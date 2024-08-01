@@ -23,13 +23,13 @@ import { ReviewDisclose } from '@review/review-disclose'
 
 export default async function Layout({
   params,
-  // evaluators,
+  evaluators,
   actions,
   modal,
   children,
 }: {
   params: { id: string }
-  // evaluators: ReactNode
+  evaluators: ReactNode
   actions: ReactNode
   modal: ReactNode
   children: ReactNode
@@ -65,6 +65,7 @@ export default async function Layout({
   return (
     <>
       {modal}
+      <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
       <ContextMenu
         context={{
           protocol_id: protocol.id,
@@ -97,7 +98,11 @@ export default async function Layout({
           </>
         }
       >
-        <ProtocolMetadata params={params} actions={actions} />
+        <ProtocolMetadata
+          params={params}
+          actions={actions}
+          evaluators={evaluators}
+        />
 
         <div className="h-[98svh] xl:relative">
           <ContainerAnimations
@@ -128,7 +133,7 @@ export default async function Layout({
             duration={0.2}
             id="protocol-container"
             className={cx(
-              '@container inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:py-8 print:left-full',
+              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8 print:left-full',
               isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
             )}
           >

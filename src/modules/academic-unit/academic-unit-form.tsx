@@ -10,7 +10,6 @@ import { FormInput } from '@shared/form/form-input'
 import type { z } from 'zod'
 import { FormButton } from '@shared/form/form-button'
 import { upsertAcademicUnit } from '@repositories/academic-unit'
-import { FormCombobox } from '@shared/form/form-combobox'
 
 export function AcademicUnitForm({
   academicUnit,

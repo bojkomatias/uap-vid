@@ -11,6 +11,9 @@ import { FormActions } from '@components/fieldset'
 import { useForm } from '@mantine/form'
 import { bug_report } from '@utils/emailer'
 import { notifications } from '@elements/notifications'
+import { atom, useAtom } from 'jotai'
+
+export const ContextMenuAtom = atom<boolean>(false)
 
 export default function ContextMenu({
   children,
@@ -21,7 +24,7 @@ export default function ContextMenu({
   menu: React.ReactNode
   context?: any
 }) {
-  const [showMenu, setShowMenu] = useState(false)
+  const [showMenu, setShowMenu] = useAtom(ContextMenuAtom)
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
   const menuRef = useRef<HTMLDivElement>(null)
 

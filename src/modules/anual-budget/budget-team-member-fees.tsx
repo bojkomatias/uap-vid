@@ -14,7 +14,11 @@ import { useRouter } from 'next/navigation'
 import type { WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
 import type { AmountIndex } from '@prisma/client'
 import { Currency } from '@shared/currency'
-import { multiplyAmountIndex, sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import {
+  multiplyAmountIndex,
+  sumAmountIndex,
+  ZeroAmountIndex,
+} from '@utils/amountIndex'
 
 export function BudgetTeamMemberFees({
   editable,
@@ -205,7 +209,11 @@ export function BudgetTeamMemberFees({
                     {remainingHours.toFixed(2)}
                   </td>
                   <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
-                    <Currency amountIndex={calculateHourRateGivenCategory(categories.at(-1) ?? null)} />
+                    <Currency
+                      amountIndex={calculateHourRateGivenCategory(
+                        categories.at(-1) ?? null
+                      )}
+                    />
                   </td>
                   <td
                     className={cx(
@@ -213,23 +221,34 @@ export function BudgetTeamMemberFees({
                       !editable && 'sm:table-cell'
                     )}
                   >
-                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1) ?? null), remainingHours
-                    )}/>
-                    
-                      
+                    <Currency
+                      amountIndex={multiplyAmountIndex(
+                        calculateHourRateGivenCategory(
+                          categories.at(-1) ?? null
+                        ),
+                        remainingHours
+                      )}
+                    />
                   </td>
                   <td className="px-3 py-5 text-right text-sm text-gray-600 ">
-                    <Currency amountIndex={multiplyAmountIndex(calculateHourRateGivenCategory(categories.at(-1)??null) , hours)} />
+                    <Currency
+                      amountIndex={multiplyAmountIndex(
+                        calculateHourRateGivenCategory(
+                          categories.at(-1) ?? null
+                        ),
+                        hours
+                      )}
+                    />
                   </td>
                   <td className={cx('hidden', !editable && 'table-cell')}>
                     <BudgetExecutionView
                       positionIndex={i}
-                      remaining={
-                        multiplyAmountIndex(
+                      remaining={multiplyAmountIndex(
                         calculateHourRateGivenCategory(
                           categories.at(-1) ?? null
-                        ), remainingHours)
-                      }
+                        ),
+                        remainingHours
+                      )}
                       executions={executions}
                       anualBudgetTeamMemberId={anualBudgetTeamMemberId}
                       title={name}
@@ -293,7 +312,7 @@ export function BudgetTeamMemberFees({
               </th>
 
               <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
-                <Currency amountIndex={sumAmountIndex([ABTr,ABTe])} />
+                <Currency amountIndex={sumAmountIndex([ABTr, ABTe])} />
               </td>
             </tr>
           </tfoot>

@@ -1,9 +1,8 @@
-import { Action, ReviewVerdict } from '@prisma/client'
+import { ReviewVerdict } from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
-import { BudgetDropdown } from '@protocol/elements/budgets/budget-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
-import { canExecute, getActionsByRoleAndState } from '@utils/scopes'
+import { getActionsByRoleAndState } from '@utils/scopes'
 import { ProtocolSchema } from '@utils/zod'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
@@ -36,21 +35,10 @@ export default async function ActionsPage({
   }
 
   return (
-    <>
-      <ActionsDropdown
-        actions={actions}
-        protocolId={protocol.id}
-        protocolState={protocol.state}
-        userId={session.user.id}
-      />
-      {canExecute(
-        Action.VIEW_ANUAL_BUDGET,
-        session.user.role,
-        protocol.state
-      ) &&
-        protocol.anualBudgets.length > 0 && (
-          <BudgetDropdown budgets={protocol.anualBudgets} />
-        )}
-    </>
+    <ActionsDropdown
+      actions={actions}
+      protocol={protocol}
+      userId={session.user.id}
+    />
   )
 }

@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useCallback, useTransition } from 'react'
 import { FieldGroup, Fieldset, FormActions } from '../../components/fieldset'
 import { FormInput } from '../../shared/form/form-input'
@@ -8,7 +9,6 @@ import { useForm, zodResolver } from '@mantine/form'
 import type { z } from 'zod'
 import { FormButton } from '@shared/form/form-button'
 import { notifications } from '@elements/notifications'
-import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import {
   verifyUserData,
