@@ -20,6 +20,7 @@ import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 import { ReviewDisclose } from '@review/review-disclose'
+import OpenFlagsDialog from '@protocol/elements/flags/open-flags-dialog-button'
 
 export default async function Layout({
   params,
@@ -85,11 +86,7 @@ export default async function Layout({
             >
               Enviar email al investigador <Mail size={18} />
             </BadgeButton>
-            <FlagsDialog
-              protocolFlags={protocol.flags}
-              protocolId={protocol.id}
-              context_menu={true}
-            />
+            <OpenFlagsDialog />
             <ProtocolLogsDrawer
               protocolId={protocol.id}
               context_menu
