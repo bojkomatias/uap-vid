@@ -65,6 +65,7 @@ export default async function Layout({
   return (
     <>
       {modal}
+      <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
       <ContextMenu
         context={{
           protocol_id: protocol.id,

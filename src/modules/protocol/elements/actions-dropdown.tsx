@@ -28,9 +28,11 @@ import {
   Flag2,
   Trash,
   FileDownload,
+  HandStop,
 } from 'tabler-icons-react'
-import FlagsDialog from './flags/flags-dialog'
+import FlagsDialog, { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
+import { useAtom } from 'jotai'
 
 type ActionOption = {
   action: Action
@@ -187,6 +189,8 @@ export function ActionsDropdown({
 
   const canViewBudgets = actions.includes('VIEW_ANUAL_BUDGET')
 
+  const [open, setOpen] = useAtom(FlagsDialogAtom)
+
   return (
     <Dropdown>
       <DropdownButton className="h-9" color="light">
@@ -213,7 +217,16 @@ export function ActionsDropdown({
               <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
             </DropdownItem>
           ))}
-        <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
+        <DropdownItem
+          onClick={(e: any) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setOpen(true)
+          }}
+        >
+          <HandStop data-slot="icon" />
+          <DropdownLabel>Votos </DropdownLabel>
+        </DropdownItem>
 
         {/* Actions that end or pause the lifetime of a project */}
         <DropdownDivider />

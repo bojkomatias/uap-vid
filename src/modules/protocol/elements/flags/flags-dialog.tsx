@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import CucytFlag from './cucyt-flag'
 import CiFlag from './ci-flag'
 import type { ProtocolFlag } from '@prisma/client'
@@ -12,9 +12,12 @@ import {
 } from '@components/dialog'
 import { Divider } from '@components/divider'
 import { BadgeButton } from '@components/badge'
-import { Flag, HandStop } from 'tabler-icons-react'
-import { DropdownItem, DropdownLabel } from '@components/dropdown'
+import { Flag } from 'tabler-icons-react'
 
+import { atom, useAtom } from 'jotai'
+import { ContextMenuAtom } from '@shared/context-menu'
+
+export const FlagsDialogAtom = atom<boolean>(false)
 export default function FlagsDialog({
   protocolId,
   protocolFlags,
@@ -24,30 +27,22 @@ export default function FlagsDialog({
   protocolFlags: ProtocolFlag[]
   context_menu?: boolean
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useAtom(FlagsDialogAtom)
+  const [_, setContextMenu] = useAtom(ContextMenuAtom)
 
   return (
     <>
-      {context_menu ?
+      {context_menu && (
         <BadgeButton
           onClick={() => {
             setOpen(true)
+            setContextMenu(false)
           }}
           className="flex grow justify-between shadow-sm"
         >
           Votos <Flag size={18} />
         </BadgeButton>
-      : <DropdownItem
-          onClick={(e: any) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setOpen(true)
-          }}
-        >
-          <HandStop data-slot="icon" />
-          <DropdownLabel>Votos </DropdownLabel>
-        </DropdownItem>
-      }
+      )}
       <Dialog open={open} onClose={setOpen} size="xl">
         <DialogTitle>Votos de las comisiones</DialogTitle>
         <DialogDescription>
