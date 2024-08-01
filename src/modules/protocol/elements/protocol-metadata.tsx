@@ -10,11 +10,10 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
-import { Heading } from '@components/heading'
+import { Heading, Subheading } from '@components/heading'
 import { Text } from '@components/text'
 import { Divider } from '@components/divider'
 import Info from 'modules/info'
-import FlagsDialog from './flags/flags-dialog'
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'
@@ -38,7 +37,7 @@ export async function ProtocolMetadata({
         <div className="mb-8 mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <Heading
-              className="truncate md:text-clip"
+              className="truncate md:text-ellipsis"
               title={protocol.sections.identification.title}
             >
               {protocol.sections.identification.title}
@@ -144,13 +143,13 @@ export async function ProtocolMetadata({
             >
               <Badge
                 color={ProtocolStatesColorDictionary[protocol.state]}
-                className="w-fit !text-[14px] font-semibold"
+                className="w-fit !text-sm/6 font-semibold"
               >
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>
             </Info>
             <Info content="Convocatoria a la que pertenece el protocolo">
-              <Badge className="w-fit text-clip !text-[14px] font-semibold">
+              <Badge className="w-fit text-clip !text-sm/6 font-semibold">
                 {protocol.convocatory ?
                   protocol.convocatory.name
                 : 'Sin convocatoria'}

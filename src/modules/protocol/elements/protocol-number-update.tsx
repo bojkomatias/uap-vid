@@ -107,7 +107,7 @@ export default function ProtocolNumberUpdate({
       : <>
           <Button
             plain
-            className="bg-black/10 dark:bg-white/5"
+            className="ml-4 bg-black/10 dark:bg-white/5"
             onClick={() => setOpen(true)}
           >
             <Number />

@@ -241,7 +241,11 @@ export function ActionsDropdown({
             <DropdownItem
               key={budget.id}
               disabled={isPending}
-              href={`/anual-budget-view/${budget.id}`}
+              onClick={() => {
+                router.push(`/anual-budget-view/${budget.id}`, {
+                  scroll: false,
+                })
+              }}
             >
               <FileDollar data-slot="icon" />
               <DropdownLabel>Presupuesto {budget.year}</DropdownLabel>
