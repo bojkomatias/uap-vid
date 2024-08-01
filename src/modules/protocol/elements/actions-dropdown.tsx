@@ -219,8 +219,6 @@ export function ActionsDropdown({
           ))}
         <DropdownItem
           onClick={(e: any) => {
-            e.preventDefault()
-            e.stopPropagation()
             setOpen(true)
           }}
         >
