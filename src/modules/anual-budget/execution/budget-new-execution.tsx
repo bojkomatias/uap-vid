@@ -1,4 +1,5 @@
 'use client'
+
 import {
   saveNewItemExecution,
   saveNewTeamMemberExecution,
@@ -43,7 +44,7 @@ const BudgetNewExecution = ({
           .number()
           .min(1, { message: 'El valor debe ser mayor a 0' })
           .max(maxAmount, {
-            message: `Monto restante: $${
+            message: `No puede exceder ${
               !maxAmount ? 0 : currencyFormatter.format(maxAmount)
             }`,
           }),
@@ -51,7 +52,7 @@ const BudgetNewExecution = ({
     ),
     validateInputOnChange: true,
   })
-  const newExecution = async (amount: number) => {
+  const newExecution = async ({ amount }: { amount: number }) => {
     try {
       if (
         anualBudgetTeamMemberId &&
@@ -87,7 +88,10 @@ const BudgetNewExecution = ({
     form.setFieldValue('amount', parseLocaleNumber(e.target.value, 'es-AR'))
   }
   return (
-    <form className="flex items-baseline justify-between gap-2">
+    <form
+      onClick={form.onSubmit((values) => newExecution(values))}
+      className="flex items-baseline justify-between gap-2"
+    >
       <FormInput
         className="flex flex-grow flex-row items-center gap-2"
         type="number"
@@ -97,15 +101,12 @@ const BudgetNewExecution = ({
       />
 
       <Button
+        type="submit"
         outline
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          e.preventDefault()
-          newExecution(form.values.amount)
-        }}
       >
-        {isPending ? 'Creando' : 'Crear'}
+        {isPending ? 'Cargando' : 'Cargar'}
       </Button>
     </form>
   )
