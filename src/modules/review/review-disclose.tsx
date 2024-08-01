@@ -12,7 +12,7 @@ export function ReviewDisclose() {
 
   return (
     <Button
-      className="active:scale-95"
+      className="self-center active:scale-95"
       title={open ? 'Mostrar evaluaciones' : 'Ocultar evaluaciones'}
       outline
       onClick={() => {
