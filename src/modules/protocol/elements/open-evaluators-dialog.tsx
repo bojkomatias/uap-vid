@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@components/dialog'
+import { Divider } from '@components/divider'
 import { Text } from '@components/text'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
@@ -23,10 +24,12 @@ export function EvaluatorsDialog({ children }: { children: ReactNode }) {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Metodólogo y evaluadores</DialogTitle>
         <DialogDescription className="!text-xs/5">
-          De acuerdo al estado del protocolo los evaluadores asignados. Si el
-          estado lo permite se puede reasignar dichos evaluadores, teniendo en
-          cuenta que esto limpia la revision realizada de haberse hecho una.
+          Solo puede asignar evaluadores luego de que el/la metodólogo/a haya
+          completado su evaluación. <br /> Reasignar metodólogo/a o evaluadores
+          eliminará la evaluación que haya sido realizada previamente por el/la
+          metodólogo o evaluadores.
         </DialogDescription>
+        <Divider className="my-4" />
         {children}
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cerrar</Button>
