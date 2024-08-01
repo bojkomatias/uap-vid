@@ -169,7 +169,7 @@ export async function ProtocolMetadata({
             </Info>
           </div>
 
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:gap-1">
+          <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center md:gap-1">
             {/* Researcher */}
             <ReviewDisclose />
             <Researcher
