@@ -1,9 +1,9 @@
 'use client'
+
 import type { Prisma } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { Check, Minus } from 'tabler-icons-react'
 import { Currency } from '@shared/currency'
 import { BadgeButton } from '@components/badge'
 import SearchBar from '@shared/data-table/search-bar'

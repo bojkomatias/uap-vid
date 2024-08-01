@@ -1,6 +1,6 @@
 import { DescriptionList } from '@components/description-list'
 import { Divider } from '@components/divider'
-import { Heading, Subheading } from '@components/heading'
+import { Heading } from '@components/heading'
 import { Text } from '@components/text'
 import React from 'react'
 interface SectionLayoutProps {

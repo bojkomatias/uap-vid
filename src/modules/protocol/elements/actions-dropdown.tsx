@@ -9,6 +9,7 @@ import {
   DropdownMenu,
 } from '@components/dropdown'
 import { notifications } from '@elements/notifications'
+import type { Prisma } from '@prisma/client'
 import { Action, ProtocolState } from '@prisma/client'
 import { getSecretariesEmailsByAcademicUnit } from '@repositories/academic-unit'
 import { updateProtocolStateById } from '@repositories/protocol'
@@ -27,7 +28,11 @@ import {
   Flag2,
   Trash,
   FileDownload,
+  HandStop,
 } from 'tabler-icons-react'
+import FlagsDialog, { FlagsDialogAtom } from './flags/flags-dialog'
+import { ProtocolSchema } from '@utils/zod'
+import { useAtom } from 'jotai'
 
 type ActionOption = {
   action: Action
@@ -38,30 +43,45 @@ type ActionOption = {
 
 export function ActionsDropdown({
   actions,
-  protocolId,
-  protocolState,
+  protocol,
   userId,
 }: {
   actions: Action[]
-  protocolId: string
-  protocolState: ProtocolState
+  protocol: Prisma.ProtocolGetPayload<{
+    include: {
+      researcher: { select: { id: true; name: true; email: true } }
+      convocatory: { select: { id: true; name: true } }
+      anualBudgets: {
+        select: { createdAt: true; year: true; id: true }
+      }
+    }
+  }>
   userId: string
 }) {
   const router = useRouter()
   const [isPending, startTranstion] = useTransition()
 
-  const actionsToOptions: (ActionOption | 'divider')[] = [
+  const actionsToOptions: ActionOption[] = [
     {
       action: Action.EDIT,
-      callback: async () => router.push(`/protocols/${protocolId}/0`),
+      callback: async () => router.push(`/protocols/${protocol.id}/0`),
       icon: <Edit data-slot="icon" />,
     },
     {
       action: Action.PUBLISH,
       callback: async () => {
+        const parsed = ProtocolSchema.safeParse(protocol)
+        if (parsed.error)
+          return notifications.show({
+            title: 'El protocolo no está completo',
+            message:
+              'Debe completar todas las secciones y los campos requeridos antes de poder publicarlo',
+            intent: 'error',
+          })
+        // Continues only if parsing goes right
         const updated = await updateProtocolStateById(
-          protocolId,
-          protocolState,
+          protocol.id,
+          protocol.state,
           ProtocolState.PUBLISHED,
           userId
         )
@@ -108,8 +128,8 @@ export function ActionsDropdown({
       action: Action.ACCEPT,
       callback: async () => {
         const updated = await updateProtocolStateById(
-          protocolId,
-          protocolState,
+          protocol.id,
+          protocol.state,
           ProtocolState.ACCEPTED,
           userId
         )
@@ -120,16 +140,18 @@ export function ActionsDropdown({
     {
       action: Action.GENERATE_ANUAL_BUDGET,
       callback: () =>
-        router.push(`/generate-budget/${protocolId}`, { scroll: false }),
+        router.push(`/generate-budget/${protocol.id}`, { scroll: false }),
       icon: <FileDollar data-slot="icon" />,
     },
-    'divider',
+  ]
+
+  const endingActions: ActionOption[] = [
     {
       action: Action.FINISH,
       callback: async () => {
         const updated = await updateProtocolStateById(
-          protocolId,
-          protocolState,
+          protocol.id,
+          protocol.state,
           ProtocolState.FINISHED,
           userId
         )
@@ -141,8 +163,8 @@ export function ActionsDropdown({
       action: Action.DISCONTINUE,
       callback: async () => {
         const updated = await updateProtocolStateById(
-          protocolId,
-          protocolState,
+          protocol.id,
+          protocol.state,
           ProtocolState.DISCONTINUED,
           userId
         )
@@ -154,8 +176,8 @@ export function ActionsDropdown({
       action: Action.DELETE,
       callback: async () => {
         const updated = await updateProtocolStateById(
-          protocolId,
-          protocolState,
+          protocol.id,
+          protocol.state,
           ProtocolState.DELETED,
           userId
         )
@@ -165,34 +187,83 @@ export function ActionsDropdown({
     },
   ]
 
+  const canViewBudgets = actions.includes('VIEW_ANUAL_BUDGET')
+
+  const [open, setOpen] = useAtom(FlagsDialogAtom)
+
   return (
     <Dropdown>
-      <DropdownButton className="h-9" outline>
+      <DropdownButton className="h-9" color="light">
         Acciones
         <ChevronDown data-slot="icon" />
       </DropdownButton>
+
       <DropdownMenu anchor="bottom end">
+        {/* Actions that are used in the lifetime of a project */}
         {actionsToOptions
-          .filter((a) => a == 'divider' || actions.includes(a.action))
-          .map((x, i) =>
-            x !== 'divider' ?
-              <DropdownItem
-                key={i}
-                disabled={isPending}
-                onClick={() => {
-                  if (x.callback) {
-                    x.callback()
-                    startTranstion(() => router.refresh())
-                  }
-                }}
-              >
-                {x.icon}
-                <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
-              </DropdownItem>
-            : i > 0 ? <DropdownDivider key={i} />
-            : null
-          )}
+          .filter((a) => actions.includes(a.action))
+          .map((x, i) => (
+            <DropdownItem
+              key={i}
+              disabled={isPending}
+              onClick={() => {
+                if (x.callback) {
+                  x.callback()
+                  startTranstion(() => router.refresh())
+                }
+              }}
+            >
+              {x.icon}
+              <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
+            </DropdownItem>
+          ))}
+        <DropdownItem
+          onClick={(e: any) => {
+            setOpen(true)
+          }}
+        >
+          <HandStop data-slot="icon" />
+          <DropdownLabel>Votos </DropdownLabel>
+        </DropdownItem>
+
+        {/* Actions that end or pause the lifetime of a project */}
         <DropdownDivider />
+        {endingActions
+          .filter((a) => actions.includes(a.action))
+          .map((x, i) => (
+            <DropdownItem
+              key={i}
+              disabled={isPending}
+              onClick={() => {
+                if (x.callback) {
+                  x.callback()
+                  startTranstion(() => router.refresh())
+                }
+              }}
+            >
+              {x.icon}
+              <DropdownLabel>{ActionDictionary[x.action]}</DropdownLabel>
+            </DropdownItem>
+          ))}
+
+        {/* Miscelaneous actions */}
+        <DropdownDivider />
+        {canViewBudgets ?
+          protocol.anualBudgets.map((budget) => (
+            <DropdownItem
+              key={budget.id}
+              disabled={isPending}
+              onClick={() => {
+                router.push(`/anual-budget-view/${budget.id}`, {
+                  scroll: false,
+                })
+              }}
+            >
+              <FileDollar data-slot="icon" />
+              <DropdownLabel>Presupuesto {budget.year}</DropdownLabel>
+            </DropdownItem>
+          ))
+        : null}
         <DropdownItem
           onClick={() => {
             window.print()

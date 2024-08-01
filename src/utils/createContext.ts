@@ -1,7 +1,8 @@
 'use client'
+
 import { createFormContext } from '@mantine/form'
 import type { ProtocolSchema, SectionsSchema } from './zod'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 export const [ProtocolProvider, useProtocolContext, useProtocol] =
   createFormContext<z.infer<typeof ProtocolSchema>>()

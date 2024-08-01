@@ -1,6 +1,6 @@
 'use client'
 
-import type { Prisma, ProtocolState, Role } from '@prisma/client'
+import type { Prisma, Role } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
@@ -11,7 +11,6 @@ import {
 import SearchBar from '@shared/data-table/search-bar'
 import { Badge } from '@components/badge'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
-import { ProtocolStatesDictionary } from '@utils/dictionaries/ProtocolStatesDictionary'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
 
