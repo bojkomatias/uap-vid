@@ -48,7 +48,7 @@ export default function FlagsDialog({
           <DropdownLabel>Votos </DropdownLabel>
         </DropdownItem>
       }
-      <Dialog open={open} onClose={() => setOpen(false)} size="xl">
+      <Dialog open={open} onClose={setOpen} size="xl">
         <DialogTitle>Votos de las comisiones</DialogTitle>
         <DialogDescription>
           Votos emitidos por las comisiones encargadas de aprobar los
