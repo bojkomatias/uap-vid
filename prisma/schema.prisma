@@ -329,7 +329,7 @@ type ProtocolSectionsIdentificationTeam {
   hours                 Float
   last_name             String? /// @deprecated use relation teamMemberId instead
   name                  String? /// @deprecated use relation teamMemberId instead
-  workingMonths         Int?
+  workingMonths         Int?     @default(12)
   role                  String
   teamMemberId          String?  @db.ObjectId
   confirmed             Boolean? @default(true)
