@@ -45,14 +45,14 @@ export default function FlagsDialog({
           }}
         >
           <HandStop data-slot="icon" />
-          <DropdownLabel>Votos de comisión</DropdownLabel>
+          <DropdownLabel>Votos </DropdownLabel>
         </DropdownItem>
       }
       <Dialog open={open} onClose={() => setOpen(false)} size="xl">
-        <DialogTitle>Votos de parte de la comisión</DialogTitle>
+        <DialogTitle>Votos de las comisiones</DialogTitle>
         <DialogDescription>
-          Aquí se registran los votos emitidos por la comisión encargada de
-          aprobar los prespuestos para el proyecto.
+          Votos emitidos por las comisiones encargadas de aprobar los
+          prespuestos para el proyecto.
         </DialogDescription>
         <DialogBody>
           <CucytFlag

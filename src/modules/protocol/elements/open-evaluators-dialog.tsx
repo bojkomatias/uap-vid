@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from '@components/dialog'
 import { Divider } from '@components/divider'
-import { Text } from '@components/text'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { UserSearch } from 'tabler-icons-react'
