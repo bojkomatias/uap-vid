@@ -12,8 +12,8 @@ export function ReviewDisclose() {
 
   return (
     <Button
-      className="active:scale-95"
-      title="Mostrar revisiones"
+      className="self-center active:scale-95"
+      title={open ? 'Mostrar evaluaciones' : 'Ocultar evaluaciones'}
       outline
       onClick={() => {
         const reviewContainer = document.querySelector('#reviews-container')

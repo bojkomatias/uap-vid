@@ -1,18 +1,16 @@
 'use client'
 
 import type { AcademicUnit, AmountIndex, Execution } from '@prisma/client'
-import { Button } from '@elements/button'
 
 import { Currency } from '@shared/currency'
 import BudgetNewExecution from './budget-new-execution'
 import { ExecutionType } from '@utils/anual-budget'
 import { useEffect, useMemo, useState } from 'react'
-import CustomDrawer from '@elements/custom-drawer'
 import { Combobox } from '@headlessui/react'
 import { Check, Selector } from 'tabler-icons-react'
 import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
-import { Strong } from '@components/text'
+import { Strong, Text } from '@components/text'
 import {
   subtractAmountIndex,
   sumAmountIndex,
@@ -20,6 +18,11 @@ import {
 } from '@utils/amountIndex'
 import { useQuery } from '@tanstack/react-query'
 import { getCurrentIndexes } from '@repositories/finance-index'
+import { Button } from '@components/button'
+import { Dialog } from '@components/dialog'
+import { Heading, Subheading } from '@components/heading'
+import { Badge, BadgeButton } from '@components/badge'
+import { Divider } from '@components/divider'
 
 export default function BudgetExecutionView({
   title,
@@ -97,47 +100,57 @@ export default function BudgetExecutionView({
   }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
   return (
     <>
-      <CustomDrawer title="Ejecuciones" open={opened} onClose={setOpened}>
+      <Dialog title="Ejecuciones" open={opened} onClose={setOpened}>
         <section
           className="flex flex-col gap-4"
           onClick={(e) => e.preventDefault()}
         >
-          <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
-            <h1 className="text-xl font-semibold text-gray-800">
+          <div className="flex flex-col gap-3">
+            <Heading className="text-xl font-semibold text-gray-800">
               {executionType === ExecutionType.TeamMember ?
-                'Honorario de equipo'
-              : 'Gasto directo'}
-            </h1>
-            <div className="flex  items-center gap-1">
+                'Honorarios'
+              : 'Gastos directos'}
+            </Heading>
+            <div className="flex items-center gap-2">
               <p className="text-sm font-semibold text-gray-600">
                 {executionType === ExecutionType.TeamMember ?
-                  'Nombre y Apellido:'
-                : 'Detalle:'}
+                  <Subheading className="!text-lg">{title}</Subheading>
+                : <>
+                    <Subheading className="font-semibold">Detalle</Subheading>
+                    <Text>{title}</Text>
+                  </>
+                }
               </p>
-              <p className="text-sm">{title}</p>
             </div>
             <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-600">Categoría:</p>
-              <p className="text-sm">{obrero ? 'Obrero' : itemName}</p>
+              <Subheading className="font-semibold ">Categoría:</Subheading>
+              <Badge className="text-sm">{obrero ? 'Obrero' : itemName}</Badge>
             </div>
+
             {obrero && (
               <div className="flex flex-col items-start gap-2">
-                <p className="text-sm font-semibold text-gray-600">
-                  Puntos: {obrero.pointsObrero}
-                </p>
-                <p className="text-sm font-semibold text-gray-600">
-                  Precio Punto: <Currency amountIndex={obrero.pointPrice} />
-                </p>
-                <p className="text-sm font-semibold text-gray-600">
-                  Precio Hora: <Currency amountIndex={obrero.hourlyRate} />
-                </p>
+                <div className="flex gap-2 text-sm font-semibold ">
+                  <Text>Puntos:</Text>{' '}
+                  <Subheading>{obrero.pointsObrero}</Subheading>
+                </div>
+                <div className="flex gap-2 text-sm font-semibold">
+                  <Text>Precio punto: </Text>
+                  <Currency amountIndex={obrero.pointPrice} />
+                </div>
+                <div className="flex gap-2 text-sm font-semibold">
+                  <Text>Precio hora:</Text>{' '}
+                  <Currency amountIndex={obrero.hourlyRate} />
+                </div>
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-3 rounded-md bg-gray-50 px-4 py-3">
+          <Divider />
+          <div className="flex flex-col gap-3 rounded-md ">
             {remaining !== ZeroAmountIndex ?
               <>
-                <h1 className="text-xl font-semibold">Nueva Ejecución:</h1>
+                <Subheading className="text-xl font-semibold">
+                  Nueva ejecución:
+                </Subheading>
                 {academicUnits ?
                   <>
                     <div className="flex flex-col items-start gap-2">
@@ -258,33 +271,37 @@ export default function BudgetExecutionView({
                 />
               </>
             : null}
-            {executions.length > 0 ?
+
+            {executions.reverse().length > 0 ?
               <>
-                <p className="text-sm text-gray-600">Ejecuciones históricas:</p>
-                <table className="table-auto text-sm text-gray-600">
+                <Divider />
+                <Subheading>Ejecuciones históricas</Subheading>
+
+                <table className="w-full table-auto">
                   <thead>
                     <tr>
-                      <th className="text-left font-semibold">Fecha</th>
-                      <th className=" text-center font-semibold">
-                        Unidad Académica
+                      <th>
+                        <Subheading className="text-left">Fecha</Subheading>
                       </th>
-                      <th className="text-center font-semibold">Monto</th>
+
+                      <th className="text-right">
+                        <Subheading>Monto</Subheading>
+                      </th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {executions.reverse().map((execution, idx) => {
                       return (
                         <>
                           <tr key={`${execution.date.getTime()}${idx}`}>
-                            <td>{execution.date.toLocaleDateString()}</td>
-                            <td className="text-center">
-                              {
-                                academicUnits?.find(
-                                  (x) => x.id === execution.academicUnitId
-                                )?.shortname
-                              }
+                            <td>
+                              <Subheading>
+                                {execution.date.toLocaleDateString()}
+                              </Subheading>
                             </td>
-                            <td className="pt-2">
+
+                            <td className="pt-2 text-right">
                               <Strong>
                                 {execution.amountIndex ?
                                   <Currency
@@ -305,24 +322,22 @@ export default function BudgetExecutionView({
                   </tbody>
                 </table>
               </>
-            : <p className="mt-6 text-center text-sm text-gray-600">
+            : <Text className="mt-6 text-center text-sm text-gray-600">
                 <b>No hay ejecuciones históricas</b>
-              </p>
+              </Text>
             }
           </div>
         </section>
-      </CustomDrawer>
+      </Dialog>
 
-      <Button
-        className="float-right px-2 py-0.5 text-xs"
+      <BadgeButton
+        className="!font-bold"
         onClick={() => {
           setOpened(true)
         }}
-        intent="secondary"
-        size="xs"
       >
         Ver
-      </Button>
+      </BadgeButton>
     </>
   )
 }

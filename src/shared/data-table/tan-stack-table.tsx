@@ -12,7 +12,7 @@ import { useState } from 'react'
 import ColumnVisibilityDropdown from './column-visibility-dropdown'
 import Pagination from './pagination'
 import HeaderSorter from './header-sorter'
-import { ArticleOff } from 'tabler-icons-react'
+import { ArticleOff, EyeOff, Mouse, SearchOff } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'
 import DownloadCSVButton from './download-csv-button'
 import {

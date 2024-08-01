@@ -15,6 +15,7 @@ import type { User } from '@prisma/client'
 import { ChatPopover } from './Popover'
 import { Button } from '@components/button'
 import { Loader, Send } from 'tabler-icons-react'
+import { Text } from '@components/text'
 
 interface ChatMessagesContextType {
   canSendMessages: boolean
@@ -129,7 +130,7 @@ export default function ChatForm({
         >
           {messages!.length > 0 ?
             <div className="w-full space-y-4 pt-4">
-              {messages && messages.length > 9 && (
+              {messages && messages?.length > 9 && (
                 <Button
                   onClick={() => {
                     setTake(take + 10)
@@ -183,10 +184,10 @@ export default function ChatForm({
                 </div>
               ))}
             </div>
-          : <p className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400 dark:border-white/10">
+          : <Text className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400 dark:border-white/10">
               Chat vacío. Puede comenzar una nueva conversación enviando un
               mensaje nuevo.
-            </p>
+            </Text>
           }
         </div>
         <div className="sticky bottom-0 bg-white">

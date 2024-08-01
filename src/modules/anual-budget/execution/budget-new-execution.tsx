@@ -3,7 +3,6 @@ import {
   saveNewItemExecution,
   saveNewTeamMemberExecution,
 } from '@actions/anual-budget/action'
-import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnit } from '@prisma/client'
@@ -14,6 +13,7 @@ import React, { useTransition } from 'react'
 import { z } from 'zod'
 import { FormInput } from '@shared/form/form-input'
 import { parseLocaleNumber } from '@elements/currency-input'
+import { Button } from '@components/button'
 
 const BudgetNewExecution = ({
   academicUnit,
@@ -87,9 +87,9 @@ const BudgetNewExecution = ({
     form.setFieldValue('amount', parseLocaleNumber(e.target.value, 'es-AR'))
   }
   return (
-    <form className="flex items-baseline gap-2">
+    <form className="flex items-baseline justify-between gap-2">
       <FormInput
-        className="flex flex-row items-center gap-2"
+        className="flex flex-grow flex-row items-center gap-2"
         type="number"
         label="Monto"
         {...form.getInputProps('amount')}
@@ -97,11 +97,9 @@ const BudgetNewExecution = ({
       />
 
       <Button
-        className=" py-2.5 text-xs shadow-sm"
-        intent="secondary"
+        outline
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}
-        loading={isPending}
         onClick={(e) => {
           e.preventDefault()
           newExecution(form.values.amount)

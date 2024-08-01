@@ -108,6 +108,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
       include: {
         protocol: {
           select: {
+            id: true,
             state: true,
             sections: {
               select: {
@@ -372,7 +373,9 @@ export const interruptAnualBudget = async (id: string) => {
   if (!AB || AB.state !== AnualBudgetState.APPROVED) return
   // Match budget Items amount to execution and remaining 0
   AB.budgetItems.forEach((bi) => {
-    bi.amountIndex = sumAmountIndex((bi.executions.map(x=>x.amountIndex).filter(Boolean) as AmountIndex[]))
+    bi.amountIndex = sumAmountIndex(
+      bi.executions.map((x) => x.amountIndex).filter(Boolean) as AmountIndex[]
+    )
     bi.remainingIndex = ZeroAmountIndex
   })
   // Match only paid hours and remaining to 0

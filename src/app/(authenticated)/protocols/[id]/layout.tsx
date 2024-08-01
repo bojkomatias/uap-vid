@@ -1,6 +1,6 @@
 import { canAccess, canExecute } from '@utils/scopes'
 import { getServerSession } from 'next-auth'
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
@@ -20,6 +20,7 @@ import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 import { ReviewDisclose } from '@review/review-disclose'
+import OpenFlagsDialog from '@protocol/elements/flags/open-flags-dialog-button'
 
 export default async function Layout({
   params,
@@ -85,11 +86,7 @@ export default async function Layout({
             >
               Enviar email al investigador <Mail size={18} />
             </BadgeButton>
-            <FlagsDialog
-              protocolFlags={protocol.flags}
-              protocolId={protocol.id}
-              context_menu={true}
-            />
+            <OpenFlagsDialog />
             <ProtocolLogsDrawer
               protocolId={protocol.id}
               context_menu
@@ -99,6 +96,13 @@ export default async function Layout({
         }
       >
         <ProtocolMetadata
+          review_disclose_button={
+            isReviewFormShown || isReviewListShown ?
+              <ContainerAnimations delay={0.5}>
+                <ReviewDisclose />
+              </ContainerAnimations>
+            : null
+          }
           params={params}
           actions={actions}
           evaluators={evaluators}
@@ -110,7 +114,7 @@ export default async function Layout({
             duration={0.2}
             id="reviews-container"
             className={cx(
-              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
+              'bottom-0 left-0 right-2/3 top-0 mb-8 overflow-x-auto overflow-y-auto rounded-r-lg bg-gray-500/5 p-4 transition-all duration-300 ease-in-out xl:absolute xl:-mb-8 xl:-ml-8 xl:mr-4 xl:mt-6 xl:rounded-tr-xl xl:pb-8 xl:pl-8 xl:pr-4 xl:pt-4 print:hidden',
               isReviewFormShown || isReviewListShown ? '' : 'hidden'
             )}
           >
@@ -139,14 +143,6 @@ export default async function Layout({
           >
             {children}
           </ContainerAnimations>
-          {isReviewFormShown || isReviewListShown ?
-            <ContainerAnimations
-              delay={0.5}
-              className="absolute left-0 top-0 z-10 -mt-6 hidden xl:block"
-            >
-              <ReviewDisclose />
-            </ContainerAnimations>
-          : null}
         </div>
 
         <ChatFullComponent user={session.user} protocolId={protocol.id} />

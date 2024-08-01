@@ -17,15 +17,18 @@ import Info from 'modules/info'
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'
+import { ReviewDisclose } from '@review/review-disclose'
 
 export async function ProtocolMetadata({
   params,
   evaluators,
   actions,
+  review_disclose_button,
 }: {
   params: { id: string }
+  actions: any
+  review_disclose_button: React.ReactNode
   evaluators: ReactNode
-  actions: ReactNode
 }) {
   const session = await getServerSession(authOptions)
   const protocol = await getProtocolMetadata(params.id)
@@ -34,7 +37,7 @@ export async function ProtocolMetadata({
   return (
     <div className="-top-6 z-50" id="metadata-container">
       <ContainerAnimations animation={3}>
-        <div className="mb-8 mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
+        <div className="mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
             <Heading
               className="truncate md:text-ellipsis"
@@ -166,8 +169,9 @@ export async function ProtocolMetadata({
             </Info>
           </div>
 
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:gap-1">
+          <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center md:gap-1">
             {/* Researcher */}
+            <ReviewDisclose />
             <Researcher
               researcher={protocol.researcher}
               protocolId={protocol.id}

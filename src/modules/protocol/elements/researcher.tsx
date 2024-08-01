@@ -23,6 +23,7 @@ import { z } from 'zod'
 import { updateProtocolResearcher } from '@repositories/protocol'
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
+import Clipboard from '@elements/clipboard'
 
 type ResearcherProps = {
   researcher: Prisma.UserGetPayload<{
@@ -48,8 +49,8 @@ export const Researcher = ({
 }
 
 const ResearcherData = ({ researcher }: ResearcherProps) => (
-  <div className="flex gap-1">
-    <User className="mt-1.5 size-4" />
+  <div className="flex items-center gap-1">
+    <User className="size-4" />
     <div className="-space-y-2">
       <Subheading>{researcher.name}</Subheading>
       <Text className="!text-xs/6">{researcher.email}</Text>
@@ -110,7 +111,7 @@ const ResearcherReassignation = ({
     <>
       <Button
         plain
-        className="text-start"
+        className="mx-2 !px-1 !py-0 text-start"
         onClick={() => {
           setIsOpen(true)
         }}
@@ -118,7 +119,14 @@ const ResearcherReassignation = ({
         <ResearcherData researcher={researcher} />
       </Button>
       <Dialog open={isOpen} onClose={setIsOpen}>
-        <DialogTitle>Investigador a cargo del proyecto</DialogTitle>
+        <div className="flex items-center justify-between">
+          <DialogTitle>Investigador a cargo del proyecto </DialogTitle>
+
+          <Clipboard
+            notification_message={`Se copió el email del investigador: ${researcher.email}`}
+            content={researcher.email}
+          />
+        </div>
         <DialogDescription>
           Aquí puede cambiar el investigador asignado al proyecto, en caso de
           que otro fue el usuario que lo dió de alta.
