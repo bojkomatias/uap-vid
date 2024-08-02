@@ -4,11 +4,15 @@ import { Switch, type SwitchProps } from '@components/switch'
 import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
 
 export function FormSwitch(
-  props: { label: string; description?: string } & GetInputPropsReturnType &
+  props: {
+    label: string
+    description?: string
+    className?: string
+  } & GetInputPropsReturnType &
     SwitchProps
 ) {
   return (
-    <Field>
+    <Field className={props.className}>
       <Label>{props.label}</Label>
       <Description>{props.description}</Description>
       <Switch {...props} />

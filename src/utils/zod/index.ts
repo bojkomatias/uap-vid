@@ -494,6 +494,7 @@ export const IdentificationTeamSchema = z.object({
   role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   teamMemberId: z.string().nullable(),
   workingMonths: z.coerce.number().default(12).nullable(),
+  toBeConfirmed: z.boolean().default(false),
   categoryToBeConfirmed: z
     .string()
     .min(1, { message: 'Debe asignar una categoría' })

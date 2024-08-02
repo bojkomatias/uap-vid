@@ -18,6 +18,15 @@ import { z } from 'zod'
  *
  */
 
+const getCategoriesForForm = cache(async () => {
+  try {
+    return await prisma.teamMemberCategory.findMany({})
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+})
+
 const getCategories = cache(
   async ({
     records = '10',
@@ -160,6 +169,7 @@ const getObreroCategory = async () => {
 }
 
 export {
+  getCategoriesForForm,
   getCategories,
   updatePriceCategoryById,
   insertCategory,

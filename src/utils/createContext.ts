@@ -20,6 +20,7 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
         role: 'Director',
         teamMemberId: null,
         workingMonths: 12,
+        toBeConfirmed: false,
         categoryToBeConfirmed: null,
       },
     ],

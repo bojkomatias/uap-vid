@@ -329,10 +329,11 @@ type ProtocolSectionsIdentificationTeam {
   hours                 Float
   last_name             String? /// @deprecated use relation teamMemberId instead
   name                  String? /// @deprecated use relation teamMemberId instead
-  workingMonths         Int?    @default(12)
+  workingMonths         Int?     @default(12)
   role                  String
-  teamMemberId          String? @db.ObjectId
-  categoryToBeConfirmed String? @db.ObjectId
+  teamMemberId          String?  @db.ObjectId
+  toBeConfirmed         Boolean? @default(true)
+  categoryToBeConfirmed String?  @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {

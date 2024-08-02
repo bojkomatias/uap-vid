@@ -16,9 +16,10 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { Text } from '@components/text'
-import { FormSwitch } from '@shared/form/form-switch'
-import { Switch } from '@components/switch'
 import Info from 'modules/info'
+import { useQuery } from '@tanstack/react-query'
+import { getCategoriesForForm } from '@repositories/team-member-category'
+import { FormSwitch } from '@shared/form/form-switch'
 
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
@@ -27,13 +28,33 @@ export default function TeamMemberListForm() {
 
   const [teamMemberToConfirm, setTeamMemberToConfirm] = useState<{
     [key: number]: boolean
-  }>({ 0: false })
+  }>({})
 
   useEffect(() => {
     ;(async () => {
       setTeamMembers(await getAllTeamMembers())
     })()
   }, [])
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => await getCategoriesForForm(),
+  })
+
+  const roles_categories = [
+    'Técnico Asistente',
+    'Técnico Asociado',
+    'Técnico Principal',
+    'Profesional Adjunto',
+    'Profesional Principal',
+  ]
+
+  const roles_categories_ids = roles_categories.map((r_c) => {
+    const category = categories?.find((c) => c.name == r_c)
+    return { value: category?.id, label: category?.name }
+  }) as { value: string; label: string }[]
+
+  console.log(form.getValues().sections.identification.team)
 
   return (
     <Fieldset>
@@ -72,25 +93,44 @@ export default function TeamMemberListForm() {
           .getValues()
           .sections.identification.team.map((_: any, index: number) => (
             <Fragment key={index}>
-              <Switch
-                onChange={() => {
-                  setTeamMemberToConfirm((prevState) => ({
-                    ...prevState,
-                    [index]: !prevState[index],
-                  }))
-                }}
-                className="col-span-4"
-              />
-
-              <FormListbox
-                className="col-span-4"
+              <FormSwitch
+                disabled={index == 0}
+                title={
+                  index == 0 ?
+                    "El primer miembro de equipo no puede quedar 'a confirmar'"
+                  : undefined
+                }
                 label=""
-                options={roleOptions.map((e) => ({ value: e, label: e }))}
                 {...form.getInputProps(
-                  `sections.identification.team.${index}.role`
+                  `sections.identification.team.${index}.toBeConfirmed`
                 )}
+                className="col-span-4"
               />
 
+              {(
+                form.getInputProps(
+                  `sections.identification.team.${index}.toBeConfirmed`
+                ).value
+              ) ?
+                <FormListbox
+                  className="col-span-4"
+                  label=""
+                  defaultValue="66420f0c773204efa47e6e14"
+                  value="66420f0c773204efa47e6e14"
+                  options={roles_categories_ids}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.categoryToBeConfirmed`
+                  )}
+                />
+              : <FormListbox
+                  className="col-span-4"
+                  label=""
+                  options={roleOptions.map((e) => ({ value: e, label: e }))}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.role`
+                  )}
+                />
+              }
               <FormCombobox
                 className="col-span-8"
                 label=""
@@ -98,7 +138,11 @@ export default function TeamMemberListForm() {
                   value: e.id,
                   label: e.name,
                 }))}
-                disabled={teamMemberToConfirm[index]}
+                disabled={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
                 {...form.getInputProps(
                   `sections.identification.team.${index}.teamMemberId`
                 )}
@@ -146,7 +190,9 @@ export default function TeamMemberListForm() {
             name: '',
             role: 'Investigador UAP',
             teamMemberId: null,
-            workingMonths: 0,
+            workingMonths: 12,
+            toBeConfirmed: false,
+            categoryToBeConfirmed: '66420f0c773204efa47e6e14',
           })
 
           setTimeout(() => {
