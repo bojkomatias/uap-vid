@@ -115,8 +115,6 @@ export default function TeamMemberListForm() {
                 <FormListbox
                   className="col-span-4"
                   label=""
-                  defaultValue="66420f0c773204efa47e6e14"
-                  value="66420f0c773204efa47e6e14"
                   options={roles_categories_ids}
                   {...form.getInputProps(
                     `sections.identification.team.${index}.categoryToBeConfirmed`

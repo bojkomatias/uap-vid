@@ -332,7 +332,7 @@ type ProtocolSectionsIdentificationTeam {
   workingMonths         Int?     @default(12)
   role                  String
   teamMemberId          String?  @db.ObjectId
-  toBeConfirmed         Boolean? @default(true)
+  toBeConfirmed         Boolean? @default(false)
   categoryToBeConfirmed String?  @db.ObjectId
 }
 
