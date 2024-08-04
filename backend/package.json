@@ -1,0 +1,12 @@
+{
+  "name": "wss-uap-backend",
+  "version": "1.0.0",
+  "description": "Web socket server.",
+  "main": "index.js",
+  "keywords": [],
+  "author": "pqlub",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
