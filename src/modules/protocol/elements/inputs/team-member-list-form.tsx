@@ -26,10 +26,6 @@ export default function TeamMemberListForm() {
 
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
-  const [teamMemberToConfirm, setTeamMemberToConfirm] = useState<{
-    [key: number]: boolean
-  }>({})
-
   useEffect(() => {
     ;(async () => {
       setTeamMembers(await getAllTeamMembers())
