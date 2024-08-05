@@ -161,6 +161,7 @@ export function BudgetTeamMemberFees({
                     memberRole,
                     hours,
                     remainingHours,
+                    categoryId,
                   },
                   i
                 ) => (
@@ -242,10 +243,11 @@ export function BudgetTeamMemberFees({
                         )}
                       />
                     </td>
+                    {/* Cannot create execution when is pending or have pending team member */}
                     <td
                       className={cx(
                         'hidden text-right print:hidden',
-                        !editable && 'table-cell'
+                        !editable && !categoryId && 'table-cell'
                       )}
                     >
                       <BudgetExecutionView

@@ -127,6 +127,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                 categories: { include: { category: true } },
               },
             },
+            category: true,
           },
         },
         AcademicUnits: true,
@@ -200,7 +201,7 @@ export const updateAnualBudgetItems = async (
 export const updateAnualBudgetTeamMemberHours = async (
   batch: Omit<
     AnualBudgetTeamMember,
-    'teamMemberId' | 'executions' | 'anualBudgetId' | 'memberRole'
+    'teamMemberId' | 'executions' | 'anualBudgetId' | 'memberRole' | 'categoryId'
   >[]
 ) => {
   try {

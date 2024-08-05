@@ -83,6 +83,7 @@ export const getAcademicUnitById = async (id?: string) => {
                     },
                   },
                 },
+                category: true,
               },
             },
           },
