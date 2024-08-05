@@ -162,6 +162,12 @@ const getAllCategories = async () =>
     },
   })
 
+const getCategoryById = async (id: string) => {
+  await prisma.teamMemberCategory.findMany({
+    where: { id },
+  })
+}
+
 const getObreroCategory = async () => {
   return await prisma.teamMemberCategory.findFirstOrThrow({
     where: { name: 'Obrero' },
@@ -175,5 +181,6 @@ export {
   insertCategory,
   deleteCategoryById,
   getAllCategories,
+  getCategoryById,
   getObreroCategory,
 }

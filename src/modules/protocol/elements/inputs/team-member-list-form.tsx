@@ -90,6 +90,11 @@ export default function TeamMemberListForm() {
           .sections.identification.team.map((_: any, index: number) => (
             <Fragment key={index}>
               <FormSwitch
+                checked={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
                 disabled={index == 0}
                 title={
                   index == 0 ?

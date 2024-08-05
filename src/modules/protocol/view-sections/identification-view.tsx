@@ -6,94 +6,87 @@ import ItemView from '@protocol/elements/view/item-view'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import { getAcademicUnitByIdWithoutIncludes } from '../../../repositories/academic-unit'
 import { getCareerById, getCourseById } from '@repositories/career'
+import { getCategoryById } from '@repositories/team-member-category'
 interface IdentificationProps {
-    data: ProtocolSectionsIdentification
+  data: ProtocolSectionsIdentification
 }
 export default async function IdentificationView({
-    data,
+  data,
 }: IdentificationProps) {
-    const academicUnits = await Promise.all(
-        data.academicUnitIds
-            .map(async (acId) => await getAcademicUnitByIdWithoutIncludes(acId))
-            .map((ac) => ac.then((a) => a?.name))
-    )
-    const career = await getCareerById(data.careerId)
+  const academicUnits = await Promise.all(
+    data.academicUnitIds
+      .map(async (acId) => await getAcademicUnitByIdWithoutIncludes(acId))
+      .map((ac) => ac.then((a) => a?.name))
+  )
+  const career = await getCareerById(data.careerId)
 
-    const course = data.courseId ? await getCourseById(data.courseId) : null
+  const course = data.courseId ? await getCourseById(data.courseId) : null
 
-    const shortData = [
-        {
-            title: 'Título',
-            value: data.title,
-        },
-        {
-            title: 'Carrera',
-            value: career?.name,
-        },
-        {
-            title: 'Materia',
-            value: course?.name,
-        },
-        {
-            title: 'Ente/s Patrocinante',
-            value: academicUnits.join(' - '),
-        },
-    ]
-    const teamMembersIds = data.team
-        .filter((tm) => tm.teamMemberId)
-        .map((tm) => tm.teamMemberId) as string[]
+  const shortData = [
+    {
+      title: 'Título',
+      value: data.title,
+    },
+    {
+      title: 'Carrera',
+      value: career?.name,
+    },
+    {
+      title: 'Materia',
+      value: course?.name,
+    },
+    {
+      title: 'Ente/s Patrocinante',
+      value: academicUnits.join(' - '),
+    },
+  ]
 
-    const teamMembers =
-        teamMembersIds.length > 0
-            ? await getTeamMembersByIds(teamMembersIds)
-            : []
-    const team = data.team.map((tm) => {
-        const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
-        const fullName = teamMember
-            ? teamMember.name
-            : `${tm.name} ${tm.last_name}`
-        return {
-            fullName,
-            role: tm.role,
-            hours: tm.hours,
-        }
-    })
+  const teamMembersIds = data.team
+    .filter((tm) => tm.teamMemberId)
+    .map((tm) => tm.teamMemberId) as string[]
 
-    const tableData = {
-        title: 'Equipo',
-        values: team.reduce((newVal: ListRowValues[], person, idx) => {
-            newVal.push([
-                {
-                    up: person.fullName,
-                    down: person.role,
-                },
-                {
-                    up: idx == 0 ? 'Horas semanales' : '',
-                    down: person.hours,
-                },
-            ])
-            return newVal
-        }, []),
+  const teamMembers =
+    teamMembersIds.length > 0 ? await getTeamMembersByIds(teamMembersIds) : []
+  const team = data.team.map((tm) => {
+    const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
+    const fullName = teamMember ? teamMember.name : `${tm.name} ${tm.last_name}`
+    return {
+      fullName,
+      role: tm.role,
+      category: tm.categoryToBeConfirmed,
+      toBeConfirmed: tm.toBeConfirmed,
+      hours: tm.hours,
     }
-    return (
+  })
+
+  const tableData = {
+    title: 'Equipo',
+    values: team.reduce((newVal: ListRowValues[], person, idx) => {
+      newVal.push([
+        {
+          up: person.fullName,
+          down: person.toBeConfirmed ? person.category : person.role,
+        },
+        {
+          up: idx == 0 ? 'Horas semanales' : '',
+          down: person.hours,
+        },
+      ])
+      return newVal
+    }, []),
+  }
+  return (
+    <>
+      <SectionViewer title="Identificación" description="Datos del proyecto">
         <>
-            <SectionViewer
-                title="Identificación"
-                description="Datos del proyecto"
-            >
-                <>
-                    {/* Details of project */}
-                    {shortData.map((item) => (
-                        <ItemView
-                            key={item.title}
-                            title={item.title}
-                            value={item.value!}
-                        />
-                    ))}
-                    {/* Team details */}
-                    <ItemListView data={tableData} />
-                </>
-            </SectionViewer>
+          {/* Details of project */}
+          {shortData.map((item) => (
+            <ItemView key={item.title} title={item.title} value={item.value!} />
+          ))}
+          {/* Team details */}
+          <ItemListView data={tableData} />
         </>
-    )
+      </SectionViewer>
+    </>
+  )
 }
