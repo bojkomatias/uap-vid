@@ -26,7 +26,7 @@ export function AssingConvocatoryDialog({
   convocatory,
 }: {
   protocolId: string
-  convocatory: { id: string; name: string } | undefined
+  convocatory: { id: string; name: string } | null
 }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
