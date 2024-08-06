@@ -91,9 +91,9 @@ export default async function Page() {
       }
 
       {/*  Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page. */}
-      {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
+      {/* {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
         <ReviewerCertificatePDF user={session.user} reviews={reviews} />
-      )}
+      )} */}
     </>
   )
 }
