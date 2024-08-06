@@ -101,9 +101,9 @@ const BudgetNewExecution = ({
         outline
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
-          newExecution(form.values.amount)
+          newExecution({ amount: form.values.amount })
         }}
       >
         {isPending ? 'Cargando' : 'Cargar'}
