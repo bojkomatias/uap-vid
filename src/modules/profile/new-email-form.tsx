@@ -67,7 +67,7 @@ export function NewEmailForm({ id, email }: { id: string; email: string }) {
       title: 'Se envió un código a tu Email',
       message:
         'Revisá tu bandeja de entrada y copiá el código y pegalo en la entrada de texto que dice "código"',
-      intent: 'primary',
+      intent: 'info',
     })
   }
 
