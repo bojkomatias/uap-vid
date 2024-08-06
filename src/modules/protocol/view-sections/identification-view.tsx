@@ -66,7 +66,7 @@ export default async function IdentificationView({
     values: team.reduce((newVal: ListRowValues[], person, idx) => {
       newVal.push([
         {
-          up: person.fullName,
+          up: person.toBeConfirmed ? 'A definir' : person.fullName,
           down:
             person.toBeConfirmed ?
               categories.find((c) => c.id == person.category)?.name
