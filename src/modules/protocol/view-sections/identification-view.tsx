@@ -73,13 +73,19 @@ export default async function IdentificationView({
             : person.role,
         },
         {
-          up: idx == 0 ? 'Horas semanales' : '',
-          down: person.hours,
+          up: person.hours.toString(),
+          down: idx == 0 ? '' : '',
         },
       ])
       return newVal
     }, []),
   }
+
+  tableData.values.unshift([
+    { up: '', down: '' },
+    { up: '', down: 'Horas semanales' },
+  ])
+
   return (
     <>
       <SectionViewer title="Identificación" description="Datos del proyecto">
