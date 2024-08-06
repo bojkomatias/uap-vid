@@ -6,7 +6,7 @@ import ItemView from '@protocol/elements/view/item-view'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import { getAcademicUnitByIdWithoutIncludes } from '../../../repositories/academic-unit'
 import { getCareerById, getCourseById } from '@repositories/career'
-import { getCategoryById } from '@repositories/team-member-category'
+import { getAllCategories } from '@repositories/team-member-category'
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
 }
@@ -21,6 +21,8 @@ export default async function IdentificationView({
   const career = await getCareerById(data.careerId)
 
   const course = data.courseId ? await getCourseById(data.courseId) : null
+
+  const categories = await getAllCategories()
 
   const shortData = [
     {
@@ -65,7 +67,10 @@ export default async function IdentificationView({
       newVal.push([
         {
           up: person.fullName,
-          down: person.toBeConfirmed ? person.category : person.role,
+          down:
+            person.toBeConfirmed ?
+              categories.find((c) => c.id == person.category)?.name
+            : person.role,
         },
         {
           up: idx == 0 ? 'Horas semanales' : '',

@@ -182,6 +182,7 @@ export default function ProtocolForm({
             })
             return form.validate()
           }
+
           upsertProtocol(form.values)
         }}
       >
