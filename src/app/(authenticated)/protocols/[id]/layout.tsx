@@ -62,8 +62,6 @@ export default async function Layout({
     protocol.state
   )
 
-  console.log('reviews', reviews.length > 0)
-
   return (
     <>
       {modal}

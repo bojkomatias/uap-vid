@@ -62,7 +62,7 @@ export default function TanStackTable({
 
   return (
     <>
-      <div className="mt-2 flex items-center gap-1">
+      <div className="mt-2 flex flex-wrap items-center gap-1">
         {children}
         <span className="grow" />
         <ColumnVisibilityDropdown columns={table.getAllLeafColumns()} />

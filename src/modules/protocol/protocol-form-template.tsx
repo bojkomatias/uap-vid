@@ -82,6 +82,7 @@ export default function ProtocolForm({
   const upsertProtocol = useCallback(
     async (protocol: z.infer<typeof ProtocolSchema>) => {
       const { id, ...restOfProtocol } = protocol
+
       // flow for protocols that don't have ID
       if (!id) {
         const created = await createProtocol(restOfProtocol as Protocol) // Its because enum from zod != prisma enum according to types
