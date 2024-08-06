@@ -1,5 +1,4 @@
 'use client'
-import CurrencyInput from '@elements/currency-input'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'

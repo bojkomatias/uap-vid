@@ -1,4 +1,5 @@
 'use client'
+
 import {
   saveNewItemExecution,
   saveNewTeamMemberExecution,
@@ -43,7 +44,7 @@ const BudgetNewExecution = ({
           .number()
           .min(1, { message: 'El valor debe ser mayor a 0' })
           .max(maxAmount, {
-            message: `Monto restante: $${
+            message: `No puede exceder ${
               !maxAmount ? 0 : currencyFormatter.format(maxAmount)
             }`,
           }),
@@ -51,7 +52,7 @@ const BudgetNewExecution = ({
     ),
     validateInputOnChange: true,
   })
-  const newExecution = async (amount: number) => {
+  const newExecution = async ({ amount }: { amount: number }) => {
     try {
       if (
         anualBudgetTeamMemberId &&
@@ -100,12 +101,12 @@ const BudgetNewExecution = ({
         outline
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}
-        onClick={(e) => {
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
-          newExecution(form.values.amount)
+          newExecution({ amount: form.values.amount })
         }}
       >
-        {isPending ? 'Creando' : 'Crear'}
+        {isPending ? 'Cargando' : 'Cargar'}
       </Button>
     </form>
   )

@@ -322,7 +322,7 @@ type ProtocolSectionsIdentification {
   courseId        String?                              @db.ObjectId
   career          String? /// @deprecated use careerId instead
   careerId        String                               @db.ObjectId
-  sponsor         String[] /// @deprecated use academicUnitIds instead
+  sponsor         String[]                             @default([]) /// @deprecated use academicUnitIds instead
   academicUnitIds String[]                             @db.ObjectId
   team            ProtocolSectionsIdentificationTeam[]
   title           String

@@ -56,9 +56,11 @@ const BudgetView = ({ data }: BudgetViewProps) => {
       <ItemListView
         data={tableData}
         footer={
-          <Text className="col-span-full ml-auto !text-base/6">
-            Total: <Currency amountIndex={totalAmountIndex} />
-          </Text>
+          totalAmountIndex.FCA == 0 ?
+            null
+          : <Text className="col-span-full ml-auto !text-base/6">
+              Total: <Currency amountIndex={totalAmountIndex} />
+            </Text>
         }
       />
     </SectionViewer>

@@ -26,10 +26,6 @@ export default function TeamMemberListForm() {
 
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
-  const [teamMemberToConfirm, setTeamMemberToConfirm] = useState<{
-    [key: number]: boolean
-  }>({})
-
   useEffect(() => {
     ;(async () => {
       setTeamMembers(await getAllTeamMembers())
@@ -66,8 +62,8 @@ export default function TeamMemberListForm() {
       <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
         <Field className="col-span-4">
           <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
-            <Label>A confirmar</Label>
-            <Description>Miembro de equipo a confirmar</Description>
+            <Label>A definir</Label>
+            <Description>Miembro de equipo a definir</Description>
           </Info>
         </Field>
         <Field className="col-span-4">
@@ -94,10 +90,15 @@ export default function TeamMemberListForm() {
           .sections.identification.team.map((_: any, index: number) => (
             <Fragment key={index}>
               <FormSwitch
+                checked={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
                 disabled={index == 0}
                 title={
                   index == 0 ?
-                    "El primer miembro de equipo no puede quedar 'a confirmar'"
+                    "El primer miembro de equipo no puede quedar 'a definir'"
                   : undefined
                 }
                 label=""
@@ -190,7 +191,9 @@ export default function TeamMemberListForm() {
             teamMemberId: null,
             workingMonths: 12,
             toBeConfirmed: false,
-            categoryToBeConfirmed: '66420f0c773204efa47e6e14',
+            categoryToBeConfirmed: categories?.find(
+              (c) => c.name == 'Técnico Asistente'
+            )?.id,
           })
 
           setTimeout(() => {

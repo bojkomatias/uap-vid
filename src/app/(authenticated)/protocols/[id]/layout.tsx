@@ -18,7 +18,6 @@ import FlagsDialog from '@protocol/elements/flags/flags-dialog'
 import { BadgeButton } from '@components/badge'
 import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
-import ProtocolLogsDrawer from '@protocol/elements/logs/log-drawer'
 import { ReviewDisclose } from '@review/review-disclose'
 import OpenFlagsDialog from '@protocol/elements/flags/open-flags-dialog-button'
 
@@ -87,11 +86,6 @@ export default async function Layout({
               Enviar email al investigador <Mail size={18} />
             </BadgeButton>
             <OpenFlagsDialog />
-            <ProtocolLogsDrawer
-              protocolId={protocol.id}
-              context_menu
-              userId={session.user.id}
-            />
           </>
         }
       >
@@ -137,7 +131,7 @@ export default async function Layout({
             duration={0.2}
             id="protocol-container"
             className={cx(
-              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8 print:left-full',
+              'inset-0 mt-8 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full',
               isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
             )}
           >
