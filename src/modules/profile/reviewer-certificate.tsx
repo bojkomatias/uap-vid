@@ -57,8 +57,6 @@ export const ReviewerCertificate = ({
     )
   }
 
-  //Since this is a very small PDF, I removed the logic to wait until it was ready to download.
-
   //Check if the user has made reviews. If not, the component will return nothing. If it does, it will show a button where he or her can download the reviewer certificate.
   if (reviews.length == 0) return
 
