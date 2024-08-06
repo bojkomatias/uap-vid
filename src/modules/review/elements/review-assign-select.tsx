@@ -102,6 +102,7 @@ export const AssignEvaluatorSelector = ({
             : type === ReviewType.SCIENTIFIC_EXTERNAL ? 'externa'
             : 'resolutiva'
           }`}
+          placeholder="Evaluador ..."
           options={users.map((u) => ({
             value: u.id,
             label: u.name,

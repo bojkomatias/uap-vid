@@ -176,6 +176,17 @@ const updateProtocolResearcher = async (id: string, researcherId: string) => {
   }
 }
 
+const updateProtocolConvocatory = async (id: string, convocatory: string) => {
+  try {
+    return await prisma.protocol.update({
+      where: { id },
+      data: { convocatoryId: convocatory },
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 const upsertProtocolFlag = async (
   id: string,
   flag: Omit<ProtocolFlag, 'createdAt'>
@@ -598,4 +609,5 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  updateProtocolConvocatory,
 }
