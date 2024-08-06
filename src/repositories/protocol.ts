@@ -499,8 +499,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
@@ -536,8 +536,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
