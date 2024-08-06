@@ -17,7 +17,6 @@ import Info from 'modules/info'
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'
-import { ReviewDisclose } from '@review/review-disclose'
 
 export async function ProtocolMetadata({
   params,
@@ -171,7 +170,7 @@ export async function ProtocolMetadata({
 
           <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center md:gap-1">
             {/* Researcher */}
-            <ReviewDisclose />
+            {review_disclose_button}
             <Researcher
               researcher={protocol.researcher}
               protocolId={protocol.id}

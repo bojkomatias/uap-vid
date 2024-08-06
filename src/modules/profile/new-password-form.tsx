@@ -87,7 +87,7 @@ export function NewPasswordForm({
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={!form.isValid()}>Cambiar contraseña</FormButton>
+        <FormButton disabled={!form.isValid()}>Cambiar contraseña</FormButton>
       </FormActions>
     </form>
   )

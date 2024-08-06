@@ -190,10 +190,8 @@ export default function ReviewForm({
                 Guardar
               </Button>
               <FormButton
-                isLoading={
-                  isPending ||
-                  form.values.verdict === ReviewVerdict.NOT_REVIEWED
-                }
+                disabled={form.values.verdict === ReviewVerdict.NOT_REVIEWED}
+                isLoading={isPending}
               >
                 Enviar
               </FormButton>
