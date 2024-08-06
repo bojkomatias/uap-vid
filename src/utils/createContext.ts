@@ -18,8 +18,10 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
         last_name: null,
         name: null,
         role: 'Director',
-        teamMemberId: 'null',
-        workingMonths: null,
+        teamMemberId: null,
+        workingMonths: 12,
+        toBeConfirmed: false,
+        categoryToBeConfirmed: null,
       },
     ],
     title: '',
@@ -77,6 +79,6 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
     result: '',
   },
   bibliography: {
-    chart: [{ title: '', author: '', year: 0 }],
+    chart: [],
   },
 }

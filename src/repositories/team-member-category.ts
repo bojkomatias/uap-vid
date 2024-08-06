@@ -18,6 +18,15 @@ import { z } from 'zod'
  *
  */
 
+const getCategoriesForForm = cache(async () => {
+  try {
+    return await prisma.teamMemberCategory.findMany({})
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+})
+
 const getCategories = cache(
   async ({
     records = '10',
@@ -153,6 +162,12 @@ const getAllCategories = async () =>
     },
   })
 
+const getCategoryById = async (id: string) => {
+  await prisma.teamMemberCategory.findMany({
+    where: { id },
+  })
+}
+
 const getObreroCategory = async () => {
   return await prisma.teamMemberCategory.findFirstOrThrow({
     where: { name: 'Obrero' },
@@ -160,10 +175,12 @@ const getObreroCategory = async () => {
 }
 
 export {
+  getCategoriesForForm,
   getCategories,
   updatePriceCategoryById,
   insertCategory,
   deleteCategoryById,
   getAllCategories,
+  getCategoryById,
   getObreroCategory,
 }

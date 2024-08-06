@@ -97,7 +97,7 @@ export function BibliographyForm() {
             setTimeout(() => {
               document
                 .getElementById(
-                  `row-${form.values.sections.identification.team.length}`
+                  `row-${form.values.sections.bibliography.chart.length}`
                 )
                 ?.getElementsByTagName('input')[0]
                 .focus()

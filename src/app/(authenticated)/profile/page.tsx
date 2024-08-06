@@ -1,8 +1,6 @@
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
-import { ReviewerCertificatePDF } from 'modules/profile/reviewer-certificate'
 import { getReviewsByReviewerId } from '@repositories/review'
-import { Role } from '@prisma/client'
 import { Heading, Subheading } from '@components/heading'
 import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 import Image from 'next/image'
@@ -91,9 +89,9 @@ export default async function Page() {
       }
 
       {/*  Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page. */}
-      {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
+      {/* {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
         <ReviewerCertificatePDF user={session.user} reviews={reviews} />
-      )}
+      )} */}
     </>
   )
 }

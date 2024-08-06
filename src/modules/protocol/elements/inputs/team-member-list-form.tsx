@@ -16,6 +16,10 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { Text } from '@components/text'
+import Info from 'modules/info'
+import { useQuery } from '@tanstack/react-query'
+import { getCategoriesForForm } from '@repositories/team-member-category'
+import { FormSwitch } from '@shared/form/form-switch'
 
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
@@ -28,6 +32,26 @@ export default function TeamMemberListForm() {
     })()
   }, [])
 
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => await getCategoriesForForm(),
+  })
+
+  const roles_categories = [
+    'Técnico Asistente',
+    'Técnico Asociado',
+    'Técnico Principal',
+    'Profesional Adjunto',
+    'Profesional Principal',
+  ]
+
+  const roles_categories_ids = roles_categories.map((r_c) => {
+    const category = categories?.find((c) => c.name == r_c)
+    return { value: category?.id, label: category?.name }
+  }) as { value: string; label: string }[]
+
+  console.log(form.getValues().sections.identification.team)
+
   return (
     <Fieldset>
       <Legend>Miembros de Equipo</Legend>
@@ -37,10 +61,16 @@ export default function TeamMemberListForm() {
       </Text>
       <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
         <Field className="col-span-4">
+          <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
+            <Label>A definir</Label>
+            <Description>Miembro de equipo a definir</Description>
+          </Info>
+        </Field>
+        <Field className="col-span-4">
           <Label>Rol</Label>
           <Description>Rol del miembro</Description>
         </Field>
-        <Field className="col-span-12">
+        <Field className="col-span-8">
           <Label>Miembro</Label>
           <Description>
             Seleccione miembro de equipo si existe o uno genérico si no
@@ -59,22 +89,59 @@ export default function TeamMemberListForm() {
           .getValues()
           .sections.identification.team.map((_: any, index: number) => (
             <Fragment key={index}>
-              <FormListbox
-                className="col-span-4"
+              <FormSwitch
+                checked={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
+                disabled={index == 0}
+                title={
+                  index == 0 ?
+                    "El primer miembro de equipo no puede quedar 'a definir'"
+                  : undefined
+                }
                 label=""
-                options={roleOptions.map((e) => ({ value: e, label: e }))}
                 {...form.getInputProps(
-                  `sections.identification.team.${index}.role`
+                  `sections.identification.team.${index}.toBeConfirmed`
                 )}
+                className="col-span-4"
               />
 
+              {(
+                form.getInputProps(
+                  `sections.identification.team.${index}.toBeConfirmed`
+                ).value
+              ) ?
+                <FormListbox
+                  className="col-span-4"
+                  label=""
+                  options={roles_categories_ids}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.categoryToBeConfirmed`
+                  )}
+                />
+              : <FormListbox
+                  className="col-span-4"
+                  label=""
+                  options={roleOptions.map((e) => ({ value: e, label: e }))}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.role`
+                  )}
+                />
+              }
               <FormCombobox
-                className="col-span-12"
+                className="col-span-8"
                 label=""
                 options={teamMembers.map((e) => ({
                   value: e.id,
                   label: e.name,
                 }))}
+                disabled={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
                 {...form.getInputProps(
                   `sections.identification.team.${index}.teamMemberId`
                 )}
@@ -120,9 +187,13 @@ export default function TeamMemberListForm() {
             hours: 0,
             last_name: '',
             name: '',
-            role: '',
+            role: 'Investigador UAP',
             teamMemberId: null,
-            workingMonths: 0,
+            workingMonths: 12,
+            toBeConfirmed: false,
+            categoryToBeConfirmed: categories?.find(
+              (c) => c.name == 'Técnico Asistente'
+            )?.id,
           })
 
           setTimeout(() => {

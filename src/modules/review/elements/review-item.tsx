@@ -93,7 +93,7 @@ export default function ReviewItem({
       {showReviewQuestions && data && (
         <div className="slide-in-fwd-center mt-4 space-y-4">
           {isLoading || isFetching ?
-            <Loader />
+            <Loader className="mx-auto animate-spin text-primary dark:text-white" />
           : review.questions.map((question, index) => (
               <ReviewQuestionView
                 key={question.id}

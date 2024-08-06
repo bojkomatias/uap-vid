@@ -88,10 +88,7 @@ const BudgetNewExecution = ({
     form.setFieldValue('amount', parseLocaleNumber(e.target.value, 'es-AR'))
   }
   return (
-    <form
-      onClick={form.onSubmit((values) => newExecution(values))}
-      className="flex items-baseline justify-between gap-2"
-    >
+    <form className="flex items-baseline justify-between gap-2">
       <FormInput
         className="flex flex-grow flex-row items-center gap-2"
         type="number"
@@ -101,10 +98,13 @@ const BudgetNewExecution = ({
       />
 
       <Button
-        type="submit"
         outline
         // Disabled if it hasn't changed
         disabled={!form.isValid('amount') || !form.isDirty('amount')}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault()
+          newExecution({ amount: form.values.amount })
+        }}
       >
         {isPending ? 'Cargando' : 'Cargar'}
       </Button>
