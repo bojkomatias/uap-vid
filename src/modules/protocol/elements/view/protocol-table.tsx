@@ -12,7 +12,6 @@ import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { Badge } from '@components/badge'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import ProtocolLogsDrawer from '../logs/log-drawer'
 import { Strong, Text } from '@components/text'
 import SearchBar from '@shared/data-table/search-bar'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
@@ -84,15 +83,6 @@ export default function ProtocolTable({
               <UserIcon className="pointer-event-auto h-4 w-4 text-gray-500" />
             </div>
           ),
-        enableHiding: false,
-        enableSorting: false,
-      },
-      {
-        accessorKey: 'logs',
-        header: '',
-        cell: ({ row }) => (
-          <ProtocolLogsDrawer userId={user.id} protocolId={row.original.id} />
-        ),
         enableHiding: false,
         enableSorting: false,
       },

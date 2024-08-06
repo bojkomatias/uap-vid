@@ -37,6 +37,14 @@ services:
     networks:
       - node-next
       - exposed-services
+  web-socket:
+    image: uapsocket
+    restart: always
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    networks:
+      - node-next
 networks:
   node-next:
   exposed-services:
