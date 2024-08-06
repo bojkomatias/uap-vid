@@ -1,9 +1,8 @@
 'use client'
 
 import React, { useCallback, useTransition } from 'react'
-import { FieldGroup, Fieldset, FormActions } from '../../components/fieldset'
-import { FormInput } from '../../shared/form/form-input'
-import Image from 'next/image'
+import { FieldGroup, Fieldset, FormActions, Legend } from '@components/fieldset'
+import { FormInput } from '@shared/form/form-input'
 import type { User } from '@prisma/client'
 import { useForm, zodResolver } from '@mantine/form'
 import type { z } from 'zod'
@@ -52,52 +51,43 @@ export function VerifyUserDataForm({ user }: { user: User }) {
   )
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-sm flex-col items-center pt-24">
-      <div className="flex flex-col items-center justify-center pb-4 text-center text-xs font-bold uppercase text-primary">
-        <Image src="/UAPazul.png" alt="UAP Logo" width={300} height={300} />
-        <p>Vicerrectoría de Investigación y Desarrollo</p>
-      </div>
+    <form onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}>
+      <Fieldset>
+        <Legend>Complete sus datos y actualice su contraseña</Legend>
+        <FieldGroup>
+          <FormInput
+            label="Nombre"
+            description="Verifique que su nombre completo esté bien escrito"
+            {...form.getInputProps('name')}
+          />
 
-      <form
-        className="flex w-full flex-col items-stretch gap-3"
-        onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}
-      >
-        <Fieldset>
-          <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
-            <FormInput
-              label="Nombre"
-              description="Verifique que su nombre completo esté bien escrito"
-              {...form.getInputProps('name')}
-            />
-
-            <FormInput
-              label="DNI"
-              type="number"
-              description="Añada su número de DNI"
-              placeholder="12 345 678"
-              {...form.getInputProps('dni')}
-            />
-            <FormInput
-              label="Nueva contraseña"
-              type="password"
-              description="Introduzca una nueva contraseña"
-              placeholder="****************"
-              {...form.getInputProps('newPassword')}
-            />
-            <FormInput
-              label="Confirme su nueva contraseña"
-              type="password"
-              description="Repita la nueva contraseña"
-              placeholder="****************"
-              {...form.getInputProps('newPasswordConfirm')}
-            />
-          </FieldGroup>
-        </Fieldset>
-        <FormActions>
-          <FormButton isLoading={isPending}>Actualizar datos</FormButton>
-        </FormActions>
-      </form>
-    </div>
+          <FormInput
+            label="DNI"
+            type="number"
+            description="Añada su número de DNI"
+            placeholder="12345678"
+            {...form.getInputProps('dni')}
+          />
+          <FormInput
+            label="Nueva contraseña"
+            type="password"
+            description="Introduzca una nueva contraseña"
+            placeholder="········"
+            {...form.getInputProps('newPassword')}
+          />
+          <FormInput
+            label="Confirme su nueva contraseña"
+            type="password"
+            description="Repita la nueva contraseña"
+            placeholder="········"
+            {...form.getInputProps('newPasswordConfirm')}
+          />
+        </FieldGroup>
+      </Fieldset>
+      <FormActions>
+        <FormButton isLoading={isPending}>Actualizar datos</FormButton>
+      </FormActions>
+    </form>
   )
 }
 
@@ -137,37 +127,28 @@ export function VerifyUserDataFormMicrosoftUsers({ user }: { user: User }) {
   )
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-sm flex-col items-center pt-24">
-      <div className="flex flex-col items-center justify-center pb-4 text-center text-xs font-bold uppercase text-primary">
-        <Image src="/UAPazul.png" alt="UAP Logo" width={300} height={300} />
-        <p>Vicerrectoría de Investigación y Desarrollo</p>
-      </div>
+    <form onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}>
+      <Fieldset>
+        <Legend>Confirme y complete sus datos</Legend>
+        <FieldGroup>
+          <FormInput
+            label="Nombre"
+            description="Verifique que su nombre completo esté bien escrito"
+            {...form.getInputProps('name')}
+          />
 
-      <form
-        className="flex w-full flex-col items-stretch gap-3"
-        onSubmit={form.onSubmit((values) => submitVerifyUserData(values))}
-      >
-        <Fieldset>
-          <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
-            <FormInput
-              label="Nombre"
-              description="Verifique que su nombre completo esté bien escrito"
-              {...form.getInputProps('name')}
-            />
-
-            <FormInput
-              label="DNI"
-              type="number"
-              description="Añada su número de DNI"
-              placeholder="12 345 678"
-              {...form.getInputProps('dni')}
-            />
-          </FieldGroup>
-        </Fieldset>
-        <FormActions>
-          <FormButton isLoading={isPending}>Actualizar datos</FormButton>
-        </FormActions>
-      </form>
-    </div>
+          <FormInput
+            label="DNI"
+            type="number"
+            description="Añada su número de DNI"
+            placeholder="12345678"
+            {...form.getInputProps('dni')}
+          />
+        </FieldGroup>
+      </Fieldset>
+      <FormActions>
+        <FormButton isLoading={isPending}>Actualizar datos</FormButton>
+      </FormActions>
+    </form>
   )
 }

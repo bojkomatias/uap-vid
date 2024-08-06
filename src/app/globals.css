@@ -114,8 +114,8 @@ body {
 }
 
 .fade-in-right {
-  -webkit-animation: fade-in-right 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
-  animation: fade-in-right 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  -webkit-animation: fade-in-right 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in-right 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 
 @-webkit-keyframes fade-in-right {
@@ -260,10 +260,10 @@ body {
   }
 }
 
-.container {
+.loading-container {
   --uib-size: 45px;
   --uib-color: gray;
-  --uib-speed: 1.75s;
+  --uib-speed: 2s;
   position: relative;
   height: var(--uib-size);
   width: var(--uib-size);

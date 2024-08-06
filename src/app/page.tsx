@@ -5,14 +5,16 @@ import type { SVGProps } from 'react'
 export default async function Page() {
   return (
     <>
-      <SignIn />
+      <div className="min-h-screen py-24">
+        <SignIn />
+      </div>
       <Footer />
     </>
   )
 }
 
 const Footer = () => (
-  <footer className="bg-primary ">
+  <footer className="bg-primary">
     <div className="mx-6 flex h-28 max-w-7xl items-center justify-between lg:mx-16 2xl:mx-auto">
       <div className="flex justify-center space-x-6 md:order-2">
         {navigation.map((item) => (
