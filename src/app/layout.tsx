@@ -29,7 +29,7 @@ export default async function RootLayout({
           </div>
         </div>
       : null}
-      <body>
+      <body className="bg-white dark:bg-gray-900 lg:bg-gray-100 dark:lg:bg-gray-950">
         <div id="notifications-container" className="relative" />
         <Providers>{children}</Providers>
       </body>
