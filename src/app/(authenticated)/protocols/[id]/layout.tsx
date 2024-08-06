@@ -63,6 +63,8 @@ export default async function Layout({
     protocol.state
   )
 
+  console.log('reviews', reviews.length > 0)
+
   return (
     <>
       {modal}
@@ -97,7 +99,7 @@ export default async function Layout({
       >
         <ProtocolMetadata
           review_disclose_button={
-            isReviewFormShown || isReviewListShown ?
+            isReviewFormShown || (isReviewListShown && reviews.length > 1) ?
               <ContainerAnimations delay={0.5}>
                 <ReviewDisclose />
               </ContainerAnimations>
@@ -137,7 +139,7 @@ export default async function Layout({
             duration={0.2}
             id="protocol-container"
             className={cx(
-              'inset-0 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:py-8 print:left-full',
+              'inset-0 mt-8 space-y-6 overflow-y-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full',
               isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
             )}
           >

@@ -73,8 +73,8 @@ export default async function IdentificationView({
             : person.role,
         },
         {
-          up: person.hours.toString(),
-          down: idx == 0 ? '' : '',
+          up: idx == 0 ? '' : '',
+          down: person.hours.toString(),
         },
       ])
       return newVal
@@ -82,7 +82,7 @@ export default async function IdentificationView({
   }
 
   tableData.values.unshift([
-    { up: '', down: '' },
+    { up: '', down: 'Miembro de equipo' },
     { up: '', down: 'Horas semanales' },
   ])
 
