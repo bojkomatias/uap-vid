@@ -50,7 +50,7 @@ export const Researcher = ({
 
 const ResearcherData = ({ researcher }: ResearcherProps) => (
   <div className="flex items-center gap-1">
-    <User className="size-4" />
+    <User className="size-4 text-gray-600 dark:text-white" />
     <div className="-space-y-2">
       <Subheading>{researcher.name}</Subheading>
       <Text className="!text-xs/6">{researcher.email}</Text>

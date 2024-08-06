@@ -1,106 +1,80 @@
-// /* eslint-disable jsx-a11y/alt-text */
-// 'use client'
-// import type { Review, User } from '@prisma/client'
-// import {
-//   Document,
-//   Page,
-//   View,
-//   Text,
-//   Image,
-//   PDFDownloadLink,
-// } from '@react-pdf/renderer'
-// import { Button } from '@elements/button'
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
+'use client'
+import { Button } from '@components/button'
+import type { Review, User } from '@prisma/client'
+import { findProtocolById } from '@repositories/protocol'
+import { useQuery } from '@tanstack/react-query'
+import { FileCertificate } from 'tabler-icons-react'
 
-// const PDFDocument = ({ user }: { user: User }) => {
-//   return (
-//     <>
-//       <Document>
-//         <Page
-//           style={{
-//             display: 'flex',
-//             flexDirection: 'column',
-//             gap: 12,
-//           }}
-//         >
-//           <View
-//             style={{
-//               backgroundColor: '#003C71',
+export const ReviewerCertificate = ({
+  reviews,
+  user,
+}: {
+  reviews: Review[]
+  user: User
+}) => {
+  const {
+    data: protocols,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ['reviews', reviews],
+    queryFn: async () =>
+      Promise.all(
+        reviews.map(async (r) => await findProtocolById(r.protocolId))
+      ),
+  })
 
-//               display: 'flex',
-//               flexDirection: 'row',
-//               justifyContent: 'space-between',
-//               alignItems: 'center',
-//             }}
-//           >
-//             <Image style={{ width: 2480 }} src={'CertificateHeader.jpg'} />
-//           </View>
-//           <View
-//             style={{
-//               padding: 20,
-//               paddingHorizontal: 42,
-//               display: 'flex',
-//               flexDirection: 'column',
-//               gap: 15,
-//             }}
-//           >
-//             <Text style={{ marginBottom: 18, fontSize: 25 }}>
-//               Certificado de Evaluador
-//             </Text>
+  const Certificate = () => {
+    return (
+      <div className=" remove-print-metadata absolute mx-10 -ml-6 flex w-full flex-wrap items-center justify-center text-black opacity-0 print:block print:opacity-100">
+        <img className="mx-auto h-[6rem]" src="/UAPazul.png"></img>
+        <div className=" mx-10 my-6 text-justify text-sm/5">
+          Por medio de la presente se deja constancia que <b>{user.name}</b>,
+          <b> DNI {user.dni}</b>, participó como evaluador/a de{' '}
+          {reviews.length > 1 ?
+            <span className="font-bold">{reviews.length} proyectos </span>
+          : <span className="font-bold">un proyecto </span>}{' '}
+          de investigación de la Universidad Adventista del Plata:
+          <div className="my-6 flex flex-col gap-2 px-2 text-xs italic">
+            {protocols?.map((p) => {
+              return <div key={p?.id}>-{p?.sections.identification.title}</div>
+            })}
+          </div>
+          A los fines que diere lugar, se extiende la presente constancia en
+          <span className="font-semibold">
+            {' '}
+            Libertador San Martín, Entre Ríos, Argentina, el{' '}
+            {new Date().toLocaleDateString()}{' '}
+          </span>
+          <img
+            className="mx-auto mt-8 h-[10rem]"
+            src="/CertificateFooter.png"
+          ></img>
+        </div>
+      </div>
+    )
+  }
 
-//             <Text style={{ fontSize: 10 }}>
-//               Por medio de la presente se deja constancia que
-//             </Text>
-//             <Text style={{ fontSize: 18 }}>{user.name}</Text>
-//             <Text style={{ fontSize: 10 }}>
-//               participó como evaluador de proyectos de investigación de la
-//               Universidad Adventista del Plata.
-//             </Text>
-//             <Text style={{ fontSize: 10 }}>
-//               A los fines que diere lugar, se extiende la presente CONSTANCIA en
-//               Libertador San Martín, Entre Ríos, Argentina, el{' '}
-//               {new Date().toLocaleDateString()}
-//             </Text>
-//           </View>
-//           <View
-//             style={{
-//               backgroundColor: '#003C71',
-//               marginTop: '40%',
-//               display: 'flex',
-//               flexDirection: 'row',
-//               justifyContent: 'space-between',
-//               alignItems: 'center',
-//             }}
-//           >
-//             <Image src={'CertificateFooter.png'} />
-//           </View>
-//         </Page>
-//       </Document>
-//     </>
-//   )
-// }
+  //Since this is a very small PDF, I removed the logic to wait until it was ready to download.
 
-// export const ReviewerCertificatePDF = ({
-//   reviews,
-//   user,
-// }: {
-//   reviews: Review[]
-//   user: User
-// }) => {
-//   //Since this is a very small PDF, I removed the logic to wait until it was ready to download.
+  //Check if the user has made reviews. If not, the component will return nothing. If it does, it will show a button where he or her can download the reviewer certificate.
+  if (reviews.length == 0) return
 
-//   //Check if the user has made reviews. If not, the component will return nothing. If it does, it will show a button where he or her can download the reviewer certificate.
-//   if (reviews.length == 0) return
-
-//   return (
-//     <>
-//       <PDFDownloadLink
-//         fileName={`CERTIFICADO-${user.name.replaceAll(' ', '_').toLowerCase()}`}
-//         document={<PDFDocument user={user} />}
-//       >
-//         <Button intent="outline" className="float-right mt-4">
-//           Descargar certificado de evaluación
-//         </Button>
-//       </PDFDownloadLink>
-//     </>
-//   )
-// }
+  return (
+    <>
+      <Certificate />
+      <Button
+        disabled={isLoading || isFetching}
+        onClick={() => {
+          window.print()
+        }}
+        outline
+        className="mx-auto print:hidden"
+      >
+        <FileCertificate data-slot="icon" /> Descargar certificado de evaluación
+      </Button>
+    </>
+  )
+}
