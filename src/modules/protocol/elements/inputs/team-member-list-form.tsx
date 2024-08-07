@@ -1,8 +1,7 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment } from 'react'
 import { Plus, Trash } from 'tabler-icons-react'
-import type { TeamMember } from '@prisma/client'
 import { getAllTeamMembers } from '@repositories/team-member'
 import {
   Description,
@@ -24,13 +23,10 @@ import { FormSwitch } from '@shared/form/form-switch'
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
-
-  useEffect(() => {
-    ;(async () => {
-      setTeamMembers(await getAllTeamMembers())
-    })()
-  }, [])
+  const { data: teamMembers } = useQuery({
+    queryKey: ['teamMembers'],
+    queryFn: async () => await getAllTeamMembers(),
+  })
 
   const { data: categories } = useQuery({
     queryKey: ['categories'],
@@ -133,7 +129,7 @@ export default function TeamMemberListForm() {
               <FormCombobox
                 className="col-span-8"
                 label=""
-                options={teamMembers.map((e) => ({
+                options={teamMembers!.map((e) => ({
                   value: e.id,
                   label: e.name,
                 }))}

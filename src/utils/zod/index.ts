@@ -498,6 +498,19 @@ export const IdentificationTeamSchema = z.object({
   categoryToBeConfirmed: z.string().nullable(),
 })
 
+export const ConfirmTeamSchema = z.object({
+  team: z.array(
+    z.object({
+      teamMemberId: z
+        .string()
+        .nullable()
+        .refine((val) => val !== null && val.length > 0, {
+          message: 'Debe seleccionar un miembro de equipo',
+        }),
+    })
+  ),
+})
+
 export const IdentificationSchema = z.object({
   courseId: z.string().nullable().optional(),
   careerId: z
