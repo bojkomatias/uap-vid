@@ -46,8 +46,6 @@ export default function TeamMemberListForm() {
     return { value: category?.id, label: category?.name }
   }) as { value: string; label: string }[]
 
-  console.log(form.getValues().sections.identification.team)
-
   return (
     <Fieldset>
       <Legend>Miembros de Equipo</Legend>
@@ -129,10 +127,12 @@ export default function TeamMemberListForm() {
               <FormCombobox
                 className="col-span-8"
                 label=""
-                options={teamMembers!.map((e) => ({
-                  value: e.id,
-                  label: e.name,
-                }))}
+                options={
+                  teamMembers?.map((e) => ({
+                    value: e.id,
+                    label: e.name,
+                  })) ?? []
+                }
                 disabled={
                   form.getInputProps(
                     `sections.identification.team.${index}.toBeConfirmed`

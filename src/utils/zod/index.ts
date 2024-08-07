@@ -516,7 +516,6 @@ export const IdentificationSchema = z.object({
   careerId: z
     .string()
     .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
-  sponsor: z.string().array(),
   academicUnitIds: z
     .string()
     .array()
