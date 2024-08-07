@@ -320,6 +320,7 @@ type ProtocolSectionsIdentification {
   career          String? /// @deprecated use careerId instead
   careerId        String                               @db.ObjectId
   academicUnitIds String[]                             @db.ObjectId
+  sponsor         String[]                             @default([])
   team            ProtocolSectionsIdentificationTeam[]
   title           String
 }

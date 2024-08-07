@@ -12,6 +12,7 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
     courseId: null,
     careerId: '',
     academicUnitIds: [],
+    sponsor: [],
     team: [
       {
         hours: 0,
