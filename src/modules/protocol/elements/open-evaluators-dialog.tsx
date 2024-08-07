@@ -20,18 +20,19 @@ export function EvaluatorsDialog({ children }: { children: ReactNode }) {
         <UserSearch data-slot="icon" />
         Evaluadores
       </Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog open={open} onClose={() => setOpen(false)} size="xl">
         <DialogTitle>Metodólogo y evaluadores</DialogTitle>
         <DialogDescription className="!text-xs/5">
-          Solo puede asignar evaluadores luego de que el/la metodólogo/a haya
-          completado su evaluación. <br /> Reasignar metodólogo/a o evaluadores
-          eliminará la evaluación que haya sido realizada previamente por el/la
-          metodólogo o evaluadores.
+          Reasignar evaluador eliminará si existe una revision del mismo tipo ya
+          creada. Solo puede existir una sola evaluación correspondiente a cada
+          etapa del proyecto.
         </DialogDescription>
-        <Divider className="my-4" />
+        <Divider className="my-3" />
         {children}
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cerrar</Button>
+          <Button plain onClick={() => setOpen(false)}>
+            Cancelar
+          </Button>
         </DialogActions>
       </Dialog>
     </>

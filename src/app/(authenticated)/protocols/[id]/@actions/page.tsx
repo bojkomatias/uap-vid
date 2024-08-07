@@ -26,7 +26,8 @@ export default async function ActionsPage({
   // Publish only if valid
   if (actions.includes('PUBLISH')) {
     const validToPublish = ProtocolSchema.safeParse(protocol)
-    if (!validToPublish.success) actions.filter((e) => e !== 'PUBLISH')
+    if (!validToPublish.success || !protocol.convocatoryId)
+      actions.filter((e) => e !== 'PUBLISH')
   }
   // Accept only if review have correct verdicts
   if (actions.includes('ACCEPT')) {

@@ -150,6 +150,7 @@ const getAllUsersWithoutResearchers = async () => {
           not: Role.RESEARCHER,
         },
       },
+      select: { id: true, name: true, email: true, role: true },
     })
     return users
   } catch (error) {

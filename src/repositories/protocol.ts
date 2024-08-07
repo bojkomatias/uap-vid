@@ -176,6 +176,17 @@ const updateProtocolResearcher = async (id: string, researcherId: string) => {
   }
 }
 
+const updateProtocolConvocatory = async (id: string, convocatory: string) => {
+  try {
+    return await prisma.protocol.update({
+      where: { id },
+      data: { convocatoryId: convocatory },
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 const upsertProtocolFlag = async (
   id: string,
   flag: Omit<ProtocolFlag, 'createdAt'>
@@ -276,6 +287,7 @@ const getProtocolsByRole = cache(
       order,
       state,
       unit,
+      convocatory,
     }: { [key: string]: string }
   ) => {
     if (!id) throw Error('No ID passed')
@@ -368,6 +380,11 @@ const getProtocolsByRole = cache(
         }
       : {}
 
+    const convocatoryFilter =
+      convocatory ?
+        { convocatoryId: convocatory === 'null' ? null : convocatory }
+      : {}
+
     const stateFilter = state ? { state: state as ProtocolState } : {}
 
     const acUnitFilter =
@@ -398,6 +415,7 @@ const getProtocolsByRole = cache(
                 // According to table features (search, filter)
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -414,6 +432,7 @@ const getProtocolsByRole = cache(
                 // According to table features (search, filter)
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -440,6 +459,7 @@ const getProtocolsByRole = cache(
                 // Table feature
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -467,6 +487,7 @@ const getProtocolsByRole = cache(
                 // Table feature
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -489,8 +510,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
@@ -502,6 +523,7 @@ const getProtocolsByRole = cache(
                 whereSearch,
                 stateFilter,
                 acUnitFilter,
+                convocatoryFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -525,8 +547,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
@@ -538,6 +560,7 @@ const getProtocolsByRole = cache(
                 whereSearch,
                 stateFilter,
                 acUnitFilter,
+                convocatoryFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -549,7 +572,7 @@ const getProtocolsByRole = cache(
       return prisma.$transaction([
         prisma.protocol.count({
           where: {
-            AND: [whereSearch, stateFilter, acUnitFilter],
+            AND: [whereSearch, stateFilter, acUnitFilter, convocatoryFilter],
           },
         }),
         prisma.protocol.findMany({
@@ -557,7 +580,7 @@ const getProtocolsByRole = cache(
           take,
           select,
           where: {
-            AND: [whereSearch, stateFilter, acUnitFilter],
+            AND: [whereSearch, stateFilter, acUnitFilter, convocatoryFilter],
           },
           orderBy,
         }),
@@ -586,4 +609,5 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  updateProtocolConvocatory,
 }
