@@ -1,10 +1,15 @@
 'use server'
 
-import type { Review, ReviewType } from '@prisma/client'
+import { ProtocolState, Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { getInitialQuestionsByType } from '@utils/reviewQuestionInitiator'
 import { getAllQuestions } from './review-question'
+import { emailer } from '@utils/emailer'
+import { useCases } from '@utils/emailer/use-cases'
+import { updateProtocolStateById } from './protocol'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 
 export const getReviewsByProtocol = cache(async (protocolId: string) => {
   const reviews = await prisma.review.findMany({
@@ -38,23 +43,57 @@ export const getProtocolReviewByReviewer = cache(
 
 export const assignReviewerToProtocol = async (
   protocolId: string,
+  protocolState: ProtocolState,
   reviewerId: string,
   type: ReviewType
 ) => {
-  const review = await prisma.review.create({
-    data: {
-      protocolId,
-      reviewerId,
-      questions: await getInitialQuestionsByType(
-        type,
-        await getAllQuestions(),
-        true
-      ),
-      type: type,
-    },
-    include: { reviewer: { select: { email: true } } },
-  })
-  return review
+  try {
+    const session = await getServerSession(authOptions)
+    const review = await prisma.review.create({
+      data: {
+        protocolId,
+        reviewerId,
+        questions: await getInitialQuestionsByType(
+          type,
+          await getAllQuestions(),
+          true
+        ),
+        type: type,
+      },
+      include: { reviewer: { select: { email: true } } },
+    })
+
+    if (type !== ReviewType.SCIENTIFIC_THIRD) {
+      // Update protocol state
+      const newStateByReviewType = {
+        [ReviewType.METHODOLOGICAL]: ProtocolState.METHODOLOGICAL_EVALUATION,
+        [ReviewType.SCIENTIFIC_INTERNAL]: ProtocolState.SCIENTIFIC_EVALUATION,
+        [ReviewType.SCIENTIFIC_EXTERNAL]: ProtocolState.SCIENTIFIC_EVALUATION,
+      }
+      await updateProtocolStateById(
+        protocolId,
+        protocolState,
+        newStateByReviewType[type],
+        session!.user.id
+      )
+      console.log(
+        'JIJO!',
+        session?.user,
+        'Se paso de estado?',
+        newStateByReviewType[type]
+      )
+    }
+
+    emailer({
+      useCase: useCases.onAssignation,
+      email: review.reviewer.email,
+      protocolId: review.protocolId,
+    })
+
+    return review
+  } catch (error) {
+    return null
+  }
 }
 
 export const reassignReviewerToProtocol = async (
@@ -63,19 +102,34 @@ export const reassignReviewerToProtocol = async (
   reviewerId: string,
   type: ReviewType
 ) => {
-  const review = await prisma.review.update({
-    where: {
-      id: reviewId,
-    },
-    data: {
-      protocolId,
-      reviewerId,
-      questions: await getInitialQuestionsByType(type, await getAllQuestions()),
-      type: type,
-    },
-    include: { reviewer: { select: { email: true } } },
-  })
-  return review
+  try {
+    const review = await prisma.review.update({
+      where: {
+        id: reviewId,
+      },
+      data: {
+        protocolId,
+        reviewerId,
+        questions: await getInitialQuestionsByType(
+          type,
+          await getAllQuestions()
+        ),
+        type: type,
+        verdict: 'NOT_REVIEWED',
+      },
+      include: { reviewer: { select: { email: true } } },
+    })
+
+    emailer({
+      useCase: useCases.onAssignation,
+      email: review.reviewer.email,
+      protocolId: review.protocolId,
+    })
+
+    return review
+  } catch (error) {
+    return null
+  }
 }
 
 export const updateReview = async (data: Review) => {

@@ -17,7 +17,7 @@ import Info from 'modules/info'
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'
-import { ReviewDisclose } from '@review/review-disclose'
+import { AssingConvocatoryDialog } from './assign-convocatory-dialog'
 
 export async function ProtocolMetadata({
   params,
@@ -151,13 +151,19 @@ export async function ProtocolMetadata({
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>
             </Info>
-            <Info content="Convocatoria a la que pertenece el protocolo">
-              <Badge className="w-fit text-clip !text-sm/6 font-semibold">
-                {protocol.convocatory ?
-                  protocol.convocatory.name
-                : 'Sin convocatoria'}
-              </Badge>
-            </Info>
+            {session.user.role === 'ADMIN' ?
+              <AssingConvocatoryDialog
+                protocolId={protocol.id}
+                convocatory={protocol.convocatory}
+              />
+            : <Info content="Convocatoria a la que pertenece el protocolo">
+                <Badge className="w-fit text-clip !text-sm/6 font-semibold">
+                  {protocol.convocatory ?
+                    protocol.convocatory.name
+                  : 'Sin convocatoria'}
+                </Badge>
+              </Info>
+            }
 
             <Info content="Fecha en la que se creó el protocolo de investigación">
               <div className="flex items-center">
@@ -171,7 +177,7 @@ export async function ProtocolMetadata({
 
           <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center md:gap-1">
             {/* Researcher */}
-            <ReviewDisclose />
+            {review_disclose_button}
             <Researcher
               researcher={protocol.researcher}
               protocolId={protocol.id}

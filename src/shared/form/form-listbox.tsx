@@ -27,7 +27,7 @@ export function FormListbox({
     <Field disabled={disabled} className={className}>
       <Label>{label}</Label>
       <Description>{description}</Description>
-      <Listbox invalid={!!error} {...props}>
+      <Listbox invalid={!!error} className="w-full" {...props}>
         {options.map(({ value, label, description }) => (
           <ListboxOption key={value} value={value}>
             <ListboxLabel>{label}</ListboxLabel>
