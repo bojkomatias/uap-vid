@@ -142,7 +142,7 @@ export default function ConfirmTeamMembersForm({
             })}
           </Fieldset>
           <FormActions>
-            <FormButton enabled={!form.isValid()}>Guardar</FormButton>
+            <FormButton disabled={!form.isValid()}>Guardar</FormButton>
           </FormActions>
         </form>
       }
