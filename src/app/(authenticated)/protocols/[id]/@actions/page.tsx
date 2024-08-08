@@ -35,11 +35,5 @@ export default async function ActionsPage({
       actions.filter((e) => e !== 'ACCEPT')
   }
 
-  return (
-    <ActionsDropdown
-      actions={actions}
-      protocol={protocol}
-      userId={session.user.id}
-    />
-  )
+  return <ActionsDropdown actions={actions} protocol={protocol} />
 }

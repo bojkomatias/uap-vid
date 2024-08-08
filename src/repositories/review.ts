@@ -1,6 +1,6 @@
 'use server'
 
-import { ProtocolState, Review, ReviewType } from '@prisma/client'
+import { Action, ProtocolState, Review, ReviewType } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { getInitialQuestionsByType } from '@utils/reviewQuestionInitiator'
@@ -72,15 +72,12 @@ export const assignReviewerToProtocol = async (
       }
       await updateProtocolStateById(
         protocolId,
+        type === ReviewType.METHODOLOGICAL ?
+          Action.ASSIGN_TO_METHODOLOGIST
+        : Action.ASSIGN_TO_SCIENTIFIC,
         protocolState,
         newStateByReviewType[type],
-        session!.user.id
-      )
-      console.log(
-        'JIJO!',
-        session?.user,
-        'Se paso de estado?',
-        newStateByReviewType[type]
+        review.reviewerId
       )
     }
 
