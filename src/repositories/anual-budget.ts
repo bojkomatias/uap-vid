@@ -365,6 +365,7 @@ export const approveAnualBudget = async (id: string) => {
       action: 'APPROVE',
       message: null,
       reviewerId: null,
+      previousState: ProtocolState.ACCEPTED,
     })
     return result
   } catch (e) {
@@ -392,6 +393,7 @@ export const rejectAnualBudget = async (id: string) => {
       action: 'DISCONTINUE',
       message: null,
       reviewerId: null,
+      previousState: ProtocolState.ACCEPTED,
     })
     return result
   } catch (e) {
@@ -444,6 +446,7 @@ export const interruptAnualBudget = async (id: string) => {
       action: 'DISCONTINUE',
       message: null,
       reviewerId: null,
+      previousState: ProtocolState.ON_GOING,
     })
     return result
   } catch (e) {
