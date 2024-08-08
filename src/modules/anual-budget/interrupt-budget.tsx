@@ -28,19 +28,6 @@ export function InterruptAnualBudget({
             intent: 'error',
           })
         if (res) {
-          // Side effect on protocol change state to Discontinued!
-          await fetch(`/api/protocol/${protocolId}/discontinue`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: protocolId,
-              // Always the same, ongoing if it has budget.
-              // But this should be the only way... so static to unify the flow
-              state: 'ACCEPTED',
-            }),
-          })
           notifications.show({
             title: 'Presupuesto interrumpido',
             message:

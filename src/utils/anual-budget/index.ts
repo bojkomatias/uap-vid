@@ -16,6 +16,7 @@ const anualBudgetTeamMemberWithAllRelations =
       teamMember: {
         include: { categories: { include: { category: true } } },
       },
+      category: true,
     },
   })
 
@@ -118,30 +119,17 @@ const calculateRemainingABTM = (
   academicUnitId?: string
 ): AmountIndex => {
   //This part is used to calculate the remaining budget for a specific academic unit in summary cards
-  if (academicUnitId) {
-    const abtmAcademicUnit = abtm.filter(
-      (item) => item.teamMember.academicUnitId === academicUnitId
-    )
-    return abtmAcademicUnit ?
-        abtmAcademicUnit.reduce(
-          (acc, item) => {
-            const remainingIndex = multiplyAmountIndex(
-              getLastCategoryPriceIndex(item),
-              item.remainingHours
-            )
-            acc = sumAmountIndex([acc, remainingIndex])
-            return acc
-          },
-          { FCA: 0, FMR: 0 } as AmountIndex
-        )
-      : ({ FCA: 0, FMR: 0 } as AmountIndex)
-  }
+  const calculateRemaining = (
+    abtm: AnualBudgetTeamMemberWithAllRelations[]
+  ) => {
+    if (!abtm) return { FCA: 0, FMR: 0 } as AmountIndex
 
-  return abtm ?
-      abtm.reduce(
+    const ABTMcategory = abtm
+      .filter((item) => item.categoryId)
+      .reduce(
         (acc, item) => {
           const remainingIndex = multiplyAmountIndex(
-            getLastCategoryPriceIndex(item),
+            item.category.amountIndex,
             item.remainingHours
           )
           acc = sumAmountIndex([acc, remainingIndex])
@@ -149,7 +137,30 @@ const calculateRemainingABTM = (
         },
         { FCA: 0, FMR: 0 } as AmountIndex
       )
-    : ({ FCA: 0, FMR: 0 } as AmountIndex)
+
+    const ABTMteamMember = abtm.reduce(
+      (acc, item) => {
+        const remainingIndex = multiplyAmountIndex(
+          getLastCategoryPriceIndex(item),
+          item.remainingHours
+        )
+        acc = sumAmountIndex([acc, remainingIndex])
+        return acc
+      },
+      { FCA: 0, FMR: 0 } as AmountIndex
+    )
+
+    const total = sumAmountIndex([ABTMcategory, ABTMteamMember])
+    return total
+  }
+  if (academicUnitId) {
+    const abtmAcademicUnit = abtm.filter(
+      (item) => item.teamMember.academicUnitId === academicUnitId
+    )
+    return calculateRemaining(abtmAcademicUnit)
+  }
+
+  return calculateRemaining(abtm)
 }
 
 const getLastCategoryPriceIndex = (
@@ -274,7 +285,7 @@ export const calculateTotalBudgetAggregated = (
         total: { FCA: 0, FMR: 0 } as AmountIndex,
       }
     )
-  return {...result, ...totalPending, ...totalApproved}
+  return { ...result, ...totalPending, ...totalApproved }
 }
 
 export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>

@@ -106,6 +106,16 @@ const generateAnualBudgetTeamMembersItems = (
         item.hours * item.workingMonths * WEEKS_IN_MONTH
       : item.hours * duration
     )
+    if (item.toBeConfirmed && item.categoryToBeConfirmed) {
+      return {
+        anualBudgetId: anualBudgetId,
+        memberRole: item.role,
+        hours: hours,
+        remainingHours: hours,
+        categoryId: item.categoryToBeConfirmed,
+        executions: [] as Execution[],
+      }
+    }
     return {
       anualBudgetId: anualBudgetId,
       teamMemberId: item.teamMemberId,
