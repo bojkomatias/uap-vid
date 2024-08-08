@@ -1,5 +1,5 @@
 'use server'
-import { AnualBudgetState, Prisma } from '@prisma/client'
+import { AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
 import type {
   AnualBudget,
   AnualBudgetTeamMember,
@@ -8,8 +8,11 @@ import type {
 } from '@prisma/client'
 import { sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
 import { orderByQuery } from '@utils/query-helper/orderBy'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
+import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
+import { logEvent } from './log'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -344,52 +347,107 @@ export const newBudgetItemExecution = async (
 }
 
 export const approveAnualBudget = async (id: string) => {
-  return await prisma.anualBudget.update({
-    where: { id },
-    data: { state: AnualBudgetState.APPROVED },
-    select: { id: true, protocol: { select: { id: true, state: true } } },
-  })
+  try {
+    const session = await getServerSession(authOptions)
+    const result = await prisma.anualBudget.update({
+      where: { id },
+      data: {
+        state: AnualBudgetState.APPROVED,
+        protocol: { update: { state: ProtocolState.ON_GOING } },
+      },
+      select: { id: true, protocolId: true },
+    })
+
+    await logEvent({
+      userId: session!.user.id,
+      protocolId: result.protocolId,
+      budgetId: result.id,
+      action: 'APPROVE',
+      message: null,
+      reviewerId: null,
+    })
+    return result
+  } catch (e) {
+    return null
+  }
 }
 
 export const rejectAnualBudget = async (id: string) => {
-  return await prisma.anualBudget.update({
-    where: { id },
-    data: { state: AnualBudgetState.REJECTED },
-    select: { id: true, protocol: { select: { id: true, state: true } } },
-  })
+  try {
+    const session = await getServerSession(authOptions)
+
+    const result = await prisma.anualBudget.update({
+      where: { id },
+      data: {
+        state: AnualBudgetState.REJECTED,
+        protocol: { update: { state: ProtocolState.DISCONTINUED } },
+      },
+      select: { id: true, protocolId: true },
+    })
+
+    await logEvent({
+      userId: session!.user.id,
+      protocolId: result.protocolId,
+      budgetId: result.id,
+      action: 'DISCONTINUE',
+      message: null,
+      reviewerId: null,
+    })
+    return result
+  } catch (e) {
+    return null
+  }
 }
 
 export const interruptAnualBudget = async (id: string) => {
-  const AB = await prisma.anualBudget.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      protocol: { select: { id: true } },
-      state: true,
-      budgetItems: true,
-      budgetTeamMembers: true,
-    },
-  })
-  if (!AB || AB.state !== AnualBudgetState.APPROVED) return
-  // Match budget Items amount to execution and remaining 0
-  AB.budgetItems.forEach((bi) => {
-    bi.amountIndex = sumAmountIndex(
-      bi.executions.map((x) => x.amountIndex).filter(Boolean) as AmountIndex[]
-    )
-    bi.remainingIndex = ZeroAmountIndex
-  })
-  // Match only paid hours and remaining to 0
-  AB.budgetTeamMembers.forEach((btm) => {
-    btm.hours = btm.hours - btm.remainingHours
-    btm.remainingHours = 0
-  })
+  try {
+    const session = await getServerSession(authOptions)
+    const AB = await prisma.anualBudget.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        protocol: { select: { id: true } },
+        state: true,
+        budgetItems: true,
+        budgetTeamMembers: true,
+      },
+    })
+    if (!AB || AB.state !== AnualBudgetState.APPROVED) return
+    // Match budget Items amount to execution and remaining 0
+    AB.budgetItems.forEach((bi) => {
+      bi.amountIndex = sumAmountIndex(
+        bi.executions.map((x) => x.amountIndex).filter(Boolean) as AmountIndex[]
+      )
+      bi.remainingIndex = ZeroAmountIndex
+    })
+    // Match only paid hours and remaining to 0
+    AB.budgetTeamMembers.forEach((btm) => {
+      btm.hours = btm.hours - btm.remainingHours
+      btm.remainingHours = 0
+    })
 
-  await updateAnualBudgetItems(AB.id, AB.budgetItems)
-  await updateAnualBudgetTeamMemberHours(AB.budgetTeamMembers)
+    await updateAnualBudgetItems(AB.id, AB.budgetItems)
+    await updateAnualBudgetTeamMemberHours(AB.budgetTeamMembers)
 
-  return await prisma.anualBudget.update({
-    where: { id },
-    data: { state: AnualBudgetState.INTERRUPTED },
-    select: { id: true, protocol: { select: { id: true, state: true } } },
-  })
+    const result = await prisma.anualBudget.update({
+      where: { id },
+      data: {
+        state: AnualBudgetState.INTERRUPTED,
+        protocol: { update: { state: ProtocolState.DISCONTINUED } },
+      },
+      select: { id: true, protocolId: true },
+    })
+    await logEvent({
+      userId: session!.user.id,
+      protocolId: result.protocolId,
+      budgetId: result.id,
+      action: 'DISCONTINUE',
+      message: null,
+      reviewerId: null,
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return null
+  }
 }

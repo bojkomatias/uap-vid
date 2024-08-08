@@ -4,7 +4,7 @@ import type { Logs } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 
-const newLog = async (data: Omit<Logs, 'id' | 'createdAt'>) => {
+const logEvent = async (data: Omit<Logs, 'id' | 'createdAt'>) => {
   try {
     const log = await prisma.logs.create({
       data,
@@ -34,4 +34,4 @@ const getLogsByProtocolId = cache(async (protocolId: string) => {
   }
 })
 
-export { newLog, getLogs, getLogsByProtocolId }
+export { logEvent, getLogs, getLogsByProtocolId }
