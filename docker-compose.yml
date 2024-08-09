@@ -1,3 +1,4 @@
+version: '3'
 services:
   mongodb:
     image: mongo
@@ -21,7 +22,7 @@ services:
     depends_on:
       - mongodb
     command: >
-      mongo --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("main"); config = { "_id" : "rs0", "members" : [ {
+      mongo --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("develop"); config = { "_id" : "rs0", "members" : [ {
           "_id" : 0,
           "host" : "mongodb:27017"
       } ] }; rs.initiate(config); '
@@ -37,14 +38,6 @@ services:
     networks:
       - node-next
       - exposed-services
-  web-socket:
-    image: uapsocket
-    restart: always
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-    networks:
-      - node-next
 networks:
   node-next:
   exposed-services:
