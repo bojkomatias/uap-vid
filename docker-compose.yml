@@ -38,8 +38,6 @@ services:
     networks:
       - node-next
       - exposed-services
-    environment:
-      - DATABASE_URL=mongodb://uap:Ford.R4ng3r@uap-vid-mongodb-1:27017/main?directConnection=true&replicaSet=rs0
 networks:
   node-next:
   exposed-services:
