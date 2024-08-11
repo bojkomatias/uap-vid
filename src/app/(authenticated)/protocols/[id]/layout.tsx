@@ -147,7 +147,7 @@ export default async function Layout({
             </ContainerAnimations>
           </div>
 
-          <ChatFullComponent user={session.user} protocolId={protocol.id} />
+          {/* <ChatFullComponent user={session.user} protocolId={protocol.id} /> */}
         </ContextMenu>
       </>
     )

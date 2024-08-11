@@ -297,6 +297,8 @@ async function main() {
     const reviews = await review_collection.find().toArray()
     const review_question_collection = getCollection('ReviewQuestion')
 
+    review_question_collection.deleteMany({})
+
     async function create_review_questions() {
       const result = await review_question_collection.insertMany(
         rawQuestions.map(({ active, question, type }) => ({
