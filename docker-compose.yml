@@ -3,6 +3,8 @@ services:
     image: mongo
     userns_mode: 'host'
     restart: always
+    ports:
+      - '27017:27017'
     volumes:
       - ../apps/mongo-data:/data/db
     env_file:
@@ -29,6 +31,8 @@ services:
     #Our container app name
     image: uapvid
     restart: always
+    depends_on:
+      - mongodb
     build:
       context: .
       dockerfile: ./Dockerfile
