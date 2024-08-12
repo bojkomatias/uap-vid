@@ -8,17 +8,17 @@ export default async function AllAnualBudgetPage({
 }: {
   searchParams: { [key: string]: string }
 }) {
-  const [totalRecords, anualBudgets] =
-    await getAnualBudgetsByAcademicUnit(searchParams)
+  // const [totalRecords, anualBudgets] =
+  //   await getAnualBudgetsByAcademicUnit(searchParams)
 
-  const budgetSummary = await getBudgetSummary()
+  // const budgetSummary = await getBudgetSummary()
   return (
     <>
-      <BudgetSummary summary={budgetSummary} allAcademicUnits />
+      {/* <BudgetSummary summary={budgetSummary} allAcademicUnits />
       <AnualBudgetTable
         anualBudgets={anualBudgets}
         totalRecords={totalRecords}
-      />
+      /> */}
     </>
   )
 }
