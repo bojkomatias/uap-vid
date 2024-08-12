@@ -27,7 +27,7 @@ services:
     networks:
       - node-next
     command: >
-      mongo --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("main"); config = { "_id" : "rs0", "members" : [ {
+      mongosh --host mongodb:27017 --eval  ' db = (new Mongo("localhost:27017")).getDB("main"); config = { "_id" : "rs0", "members" : [ {
           "_id" : 0,
           "host" : "mongodb:27017"
       } ] }; rs.initiate(config); '
