@@ -1,18 +1,16 @@
-
 # Delete old code
 rm -rf uap-vid
-
 # clone latest code
 git clone https://github.com/bojkomatias/uap-vid.git
 
-# go to uap-vid folder
 cd uap-vid
+git checkout testing_environment
 
-# build docker image
-docker build -t uap:latest .
+cp /home/nodo/apps/enviroments/uap-vid.env ./.env
+cat .env
 
-# # docker compose down
-# docker-compose down
 
-# docker compose up with name uap 
-docker-compose up -d --name uap
+#docker compose down�
+docker compose -f mongodb-compose.yml up
+
+#docker-compose -f uap-research-compose.yml up

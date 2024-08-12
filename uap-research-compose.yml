@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  uap-research:
+    image: uapvid
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - ../apps/enviroments/uap-vid.env
+    networks:
+      - node-next
+      - exposed-services
+
+networks:
+  node-next:
+  exposed-services:
+    external: true
