@@ -6,12 +6,12 @@ import { IndexTable } from 'modules/indexes/index-table'
 import { UpdateIndexDialog } from 'modules/indexes/update-index-dialog'
 
 export default async function IndexesPage() {
-  const index = await getIndexByUnit('FMR')
-  index.values.reverse()
+  // const index = await getIndexByUnit('FMR')
+  // index.values.reverse()
 
   return (
     <div>
-      <div className="flex items-end">
+      {/* <div className="flex items-end">
         <Heading>Indice FMR</Heading>
         <UpdateIndexDialog index={'FMR'} />
       </div>
@@ -21,7 +21,7 @@ export default async function IndexesPage() {
         <DialogTableIndex values={index.values} />
       </Text>
 
-      <IndexTable values={index.values} />
+      <IndexTable values={index.values} /> */}
     </div>
   )
 }
