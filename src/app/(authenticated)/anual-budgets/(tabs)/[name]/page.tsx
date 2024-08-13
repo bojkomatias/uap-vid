@@ -10,18 +10,18 @@ export default async function Page({
   params: { name: string }
   searchParams: { [key: string]: string }
 }) {
-  const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
-    searchParams,
-    params.name
-  )
-  const budgetSummary = await getBudgetSummary(params.name)
+  // const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
+  //   searchParams,
+  //   params.name
+  // )
+  // const budgetSummary = await getBudgetSummary(params.name)
   return (
     <>
-      <BudgetSummary summary={budgetSummary} />
+      {/* <BudgetSummary summary={budgetSummary} />
       <AnualBudgetTable
         anualBudgets={anualBudgets}
         totalRecords={totalRecords}
-      />
+      /> */}
     </>
   )
 }
