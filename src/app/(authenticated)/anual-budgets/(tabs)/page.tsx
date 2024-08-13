@@ -3,6 +3,8 @@ import { getAnualBudgetsByAcademicUnit } from '@repositories/anual-budget'
 import { BudgetSummary } from 'modules/anual-budget/budget-summary/budget-summary-template'
 import AnualBudgetTable from 'modules/anual-budget/budget-table'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AllAnualBudgetPage({
   searchParams,
 }: {
@@ -11,10 +13,10 @@ export default async function AllAnualBudgetPage({
   const [totalRecords, anualBudgets] =
     await getAnualBudgetsByAcademicUnit(searchParams)
 
-  // const budgetSummary = await getBudgetSummary()
+  const budgetSummary = await getBudgetSummary()
   return (
     <>
-      {/* <BudgetSummary summary={budgetSummary} allAcademicUnits /> */}
+      <BudgetSummary summary={budgetSummary} allAcademicUnits />
       <AnualBudgetTable
         anualBudgets={anualBudgets}
         totalRecords={totalRecords}
