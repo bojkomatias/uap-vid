@@ -5,13 +5,16 @@ import { DialogTableIndex } from 'modules/indexes/dialog-index-table'
 import { IndexTable } from 'modules/indexes/index-table'
 import { UpdateIndexDialog } from 'modules/indexes/update-index-dialog'
 
+//Force it to be dynamic so it doesn't break the build in the Docker container
+export const dynamic = 'force-dynamic'
+
 export default async function IndexesPage() {
-  // const index = await getIndexByUnit('FCA')
-  // index.values.reverse()
+  const index = await getIndexByUnit('FCA')
+  index.values.reverse()
 
   return (
     <div>
-      {/* <div className="flex items-end">
+      <div className="flex items-end">
         <Heading>Indice FCA</Heading>
         <UpdateIndexDialog index={'FCA'} />
       </div>
@@ -21,7 +24,7 @@ export default async function IndexesPage() {
         <DialogTableIndex values={index.values} />
       </Text>
 
-      <IndexTable values={index.values} /> */}
+      <IndexTable values={index.values} />
     </div>
   )
 }
