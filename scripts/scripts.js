@@ -1,6 +1,8 @@
 import mongodb from 'mongodb'
 import 'dotenv/config'
 import InsertIndexes from './indexes_insert.js'
+import CareersInsert from './careers_insert.js'
+import EmailsInsert from './emails_insert.js'
 import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes.js'
 import AcademicUnitProtocolRelation from './academic-unit-protocol-relation.js'
 import AnualBudgetToIndexes from './anual-budget-to-indexes.js'
@@ -20,6 +22,8 @@ console.log(uri)
 async function main() {
   try {
     await InsertIndexes()
+    await CareersInsert()
+    await EmailsInsert()
     await AcademicUnitBudgetsToIndexes()
     await AcademicUnitProtocolRelation()
     await AnualBudgetToIndexes()

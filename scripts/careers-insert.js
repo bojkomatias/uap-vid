@@ -2296,8 +2296,6 @@ export default async function main() {
         console.log('Error occured while inserting career', e)
       }
     }
-
-    console.log('Inserted documents:', FCA.insertedId, FMR.insertedId)
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
