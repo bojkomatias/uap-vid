@@ -1,7 +1,7 @@
-import mongodb from 'mongodb'
+import { MongoClient } from 'mongodb'
 import 'dotenv/config'
+
 const uri = process.env.MONGO_URI
-const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
 function getCollection(collection, db = 'main') {
@@ -11,23 +11,23 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
+    console.log('Connected successfully to server')
 
     const indexes_collection = getCollection('Index')
 
+    const now = new Date() // Current date and time
+
     const FCA = await indexes_collection.insertOne({
       unit: 'FCA',
-      values: [
-        { from: '2024-07-30T21:51:31.986+00:00', to: null, price: 4500 },
-      ],
-    })
-    const FMR = await indexes_collection.insertOne({
-      unit: 'FCA',
-      values: [
-        { from: '2024-07-30T21:51:31.986+00:00', to: null, price: 4500 },
-      ],
+      values: [{ from: now, to: null, price: 4500 }],
     })
 
-    console.log(FCA, FMR)
+    const FMR = await indexes_collection.insertOne({
+      unit: 'FMR',
+      values: [{ from: now, to: null, price: 4500 }],
+    })
+
+    console.log('Inserted documents:', FCA.insertedId, FMR.insertedId)
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
@@ -35,4 +35,5 @@ export default async function main() {
     console.log('Connection closed')
   }
 }
-main()
+
+main().catch(console.error)

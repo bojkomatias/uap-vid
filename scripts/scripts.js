@@ -1,6 +1,6 @@
 import mongodb from 'mongodb'
 import 'dotenv/config'
-import InsertIndexes from './insert_indexes.js'
+import InsertIndexes from './indexes_insert.js'
 import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes.js'
 import AcademicUnitProtocolRelation from './academic-unit-protocol-relation.js'
 import AnualBudgetToIndexes from './anual-budget-to-indexes.js'
