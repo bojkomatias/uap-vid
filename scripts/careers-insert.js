@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import 'dotenv/config'
 
 const uri = process.env.MONGO_URI
@@ -2262,7 +2263,7 @@ export default async function main() {
     await careers_collection.deleteMany({})
     await courses_collection.deleteMany({})
 
-    for (career in careers_and_courses) {
+    for (const career of careers_and_courses) {
       try {
         const inserted_career = async () => {
           const career_insert = await careers_collection.insertOne({
@@ -2272,7 +2273,11 @@ export default async function main() {
           })
 
           const courses_to_insert = career.assignment.map((c) => {
-            return { name: c, careerId: career_insert.insertedId, active: true }
+            return {
+              name: c,
+              careerId: new ObjectId(career_insert.insertedId),
+              active: true,
+            }
           })
 
           const courses_insert =
