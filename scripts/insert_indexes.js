@@ -14,13 +14,13 @@ export default async function main() {
 
     const indexes_collection = getCollection('Index')
 
-    const FCA = indexes_collection.insertOne({
+    const FCA = await indexes_collection.insertOne({
       unit: 'FCA',
       values: [
         { from: '2024-07-30T21:51:31.986+00:00', to: null, price: 4500 },
       ],
     })
-    const FMR = indexes_collection.insertOne({
+    const FMR = await indexes_collection.insertOne({
       unit: 'FCA',
       values: [
         { from: '2024-07-30T21:51:31.986+00:00', to: null, price: 4500 },
