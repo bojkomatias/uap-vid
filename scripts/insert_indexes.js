@@ -12,6 +12,8 @@ export default async function main() {
   try {
     await client.connect()
 
+    const indexes_collection = getCollection('Index')
+
     const FCA = indexes_collection.insertOne({
       unit: 'FCA',
       values: [
