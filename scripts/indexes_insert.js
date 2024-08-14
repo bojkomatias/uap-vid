@@ -15,6 +15,8 @@ export default async function main() {
 
     const indexes_collection = getCollection('Index')
 
+    await indexes_collection.deleteMany({})
+
     const now = new Date() // Current date and time
 
     const FCA = await indexes_collection.insertOne({
