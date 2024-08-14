@@ -1,5 +1,11 @@
 import mongodb from 'mongodb'
 import 'dotenv/config'
+import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes'
+import AcademicUnitProtocolRelation from './academic-unit-protocol-relation'
+import AnualBudgetToIndexes from './anual-budget-to-indexes'
+import BudgetExpensesToIndexes from './budget-expenses-to-indexes'
+import ProtocolCareerRelation from './protocol-career-relation'
+import TeamMemberCategoryToIndexes from './team-member-category-to-indexes'
 
 const MongoClient = mongodb.MongoClient
 const uri = process.env.MONGO_URI
@@ -12,15 +18,12 @@ console.log(uri)
  */
 async function main() {
   try {
-    // await client.connect()
-    // console.log('Connected successfully to server')
-    // const acCollection = client.db('develop').collection('AcademicUnit')
-    // const academic_units = await acCollection.find().toArray()
-    // const acs_dictionary = academic_units.reduce((acc, ac) => {
-    //   acc[ac.shortname] = ac._id
-    //   return acc
-    // }, {})
-    // console.log(academic_units)
+    await AcademicUnitBudgetsToIndexes()
+    await AcademicUnitProtocolRelation()
+    await AnualBudgetToIndexes()
+    await BudgetExpensesToIndexes()
+    await ProtocolCareerRelation()
+    await TeamMemberCategoryToIndexes()
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
