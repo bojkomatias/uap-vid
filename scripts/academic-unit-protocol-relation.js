@@ -14,14 +14,14 @@ export default async function main() {
     await client.connect()
     console.log('Connected successfully to server')
 
-    const acCollection = client.db('develop').collection('AcademicUnit')
+    const acCollection = client.db('main').collection('AcademicUnit')
     const academic_units = await acCollection.find().toArray()
     const acs_dictionary = academic_units.reduce((acc, ac) => {
       acc[ac.shortname] = ac._id
       return acc
     }, {})
 
-    const protocolCollection = client.db('develop').collection('Protocol')
+    const protocolCollection = client.db('main').collection('Protocol')
     const protocols = await protocolCollection.find().toArray()
 
     const protocolsForMongo = protocols.map((p) => {

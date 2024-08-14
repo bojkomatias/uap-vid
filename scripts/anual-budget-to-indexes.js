@@ -6,7 +6,7 @@ const uri = process.env.MONGO_URI
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
-function getCollection(collection, db = 'develop') {
+function getCollection(collection, db = 'main') {
   return client.db(db).collection(collection)
 }
 
