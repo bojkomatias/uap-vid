@@ -1,8 +1,7 @@
 import mongodb from 'mongodb'
 import { ObjectId } from 'mongodb'
-import sensitive from "./sensitive.json" assert {type: "json"}
-
-const uri = sensitive.mongo_uri
+import 'dotenv/config'
+const uri = process.env.MONGO_URI
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
@@ -12,7 +11,7 @@ function getCollection(collection, db = 'develop') {
 /**This script adds the amountIndex field in the Category collection.
  -Needs a little refactoring.
  */
-async function main() {
+export default async function main() {
   try {
     await client.connect()
     console.log('Connected successfully to MongoDB')

@@ -1,12 +1,11 @@
 import mongodb from 'mongodb'
 import { ObjectId } from 'mongodb'
-import sensitive from './sensitive.json' assert { type: 'json' }
-
-const uri = sensitive.mongo_uri
+import 'dotenv/config'
+const uri = process.env.MONGO_URI
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
-export const rawQuestions = [
+export default export const rawQuestions = [
   {
     id: '0',
     active: false,
