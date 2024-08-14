@@ -1,11 +1,12 @@
 import mongodb from 'mongodb'
 import 'dotenv/config'
-import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes'
-import AcademicUnitProtocolRelation from './academic-unit-protocol-relation'
-import AnualBudgetToIndexes from './anual-budget-to-indexes'
-import BudgetExpensesToIndexes from './budget-expenses-to-indexes'
-import ProtocolCareerRelation from './protocol-career-relation'
-import TeamMemberCategoryToIndexes from './team-member-category-to-indexes'
+import InsertIndexes from './insert_indexes.js'
+import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes.js'
+import AcademicUnitProtocolRelation from './academic-unit-protocol-relation.js'
+import AnualBudgetToIndexes from './anual-budget-to-indexes.js'
+import BudgetExpensesToIndexes from './budget-expenses-to-indexes.js'
+import ProtocolCareerRelation from './protocol-career-relation.js'
+import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
 
 const MongoClient = mongodb.MongoClient
 const uri = process.env.MONGO_URI
@@ -18,6 +19,7 @@ console.log(uri)
  */
 async function main() {
   try {
+    await InsertIndexes()
     await AcademicUnitBudgetsToIndexes()
     await AcademicUnitProtocolRelation()
     await AnualBudgetToIndexes()
