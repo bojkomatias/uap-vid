@@ -21,14 +21,41 @@ console.log(uri)
  */
 async function main() {
   try {
+    console.log('🚀🚀🚀 PREPARING FOR LIFTOFF: INSERTING INDEXES! 🚀🚀🚀')
     await InsertIndexes()
+
+    console.log('💼💼💼 CAREER DAY INCOMING: INSERTING CAREERS! 💼💼💼')
     await CareersInsert()
+
+    console.log("📧📧📧 YOU'VE GOT MAIL: INSERTING EMAILS! 📧📧📧")
     await EmailsInsert()
+
+    console.log(
+      '🎓💰🎓 ACADEMIC BUDGETING 101: INDEXING ACADEMIC UNIT BUDGETS! 🎓💰🎓'
+    )
     await AcademicUnitBudgetsToIndexes()
+
+    console.log(
+      '🤝🤝🤝 DIPLOMATIC MISSION: ESTABLISHING ACADEMIC UNIT PROTOCOL RELATION! 🤝🤝🤝'
+    )
     await AcademicUnitProtocolRelation()
+
+    console.log('💸💸💸 SHOW ME THE MONEY: INDEXING ANNUAL BUDGET! 💸💸💸')
     await AnualBudgetToIndexes()
+
+    console.log(
+      '💳💳💳 EXPENSE REPORT EXTRAVAGANZA: INDEXING BUDGET EXPENSES! 💳💳💳'
+    )
     await BudgetExpensesToIndexes()
+
+    console.log(
+      '📜👔📜 CAREER PROTOCOL INITIATED: SETTING PROTOCOL CAREER RELATION! 📜👔📜'
+    )
     await ProtocolCareerRelation()
+
+    console.log(
+      '👥🏆👥 TEAM BUILDING EXERCISE: INDEXING TEAM MEMBER CATEGORIES! 👥🏆👥'
+    )
     await TeamMemberCategoryToIndexes()
   } catch (error) {
     console.error('An error occurred:', error)
