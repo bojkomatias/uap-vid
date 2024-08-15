@@ -11,19 +11,27 @@ RUN corepack enable pnpm
 
 # Copy package.json and install dependencies
 COPY package.json ./
+
+# Create the node_modules directory and set permissions
+RUN mkdir -p /app/node_modules && chown -R node:node /app
+
+# Switch to non-root user
+USER node
+
 RUN pnpm install
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --chown=node:node . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+USER node
 RUN corepack enable pnpm && pnpm run build
 
 # Production image, copy all the files and run next
@@ -43,7 +51,6 @@ COPY --from=builder /app/public ./public
 USER root
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
-USER nextjs
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
@@ -58,4 +65,4 @@ ENV PORT 3000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["node", "server.js"]
