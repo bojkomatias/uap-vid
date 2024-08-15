@@ -1,8 +1,10 @@
-version: "3"
+version: '3'
 services:
   web-socket:
     image: uapsocket
     restart: always
+    ports:
+      - '3001:3001'
     build:
       context: ./backend
       dockerfile: Dockerfile
