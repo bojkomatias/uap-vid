@@ -16,53 +16,34 @@ const uri = process.env.MONGO_URI
 
 console.log(uri)
 
+function sleep(ms) {
+  console.log(
+    '🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒'
+  )
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 /**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
  -Needs a little refactoring.
  */
 async function main() {
-  try {
-    console.log('🚀🚀🚀 PREPARING FOR LIFTOFF: INSERTING INDEXES! 🚀🚀🚀')
-    await InsertIndexes()
-
-    console.log('💼💼💼 CAREER DAY INCOMING: INSERTING CAREERS! 💼💼💼')
-    await CareersInsert()
-
-    console.log("📧📧📧 YOU'VE GOT MAIL: INSERTING EMAILS! 📧📧📧")
-    await EmailsInsert()
-
-    console.log(
-      '🎓💰🎓 ACADEMIC BUDGETING 101: INDEXING ACADEMIC UNIT BUDGETS! 🎓💰🎓'
-    )
-    await AcademicUnitBudgetsToIndexes()
-
-    console.log(
-      '🤝🤝🤝 DIPLOMATIC MISSION: ESTABLISHING ACADEMIC UNIT PROTOCOL RELATION! 🤝🤝🤝'
-    )
-    await AcademicUnitProtocolRelation()
-
-    console.log('💸💸💸 SHOW ME THE MONEY: INDEXING ANNUAL BUDGET! 💸💸💸')
-    await AnualBudgetToIndexes()
-
-    console.log(
-      '💳💳💳 EXPENSE REPORT EXTRAVAGANZA: INDEXING BUDGET EXPENSES! 💳💳💳'
-    )
-    await BudgetExpensesToIndexes()
-
-    console.log(
-      '📜👔📜 CAREER PROTOCOL INITIATED: SETTING PROTOCOL CAREER RELATION! 📜👔📜'
-    )
-    await ProtocolCareerRelation()
-
-    console.log(
-      '👥🏆👥 TEAM BUILDING EXERCISE: INDEXING TEAM MEMBER CATEGORIES! 👥🏆👥'
-    )
-    await TeamMemberCategoryToIndexes()
-  } catch (error) {
-    console.error('An error occurred:', error)
-  } finally {
-    //await client.close()
-    console.log('Connection closed')
-  }
+  await InsertIndexes()
+  await sleep(2000)
+  await CareersInsert()
+  await sleep(2000)
+  await EmailsInsert()
+  await sleep(2000)
+  await AcademicUnitBudgetsToIndexes()
+  await sleep(2000)
+  await AcademicUnitProtocolRelation()
+  await sleep(2000)
+  await AnualBudgetToIndexes()
+  await sleep(2000)
+  await BudgetExpensesToIndexes()
+  await sleep(2000)
+  await ProtocolCareerRelation()
+  await sleep(2000)
+  await TeamMemberCategoryToIndexes()
 }
 
-main()
+await main()
