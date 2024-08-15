@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web-socket:
+    image: uapsocket
+    restart: always
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    networks:
+      - node-next
+
+networks:
+  node-next:
+  exposed-services:
+    external: true
