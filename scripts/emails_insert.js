@@ -56,7 +56,7 @@ export default async function main() {
 
     for (const email of emails) {
       try {
-        const email_insert = await emails_collection.insertOne({ email })
+        const email_insert = await emails_collection.insertOne({ ...email })
         console.log('Inserted email', email_insert)
       } catch (e) {
         console.log('Error occured while inserting email', e)
