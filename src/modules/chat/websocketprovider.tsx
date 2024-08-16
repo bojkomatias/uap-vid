@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect } from 'react'
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import { useQueryClient } from '@tanstack/react-query'
-import { ChatMessage } from '@prisma/client'
+import type { ChatMessage } from '@prisma/client'
 
 interface ChatMessagesContextType {
   sendMessage: (content: string) => void
