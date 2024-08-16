@@ -68,7 +68,7 @@ wss.on('connection', (ws, req) => {
   })
 })
 
-const port = 443 // Standard HTTPS port
+const port = 3001
 server.listen(port, () => {
   console.log(`Secure WebSocket server is running on port ${port}`)
 })
