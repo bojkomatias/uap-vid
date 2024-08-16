@@ -3,8 +3,8 @@ const https = require('https')
 const fs = require('fs')
 
 const options = {
-  cert: fs.readFileSync('/app/certs/wildcard.uap.edu.ar.crt'),
-  key: fs.readFileSync('/app/certs/wildcard.uap.edu.ar.key'),
+  cert: fs.readFileSync('/app/certs/STAR_uap_edu_ar.crt'),
+  key: fs.readFileSync('/app/certs/uap.edu.ar.key'),
   ca: fs.readFileSync('/app/certs/CAbundle.crt'),
 }
 
