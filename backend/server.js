@@ -3,9 +3,9 @@ const https = require('https')
 const fs = require('fs')
 
 const options = {
-  cert: fs.readFileSync('/path/to/wildcard.uap.edu.ar.crt'),
-  key: fs.readFileSync('/path/to/wildcard.uap.edu.ar.key'),
-  ca: fs.readFileSync('/path/to/CAbundle.crt'),
+  cert: fs.readFileSync('/app/wildcard.uap.edu.ar.crt'),
+  key: fs.readFileSync('/app/wildcard.uap.edu.ar.key'),
+  ca: fs.readFileSync('/app/CAbundle.crt'),
 }
 
 const server = https.createServer(options)
