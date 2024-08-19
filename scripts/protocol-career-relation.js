@@ -5,7 +5,7 @@ const uri = process.env.MONGO_URI
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
-function getCollection(collection, db = 'main') {
+function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script adds the relation between Protocol and Career (adding careerId to Protocol).
@@ -30,33 +30,24 @@ export default async function main() {
         return acc
       }, {})
 
-      const updated_protocols = protocols.map((protocol) => {
-        return {
-          ...protocol,
-          sections: {
-            ...protocol.sections,
-            identification: {
-              ...protocol.sections.identification,
-              careerId:
-                career_id_dictionary[protocol.sections.identification.career],
-            },
-          },
-        }
-      })
+      const updated_protocols = protocols.map((protocol) => ({
+        protocol_id: protocol._id,
+        careerId: career_id_dictionary[protocol.sections.identification.career],
+      }))
 
       for (const protocol of updated_protocols) {
         try {
           const result = await protocol_collection.updateOne(
-            { _id: new ObjectId(protocol._id) },
+            { _id: new ObjectId(protocol.protocol_id) },
             {
               $set: {
-                'sections.identification': protocol.sections.identification,
+                'sections.identification.careerId': protocol.careerId,
               },
             }
           )
-          console.log(
-            `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
-          )
+          // console.log(
+          //   `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+          // )
         } catch (error) {
           console.error(`Error updating protocol ${protocol._id}:`, error)
         }

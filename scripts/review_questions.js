@@ -5,7 +5,7 @@ const uri = process.env.MONGO_URI
 const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
-function getCollection(collection, db = 'main') {
+function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script creates the current review questions and adds the relation between them and the Review model.

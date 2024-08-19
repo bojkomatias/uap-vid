@@ -2248,7 +2248,7 @@ const careers_and_courses = [
   },
 ]
 
-function getCollection(collection, db = 'main') {
+function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 
