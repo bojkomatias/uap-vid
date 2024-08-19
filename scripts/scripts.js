@@ -18,14 +18,12 @@ async function main() {
   await CareersInsert()
   await EmailsInsert()
 
-  setTimeout(async () => {
-    await AcademicUnitBudgetsToIndexes()
-    await AcademicUnitProtocolRelation()
-    await AnualBudgetToIndexes()
-    await BudgetExpensesToIndexes()
-    await ProtocolCareerRelation()
-    await TeamMemberCategoryToIndexes()
-  }, 1000)
+  await AcademicUnitBudgetsToIndexes()
+  await AcademicUnitProtocolRelation()
+  await AnualBudgetToIndexes()
+  await BudgetExpensesToIndexes()
+  await ProtocolCareerRelation()
+  await TeamMemberCategoryToIndexes()
 }
 
 await main()
