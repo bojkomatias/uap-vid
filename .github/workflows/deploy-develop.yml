@@ -20,7 +20,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ./uap-vid
-            git pull origin develop
+            rm -rf uap-vid
+            git clone https://github.com/bojkomatias/uap-vid.git
+            cd uap-vid
+            git checkout origin/develop
+            cp /home/nodo/apps/enviroments/uap-vid.env ./.env
             docker build -t uap:latest .
             docker-compose up -d --no-deps --force-recreate uap-research
