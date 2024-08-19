@@ -9,8 +9,6 @@ git checkout testing_environment
 cp /home/nodo/apps/enviroments/uap-vid.env ./.env
 cat .env
 
+# docker compose up with name uap 
+docker-compose up -d --no-deps --force-recreate uap-research
 
-#docker compose down�
-docker compose -f mongodb-compose.yml up
-
-#docker-compose -f uap-research-compose.yml up
