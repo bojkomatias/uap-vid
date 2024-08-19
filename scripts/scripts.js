@@ -10,12 +10,6 @@ import BudgetExpensesToIndexes from './budget-expenses-to-indexes.js'
 import ProtocolCareerRelation from './protocol-career-relation.js'
 import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
 
-const MongoClient = mongodb.MongoClient
-const uri = process.env.MONGO_URI
-//const client = new MongoClient(uri)
-
-console.log(uri)
-
 /**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
  -Needs a little refactoring.
  */
@@ -31,7 +25,7 @@ async function main() {
     await BudgetExpensesToIndexes()
     await ProtocolCareerRelation()
     await TeamMemberCategoryToIndexes()
-  }, 15000)
+  }, 1000)
 }
 
 await main()
