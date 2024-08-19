@@ -50,7 +50,7 @@ export const Researcher = ({
 
 const ResearcherData = ({ researcher }: ResearcherProps) => (
   <div className="flex items-center gap-1">
-    <User className="size-4" />
+    <User className="size-4 text-gray-600 dark:text-white" />
     <div className="-space-y-2">
       <Subheading>{researcher.name}</Subheading>
       <Text className="!text-xs/6">{researcher.email}</Text>
@@ -111,7 +111,7 @@ const ResearcherReassignation = ({
     <>
       <Button
         plain
-        className="mx-2 !px-1 !py-0 text-start"
+        className="!px-1 !py-0 text-start"
         onClick={() => {
           setIsOpen(true)
         }}
@@ -155,7 +155,7 @@ const ResearcherReassignation = ({
             >
               Cerrar
             </Button>
-            <FormButton enabled={!form.isDirty()} isLoading={isPending}>
+            <FormButton disabled={form.isDirty()} isLoading={isPending}>
               Cambiar investigador
             </FormButton>
           </DialogActions>

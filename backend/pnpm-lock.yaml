@@ -1,20 +1,17 @@
-lockfileVersion: '9.0'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
-
-  .:
-    dependencies:
-      ws:
-        specifier: ^8.18.0
-        version: 8.18.0
+dependencies:
+  ws:
+    specifier: ^8.18.0
+    version: 8.18.0
 
 packages:
 
-  ws@8.18.0:
+  /ws@8.18.0:
     resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -25,7 +22,4 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-
-snapshots:
-
-  ws@8.18.0: {}
+    dev: false

@@ -26,17 +26,20 @@ export const notifications = new Notifications()
 
 const intents = {
   success: {
-    background: 'after:bg-teal-500/10 dark:after:bg-teal-900/5',
+    background:
+      'after:bg-teal-500/5 after:border-teal-500/20 dark:after:border-teal-800/20 dark:after:bg-teal-800/10',
     text: 'text-teal-700',
     icon: <CircleCheck className="mt-0.5 size-6 shrink-0 stroke-teal-600" />,
   },
   error: {
-    background: 'after:bg-red-500/10 dark:after:bg-red-900/5',
+    background:
+      'after:bg-red-500/5 after:border-red-500/20 dark:after:border-red-800/20 dark:after:bg-red-800/10',
     text: 'text-red-700',
     icon: <CircleX className="mt-0.5 size-6 shrink-0 stroke-red-600" />,
   },
   info: {
-    background: 'after:bg-primary-500/10 dark:after:bg-transparent',
+    background:
+      'after:bg-primary-500/5 after:border-primary-500/20 dark:after:border-primary-800/20 dark:after:bg-primary-800/10',
     text: 'text-primary-950',
     icon: (
       <InfoCircle className="mt-0.5 size-6 shrink-0 stroke-primary-950 dark:stroke-primary-900" />
@@ -56,6 +59,11 @@ function Notification({ title, message, intent }: NotificationProps) {
 
   useEffect(() => {
     setTimeout(() => {
+      document
+        .getElementById('notification-timer')
+        ?.classList.add('-translate-x-full')
+    }, 100)
+    setTimeout(() => {
       closeNotification()
     }, duration_default)
   })
@@ -64,26 +72,27 @@ function Notification({ title, message, intent }: NotificationProps) {
     <div
       id={id}
       className={cx(
-        'fade-in-right fixed bottom-4 right-4 w-[22rem] rounded-lg bg-white px-4 py-3 shadow-lg dark:bg-gray-900 dark:shadow-none',
-        'after:absolute after:inset-0 after:z-10 after:rounded-lg after:border after:border-gray-200 after:dark:border-gray-800',
+        'fade-in-right fixed bottom-4 right-4 z-50 w-[24rem] rounded-md bg-white px-5 pb-4 pt-3 shadow-lg dark:bg-gray-800 dark:shadow-none',
+        'overflow-hidden after:absolute after:inset-0 after:z-10 after:rounded-md after:border',
         intents[intent].background
       )}
     >
-      <X
-        onClick={closeNotification}
-        className={cx(
-          'absolute -left-1.5 -top-1.5 z-20 size-[18px] cursor-pointer rounded-full border border-gray-200 bg-white stroke-gray-500 p-0.5 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:hover:bg-gray-700'
-        )}
-      />
       <div className="flex justify-between">
         <div>
-          <Subheading className={cx('mb-0.5', intents[intent].text)}>
+          <Subheading className={cx('!text-base/8', intents[intent].text)}>
             {title}
           </Subheading>
           <Text className="!text-xs/4">{message}</Text>
         </div>
         {intents[intent].icon}
       </div>
+      <div
+        id="notification-timer"
+        className={cx(
+          'absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-current transition-all duration-[4800ms] ease-linear',
+          intents[intent].text
+        )}
+      ></div>
     </div>
   )
 }

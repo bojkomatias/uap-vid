@@ -1,6 +1,11 @@
 'use client'
 
-import type { Prisma, ProtocolState, User } from '@prisma/client'
+import {
+  Role,
+  type Prisma,
+  type ProtocolState,
+  type User,
+} from '@prisma/client'
 import {
   ProtocolStatesColorDictionary,
   ProtocolStatesDictionary,
@@ -22,8 +27,6 @@ import {
   ReviewVerdictColorDictionary,
   ReviewVerdictDictionary,
 } from '@utils/dictionaries/ReviewVerdictsDictionary'
-import { Button } from '@components/button'
-import { notifications } from '@elements/notifications'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -319,8 +322,10 @@ export default function ProtocolTable({
     >
       <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
       <ConvocatoryFilter />
-      <AcademicUnitFilter academicUnits={academicUnits} />
       <StateFilter />
+      {user.role === Role.ADMIN || user.role === Role.SECRETARY ?
+        <AcademicUnitFilter academicUnits={academicUnits} />
+      : null}
     </TanStackTable>
   )
 }
@@ -393,6 +398,9 @@ function ConvocatoryFilter() {
         })
       }}
     >
+      <ListboxOption key={'null'} value={'null'}>
+        <ListboxLabel>Sin convocatoria</ListboxLabel>
+      </ListboxOption>
       {data?.map((e) => (
         <ListboxOption key={e.id} value={e.id}>
           <ListboxLabel>{e.name}</ListboxLabel>

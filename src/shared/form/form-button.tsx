@@ -5,14 +5,14 @@ import { Loader2 } from 'tabler-icons-react'
 export function FormButton({
   children,
   isLoading,
-  enabled,
+  disabled,
 }: {
   children: ReactNode
   isLoading?: boolean
-  enabled?: boolean
+  disabled?: boolean
 }) {
   return (
-    <Button className="relative" type="submit" disabled={enabled || isLoading}>
+    <Button className="relative" type="submit" disabled={disabled || isLoading}>
       <span className={isLoading ? 'opacity-0' : ''}>{children}</span>
       {isLoading && <Loader2 className="absolute animate-spin" />}
     </Button>

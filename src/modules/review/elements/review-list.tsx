@@ -24,14 +24,16 @@ export async function ReviewList({ id, role, isOwner }: ReviewStateProps) {
       </div>
       {reviews.some((r) => r.verdict !== ReviewVerdict.NOT_REVIEWED) ?
         <ul role="list" className="space-y-6">
-          {reviews.map((r, i) => (
-            <>
-              {i === 0 ?
-                <Divider />
-              : <Divider soft />}
-              <ReviewItem key={i} review={r} role={role} isOwner={isOwner} />
-            </>
-          ))}
+          {reviews
+            .filter((x) => x.verdict !== ReviewVerdict.NOT_REVIEWED)
+            .map((r, i) => (
+              <>
+                {i === 0 ?
+                  <Divider />
+                : <Divider soft />}
+                <ReviewItem key={i} review={r} role={role} isOwner={isOwner} />
+              </>
+            ))}
         </ul>
       : null}
     </div>

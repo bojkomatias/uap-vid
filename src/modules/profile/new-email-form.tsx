@@ -120,7 +120,7 @@ export function NewEmailForm({ id, email }: { id: string; email: string }) {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={!emailForm.isValid()}>Cambiar email</FormButton>
+        <FormButton disabled={!emailForm.isValid()}>Cambiar email</FormButton>
       </FormActions>
     </form>
   )

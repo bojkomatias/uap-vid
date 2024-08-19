@@ -1,7 +1,11 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import type { ProtocolFlag } from '@prisma/client'
+import type {
+  ProtocolFlag,
+  ProtocolSectionsIdentificationTeam,
+  TeamMember,
+} from '@prisma/client'
 import { type Protocol, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
@@ -43,7 +47,7 @@ const getProtocolMetadata = cache(
           select: { name: true, email: true, id: true, role: true },
         },
         sections: {
-          select: { identification: { select: { title: true } } },
+          select: { identification: { select: { title: true, team: true } } },
         },
       },
     })
@@ -176,6 +180,52 @@ const updateProtocolResearcher = async (id: string, researcherId: string) => {
   }
 }
 
+const updateProtocolTeamMembers = async (
+  id: string,
+  team: ProtocolSectionsIdentificationTeam[]
+) => {
+  try {
+    const currentProtocol = await prisma.protocol.findUnique({
+      where: { id },
+      select: { sections: true },
+    })
+
+    if (!currentProtocol) {
+      throw new Error('Protocol not found')
+    }
+
+    const updatedSections = {
+      ...currentProtocol.sections,
+      identification: {
+        ...currentProtocol.sections.identification,
+        team,
+      },
+    }
+
+    const result = await prisma.protocol.update({
+      where: { id },
+      data: {
+        sections: updatedSections,
+      },
+    })
+
+    return result.researcherId
+  } catch (e) {
+    console.error('Error updating protocol team members:', e)
+  }
+}
+
+const updateProtocolConvocatory = async (id: string, convocatory: string) => {
+  try {
+    return await prisma.protocol.update({
+      where: { id },
+      data: { convocatoryId: convocatory },
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 const upsertProtocolFlag = async (
   id: string,
   flag: Omit<ProtocolFlag, 'createdAt'>
@@ -276,6 +326,7 @@ const getProtocolsByRole = cache(
       order,
       state,
       unit,
+      convocatory,
     }: { [key: string]: string }
   ) => {
     if (!id) throw Error('No ID passed')
@@ -368,6 +419,11 @@ const getProtocolsByRole = cache(
         }
       : {}
 
+    const convocatoryFilter =
+      convocatory ?
+        { convocatoryId: convocatory === 'null' ? null : convocatory }
+      : {}
+
     const stateFilter = state ? { state: state as ProtocolState } : {}
 
     const acUnitFilter =
@@ -398,6 +454,7 @@ const getProtocolsByRole = cache(
                 // According to table features (search, filter)
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -414,6 +471,7 @@ const getProtocolsByRole = cache(
                 // According to table features (search, filter)
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -440,6 +498,7 @@ const getProtocolsByRole = cache(
                 // Table feature
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -467,6 +526,7 @@ const getProtocolsByRole = cache(
                 // Table feature
                 whereSearch,
                 stateFilter,
+                convocatoryFilter,
               ],
               NOT: { state: ProtocolState.DELETED },
             },
@@ -489,8 +549,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
@@ -502,6 +562,7 @@ const getProtocolsByRole = cache(
                 whereSearch,
                 stateFilter,
                 acUnitFilter,
+                convocatoryFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -525,8 +586,8 @@ const getProtocolsByRole = cache(
                         is: {
                           identification: {
                             is: {
-                              sponsor: {
-                                hasSome: academicUnits?.map((e) => e.name),
+                              academicUnitIds: {
+                                hasSome: academicUnits?.map((e) => e.id),
                               },
                             },
                           },
@@ -538,6 +599,7 @@ const getProtocolsByRole = cache(
                 whereSearch,
                 stateFilter,
                 acUnitFilter,
+                convocatoryFilter,
               ],
 
               NOT: { state: ProtocolState.DELETED },
@@ -549,7 +611,7 @@ const getProtocolsByRole = cache(
       return prisma.$transaction([
         prisma.protocol.count({
           where: {
-            AND: [whereSearch, stateFilter, acUnitFilter],
+            AND: [whereSearch, stateFilter, acUnitFilter, convocatoryFilter],
           },
         }),
         prisma.protocol.findMany({
@@ -557,7 +619,7 @@ const getProtocolsByRole = cache(
           take,
           select,
           where: {
-            AND: [whereSearch, stateFilter, acUnitFilter],
+            AND: [whereSearch, stateFilter, acUnitFilter, convocatoryFilter],
           },
           orderBy,
         }),
@@ -586,4 +648,6 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  updateProtocolTeamMembers,
+  updateProtocolConvocatory,
 }

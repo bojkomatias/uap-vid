@@ -8,17 +8,11 @@ import {
 } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
-import { UserSearch } from 'tabler-icons-react'
-import { Badge } from '@components/badge'
 import { canAccess, canExecute } from '@utils/scopes'
-import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
-import ReviewAssignSelect from '@review/elements/review-assign-select'
-import { Strong, Text } from '@components/text'
-import { Subheading } from '@components/heading'
-import { Dialog } from '@components/dialog'
+import { AssignEvaluatorSelector } from '@review/elements/review-assign-select'
 import { EvaluatorsDialog } from '@protocol/elements/open-evaluators-dialog'
 
 export default async function ReviewAssignation({
@@ -140,20 +134,19 @@ export default async function ReviewAssignation({
     return (
       <EvaluatorsDialog>
         <div className="print:hidden">
-          {reviewAssignSelectsData.map((data) => (
-            <div key={data.type} className="flex gap-2">
-              <Badge>{EvaluatorsByReviewType[data.type]}</Badge>
-              <Subheading>{data.review?.reviewer.name}</Subheading>
-
-              {data.enabled && (
-                <ReviewAssignSelect
-                  {...data}
+          {reviewAssignSelectsData.map(
+            (data) =>
+              data.enabled && (
+                <AssignEvaluatorSelector
+                  key={data.type}
+                  type={data.type}
+                  users={data.users}
+                  review={data.review}
                   protocolId={protocol.id}
                   protocolState={protocol.state}
                 />
-              )}
-            </div>
-          ))}
+              )
+          )}
         </div>
       </EvaluatorsDialog>
     )

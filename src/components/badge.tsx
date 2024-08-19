@@ -6,7 +6,7 @@ import { cx } from '@utils/cx'
 
 const colors = {
   light:
-    'bg-black/5 text-gray-700 group-data-[hover]:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:group-data-[hover]:bg-black/10',
+    'bg-black/5 text-gray-700 group-data-[hover]:bg-black/10 dark:bg-white/5 dark:text-gray-200 dark:group-data-[hover]:bg-black/10',
   red: 'bg-red-500/15 text-red-700 group-data-[hover]:bg-red-500/25 dark:bg-red-500/10 dark:text-red-400 dark:group-data-[hover]:bg-red-500/20',
   orange:
     'bg-orange-500/15 text-orange-700 group-data-[hover]:bg-orange-500/25 dark:bg-orange-500/10 dark:text-orange-400 dark:group-data-[hover]:bg-orange-500/20',
