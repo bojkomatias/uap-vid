@@ -14,53 +14,54 @@ function getCollection(collection, db = 'main') {
 
 export default async function main() {
   try {
-    await client.connect()
-    console.log(
-      'Connected successfully to the server || ProtocolCareerRelation'
-    )
+    await client.connect().then(async () => {
+      console.log(
+        'Connected successfully to the server || ProtocolCareerRelation'
+      )
 
-    const protocol_collection = getCollection('Protocol')
-    const protocols = await protocol_collection.find().toArray()
+      const protocol_collection = getCollection('Protocol')
+      const protocols = await protocol_collection.find().toArray()
 
-    const career_collection = getCollection('Career')
-    const careers = await career_collection.find().toArray()
+      const career_collection = getCollection('Career')
+      const careers = await career_collection.find().toArray()
 
-    const career_id_dictionary = careers.reduce((acc, ac) => {
-      acc[ac.name] = ac._id
-      return acc
-    }, {})
+      const career_id_dictionary = careers.reduce((acc, ac) => {
+        acc[ac.name] = ac._id
+        return acc
+      }, {})
 
-    const updated_protocols = protocols.map((protocol) => {
-      return {
-        ...protocol,
-        sections: {
-          ...protocol.sections,
-          identification: {
-            ...protocol.sections.identification,
-            careerId:
-              career_id_dictionary[protocol.sections.identification.career],
+      const updated_protocols = protocols.map((protocol) => {
+        return {
+          ...protocol,
+          sections: {
+            ...protocol.sections,
+            identification: {
+              ...protocol.sections.identification,
+              careerId:
+                career_id_dictionary[protocol.sections.identification.career],
+            },
           },
-        },
+        }
+      })
+
+      for (const protocol of updated_protocols) {
+        try {
+          const result = await protocol_collection.updateOne(
+            { _id: new ObjectId(protocol._id) },
+            {
+              $set: {
+                'sections.identification': protocol.sections.identification,
+              },
+            }
+          )
+          // console.log(
+          //   `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+          // )
+        } catch (error) {
+          console.error(`Error updating protocol ${protocol._id}:`, error)
+        }
       }
     })
-
-    for (const protocol of updated_protocols) {
-      try {
-        const result = await protocol_collection.updateOne(
-          { _id: new ObjectId(protocol._id) },
-          {
-            $set: {
-              'sections.identification': protocol.sections.identification,
-            },
-          }
-        )
-        // console.log(
-        //   `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
-        // )
-      } catch (error) {
-        console.error(`Error updating protocol ${protocol._id}:`, error)
-      }
-    }
   } catch (error) {
     console.error('An error occurred while updating protocols:', error)
   } finally {

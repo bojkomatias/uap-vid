@@ -13,54 +13,58 @@ function getCollection(collection, db = 'main') {
  */
 export default async function main() {
   try {
-    await client.connect()
-    console.log(
-      'Connected successfully to the server || TeamMemberCategoryToIndexes'
-    )
+    await client.connect().then(async () => {
+      console.log(
+        'Connected successfully to the server || TeamMemberCategoryToIndexes'
+      )
 
-    const indexes_collection = getCollection('Index')
-    const indexes = await indexes_collection.find().toArray()
-    const indexes_latest_values = indexes.map((idx) => {
-      return { unit: idx.unit, latest_value: idx.values.at(-1) }
-    })
+      const indexes_collection = getCollection('Index')
+      const indexes = await indexes_collection.find().toArray()
+      const indexes_latest_values = indexes.map((idx) => {
+        return { unit: idx.unit, latest_value: idx.values.at(-1) }
+      })
 
-    const latest_fca_price = indexes_latest_values.find((i) => i.unit === 'FCA')
-      .latest_value.price
-    const latest_fmr_price = indexes_latest_values.find((i) => i.unit === 'FMR')
-      .latest_value.price
+      const latest_fca_price = indexes_latest_values.find(
+        (i) => i.unit === 'FCA'
+      ).latest_value.price
+      const latest_fmr_price = indexes_latest_values.find(
+        (i) => i.unit === 'FMR'
+      ).latest_value.price
 
-    const team_member_category_collection = getCollection('TeamMemberCategory')
-    const team_member_categories = await team_member_category_collection
-      .find()
-      .toArray()
+      const team_member_category_collection =
+        getCollection('TeamMemberCategory')
+      const team_member_categories = await team_member_category_collection
+        .find()
+        .toArray()
 
-    const updatedCategories = team_member_categories.map((category) => {
-      delete category['category']
-      return {
-        ...category,
-        amountIndex: {
-          FCA: category.price.at(-1).price / latest_fca_price,
-          FMR: category.price.at(-1).price / latest_fmr_price,
-        },
+      const updatedCategories = team_member_categories.map((category) => {
+        delete category['category']
+        return {
+          ...category,
+          amountIndex: {
+            FCA: category.price.at(-1).price / latest_fca_price,
+            FMR: category.price.at(-1).price / latest_fmr_price,
+          },
+        }
+      })
+
+      for (const category of updatedCategories) {
+        try {
+          const result = await team_member_category_collection.replaceOne(
+            { _id: new ObjectId(category._id) },
+            category
+          )
+          console.log(
+            `Updated category ${category._id}: ${result.modifiedCount} document modified`
+          )
+        } catch (error) {
+          console.error(
+            `Error updating team member category ${category._id}:`,
+            error
+          )
+        }
       }
     })
-
-    for (const category of updatedCategories) {
-      try {
-        const result = await team_member_category_collection.replaceOne(
-          { _id: new ObjectId(category._id) },
-          category
-        )
-        console.log(
-          `Updated category ${category._id}: ${result.modifiedCount} document modified`
-        )
-      } catch (error) {
-        console.error(
-          `Error updating team member category ${category._id}:`,
-          error
-        )
-      }
-    }
   } catch (error) {
     console.error(
       'An error occurred while updating team member categories:',

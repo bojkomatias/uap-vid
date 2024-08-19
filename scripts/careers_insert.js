@@ -2254,41 +2254,42 @@ function getCollection(collection, db = 'main') {
 
 export default async function main() {
   try {
-    await client.connect()
-    console.log('Connected successfully to server || CareersInsert')
+    await client.connect().then(async () => {
+      console.log('Connected successfully to server || CareersInsert')
 
-    const careers_collection = getCollection('Career')
-    const courses_collection = getCollection('Course')
+      const careers_collection = getCollection('Career')
+      const courses_collection = getCollection('Course')
 
-    await careers_collection.deleteMany({})
-    await courses_collection.deleteMany({})
+      await careers_collection.deleteMany({})
+      await courses_collection.deleteMany({})
 
-    for (const career of careers_and_courses) {
-      try {
-        const inserted_career = async () => {
-          const career_insert = await careers_collection.insertOne({
-            name: career.career,
-            active: true,
-            academicUnitId: null,
-          })
-
-          const courses_to_insert = career.assignment.map((c) => {
-            return {
-              name: c,
-              careerId: new ObjectId(career_insert.insertedId),
+      for (const career of careers_and_courses) {
+        try {
+          const inserted_career = async () => {
+            const career_insert = await careers_collection.insertOne({
+              name: career.career,
               active: true,
-            }
-          })
+              academicUnitId: null,
+            })
 
-          const courses_insert =
-            await courses_collection.insertMany(courses_to_insert)
+            const courses_to_insert = career.assignment.map((c) => {
+              return {
+                name: c,
+                careerId: new ObjectId(career_insert.insertedId),
+                active: true,
+              }
+            })
+
+            const courses_insert =
+              await courses_collection.insertMany(courses_to_insert)
+          }
+
+          await inserted_career()
+        } catch (e) {
+          console.log('Error occured while inserting career', e)
         }
-
-        await inserted_career()
-      } catch (e) {
-        console.log('Error occured while inserting career', e)
       }
-    }
+    })
   } catch (error) {
     console.error(
       'An error occurred while inserting careers and courses:',
