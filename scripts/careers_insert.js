@@ -2282,13 +2282,6 @@ export default async function main() {
 
           const courses_insert =
             await courses_collection.insertMany(courses_to_insert)
-
-          console.log(
-            'Inserted career: ',
-            career_insert,
-            'Inserted course: ',
-            courses_insert
-          )
         }
 
         await inserted_career()
