@@ -1,4 +1,5 @@
 import View from '@protocol/protocol-view-template'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
 
@@ -10,5 +11,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect('/protocols')
   }
 
-  return <View sections={protocol.sections} />
+  return (
+    <>
+      <Link href={`/logs?protocolId=${params.id}`}>LOG</Link>
+      <View sections={protocol.sections} />
+    </>
+  )
 }
