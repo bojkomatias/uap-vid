@@ -55,6 +55,17 @@ sudo chown -R "$USERNAME":"$USERNAME" "$HOMEDIR"
 sudo chmod -R 755 "$HOMEDIR"
 echo "Write access to '$HOMEDIR' ensured for user '$USERNAME'."
 
+# Step 6: Add user to Docker group
+if ! groups "$USERNAME" | grep -q "docker"; then
+    sudo usermod -aG docker "$USERNAME"
+    echo "User '$USERNAME' added to Docker group."
+else
+    echo "User '$USERNAME' is already in the Docker group."
+fi
+
+# Step 7: Configure password-less sudo for Docker commands
+echo "$USERNAME ALL=(ALL) NOPASSWD: /usr/bin/docker" | sudo tee /etc/sudoers.d/$USERNAME-docker
+
 echo "Setup complete."
 
 # Print SSH private key for GitHub secrets
