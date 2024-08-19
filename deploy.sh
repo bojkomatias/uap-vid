@@ -15,4 +15,4 @@ docker build -t uap:latest .
 # docker-compose down
 
 # docker compose up with name uap 
-docker-compose up -d --name uap
+docker-compose up -d --no-deps --force-recreate uap-research
