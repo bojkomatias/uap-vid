@@ -14,8 +14,14 @@ export default async function main() {
       console.log('Connected successfully to server || IndexesInsert')
 
       const indexes_collection = getCollection('Index')
+      const chat_messages_collection = getCollection('ChatMessage')
 
       await indexes_collection.deleteMany({})
+      /*
+      Aprovecho este script para borrar los mensajes de chat para no tener que hacer otro archivo
+      Borro los mensajes porque la mayoría de las veces mandamos mensajes con los usuarios de prueba y al eliminarse (con el dump y restore de la BBDD) se pierde el ID, lo que provoca que la query de Prisma se rompa.
+      */
+      await chat_messages_collection.deleteMany({})
 
       const now = new Date() // Current date and time
 
