@@ -2255,7 +2255,7 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to server')
+    console.log('Connected successfully to server || CareersInsert')
 
     const careers_collection = getCollection('Career')
     const courses_collection = getCollection('Course')
@@ -2297,10 +2297,13 @@ export default async function main() {
       }
     }
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error(
+      'An error occurred while inserting careers and courses:',
+      error
+    )
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || CareersInsert')
   }
 }
 

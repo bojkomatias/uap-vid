@@ -15,7 +15,9 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to MongoDB')
+    console.log(
+      'Connected successfully to the server || BudgetExpensesToIndexes'
+    )
 
     const indexes_collection = getCollection('Index')
     const indexes = await indexes_collection.find().toArray()
@@ -74,10 +76,13 @@ export default async function main() {
       }
     }
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error(
+      'An error occurred while updating budget expenses in protocol:',
+      error
+    )
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || BudgetExpensesToIndexes')
   }
 }
 

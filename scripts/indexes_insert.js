@@ -11,7 +11,7 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to server')
+    console.log('Connected successfully to server || IndexesInsert')
 
     const indexes_collection = getCollection('Index')
 
@@ -29,12 +29,12 @@ export default async function main() {
       values: [{ from: now, to: null, price: 4500 }],
     })
 
-    console.log('Inserted documents:', FCA.insertedId, FMR.insertedId)
+    console.log('Inserted indexes:', FCA.insertedId, FMR.insertedId)
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error('An error occurred while inserting indexes:', error)
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || IndexesInsert')
   }
 }
 

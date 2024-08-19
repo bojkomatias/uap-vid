@@ -48,7 +48,7 @@ const emails = [
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to server')
+    console.log('Connected successfully to server || EmailsInsert')
 
     const emails_collection = getCollection('EmailContentTemplate')
 
@@ -63,10 +63,10 @@ export default async function main() {
       }
     }
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error('An error occurred while inserting emails:', error)
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || EmailsInsert')
   }
 }
 

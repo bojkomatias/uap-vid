@@ -12,7 +12,9 @@ const client = new MongoClient(uri)
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to server')
+    console.log(
+      'Connected successfully to server || AcademicUnitProtocolRelation'
+    )
 
     const acCollection = client.db('main').collection('AcademicUnit')
     const academic_units = await acCollection.find().toArray()
@@ -67,10 +69,10 @@ export default async function main() {
 
     console.log('Academic Units Dictionary:', acs_dictionary)
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error('An error occurred while updating protocols:', error)
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || AcademicUnitProtocolRelation')
   }
 }
 

@@ -15,7 +15,9 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to MongoDB')
+    console.log(
+      'Connected successfully to the server || ProtocolCareerRelation'
+    )
 
     const protocol_collection = getCollection('Protocol')
     const protocols = await protocol_collection.find().toArray()
@@ -60,10 +62,10 @@ export default async function main() {
       }
     }
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error('An error occurred while updating protocols:', error)
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || ProtocolCareerRelation')
   }
 }
 

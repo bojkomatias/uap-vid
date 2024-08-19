@@ -14,7 +14,9 @@ function getCollection(collection, db = 'main') {
 export default async function main() {
   try {
     await client.connect()
-    console.log('Connected successfully to MongoDB')
+    console.log(
+      'Connected successfully to the server || TeamMemberCategoryToIndexes'
+    )
 
     const indexes_collection = getCollection('Index')
     const indexes = await indexes_collection.find().toArray()
@@ -53,14 +55,20 @@ export default async function main() {
           `Updated category ${category._id}: ${result.modifiedCount} document modified`
         )
       } catch (error) {
-        console.error(`Error updating category ${category._id}:`, error)
+        console.error(
+          `Error updating team member category ${category._id}:`,
+          error
+        )
       }
     }
   } catch (error) {
-    console.error('An error occurred:', error)
+    console.error(
+      'An error occurred while updating team member categories:',
+      error
+    )
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || TeamMemberCategoryToIndexes')
   }
 }
 
