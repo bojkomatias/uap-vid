@@ -148,7 +148,9 @@ export const protocolToAnualBudgetPreview = async (
 
   const teamMembers =
     thereAreTeamMembers ?
-      await getTeamMembersByIds(ABT.map((t) => t.teamMemberId))
+      await getTeamMembersByIds(
+        ABT.map((t) => t.teamMemberId).filter((id) => id !== null) as string[]
+      )
     : []
 
   const ABTWithTeamMemberAndUserData = ABT.map((t) => {
@@ -192,8 +194,9 @@ export const saveNewTeamMemberExecution = async (
 
   const amountIndex = await transformAmountToAmountIndex(amount)
 
+  // In this cases team members will exist. Cannot have executions over plain categories.
   const hourlyRateInFCA =
-    anualBudgetTeamMember.teamMember.categories.at(-1)?.category.amountIndex
+    anualBudgetTeamMember.teamMember!.categories.at(-1)?.category.amountIndex
       ?.FCA || 0
 
   const amountExcecutedInHours =
@@ -202,7 +205,7 @@ export const saveNewTeamMemberExecution = async (
   const remainingHours =
     anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
-  if (!anualBudgetTeamMember.teamMember.academicUnitId) {
+  if (!anualBudgetTeamMember.teamMember!.academicUnitId) {
     return null
   }
 
@@ -210,7 +213,7 @@ export const saveNewTeamMemberExecution = async (
     anualBudgetTeamMemberId,
     amountIndex,
     remainingHours,
-    anualBudgetTeamMember.teamMember.academicUnitId
+    anualBudgetTeamMember.teamMember!.academicUnitId
   )
   return updated
 }
