@@ -16,34 +16,22 @@ const uri = process.env.MONGO_URI
 
 console.log(uri)
 
-function sleep(ms) {
-  console.log(
-    '🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒🕒'
-  )
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
 /**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
  -Needs a little refactoring.
  */
 async function main() {
   await InsertIndexes()
-  await sleep(2000)
   await CareersInsert()
-  await sleep(2000)
   await EmailsInsert()
-  await sleep(2000)
-  await AcademicUnitBudgetsToIndexes()
-  await sleep(2000)
-  await AcademicUnitProtocolRelation()
-  await sleep(2000)
-  await AnualBudgetToIndexes()
-  await sleep(2000)
-  await BudgetExpensesToIndexes()
-  await sleep(2000)
-  await ProtocolCareerRelation()
-  await sleep(2000)
-  await TeamMemberCategoryToIndexes()
+
+  setTimeout(async () => {
+    await AcademicUnitBudgetsToIndexes()
+    await AcademicUnitProtocolRelation()
+    await AnualBudgetToIndexes()
+    await BudgetExpensesToIndexes()
+    await ProtocolCareerRelation()
+    await TeamMemberCategoryToIndexes()
+  }, 1000)
 }
 
 await main()
