@@ -5,9 +5,6 @@ import { DialogTableIndex } from 'modules/indexes/dialog-index-table'
 import { IndexTable } from 'modules/indexes/index-table'
 import { UpdateIndexDialog } from 'modules/indexes/update-index-dialog'
 
-//Force it to be dynamic so it doesn't break the build in the Docker container
-export const dynamic = 'force-dynamic'
-
 export default async function IndexesPage() {
   const index = await getIndexByUnit('FMR')
   index.values.reverse()

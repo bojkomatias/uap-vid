@@ -3,9 +3,6 @@ import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import { Heading, Subheading } from '@components/heading'
 import { Text, TextLink } from '@components/text'
 
-//Force it to be dynamic so it doesn't break the build in the Docker container
-export const dynamic = 'force-dynamic'
-
 export default async function AnualBudgetsLayout({
   children,
 }: {
