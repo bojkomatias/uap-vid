@@ -31,7 +31,7 @@ async function main() {
     await BudgetExpensesToIndexes()
     await ProtocolCareerRelation()
     await TeamMemberCategoryToIndexes()
-  }, 1000)
+  }, 15000)
 }
 
 await main()
