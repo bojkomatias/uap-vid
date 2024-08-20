@@ -14,6 +14,8 @@ import { Text } from '@components/text'
 import { NewEmailForm } from 'modules/profile/new-email-form'
 import { NewPasswordForm } from 'modules/profile/new-password-form'
 import Clipboard from '@elements/clipboard'
+import { ReviewerCertificate } from 'modules/profile/reviewer-certificate'
+import { Role } from '@prisma/client'
 
 export default async function Page() {
   const session = await getServerSession(authOptions)
@@ -23,23 +25,27 @@ export default async function Page() {
 
   return (
     <>
-      <Heading>Cuenta</Heading>
-      <Subheading className="mb-4">
+      <Heading className="print:hidden">Cuenta</Heading>
+
+      <Subheading className="mb-4 print:hidden">
         Datos del usuario que se encuentra autenticado en el sistema.
       </Subheading>
+      {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
+        <ReviewerCertificate user={session.user} reviews={reviews} />
+      )}
       {user.image ?
         <Image
-          className="size-12 rounded-full"
+          className="size-12 rounded-full print:hidden"
           src={user.image}
           alt="Imagen del usuario"
           height={200}
           width={200}
         />
       : null}
-      <DescriptionList className="mt-4">
+      <DescriptionList className="mt-4 print:hidden">
         <DescriptionTerm>UUID</DescriptionTerm>
         <DescriptionDetails className="flex items-center gap-2">
-          <span className="font-mono text-xs">{user.id}</span>
+          <span className="font-mono text-xs ">{user.id}</span>
           <Clipboard content={user.id} />
         </DescriptionDetails>
         <DescriptionTerm>Nombre</DescriptionTerm>
@@ -52,9 +58,9 @@ export default async function Page() {
         <DescriptionDetails>{RolesDictionary[user.role]}</DescriptionDetails>
       </DescriptionList>
 
-      <Heading className="mt-8">Editar cuenta</Heading>
+      <Heading className="mt-8 print:hidden">Editar cuenta</Heading>
       {!user.password ?
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between print:hidden">
           <Text className="max-w-3xl">
             La cuenta esta relacionada directamente al a cuenta de Microsoft
             Office. Si desea editar algún dato, debe hacerlo desde Microsoft y
@@ -82,16 +88,11 @@ export default async function Page() {
             />
           </Button>
         </div>
-      : <>
+      : <div className="print:hidden">
           <NewEmailForm id={user.id} email={user.email} />
           <NewPasswordForm id={user.id} password={user.password} />
-        </>
+        </div>
       }
-
-      {/*  Since not all users do evaluations/reviews, I'm checking for the user role before loading the component, therefore, improving the load time of the page. */}
-      {/* {(user.role == Role.SCIENTIST || user.role == Role.METHODOLOGIST) && (
-        <ReviewerCertificatePDF user={session.user} reviews={reviews} />
-      )} */}
     </>
   )
 }

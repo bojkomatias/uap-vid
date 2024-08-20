@@ -1,7 +1,12 @@
 'use server'
 
 import { prisma } from '../utils/bd'
-import type { Action, ProtocolFlag } from '@prisma/client'
+import type {
+  Action,
+  ProtocolFlag,
+  ProtocolSectionsIdentificationTeam,
+  TeamMember,
+} from '@prisma/client'
 import { type Protocol, ProtocolState } from '@prisma/client'
 import { cache } from 'react'
 import { getAcademicUnitsByUserId } from './academic-unit'
@@ -45,7 +50,7 @@ const getProtocolMetadata = cache(
           select: { name: true, email: true, id: true, role: true },
         },
         sections: {
-          select: { identification: { select: { title: true } } },
+          select: { identification: { select: { title: true, team: true } } },
         },
       },
     })
@@ -180,6 +185,41 @@ const updateProtocolResearcher = async (id: string, researcherId: string) => {
     return result.researcherId
   } catch (e) {
     return null
+  }
+}
+
+const updateProtocolTeamMembers = async (
+  id: string,
+  team: ProtocolSectionsIdentificationTeam[]
+) => {
+  try {
+    const currentProtocol = await prisma.protocol.findUnique({
+      where: { id },
+      select: { sections: true },
+    })
+
+    if (!currentProtocol) {
+      throw new Error('Protocol not found')
+    }
+
+    const updatedSections = {
+      ...currentProtocol.sections,
+      identification: {
+        ...currentProtocol.sections.identification,
+        team,
+      },
+    }
+
+    const result = await prisma.protocol.update({
+      where: { id },
+      data: {
+        sections: updatedSections,
+      },
+    })
+
+    return result.researcherId
+  } catch (e) {
+    console.error('Error updating protocol team members:', e)
   }
 }
 
@@ -616,5 +656,6 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  updateProtocolTeamMembers,
   updateProtocolConvocatory,
 }

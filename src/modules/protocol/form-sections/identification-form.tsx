@@ -70,7 +70,7 @@ export function IdentificationForm() {
               !form.getInputProps('sections.identification.careerId').value ||
               courses.length === 0
             }
-            options={courses.map((e) => ({ value: e.id, label: e.name }))}
+            options={courses.map((e) => ({ value: e.id, label: e.name })) ?? []}
             {...form.getInputProps('sections.identification.courseId')}
           />
           <TeamInfo />

@@ -78,6 +78,9 @@ export const assignReviewerToProtocol = async (
         protocolState,
         newStateByReviewType[type],
         review.reviewerId
+        session!.user.id
+
+
       )
     }
 

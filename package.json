@@ -10,7 +10,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@mantine/form": "^7.11.2",
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "^5.18.0",
     "@tabler/icons": "^2.47.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
@@ -29,12 +29,10 @@
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.7",
     "jotai": "^2.9.0",
-    "ldrs": "^1.0.2",
     "mongodb": "^6.8.0",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
     "nodemailer": "^6.9.14",
-    "pnpm": "^9.5.0",
     "react": "^18.3.1",
     "react-csv": "^2.2.2",
     "react-dom": "^18.3.1",
@@ -57,10 +55,8 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "prisma": "^5.17.0",
+    "prisma": "^5.18.0",
     "tailwindcss": "^3.4.6",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.3",
-    "zod-prisma-types": "^2.8.1"
+    "typescript": "^5.5.3"
   }
 }

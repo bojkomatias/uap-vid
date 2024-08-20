@@ -27,7 +27,6 @@ import {
   ReviewVerdictColorDictionary,
   ReviewVerdictDictionary,
 } from '@utils/dictionaries/ReviewVerdictsDictionary'
-import Link from 'next/link'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
