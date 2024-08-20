@@ -30,12 +30,12 @@ export default async function main() {
         (i) => i.unit === 'FMR'
       ).latest_value.price
 
-      const ac_units_collection = getCollection('AcademicUnit')
-      const ac_units = await ac_units_collection.find().toArray()
+      const academic_units_collection = getCollection('AcademicUnit')
+      const academic_units = await academic_units_collection.find().toArray()
 
-      const updated_ac_units = ac_units.map((ac_unit) => {
+      const updated_academic_units_budgets = academic_units.map((ac_unit) => {
         return {
-          ...ac_unit,
+          academic_unit_id: ac_unit._id,
           budgets: ac_unit.budgets?.map((budget) => {
             return {
               ...budget,
@@ -48,17 +48,24 @@ export default async function main() {
         }
       })
 
-      for (const ac_unit of updated_ac_units) {
+      for (const academic_unit_budget of updated_academic_units_budgets) {
         try {
-          const result = await ac_units_collection.replaceOne(
-            { _id: new ObjectId(ac_unit._id) },
-            ac_unit
+          const result = await academic_units_collection.updateOne(
+            { _id: new ObjectId(academic_unit_budget.academic_unit_id) },
+            {
+              $set: {
+                budgets: academic_unit_budget,
+              },
+            }
           )
           console.log(
-            `Updated academic unit ${ac_unit._id}: ${result.modifiedCount} document modified`
+            `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified`
           )
         } catch (error) {
-          console.error(`Error updating academic unit ${ac_unit._id}:`, error)
+          console.error(
+            `Error updating academic unit ${academic_unit._id}:`,
+            error
+          )
         }
       }
     })
