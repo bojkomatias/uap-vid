@@ -15,9 +15,16 @@ const logEvent = async (data: Omit<Logs, 'id' | 'createdAt'>) => {
   }
 }
 
-const getLogs = cache(async () => {
+const getLogs = cache(async (search: { [key: string]: string }) => {
   try {
-    return await prisma.logs.findMany()
+    return await prisma.logs.findMany({
+      where: search,
+      select: {
+        user: { select: { name: true } },
+        reviewer: { select: { name: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
   } catch (e) {
     return null
   }

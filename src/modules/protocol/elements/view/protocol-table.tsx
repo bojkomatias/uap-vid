@@ -27,6 +27,7 @@ import {
   ReviewVerdictColorDictionary,
   ReviewVerdictDictionary,
 } from '@utils/dictionaries/ReviewVerdictsDictionary'
+import Link from 'next/link'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -94,9 +95,7 @@ export default function ProtocolTable({
       {
         accessorKey: 'id',
         header: 'ID',
-        cell: ({ row }) => (
-          <span className="text-xs text-gray-600">{row.original.id}</span>
-        ),
+        cell: ({ row }) => <Badge>{row.original.id}</Badge>,
       },
       {
         accessorKey: 'createdAt',

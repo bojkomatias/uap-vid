@@ -11,10 +11,5 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect('/protocols')
   }
 
-  return (
-    <>
-      <Link href={`/logs?protocolId=${params.id}`}>LOG</Link>
-      <View sections={protocol.sections} />
-    </>
-  )
+  return <View sections={protocol.sections} />
 }

@@ -145,7 +145,7 @@ const updateProtocolStateById = async (
       previousState,
       message: null,
       budgetId: null,
-      reviewerId: null,
+      reviewerId: reviewerId ?? null,
     })
 
     return {

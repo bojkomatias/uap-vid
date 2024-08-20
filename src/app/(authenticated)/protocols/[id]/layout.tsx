@@ -20,6 +20,7 @@ import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import { ReviewDisclose } from '@review/review-disclose'
 import OpenFlagsDialog from '@protocol/elements/flags/open-flags-dialog-button'
+import { Link } from '@components/link'
 
 export default async function Layout({
   params,
@@ -101,6 +102,7 @@ export default async function Layout({
           actions={actions}
           evaluators={evaluators}
         />
+        <Link href={`/logs?protocolId=${params.id}`}>LOGS</Link>
 
         <div className="h-[98svh] xl:relative">
           <ContainerAnimations
