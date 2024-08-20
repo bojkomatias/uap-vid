@@ -29,6 +29,7 @@ import {
   Trash,
   FileDownload,
   HandStop,
+  FileSpreadsheet,
 } from 'tabler-icons-react'
 import { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
@@ -44,6 +45,7 @@ type ActionOption = {
 export function ActionsDropdown({
   actions,
   protocol,
+  canViewLogs,
 }: {
   actions: Action[]
   protocol: Prisma.ProtocolGetPayload<{
@@ -55,6 +57,7 @@ export function ActionsDropdown({
       }
     }
   }>
+  canViewLogs?: boolean
 }) {
   const router = useRouter()
   const [isPending, startTranstion] = useTransition()
@@ -261,6 +264,12 @@ export function ActionsDropdown({
               <DropdownLabel>Presupuesto {budget.year}</DropdownLabel>
             </DropdownItem>
           ))
+        : null}
+        {canViewLogs ?
+          <DropdownItem href={`/logs?protocolId=${protocol.id}`}>
+            <FileSpreadsheet data-slot="icon" />
+            <DropdownLabel>Ver logs / registros</DropdownLabel>
+          </DropdownItem>
         : null}
         <DropdownItem
           onClick={() => {

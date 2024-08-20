@@ -102,7 +102,6 @@ export default async function Layout({
           actions={actions}
           evaluators={evaluators}
         />
-        <Link href={`/logs?protocolId=${params.id}`}>LOGS</Link>
 
         <div className="h-[98svh] xl:relative">
           <ContainerAnimations

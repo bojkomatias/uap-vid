@@ -35,5 +35,11 @@ export default async function ActionsPage({
       actions.filter((e) => e !== 'ACCEPT')
   }
 
-  return <ActionsDropdown actions={actions} protocol={protocol} />
+  return (
+    <ActionsDropdown
+      actions={actions}
+      protocol={protocol}
+      canViewLogs={session.user.role === 'ADMIN'}
+    />
+  )
 }

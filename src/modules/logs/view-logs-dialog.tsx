@@ -1,6 +1,6 @@
 'use client'
 
-import { Action, Logs } from '@prisma/client'
+import { Action, type Prisma } from '@prisma/client'
 import { Button } from '@components/button'
 import {
   Dialog,
@@ -17,9 +17,16 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { dateFormatter } from '@utils/formatters'
-import { Text, TextLink } from '@components/text'
+import { Strong, Text, TextLink } from '@components/text'
 
-export function ViewLogsDialog({ logs }: { logs: Logs[] | null }) {
+type Log = Prisma.LogsGetPayload<{
+  include: {
+    user: { select: { name: true } }
+    reviewer: { select: { name: true } }
+  }
+}>
+
+export function ViewLogsDialog({ logs }: { logs: Log[] | null }) {
   const router = useRouter()
   const [open, setOpen] = useState(() => true)
 
@@ -31,9 +38,9 @@ export function ViewLogsDialog({ logs }: { logs: Logs[] | null }) {
     <Dialog open={open} onClose={closeDialog}>
       <DialogTitle>Lista de logs</DialogTitle>
       <DialogDescription>Viendo los logs filtrados por: </DialogDescription>
-      <DialogBody>
+      <DialogBody className="space-y-4">
         {!logs ?
-          'No se encontraron logs'
+          <Text>No se encontraron logs</Text>
         : logs.map((log) => (
             <div key={log.id}>
               <LogCard log={log} />
@@ -50,26 +57,41 @@ export function ViewLogsDialog({ logs }: { logs: Logs[] | null }) {
   )
 }
 
-function LogCard({ log }: { log: Logs }) {
+function LogCard({ log }: { log: Log }) {
   return (
-    <DescriptionList>
-      <DescriptionTerm>{dateFormatter.format(log.createdAt)}</DescriptionTerm>
-      <DescriptionDetails>
-        {log.message ?
-          log.message
-        : <>
-            <Text>
-              El <TextLink href={`/users/${log.userId}`}>usuario</TextLink>
-            </Text>
-          </>
-        }
-      </DescriptionDetails>
-    </DescriptionList>
+    <>
+      <Text className="ml-1 !text-xs">
+        {dateFormatter.format(log.createdAt)}
+      </Text>
+
+      {log.action ?
+        <Text>
+          <Strong>{log.user.name}</Strong> {logActionToText(log.action)}
+        </Text>
+      : <Text>{log.message}</Text>}
+    </>
   )
 }
 
-// El usuario (link to user)
-
-const logActionMessage = (action: Action) => {
-  return
+const logActionToText = (action: Action, interpolated?: string) => {
+  if (action === Action.PUBLISH) return 'ha publicado el proyecto'
+  if (action === Action.ASSIGN_TO_METHODOLOGIST)
+    return (
+      <>
+        ha asignado a <Strong>{interpolated}</Strong> como metodólogo
+      </>
+    )
+  if (action === Action.ASSIGN_TO_SCIENTIFIC)
+    return (
+      <>
+        ha asignado a <Strong>{interpolated}</Strong> como investigador
+      </>
+    )
+  if (action === Action.ACCEPT)
+    return 'ha marcado el proyecto como aceptado por los evaluadores'
+  if (action === Action.APPROVE) return 'ha puesto en curso el proyecto'
+  if (action === Action.FINISH) return 'ha marcado el proyecto como finalizado'
+  if (action === Action.DISCONTINUE)
+    return 'ha marcado el proyecto como discontinuado'
+  if (action === Action.DELETE) return 'ha borrado el proyecto'
 }

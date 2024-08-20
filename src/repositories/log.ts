@@ -19,7 +19,7 @@ const getLogs = cache(async (search: { [key: string]: string }) => {
   try {
     return await prisma.logs.findMany({
       where: search,
-      select: {
+      include: {
         user: { select: { name: true } },
         reviewer: { select: { name: true } },
       },
