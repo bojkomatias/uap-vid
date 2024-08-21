@@ -35,44 +35,37 @@ export default async function main() {
       const protocols_collection = getCollection('Protocol')
       const protocols = await protocols_collection.find().toArray()
 
-      const updatedProtocols = protocols.map((protocol) => {
-        return {
-          ...protocol,
-          sections: {
-            ...protocol.sections,
-            budget: protocol.sections.budget.expenses.map((expense) => {
-              return {
-                ...expense,
-                data: expense.data.map((data) => {
-                  return {
-                    ...data,
-                    amountIndex: {
-                      FCA: data.amount / latest_fca_price,
-                      FMR: data.amount / latest_fmr_price,
-                    },
-                  }
-                }),
-              }
-            }),
-          },
-        }
-      })
+      const updatedProtocols = protocols.map((protocol) => ({
+        protocol_id: protocol._id,
+        budget: protocol.sections.budget.expenses.map((expense) => ({
+          ...expense,
+          data: expense.data.map(({ amount, ...data }) => {
+            return {
+              ...data,
+              amountIndex: {
+                FCA: amount / latest_fca_price,
+                FMR: amount / latest_fmr_price,
+              },
+            }
+          }),
+        })),
+      }))
 
       console.log(updatedProtocols[0].sections.budget[2].data[0])
 
       for (const protocol of updatedProtocols) {
         try {
           const result = await protocols_collection.updateOne(
-            { _id: new ObjectId(protocol._id) },
+            { _id: new ObjectId(protocol.protocol_id) },
             {
               $set: {
                 'sections.budget.expenses': protocol.sections.budget,
               },
             }
           )
-          // console.log(
-          //   `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
-          // )
+          console.log(
+            `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+          )
         } catch (error) {
           console.error(`Error updating protocol ${protocol._id}:`, error)
         }

@@ -1,6 +1,6 @@
 import mongodb from 'mongodb'
 import 'dotenv/config'
-import InsertIndexes from './indexes_insert.js'
+import IndexesInsert from './indexes_insert.js'
 import CareersInsert from './careers_insert.js'
 import EmailsInsert from './emails_insert.js'
 import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes.js'
@@ -14,14 +14,14 @@ import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
  -Needs a little refactoring.
  */
 async function main() {
-  await InsertIndexes()
+  await IndexesInsert()
   await CareersInsert()
   await EmailsInsert()
 
+  await BudgetExpensesToIndexes()
   await AcademicUnitBudgetsToIndexes()
   await AcademicUnitProtocolRelation()
   await AnualBudgetToIndexes()
-  await BudgetExpensesToIndexes()
   await ProtocolCareerRelation()
   await TeamMemberCategoryToIndexes()
 }
