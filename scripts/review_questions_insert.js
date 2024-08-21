@@ -321,22 +321,22 @@ export default async function main() {
 
       console.log(question_id_dictionary)
 
-      const bulkOps = reviews.map((review) => ({
-        updateOne: {
-          filter: { _id: review._id },
-          update: {
+      for (const review of reviews) {
+        const result = await review_collection.updateOne(
+          { _id: review._id },
+          {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
                 id: new ObjectId(question_id_dictionary[q.id]),
               })),
             },
-          },
-        },
-      }))
-
-      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
-      console.log('Operation result: ', updated_reviews_result)
+          }
+        )
+        console.log(
+          `Updated review ${review._id}: ${result.modifiedCount} document modified, review has ReviewQuestion's related`
+        )
+      }
     }
 
     await review_question_collection.deleteMany({})
@@ -350,3 +350,5 @@ export default async function main() {
     console.log('Connection closed')
   }
 }
+
+main()
