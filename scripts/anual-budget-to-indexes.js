@@ -55,20 +55,28 @@ export default async function main() {
 
       for (const anual_budget of updated_anual_budgets) {
         try {
-          const result = await anual_budget_collection.updateOne(
-            { _id: new ObjectId(anual_budget.anual_budget_id) },
-            {
-              $set: {
-                budgetItems: anual_budget.budgetItems,
-              },
+          if (
+            anual_budget.budgetItems.some(
+              (item) => !isNaN(item.amountIndex.FCA)
+            )
+          ) {
+            const result = await anual_budget_collection.updateOne(
+              { _id: new ObjectId(anual_budget.anual_budget_id) },
+              {
+                $set: {
+                  budgetItems: anual_budget.budgetItems,
+                },
+              }
+            )
+            if (result.matchedCount > 0) {
+              console.log(
+                `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified, amount to indexes`
+              )
             }
-          )
-          console.log(
-            `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified, amount to indexes`
-          )
+          }
         } catch (error) {
           console.error(
-            `Error updating anual budget ${anual_budget._id}:`,
+            `Error updating anual budget ${anual_budget.anual_budget_id}:`,
             error
           )
         }
@@ -81,3 +89,4 @@ export default async function main() {
     console.log('Connection closed || AnualBudgetToIndexes')
   }
 }
+main()
