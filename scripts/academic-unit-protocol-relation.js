@@ -56,9 +56,9 @@ export default async function main() {
               },
             }
           )
-          // console.log(
-          //   `Updated protocol ${p._id}: ${result.modifiedCount} document modified`
-          // )
+          console.log(
+            `Updated protocol ${p._id}: ${result.modifiedCount} document modified`
+          )
         } catch (error) {
           console.error(`Error updating protocol ${p._id}:`, error)
         }

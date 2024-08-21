@@ -37,7 +37,7 @@ export default async function main() {
 
       const updated_anual_budgets = anual_budgets.map((anual_budget) => {
         return {
-          ...anual_budget,
+          anual_budget_id: anual_budget._id,
           budgetItems: anual_budget.budgetItems?.map((budgetItem) => {
             return {
               ...budgetItem,
@@ -56,9 +56,13 @@ export default async function main() {
 
       for (const anual_budget of updated_anual_budgets) {
         try {
-          const result = await anual_budget_collection.replaceOne(
-            { _id: new ObjectId(anual_budget._id) },
-            anual_budget
+          const result = await anual_budget_collection.updateOne(
+            { _id: new ObjectId(anual_budget.anual_budget_id) },
+            {
+              $set: {
+                budgetItems: anual_budget.budgetItems,
+              },
+            }
           )
           console.log(
             `Updated anual budget ${anual_budget._id}: ${result.modifiedCount} document modified`
