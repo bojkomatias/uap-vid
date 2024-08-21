@@ -39,7 +39,6 @@ export default async function main() {
           anual_budget_id: anual_budget._id,
           budgetItems: anual_budget.budgetItems?.map(
             ({ amount, remaining, ...rest }) => {
-              console.log(rest)
               return {
                 ...rest,
                 amountIndex: {
