@@ -1,7 +1,9 @@
 import Tabs from '@elements/tabs'
 import { getAcademicUnitsTabs } from '@repositories/academic-unit'
 import { Heading, Subheading } from '@components/heading'
-import { Text, TextLink } from '@components/text'
+import { TextLink } from '@components/text'
+
+export const dynamic = 'force-dynamic'
 
 export default async function AnualBudgetsLayout({
   children,
