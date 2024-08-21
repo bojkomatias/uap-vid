@@ -321,25 +321,27 @@ export default async function main() {
 
       console.log(question_id_dictionary)
 
-      for (const review of reviews) {
-        const updateResult = await review_collection.updateOne(
-          { _id: review._id },
-          {
+      const bulkOps = reviews.map((review) => ({
+        updateOne: {
+          filter: { _id: review._id },
+          update: {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
                 id: question_id_dictionary[q.id],
               })),
             },
-          }
-        )
+          },
+        },
+      }))
 
-        console.log(`Update result for review ${review._id}:`, updateResult)
-      }
+      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
+      console.log('Operation result: ', updated_reviews_result)
     }
 
     await review_question_collection.deleteMany({})
     await create_review_questions()
+
     await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
