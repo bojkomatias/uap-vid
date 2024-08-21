@@ -65,7 +65,7 @@ export default async function main() {
             }
           )
           console.log(
-            `Updated anual budget ${anual_budget._id}: ${result.modifiedCount} document modified`
+            `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified`
           )
         } catch (error) {
           console.error(
