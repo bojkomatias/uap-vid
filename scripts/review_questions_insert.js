@@ -328,7 +328,7 @@ export default async function main() {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
-                id: question_id_dictionary[q.id],
+                id: question_id_dictionary[q.id].toString(),
               })),
             },
           }
@@ -350,5 +350,3 @@ export default async function main() {
     console.log('Connection closed')
   }
 }
-
-main()
