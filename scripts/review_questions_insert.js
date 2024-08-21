@@ -305,21 +305,22 @@ export default async function main() {
       console.log('RESULT BULK INSERT REVIEW QUESTIONS', result)
     }
 
-    const review_questions = await review_question_collection.find().toArray()
-
-    const question_id_dictionary = review_questions
-      .map((rq) => {
-        const id = rawQuestions.find(
-          (q) => q.question == rq.question && q.type == rq.type
-        ).id
-        return { id: id, _id: rq._id.toString() }
-      })
-      .reduce((acc, ac) => {
-        acc[ac.id] = ac._id
-        return acc
-      }, {})
-
     async function update_reviews() {
+      const review_questions = await review_question_collection.find().toArray()
+      const question_id_dictionary = review_questions
+        .map((rq) => {
+          const id = rawQuestions.find(
+            (q) => q.question == rq.question && q.type == rq.type
+          ).id
+          return { id: id, _id: rq._id.toString() }
+        })
+        .reduce((acc, ac) => {
+          acc[ac.id] = ac._id
+          return acc
+        }, {})
+
+      console.log(question_id_dictionary)
+
       const bulkOps = reviews.map((review) => ({
         updateOne: {
           filter: { _id: review._id },
@@ -340,7 +341,7 @@ export default async function main() {
 
     await review_question_collection.deleteMany({})
     await create_review_questions()
-    console.log(question_id_dictionary)
+
     await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
