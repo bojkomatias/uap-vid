@@ -11,7 +11,6 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
 }
 
 /**This script adds the amountIndex field in the budgetItems array, for each document in the AnualBudget collection.
- -Needs a little refactoring.
  */
 
 export default async function main() {
