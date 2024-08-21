@@ -327,19 +327,20 @@ export default async function main() {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
-                id: question_id_dictionary[q.id],
+                id: q.id.length < 2 ? question_id_dictionary[q.id] : q.id,
               })),
             },
           },
         },
       }))
-      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
 
+      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
       console.log('Operation result: ', updated_reviews_result)
     }
 
     await review_question_collection.deleteMany({})
     await create_review_questions()
+    console.log(question_id_dictionary)
     await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
