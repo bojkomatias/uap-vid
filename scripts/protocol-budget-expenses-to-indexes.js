@@ -38,12 +38,12 @@ export default async function main() {
         protocol_id: protocol._id,
         budget: protocol.sections.budget?.expenses.map((expense) => ({
           ...expense,
-          data: expense.data.map(({ amount, ...data }) => {
+          data: expense.data.map((data) => {
             return {
               ...data,
               amountIndex: {
-                FCA: amount / latest_fca_price,
-                FMR: amount / latest_fmr_price,
+                FCA: data.amount / latest_fca_price,
+                FMR: data.amount / latest_fmr_price,
               },
             }
           }),
