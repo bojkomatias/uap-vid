@@ -38,7 +38,7 @@ export default async function main() {
         return {
           anual_budget_id: anual_budget._id,
           budgetItems: anual_budget.budgetItems?.map((budgetItem) => {
-            return {
+            const updated_budget_item = {
               ...budgetItem,
               amountIndex: {
                 FCA: budgetItem.amount / latest_fca_price,
@@ -49,6 +49,10 @@ export default async function main() {
                 FMR: budgetItem.amount / latest_fmr_price,
               },
             }
+
+            delete updated_budget_item['amount']
+            delete updated_budget_item['remaining']
+            return updated_budget_item
           }),
         }
       })
@@ -60,6 +64,12 @@ export default async function main() {
             {
               $set: {
                 budgetItems: anual_budget.budgetItems,
+              },
+              $unset: {
+                budgetItems: {
+                  amount: '',
+                  remaining: '',
+                },
               },
             }
           )
