@@ -313,6 +313,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
         }),
       ])
     } catch (error) {
+      console.log(error)
       return []
     }
   }

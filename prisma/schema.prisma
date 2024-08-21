@@ -283,7 +283,7 @@ type ProtocolSectionsBudgetExpenses {
 }
 
 type ProtocolSectionsBudgetExpensesData {
-  amount      Float /// @description use `amountIndex`, 'amount' is still used to save the data
+  amount      Float? /// @description use `amountIndex`, 'amount' is still used to save the data
   amountIndex AmountIndex
   detail      String
   year        String
