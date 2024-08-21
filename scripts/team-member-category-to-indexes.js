@@ -53,7 +53,7 @@ export default async function main() {
             { _id: new ObjectId(category._id) },
             category
           )
-          if (result.modifiedCount > 1) {
+          if (result.modifiedCount > 0) {
             console.log(
               `Updated team member category ${category._id}: ${result.modifiedCount} document modified, amount to indexes`
             )

@@ -47,26 +47,35 @@ export default async function main() {
         }
       })
 
-      for (const academic_unit_budget of updated_academic_units_budgets) {
-        try {
-          const result = await academic_units_collection.updateOne(
-            { _id: new ObjectId(academic_unit_budget.academic_unit_id) },
-            {
-              $set: {
-                budgets: academic_unit_budget.budgets,
-              },
+      console.log(
+        isNaN(updated_academic_units_budgets[0].budgets[0].amountIndex.FCA)
+      )
+
+      if (
+        isNaN(updated_academic_units_budgets[0].budgets[0].amountIndex.FCA) !==
+        true
+      ) {
+        for (const academic_unit_budget of updated_academic_units_budgets) {
+          try {
+            const result = await academic_units_collection.updateOne(
+              { _id: new ObjectId(academic_unit_budget.academic_unit_id) },
+              {
+                $set: {
+                  budgets: academic_unit_budget.budgets,
+                },
+              }
+            )
+            if (result.modifiedCount > 0) {
+              console.log(
+                `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified, amount to indexes.`
+              )
             }
-          )
-          if (result.modifiedCount > 1) {
-            console.log(
-              `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified, amount to indexes.`
+          } catch (error) {
+            console.error(
+              `Error updating academic unit ${academic_unit._id}:`,
+              error
             )
           }
-        } catch (error) {
-          console.error(
-            `Error updating academic unit ${academic_unit._id}:`,
-            error
-          )
         }
       }
     })
@@ -77,3 +86,5 @@ export default async function main() {
     console.log('Connection closed || AcademicUnitBudgetsToIndexes')
   }
 }
+
+main()

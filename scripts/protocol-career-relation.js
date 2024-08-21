@@ -42,7 +42,7 @@ export default async function main() {
               },
             }
           )
-          if (result.modifiedCount > 1) {
+          if (result.modifiedCount > 0) {
             console.log(
               `Updated protocol ${protocol.protocol_id}: ${result.modifiedCount} document modified, career related through ObjectId`
             )

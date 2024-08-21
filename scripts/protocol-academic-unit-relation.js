@@ -54,7 +54,7 @@ export default async function main() {
               },
             }
           )
-          if (result.modifiedCount > 1) {
+          if (result.modifiedCount > 0) {
             console.log(
               `Updated protocol ${p.protocol_id}: ${result.modifiedCount} document modified, academic units of the protocol are related through ObjectId's`
             )

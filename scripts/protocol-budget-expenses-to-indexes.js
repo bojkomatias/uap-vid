@@ -60,7 +60,7 @@ export default async function main() {
               },
             }
           )
-          if (result.modifiedCount > 1) {
+          if (result.modifiedCount > 0) {
             console.log(
               `Updated protocol budget expenses ${protocol.protocol_id}: ${result.modifiedCount} document modified, amount to indexes`
             )
