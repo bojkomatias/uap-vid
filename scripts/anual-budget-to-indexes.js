@@ -38,16 +38,17 @@ export default async function main() {
         return {
           anual_budget_id: anual_budget._id,
           budgetItems: anual_budget.budgetItems?.map(
-            ({ amount, reamining, ...rest }) => {
+            ({ amount, remaining, ...rest }) => {
+              console.log(rest)
               return {
                 ...rest,
                 amountIndex: {
-                  FCA: budgetItem.amount / latest_fca_price,
-                  FMR: budgetItem.amount / latest_fmr_price,
+                  FCA: amount / latest_fca_price,
+                  FMR: amount / latest_fmr_price,
                 },
                 remainingIndex: {
-                  FCA: budgetItem.amount / latest_fca_price,
-                  FMR: budgetItem.amount / latest_fmr_price,
+                  FCA: amount / latest_fca_price,
+                  FMR: amount / latest_fmr_price,
                 },
               }
             }
@@ -62,12 +63,6 @@ export default async function main() {
             {
               $set: {
                 budgetItems: anual_budget.budgetItems,
-              },
-              $unset: {
-                budgetItems: {
-                  amount: '',
-                  remaining: '',
-                },
               },
             }
           )
