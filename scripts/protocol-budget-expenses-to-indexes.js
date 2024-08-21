@@ -15,7 +15,7 @@ export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to the server || BudgetExpensesToIndexes'
+        'Connected successfully to MongoDB || BudgetExpensesToIndexes'
       )
 
       const indexes_collection = getCollection('Index')
@@ -50,8 +50,6 @@ export default async function main() {
         })),
       }))
 
-      console.log(updatedProtocols[2])
-
       for (const protocol of updatedProtocols) {
         try {
           const result = await protocols_collection.updateOne(
@@ -62,9 +60,11 @@ export default async function main() {
               },
             }
           )
-          console.log(
-            `Updated protocol ${protocol.protocol_id}: ${result.modifiedCount} document modified`
-          )
+          if (result.modifiedCount > 1) {
+            console.log(
+              `Updated protocol budget expenses ${protocol.protocol_id}: ${result.modifiedCount} document modified, amount to indexes`
+            )
+          }
         } catch (error) {
           console.error(
             `Error updating protocol ${protocol.protocol_id}:`,

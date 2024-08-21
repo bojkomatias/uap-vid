@@ -16,9 +16,7 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
 export default async function main() {
   try {
     await client.connect().then(async () => {
-      console.log(
-        'Connected successfully to the server || AnualBudgetToIndexes'
-      )
+      console.log('Connected successfully to MongoDB || AnualBudgetToIndexes')
       const indexes_collection = getCollection('Index')
       const indexes = await indexes_collection.find().toArray()
       const indexes_latest_values = indexes.map((idx) => {
@@ -66,7 +64,7 @@ export default async function main() {
             }
           )
           console.log(
-            `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified`
+            `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified, amount to indexes`
           )
         } catch (error) {
           console.error(

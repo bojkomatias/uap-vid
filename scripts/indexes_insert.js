@@ -11,7 +11,7 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
 export default async function main() {
   try {
     await client.connect().then(async () => {
-      console.log('Connected successfully to server || IndexesInsert')
+      console.log('Connected successfully to MongoDB || IndexesInsert')
 
       const indexes_collection = getCollection('Index')
       const chat_messages_collection = getCollection('ChatMessage')
@@ -35,7 +35,8 @@ export default async function main() {
         values: [{ from: now, to: null, price: 4500 }],
       })
 
-      console.log('Inserted indexes:', FCA.insertedId, FMR.insertedId)
+      console.log('Inserted FCA index', FCA.insertedId)
+      console.log('Inserted FMR index', FMR.insertedId)
     })
   } catch (error) {
     console.error('An error occurred while inserting indexes:', error)

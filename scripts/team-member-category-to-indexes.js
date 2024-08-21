@@ -14,7 +14,7 @@ export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to the server || TeamMemberCategoryToIndexes'
+        'Connected successfully to MongoDB || TeamMemberCategoryToIndexes'
       )
 
       const indexes_collection = getCollection('Index')
@@ -53,9 +53,11 @@ export default async function main() {
             { _id: new ObjectId(category._id) },
             category
           )
-          console.log(
-            `Updated category ${category._id}: ${result.modifiedCount} document modified`
-          )
+          if (result.modifiedCount > 1) {
+            console.log(
+              `Updated team member category ${category._id}: ${result.modifiedCount} document modified, amount to indexes`
+            )
+          }
         } catch (error) {
           console.error(
             `Error updating team member category ${category._id}:`,

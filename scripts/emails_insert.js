@@ -48,7 +48,7 @@ const emails = [
 export default async function main() {
   try {
     await client.connect().then(async () => {
-      console.log('Connected successfully to server || EmailsInsert')
+      console.log('Connected successfully to MongoDB || EmailsInsert')
 
       const emails_collection = getCollection('EmailContentTemplate')
 
@@ -57,7 +57,7 @@ export default async function main() {
       for (const email of emails) {
         try {
           const email_insert = await emails_collection.insertOne({ ...email })
-          console.log('Inserted email', email_insert)
+          console.log('Inserted email', email_insert.insertedId)
         } catch (e) {
           console.log('Error occured while inserting email', e)
         }

@@ -15,7 +15,7 @@ export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to the server || AcademicUnitBudgetsToIndexes'
+        'Connected successfully to MongoDB || AcademicUnitBudgetsToIndexes'
       )
       const indexes_collection = getCollection('Index')
       const indexes = await indexes_collection.find().toArray()
@@ -57,9 +57,11 @@ export default async function main() {
               },
             }
           )
-          console.log(
-            `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified`
-          )
+          if (result.modifiedCount > 1) {
+            console.log(
+              `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified, amount to indexes.`
+            )
+          }
         } catch (error) {
           console.error(
             `Error updating academic unit ${academic_unit._id}:`,

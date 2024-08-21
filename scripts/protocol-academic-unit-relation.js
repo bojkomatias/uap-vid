@@ -17,7 +17,7 @@ export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to server || AcademicUnitProtocolRelation'
+        'Connected successfully to MongoDB || AcademicUnitProtocolRelation'
       )
 
       const academic_unit_collection = getCollection('AcademicUnit')
@@ -27,7 +27,6 @@ export default async function main() {
         return acc
       }, {})
 
-      console.log('Academic Units Dictionary:', acs_dictionary)
       const protocolCollection = client
         .db(process.env.DATABASE_NAME)
         .collection('Protocol')
@@ -55,9 +54,11 @@ export default async function main() {
               },
             }
           )
-          console.log(
-            `Updated protocol ${p.protocol_id}: ${result.modifiedCount} document modified`
-          )
+          if (result.modifiedCount > 1) {
+            console.log(
+              `Updated protocol ${p.protocol_id}: ${result.modifiedCount} document modified, academic units of the protocol are related through ObjectId's`
+            )
+          }
         } catch (error) {
           console.error(`Error updating protocol ${p.protocol_id}:`, error)
         }
