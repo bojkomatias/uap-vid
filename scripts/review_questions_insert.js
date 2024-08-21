@@ -327,7 +327,7 @@ export default async function main() {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
-                id: q.id.length <= 2 ? question_id_dictionary[q.id] : q.id,
+                id: question_id_dictionary[q.id],
               })),
             },
           },
