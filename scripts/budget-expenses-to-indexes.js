@@ -27,17 +27,17 @@ export default async function main() {
 
       const latest_fca_price = indexes_latest_values.find(
         (i) => i.unit === 'FCA'
-      ).latest_value.price
+      )?.latest_value?.price
       const latest_fmr_price = indexes_latest_values.find(
         (i) => i.unit === 'FMR'
-      ).latest_value.price
+      )?.latest_value?.price
 
       const protocols_collection = getCollection('Protocol')
       const protocols = await protocols_collection.find().toArray()
 
       const updatedProtocols = protocols.map((protocol) => ({
         protocol_id: protocol._id,
-        budget: protocol.sections.budget.expenses.map((expense) => ({
+        budget: protocol.sections.budget?.expenses.map((expense) => ({
           ...expense,
           data: expense.data.map(({ amount, ...data }) => {
             return {
@@ -51,7 +51,7 @@ export default async function main() {
         })),
       }))
 
-      console.log(updatedProtocols[0].sections.budget[2].data[0])
+      console.log(updatedProtocols[2])
 
       for (const protocol of updatedProtocols) {
         try {
@@ -59,15 +59,18 @@ export default async function main() {
             { _id: new ObjectId(protocol.protocol_id) },
             {
               $set: {
-                'sections.budget.expenses': protocol.sections.budget,
+                'sections.budget.expenses': protocol.budget,
               },
             }
           )
           console.log(
-            `Updated protocol ${protocol._id}: ${result.modifiedCount} document modified`
+            `Updated protocol ${protocol.protocol_id}: ${result.modifiedCount} document modified`
           )
         } catch (error) {
-          console.error(`Error updating protocol ${protocol._id}:`, error)
+          console.error(
+            `Error updating protocol ${protocol.protocol_id}:`,
+            error
+          )
         }
       }
     })
