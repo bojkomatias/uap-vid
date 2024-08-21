@@ -35,12 +35,12 @@ export default async function main() {
       const updated_academic_units_budgets = academic_units.map((ac_unit) => {
         return {
           academic_unit_id: ac_unit._id,
-          budgets: ac_unit.budgets?.map((budget) => {
+          budgets: ac_unit.budgets?.map(({ amount, ...rest }) => {
             return {
-              ...budget,
+              ...rest,
               amountIndex: {
-                FCA: budget.amount / latest_fca_price,
-                FMR: budget.amount / latest_fmr_price,
+                FCA: amount / latest_fca_price,
+                FMR: amount / latest_fmr_price,
               },
             }
           }),
