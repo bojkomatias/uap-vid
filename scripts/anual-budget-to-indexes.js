@@ -56,7 +56,7 @@ export default async function main() {
       for (const anual_budget of updated_anual_budgets) {
         try {
           if (
-            anual_budget.budgetItems.some(
+            anual_budget.budgetItems?.some(
               (item) => !isNaN(item.amountIndex.FCA)
             )
           ) {
