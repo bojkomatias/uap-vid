@@ -48,7 +48,6 @@ export const assignReviewerToProtocol = async (
   type: ReviewType
 ) => {
   try {
-    const session = await getServerSession(authOptions)
     const review = await prisma.review.create({
       data: {
         protocolId,
@@ -78,9 +77,6 @@ export const assignReviewerToProtocol = async (
         protocolState,
         newStateByReviewType[type],
         review.reviewerId
-        session!.user.id
-
-
       )
     }
 
