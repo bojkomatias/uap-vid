@@ -288,13 +288,11 @@ export default async function main() {
   ]
   try {
     await client.connect()
-    console.log('Connected successfully to MongoDB || ReviewQuestionsInsert')
-
-    const review_question_collection = getCollection('ReviewQuestion')
-    review_question_collection.deleteMany({})
+    console.log('Connected successfully to MongoDB')
 
     const review_collection = getCollection('Review')
     const reviews = await review_collection.find().toArray()
+    const review_question_collection = getCollection('ReviewQuestion')
 
     async function create_review_questions() {
       const result = await review_question_collection.insertMany(
@@ -304,12 +302,10 @@ export default async function main() {
           type,
         }))
       )
-      //console.log('Review questions bulk insert', result)
+      console.log('RESULT BULK INSERT REVIEW QUESTIONS', result)
     }
 
     const review_questions = await review_question_collection.find().toArray()
-
-    console.log(review_questions)
 
     const question_id_dictionary = review_questions
       .map((rq) => {
@@ -337,16 +333,20 @@ export default async function main() {
           },
         },
       }))
-      //const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
+      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
+
+      console.log('Operation result: ', updated_reviews_result)
     }
 
+    await review_question_collection.deleteMany({})
     await create_review_questions()
-    //await update_reviews()
+    await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
   } finally {
     await client.close()
-    console.log('Connection closed || ReviewQuestionsInsert')
+    console.log('Connection closed')
   }
 }
+
 main()
