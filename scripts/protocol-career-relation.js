@@ -9,7 +9,6 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script adds the relation between Protocol and Career (adding careerId to Protocol).
- -Needs a little refactoring.
  */
 
 export default async function main() {

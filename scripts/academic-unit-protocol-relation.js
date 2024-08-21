@@ -7,7 +7,6 @@ const MongoClient = mongodb.MongoClient
 const client = new MongoClient(uri)
 
 /**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
- -Needs a little refactoring.
  */
 
 function getCollection(collection, db = process.env.DATABASE_NAME) {

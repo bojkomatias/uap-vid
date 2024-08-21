@@ -9,7 +9,6 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script creates the current review questions and adds the relation between them and the Review model.
- -Needs a little refactoring.
  */
 
 export default async function main() {
