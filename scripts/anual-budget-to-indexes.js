@@ -37,23 +37,21 @@ export default async function main() {
       const updated_anual_budgets = anual_budgets.map((anual_budget) => {
         return {
           anual_budget_id: anual_budget._id,
-          budgetItems: anual_budget.budgetItems?.map((budgetItem) => {
-            const updated_budget_item = {
-              ...budgetItem,
-              amountIndex: {
-                FCA: budgetItem.amount / latest_fca_price,
-                FMR: budgetItem.amount / latest_fmr_price,
-              },
-              remainingIndex: {
-                FCA: budgetItem.amount / latest_fca_price,
-                FMR: budgetItem.amount / latest_fmr_price,
-              },
+          budgetItems: anual_budget.budgetItems?.map(
+            ({ amount, reamining, ...rest }) => {
+              return {
+                ...rest,
+                amountIndex: {
+                  FCA: budgetItem.amount / latest_fca_price,
+                  FMR: budgetItem.amount / latest_fmr_price,
+                },
+                remainingIndex: {
+                  FCA: budgetItem.amount / latest_fca_price,
+                  FMR: budgetItem.amount / latest_fmr_price,
+                },
+              }
             }
-
-            delete updated_budget_item['amount']
-            delete updated_budget_item['remaining']
-            return updated_budget_item
-          }),
+          ),
         }
       })
 
