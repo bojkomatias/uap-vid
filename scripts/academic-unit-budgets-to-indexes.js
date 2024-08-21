@@ -47,10 +47,6 @@ export default async function main() {
         }
       })
 
-      console.log(
-        isNaN(updated_academic_units_budgets[0].budgets[0].amountIndex.FCA)
-      )
-
       if (
         isNaN(updated_academic_units_budgets[0].budgets[0].amountIndex.FCA) !==
         true
