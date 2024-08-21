@@ -59,5 +59,3 @@ export default async function main() {
     console.log('Connection closed || ProtocolCareerRelation')
   }
 }
-
-main()

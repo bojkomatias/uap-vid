@@ -2300,5 +2300,3 @@ export default async function main() {
     console.log('Connection closed || CareersInsert')
   }
 }
-
-main().catch(console.error)

@@ -70,5 +70,3 @@ export default async function main() {
     console.log('Connection closed || EmailsInsert')
   }
 }
-
-main().catch(console.error)

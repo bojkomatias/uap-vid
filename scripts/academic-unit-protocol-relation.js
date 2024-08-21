@@ -56,10 +56,10 @@ export default async function main() {
             }
           )
           console.log(
-            `Updated protocol ${p._id}: ${result.modifiedCount} document modified`
+            `Updated protocol ${p.protocol_id}: ${result.modifiedCount} document modified`
           )
         } catch (error) {
-          console.error(`Error updating protocol ${p._id}:`, error)
+          console.error(`Error updating protocol ${p.protocol_id}:`, error)
         }
       }
     })
@@ -70,5 +70,3 @@ export default async function main() {
     console.log('Connection closed || AcademicUnitProtocolRelation')
   }
 }
-
-main()
