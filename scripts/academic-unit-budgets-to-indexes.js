@@ -10,7 +10,6 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script adds the amountIndex field in the Budgets array, for each document in the AcademicUnit collection.
- -Needs a little refactoring.
  */
 export default async function main() {
   try {
@@ -54,7 +53,7 @@ export default async function main() {
             { _id: new ObjectId(academic_unit_budget.academic_unit_id) },
             {
               $set: {
-                budgets: academic_unit_budget,
+                budgets: academic_unit_budget.budgets,
               },
             }
           )
