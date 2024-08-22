@@ -1,5 +1,4 @@
 'use client'
-
 import type { Prisma } from '@prisma/client'
 import { calculateTotalBudget } from '@utils/anual-budget'
 import { Currency } from '@shared/currency'
@@ -45,6 +44,7 @@ type Budget = Prisma.AnualBudgetGetPayload<{
             categories: { include: { category: true } }
           }
         }
+        category: true
       }
     }
     AcademicUnits: true
@@ -89,20 +89,28 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
             {budgetTeamMembers.map((member) => (
               <TableRow key={member.id}>
                 <TableCell colSpan={2} className="font-medium">
-                  {member.teamMember.name}
+                  {member.teamMember ?
+                    member.teamMember.name
+                  : member.category?.name}
                 </TableCell>
                 <TableCell>{member.hours}</TableCell>
                 <TableCell>
                   <Currency
                     amountIndex={
-                      member.teamMember.categories.at(-1)!.category.amountIndex
+                      member.teamMember ?
+                        member.teamMember.categories.at(-1)!.category
+                          .amountIndex
+                      : member.category!.amountIndex
                     }
                   />
                 </TableCell>
                 <TableCell>
                   <Currency
                     amountIndex={multiplyAmountIndex(
-                      member.teamMember.categories.at(-1)!.category.amountIndex,
+                      member.teamMember ?
+                        member.teamMember.categories.at(-1)!.category
+                          .amountIndex
+                      : member.category!.amountIndex,
                       member.hours
                     )}
                   />
