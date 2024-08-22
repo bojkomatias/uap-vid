@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Subheading, Heading } from '@components/heading'
 import { ContainerAnimations } from '@elements/container-animations'
 
-//export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic'
 
 export default function Layout({
   fca,

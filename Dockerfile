@@ -10,11 +10,10 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 RUN \
     if [ -f pnpm-lock.yaml ]; then \
-        corepack enable pnpm && \
-        pnpm add next && \
-        pnpm i --frozen-lockfile; \
+    corepack enable pnpm && \
+    pnpm i --frozen-lockfile; \
     else \
-        echo "Lockfile not found." && exit 1; \
+    echo "Lockfile not found." && exit 1; \
     fi
 
 
