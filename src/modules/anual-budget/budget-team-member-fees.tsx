@@ -5,6 +5,7 @@ import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
 import {
   ExecutionType,
   type AnualBudgetTeamMemberWithAllRelations,
+  calculateHourRateGivenTMCategory,
   calculateHourRateGivenCategory,
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
@@ -29,7 +30,6 @@ export function BudgetTeamMemberFees({
   budgetTeamMembers,
   ABTe,
   ABTr,
-  duration,
 }: {
   editable: boolean
   budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
@@ -39,7 +39,6 @@ export function BudgetTeamMemberFees({
 }) {
   const router = useRouter()
   const form = useForm({ initialValues: budgetTeamMembers })
-  console.log(form.getValues())
   return (
     <div className="overflow-auto">
       <form
@@ -155,18 +154,26 @@ export function BudgetTeamMemberFees({
               {budgetTeamMembers.map(
                 (
                   {
-                    teamMember: { id, name, categories },
+                    teamMemberId,
+                    teamMember,
                     id: anualBudgetTeamMemberId,
                     executions,
                     memberRole,
                     hours,
                     remainingHours,
+                    categoryId,
+                    category,
                   },
                   i
                 ) => (
-                  <tr className="border-b dark:border-gray-800" key={id}>
+                  <tr
+                    className="border-b dark:border-gray-800"
+                    key={teamMemberId ?? categoryId}
+                  >
                     <td className="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
-                      <Subheading>{name}</Subheading>
+                      <Subheading>
+                        {teamMember ? teamMember.name : 'A definir'}
+                      </Subheading>
                       <div className="mt-1.5 flex flex-col gap-1 truncate text-gray-500">
                         <div className="flex gap-2">
                           <Badge>Rol: </Badge>
@@ -175,12 +182,19 @@ export function BudgetTeamMemberFees({
 
                         <div className="flex gap-2">
                           <Badge>Categoría: </Badge>
-                          <Text>{categories.at(-1)?.category.name}</Text>
+                          <Text>
+                            {teamMemberId ?
+                              teamMember?.categories.at(-1)?.category.name
+                            : category?.name}
+                          </Text>
                           <div>
-                            {categories.at(-1)?.pointsObrero ?
+                            {(
+                              teamMemberId &&
+                              teamMember?.categories.at(-1)?.pointsObrero
+                            ) ?
                               <Text className="text-gray-600">
                                 {'[ '}
-                                {categories.at(-1)?.pointsObrero}
+                                {teamMember.categories.at(-1)?.pointsObrero}
                                 {' ]'}
                               </Text>
                             : null}
@@ -212,9 +226,13 @@ export function BudgetTeamMemberFees({
                     </td>
                     <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
                       <Currency
-                        amountIndex={calculateHourRateGivenCategory(
-                          categories.at(-1) ?? null
-                        )}
+                        amountIndex={
+                          teamMemberId ?
+                            calculateHourRateGivenTMCategory(
+                              teamMember?.categories.at(-1) ?? null
+                            )
+                          : calculateHourRateGivenCategory(category)
+                        }
                       />
                     </td>
                     <td
@@ -225,9 +243,11 @@ export function BudgetTeamMemberFees({
                     >
                       <Currency
                         amountIndex={multiplyAmountIndex(
-                          calculateHourRateGivenCategory(
-                            categories.at(-1) ?? null
-                          ),
+                          teamMemberId ?
+                            calculateHourRateGivenTMCategory(
+                              teamMember?.categories.at(-1) ?? null
+                            )
+                          : calculateHourRateGivenCategory(category),
                           remainingHours
                         )}
                       />
@@ -235,45 +255,55 @@ export function BudgetTeamMemberFees({
                     <td className="px-3 py-5 text-right text-sm text-gray-600 ">
                       <Currency
                         amountIndex={multiplyAmountIndex(
-                          calculateHourRateGivenCategory(
-                            categories.at(-1) ?? null
-                          ),
+                          teamMemberId ?
+                            calculateHourRateGivenTMCategory(
+                              teamMember?.categories.at(-1) ?? null
+                            )
+                          : calculateHourRateGivenCategory(category),
                           hours
                         )}
                       />
                     </td>
+                    {/* Cannot create execution when is pending or have pending team member */}
                     <td
                       className={cx(
                         'hidden text-right print:hidden',
-                        !editable && 'table-cell'
+                        !editable && !categoryId && 'table-cell'
                       )}
                     >
                       <BudgetExecutionView
                         positionIndex={i}
                         remaining={multiplyAmountIndex(
-                          calculateHourRateGivenCategory(
-                            categories.at(-1) ?? null
-                          ),
+                          teamMemberId ?
+                            calculateHourRateGivenTMCategory(
+                              teamMember?.categories.at(-1) ?? null
+                            )
+                          : calculateHourRateGivenCategory(category),
                           remainingHours
                         )}
                         executions={executions}
                         anualBudgetTeamMemberId={anualBudgetTeamMemberId}
-                        title={name}
+                        title={teamMember?.name ?? 'A definir'}
                         executionType={ExecutionType.TeamMember}
                         itemName={
-                          categories.at(-1)?.category.name ?? 'Sin categoría'
+                          teamMember!.categories.at(-1)?.category.name ??
+                          'Sin categoría'
                         }
                         obrero={
-                          categories.at(-1)?.pointsObrero ?
+                          teamMember!.categories.at(-1)?.pointsObrero ?
                             {
                               pointsObrero:
-                                categories.at(-1)?.pointsObrero ?? 0,
+                                teamMember!.categories.at(-1)?.pointsObrero ??
+                                0,
                               pointPrice:
-                                categories.at(-1)?.category.amountIndex ??
-                                ZeroAmountIndex,
-                              hourlyRate: calculateHourRateGivenCategory(
-                                categories.at(-1) ?? null
-                              ),
+                                teamMember!.categories.at(-1)?.category
+                                  .amountIndex ?? ZeroAmountIndex,
+                              hourlyRate:
+                                teamMemberId ?
+                                  calculateHourRateGivenTMCategory(
+                                    teamMember?.categories.at(-1) ?? null
+                                  )
+                                : calculateHourRateGivenCategory(category),
                             }
                           : undefined
                         }
