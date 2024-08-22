@@ -145,6 +145,7 @@ model TeamMemberCategory {
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
   amountIndex                AmountIndex //FCA or FMR
+  AnualBudgetTeamMember      AnualBudgetTeamMember[]
 }
 
 /// @deprecated this won't be needed after indexing the whole app.
@@ -200,15 +201,17 @@ type AmountIndex {
 }
 
 model AnualBudgetTeamMember {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  teamMemberId   String       @db.ObjectId
-  teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  teamMemberId   String?             @db.ObjectId
+  teamMember     TeamMember?         @relation(fields: [teamMemberId], references: [id])
+  categoryId     String?             @db.ObjectId
+  category       TeamMemberCategory? @relation(fields: [categoryId], references: [id])
   memberRole     String
   hours          Float
   remainingHours Float
   executions     Execution[]
-  AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
-  anualBudgetId  String?      @db.ObjectId
+  AnualBudget    AnualBudget?        @relation(fields: [anualBudgetId], references: [id])
+  anualBudgetId  String?             @db.ObjectId
 }
 
 model Index {

@@ -1,4 +1,5 @@
 'use server'
+
 import { AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
 import type {
   AnualBudget,
@@ -130,6 +131,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
                 categories: { include: { category: true } },
               },
             },
+            category: true,
           },
         },
         AcademicUnits: true,
@@ -203,7 +205,11 @@ export const updateAnualBudgetItems = async (
 export const updateAnualBudgetTeamMemberHours = async (
   batch: Omit<
     AnualBudgetTeamMember,
-    'teamMemberId' | 'executions' | 'anualBudgetId' | 'memberRole'
+    | 'teamMemberId'
+    | 'executions'
+    | 'anualBudgetId'
+    | 'memberRole'
+    | 'categoryId'
   >[]
 ) => {
   try {
@@ -439,6 +445,7 @@ export const interruptAnualBudget = async (id: string) => {
       },
       select: { id: true, protocolId: true },
     })
+
     await logEvent({
       userId: session!.user.id,
       protocolId: result.protocolId,
@@ -448,9 +455,32 @@ export const interruptAnualBudget = async (id: string) => {
       reviewerId: null,
       previousState: ProtocolState.ON_GOING,
     })
-    return result
   } catch (e) {
-    console.log(e)
     return null
   }
+}
+
+export const reactivatedAnualBudget = async (id: string) => {
+  const AB = await prisma.anualBudget.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      protocol: { select: { id: true } },
+      state: true,
+      budgetItems: true,
+      budgetTeamMembers: true,
+    },
+  })
+  if (!AB || AB.state !== AnualBudgetState.INTERRUPTED) return
+
+  await prisma.anualBudget.update({
+    where: { id },
+    data: { state: AnualBudgetState.APPROVED },
+    select: { id: true, protocol: { select: { id: true, state: true } } },
+  })
+
+  return prisma.protocol.update({
+    where: { id: AB.protocol.id },
+    data: { state: ProtocolState.ON_GOING },
+  })
 }
