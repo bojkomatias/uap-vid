@@ -9,13 +9,12 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script adds the amountIndex field in the Category collection.
- -Needs a little refactoring.
  */
 export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to the server || TeamMemberCategoryToIndexes'
+        'Connected successfully to MongoDB || TeamMemberCategoryToIndexes'
       )
 
       const indexes_collection = getCollection('Index')
@@ -54,9 +53,11 @@ export default async function main() {
             { _id: new ObjectId(category._id) },
             category
           )
-          console.log(
-            `Updated category ${category._id}: ${result.modifiedCount} document modified`
-          )
+          if (result.modifiedCount > 0) {
+            console.log(
+              `Updated team member category ${category._id}: ${result.modifiedCount} document modified, amount to indexes`
+            )
+          }
         } catch (error) {
           console.error(
             `Error updating team member category ${category._id}:`,
@@ -75,5 +76,3 @@ export default async function main() {
     console.log('Connection closed || TeamMemberCategoryToIndexes')
   }
 }
-
-main()

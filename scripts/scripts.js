@@ -1,29 +1,27 @@
-import mongodb from 'mongodb'
 import 'dotenv/config'
-import InsertIndexes from './indexes_insert.js'
+import IndexesInsert from './indexes_insert.js'
 import CareersInsert from './careers_insert.js'
 import EmailsInsert from './emails_insert.js'
+import ReviewQuestionsInsert from './review_questions_insert.js'
 import AcademicUnitBudgetsToIndexes from './academic-unit-budgets-to-indexes.js'
-import AcademicUnitProtocolRelation from './academic-unit-protocol-relation.js'
+import ProtocolAcademicUnitRelation from './protocol-academic-unit-relation.js'
 import AnualBudgetToIndexes from './anual-budget-to-indexes.js'
-import BudgetExpensesToIndexes from './budget-expenses-to-indexes.js'
+import ProtocolBudgetExpensesToIndexes from './protocol-budget-expenses-to-indexes.js'
 import ProtocolCareerRelation from './protocol-career-relation.js'
 import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
 
-/**This script adds the academicUnitIds array in the Protocol object. This field is necessary for Prisma to create a virtual relation between Protocol and AcademicUnit.
- -Needs a little refactoring.
- */
 async function main() {
-  await InsertIndexes()
+  await ReviewQuestionsInsert()
+  await IndexesInsert()
   await CareersInsert()
   await EmailsInsert()
 
+  await ProtocolBudgetExpensesToIndexes()
   await AcademicUnitBudgetsToIndexes()
-  await AcademicUnitProtocolRelation()
-  await AnualBudgetToIndexes()
-  await BudgetExpensesToIndexes()
-  await ProtocolCareerRelation()
   await TeamMemberCategoryToIndexes()
+  await AnualBudgetToIndexes()
+  await ProtocolAcademicUnitRelation()
+  await ProtocolCareerRelation()
 }
 
 await main()

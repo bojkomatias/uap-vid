@@ -10,13 +10,12 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script adds the amountIndex field in the Budgets array, for each document in the AcademicUnit collection.
- -Needs a little refactoring.
  */
 export default async function main() {
   try {
     await client.connect().then(async () => {
       console.log(
-        'Connected successfully to the server || AcademicUnitBudgetsToIndexes'
+        'Connected successfully to MongoDB || AcademicUnitBudgetsToIndexes'
       )
       const indexes_collection = getCollection('Index')
       const indexes = await indexes_collection.find().toArray()
@@ -30,35 +29,50 @@ export default async function main() {
         (i) => i.unit === 'FMR'
       ).latest_value.price
 
-      const ac_units_collection = getCollection('AcademicUnit')
-      const ac_units = await ac_units_collection.find().toArray()
+      const academic_units_collection = getCollection('AcademicUnit')
+      const academic_units = await academic_units_collection.find().toArray()
 
-      const updated_ac_units = ac_units.map((ac_unit) => {
+      const updated_academic_units_budgets = academic_units.map((ac_unit) => {
         return {
-          ...ac_unit,
-          budgets: ac_unit.budgets?.map((budget) => {
+          academic_unit_id: ac_unit._id,
+          budgets: ac_unit.budgets?.map(({ amount, ...rest }) => {
             return {
-              ...budget,
+              ...rest,
               amountIndex: {
-                FCA: budget.amount / latest_fca_price,
-                FMR: budget.amount / latest_fmr_price,
+                FCA: amount / latest_fca_price,
+                FMR: amount / latest_fmr_price,
               },
             }
           }),
         }
       })
 
-      for (const ac_unit of updated_ac_units) {
+      for (const academic_unit_budget of updated_academic_units_budgets) {
         try {
-          const result = await ac_units_collection.replaceOne(
-            { _id: new ObjectId(ac_unit._id) },
-            ac_unit
-          )
-          console.log(
-            `Updated academic unit ${ac_unit._id}: ${result.modifiedCount} document modified`
-          )
+          if (
+            academic_unit_budget.budgets?.some(
+              (budget) => !isNaN(budget.amountIndex.FCA)
+            )
+          ) {
+            const result = await academic_units_collection.updateOne(
+              { _id: new ObjectId(academic_unit_budget.academic_unit_id) },
+              {
+                $set: {
+                  budgets: academic_unit_budget.budgets,
+                },
+              }
+            )
+            if (result.modifiedCount > 0) {
+              console.log(
+                `Updated academic unit ${academic_unit_budget.academic_unit_id}: ${result.modifiedCount} document modified, amount to indexes.`
+              )
+            }
+          }
         } catch (error) {
-          console.error(`Error updating academic unit ${ac_unit._id}:`, error)
+          console.error(
+            `Error updating academic unit ${academic_unit_budget.academic_unit_id}:`,
+            error
+          )
         }
       }
     })
@@ -69,5 +83,3 @@ export default async function main() {
     console.log('Connection closed || AcademicUnitBudgetsToIndexes')
   }
 }
-
-main()
