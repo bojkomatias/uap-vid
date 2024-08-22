@@ -124,7 +124,10 @@ export async function GenerateAnualBudget({
                   }
                 </span>
                 <span className="text-center">
-                  {teamMemberBudget.teamMember.categories.at(-1)?.category.name}
+                  {
+                    teamMemberBudget.teamMember?.categories.at(-1)?.category
+                      .name
+                  }
                 </span>
                 <span className="text-right">{teamMemberBudget.hours}</span>
               </div>
