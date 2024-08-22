@@ -9,7 +9,6 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
   return client.db(db).collection(collection)
 }
 /**This script creates the current review questions and adds the relation between them and the Review model.
- -Needs a little refactoring.
  */
 
 export default async function main() {
@@ -295,8 +294,6 @@ export default async function main() {
     const reviews = await review_collection.find().toArray()
     const review_question_collection = getCollection('ReviewQuestion')
 
-    review_question_collection.deleteMany({})
-
     async function create_review_questions() {
       const result = await review_question_collection.insertMany(
         rawQuestions.map(({ active, question, type }) => ({
@@ -308,41 +305,43 @@ export default async function main() {
       console.log('RESULT BULK INSERT REVIEW QUESTIONS', result)
     }
 
-    const review_questions = await review_question_collection.find().toArray()
-    console.log('REVIEW QUESTIONS IN DATABASE', review_questions.length)
-
-    const question_id_dictionary = review_questions
-      .map((rq) => {
-        const id = rawQuestions.find(
-          (q) => q.question == rq.question && q.type == rq.type
-        ).id
-        return { id: id, _id: rq._id.toString() }
-      })
-      .reduce((acc, ac) => {
-        acc[ac.id] = ac._id
-        return acc
-      }, {})
-
     async function update_reviews() {
-      const bulkOps = reviews.map((review) => ({
-        updateOne: {
-          filter: { _id: review._id },
-          update: {
+      const review_questions = await review_question_collection.find().toArray()
+      const question_id_dictionary = review_questions
+        .map((rq) => {
+          const id = rawQuestions.find(
+            (q) => q.question == rq.question && q.type == rq.type
+          ).id
+          return { id: id, _id: rq._id.toString() }
+        })
+        .reduce((acc, ac) => {
+          acc[ac.id] = ac._id
+          return acc
+        }, {})
+
+      console.log(question_id_dictionary)
+
+      for (const review of reviews) {
+        const result = await review_collection.updateOne(
+          { _id: review._id },
+          {
             $set: {
               questions: review.questions.map((q) => ({
                 ...q,
-                id: question_id_dictionary[q.id],
+                id: question_id_dictionary[q.id].toString(),
               })),
             },
-          },
-        },
-      }))
-      const updated_reviews_result = await review_collection.bulkWrite(bulkOps)
-
-      console.log('Operation result: ', updated_reviews_result)
+          }
+        )
+        console.log(
+          `Updated review ${review._id}: ${result.modifiedCount} document modified, review has ReviewQuestion's related`
+        )
+      }
     }
 
+    await review_question_collection.deleteMany({})
     await create_review_questions()
+
     await update_reviews()
   } catch (error) {
     console.error('An error occurred:', error)
@@ -351,5 +350,3 @@ export default async function main() {
     console.log('Connection closed')
   }
 }
-
-main()

@@ -2255,7 +2255,7 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
 export default async function main() {
   try {
     await client.connect().then(async () => {
-      console.log('Connected successfully to server || CareersInsert')
+      console.log('Connected successfully to MongoDB || CareersInsert')
 
       const careers_collection = getCollection('Career')
       const courses_collection = getCollection('Course')
@@ -2282,6 +2282,11 @@ export default async function main() {
 
             const courses_insert =
               await courses_collection.insertMany(courses_to_insert)
+
+            console.log(
+              `Inserted career and its courses`,
+              career_insert.insertedId
+            )
           }
 
           await inserted_career()
@@ -2300,5 +2305,3 @@ export default async function main() {
     console.log('Connection closed || CareersInsert')
   }
 }
-
-main().catch(console.error)

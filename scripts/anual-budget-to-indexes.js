@@ -11,15 +11,12 @@ function getCollection(collection, db = process.env.DATABASE_NAME) {
 }
 
 /**This script adds the amountIndex field in the budgetItems array, for each document in the AnualBudget collection.
- -Needs a little refactoring.
  */
 
 export default async function main() {
   try {
     await client.connect().then(async () => {
-      console.log(
-        'Connected successfully to the server || AnualBudgetToIndexes'
-      )
+      console.log('Connected successfully to MongoDB || AnualBudgetToIndexes')
       const indexes_collection = getCollection('Index')
       const indexes = await indexes_collection.find().toArray()
       const indexes_latest_values = indexes.map((idx) => {
@@ -37,35 +34,49 @@ export default async function main() {
 
       const updated_anual_budgets = anual_budgets.map((anual_budget) => {
         return {
-          ...anual_budget,
-          budgetItems: anual_budget.budgetItems?.map((budgetItem) => {
-            return {
-              ...budgetItem,
-              amountIndex: {
-                FCA: budgetItem.amount / latest_fca_price,
-                FMR: budgetItem.amount / latest_fmr_price,
-              },
-              remainingIndex: {
-                FCA: budgetItem.amount / latest_fca_price,
-                FMR: budgetItem.amount / latest_fmr_price,
-              },
+          anual_budget_id: anual_budget._id,
+          budgetItems: anual_budget.budgetItems?.map(
+            ({ amount, remaining, ...rest }) => {
+              return {
+                ...rest,
+                amountIndex: {
+                  FCA: amount / latest_fca_price,
+                  FMR: amount / latest_fmr_price,
+                },
+                remainingIndex: {
+                  FCA: amount / latest_fca_price,
+                  FMR: amount / latest_fmr_price,
+                },
+              }
             }
-          }),
+          ),
         }
       })
 
       for (const anual_budget of updated_anual_budgets) {
         try {
-          const result = await anual_budget_collection.replaceOne(
-            { _id: new ObjectId(anual_budget._id) },
-            anual_budget
-          )
-          console.log(
-            `Updated anual budget ${anual_budget._id}: ${result.modifiedCount} document modified`
-          )
+          if (
+            anual_budget.budgetItems?.some(
+              (item) => !isNaN(item.amountIndex.FCA)
+            )
+          ) {
+            const result = await anual_budget_collection.updateOne(
+              { _id: new ObjectId(anual_budget.anual_budget_id) },
+              {
+                $set: {
+                  budgetItems: anual_budget.budgetItems,
+                },
+              }
+            )
+            if (result.matchedCount > 0) {
+              console.log(
+                `Updated anual budget ${anual_budget.anual_budget_id}: ${result.modifiedCount} document modified, amount to indexes`
+              )
+            }
+          }
         } catch (error) {
           console.error(
-            `Error updating anual budget ${anual_budget._id}:`,
+            `Error updating anual budget ${anual_budget.anual_budget_id}:`,
             error
           )
         }
@@ -78,5 +89,3 @@ export default async function main() {
     console.log('Connection closed || AnualBudgetToIndexes')
   }
 }
-
-main()
