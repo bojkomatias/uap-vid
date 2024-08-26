@@ -57,13 +57,19 @@ model Convocatory {
 }
 
 model Logs {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt  DateTime @default(now())
-  message    String?
-  protocol   Protocol @relation(fields: [protocolId], references: [id])
-  protocolId String   @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String   @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime       @default(now())
+  message       String?
+  user          User           @relation(fields: [userId], references: [id], name: "UserToLogs")
+  userId        String         @db.ObjectId
+  protocol      Protocol       @relation(fields: [protocolId], references: [id])
+  protocolId    String         @db.ObjectId
+  budget        AnualBudget?   @relation(fields: [budgetId], references: [id])
+  budgetId      String?        @db.ObjectId
+  reviewer      User?          @relation(fields: [reviewerId], references: [id], name: "ReviewerToLogs")
+  reviewerId    String?        @db.ObjectId
+  action        Action?
+  previousState ProtocolState?
 }
 
 model Protocol {
@@ -105,8 +111,9 @@ model User {
   AcademicUnitIds String[]       @db.ObjectId
   protocols       Protocol[]
   memberDetails   TeamMember?
-  logs            Logs[]
   chat_messages   ChatMessage[]
+  logs            Logs[]         @relation(name: "UserToLogs")
+  reviewerLogs    Logs[]         @relation(name: "ReviewerToLogs")
 }
 
 model TeamMember {
@@ -175,6 +182,7 @@ model AnualBudget {
   protocol          Protocol                @relation(fields: [protocolId], references: [id])
   AcademicUnits     AcademicUnit[]          @relation(fields: [academicUnitsIds], references: [id])
   academicUnitsIds  String[]                @db.ObjectId
+  Logs              Logs[]
 }
 
 type AnualBudgetItem {
