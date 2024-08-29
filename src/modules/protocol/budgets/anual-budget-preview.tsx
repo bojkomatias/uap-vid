@@ -6,6 +6,18 @@ import { buttonStyle } from '@elements/button/styles'
 import { AlertCircle, CircleCheck } from 'tabler-icons-react'
 import { ActionGenerateButton } from './action-generate'
 import Link from 'next/link'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/table'
+import { Currency } from '@shared/currency'
+import { Subheading } from '@components/heading'
+import { DialogActions, DialogBody } from '@components/dialog'
+import { Divider } from '@components/divider'
 
 export async function AnualBudgetPreview({
   protocol,
@@ -73,104 +85,73 @@ export async function AnualBudgetPreview({
   )
   return (
     <>
-      <section className="mb-5">
-        <h1 className="text-lg font-semibold leading-7 text-gray-900">
-          Previsualización del presupuesto anual
-        </h1>
-        <div>
-          <div className="rounded-md bg-teal-300 px-6 py-3 text-sm shadow-sm">
-            <span className="flex items-center justify-between text-lg font-semibold">
-              <p>
-                Se generará un presupuesto para el
-                <Link
-                  target="_blank"
-                  className="font-bold transition hover:text-gray-700"
-                  href={`/protocols/${protocol.id}`}
-                >
-                  {' '}
-                  protocolo{' '}
-                </Link>
-                con los siguientes datos
-              </p>
-              <CircleCheck />
-            </span>
-            <p className="text-xs">
-              Esta ventana es una previsualización, una vez generado el
-              presupuesto, podrá ver con más detalles el presupuesto y el
-              cálculo del monto total.
-            </p>
-          </div>
-          <div className="  my-2 rounded-md border px-6 py-2 text-sm shadow">
-            <div className="grid grid-cols-4">
-              <div className="font-semibold text-gray-600 ">
-                <span>Miembro de equipo</span>
-              </div>
-              <div className=" text-center font-semibold text-gray-600">
-                <span>Rol</span>
-              </div>
-              <div className=" text-center font-semibold text-gray-600">
-                <span>Categoría</span>
-              </div>
-              <div className=" text-right font-semibold text-gray-600">
-                <span>Total horas</span>
-              </div>
-            </div>
-            {budgetPreview.budgetTeamMembers.map((teamMemberBudget, idx) => (
-              <div key={idx} className="my-2 grid grid-cols-4">
-                <span>{teamMemberBudget.teamMember?.name}</span>
-                <span className="text-center">
+      <DialogBody>
+        <Subheading>Miembros de equipo y horas</Subheading>
+        <Table bleed dense>
+          <TableHead>
+            <TableRow>
+              <TableHeader>Miembro</TableHeader>
+              <TableHeader>Rol</TableHeader>
+              <TableHeader>Categoría</TableHeader>
+              <TableHeader className="text-right">Horas totales</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {budgetPreview.budgetTeamMembers.map((tmBudget, idx) => (
+              <TableRow key={idx}>
+                <TableCell className="font-medium">
+                  {tmBudget.teamMember?.name}
+                </TableCell>
+                <TableCell>
                   {
                     parsedObject.data.find(
-                      (x) => x.teamMemberId == teamMemberBudget.teamMemberId
+                      (x) => x.teamMemberId == tmBudget.teamMemberId
                     )?.role
                   }
-                </span>
-                <span className="text-center">
-                  {
-                    teamMemberBudget.teamMember?.categories.at(-1)?.category
-                      .name
-                  }
-                </span>
-                <span className="text-right">{teamMemberBudget.hours}</span>
-              </div>
+                </TableCell>
+                <TableCell className="text-zinc-500">
+                  {tmBudget.teamMember?.categories.at(-1)?.category.name}
+                </TableCell>
+                <TableCell className="text-right font-medium">
+                  {tmBudget.hours}
+                </TableCell>
+              </TableRow>
             ))}
-          </div>
-          {budgetPreview.budgetItems.length !== 0 && (
-            <div className="my-2 rounded-md border px-6 py-2 text-sm shadow">
-              <div className="grid grid-cols-3 ">
-                <div className=" w-fit font-semibold text-gray-600">
-                  <span>Item</span>
-                </div>
-                <div className="text-center font-semibold text-gray-600">
-                  <span>Tipo</span>
-                </div>
-                <div className="text-right font-semibold text-gray-600">
-                  <span>Monto</span>
-                </div>
-              </div>
+          </TableBody>
+        </Table>
 
+        <Subheading className="mt-8">Gastos directos</Subheading>
+        {budgetPreview.budgetItems.length !== 0 && (
+          <Table bleed dense>
+            <TableHead>
+              <TableRow>
+                <TableHeader>Detalle</TableHeader>
+                <TableHeader>Tipo</TableHeader>
+                <TableHeader className="text-right">Monto</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {budgetPreview.budgetItems.map((i, idx) => (
-                <div key={idx} className="my-2 grid grid-cols-3">
-                  <span>{i.detail}</span>
-                  <span className="text-center">{i.type}</span>
-                  <span className="text-right">
-                    {/* To be INDEXED WHEN FINISHED! */}
-                    {/* <Currency amountIndex={i.amountIndex} /> */}
-                    Preview to be indexed
-                  </span>
-                </div>
+                <TableRow key={idx}>
+                  <TableCell className="font-medium">{i.detail}</TableCell>
+                  <TableCell>{i.type}</TableCell>
+                  <TableCell className="text-right">
+                    <Currency amountIndex={i.amountIndex} />
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <ActionGenerateButton
-        protocolId={protocol.id}
-        anualBudgetYears={protocol.anualBudgets.map((anual) => {
-          return anual.year
-        })}
-      />
+            </TableBody>
+          </Table>
+        )}
+      </DialogBody>
+      <DialogActions>
+        <ActionGenerateButton
+          protocolId={protocol.id}
+          anualBudgetYears={protocol.anualBudgets.map((anual) => {
+            return anual.year
+          })}
+        />
+      </DialogActions>
     </>
   )
 }
