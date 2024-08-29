@@ -1,14 +1,18 @@
-import { GenerateAnualBudget } from '@protocol/elements/budgets/generate-anual-budget'
-import { ProtocolInterceptedModal } from '@protocol/elements/protocol-intercepted-modal'
+import { AnualBudgetPreview } from '@protocol/budgets/anual-budget-preview'
+import { GenerateAnualBudgetDialog } from '@protocol/budgets/generate-anual-budget-dialog'
+import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 
 export default async function ModalPage({
   params: { protocolId },
 }: {
   params: { protocolId: string }
 }) {
+  const protocol = await findProtocolByIdWithResearcher(protocolId)
+  if (!protocol) return
+
   return (
-    <ProtocolInterceptedModal>
-      <GenerateAnualBudget protocolId={protocolId} />
-    </ProtocolInterceptedModal>
+    <GenerateAnualBudgetDialog>
+      <AnualBudgetPreview protocol={protocol} />
+    </GenerateAnualBudgetDialog>
   )
 }

@@ -1,23 +1,28 @@
+import type { Prisma } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
-import Link from 'next/link'
-import { AlertCircle, CircleCheck } from 'tabler-icons-react'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
-import { findProtocolByIdWithResearcher } from '@repositories/protocol'
-import { buttonStyle } from '@elements/button/styles'
-import { ActionGenerateButton } from './action-generate'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
+import { buttonStyle } from '@elements/button/styles'
+import { AlertCircle, CircleCheck } from 'tabler-icons-react'
+import { ActionGenerateButton } from './action-generate'
+import Link from 'next/link'
 
-export async function GenerateAnualBudget({
-  protocolId,
+export async function AnualBudgetPreview({
+  protocol,
 }: {
-  protocolId: string
+  protocol: Prisma.ProtocolGetPayload<{
+    include: {
+      researcher: { select: { id: true; name: true; email: true } }
+      convocatory: { select: { id: true; name: true } }
+      anualBudgets: {
+        select: { createdAt: true; year: true; id: true }
+      }
+    }
+  }>
 }) {
-  const protocol = await findProtocolByIdWithResearcher(protocolId)
-  if (!protocol) return
   const parsedObject = TeamMemberRelation.safeParse(
     protocol.sections.identification.team
   )
-
   if (!parsedObject.success)
     return (
       <div>
@@ -52,7 +57,7 @@ export async function GenerateAnualBudget({
         </section>
         <Link
           scroll={false}
-          href={`/protocols/${protocolId}/0`}
+          href={`/protocols/${protocol.id}/0`}
           className={buttonStyle('secondary')}
         >
           Editar miembros de equipo
@@ -61,14 +66,13 @@ export async function GenerateAnualBudget({
     )
 
   const budgetPreview = await protocolToAnualBudgetPreview(
-    protocolId,
+    protocol.id,
     protocol.sections.budget,
     protocol.sections.identification.team,
     protocolDuration(protocol.sections.duration.duration)
   )
-
   return (
-    <div>
+    <>
       <section className="mb-5">
         <h1 className="text-lg font-semibold leading-7 text-gray-900">
           Previsualización del presupuesto anual
@@ -76,13 +80,12 @@ export async function GenerateAnualBudget({
         <div>
           <div className="rounded-md bg-teal-300 px-6 py-3 text-sm shadow-sm">
             <span className="flex items-center justify-between text-lg font-semibold">
-              {' '}
               <p>
                 Se generará un presupuesto para el
                 <Link
                   target="_blank"
                   className="font-bold transition hover:text-gray-700"
-                  href={`/protocols/${protocolId}`}
+                  href={`/protocols/${protocol.id}`}
                 >
                   {' '}
                   protocolo{' '}
@@ -163,11 +166,11 @@ export async function GenerateAnualBudget({
       </section>
 
       <ActionGenerateButton
-        protocolId={protocolId}
+        protocolId={protocol.id}
         anualBudgetYears={protocol.anualBudgets.map((anual) => {
           return anual.year
         })}
       />
-    </div>
+    </>
   )
 }

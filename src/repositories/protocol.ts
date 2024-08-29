@@ -33,6 +33,7 @@ const findProtocolByIdWithResearcher = cache(
       },
     })
 )
+
 const getProtocolMetadata = cache(
   async (id: string) =>
     await prisma.protocol.findUnique({
