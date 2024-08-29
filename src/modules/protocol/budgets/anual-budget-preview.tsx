@@ -2,10 +2,7 @@ import type { Prisma } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
-import { buttonStyle } from '@elements/button/styles'
-import { AlertCircle, CircleCheck } from 'tabler-icons-react'
 import { ActionGenerateButton } from './action-generate'
-import Link from 'next/link'
 import {
   Table,
   TableBody,
@@ -17,7 +14,6 @@ import {
 import { Currency } from '@shared/currency'
 import { Subheading } from '@components/heading'
 import { DialogActions, DialogBody } from '@components/dialog'
-import { Divider } from '@components/divider'
 import { z } from 'zod'
 
 export async function AnualBudgetPreview({
@@ -29,7 +25,7 @@ export async function AnualBudgetPreview({
       researcher: { select: { id: true; name: true; email: true } }
       convocatory: { select: { id: true; name: true } }
       anualBudgets: {
-        select: { createdAt: true; year: true; id: true }
+        select: { createdAt: true; year: true; id: true; state: true }
       }
     }
   }>
@@ -105,9 +101,7 @@ export async function AnualBudgetPreview({
       <DialogActions>
         <ActionGenerateButton
           protocolId={protocol.id}
-          anualBudgetYears={protocol.anualBudgets.map((anual) => {
-            return anual.year
-          })}
+          anualBudgets={protocol.anualBudgets}
         />
       </DialogActions>
     </>

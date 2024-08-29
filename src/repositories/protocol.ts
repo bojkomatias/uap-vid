@@ -28,7 +28,7 @@ const findProtocolByIdWithResearcher = cache(
         researcher: { select: { id: true, name: true, email: true } },
         convocatory: { select: { id: true, name: true } },
         anualBudgets: {
-          select: { createdAt: true, year: true, id: true },
+          select: { createdAt: true, year: true, id: true, state: true },
         },
       },
     })

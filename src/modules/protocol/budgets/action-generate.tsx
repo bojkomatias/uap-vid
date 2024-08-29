@@ -1,24 +1,27 @@
 'use client'
+
 import { generateAnualBudget } from '@actions/anual-budget/action'
 import { Badge } from '@components/badge'
-import MultipleButton from '@elements/multiple-button'
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
+import { Prisma } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 
 export function ActionGenerateButton({
   protocolId,
-  anualBudgetYears,
+  anualBudgets,
 }: {
   protocolId: string
-  anualBudgetYears: number[]
+  anualBudgets: Prisma.AnualBudgetGetPayload<{
+    select: { createdAt: true; year: true; id: true; state: true }
+  }>[]
 }) {
   const router = useRouter()
   const currentYear = new Date().getFullYear()
   const options = [
     {
       year: currentYear,
-      title: `Generar presupuesto: ${currentYear}`,
-      description: 'Genera el presupuesto para el año actual',
+      title: `Presupuestar para ${currentYear}`,
       onClick: async () => {
         const budget = await generateAnualBudget(
           protocolId,
@@ -44,8 +47,7 @@ export function ActionGenerateButton({
     },
     {
       year: currentYear + 1,
-      title: `Generar presupuesto: ${currentYear + 1}`,
-      description: 'Genera el presupuesto para el año entrante',
+      title: `Presupuestar para ${currentYear + 1}`,
       onClick: async () => {
         const budget = await generateAnualBudget(
           protocolId,
@@ -71,26 +73,22 @@ export function ActionGenerateButton({
     },
   ]
 
-  const validToGenerateOptions = options.filter(
-    (x) => !anualBudgetYears.includes(x.year)
-  )
+  // If has draft budgets can re-generate more. This overrides the previous draft.
+  const approvedBudgetsYears = anualBudgets
+    .filter((budget) => budget.state === 'APPROVED')
+    .map((e) => e.year)
 
-  const hasNoValidOptions = validToGenerateOptions.length === 0
-
-  if (hasNoValidOptions)
-    return (
-      <Badge className="bg-yellow-50 ring-yellow-300">
-        Presupuestos ya han sido generados
-      </Badge>
-    )
-
-  return (
-    <MultipleButton
-      position="left-0 absolute bottom-0"
-      defaultValue={
-        anualBudgetYears.includes(options[1].year) ? options[0] : options[1]
+  return options.map(({ year, title, onClick }) => (
+    <Button
+      onClick={onClick}
+      disabled={approvedBudgetsYears.includes(year)}
+      title={
+        approvedBudgetsYears.includes(year) ?
+          'El año ya tiene presupuesto aprobado'
+        : undefined
       }
-      options={validToGenerateOptions}
-    />
-  )
+    >
+      {title}
+    </Button>
+  ))
 }
