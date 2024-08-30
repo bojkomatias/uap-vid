@@ -160,9 +160,23 @@ export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
 })
 
 export const createAnualBudget = async (
-  data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>
+  data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>,
+  id?: string
 ) => {
-  const newAnualBudget = await prisma.anualBudget.create({ data })
+  let newAnualBudget
+  if (id)
+    newAnualBudget = await prisma.anualBudget.update({
+      where: { id },
+      data: {
+        year: data.year,
+        budgetItems: data.budgetItems,
+        academicUnitsIds: data.academicUnitsIds,
+      },
+    })
+  else
+    newAnualBudget = await prisma.anualBudget.create({
+      data,
+    })
 
   const promises = data.academicUnitsIds.map(async (id) => {
     await prisma.academicUnit.update({

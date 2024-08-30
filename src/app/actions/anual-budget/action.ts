@@ -42,23 +42,34 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
  * @param year - The year to generate the budget for.
  * @returns A Promise that resolves to the generated annual budget, or null if the protocol is not found.
  */
-export const generateAnualBudget = async (protocolId: string, year: string) => {
+export const generateAnualBudget = async ({
+  protocolId,
+  year,
+  id,
+}: {
+  protocolId: string
+  year: number
+  id?: string
+}) => {
   const protocol = await findProtocolById(protocolId)
   if (!protocol) return null
 
   // Create the annual budget with all the items listed in the protocol budget section.
-  const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
+  const ABI = generateAnualBudgetItems(
+    protocol?.sections.budget,
+    year.toString()
+  )
   const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
     protocolId: protocol.id,
-    year: Number(year),
+    year,
     budgetItems: ABI,
     academicUnitsIds: protocol.sections.identification.academicUnitIds,
   }
 
-  const newAnualBudget = await createAnualBudget(data)
+  const newAnualBudget = await createAnualBudget(data, id)
   const duration = protocolDuration(protocol.sections.duration.duration)
   // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
-  const ABT = generateAnualBudgetTeamMembersItems(
+  const ABT = generateAnualBudgetTeamMembers(
     protocol.sections.identification.team,
     newAnualBudget.id,
     duration
@@ -93,7 +104,7 @@ const generateAnualBudgetItems = (
   }, [] as AnualBudgetItem[])
 }
 
-const generateAnualBudgetTeamMembersItems = (
+const generateAnualBudgetTeamMembers = (
   protocolTeam: ProtocolSectionsIdentificationTeam[],
   anualBudgetId: string | null,
   duration: number
@@ -137,7 +148,7 @@ export const protocolToAnualBudgetPreview = async (
     protocolBudgetItems,
     new Date().getFullYear().toString()
   )
-  const ABT = generateAnualBudgetTeamMembersItems(
+  const ABT = generateAnualBudgetTeamMembers(
     protocolTeamMembers,
     null,
     duration
