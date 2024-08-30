@@ -5,6 +5,7 @@ import { Badge } from '@components/badge'
 import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { Prisma } from '@prisma/client'
+import { getAnualBudgetById } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 
 export function ActionGenerateButton({
@@ -36,7 +37,7 @@ export function ActionGenerateButton({
           })
           setTimeout(() => {
             router.push(`/anual-budgets/budget/${budget}`)
-          }, 500)
+          }, 2500)
         } else
           notifications.show({
             title: 'Problema al generar presupuesto',
