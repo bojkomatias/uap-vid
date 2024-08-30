@@ -8,6 +8,7 @@ import { ArrowDown, ArrowRight, User } from 'tabler-icons-react'
 import type { EmailContentTemplate } from '@prisma/client'
 import EmailForm from './EmailForm'
 import { Text } from '@components/text'
+import { Badge } from '@components/badge'
 
 export default function EmailsTable({
   emails,
@@ -597,15 +598,17 @@ export default function EmailsTable({
               setOpen(true)
               setDialogContent(emails.find((e) => e.useCase == uc)!)
             }}
-            className="cursor-pointer rounded-lg border p-4 text-lg font-medium drop-shadow-sm transition hover:shadow-lg dark:border-gray-700"
+            className="max-w-3xl cursor-pointer rounded-lg border p-4 text-left text-lg font-medium drop-shadow-sm transition hover:bg-black/10 hover:shadow-lg dark:border-gray-700 dark:hover:border-white/30"
           >
-            {useCasesDictionary[uc]}
+            <Badge className="!text-base">{useCasesDictionary[uc]}</Badge>
+
+            {useCasesExplanation[uc]}
           </Button>
         ))}
       </div>
       <Dialog size="2xl" open={open} onClose={setOpen}>
         <Heading>{useCasesDictionary[dialogContent?.useCase]}</Heading>
-        {useCasesExplanation[dialogContent?.useCase]}
+
         <Subheading className=" my-2">Email</Subheading>
         <EmailForm email={dialogContent} callbackFn={setDialogContent} />
         <Subheading className="mt-3">Vista previa del email</Subheading>
