@@ -28,7 +28,7 @@ import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
 import { BadgeButton } from '@components/badge'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { Button } from '@components/button'
 import type { z } from 'zod'
 import { createProtocol, updateProtocolById } from '@repositories/protocol'
@@ -269,7 +269,7 @@ export default function ProtocolForm({
             Sección previa
           </Button>
 
-          <FormButton isLoading={isPending}>Guardar</FormButton>
+          <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
 
           <Button
             type="button"

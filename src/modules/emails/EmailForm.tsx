@@ -3,7 +3,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { EmailContentTemplate } from '@prisma/client'
 import { updateEmail } from '@repositories/email'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { EmailContentTemplateSchema } from '@utils/zod'
@@ -76,7 +76,7 @@ export default function EmailForm({
         />
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={false}>Actualizar</FormButton>
+        <SubmitButton isLoading={false}>Actualizar</SubmitButton>
       </FormActions>
     </form>
   )

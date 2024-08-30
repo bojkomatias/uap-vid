@@ -5,7 +5,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { Prisma, TeamMemberCategory } from '@prisma/client'
 import { updateCategoryHistory } from '@repositories/team-member'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { FormListbox } from '@shared/form/form-listbox'
 import { cx } from '@utils/cx'
@@ -120,7 +120,7 @@ export default function CategorizationForm({
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>Actualizar categoría</FormButton>
+        <SubmitButton isLoading={isPending}>Actualizar categoría</SubmitButton>
       </FormActions>
     </form>
   )

@@ -17,7 +17,7 @@ import { User } from 'tabler-icons-react'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { useQuery } from '@tanstack/react-query'
 import { getAllOwners } from '@repositories/user'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { useForm, zodResolver } from '@mantine/form'
 import { z } from 'zod'
 import { updateProtocolResearcher } from '@repositories/protocol'
@@ -155,9 +155,9 @@ const ResearcherReassignation = ({
             >
               Cerrar
             </Button>
-            <FormButton disabled={form.isDirty()} isLoading={isPending}>
+            <SubmitButton disabled={form.isDirty()} isLoading={isPending}>
               Cambiar investigador
-            </FormButton>
+            </SubmitButton>
           </DialogActions>
         </form>
       </Dialog>

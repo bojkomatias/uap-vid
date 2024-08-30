@@ -4,8 +4,9 @@ import { generateAnualBudget } from '@actions/anual-budget/action'
 import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { Prisma } from '@prisma/client'
+import { SubmitButton } from '@shared/submit-button'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 export function ActionGenerateButton({
   protocolId,
@@ -17,6 +18,7 @@ export function ActionGenerateButton({
   }>[]
 }) {
   const router = useRouter()
+  const [isSubmitting, setSubmitting] = useState(false)
   const currentYear = new Date().getFullYear()
   const comingYear = new Date().getFullYear() + 1
 
@@ -62,7 +64,7 @@ export function ActionGenerateButton({
 
   return (
     <>
-      <Button
+      <SubmitButton
         color="light"
         disabled={budgetedCurrentYear?.state === 'APPROVED'}
         onClick={() =>
@@ -74,7 +76,7 @@ export function ActionGenerateButton({
         }
       >
         Presupuesto año corriente {currentYear}
-      </Button>
+      </SubmitButton>
       <Button
         disabled={budgetedComingYear?.state === 'APPROVED'}
         onClick={() =>

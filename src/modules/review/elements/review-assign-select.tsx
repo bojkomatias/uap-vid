@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { useForm } from '@mantine/form'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FieldGroup, Fieldset } from '@components/fieldset'
 import {
   assignReviewerToProtocol,
@@ -110,7 +110,7 @@ export const AssignEvaluatorSelector = ({
           }))}
           {...form.getInputProps('evaluator')}
         />
-        <FormButton isLoading={isPending}>Asignar</FormButton>
+        <SubmitButton isLoading={isPending}>Asignar</SubmitButton>
       </Fieldset>
     </form>
   )
