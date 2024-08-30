@@ -60,7 +60,7 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
 
   return (
     // Cannot delay router back for animation transition because it bugs out.
-    <Dialog transition open={true} onClose={() => router.back()} size="3xl">
+    <Dialog transition open={true} onClose={() => router.back()} size="4xl">
       <DialogTitle>Presupuesto {budget.year}</DialogTitle>
       <DialogDescription>
         Honorarios y gastos directos presupuestados
@@ -187,7 +187,7 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
           Cerrar
         </Button>
         <Button href={`/anual-budgets/budget/${budget.id}`}>
-          Ver detalles
+          Ir al presupuesto
         </Button>
       </DialogActions>
     </Dialog>

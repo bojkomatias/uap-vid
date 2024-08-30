@@ -18,11 +18,18 @@ import {
 } from '@utils/amountIndex'
 import { useQuery } from '@tanstack/react-query'
 import { getCurrentIndexes } from '@repositories/finance-index'
-import { Button } from '@components/button'
-import { Dialog } from '@components/dialog'
+import { Dialog, DialogBody, DialogTitle } from '@components/dialog'
 import { Heading, Subheading } from '@components/heading'
 import { Badge, BadgeButton } from '@components/badge'
 import { Divider } from '@components/divider'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@components/table'
 
 export default function BudgetExecutionView({
   title,
@@ -98,236 +105,108 @@ export default function BudgetExecutionView({
       executionAmountByAcademicUnit
     )
   }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
+
   return (
     <>
-      <Dialog title="Ejecuciones" open={opened} onClose={setOpened}>
-        <section
-          className="flex flex-col gap-4"
-          onClick={(e) => e.preventDefault()}
-        >
-          <div className="flex flex-col gap-3">
-            <Heading className="text-xl font-semibold text-gray-800">
-              {executionType === ExecutionType.TeamMember ?
-                'Honorarios'
-              : 'Gastos directos'}
-            </Heading>
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-600">
-                {executionType === ExecutionType.TeamMember ?
-                  <Subheading className="!text-lg">{title}</Subheading>
-                : <>
-                    <Subheading className="font-semibold">Detalle</Subheading>
-                    <Text>{title}</Text>
-                  </>
-                }
-              </p>
+      <Dialog
+        open={opened}
+        onClose={setOpened}
+        size="2xl"
+        className="space-y-4"
+      >
+        <DialogTitle>
+          {executionType === ExecutionType.TeamMember ?
+            'Honorarios'
+          : 'Gastos directos'}
+        </DialogTitle>
+
+        <div className="flex items-center gap-2">
+          {executionType === ExecutionType.TeamMember ?
+            <Heading>{title}</Heading>
+          : <>
+              <Subheading>Detalle</Subheading>
+              <Text>{title}</Text>
+            </>
+          }
+        </div>
+
+        <Strong>Categoría:</Strong>
+        <Badge className="text-sm">{obrero ? 'Obrero' : itemName}</Badge>
+
+        {obrero && (
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Text>Puntos:</Text>
+              <Strong>{obrero.pointsObrero}</Strong>
             </div>
-            <div className="flex items-center gap-2">
-              <Subheading className="font-semibold ">Categoría:</Subheading>
-              <Badge className="text-sm">{obrero ? 'Obrero' : itemName}</Badge>
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Text>Precio punto: </Text>
+              <Currency amountIndex={obrero.pointPrice} />
             </div>
-
-            {obrero && (
-              <div className="flex flex-col items-start gap-2">
-                <div className="flex gap-2 text-sm font-semibold ">
-                  <Text>Puntos:</Text>{' '}
-                  <Subheading>{obrero.pointsObrero}</Subheading>
-                </div>
-                <div className="flex gap-2 text-sm font-semibold">
-                  <Text>Precio punto: </Text>
-                  <Currency amountIndex={obrero.pointPrice} />
-                </div>
-                <div className="flex gap-2 text-sm font-semibold">
-                  <Text>Precio hora:</Text>{' '}
-                  <Currency amountIndex={obrero.hourlyRate} />
-                </div>
-              </div>
-            )}
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Text>Precio hora:</Text>
+              <Currency amountIndex={obrero.hourlyRate} />
+            </div>
           </div>
-          <Divider />
-          <div className="flex flex-col gap-3 rounded-md ">
-            {remaining !== ZeroAmountIndex ?
-              <>
-                <Subheading className="text-xl font-semibold">
-                  Nueva ejecución:
-                </Subheading>
-                {academicUnits ?
-                  <>
-                    <div className="flex flex-col items-start gap-2">
-                      <p className="gap-2 text-sm font-semibold text-gray-600">
-                        Presupuesto asignado:
+        )}
+
+        <Divider />
+        <div>
+          <Subheading>
+            <Strong>Nueva ejecución</Strong>
+          </Subheading>
+
+          {remaining !== ZeroAmountIndex ?
+            <BudgetNewExecution
+              academicUnits={academicUnits}
+              maxAmount={
+                priceData ? maxExecutionAmount.FCA * priceData.currentFCA : 0
+              }
+              anualBudgetTeamMemberId={anualBudgetTeamMemberId}
+              executionType={executionType}
+              budgetItemPositionIndex={positionIndex}
+            />
+          : null}
+        </div>
+        <Divider />
+        <div>
+          <Subheading>
+            <Strong>Ejecuciones históricas</Strong>
+          </Subheading>
+
+          {executions.reverse().length > 0 ?
+            <Table bleed>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Fecha</TableHeader>
+                  <TableHeader className="text-right">Monto</TableHeader>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {executions.reverse().map((execution, idx) => (
+                  <TableRow key={`${execution.date.getTime()}${idx}`}>
+                    <TableCell>
+                      <Subheading>
+                        {execution.date.toLocaleDateString()}
+                      </Subheading>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {execution.amountIndex ?
                         <Currency
-                          amountIndex={
-                            maxAmountPerAcademicUnit ?? ZeroAmountIndex
-                          }
+                          amountIndex={execution.amountIndex ?? ZeroAmountIndex}
                         />
-                      </p>
-                      <p className="gap-2 text-sm font-semibold text-gray-600">
-                        Presupuesto utilizado:
-                        <Currency
-                          amountIndex={
-                            executionAmountByAcademicUnit ?? ZeroAmountIndex
-                          }
-                        />
-                      </p>
-                    </div>
-                    <Combobox
-                      as="div"
-                      value={selectedAcademicUnit?.id}
-                      onChange={(value) => {
-                        if (value) {
-                          setSelectedAcademicUnit(
-                            academicUnits?.find((ac) => ac.id === value)
-                          )
-                        }
-                      }}
-                      className="relative z-10"
-                    >
-                      <Combobox.Button className="relative w-2/3">
-                        <Combobox.Input
-                          autoComplete="off"
-                          onChange={(event) => setQuery(event.target.value)}
-                          className="input disabled:bg-gray-100"
-                          placeholder={`Seleccione una unidad academica`}
-                          displayValue={() =>
-                            academicUnits?.find(
-                              (ac) => ac.id === selectedAcademicUnit?.id
-                            )?.shortname ?? ''
-                          }
-                        />
-
-                        <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
-                          <Selector
-                            className="h-4 text-gray-600 hover:text-gray-400"
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </Combobox.Button>
-
-                      {(
-                        filteredAcademicUnits &&
-                        filteredAcademicUnits.length > 0
-                      ) ?
-                        <Combobox.Options className="absolute z-10 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
-                          {filteredAcademicUnits.map((value) => (
-                            <Combobox.Option
-                              key={value.id}
-                              value={value.id}
-                              className={({ active }) =>
-                                cx(
-                                  'relative cursor-default select-none py-2 pl-8 pr-2',
-                                  active ? 'bg-gray-100' : 'text-gray-600'
-                                )
-                              }
-                            >
-                              {({ active, selected }) => (
-                                <>
-                                  <span className="block truncate font-medium">
-                                    <span
-                                      title={value.shortname}
-                                      className={cx(
-                                        'ml-3 truncate text-xs font-light',
-                                        active ? 'text-gray-700' : (
-                                          'text-gray-500'
-                                        )
-                                      )}
-                                    >
-                                      {value.name}
-                                    </span>
-                                  </span>
-
-                                  {selected && (
-                                    <span
-                                      className={cx(
-                                        'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
-                                        active ? 'text-white' : ''
-                                      )}
-                                    >
-                                      <Check
-                                        className="h-4 w-4 text-gray-500"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </Combobox.Option>
-                          ))}
-                        </Combobox.Options>
-                      : null}
-                    </Combobox>
-                  </>
-                : null}
-                <BudgetNewExecution
-                  academicUnit={selectedAcademicUnit}
-                  maxAmount={
-                    priceData ?
-                      maxExecutionAmount.FCA * priceData.currentFCA
-                    : 0
-                  }
-                  anualBudgetTeamMemberId={anualBudgetTeamMemberId}
-                  executionType={executionType}
-                  budgetItemPositionIndex={positionIndex}
-                />
-              </>
-            : null}
-
-            {executions.reverse().length > 0 ?
-              <>
-                <Divider />
-                <Subheading>Ejecuciones históricas</Subheading>
-
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr>
-                      <th>
-                        <Subheading className="text-left">Fecha</Subheading>
-                      </th>
-
-                      <th className="text-right">
-                        <Subheading>Monto</Subheading>
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {executions.reverse().map((execution, idx) => {
-                      return (
-                        <>
-                          <tr key={`${execution.date.getTime()}${idx}`}>
-                            <td>
-                              <Subheading>
-                                {execution.date.toLocaleDateString()}
-                              </Subheading>
-                            </td>
-
-                            <td className="pt-2 text-right">
-                              <Strong>
-                                {execution.amountIndex ?
-                                  <Currency
-                                    amountIndex={
-                                      execution.amountIndex ?? ZeroAmountIndex
-                                    }
-                                  />
-                                : currencyFormatter.format(
-                                    execution.amount ?? 0
-                                  )
-                                }
-                              </Strong>
-                            </td>
-                          </tr>
-                        </>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </>
-            : <Text className="mt-6 text-center text-sm text-gray-600">
-                <b>No hay ejecuciones históricas</b>
-              </Text>
-            }
-          </div>
-        </section>
+                      : currencyFormatter.format(execution.amount ?? 0)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          : <Text className="mt-6 text-center text-sm text-gray-600">
+              <b>No hay ejecuciones históricas</b>
+            </Text>
+          }
+        </div>
       </Dialog>
 
       <BadgeButton

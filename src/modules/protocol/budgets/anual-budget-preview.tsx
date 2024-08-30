@@ -74,28 +74,30 @@ export async function AnualBudgetPreview({
           </TableBody>
         </Table>
 
-        <Subheading className="mt-8">Gastos directos</Subheading>
         {budgetPreview.budgetItems.length !== 0 && (
-          <Table bleed dense>
-            <TableHead>
-              <TableRow>
-                <TableHeader>Detalle</TableHeader>
-                <TableHeader>Tipo</TableHeader>
-                <TableHeader className="text-right">Monto</TableHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {budgetPreview.budgetItems.map((i, idx) => (
-                <TableRow key={idx + i.type}>
-                  <TableCell className="font-medium">{i.detail}</TableCell>
-                  <TableCell>{i.type}</TableCell>
-                  <TableCell className="text-right">
-                    <Currency amountIndex={i.amountIndex} />
-                  </TableCell>
+          <>
+            <Subheading className="mt-8">Gastos directos</Subheading>
+            <Table bleed dense>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Detalle</TableHeader>
+                  <TableHeader>Tipo</TableHeader>
+                  <TableHeader className="text-right">Monto</TableHeader>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {budgetPreview.budgetItems.map((i, idx) => (
+                  <TableRow key={idx + i.type}>
+                    <TableCell className="font-medium">{i.detail}</TableCell>
+                    <TableCell>{i.type}</TableCell>
+                    <TableCell className="text-right">
+                      <Currency amountIndex={i.amountIndex} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
         )}
       </DialogBody>
       <DialogActions>

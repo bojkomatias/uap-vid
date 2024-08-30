@@ -15,6 +15,7 @@ import { getAcademicUnitById } from '@repositories/academic-unit'
 import {
   createAnualBudget,
   createManyAnualBudgetTeamMember,
+  deleteAnualBudgetTeamMembers,
   getAnualBudgetById,
   getAnualBudgetTeamMemberById,
   newBudgetItemExecution,
@@ -74,6 +75,11 @@ export const generateAnualBudget = async ({
     newAnualBudget.id,
     duration
   )
+
+  // if has id, should clean previous teamMembers from the database.
+  if (id && newAnualBudget.state === 'PENDING') {
+    await deleteAnualBudgetTeamMembers(id)
+  }
 
   await createManyAnualBudgetTeamMember(ABT)
   //Added this return to check if the budget was created

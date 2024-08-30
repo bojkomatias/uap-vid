@@ -32,6 +32,7 @@ export function ActionGenerateButton({
       year: number
       id?: string
     }) => {
+      setSubmitting(true)
       const budget = await generateAnualBudget({ protocolId, year, id })
 
       if (budget) {
@@ -41,14 +42,17 @@ export function ActionGenerateButton({
           intent: 'success',
         })
         setTimeout(() => {
+          setSubmitting(false)
           router.push(`/anual-budgets/budget/${budget}`)
         }, 2500)
-      } else
+      } else {
+        setSubmitting(false)
         notifications.show({
           title: 'Problema al generar presupuesto',
           message: 'Ocurrió un error al generar el presupuesto',
           intent: 'error',
         })
+      }
     },
     []
   )
@@ -64,31 +68,35 @@ export function ActionGenerateButton({
 
   return (
     <>
-      <SubmitButton
-        color="light"
-        disabled={budgetedCurrentYear?.state === 'APPROVED'}
-        onClick={() =>
-          submitGeneration({
-            protocolId,
-            year: comingYear,
-            id: budgetedCurrentYear?.id,
-          })
-        }
-      >
-        Presupuesto año corriente {currentYear}
-      </SubmitButton>
-      <Button
-        disabled={budgetedComingYear?.state === 'APPROVED'}
-        onClick={() =>
-          submitGeneration({
-            protocolId,
-            year: comingYear,
-            id: budgetedComingYear?.id,
-          })
-        }
-      >
-        Presupuesto año entrante {currentYear + 1}
-      </Button>
+      {budgetedCurrentYear?.state !== 'PENDING' ? null : (
+        <SubmitButton
+          color="light"
+          isLoading={isSubmitting}
+          onClick={() =>
+            submitGeneration({
+              protocolId,
+              year: currentYear,
+              id: budgetedCurrentYear?.id,
+            })
+          }
+        >
+          Presupuesto año corriente {currentYear}
+        </SubmitButton>
+      )}
+      {budgetedComingYear?.state !== 'PENDING' ? null : (
+        <SubmitButton
+          isLoading={isSubmitting}
+          onClick={() =>
+            submitGeneration({
+              protocolId,
+              year: comingYear,
+              id: budgetedComingYear?.id,
+            })
+          }
+        >
+          Presupuesto año entrante {comingYear}
+        </SubmitButton>
+      )}
     </>
   )
 }

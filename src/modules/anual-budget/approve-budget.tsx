@@ -11,7 +11,7 @@ export function ApproveAnualBudget({ id }: { id: string }) {
   const [isPending, startTransition] = useTransition()
   return (
     <Button
-      outline
+      color="teal"
       disabled={isPending}
       onClick={async () => {
         const res = await approveAnualBudget(id)
@@ -32,7 +32,8 @@ export function ApproveAnualBudget({ id }: { id: string }) {
         })
       }}
     >
-      Aprobar presupuesto <Check />
+      <Check data-slot="icon" />
+      Aprobar presupuesto
     </Button>
   )
 }

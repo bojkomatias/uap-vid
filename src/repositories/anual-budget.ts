@@ -195,6 +195,18 @@ export const createAnualBudget = async (
   return newAnualBudget
 }
 
+export const deleteAnualBudgetTeamMembers = async (id: string) => {
+  try {
+    const result = await prisma.anualBudgetTeamMember.deleteMany({
+      where: { anualBudgetId: id },
+    })
+    return result
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
 export const createManyAnualBudgetTeamMember = async (
   data: Omit<AnualBudgetTeamMember, 'id'>[]
 ) => {
