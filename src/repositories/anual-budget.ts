@@ -14,6 +14,7 @@ import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import { logEvent } from './log'
+import { getCurrentIndexes } from './finance-index'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -212,6 +213,7 @@ export const updateAnualBudgetItems = async (
       data: { budgetItems },
     })
   } catch (error) {
+    console.log(error)
     return null
   }
 }
