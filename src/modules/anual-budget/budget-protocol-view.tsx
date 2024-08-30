@@ -63,8 +63,7 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
     <Dialog transition open={true} onClose={() => router.back()} size="3xl">
       <DialogTitle>Presupuesto {budget.year}</DialogTitle>
       <DialogDescription>
-        Los calculos de honorarios y gastos directos, indexados actualizados en
-        el tiempo
+        Honorarios y gastos directos presupuestados
       </DialogDescription>
       <DialogBody>
         <Subheading>Honorarios del equipo</Subheading>
@@ -186,6 +185,9 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
       <DialogActions>
         <Button plain onClick={() => router.back()}>
           Cerrar
+        </Button>
+        <Button href={`/anual-budgets/budget/${budget.id}`}>
+          Ver detalles
         </Button>
       </DialogActions>
     </Dialog>

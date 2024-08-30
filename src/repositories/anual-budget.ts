@@ -213,12 +213,20 @@ export const updateAnualBudgetTeamMemberHours = async (
   >[]
 ) => {
   try {
+    batch.map(({ id, ...data }) => console.log(data))
     return await prisma.$transaction(
-      batch.map(({ id, ...data }) =>
-        prisma.anualBudgetTeamMember.update({ where: { id }, data })
-      )
+      batch.map(({ id, ...data }) => {
+        return prisma.anualBudgetTeamMember.update({
+          where: { id },
+          data: {
+            hours: Number(data.hours),
+            remainingHours: Number(data.remainingHours),
+          },
+        })
+      })
     )
   } catch (error) {
+    console.log(error)
     return null
   }
 }
