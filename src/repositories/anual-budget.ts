@@ -1,6 +1,6 @@
 'use server'
 
-import { AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
+import { Action, AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
 import type {
   AnualBudget,
   AnualBudgetTeamMember,
@@ -160,7 +160,29 @@ export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
   }
 })
 
-export const createAnualBudget = async (
+export const getAnualBudgetTeamMembersByAnualBudgetId = cache(
+  async (anualBudgetId: string) => {
+    try {
+      return await prisma.anualBudgetTeamMember.findMany({
+        where: { anualBudgetId: anualBudgetId },
+      })
+    } catch (error) {
+      return []
+    }
+  }
+)
+
+export const updateAnualBudgetState = async (
+  anualBudgetId: string,
+  state: AnualBudgetState
+) => {
+  return await prisma.anualBudget.update({
+    where: { id: anualBudgetId },
+    data: { state: state },
+  })
+}
+
+export const upsertAnualBudget = async (
   data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>,
   id?: string
 ) => {
@@ -487,13 +509,14 @@ export const interruptAnualBudget = async (id: string) => {
       userId: session!.user.id,
       protocolId: result.protocolId,
       budgetId: result.id,
-      action: 'DISCONTINUE',
+      action: Action.DISCONTINUE,
       message: null,
       reviewerId: null,
       previousState: ProtocolState.ON_GOING,
     })
+    return { success: true }
   } catch (e) {
-    return null
+    return { success: false, message: e }
   }
 }
 

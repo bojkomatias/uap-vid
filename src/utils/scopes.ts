@@ -69,6 +69,7 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
     Action.FINISH,
     Action.VIEW_ANUAL_BUDGET,
     Action.GENERATE_ANUAL_BUDGET,
+    Action.REACTIVATE,
   ],
 }
 
@@ -109,7 +110,9 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
     Action.GENERATE_ANUAL_BUDGET,
   ],
   [ProtocolState.FINISHED]: [],
-  [ProtocolState.DISCONTINUED]: [],
+  [ProtocolState.DISCONTINUED]: [
+    Action.REACTIVATE
+  ],
   [ProtocolState.DELETED]: [],
 }
 

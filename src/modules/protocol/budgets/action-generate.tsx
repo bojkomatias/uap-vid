@@ -33,7 +33,11 @@ export function ActionGenerateButton({
       id?: string
     }) => {
       setSubmitting(true)
-      const budget = await generateAnualBudget({ protocolId, year, id })
+      const budget = await generateAnualBudget({
+        protocolId,
+        year,
+        budgetId: id,
+      })
 
       if (budget) {
         notifications.show({

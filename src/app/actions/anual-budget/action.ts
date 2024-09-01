@@ -10,19 +10,28 @@ import {
   type AnualBudgetTeamMember,
   type AcademicUnit,
   AnualBudgetState,
+  ProtocolState,
+  Action,
 } from '@prisma/client'
 import { getAcademicUnitById } from '@repositories/academic-unit'
 import {
-  createAnualBudget,
   createManyAnualBudgetTeamMember,
   deleteAnualBudgetTeamMembers,
   getAnualBudgetById,
   getAnualBudgetTeamMemberById,
+  getAnualBudgetTeamMembersByAnualBudgetId,
   newBudgetItemExecution,
   newTeamMemberExecution,
+  updateAnualBudgetState,
+  upsertAnualBudget,
 } from '@repositories/anual-budget'
 import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
-import { findProtocolById } from '@repositories/protocol'
+import { getLogsByProtocolId } from '@repositories/log'
+import {
+  findProtocolById,
+  findProtocolByIdWithBudgets,
+  updateProtocolStateById,
+} from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
   BudgetSummaryZero,
@@ -46,11 +55,13 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
 export const generateAnualBudget = async ({
   protocolId,
   year,
-  id,
+  budgetId,
+  reactivated,
 }: {
   protocolId: string
   year: number
-  id?: string
+  budgetId?: string
+  reactivated?: boolean
 }) => {
   const protocol = await findProtocolById(protocolId)
   if (!protocol) return null
@@ -67,7 +78,7 @@ export const generateAnualBudget = async ({
     academicUnitsIds: protocol.sections.identification.academicUnitIds,
   }
 
-  const newAnualBudget = await createAnualBudget(data, id)
+  const newAnualBudget = await upsertAnualBudget(data, budgetId)
   const duration = protocolDuration(protocol.sections.duration.duration)
   // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
   const ABT = generateAnualBudgetTeamMembers(
@@ -76,14 +87,96 @@ export const generateAnualBudget = async ({
     duration
   )
 
+  // Handle the case where the anual budget is reactivated
+  if (budgetId && reactivated) {
+    const oldABT = await getAnualBudgetTeamMembersByAnualBudgetId(
+      newAnualBudget.id
+    )
+    ABT.forEach((newABT) => {
+      newABT.executions =
+        oldABT.find((oldABT) => oldABT.teamMemberId === newABT.teamMemberId)
+          ?.executions || []
+    })
+    await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
+  }
+
   // if has id, should clean previous teamMembers from the database.
-  if (id && newAnualBudget.state === 'PENDING') {
-    await deleteAnualBudgetTeamMembers(id)
+  if (budgetId && newAnualBudget.state === 'PENDING') {
+    await deleteAnualBudgetTeamMembers(budgetId)
   }
 
   await createManyAnualBudgetTeamMember(ABT)
   //Added this return to check if the budget was created
   return newAnualBudget.id
+}
+
+export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
+  const protocol = await findProtocolByIdWithBudgets(protocolId)
+  if (!protocol)
+    return {
+      success: false,
+      notification: {
+        title: 'Error',
+        message: 'Ocurrio un error al reactivar el procotolo.',
+        intent: 'error',
+      } as const,
+    }
+
+  const currentYear = new Date().getFullYear()
+  const haveBudgetForCurrentYear = protocol.anualBudgets.find(
+    (b) => b.year === currentYear
+  )
+
+  if (haveBudgetForCurrentYear) {
+    await generateAnualBudget({
+      protocolId: protocolId,
+      year: currentYear,
+      budgetId: haveBudgetForCurrentYear.id,
+      reactivated: true,
+    })
+  }
+
+  const protocolLogs = await getLogsByProtocolId(protocolId)
+
+  // TODO: Fix this validation
+
+  // if (!protocolLogs)
+  //   return {
+  //     success: false,
+  //     notification: {
+  //       title: 'Error',
+  //       message: 'Ocurrio un error al reactivar el procotolo.',
+  //       intent: 'error',
+  //     } as const,
+  //   }
+
+  // const lastProtocolState = protocolLogs.at(-1)?.previousState
+
+  // if (!lastProtocolState)
+  //   return {
+  //     success: false,
+  //     notification: {
+  //       title: 'Error',
+  //       message: 'Ocurrio un error al reactivar el procotolo.',
+  //       intent: 'error',
+  //     } as const,
+  //   }
+
+  await updateProtocolStateById(
+    protocolId,
+    Action.REACTIVATE,
+    ProtocolState.DISCONTINUED,
+    protocolLogs?.at(-1)?.previousState ?? ProtocolState.ON_GOING
+  )
+
+  return {
+    success: true,
+    notification: {
+      title: 'Estado modificado',
+      message: 'El estado del protocolo fue modificado con éxito',
+      intent: 'success',
+    } as const,
+  }
 }
 
 // Utilities for generating the annual budget from a protocol.

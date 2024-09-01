@@ -65,6 +65,16 @@ const findProtocolById = cache(
     })
 )
 
+const findProtocolByIdWithBudgets = cache(
+  async (id: string) =>
+    await prisma.protocol.findUnique({
+      where: {
+        id,
+      },
+      include: { anualBudgets: true },
+    })
+)
+
 const getResearcherEmailByProtocolId = cache(async (id: string) => {
   try {
     return await prisma.protocol.findUnique({
@@ -659,4 +669,5 @@ export {
   upsertProtocolFlag,
   updateProtocolTeamMembers,
   updateProtocolConvocatory,
+  findProtocolByIdWithBudgets,
 }
