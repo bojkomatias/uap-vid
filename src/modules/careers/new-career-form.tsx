@@ -62,7 +62,7 @@ export function NewCareerForm({
       className="@container"
     >
       <Fieldset>
-        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+        <FieldGroup className="@xl:grid @xl:grid-cols-1 @xl:gap-6 @xl:space-y-0">
           <FormSwitch
             label="Estado de la carrera"
             description={
