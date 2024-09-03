@@ -71,6 +71,8 @@ const getCategories = cache(
             name: true,
             price: true,
             amountIndex: true,
+            specialCategory: true,
+            specialCategoryPrices: true,
           },
           // Add all the globally searchable fields
           where: {
@@ -138,6 +140,7 @@ const insertCategory = async (
   const newCategory = {
     name: data.name,
     state: data.state,
+    specialCategory: data.specialCategory,
     amountIndex: {
       FCA: data.amount / currentFCA,
       FMR: data.amount / currentFMR,
@@ -145,10 +148,27 @@ const insertCategory = async (
   }
 
   try {
-    return await prisma.teamMemberCategory.create({
+    const created = await prisma.teamMemberCategory.create({
       data: newCategory,
     })
+
+    if (data.specialCategory) {
+       await prisma.teamMemberCategory.update({
+        where: {
+          id: created.id,
+        },
+        data: { specialCategoryPrices: {
+          push: {
+            from: new Date(),
+            to: null,
+            price: Number(data.amount),
+          }
+        }}
+      })
+    }
+    return created
   } catch (error) {
+    console.log(error)
     return null
   }
 }

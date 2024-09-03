@@ -45,10 +45,45 @@ export async function updateIndexByUnit(
 
     const { id, ...restIndex } = IndexSchema.parse(index)
 
-    return await prisma.index.update({
+    const updated = await prisma.index.update({
       where: { id },
       data: restIndex,
     })
+
+    await recalculateSpecialCategories()
+
+    return updated
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+export async function recalculateSpecialCategories() {
+  try {
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+    const specialTeamMembers = await prisma.teamMemberCategory.findMany({
+      where: { specialCategory: true },
+    })
+
+    const updatedCategories = specialTeamMembers.map((category) => {
+      const price = category.specialCategoryPrices.find(x=>!x.to)!.price
+      return {
+        id: category.id,
+        amountIndex: {
+          FCA: price / currentFCA,
+          FMR: price / currentFMR,
+        },
+      }})
+
+      const promises = updatedCategories.map((category) =>
+        prisma.teamMemberCategory.update({
+          where: { id: category.id },
+          data: { amountIndex: category.amountIndex },
+        })
+      )
+
+      await Promise.all(promises)
   } catch (error) {
     console.error(error)
     return null

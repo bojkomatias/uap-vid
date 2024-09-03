@@ -18,6 +18,7 @@ import { FormInput } from '@shared/form/form-input'
 import { useRouter } from 'next/navigation'
 import type { z } from 'zod'
 import { useState, useTransition } from 'react'
+import { FormCheckbox } from '@shared/form/form-checkbox'
 
 export function NewCategoryDialog() {
   const [open, setOpen] = useState(false)
@@ -27,6 +28,7 @@ export function NewCategoryDialog() {
 
   const form = useForm({
     initialValues: {
+      specialCategory: false,
       state: true,
       name: '',
       amount: 0,
@@ -84,6 +86,11 @@ export function NewCategoryDialog() {
                 description="El valor de las hora actual, este valor luego es indexado"
                 type="number"
                 {...form.getInputProps('amount')}
+              />
+              <FormCheckbox 
+                label="No indexada"
+                description="Si la categoría no se indexa, no se actualiza su valor con los indices."
+                {...form.getInputProps('specialCategory')}
               />
             </FieldGroup>
           </Fieldset>

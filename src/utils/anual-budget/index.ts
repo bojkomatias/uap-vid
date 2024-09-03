@@ -139,7 +139,7 @@ const calculateRemainingABTM = (
         },
         { FCA: 0, FMR: 0 } as AmountIndex
       )
-
+// SORETE
     const ABTMteamMember = abtm
       .filter((item) => item.teamMemberId && !item.categoryId)
       .reduce(
