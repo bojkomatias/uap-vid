@@ -139,21 +139,21 @@ model HistoricTeamMemberCategory {
 }
 
 model TeamMemberCategory {
-  id                         String                         @id @default(auto()) @map("_id") @db.ObjectId
-  name                       String                         @unique
+  id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
+  name                       String                       @unique
   state                      Boolean?
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
   amountIndex                AmountIndex //FCA or FMR
   AnualBudgetTeamMember      AnualBudgetTeamMember[]
-  specialCategory            Boolean                        @default(false)
-  specialCategoryPrices      SpecialHistoricCategoryPrice[]
+  historicAmountIndexes      HistoricAmountIndexes[]
+  specialCategory            Boolean                      @default(false)
 }
 
-type SpecialHistoricCategoryPrice {
-  from  DateTime
-  to    DateTime?
-  price Float
+type HistoricAmountIndexes {
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex
 }
 
 /// @deprecated this won't be needed after indexing the whole app.

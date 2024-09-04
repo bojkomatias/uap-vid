@@ -4,6 +4,7 @@ import { prisma } from '../utils/bd'
 import { IndexSchema } from '@utils/zod'
 import type { HistoricIndex } from '@prisma/client'
 import { cache } from 'react'
+import { recalculateSpecialCategories } from './team-member-category'
 
 export const getCurrentIndexes = cache(async () => {
   const [FCAValues, FMRValues] = await prisma.$transaction([
@@ -38,8 +39,10 @@ export async function updateIndexByUnit(
   try {
     const index = await prisma.index.findFirstOrThrow({ where: { unit } })
 
+    const oldIndexValue = index.values.at(-1)
+
     // If array contains any item, update it's last to
-    if (index.values.length > 0) index.values.at(-1)!.to = new Date()
+    if (index.values.length > 0) oldIndexValue!.to = new Date()
 
     index.values.push(newIndexValue)
 
@@ -50,40 +53,13 @@ export async function updateIndexByUnit(
       data: restIndex,
     })
 
-    await recalculateSpecialCategories()
+    await recalculateSpecialCategories(
+      unit,
+      oldIndexValue!.price,
+      newIndexValue.price
+    )
 
     return updated
-  } catch (error) {
-    console.error(error)
-    return null
-  }
-}
-
-export async function recalculateSpecialCategories() {
-  try {
-    const { currentFCA, currentFMR } = await getCurrentIndexes()
-    const specialTeamMembers = await prisma.teamMemberCategory.findMany({
-      where: { specialCategory: true },
-    })
-
-    const updatedCategories = specialTeamMembers.map((category) => {
-      const price = category.specialCategoryPrices.find(x=>!x.to)!.price
-      return {
-        id: category.id,
-        amountIndex: {
-          FCA: price / currentFCA,
-          FMR: price / currentFMR,
-        },
-      }})
-
-      const promises = updatedCategories.map((category) =>
-        prisma.teamMemberCategory.update({
-          where: { id: category.id },
-          data: { amountIndex: category.amountIndex },
-        })
-      )
-
-      await Promise.all(promises)
   } catch (error) {
     console.error(error)
     return null

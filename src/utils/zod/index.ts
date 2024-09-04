@@ -271,7 +271,7 @@ export const TeamMemberCategorySchema = z.object({
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
   amount: z.coerce.number(), //Remove nullable
-  specialCategory: z.boolean().optional(),
+  specialCategory: z.boolean().optional().default(false),
 })
 
 /////////////////////////////////////////
