@@ -64,6 +64,7 @@ export default async function main() {
       const logs = await logs_collection.find().toArray()
 
       for (const log of logs) {
+        //Checks to only modify logs that have a message and that such message is not a custom message but it has keywords corresponding to state changes.
         if (
           log.message &&
           getKeyByValue(
