@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
 import type { z } from 'zod'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { upsertAcademicUnit } from '@repositories/academic-unit'
 
 export function AcademicUnitForm({
@@ -63,11 +63,11 @@ export function AcademicUnitForm({
       </Fieldset>
 
       <FormActions>
-        <FormButton isLoading={isPending}>
+        <SubmitButton isLoading={isPending}>
           {!academicUnit.id ?
             'Crear unidad académica'
           : 'Actualizar unidad académica'}
-        </FormButton>
+        </SubmitButton>
       </FormActions>
     </form>
   )

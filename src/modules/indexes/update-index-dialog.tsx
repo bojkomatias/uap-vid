@@ -15,7 +15,7 @@ import { HistoricIndexSchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
 import type { TransformedValues } from '@mantine/form'
 import { useForm, zodResolver } from '@mantine/form'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { updateIndexByUnit } from '@repositories/finance-index'
 import { notifications } from '@elements/notifications'
@@ -79,7 +79,7 @@ export function UpdateIndexDialog({ index }: { index: 'FCA' | 'FMR' }) {
             />
           </DialogBody>
           <DialogActions>
-            <FormButton isLoading={isPending}>Actualizar</FormButton>
+            <SubmitButton isLoading={isPending}>Actualizar</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>

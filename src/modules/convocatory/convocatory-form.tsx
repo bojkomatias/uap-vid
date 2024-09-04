@@ -10,7 +10,7 @@ import type { ChangeEvent } from 'react'
 import { useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
 import type { z } from 'zod'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 
 export function ConvocatoryForm({
   convocatory,
@@ -101,9 +101,9 @@ export function ConvocatoryForm({
       </Fieldset>
 
       <FormActions>
-        <FormButton isLoading={isPending}>
+        <SubmitButton isLoading={isPending}>
           {!convocatory.id ? 'Crear convocatoria' : 'Actualizar convocatoria'}
-        </FormButton>
+        </SubmitButton>
       </FormActions>
     </form>
   )

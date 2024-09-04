@@ -26,13 +26,9 @@ export default async function Budget({ params }: { params: { id: string } }) {
     <>
       <div className="relative w-full">
         <BudgetMetadata {...meta}>
-          {' '}
           <div className="flex gap-2">
             {meta.state === AnualBudgetState.PENDING && (
               <ApproveAnualBudget id={meta.id} />
-            )}
-            {meta.state === AnualBudgetState.PENDING && (
-              <RejectAnualBudget id={meta.id} />
             )}
             {/* If remainings are 0 then budget is finished */}
             {(

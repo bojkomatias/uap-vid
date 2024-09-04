@@ -20,7 +20,7 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 import { updateUserRoleById } from '@repositories/user'
 import { notifications } from '@elements/notifications'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { useForm } from '@mantine/form'
 import { Divider } from '@components/divider'
 import { DeleteUserButton } from './delete-user-button'
@@ -105,7 +105,7 @@ export function UserDetailsDialog({ user }: { user: Omit<User, 'password'> }) {
           }))}
           {...form.getInputProps('role')}
         />
-        <FormButton isLoading={isPending}>Actualizar rol</FormButton>
+        <SubmitButton isLoading={isPending}>Actualizar rol</SubmitButton>
       </form>
       <Divider className="my-4" />
       <div className="flex items-end gap-1">
