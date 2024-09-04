@@ -85,6 +85,7 @@ export default async function main() {
                     String(log.message).split('-->')[1].toString().trim()
                   ],
                 reviewerId: '',
+                budgetId: '',
               },
             }
           )
@@ -103,4 +104,4 @@ export default async function main() {
   }
 }
 
-//await main()
+await main()
