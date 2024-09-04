@@ -12,7 +12,7 @@ import ProtocolCareerRelation from './protocol-career-relation.js'
 import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
 
 async function main() {
-  //await LogsTransform()
+  await LogsTransform()
   await ReviewQuestionsInsert()
   await IndexesInsert()
   await CareersInsert()
