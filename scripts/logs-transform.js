@@ -101,5 +101,3 @@ export default async function main() {
     console.log('Connection closed || LogsTransform')
   }
 }
-
-await main()
