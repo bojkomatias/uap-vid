@@ -47,6 +47,7 @@ const ActionFromStateDictionary = {
   Publicado: 'PUBLISH',
   'Evaluación metodológica': 'ASSIGN_TO_METHODOLOGIST',
   'Evaluación científica': 'ASSIGN_TO_SCIENTIFIC',
+  'En evaluación científica': 'ASSIGN_TO_SCIENTIFIC',
   'En evaluación metodológica': 'ASSIGN_TO_METHODOLOGIST',
   'Aceptado para evaluación en comisión': 'ACCEPT',
   Eliminado: 'DELETE',
@@ -93,36 +94,17 @@ export default async function main() {
                   String(log.message).split('-->')[0].toString().trim()
                 ),
                 action: actionTaken,
-                reviewerId: (() => {
-                  if (actionTaken === 'ASSIGN_TO_METHODOLOGIST') {
-                    return (
-                      protocolReviews.find((p) => p.type === 'METHODOLOGICAL')
-                        ?.reviewerId || null
-                    )
-                  } else if (actionTaken === 'ASSIGN_TO_SCIENTIFIC') {
-                    const internalReview = protocolReviews.find(
-                      (p) => p.type === 'SCIENTIFIC_INTERNAL'
-                    )
-                    const externalReview = protocolReviews.find(
-                      (p) => p.type === 'SCIENTIFIC_EXTERNAL'
-                    )
-
-                    if (!log.reviewerId) {
-                      // If there's no existing reviewerId, use the internal one
-                      return internalReview?.reviewerId || null
-                    } else {
-                      // If there's an existing reviewerId, use the external one if it's different
-                      return (
-                          externalReview?.reviewerId &&
-                            externalReview.reviewerId !==
-                              internalReview?.reviewerId
-                        ) ?
-                          externalReview.reviewerId
-                        : null
-                    }
-                  }
-                  return null
-                })(),
+                reviewerId:
+                  actionTaken == 'ASSIGN_TO_METHODOLOGIST' ?
+                    protocolReviews.find((p) => p.type == 'METHODOLOGICAL')
+                      ?.reviewerId
+                  : (
+                    actionTaken == 'ASSIGN_TO_SCIENTIFIC' &&
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
+                  ) ?
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
+                      ?.reviewerId
+                  : null,
               },
             }
           )
