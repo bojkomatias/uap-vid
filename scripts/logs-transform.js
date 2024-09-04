@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
 import 'dotenv/config'
 
 // const Actions {
@@ -63,7 +63,14 @@ export default async function main() {
       const logs_collection = getCollection('Logs')
       const logs = await logs_collection.find().toArray()
 
+      const reviews_collection = getCollection('Review')
+      const reviews = await reviews_collection.find().toArray()
+
       for (const log of logs) {
+        const protocolReviews = reviews.filter(
+          (r) => r.protocolId.toString() == log.protocolId.toString()
+        )
+
         //Checks to only modify logs that have a message and that such message is not a custom message but it has keywords corresponding to state changes.
         if (
           log.message &&
@@ -72,6 +79,22 @@ export default async function main() {
             String(log.message).split('-->')[0].toString().trim()
           )
         ) {
+          const actionTaken =
+            ActionFromStateDictionary[
+              String(log.message).split('-->')[1].toString().trim()
+            ]
+
+          const scientificEvaluationsLogs = logs.filter(
+            (l) =>
+              l.protocolId == log.protocolId &&
+              (l.message.includes(
+                'Evaluación metodológica --> Evaluación científica'
+              ) ||
+                l.message.includes(
+                  'En evaluación metodológica --> En evaluación científica'
+                ))
+          )
+
           const updatedLog = await logs_collection.updateOne(
             { _id: log._id },
             {
@@ -80,10 +103,25 @@ export default async function main() {
                   ProtocolStatesDictionary,
                   String(log.message).split('-->')[0].toString().trim()
                 ),
-                action:
-                  ActionFromStateDictionary[
-                    String(log.message).split('-->')[1].toString().trim()
-                  ],
+                action: actionTaken,
+                reviewerId:
+                  actionTaken == 'ASSIGN_TO_METHODOLOGIST' ?
+                    protocolReviews.find((p) => p.type == 'METHODOLOGICAL')
+                      ?.reviewerId
+                  : (
+                    actionTaken == 'ASSIGN_TO_SCIENTIFIC' &&
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
+                      .reviewerId !== scientificEvaluationsLogs.reviewerId
+                  ) ?
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
+                      ?.reviewerId
+                  : (
+                    actionTaken == 'ASSIGN_TO_SCIENTIFIC' &&
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_EXTERNAL')
+                  ) ?
+                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_EXTERNAL')
+                      ?.reviewerId
+                  : null,
               },
             }
           )
@@ -101,3 +139,5 @@ export default async function main() {
     console.log('Connection closed || LogsTransform')
   }
 }
+
+await main()
