@@ -37,14 +37,22 @@ const ProtocolStatesDictionary = {
   DELETED: 'Eliminado',
 }
 
+//Small util function to get the key by its value. Useful to make some checks.
 function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value)
 }
 
+//Reads the "to" state from a message with the format ["prevState --> toState"] and pairs the protocol state with the action that was taken for the protocol to take said state.
 const ActionFromStateDictionary = {
   Publicado: 'PUBLISH',
   'Evaluación metodológica': 'ASSIGN_TO_METHODOLOGIST',
   'Evaluación científica': 'ASSIGN_TO_SCIENTIFIC',
+  'En evaluación metodológica': 'ASSIGN_TO_METHODOLOGIST',
+  'Aceptado para evaluación en comisión': 'ACCEPT',
+  Eliminado: 'DELETE',
+  'En curso': 'APPROVE',
+  Discontinuado: 'DISCONTINUE',
+  Aceptado: 'ACCEPT',
 }
 
 export default async function main() {
@@ -53,10 +61,7 @@ export default async function main() {
       console.log('Connected successfully to MongoDB || LogsTransform')
 
       const logs_collection = getCollection('Logs')
-
       const logs = await logs_collection.find().toArray()
-
-      console.log(ProtocolStatesDictionary['ACCEPTED'])
 
       for (const log of logs) {
         if (
@@ -66,7 +71,25 @@ export default async function main() {
             String(log.message).split('-->')[0].toString().trim()
           )
         ) {
-          console.log(String(log.message).split('-->').toString().trim())
+          const updatedLog = await logs_collection.updateOne(
+            { _id: log._id },
+            {
+              $set: {
+                previousState: getKeyByValue(
+                  ProtocolStatesDictionary,
+                  String(log.message).split('-->')[0].toString().trim()
+                ),
+                action:
+                  ActionFromStateDictionary[
+                    String(log.message).split('-->')[1].toString().trim()
+                  ],
+              },
+            }
+          )
+
+          console.log(
+            `Updated log ${log._id}: ${updatedLog.modifiedCount} document modified, log has now previousState and action fields`
+          )
         }
       }
     })
