@@ -84,17 +84,6 @@ export default async function main() {
               String(log.message).split('-->')[1].toString().trim()
             ]
 
-          const scientificEvaluationsLogs = logs.filter(
-            (l) =>
-              l.protocolId == log.protocolId &&
-              (l.message.includes(
-                'Evaluación metodológica --> Evaluación científica'
-              ) ||
-                l.message.includes(
-                  'En evaluación metodológica --> En evaluación científica'
-                ))
-          )
-
           const updatedLog = await logs_collection.updateOne(
             { _id: log._id },
             {
@@ -104,24 +93,36 @@ export default async function main() {
                   String(log.message).split('-->')[0].toString().trim()
                 ),
                 action: actionTaken,
-                reviewerId:
-                  actionTaken == 'ASSIGN_TO_METHODOLOGIST' ?
-                    protocolReviews.find((p) => p.type == 'METHODOLOGICAL')
-                      ?.reviewerId
-                  : (
-                    actionTaken == 'ASSIGN_TO_SCIENTIFIC' &&
-                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
-                      .reviewerId !== scientificEvaluationsLogs.reviewerId
-                  ) ?
-                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_INTERNAL')
-                      ?.reviewerId
-                  : (
-                    actionTaken == 'ASSIGN_TO_SCIENTIFIC' &&
-                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_EXTERNAL')
-                  ) ?
-                    protocolReviews.find((p) => p.type == 'SCIENTIFIC_EXTERNAL')
-                      ?.reviewerId
-                  : null,
+                reviewerId: (() => {
+                  if (actionTaken === 'ASSIGN_TO_METHODOLOGIST') {
+                    return (
+                      protocolReviews.find((p) => p.type === 'METHODOLOGICAL')
+                        ?.reviewerId || null
+                    )
+                  } else if (actionTaken === 'ASSIGN_TO_SCIENTIFIC') {
+                    const internalReview = protocolReviews.find(
+                      (p) => p.type === 'SCIENTIFIC_INTERNAL'
+                    )
+                    const externalReview = protocolReviews.find(
+                      (p) => p.type === 'SCIENTIFIC_EXTERNAL'
+                    )
+
+                    if (!log.reviewerId) {
+                      // If there's no existing reviewerId, use the internal one
+                      return internalReview?.reviewerId || null
+                    } else {
+                      // If there's an existing reviewerId, use the external one if it's different
+                      return (
+                          externalReview?.reviewerId &&
+                            externalReview.reviewerId !==
+                              internalReview?.reviewerId
+                        ) ?
+                          externalReview.reviewerId
+                        : null
+                    }
+                  }
+                  return null
+                })(),
               },
             }
           )
