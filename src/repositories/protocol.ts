@@ -2,6 +2,7 @@
 
 import { prisma } from '../utils/bd'
 import type {
+  Action,
   ProtocolFlag,
   ProtocolSectionsIdentificationTeam,
   TeamMember,
@@ -13,7 +14,9 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import { IdentificationTeamSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
-import { logProtocolUpdate } from '@utils/logger'
+import { logEvent } from './log'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>
@@ -118,11 +121,13 @@ const updateProtocolById = async (id: string, data: Protocol) => {
 
 const updateProtocolStateById = async (
   id: string,
-  fromState: ProtocolState,
+  action: Action,
+  previousState: ProtocolState,
   toState: ProtocolState,
-  userId: string
+  reviewerId?: string
 ) => {
   try {
+    const session = await getServerSession(authOptions)
     const protocol = await prisma.protocol.update({
       where: {
         id,
@@ -138,11 +143,14 @@ const updateProtocolStateById = async (
       },
     })
 
-    await logProtocolUpdate({
-      userId,
-      fromState,
-      toState,
+    await logEvent({
+      userId: session!.user.id,
       protocolId: id,
+      action,
+      previousState,
+      message: null,
+      budgetId: null,
+      reviewerId: reviewerId ?? null,
     })
 
     return {

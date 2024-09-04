@@ -39,7 +39,7 @@ export default async function ActionsPage({
     <ActionsDropdown
       actions={actions}
       protocol={protocol}
-      userId={session.user.id}
+      canViewLogs={session.user.role === 'ADMIN'}
     />
   )
 }

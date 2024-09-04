@@ -17,16 +17,10 @@ export function InterruptAnualBudget({
   return (
     <Button
       color="red"
+      disabled={isPending}
       onClick={async () => {
         const res = await interruptAnualBudget(id)
 
-        if (!res)
-          return notifications.show({
-            title: 'Error al interrumpir',
-            message:
-              'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
-            intent: 'error',
-          })
         if (res) {
           notifications.show({
             title: 'Presupuesto interrumpido',
@@ -34,8 +28,14 @@ export function InterruptAnualBudget({
               'El presupuesto fue dado de baja exitosamente. También el proyecto ha sido discontinuado.',
             intent: 'success',
           })
-          startTransition(() => router.refresh())
+          return startTransition(() => router.refresh())
         }
+        return notifications.show({
+          title: 'Error al interrumpir',
+          message:
+            'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
+          intent: 'error',
+        })
       }}
     >
       Interrumpir

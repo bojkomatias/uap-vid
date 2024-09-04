@@ -1,4 +1,5 @@
 'use client'
+
 import { Divider } from '@components/divider'
 import { Fieldset, FormActions, Label } from '@components/fieldset'
 import { Heading, Subheading } from '@components/heading'
@@ -33,7 +34,7 @@ type ProtocolMetadataAndTeamMembers = Prisma.ProtocolGetPayload<{
   }
 }>
 
-export default function ConfirmTeamMembersForm({
+export function ConfirmTeamMembersForm({
   protocol,
 }: {
   protocol: ProtocolMetadataAndTeamMembers
