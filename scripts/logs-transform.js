@@ -84,6 +84,7 @@ export default async function main() {
                   ActionFromStateDictionary[
                     String(log.message).split('-->')[1].toString().trim()
                   ],
+                reviewerId: '',
               },
             }
           )
@@ -101,3 +102,5 @@ export default async function main() {
     console.log('Connection closed || LogsTransform')
   }
 }
+
+await main()
