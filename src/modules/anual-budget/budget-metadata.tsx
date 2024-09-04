@@ -3,7 +3,10 @@ import { Heading, Subheading } from '@components/heading'
 import { Text } from '@components/text'
 import { ContainerAnimations } from '@elements/container-animations'
 import type { AnualBudget } from '@prisma/client'
-import { AnualBudgetStateDictionary } from '@utils/dictionaries/AnualBudgetStateDictionary'
+import {
+  AnualBudgetStateColorDictionary,
+  AnualBudgetStateDictionary,
+} from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
 import Link from 'next/link'
 
@@ -57,7 +60,10 @@ export const BudgetMetadata = ({
         </div>
         <div className="flex grow flex-col justify-between">
           <div className="self-end">
-            <Badge className="h-fit w-fit text-clip !text-[14px] font-semibold">
+            <Badge
+              className="!text-sm/6 font-semibold"
+              color={AnualBudgetStateColorDictionary[state]}
+            >
               {AnualBudgetStateDictionary[state]}
             </Badge>
           </div>

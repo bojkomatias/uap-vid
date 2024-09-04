@@ -8,7 +8,7 @@ import { FormSwitch } from '../../../../shared/form/form-switch'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { notifications } from '@elements/notifications'
 import { FieldGroup, FormActions } from '@components/fieldset'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 
 export default function CiFlag({
   protocolId,
@@ -56,7 +56,7 @@ export default function CiFlag({
         />
       </FieldGroup>
       <FormActions>
-        <FormButton>Guardar voto Comisión Interna</FormButton>
+        <SubmitButton>Guardar voto Comisión Interna</SubmitButton>
       </FormActions>
     </form>
   )

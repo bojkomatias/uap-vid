@@ -21,7 +21,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnitBudget } from '@prisma/client'
 import { updateAcademicUnitBudget } from '@repositories/academic-unit'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { currencyFormatter, dateFormatter } from '@utils/formatters'
 import { useRouter } from 'next/navigation'
@@ -95,7 +95,9 @@ export function UpdateAcademicUnitBudgetDialog({
             {...form.getInputProps('value')}
           />
 
-          <FormButton isLoading={isPending}>Actualizar presupuesto</FormButton>
+          <SubmitButton isLoading={isPending}>
+            Actualizar presupuesto
+          </SubmitButton>
         </form>
 
         {academicUnitBudgets ?

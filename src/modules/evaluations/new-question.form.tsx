@@ -3,7 +3,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { ReviewQuestion } from '@prisma/client'
 import { newQuestion } from '@repositories/review-question'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { useMutation } from '@tanstack/react-query'
 import { ReviewQuestionSchema } from '@utils/zod'
@@ -56,7 +56,7 @@ export default function NewQuestionForm({ type }: { type: string }) {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>Guardar</FormButton>
+        <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
       </FormActions>
     </form>
   )

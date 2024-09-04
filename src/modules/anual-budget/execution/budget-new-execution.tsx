@@ -10,26 +10,30 @@ import type { AcademicUnit } from '@prisma/client'
 import { ExecutionType } from '@utils/anual-budget'
 import { currencyFormatter } from '@utils/formatters'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useTransition } from 'react'
+import React, { useState, useTransition } from 'react'
 import { z } from 'zod'
 import { FormInput } from '@shared/form/form-input'
 import { parseLocaleNumber } from '@elements/currency-input'
 import { Button } from '@components/button'
+import { SubmitButton } from '@shared/submit-button'
+import { FieldGroup } from '@components/fieldset'
+import { FormCombobox } from '@shared/form/form-combobox'
 
 const BudgetNewExecution = ({
-  academicUnit,
+  academicUnits,
   maxAmount,
   budgetItemPositionIndex,
   anualBudgetTeamMemberId,
   executionType,
 }: {
-  academicUnit?: AcademicUnit
+  academicUnits?: AcademicUnit[]
   maxAmount: number
   budgetItemPositionIndex: number
   anualBudgetTeamMemberId?: string
   executionType: ExecutionType
 }) => {
   const [isPending, startTransition] = useTransition()
+  const [isSubmitting, setSubmitting] = useState(false)
   const router = useRouter()
   const path = usePathname()
   const anualBudgetId = path?.split('/')[3]
@@ -37,6 +41,7 @@ const BudgetNewExecution = ({
   const form = useForm({
     initialValues: {
       amount: 1000,
+      academicUnit: undefined,
     },
     validate: zodResolver(
       z.object({
@@ -50,9 +55,17 @@ const BudgetNewExecution = ({
           }),
       })
     ),
-    validateInputOnChange: true,
   })
-  const newExecution = async ({ amount }: { amount: number }) => {
+
+  const newExecution = async ({
+    amount,
+    academicUnit,
+  }: {
+    amount: number
+    academicUnit?: string
+  }) => {
+    console.log('SABING ASDASDA', amount)
+    setSubmitting(true)
     try {
       if (
         anualBudgetTeamMemberId &&
@@ -62,21 +75,32 @@ const BudgetNewExecution = ({
       }
 
       if (executionType === ExecutionType.Item) {
-        if (!academicUnit) return
+        if (!academicUnit)
+          return notifications.show({
+            title: 'Falta unidad académica',
+            message:
+              'Debe seleccionar una unidada académica a la cual se le computa el gasto',
+            intent: 'error',
+          })
         await saveNewItemExecution(
-          academicUnit.id,
+          academicUnit,
           budgetItemPositionIndex,
           anualBudgetId!,
           amount
         )
       }
+
       notifications.show({
         title: 'Ejecución creada',
         message: 'La ejecución ha sido creada con éxito',
         intent: 'success',
       })
-      startTransition(() => router.refresh())
+      startTransition(() => {
+        setSubmitting(false)
+        router.refresh()
+      })
     } catch (error) {
+      setSubmitting(false)
       notifications.show({
         title: 'Error',
         message: 'Ha ocurrido un error al crear la ejecución',
@@ -84,30 +108,27 @@ const BudgetNewExecution = ({
       })
     }
   }
-  const updateOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    form.setFieldValue('amount', parseLocaleNumber(e.target.value, 'es-AR'))
-  }
-  return (
-    <form className="flex items-baseline justify-between gap-2">
-      <FormInput
-        className="flex flex-grow flex-row items-center gap-2"
-        type="number"
-        label="Monto"
-        {...form.getInputProps('amount')}
-        onBlur={updateOnBlur}
-      />
 
-      <Button
-        outline
-        // Disabled if it hasn't changed
-        disabled={!form.isValid('amount') || !form.isDirty('amount')}
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          e.preventDefault()
-          newExecution({ amount: form.values.amount })
-        }}
-      >
-        {isPending ? 'Cargando' : 'Cargar'}
-      </Button>
+  return (
+    <form onSubmit={form.onSubmit((values) => newExecution(values))}>
+      <FieldGroup className="flex items-end justify-between">
+        {academicUnits ?
+          <FormCombobox
+            label="Unidad academica"
+            options={academicUnits.map((e) => ({ label: e.name, value: e.id }))}
+            {...form.getInputProps('academicUnit')}
+          />
+        : null}
+        <FormInput
+          type="number"
+          label="Monto"
+          {...form.getInputProps('amount')}
+        />
+
+        <SubmitButton isLoading={isSubmitting || isPending}>
+          Cargar
+        </SubmitButton>
+      </FieldGroup>
     </form>
   )
 }

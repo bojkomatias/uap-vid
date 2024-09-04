@@ -27,7 +27,7 @@ import {
 import { Text } from '@components/text'
 import { Divider } from '@components/divider'
 import { Radio, RadioField, RadioGroup } from '@components/radio'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { Button } from '@components/button'
 
 export default function ReviewForm({
@@ -189,12 +189,12 @@ export default function ReviewForm({
               >
                 Guardar
               </Button>
-              <FormButton
+              <SubmitButton
                 disabled={form.values.verdict === ReviewVerdict.NOT_REVIEWED}
                 isLoading={isPending}
               >
                 Enviar
-              </FormButton>
+              </SubmitButton>
             </FormActions>
           </Fieldset>
         </form>

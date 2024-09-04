@@ -7,7 +7,7 @@ import React from 'react'
 import { FormSwitch } from '../../../../shared/form/form-switch'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { notifications } from '@elements/notifications'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FieldGroup, FormActions } from '@components/fieldset'
 
 export default function CucytFlag({
@@ -59,7 +59,7 @@ export default function CucytFlag({
         />
       </FieldGroup>
       <FormActions>
-        <FormButton>Guardar voto CUCYT</FormButton>
+        <SubmitButton>Guardar voto CUCYT</SubmitButton>
       </FormActions>
     </form>
   )
