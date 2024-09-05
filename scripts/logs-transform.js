@@ -19,6 +19,12 @@ const ProtocolStatesDictionary = {
   DELETED: 'Eliminado',
 }
 
+//This is because we've been saving state changes messages with two different formats.
+const ProtocolStatesDictionary2 = {
+  METHODOLOGICAL_EVALUATION: 'En evaluación metodológica',
+  SCIENTIFIC_EVALUATION: 'En evaluación científica',
+}
+
 //Small util function to get the key by its value. Useful to make some checks.
 function getKeyByValue(object, value) {
   return Object.keys(object).find((key) => object[key] === value)
@@ -57,10 +63,14 @@ export default async function main() {
         //Checks to only modify logs that have a message and that such message is not a custom message but it has keywords corresponding to state changes.
         if (
           log.message &&
-          getKeyByValue(
+          (getKeyByValue(
             ProtocolStatesDictionary,
             String(log.message).split('-->')[0].toString().trim()
-          )
+          ) ||
+            getKeyByValue(
+              ProtocolStatesDictionary2,
+              String(log.message).split('-->')[0].toString().trim()
+            ))
         ) {
           const actionTaken =
             ActionFromStateDictionary[
@@ -96,6 +106,55 @@ export default async function main() {
           )
         }
       }
+
+      const logs_scientific_evaluations = await logs_collection
+        .find({
+          action: 'ASSIGN_TO_SCIENTIFIC',
+        })
+        .toArray()
+
+      //Group logs by protocolId. I already filtered the logs that are related to scientific evaluations, now I  group them by protocolId
+      const logsGroupedById = logs_scientific_evaluations.reduce((acc, log) => {
+        if (!acc[log.protocolId]) {
+          acc[log.protocolId] = []
+        }
+        acc[log.protocolId].push(log)
+        return acc
+      }, {})
+
+      const result = Object.entries(logsGroupedById).filter(
+        (r) => r[1].length > 1
+      )
+
+      //This is looping through logs, not evaluations, but to differeantiate this loop from the previous one, I'm calling the variable "evaluations"
+      for (const evaluations of result) {
+        const evaluation1 = evaluations[1][0]
+        const evaluation2 = evaluations[1][1]
+        const protocolId = evaluations[0]
+        const evaluation1Date = new Date(evaluation1.createdAt)
+        const evaluation2Date = new Date(evaluation2.createdAt)
+
+        const protocolExternalReview = reviews.find(
+          (r) =>
+            r.protocolId.toString() == protocolId.toString() &&
+            r.type == 'SCIENTIFIC_EXTERNAL'
+        )
+
+        if (evaluation1Date < evaluation2Date) {
+          const updatedLog = await logs_collection.updateOne(
+            { _id: evaluation2._id },
+            {
+              $set: {
+                reviewerId: protocolExternalReview?.reviewerId,
+              },
+            }
+          )
+
+          console.log(
+            `Updated log ${evaluation2._id}: ${updatedLog.modifiedCount} document modified, now logs corresponding to external reviews are fixed`
+          )
+        }
+      }
     })
   } catch (error) {
     console.error('An error occurred while transforming logs:', error)
@@ -104,5 +163,3 @@ export default async function main() {
     console.log('Connection closed || LogsTransform')
   }
 }
-
-await main()
