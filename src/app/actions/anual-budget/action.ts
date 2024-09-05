@@ -80,14 +80,15 @@ export const generateAnualBudget = async ({
 
   const newAnualBudget = await upsertAnualBudget(data, budgetId)
   const duration = protocolDuration(protocol.sections.duration.duration)
-  // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
+
+  // Generate new annual budget team members
   const ABT = generateAnualBudgetTeamMembers(
     protocol.sections.identification.team,
     newAnualBudget.id,
     duration
   )
 
-  // Handle the case where the anual budget is reactivated
+  // Handle the case where the annual budget is reactivated
   if (budgetId && reactivated) {
     const oldABT = await getAnualBudgetTeamMembersByAnualBudgetId(
       newAnualBudget.id
@@ -100,13 +101,14 @@ export const generateAnualBudget = async ({
     await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
   }
 
-  // if has id, should clean previous teamMembers from the database.
-  if (budgetId && newAnualBudget.state === 'PENDING') {
+  // If updating an existing budget, delete old team members before creating new ones
+  if (budgetId) {
     await deleteAnualBudgetTeamMembers(budgetId)
   }
 
+  // Create new team members
   await createManyAnualBudgetTeamMember(ABT)
-  //Added this return to check if the budget was created
+
   return newAnualBudget.id
 }
 

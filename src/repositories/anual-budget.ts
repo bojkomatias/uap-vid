@@ -263,7 +263,6 @@ export const updateAnualBudgetTeamMemberHours = async (
   >[]
 ) => {
   try {
-    batch.map(({ id, ...data }) => console.log(data))
     return await prisma.$transaction(
       batch.map(({ id, ...data }) => {
         return prisma.anualBudgetTeamMember.update({
