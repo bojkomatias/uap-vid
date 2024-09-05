@@ -436,6 +436,7 @@ enum Action {
   DELETE
   GENERATE_ANUAL_BUDGET
   VIEW_ANUAL_BUDGET
+  REACTIVATE
 }
 
 enum Access {
