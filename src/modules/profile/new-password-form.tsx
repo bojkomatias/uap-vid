@@ -5,7 +5,7 @@ import { Text } from '@components/text'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import { updateUserPasswordById } from '@repositories/user'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { UserPasswordChangeSchema } from '@utils/zod'
 
@@ -87,7 +87,9 @@ export function NewPasswordForm({
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton disabled={!form.isValid()}>Cambiar contraseña</FormButton>
+        <SubmitButton disabled={!form.isValid()}>
+          Cambiar contraseña
+        </SubmitButton>
       </FormActions>
     </form>
   )

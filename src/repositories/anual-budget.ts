@@ -1,6 +1,6 @@
 'use server'
 
-import { AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
+import { Action, AnualBudgetState, Prisma, ProtocolState } from '@prisma/client'
 import type {
   AnualBudget,
   AnualBudgetTeamMember,
@@ -14,6 +14,7 @@ import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import { logEvent } from './log'
+import { getCurrentIndexes } from './finance-index'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -159,10 +160,46 @@ export const getAnualBudgetTeamMemberById = cache(async (id: string) => {
   }
 })
 
-export const createAnualBudget = async (
-  data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>
+export const getAnualBudgetTeamMembersByAnualBudgetId = cache(
+  async (anualBudgetId: string) => {
+    try {
+      return await prisma.anualBudgetTeamMember.findMany({
+        where: { anualBudgetId: anualBudgetId },
+      })
+    } catch (error) {
+      return []
+    }
+  }
+)
+
+export const updateAnualBudgetState = async (
+  anualBudgetId: string,
+  state: AnualBudgetState
 ) => {
-  const newAnualBudget = await prisma.anualBudget.create({ data })
+  return await prisma.anualBudget.update({
+    where: { id: anualBudgetId },
+    data: { state: state },
+  })
+}
+
+export const upsertAnualBudget = async (
+  data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'>,
+  id?: string
+) => {
+  let newAnualBudget
+  if (id)
+    newAnualBudget = await prisma.anualBudget.update({
+      where: { id },
+      data: {
+        year: data.year,
+        budgetItems: data.budgetItems,
+        academicUnitsIds: data.academicUnitsIds,
+      },
+    })
+  else
+    newAnualBudget = await prisma.anualBudget.create({
+      data,
+    })
 
   const promises = data.academicUnitsIds.map(async (id) => {
     await prisma.academicUnit.update({
@@ -178,6 +215,18 @@ export const createAnualBudget = async (
   await Promise.all(promises)
 
   return newAnualBudget
+}
+
+export const deleteAnualBudgetTeamMembers = async (id: string) => {
+  try {
+    const result = await prisma.anualBudgetTeamMember.deleteMany({
+      where: { anualBudgetId: id },
+    })
+    return result
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }
 
 export const createManyAnualBudgetTeamMember = async (
@@ -198,6 +247,7 @@ export const updateAnualBudgetItems = async (
       data: { budgetItems },
     })
   } catch (error) {
+    console.log(error)
     return null
   }
 }
@@ -214,11 +264,18 @@ export const updateAnualBudgetTeamMemberHours = async (
 ) => {
   try {
     return await prisma.$transaction(
-      batch.map(({ id, ...data }) =>
-        prisma.anualBudgetTeamMember.update({ where: { id }, data })
-      )
+      batch.map(({ id, ...data }) => {
+        return prisma.anualBudgetTeamMember.update({
+          where: { id },
+          data: {
+            hours: Number(data.hours),
+            remainingHours: Number(data.remainingHours),
+          },
+        })
+      })
     )
   } catch (error) {
+    console.log(error)
     return null
   }
 }
@@ -451,13 +508,14 @@ export const interruptAnualBudget = async (id: string) => {
       userId: session!.user.id,
       protocolId: result.protocolId,
       budgetId: result.id,
-      action: 'DISCONTINUE',
+      action: Action.DISCONTINUE,
       message: null,
       reviewerId: null,
       previousState: ProtocolState.ON_GOING,
     })
+    return { success: true }
   } catch (e) {
-    return null
+    return { success: false, message: e }
   }
 }
 

@@ -146,7 +146,7 @@ export async function ProtocolMetadata({
             >
               <Badge
                 color={ProtocolStatesColorDictionary[protocol.state]}
-                className="w-fit !text-sm/6 font-semibold"
+                className="!text-sm/6 font-semibold"
               >
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>

@@ -8,7 +8,7 @@ import {
 } from '@components/dialog'
 import { ScriptPlus } from 'tabler-icons-react'
 import { Button } from '@components/button'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import { insertCategory } from '@repositories/team-member-category'
 import { notifications } from '@elements/notifications'
@@ -65,7 +65,6 @@ export function NewCategoryDialog() {
       </Button>
 
       <Dialog open={open} onClose={setOpen} size="2xl">
-
         <DialogTitle>Crear categoria</DialogTitle>
         <DialogDescription>
           Aquí puede crear una nueva categoria para luego asignarla a los
@@ -89,7 +88,7 @@ export function NewCategoryDialog() {
           </Fieldset>
 
           <DialogActions>
-            <FormButton isLoading={isPending}>Crear categoria</FormButton>
+            <SubmitButton isLoading={isPending}>Crear categoria</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>

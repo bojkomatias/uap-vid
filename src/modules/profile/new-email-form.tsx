@@ -5,7 +5,7 @@ import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import { updateUserEmailById } from '@repositories/user'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
 import { emailer } from '@utils/emailer'
 import { useCases } from '@utils/emailer/use-cases'
@@ -120,7 +120,9 @@ export function NewEmailForm({ id, email }: { id: string; email: string }) {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton disabled={!emailForm.isValid()}>Cambiar email</FormButton>
+        <SubmitButton disabled={!emailForm.isValid()}>
+          Cambiar email
+        </SubmitButton>
       </FormActions>
     </form>
   )

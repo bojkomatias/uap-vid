@@ -1,4 +1,4 @@
-import type { AcademicUnit, AnualBudgetItem } from '@prisma/client'
+import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import type {
   AnualBudgetTeamMemberWithAllRelations,
@@ -12,8 +12,9 @@ import { Currency } from '@shared/currency'
 import { Text } from '@components/text'
 import { Subheading } from '@components/heading'
 import { ContainerAnimations } from '@elements/container-animations'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
-export function BudgetView({
+export async function BudgetView({
   budgetId,
   state,
   duration,
@@ -30,6 +31,8 @@ export function BudgetView({
   calculations: TotalBudgetCalculation
   academicUnits: AcademicUnit[]
 }) {
+  const currentIndexes = await getCurrentIndexes()
+
   return (
     <ContainerAnimations animation={3}>
       <div>
@@ -48,6 +51,7 @@ export function BudgetView({
           budgetItems={budgetItems}
           ABIe={calculations.ABIe}
           ABIr={calculations.ABIr}
+          currentIndexes={currentIndexes}
         />
 
         <div className="my-10 mb-20 flex justify-end pt-4">

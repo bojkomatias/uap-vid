@@ -6,7 +6,7 @@ import { DialogPanel } from '@headlessui/react'
 import React, { useState, useEffect, useRef } from 'react'
 import { Bug, Clipboard, Copy, Download } from 'tabler-icons-react'
 import { FormTextarea } from './form/form-textarea'
-import { FormButton } from './form/form-button'
+import { SubmitButton } from './submit-button'
 import { FormActions } from '@components/fieldset'
 import { useForm } from '@mantine/form'
 import { bug_report } from '@utils/emailer'
@@ -149,7 +149,7 @@ export default function ContextMenu({
               {...form.getInputProps('content')}
             />
             <FormActions>
-              <FormButton isLoading={false}>Enviar</FormButton>
+              <SubmitButton isLoading={false}>Enviar</SubmitButton>
             </FormActions>
           </form>
         </DialogPanel>
