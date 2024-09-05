@@ -18,9 +18,14 @@ export function ActionGenerateButton({
   }>[]
 }) {
   const router = useRouter()
-  const [isSubmitting, setSubmitting] = useState(false)
+
   const currentYear = new Date().getFullYear()
   const comingYear = new Date().getFullYear() + 1
+
+  const [isSubmitting, setSubmitting] = useState({
+    year: currentYear,
+    state: false,
+  })
 
   const submitGeneration = useCallback(
     async ({
@@ -32,7 +37,7 @@ export function ActionGenerateButton({
       year: number
       id?: string
     }) => {
-      setSubmitting(true)
+      setSubmitting({ year, state: true })
       const budget = await generateAnualBudget({
         protocolId,
         year,
@@ -46,11 +51,11 @@ export function ActionGenerateButton({
           intent: 'success',
         })
         setTimeout(() => {
-          setSubmitting(false)
+          setSubmitting({ year, state: false })
           router.push(`/anual-budgets/budget/${budget}`)
         }, 2500)
       } else {
-        setSubmitting(false)
+        setSubmitting({ year, state: false })
         notifications.show({
           title: 'Problema al generar presupuesto',
           message: 'Ocurrió un error al generar el presupuesto',
@@ -67,15 +72,15 @@ export function ActionGenerateButton({
   )
 
   const budgetedComingYear = anualBudgets.find(
-    (budget) => budget.year === currentYear
+    (budget) => budget.year === comingYear
   )
 
   return (
     <>
-      {budgetedCurrentYear?.state !== 'PENDING' ? null : (
-        <SubmitButton
+      {budgetedCurrentYear && budgetedCurrentYear?.state !== 'PENDING' ? null
+      : <SubmitButton
           color="light"
-          isLoading={isSubmitting}
+          isLoading={isSubmitting.year == currentYear && isSubmitting.state}
           onClick={() =>
             submitGeneration({
               protocolId,
@@ -85,11 +90,10 @@ export function ActionGenerateButton({
           }
         >
           Presupuesto año corriente {currentYear}
-        </SubmitButton>
-      )}
-      {budgetedComingYear?.state !== 'PENDING' ? null : (
+        </SubmitButton>}
+      {budgetedComingYear && budgetedComingYear?.state !== 'PENDING' ? null : (
         <SubmitButton
-          isLoading={isSubmitting}
+          isLoading={isSubmitting.year == comingYear && isSubmitting.state}
           onClick={() =>
             submitGeneration({
               protocolId,
