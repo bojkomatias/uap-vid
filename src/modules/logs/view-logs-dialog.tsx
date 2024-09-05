@@ -66,7 +66,8 @@ function LogCard({ log }: { log: Log }) {
 
       {log.action ?
         <Text>
-          <Strong>{log.user.name}</Strong> {logActionToText(log.action)}
+          <Strong>{log.user.name}</Strong>{' '}
+          {logActionToText(log.action, log.reviewer?.name)}
         </Text>
       : <Text>{log.message}</Text>}
     </>
@@ -84,7 +85,7 @@ const logActionToText = (action: Action, interpolated?: string) => {
   if (action === Action.ASSIGN_TO_SCIENTIFIC)
     return (
       <>
-        ha asignado a <Strong>{interpolated}</Strong> como investigador
+        ha asignado a <Strong>{interpolated}</Strong> como evaluador científico
       </>
     )
   if (action === Action.ACCEPT)
