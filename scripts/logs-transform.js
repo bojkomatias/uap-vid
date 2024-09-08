@@ -81,6 +81,7 @@ export default async function main() {
             { _id: log._id },
             {
               $set: {
+                budgetId: null,
                 previousState: getKeyByValue(
                   ProtocolStatesDictionary,
                   String(log.message).split('-->')[0].toString().trim()
