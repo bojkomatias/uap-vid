@@ -22,25 +22,24 @@ const getLogs = cache(async (search: { [key: string]: string }) => {
       include: {
         user: { select: { name: true } },
         reviewer: { select: { name: true } },
+        budget: {
+          select: {
+            budgetItems: true,
+            budgetTeamMembers: true,
+            state: true,
+            id: true,
+            AcademicUnits: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
     })
-    console.log(result)
+    console.log('This is getting logs???', result)
     return result
-  } catch (e) {
+  } catch (error) {
+    console.log(error)
     return null
   }
 })
 
-const getLogsByProtocolId = cache(async (protocolId: string) => {
-  try {
-    return await prisma.logs.findMany({
-      where: { protocolId },
-      include: { user: true },
-    })
-  } catch (e) {
-    return null
-  }
-})
-
-export { logEvent, getLogs, getLogsByProtocolId }
+export { logEvent, getLogs }

@@ -8,7 +8,5 @@ export default async function Page({
 }) {
   const logs = await getLogs(searchParams)
 
-  console.log(logs)
-
   return <ViewLogsDialog logs={logs} />
 }

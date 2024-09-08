@@ -35,7 +35,7 @@ export function ViewLogsDialog({ logs }: { logs: Log[] | null }) {
     setTimeout(() => router.back(), 100)
   }
   return (
-    <Dialog open={open} onClose={closeDialog}>
+    <Dialog open={open} onClose={closeDialog} size="2xl">
       <DialogTitle>Lista de logs</DialogTitle>
       <DialogDescription>Viendo los logs filtrados por: </DialogDescription>
       <DialogBody className="space-y-4">
@@ -57,7 +57,7 @@ export function ViewLogsDialog({ logs }: { logs: Log[] | null }) {
   )
 }
 
-function LogCard({ log }: { log: Log }) {
+export function LogCard({ log }: { log: Log }) {
   return (
     <>
       <Text className="ml-1 !text-xs">

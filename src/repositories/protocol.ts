@@ -357,9 +357,6 @@ const getProtocolsByRole = cache(
       id: true,
       protocolNumber: true,
       state: true,
-      logs: {
-        include: { user: { select: { name: true } } },
-      },
       createdAt: true,
       convocatory: { select: { id: true, name: true, year: true } },
       researcher: {

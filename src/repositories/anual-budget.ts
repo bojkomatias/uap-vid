@@ -14,7 +14,6 @@ import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import { logEvent } from './log'
-import { getCurrentIndexes } from './finance-index'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -425,7 +424,7 @@ export const approveAnualBudget = async (id: string) => {
     await logEvent({
       userId: session!.user.id,
       protocolId: result.protocolId,
-      budgetId: result.id,
+      budgetId: null,
       action: 'APPROVE',
       message: null,
       reviewerId: null,
@@ -453,7 +452,7 @@ export const rejectAnualBudget = async (id: string) => {
     await logEvent({
       userId: session!.user.id,
       protocolId: result.protocolId,
-      budgetId: result.id,
+      budgetId: null,
       action: 'DISCONTINUE',
       message: null,
       reviewerId: null,
@@ -507,7 +506,7 @@ export const interruptAnualBudget = async (id: string) => {
     await logEvent({
       userId: session!.user.id,
       protocolId: result.protocolId,
-      budgetId: result.id,
+      budgetId: null,
       action: Action.DISCONTINUE,
       message: null,
       reviewerId: null,

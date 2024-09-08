@@ -26,7 +26,7 @@ import {
   upsertAnualBudget,
 } from '@repositories/anual-budget'
 import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
-import { getLogsByProtocolId } from '@repositories/log'
+import { getLogs } from '@repositories/log'
 import {
   findProtocolById,
   findProtocolByIdWithBudgets,
@@ -149,8 +149,6 @@ export const generateAnualBudget = async ({
     await deleteAnualBudgetTeamMembers(budgetId)
   }
 
-  console.log('ABT====>', ABT)
-
   // Create new team members
   await createManyAnualBudgetTeamMember(ABT)
 
@@ -159,7 +157,7 @@ export const generateAnualBudget = async ({
 
 export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
   const protocol = await findProtocolByIdWithBudgets(protocolId)
-  const protocolLogs = await getLogsByProtocolId(protocolId)
+  const protocolLogs = await getLogs({ protocolId })
 
   const lastProtocolState = protocolLogs?.at(-1)?.previousState
 
@@ -234,8 +232,6 @@ const generateAnualBudgetTeamMembers = (
         item.hours * item.workingMonths * WEEKS_IN_MONTH
       : item.hours * duration
     )
-
-    console.log('HOURDS', hours)
 
     if (item.toBeConfirmed && item.categoryToBeConfirmed) {
       return {
