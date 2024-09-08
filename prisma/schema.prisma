@@ -146,6 +146,14 @@ model TeamMemberCategory {
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
   amountIndex                AmountIndex //FCA or FMR
   AnualBudgetTeamMember      AnualBudgetTeamMember[]
+  historicAmountIndexes      HistoricAmountIndexes[]
+  specialCategory            Boolean                      @default(false)
+}
+
+type HistoricAmountIndexes {
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex
 }
 
 /// @deprecated this won't be needed after indexing the whole app.
