@@ -15,6 +15,7 @@ import {
   DropdownLabel,
 } from '@components/dropdown'
 import { Avatar } from '@components/avatar'
+import { AnimationsSwapper } from '@shared/animations-swapper'
 
 export function UserDropdown({ user }: { user: User }) {
   const [loading, setLoading] = useState(false)
@@ -66,7 +67,9 @@ export function UserDropdown({ user }: { user: User }) {
           <Settings data-slot="icon" />
           <DropdownLabel>Cuenta</DropdownLabel>
         </DropdownItem>
+        <DropdownDivider />
         <DarkModeToggler />
+        <AnimationsSwapper />
         <DropdownDivider />
         <DropdownItem
           onClick={() => {

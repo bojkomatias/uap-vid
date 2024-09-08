@@ -69,8 +69,6 @@ export function AppSidebar({
           <SidebarSection>
             <SidebarHeading>Visulizar montos en indices</SidebarHeading>
             <IndexSwapper />
-            <SidebarHeading>Mostrar animaciones</SidebarHeading>
-            <AnimationsSwapper />
           </SidebarSection>
         )}
         {convocatory ?

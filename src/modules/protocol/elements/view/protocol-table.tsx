@@ -161,10 +161,18 @@ export default function ProtocolTable({
       {
         accessorKey: 'sections.duration.modality',
         header: 'Modalidad',
+        cell: ({ row }) => (
+          <Text className="line-clamp-2 max-w-96 whitespace-normal">
+            {row.original.sections.duration.modality}
+          </Text>
+        ),
       },
       {
         accessorKey: 'sections.duration.duration',
         header: 'Duración',
+        cell: ({ row }) => (
+          <Text>{row.original.sections.duration.duration}</Text>
+        ),
       },
       {
         accessorKey: 'state',

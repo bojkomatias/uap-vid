@@ -1,48 +1,38 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import { atom, useAtom } from 'jotai'
-
-type swapType = 'true' | 'false'
+import { DropdownItem, DropdownLabel } from '@components/dropdown'
+import { EaseInOut, EaseInOutControlPoints } from 'tabler-icons-react'
 
 const LOCAL_STORAGE_KEY = 'animations-swap-value'
 
 // Initialize atom with value from localStorage or default to 'true'
-const getInitialValue = (): swapType => {
+const getInitialValue = (): boolean => {
   if (typeof window !== 'undefined') {
     const storedValue = localStorage.getItem(LOCAL_STORAGE_KEY)
     return storedValue === 'true' || storedValue === 'false' ?
-        storedValue
-      : 'true'
+        JSON.parse(storedValue)
+      : true
   }
-  return 'true'
+  return true
 }
 
-export const animationsSwapAtom = atom<swapType>(getInitialValue())
+export const animationsSwapAtom = atom<boolean>(getInitialValue())
 
 export function AnimationsSwapper() {
   const [value, setValue] = useAtom(animationsSwapAtom)
 
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, value)
-  }, [value])
-
   return (
-    <Listbox
-      name="animations-swapper"
-      defaultValue={value}
-      value={value}
-      onChange={(e) => {
-        setValue(e as swapType)
+    <DropdownItem
+      onClick={() => {
+        setValue((e) => !e)
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value))
       }}
     >
-      <ListboxOption value="true">
-        <ListboxLabel>Activar</ListboxLabel>
-      </ListboxOption>
-      <ListboxOption value="false">
-        <ListboxLabel>Desactivar</ListboxLabel>
-      </ListboxOption>
-    </Listbox>
+      {value ?
+        <EaseInOut data-slot="icon" />
+      : <EaseInOutControlPoints data-slot="icon" />}
+      <DropdownLabel>{value ? 'Desactivar' : 'Activar'}</DropdownLabel>
+    </DropdownItem>
   )
 }
