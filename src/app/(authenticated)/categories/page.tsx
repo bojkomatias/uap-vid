@@ -5,6 +5,7 @@ import { Button } from '@components/button'
 import { Plus } from 'tabler-icons-react'
 import { NewCategoryDialog } from 'modules/categories/new-category-dialog'
 import { ContainerAnimations } from '@elements/container-animations'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
 export default async function Page({
   searchParams,
@@ -12,6 +13,7 @@ export default async function Page({
   searchParams: { [key: string]: string }
 }) {
   const [totalRecords, categories] = await getCategories(searchParams)
+  const { currentFCA } = await getCurrentIndexes()
 
   return (
     <>
@@ -26,7 +28,7 @@ export default async function Page({
         </Subheading>
       </ContainerAnimations>
       <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
-        <CategoriesTable categories={categories} totalRecords={totalRecords} />
+        <CategoriesTable categories={categories} totalRecords={totalRecords} currentFCA={currentFCA} />
       </ContainerAnimations>
     </>
   )

@@ -1,6 +1,6 @@
 'use server'
 
-import type { TeamMemberCategory } from '@prisma/client'
+import type { AmountIndex, TeamMemberCategory } from '@prisma/client'
 import { cache } from 'react'
 import { prisma } from '../utils/bd'
 import { orderByQuery } from '@utils/query-helper/orderBy'
@@ -71,6 +71,8 @@ const getCategories = cache(
             name: true,
             price: true,
             amountIndex: true,
+            specialCategory: true,
+            historicAmountIndexes: true,
           },
           // Add all the globally searchable fields
           where: {
@@ -134,21 +136,152 @@ const insertCategory = async (
   data: z.infer<typeof TeamMemberCategorySchema>
 ) => {
   const { currentFCA, currentFMR } = await getCurrentIndexes()
+  try {
+    console.log('Inserting category')
+    console.log(data.specialCategory)
 
-  const newCategory = {
+    const created = await prisma.teamMemberCategory.create({
+      data: {
+        name: data.name,
+        state: data.state,
+        specialCategory: data.specialCategory,
+        amountIndex: {
+          FCA: data.amount / currentFCA,
+          FMR: data.amount / currentFMR,
+        },
+        // push the new amount index to the historic array
+        historicAmountIndexes: [
+          {
+            from: new Date(),
+            amountIndex: {
+              FCA: data.amount / currentFCA,
+              FMR: data.amount / currentFMR,
+            },
+          },
+        ],
+      },
+    })
+    return created
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
+const getNewHistoricAmountIndex = (
+  oldCategory: TeamMemberCategory,
+  newAmountIndex: AmountIndex
+) => {
+  const oldHistoricAmountIndexes = oldCategory.historicAmountIndexes.map(
+    (item) => {
+      if (!item.to) {
+        return {
+          ...item,
+          to: new Date(),
+        }
+      }
+      return item
+    }
+  )
+  const newHistoricAmountIndex = [
+    ...oldHistoricAmountIndexes,
+    {
+      from: new Date(),
+      amountIndex: newAmountIndex,
+    },
+  ]
+  return newHistoricAmountIndex
+}
+
+export async function recalculateSpecialCategories(
+  unit: 'FCA' | 'FMR',
+  oldIndexValue: number,
+  newIndexValue: number
+) {
+  try {
+    const specialTeamMembers = await prisma.teamMemberCategory.findMany({
+      where: { specialCategory: true },
+    })
+
+    const updatedCategories = specialTeamMembers.map((category) => {
+      const newAmountIndex = {
+        ...category.amountIndex,
+        [unit]: (category.amountIndex[unit] * oldIndexValue) / newIndexValue,
+      }
+      return {
+        id: category.id,
+        amountIndex: newAmountIndex,
+        historicAmountIndexes: getNewHistoricAmountIndex(
+          category,
+          newAmountIndex
+        ),
+      }
+    })
+
+    const promises = updatedCategories.map((category) =>
+      prisma.teamMemberCategory.update({
+        where: { id: category.id },
+        data: {
+          amountIndex: category.amountIndex,
+          historicAmountIndexes: category.historicAmountIndexes,
+        },
+      })
+    )
+
+    await Promise.all(promises)
+
+    console.log('Special categories recalculated')
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+const updateCategory = async (
+  id: string,
+  data: z.infer<typeof TeamMemberCategorySchema>
+) => {
+  console.log('Updating category')
+  console.log(data.specialCategory)
+  const { currentFCA, currentFMR } = await getCurrentIndexes()
+  const oldCategory = await prisma.teamMemberCategory.findFirst({
+    where: {
+      id,
+    },
+  })
+
+  if (!oldCategory) {
+    throw new Error('Category not found')
+  }
+
+  const amountIndex = {
+    FCA: data.amount / currentFCA,
+    FMR: data.amount / currentFMR,
+  }
+
+  const newHistoricAmountIndex = getNewHistoricAmountIndex(
+    oldCategory,
+    amountIndex
+  )
+
+  const updatedCategory = {
     name: data.name,
     state: data.state,
-    amountIndex: {
-      FCA: data.amount / currentFCA,
-      FMR: data.amount / currentFMR,
-    },
+    specialCategory: data.specialCategory,
+    amountIndex,
+    historicAmountIndexes: newHistoricAmountIndex,
   }
 
   try {
-    return await prisma.teamMemberCategory.create({
-      data: newCategory,
+    const updated = await prisma.teamMemberCategory.update({
+      where: {
+        id,
+      },
+      data: updatedCategory,
     })
+    return updated
   } catch (error) {
+    console.log(error)
     return null
   }
 }
@@ -179,6 +312,7 @@ export {
   getCategories,
   updatePriceCategoryById,
   insertCategory,
+  updateCategory,
   deleteCategoryById,
   getAllCategories,
   getCategoryById,

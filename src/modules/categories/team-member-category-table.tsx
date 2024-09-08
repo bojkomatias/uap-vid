@@ -6,13 +6,17 @@ import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Currency } from '@shared/currency'
 import SearchBar from '@shared/data-table/search-bar'
+import { BadgeButton } from '@components/badge'
+import { EditCategoryDialog } from './edit-category-dialog'
 
 export default function CategoriesTable({
   categories,
   totalRecords,
+  currentFCA
 }: {
   categories: TeamMemberCategory[]
   totalRecords: number
+  currentFCA: number
 }) {
   const columns = useMemo<ColumnDef<TeamMemberCategory>[]>(
     () => [
@@ -35,6 +39,18 @@ export default function CategoriesTable({
         enableHiding: false,
         enableSorting: false,
         cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
+      },
+      {
+        accessorKey: 'action',
+        header: '',
+        cell: ({ row }) => (
+          <EditCategoryDialog
+            teamMemberCategory={row.original}
+            currentFCA={currentFCA}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
       },
     ],
     []

@@ -6,11 +6,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@components/dialog'
-import { ScriptPlus } from 'tabler-icons-react'
-import { Button } from '@components/button'
 import { SubmitButton } from '@shared/submit-button'
 import { TeamMemberCategorySchema } from '@utils/zod'
-import { insertCategory } from '@repositories/team-member-category'
+import { updateCategory } from '@repositories/team-member-category'
 import { notifications } from '@elements/notifications'
 import { FieldGroup, Fieldset } from '@components/fieldset'
 import { useForm, zodResolver } from '@mantine/form'
@@ -19,8 +17,16 @@ import { useRouter } from 'next/navigation'
 import type { z } from 'zod'
 import { useState, useTransition } from 'react'
 import { FormCheckbox } from '@shared/form/form-checkbox'
+import { TeamMemberCategory } from '@prisma/client'
+import { BadgeButton } from '@components/badge'
 
-export function NewCategoryDialog() {
+export function EditCategoryDialog({
+  teamMemberCategory,
+  currentFCA,
+}: {
+  teamMemberCategory: TeamMemberCategory
+  currentFCA: number
+}) {
   const [open, setOpen] = useState(false)
 
   const router = useRouter()
@@ -28,10 +34,10 @@ export function NewCategoryDialog() {
 
   const form = useForm({
     initialValues: {
-      specialCategory: false,
+      specialCategory: teamMemberCategory.specialCategory,
       state: true,
-      name: '',
-      amount: 0,
+      name: teamMemberCategory.name,
+      amount: teamMemberCategory.amountIndex.FCA * currentFCA,
     },
     validate: zodResolver(TeamMemberCategorySchema),
     validateInputOnBlur: true,
@@ -40,12 +46,12 @@ export function NewCategoryDialog() {
   const submitCategory = async (
     category: z.infer<typeof TeamMemberCategorySchema>
   ) => {
-    const created = await insertCategory(category)
+    const updated = await updateCategory(teamMemberCategory.id, category)
 
-    if (created) {
+    if (updated) {
       notifications.show({
-        title: 'Categoría creada',
-        message: 'Se creo correctamente la categoría',
+        title: 'Categoría actualizada',
+        message: 'Se actualizó correctamente la categoría',
         intent: 'success',
       })
       return startTransition(() => router.refresh())
@@ -53,7 +59,7 @@ export function NewCategoryDialog() {
 
     notifications.show({
       title: 'Error',
-      message: 'No se pudo crear la categoría',
+      message: 'No se pudo actualizar la categoría',
       intent: 'error',
     })
     return startTransition(() => router.refresh())
@@ -61,15 +67,12 @@ export function NewCategoryDialog() {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
-        <ScriptPlus data-slot="icon" />
-        Categoria
-      </Button>
+      <BadgeButton onClick={() => setOpen(true)}>Editar</BadgeButton>
 
       <Dialog open={open} onClose={setOpen} size="2xl">
-        <DialogTitle>Crear categoria</DialogTitle>
+        <DialogTitle>Editar categoria</DialogTitle>
         <DialogDescription>
-          Aquí puede crear una nueva categoria para luego asignarla a los
+          Aquí puede editar una nueva categoria para luego asignarla a los
           investigadores
         </DialogDescription>
         <form onSubmit={form.onSubmit((values) => submitCategory(values))}>
@@ -86,16 +89,16 @@ export function NewCategoryDialog() {
                 type="number"
                 {...form.getInputProps('amount')}
               />
-              <FormCheckbox 
+              <FormCheckbox
                 label="No indexada"
-                description="Si la categoría no se indexa, no se actualiza su valor con los indices."
+                description="Si la categoría no se indexa, no se actualiza su valor con los indices. El valor de la hora se mantiene fijo en pesos."
                 {...form.getInputProps('specialCategory')}
               />
             </FieldGroup>
           </Fieldset>
 
           <DialogActions>
-            <SubmitButton isLoading={isPending}>Crear categoria</SubmitButton>
+            <SubmitButton isLoading={isPending}>Editar categoria</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>
