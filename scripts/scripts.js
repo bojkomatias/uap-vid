@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import LogsTransform from './logs-transform.js'
 import IndexesInsert from './indexes_insert.js'
 import CareersInsert from './careers_insert.js'
 import EmailsInsert from './emails_insert.js'
@@ -11,6 +12,7 @@ import ProtocolCareerRelation from './protocol-career-relation.js'
 import TeamMemberCategoryToIndexes from './team-member-category-to-indexes.js'
 
 async function main() {
+  await LogsTransform()
   await ReviewQuestionsInsert()
   await IndexesInsert()
   await CareersInsert()

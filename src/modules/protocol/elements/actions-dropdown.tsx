@@ -34,6 +34,7 @@ import {
 import { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
 import { useAtom } from 'jotai'
+import { reactivateProtocolAndAnualBudget } from '@actions/anual-budget/action'
 
 type ActionOption = {
   action: Action
@@ -143,6 +144,14 @@ export function ActionsDropdown({
       callback: () =>
         router.push(`/generate-budget/${protocol.id}`, { scroll: false }),
       icon: <FileDollar data-slot="icon" />,
+    },
+    {
+      action: Action.REACTIVATE,
+      callback: async () => {
+        const updated = await reactivateProtocolAndAnualBudget(protocol.id)
+        notifications.show(updated.notification)
+      },
+      icon: <Badge data-slot="icon" />,
     },
   ]
 

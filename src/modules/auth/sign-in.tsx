@@ -17,7 +17,10 @@ import { Strong, Text } from '@components/text'
 import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
 import { useForm } from '@mantine/form'
+import { QuestionMark } from 'tabler-icons-react'
+import Info from 'modules/info'
 import { SubmitButton } from '@shared/submit-button'
+
 
 export const SignIn = () => {
   const router = useRouter()
@@ -56,7 +59,7 @@ export const SignIn = () => {
   }
 
   return (
-    <div className="mx-auto max-w-xl rounded-xl border border-gray-200 bg-white p-12 shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:shadow-black">
+    <div className="mx-auto max-w-xl rounded-3xl border border-gray-200 bg-white p-12 shadow-sm dark:border-gray-800 dark:bg-gray-900 dark:shadow-black">
       <div className="mx-auto my-8">
         <Image
           src="/UAPazul.png"
@@ -70,9 +73,6 @@ export const SignIn = () => {
         </Text>
       </div>
 
-      <Text className="text-center">
-        Ingreso mediante credenciales institucionales.
-      </Text>
       <Button
         color="primary"
         disabled={loadingMicrosoft}
@@ -96,11 +96,20 @@ export const SignIn = () => {
       <Divider className="my-6" />
 
       <Disclosure as="div">
-        <DisclosureButton className={'mx-auto w-full'}>
-          <Text>
-            ¿Tiene credenciales propias? <Strong>Click aquí</Strong>
-          </Text>
-        </DisclosureButton>
+        <div className={'relative mx-auto flex w-fit'}>
+          <DisclosureButton>
+            <Text>
+              Si tenés credenciales locales,
+              <Strong> click aquí para iniciar sesión</Strong>
+            </Text>
+          </DisclosureButton>
+          <Info content="Si se te asignó uno o más proyectos para evaluar, las credenciales que le envió el secretario de investigación son credenciales locales.">
+            <QuestionMark
+              className="absolute -right-6 -top-4 p-2 opacity-50 hover:opacity-100"
+              size={30}
+            />
+          </Info>
+        </div>
         <div className="overflow-hidden py-2">
           <DisclosurePanel
             transition
