@@ -66,11 +66,37 @@ export const generateAnualBudget = async ({
   const protocol = await findProtocolById(protocolId)
   if (!protocol) return null
 
+  const oldAB = budgetId ? await getAnualBudgetById(budgetId) : null
+
   // Create the annual budget with all the items listed in the protocol budget section.
   const ABI = generateAnualBudgetItems(
     protocol?.sections.budget,
     year.toString()
   )
+
+  // Handle the case where the annual budget is reactivated
+  if (budgetId && reactivated && oldAB) {
+    for (let i = 0; i < ABI.length; i++) {
+      ABI[i].executions = oldAB.budgetItems[i].executions
+
+      // ABI[].remaining = oldAB.budgetItems[i].remainingIndex - sumatoria de ejecuciones.amountindex
+      const executionsSum = oldAB.budgetItems[i].executions.reduce(
+        (acc, item) => {
+          if (!item || !item.amountIndex) return acc
+          acc = sumAmountIndex([acc, item.amountIndex])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
+
+      const newRemainig = subtractAmountIndex(
+        ABI[i].remainingIndex,
+        executionsSum
+      )
+      ABI[i].remainingIndex = newRemainig
+    }
+  }
+
   const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
     protocolId: protocol.id,
     year,
@@ -89,15 +115,27 @@ export const generateAnualBudget = async ({
   )
 
   // Handle the case where the annual budget is reactivated
-  if (budgetId && reactivated) {
-    const oldABT = await getAnualBudgetTeamMembersByAnualBudgetId(
-      newAnualBudget.id
-    )
+  if (budgetId && reactivated && oldAB) {
     ABT.forEach((newABT) => {
-      newABT.executions =
-        oldABT.find((oldABT) => oldABT.teamMemberId === newABT.teamMemberId)
-          ?.executions || []
+      const oldABT = oldAB?.budgetTeamMembers.find(
+        (oldABT) => oldABT.teamMemberId === newABT.teamMemberId
+      )
+      if (!oldABT) return
+      newABT.executions = oldABT?.executions || []
+
+      const executionsSum = oldABT.executions.reduce((acc, item) => {
+        if (!item.amountIndex) return acc
+        sumAmountIndex([acc, item.amountIndex])
+        return acc
+      }, {} as AmountIndex)
+
+      const hourlyRateInFCA =
+        oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 0
+      const newRemaining =
+        newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
+      newABT.remainingHours = newRemaining
     })
+
     await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
   }
 
