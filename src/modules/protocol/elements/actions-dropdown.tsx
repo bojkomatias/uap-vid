@@ -145,17 +145,17 @@ export function ActionsDropdown({
         router.push(`/generate-budget/${protocol.id}`, { scroll: false }),
       icon: <FileDollar data-slot="icon" />,
     },
+  ]
+
+  const endingActions: ActionOption[] = [
     {
       action: Action.REACTIVATE,
       callback: async () => {
         const updated = await reactivateProtocolAndAnualBudget(protocol.id)
         notifications.show(updated.notification)
       },
-      icon: <Badge data-slot="icon" />,
+      icon: <Badge data-slot="icon" className="stroke-emerald-500" />,
     },
-  ]
-
-  const endingActions: ActionOption[] = [
     {
       action: Action.FINISH,
       callback: async () => {
@@ -237,7 +237,9 @@ export function ActionsDropdown({
         </DropdownItem>
 
         {/* Actions that end or pause the lifetime of a project */}
-        <DropdownDivider />
+        {endingActions.length > 0 ?
+          <DropdownDivider />
+        : null}
         {endingActions
           .filter((a) => actions.includes(a.action))
           .map((x, i) => (

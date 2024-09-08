@@ -120,6 +120,7 @@ export const generateAnualBudget = async ({
       const oldABT = oldAB?.budgetTeamMembers.find(
         (oldABT) => oldABT.teamMemberId === newABT.teamMemberId
       )
+
       if (!oldABT) return
       newABT.executions = oldABT?.executions || []
 
@@ -129,11 +130,15 @@ export const generateAnualBudget = async ({
         return acc
       }, {} as AmountIndex)
 
-      const hourlyRateInFCA =
-        oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 0
-      const newRemaining =
-        newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
-      newABT.remainingHours = newRemaining
+      if (executionsSum?.FCA) {
+        const hourlyRateInFCA =
+          oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 1
+
+        const newRemaining =
+          newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
+
+        newABT.remainingHours = newRemaining
+      }
     })
 
     await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
@@ -144,6 +149,8 @@ export const generateAnualBudget = async ({
     await deleteAnualBudgetTeamMembers(budgetId)
   }
 
+  console.log('ABT====>', ABT)
+
   // Create new team members
   await createManyAnualBudgetTeamMember(ABT)
 
@@ -152,18 +159,24 @@ export const generateAnualBudget = async ({
 
 export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
   const protocol = await findProtocolByIdWithBudgets(protocolId)
-  if (!protocol)
-    return {
-      success: false,
-      notification: {
-        title: 'Error',
-        message: 'Ocurrio un error al reactivar el procotolo.',
-        intent: 'error',
-      } as const,
-    }
+  const protocolLogs = await getLogsByProtocolId(protocolId)
+
+  const lastProtocolState = protocolLogs?.at(-1)?.previousState
+
+  console.log(protocolId, protocolLogs)
+
+  // if (!protocol || !lastProtocolState)
+  //   return {
+  //     success: false,
+  //     notification: {
+  //       title: 'Error',
+  //       message: 'Ocurrio un error al reactivar el procotolo.',
+  //       intent: 'error',
+  //     } as const,
+  //   }
 
   const currentYear = new Date().getFullYear()
-  const haveBudgetForCurrentYear = protocol.anualBudgets.find(
+  const haveBudgetForCurrentYear = protocol!.anualBudgets.find(
     (b) => b.year === currentYear
   )
 
@@ -176,47 +189,12 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
     })
   }
 
-  const protocolLogs = await getLogsByProtocolId(protocolId)
-
-  // TODO: Fix this validation
-
-  // if (!protocolLogs)
-  //   return {
-  //     success: false,
-  //     notification: {
-  //       title: 'Error',
-  //       message: 'Ocurrio un error al reactivar el procotolo.',
-  //       intent: 'error',
-  //     } as const,
-  //   }
-
-  // const lastProtocolState = protocolLogs.at(-1)?.previousState
-
-  // if (!lastProtocolState)
-  //   return {
-  //     success: false,
-  //     notification: {
-  //       title: 'Error',
-  //       message: 'Ocurrio un error al reactivar el procotolo.',
-  //       intent: 'error',
-  //     } as const,
-  //   }
-
-  await updateProtocolStateById(
+  return await updateProtocolStateById(
     protocolId,
     Action.REACTIVATE,
     ProtocolState.DISCONTINUED,
-    protocolLogs?.at(-1)?.previousState ?? ProtocolState.ON_GOING
+    ProtocolState.ON_GOING
   )
-
-  return {
-    success: true,
-    notification: {
-      title: 'Estado modificado',
-      message: 'El estado del protocolo fue modificado con éxito',
-      intent: 'success',
-    } as const,
-  }
 }
 
 // Utilities for generating the annual budget from a protocol.
@@ -256,6 +234,9 @@ const generateAnualBudgetTeamMembers = (
         item.hours * item.workingMonths * WEEKS_IN_MONTH
       : item.hours * duration
     )
+
+    console.log('HOURDS', hours)
+
     if (item.toBeConfirmed && item.categoryToBeConfirmed) {
       return {
         anualBudgetId: anualBudgetId,
@@ -347,7 +328,7 @@ export const saveNewTeamMemberExecution = async (
   // In this cases team members will exist. Cannot have executions over plain categories.
   const hourlyRateInFCA =
     anualBudgetTeamMember.teamMember!.categories.at(-1)?.category.amountIndex
-      ?.FCA || 0
+      ?.FCA || 1
 
   const amountExcecutedInHours =
     hourlyRateInFCA ? amountIndex.FCA / hourlyRateInFCA : 0

@@ -1,7 +1,6 @@
 'use client'
 
 import { generateAnualBudget } from '@actions/anual-budget/action'
-import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { Prisma } from '@prisma/client'
 import { SubmitButton } from '@shared/submit-button'
