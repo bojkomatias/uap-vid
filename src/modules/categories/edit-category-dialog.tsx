@@ -1,11 +1,12 @@
 'use client'
+
 import {
   Dialog,
   DialogActions,
   DialogDescription,
   DialogTitle,
 } from '@components/dialog'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import { updateCategory } from '@repositories/team-member-category'
 import { notifications } from '@elements/notifications'
@@ -97,7 +98,7 @@ export function EditCategoryDialog({
           </Fieldset>
 
           <DialogActions>
-            <FormButton isLoading={isPending}>Editar categoria</FormButton>
+            <SubmitButton isLoading={isPending}>Editar categoria</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>
