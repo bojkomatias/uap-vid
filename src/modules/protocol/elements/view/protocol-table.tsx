@@ -34,9 +34,6 @@ type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     protocolNumber: true
     state: true
     createdAt: true
-    logs: {
-      include: { user: { select: { name: true } } }
-    }
     convocatory: { select: { id: true; name: true } }
     researcher: {
       select: { id: true; name: true; role: true; email: true }
