@@ -95,4 +95,5 @@ const logActionToText = (action: Action, interpolated?: string) => {
   if (action === Action.DISCONTINUE)
     return 'ha marcado el proyecto como discontinuado'
   if (action === Action.DELETE) return 'ha borrado el proyecto'
+  if (action === Action.REACTIVATE) return 'ha reactivado el proyecto'
 }

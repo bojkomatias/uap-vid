@@ -135,7 +135,8 @@ const updateProtocolStateById = async (
   action: Action,
   previousState: ProtocolState,
   toState: ProtocolState,
-  reviewerId?: string
+  reviewerId?: string,
+  budgetId?: string
 ) => {
   try {
     const session = await getServerSession(authOptions)
@@ -160,7 +161,7 @@ const updateProtocolStateById = async (
       action,
       previousState,
       message: null,
-      budgetId: null,
+      budgetId: budgetId ?? null,
       reviewerId: reviewerId ?? null,
     })
 

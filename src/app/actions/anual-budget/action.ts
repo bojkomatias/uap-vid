@@ -19,14 +19,16 @@ import {
   deleteAnualBudgetTeamMembers,
   getAnualBudgetById,
   getAnualBudgetTeamMemberById,
-  getAnualBudgetTeamMembersByAnualBudgetId,
   newBudgetItemExecution,
   newTeamMemberExecution,
   updateAnualBudgetState,
   upsertAnualBudget,
 } from '@repositories/anual-budget'
 import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
-import { getLogs } from '@repositories/log'
+import {
+  getLogs,
+  updateLogsBudgetIdOnProtocolReactivation,
+} from '@repositories/log'
 import {
   findProtocolById,
   findProtocolByIdWithBudgets,
@@ -161,8 +163,6 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
 
   const lastProtocolState = protocolLogs?.at(-1)?.previousState
 
-  console.log(protocolId, protocolLogs)
-
   // if (!protocol || !lastProtocolState)
   //   return {
   //     success: false,
@@ -178,8 +178,10 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
     (b) => b.year === currentYear
   )
 
+  let newBudgetId
+
   if (haveBudgetForCurrentYear) {
-    await generateAnualBudget({
+    newBudgetId = await generateAnualBudget({
       protocolId: protocolId,
       year: currentYear,
       budgetId: haveBudgetForCurrentYear.id,
@@ -187,11 +189,16 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
     })
   }
 
+  if (newBudgetId)
+    await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
+
   return await updateProtocolStateById(
     protocolId,
     Action.REACTIVATE,
     ProtocolState.DISCONTINUED,
-    ProtocolState.ON_GOING
+    ProtocolState.ON_GOING,
+    undefined,
+    newBudgetId!
   )
 }
 

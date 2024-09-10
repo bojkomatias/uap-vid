@@ -1,6 +1,6 @@
 'use server'
 
-import type { Logs } from '@prisma/client'
+import { Action, type Logs } from '@prisma/client'
 import { prisma } from '../utils/bd'
 import { cache } from 'react'
 
@@ -34,7 +34,6 @@ const getLogs = cache(async (search: { [key: string]: string }) => {
       },
       orderBy: { createdAt: 'desc' },
     })
-    console.log('This is getting logs???', result)
     return result
   } catch (error) {
     console.log(error)
@@ -42,4 +41,26 @@ const getLogs = cache(async (search: { [key: string]: string }) => {
   }
 })
 
-export { logEvent, getLogs }
+const updateLogsBudgetIdOnProtocolReactivation = cache(
+  async (protocolId: string, newBudgetId: string) => {
+    try {
+      const result = await prisma.logs.updateMany({
+        where: {
+          protocolId,
+          OR: [
+            { action: Action.REACTIVATE },
+            { action: Action.APPROVE },
+            { action: Action.DISCONTINUE },
+          ],
+        },
+        data: { budgetId: newBudgetId },
+      })
+
+      return result
+    } catch (e) {
+      return null
+    }
+  }
+)
+
+export { logEvent, getLogs, updateLogsBudgetIdOnProtocolReactivation }
