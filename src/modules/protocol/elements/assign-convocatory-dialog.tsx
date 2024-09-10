@@ -13,7 +13,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import { getConvocatoriesForFilter } from '@repositories/convocatory'
 import { updateProtocolConvocatory } from '@repositories/protocol'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormListbox } from '@shared/form/form-listbox'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
@@ -100,7 +100,9 @@ export function AssingConvocatoryDialog({
             <Button plain type="button" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <FormButton isLoading={isPending}>Asignar convocatoria</FormButton>
+            <SubmitButton isLoading={isPending}>
+              Asignar convocatoria
+            </SubmitButton>
           </DialogActions>
         </form>
       </Dialog>

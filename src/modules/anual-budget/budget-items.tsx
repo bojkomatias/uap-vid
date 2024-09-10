@@ -1,7 +1,12 @@
 'use client'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'
+import type {
+  AcademicUnit,
+  AmountIndex,
+  AnualBudgetItem,
+  Index,
+} from '@prisma/client'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
 import { ExecutionType } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
@@ -17,6 +22,8 @@ import { Button } from '@components/button'
 import { Text } from '@components/text'
 import { Heading, Subheading } from '@components/heading'
 import { FormInput } from '@shared/form/form-input'
+import { useAtom } from 'jotai'
+import { indexSwapAtom } from '@shared/index-swapper'
 
 export function BudgetItems({
   budgetId,
@@ -25,6 +32,7 @@ export function BudgetItems({
   ABIe,
   ABIr,
   academicUnits,
+  currentIndexes,
 }: {
   budgetId: string
   editable: boolean
@@ -32,20 +40,35 @@ export function BudgetItems({
   ABIe: AmountIndex
   ABIr: AmountIndex
   academicUnits: AcademicUnit[]
+  currentIndexes: { currentFCA: number; currentFMR: number }
 }) {
   const router = useRouter()
   const form = useForm({ initialValues: budgetItems })
 
   if (budgetItems.length < 1) return null
 
+  const { currentFCA } = currentIndexes
+  const { currentFMR } = currentIndexes
+
   return (
     <form
       className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
       onSubmit={form.onSubmit(async (values) => {
+        console.log(values)
         if (!editable) return
-        const itemsWithRemainingUpdated = values.map((item) => {
-          const remaining = item.amount
-          return { ...item, remaining }
+        const itemsWithRemainingUpdated = Object.values(values).map((item) => {
+          const remainingIndex = {
+            FCA: item.amount! / currentFCA,
+            FMR: item.amount! / currentFMR,
+          }
+          const amountIndex = {
+            FCA: item.amount! / currentFCA,
+            FMR: item.amount! / currentFMR,
+          }
+          if (item.amount) {
+            return { ...item, amountIndex, remainingIndex, amount: null }
+          }
+          return { ...item, amount: null }
         })
         const res = await updateAnualBudgetItems(
           budgetId,
@@ -58,6 +81,12 @@ export function BudgetItems({
             intent: 'success',
           })
           router.refresh()
+        } else {
+          notifications.show({
+            title: 'No se pudo actualizar',
+            message: 'Ocurrió un error al actualizar los datos',
+            intent: 'error',
+          })
         }
       })}
     >
@@ -185,7 +214,10 @@ export function BudgetItems({
                     $
                     <FormInput
                       type="number"
-                      defaultValue={form.getInputProps(`${i}.amount`).value}
+                      defaultValue={
+                        form.getInputProps(`${i}.amountIndex.FCA`).value *
+                        currentFCA
+                      }
                       className={cx('ml-full float-right w-32')}
                       {...form.getInputProps(`${i}.amount`)}
                     />

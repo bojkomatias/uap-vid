@@ -10,18 +10,30 @@ import {
   type AnualBudgetTeamMember,
   type AcademicUnit,
   AnualBudgetState,
+  ProtocolState,
+  Action,
 } from '@prisma/client'
 import { getAcademicUnitById } from '@repositories/academic-unit'
 import {
-  createAnualBudget,
   createManyAnualBudgetTeamMember,
+  deleteAnualBudgetTeamMembers,
   getAnualBudgetById,
   getAnualBudgetTeamMemberById,
   newBudgetItemExecution,
   newTeamMemberExecution,
+  updateAnualBudgetState,
+  upsertAnualBudget,
 } from '@repositories/anual-budget'
 import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
-import { findProtocolById } from '@repositories/protocol'
+import {
+  getLogs,
+  updateLogsBudgetIdOnProtocolReactivation,
+} from '@repositories/log'
+import {
+  findProtocolById,
+  findProtocolByIdWithBudgets,
+  updateProtocolStateById,
+} from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
   BudgetSummaryZero,
@@ -42,31 +54,152 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
  * @param year - The year to generate the budget for.
  * @returns A Promise that resolves to the generated annual budget, or null if the protocol is not found.
  */
-export const generateAnualBudget = async (protocolId: string, year: string) => {
+export const generateAnualBudget = async ({
+  protocolId,
+  year,
+  budgetId,
+  reactivated,
+}: {
+  protocolId: string
+  year: number
+  budgetId?: string
+  reactivated?: boolean
+}) => {
   const protocol = await findProtocolById(protocolId)
   if (!protocol) return null
 
+  const oldAB = budgetId ? await getAnualBudgetById(budgetId) : null
+
   // Create the annual budget with all the items listed in the protocol budget section.
-  const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
+  const ABI = generateAnualBudgetItems(
+    protocol?.sections.budget,
+    year.toString()
+  )
+
+  // Handle the case where the annual budget is reactivated
+  if (budgetId && reactivated && oldAB) {
+    for (let i = 0; i < ABI.length; i++) {
+      ABI[i].executions = oldAB.budgetItems[i].executions
+
+      // ABI[].remaining = oldAB.budgetItems[i].remainingIndex - sumatoria de ejecuciones.amountindex
+      const executionsSum = oldAB.budgetItems[i].executions.reduce(
+        (acc, item) => {
+          if (!item || !item.amountIndex) return acc
+          acc = sumAmountIndex([acc, item.amountIndex])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
+
+      const newRemainig = subtractAmountIndex(
+        ABI[i].remainingIndex,
+        executionsSum
+      )
+      ABI[i].remainingIndex = newRemainig
+    }
+  }
+
   const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
     protocolId: protocol.id,
-    year: Number(year),
+    year,
     budgetItems: ABI,
     academicUnitsIds: protocol.sections.identification.academicUnitIds,
   }
 
-  const newAnualBudget = await createAnualBudget(data)
+  const newAnualBudget = await upsertAnualBudget(data, budgetId)
   const duration = protocolDuration(protocol.sections.duration.duration)
-  // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
-  const ABT = generateAnualBudgetTeamMembersItems(
+
+  // Generate new annual budget team members
+  const ABT = generateAnualBudgetTeamMembers(
     protocol.sections.identification.team,
     newAnualBudget.id,
     duration
   )
 
+  // Handle the case where the annual budget is reactivated
+  if (budgetId && reactivated && oldAB) {
+    ABT.forEach((newABT) => {
+      const oldABT = oldAB?.budgetTeamMembers.find(
+        (oldABT) => oldABT.teamMemberId === newABT.teamMemberId
+      )
+
+      if (!oldABT) return
+      newABT.executions = oldABT?.executions || []
+
+      const executionsSum = oldABT.executions.reduce((acc, item) => {
+        if (!item.amountIndex) return acc
+        sumAmountIndex([acc, item.amountIndex])
+        return acc
+      }, {} as AmountIndex)
+
+      if (executionsSum?.FCA) {
+        const hourlyRateInFCA =
+          oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 1
+
+        const newRemaining =
+          newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
+
+        newABT.remainingHours = newRemaining
+      }
+    })
+
+    await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
+  }
+
+  // If updating an existing budget, delete old team members before creating new ones
+  if (budgetId) {
+    await deleteAnualBudgetTeamMembers(budgetId)
+  }
+
+  // Create new team members
   await createManyAnualBudgetTeamMember(ABT)
-  //Added this return to check if the budget was created
+
   return newAnualBudget.id
+}
+
+export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
+  const protocol = await findProtocolByIdWithBudgets(protocolId)
+  const protocolLogs = await getLogs({ protocolId })
+
+  const lastProtocolState = protocolLogs?.at(-1)?.previousState
+
+  // if (!protocol || !lastProtocolState)
+  //   return {
+  //     success: false,
+  //     notification: {
+  //       title: 'Error',
+  //       message: 'Ocurrio un error al reactivar el procotolo.',
+  //       intent: 'error',
+  //     } as const,
+  //   }
+
+  const currentYear = new Date().getFullYear()
+  const haveBudgetForCurrentYear = protocol!.anualBudgets.find(
+    (b) => b.year === currentYear
+  )
+
+  let newBudgetId
+
+  if (haveBudgetForCurrentYear) {
+    newBudgetId = await generateAnualBudget({
+      protocolId: protocolId,
+      year: currentYear,
+      budgetId: haveBudgetForCurrentYear.id,
+      reactivated: true,
+    })
+  }
+
+  if (newBudgetId)
+    await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
+
+  return await updateProtocolStateById(
+    protocolId,
+    Action.REACTIVATE,
+    ProtocolState.DISCONTINUED,
+    ProtocolState.ON_GOING,
+    undefined,
+    newBudgetId!
+  )
 }
 
 // Utilities for generating the annual budget from a protocol.
@@ -93,7 +226,7 @@ const generateAnualBudgetItems = (
   }, [] as AnualBudgetItem[])
 }
 
-const generateAnualBudgetTeamMembersItems = (
+const generateAnualBudgetTeamMembers = (
   protocolTeam: ProtocolSectionsIdentificationTeam[],
   anualBudgetId: string | null,
   duration: number
@@ -106,6 +239,7 @@ const generateAnualBudgetTeamMembersItems = (
         item.hours * item.workingMonths * WEEKS_IN_MONTH
       : item.hours * duration
     )
+
     if (item.toBeConfirmed && item.categoryToBeConfirmed) {
       return {
         anualBudgetId: anualBudgetId,
@@ -137,7 +271,7 @@ export const protocolToAnualBudgetPreview = async (
     protocolBudgetItems,
     new Date().getFullYear().toString()
   )
-  const ABT = generateAnualBudgetTeamMembersItems(
+  const ABT = generateAnualBudgetTeamMembers(
     protocolTeamMembers,
     null,
     duration
@@ -197,7 +331,7 @@ export const saveNewTeamMemberExecution = async (
   // In this cases team members will exist. Cannot have executions over plain categories.
   const hourlyRateInFCA =
     anualBudgetTeamMember.teamMember!.categories.at(-1)?.category.amountIndex
-      ?.FCA || 0
+      ?.FCA || 1
 
   const amountExcecutedInHours =
     hourlyRateInFCA ? amountIndex.FCA / hourlyRateInFCA : 0

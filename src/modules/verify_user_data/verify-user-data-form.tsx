@@ -6,7 +6,7 @@ import { FormInput } from '@shared/form/form-input'
 import type { User } from '@prisma/client'
 import { useForm, zodResolver } from '@mantine/form'
 import type { z } from 'zod'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { notifications } from '@elements/notifications'
 import { signOut } from 'next-auth/react'
 import {
@@ -86,7 +86,7 @@ export function VerifyUserDataForm({ user }: { user: User }) {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>Actualizar datos</FormButton>
+        <SubmitButton isLoading={isPending}>Actualizar datos</SubmitButton>
       </FormActions>
     </form>
   )
@@ -148,7 +148,7 @@ export function VerifyUserDataFormMicrosoftUsers({ user }: { user: User }) {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>Actualizar datos</FormButton>
+        <SubmitButton isLoading={isPending}>Actualizar datos</SubmitButton>
       </FormActions>
     </form>
   )

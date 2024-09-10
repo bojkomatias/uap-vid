@@ -47,7 +47,7 @@ export function BudgetTeamMemberFees({
           if (!editable) return
 
           const res = await updateAnualBudgetTeamMemberHours(
-            values.map((e) => {
+            Object.values(values).map((e) => {
               return {
                 id: e.id,
                 hours: e.hours,

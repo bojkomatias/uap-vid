@@ -8,7 +8,7 @@ import { RoleSchema } from '@utils/zod'
 import { useForm, zodResolver } from '@mantine/form'
 import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormListbox } from '@shared/form/form-listbox'
 import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 
@@ -97,7 +97,7 @@ export function UserForm() {
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>Crear usuario</FormButton>
+        <SubmitButton isLoading={isPending}>Crear usuario</SubmitButton>
       </FormActions>
     </form>
   )

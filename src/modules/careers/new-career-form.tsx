@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { FormInput } from '@shared/form/form-input'
 import type { z } from 'zod'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { upsertCareer } from '@repositories/career'
 import { FormSwitch } from '@shared/form/form-switch'
@@ -62,7 +62,7 @@ export function NewCareerForm({
       className="@container"
     >
       <Fieldset>
-        <FieldGroup className="@xl:grid @xl:grid-cols-2 @xl:gap-6 @xl:space-y-0">
+        <FieldGroup className="@xl:grid @xl:grid-cols-1 @xl:gap-6 @xl:space-y-0">
           <FormSwitch
             label="Estado de la carrera"
             description={
@@ -92,9 +92,9 @@ export function NewCareerForm({
       </Fieldset>
 
       <FormActions>
-        <FormButton isLoading={isPending}>
+        <SubmitButton isLoading={isPending}>
           {!career.id ? 'Crear carrera' : 'Actualizar carrera'}
-        </FormButton>
+        </SubmitButton>
       </FormActions>
     </form>
   )

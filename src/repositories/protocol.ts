@@ -2,6 +2,7 @@
 
 import { prisma } from '../utils/bd'
 import type {
+  Action,
   ProtocolFlag,
   ProtocolSectionsIdentificationTeam,
   TeamMember,
@@ -13,7 +14,9 @@ import { orderByQuery } from '@utils/query-helper/orderBy'
 import { Prisma, Role } from '@prisma/client'
 import { IdentificationTeamSchema } from '@utils/zod'
 import { getCurrentIndexes } from './finance-index'
-import { logProtocolUpdate } from '@utils/logger'
+import { logEvent } from './log'
+import { getServerSession } from 'next-auth'
+import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 
 const findProtocolByIdWithResearcher = cache(
   async (id: string) =>
@@ -25,11 +28,12 @@ const findProtocolByIdWithResearcher = cache(
         researcher: { select: { id: true, name: true, email: true } },
         convocatory: { select: { id: true, name: true } },
         anualBudgets: {
-          select: { createdAt: true, year: true, id: true },
+          select: { createdAt: true, year: true, id: true, state: true },
         },
       },
     })
 )
+
 const getProtocolMetadata = cache(
   async (id: string) =>
     await prisma.protocol.findUnique({
@@ -58,6 +62,16 @@ const findProtocolById = cache(
       where: {
         id,
       },
+    })
+)
+
+const findProtocolByIdWithBudgets = cache(
+  async (id: string) =>
+    await prisma.protocol.findUnique({
+      where: {
+        id,
+      },
+      include: { anualBudgets: true },
     })
 )
 
@@ -118,11 +132,14 @@ const updateProtocolById = async (id: string, data: Protocol) => {
 
 const updateProtocolStateById = async (
   id: string,
-  fromState: ProtocolState,
+  action: Action,
+  previousState: ProtocolState,
   toState: ProtocolState,
-  userId: string
+  reviewerId?: string,
+  budgetId?: string
 ) => {
   try {
+    const session = await getServerSession(authOptions)
     const protocol = await prisma.protocol.update({
       where: {
         id,
@@ -138,11 +155,14 @@ const updateProtocolStateById = async (
       },
     })
 
-    await logProtocolUpdate({
-      userId,
-      fromState,
-      toState,
+    await logEvent({
+      userId: session!.user.id,
       protocolId: id,
+      action,
+      previousState,
+      message: null,
+      budgetId: budgetId ?? null,
+      reviewerId: reviewerId ?? null,
     })
 
     return {
@@ -338,9 +358,6 @@ const getProtocolsByRole = cache(
       id: true,
       protocolNumber: true,
       state: true,
-      logs: {
-        include: { user: { select: { name: true } } },
-      },
       createdAt: true,
       convocatory: { select: { id: true, name: true, year: true } },
       researcher: {
@@ -650,4 +667,5 @@ export {
   upsertProtocolFlag,
   updateProtocolTeamMembers,
   updateProtocolConvocatory,
+  findProtocolByIdWithBudgets,
 }

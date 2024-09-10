@@ -21,7 +21,7 @@ export function ContainerAnimations({
 }) {
   const [value] = useAtom(animationsSwapAtom)
 
-  if (value === 'false') {
+  if (!value) {
     return (
       <div id={id} className={className}>
         {children}

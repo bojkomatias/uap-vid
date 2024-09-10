@@ -29,10 +29,12 @@ import {
   Trash,
   FileDownload,
   HandStop,
+  FileSpreadsheet,
 } from 'tabler-icons-react'
-import FlagsDialog, { FlagsDialogAtom } from './flags/flags-dialog'
+import { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
 import { useAtom } from 'jotai'
+import { reactivateProtocolAndAnualBudget } from '@actions/anual-budget/action'
 
 type ActionOption = {
   action: Action
@@ -44,7 +46,7 @@ type ActionOption = {
 export function ActionsDropdown({
   actions,
   protocol,
-  userId,
+  canViewLogs,
 }: {
   actions: Action[]
   protocol: Prisma.ProtocolGetPayload<{
@@ -56,7 +58,7 @@ export function ActionsDropdown({
       }
     }
   }>
-  userId: string
+  canViewLogs?: boolean
 }) {
   const router = useRouter()
   const [isPending, startTranstion] = useTransition()
@@ -81,9 +83,9 @@ export function ActionsDropdown({
         // Continues only if parsing goes right
         const updated = await updateProtocolStateById(
           protocol.id,
+          Action.PUBLISH,
           protocol.state,
-          ProtocolState.PUBLISHED,
-          userId
+          ProtocolState.PUBLISHED
         )
         const secretariesEmails = async (academicUnits: string[]) => {
           const secretaryEmailPromises = academicUnits.map(async (s) => {
@@ -129,9 +131,9 @@ export function ActionsDropdown({
       callback: async () => {
         const updated = await updateProtocolStateById(
           protocol.id,
+          Action.ACCEPT,
           protocol.state,
-          ProtocolState.ACCEPTED,
-          userId
+          ProtocolState.ACCEPTED
         )
         notifications.show(updated.notification)
       },
@@ -147,13 +149,21 @@ export function ActionsDropdown({
 
   const endingActions: ActionOption[] = [
     {
+      action: Action.REACTIVATE,
+      callback: async () => {
+        const updated = await reactivateProtocolAndAnualBudget(protocol.id)
+        notifications.show(updated.notification)
+      },
+      icon: <Badge data-slot="icon" className="stroke-emerald-500" />,
+    },
+    {
       action: Action.FINISH,
       callback: async () => {
         const updated = await updateProtocolStateById(
           protocol.id,
+          Action.GENERATE_ANUAL_BUDGET,
           protocol.state,
-          ProtocolState.FINISHED,
-          userId
+          ProtocolState.FINISHED
         )
         notifications.show(updated.notification)
       },
@@ -164,9 +174,9 @@ export function ActionsDropdown({
       callback: async () => {
         const updated = await updateProtocolStateById(
           protocol.id,
+          Action.DISCONTINUE,
           protocol.state,
-          ProtocolState.DISCONTINUED,
-          userId
+          ProtocolState.DISCONTINUED
         )
         notifications.show(updated.notification)
       },
@@ -177,9 +187,9 @@ export function ActionsDropdown({
       callback: async () => {
         const updated = await updateProtocolStateById(
           protocol.id,
+          Action.DELETE,
           protocol.state,
-          ProtocolState.DELETED,
-          userId
+          ProtocolState.DELETED
         )
         notifications.show(updated.notification)
       },
@@ -227,7 +237,9 @@ export function ActionsDropdown({
         </DropdownItem>
 
         {/* Actions that end or pause the lifetime of a project */}
-        <DropdownDivider />
+        {endingActions.length > 0 ?
+          <DropdownDivider />
+        : null}
         {endingActions
           .filter((a) => actions.includes(a.action))
           .map((x, i) => (
@@ -263,6 +275,12 @@ export function ActionsDropdown({
               <DropdownLabel>Presupuesto {budget.year}</DropdownLabel>
             </DropdownItem>
           ))
+        : null}
+        {canViewLogs ?
+          <DropdownItem href={`/logs?protocolId=${protocol.id}`}>
+            <FileSpreadsheet data-slot="icon" />
+            <DropdownLabel>Ver logs / registros</DropdownLabel>
+          </DropdownItem>
         : null}
         <DropdownItem
           onClick={() => {

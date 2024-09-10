@@ -1,4 +1,5 @@
 'use client'
+
 import { Divider } from '@components/divider'
 import { Fieldset, FormActions, Label } from '@components/fieldset'
 import { Heading, Subheading } from '@components/heading'
@@ -8,7 +9,7 @@ import type { Prisma, ProtocolSectionsIdentificationTeam } from '@prisma/client'
 import { updateProtocolTeamMembers } from '@repositories/protocol'
 import { getAllTeamMembers } from '@repositories/team-member'
 import { getCategoriesForForm } from '@repositories/team-member-category'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { ConfirmTeamSchema } from '@utils/zod'
@@ -33,7 +34,7 @@ type ProtocolMetadataAndTeamMembers = Prisma.ProtocolGetPayload<{
   }
 }>
 
-export default function ConfirmTeamMembersForm({
+export function ConfirmTeamMembersForm({
   protocol,
 }: {
   protocol: ProtocolMetadataAndTeamMembers
@@ -142,7 +143,7 @@ export default function ConfirmTeamMembersForm({
             })}
           </Fieldset>
           <FormActions>
-            <FormButton disabled={!form.isValid()}>Guardar</FormButton>
+            <SubmitButton disabled={!form.isValid()}>Guardar</SubmitButton>
           </FormActions>
         </form>
       }

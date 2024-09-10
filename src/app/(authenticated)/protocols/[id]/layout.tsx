@@ -20,7 +20,7 @@ import { Mail } from 'tabler-icons-react'
 import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import { ReviewDisclose } from '@review/review-disclose'
 import OpenFlagsDialog from '@protocol/elements/flags/open-flags-dialog-button'
-import ConfirmTeamMembersForm from '@protocol/form-sections/confirm-team-members-form'
+import { ConfirmTeamMembersForm } from '@protocol/form-sections/confirm-team-members-form'
 
 export default async function Layout({
   params,

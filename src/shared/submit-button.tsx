@@ -1,18 +1,24 @@
 import type { ReactNode } from 'react'
-import { Button } from '@components/button'
+import { Button, ButtonProps } from '@components/button'
 import { Loader2 } from 'tabler-icons-react'
+import { cx } from '@utils/cx'
 
-export function FormButton({
-  children,
+export function SubmitButton({
   isLoading,
+  children,
   disabled,
+
+  ...props
 }: {
-  children: ReactNode
   isLoading?: boolean
-  disabled?: boolean
-}) {
+} & ButtonProps) {
   return (
-    <Button className="relative" type="submit" disabled={disabled || isLoading}>
+    <Button
+      {...props}
+      className={cx('relative', props.className)}
+      type="submit"
+      disabled={disabled || isLoading}
+    >
       <span className={isLoading ? 'opacity-0' : ''}>{children}</span>
       {isLoading && <Loader2 className="absolute animate-spin" />}
     </Button>

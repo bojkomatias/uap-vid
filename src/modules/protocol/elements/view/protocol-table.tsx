@@ -34,9 +34,6 @@ type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     protocolNumber: true
     state: true
     createdAt: true
-    logs: {
-      include: { user: { select: { name: true } } }
-    }
     convocatory: { select: { id: true; name: true } }
     researcher: {
       select: { id: true; name: true; role: true; email: true }
@@ -94,9 +91,7 @@ export default function ProtocolTable({
       {
         accessorKey: 'id',
         header: 'ID',
-        cell: ({ row }) => (
-          <span className="text-xs text-gray-600">{row.original.id}</span>
-        ),
+        cell: ({ row }) => <Badge>{row.original.id}</Badge>,
       },
       {
         accessorKey: 'createdAt',
@@ -163,10 +158,18 @@ export default function ProtocolTable({
       {
         accessorKey: 'sections.duration.modality',
         header: 'Modalidad',
+        cell: ({ row }) => (
+          <Text className="line-clamp-2 max-w-96 whitespace-normal">
+            {row.original.sections.duration.modality}
+          </Text>
+        ),
       },
       {
         accessorKey: 'sections.duration.duration',
         header: 'Duración',
+        cell: ({ row }) => (
+          <Text>{row.original.sections.duration.duration}</Text>
+        ),
       },
       {
         accessorKey: 'state',
@@ -300,9 +303,9 @@ export default function ProtocolTable({
     convocatory_year: false,
     convocatory_name: false,
     researcher_name: false,
-    'sections_identification.career': false,
-    'sections_duration.modality': false,
-    'sections_duration.duration': false,
+    'sections.identification.career': false,
+    'sections.duration.modality': false,
+    'sections.duration.duration': false,
     'reviews_0.verdict': false,
     'reviews_0.reviewer.name': false,
     'reviews_1.verdict': false,

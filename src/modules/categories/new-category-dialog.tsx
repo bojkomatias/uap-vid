@@ -8,7 +8,7 @@ import {
 } from '@components/dialog'
 import { ScriptPlus } from 'tabler-icons-react'
 import { Button } from '@components/button'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { TeamMemberCategorySchema } from '@utils/zod'
 import { insertCategory } from '@repositories/team-member-category'
 import { notifications } from '@elements/notifications'
@@ -18,6 +18,7 @@ import { FormInput } from '@shared/form/form-input'
 import { useRouter } from 'next/navigation'
 import type { z } from 'zod'
 import { useState, useTransition } from 'react'
+import { FormCheckbox } from '@shared/form/form-checkbox'
 
 export function NewCategoryDialog() {
   const [open, setOpen] = useState(false)
@@ -27,6 +28,7 @@ export function NewCategoryDialog() {
 
   const form = useForm({
     initialValues: {
+      specialCategory: false,
       state: true,
       name: '',
       amount: 0,
@@ -65,7 +67,6 @@ export function NewCategoryDialog() {
       </Button>
 
       <Dialog open={open} onClose={setOpen} size="2xl">
-
         <DialogTitle>Crear categoria</DialogTitle>
         <DialogDescription>
           Aquí puede crear una nueva categoria para luego asignarla a los
@@ -85,11 +86,16 @@ export function NewCategoryDialog() {
                 type="number"
                 {...form.getInputProps('amount')}
               />
+              <FormCheckbox 
+                label="No indexada"
+                description="Si la categoría no se indexa, no se actualiza su valor con los indices."
+                {...form.getInputProps('specialCategory')}
+              />
             </FieldGroup>
           </Fieldset>
 
           <DialogActions>
-            <FormButton isLoading={isPending}>Crear categoria</FormButton>
+            <SubmitButton isLoading={isPending}>Crear categoria</SubmitButton>
           </DialogActions>
         </form>
       </Dialog>

@@ -11,33 +11,29 @@ export function ApproveAnualBudget({ id }: { id: string }) {
   const [isPending, startTransition] = useTransition()
   return (
     <Button
-      outline
+      color="teal"
+      disabled={isPending}
       onClick={async () => {
         const res = await approveAnualBudget(id)
 
-        if (!res)
-          return notifications.show({
-            title: 'Error al aprobar',
-            message:
-              'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
-            intent: 'error',
-          })
         if (res) {
-          const r = await fetch(`/api/protocol/${res.protocol.id}/approve`, {
-            method: 'PUT',
-            body: JSON.stringify(res.protocol),
+          notifications.show({
+            title: 'Presupuesto aprobado',
+            message: 'El presupuesto fue aprobado con éxito',
+            intent: 'success',
           })
-          if (r)
-            notifications.show({
-              title: 'Presupuesto aprobado',
-              message: 'El presupuesto fue aprobado con éxito',
-              intent: 'success',
-            })
-          startTransition(() => router.refresh())
+          return startTransition(() => router.refresh())
         }
+        return notifications.show({
+          title: 'Error al aprobar',
+          message:
+            'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
+          intent: 'error',
+        })
       }}
     >
-      Aprobar presupuesto <Check />
+      <Check data-slot="icon" />
+      Aprobar presupuesto
     </Button>
   )
 }
