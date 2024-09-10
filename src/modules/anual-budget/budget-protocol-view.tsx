@@ -1,6 +1,9 @@
 'use client'
 import type { Prisma } from '@prisma/client'
-import { calculateTotalBudget } from '@utils/anual-budget'
+import {
+  calculateHourRateGivenTMCategory,
+  calculateTotalBudget,
+} from '@utils/anual-budget'
 import { Currency } from '@shared/currency'
 import { multiplyAmountIndex, sumAmountIndex } from '@utils/amountIndex'
 import { useRouter } from 'next/navigation'
@@ -41,7 +44,10 @@ type Budget = Prisma.AnualBudgetGetPayload<{
       include: {
         teamMember: {
           include: {
-            categories: { include: { category: true } }
+            categories: {
+              select: { category: true; amountIndex: true; pointsObrero: true }
+              include: { category: true }
+            }
           }
         }
         category: true
@@ -97,8 +103,9 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
                   <Currency
                     amountIndex={
                       member.teamMember ?
-                        member.teamMember.categories.at(-1)!.category
-                          .amountIndex
+                        calculateHourRateGivenTMCategory(
+                          member.teamMember.categories.at(-1)!
+                        )
                       : member.category!.amountIndex
                     }
                   />
@@ -107,8 +114,9 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
                   <Currency
                     amountIndex={multiplyAmountIndex(
                       member.teamMember ?
-                        member.teamMember.categories.at(-1)!.category
-                          .amountIndex
+                        calculateHourRateGivenTMCategory(
+                          member.teamMember.categories.at(-1)!
+                        )
                       : member.category!.amountIndex,
                       member.hours
                     )}
