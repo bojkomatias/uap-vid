@@ -25,8 +25,11 @@ export function AnimationsSwapper() {
   return (
     <DropdownItem
       onClick={() => {
-        setValue((e) => !e)
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value))
+        setValue((prevValue) => {
+          const newValue = !prevValue
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newValue))
+          return newValue
+        })
       }}
     >
       {value ?
