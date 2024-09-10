@@ -103,8 +103,9 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
                   <Currency
                     amountIndex={
                       member.teamMember ?
-                        member.teamMember.categories.at(-1)!.category
-                          .amountIndex
+                        calculateHourRateGivenTMCategory(
+                          member.teamMember.categories.at(-1)!
+                        )
                       : member.category!.amountIndex
                     }
                   />
