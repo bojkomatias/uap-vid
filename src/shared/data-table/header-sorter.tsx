@@ -18,7 +18,7 @@ export default function HeaderSorter({
         {...{
           className:
             header.column.getCanSort() ?
-              'cursor-pointer select-none flex items-center hover:text-black group'
+              'cursor-pointer select-none flex items-center group dark:hover:text-gray-500 hover:text-gray-700'
             : '',
           onClick: () =>
             header.column.getCanSort() &&
@@ -26,12 +26,12 @@ export default function HeaderSorter({
               sort: header.id,
               order:
                 (
-                  searchParams?.get('sort') == null ||
+                  searchParams?.get('sort') == '' ||
                   searchParams.get('sort') !== header.id
                 ) ?
                   'asc'
                 : searchParams?.get('order') == 'asc' ? 'desc'
-                : searchParams?.get('order') == 'desc' ? null
+                : searchParams?.get('order') == 'desc' ? ''
                 : 'asc',
             }),
         }}

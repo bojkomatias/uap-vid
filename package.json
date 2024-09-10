@@ -10,8 +10,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@mantine/form": "^7.11.2",
-    "@prisma/client": "^5.17.0",
-    "@react-pdf/renderer": "^3.4.4",
+    "@prisma/client": "^5.19.1",
     "@tabler/icons": "^2.47.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
@@ -31,20 +30,19 @@
     "framer-motion": "^11.3.7",
     "jotai": "^2.9.0",
     "mongodb": "^6.8.0",
-    "next": "^14.2.5",
+    "next": "^14.2.7",
     "next-auth": "^4.24.7",
     "nodemailer": "^6.9.14",
-    "pnpm": "^9.5.0",
     "react": "^18.3.1",
     "react-csv": "^2.2.2",
     "react-dom": "^18.3.1",
     "react-use-websocket": "^4.8.1",
     "tabler-icons-react": "^1.56.0",
-    "ws": "^8.18.0",
     "tailwind-merge": "^2.4.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.14.11",
     "@types/react": "^18.3.3",
@@ -57,10 +55,8 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "ts-node": "^10.9.2",
-    "prisma": "^5.17.0",
+    "prisma": "^5.19.1",
     "tailwindcss": "^3.4.6",
-    "typescript": "^5.5.3",
-    "zod-prisma-types": "^2.8.1"
+    "typescript": "^5.5.3"
   }
 }

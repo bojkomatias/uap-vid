@@ -3,7 +3,7 @@ import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { ReviewQuestion } from '@prisma/client'
 import { updateQuestion } from '@repositories/review-question'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormSwitch } from '@shared/form/form-switch'
 import { FormTextarea } from '@shared/form/form-textarea'
 import { useMutation } from '@tanstack/react-query'
@@ -75,9 +75,9 @@ export default function QuestionForm({
         </FieldGroup>
       </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>
+        <SubmitButton isLoading={isPending}>
           Actualizar pregunta de evaluación
-        </FormButton>
+        </SubmitButton>
       </FormActions>
     </form>
   )

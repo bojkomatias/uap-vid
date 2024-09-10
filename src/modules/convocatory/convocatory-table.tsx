@@ -4,6 +4,7 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import type { Convocatory } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import { dateFormatter } from '@utils/formatters'
+import SearchBar from '@shared/data-table/search-bar'
 
 export function ConvocatoryTable({
   convocatories,
@@ -71,7 +72,6 @@ export function ConvocatoryTable({
       data={convocatories}
       columns={columns}
       totalRecords={totalRecords}
-      searchBarPlaceholder="Buscar por nombre de convocatoria"
       rowAsLinkPath="/convocatories/edit/"
       initialVisibility={{
         name: true,
@@ -81,6 +81,8 @@ export function ConvocatoryTable({
         id: false,
         isCurrent: false,
       }}
-    />
+    >
+      <SearchBar placeholder="Buscar" />
+    </TanStackTable>
   )
 }

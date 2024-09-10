@@ -10,7 +10,7 @@ datasource db {
 model ChatMessage {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   content    String
-  thread     String //This is to separate multiple threads into a single protocol 
+  thread     String //This is to separate multiple threads into a single protocol
   createdAt  DateTime @default(now())
   read       Boolean  @default(false)
   user       User     @relation(fields: [userId], references: [id])
@@ -39,6 +39,13 @@ type AcademicUnitBudget {
   amountIndex AmountIndex
 }
 
+model EmailContentTemplate {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  useCase String
+  subject String
+  content String
+}
+
 model Convocatory {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime   @default(now())
@@ -50,13 +57,19 @@ model Convocatory {
 }
 
 model Logs {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt  DateTime @default(now())
-  message    String
-  protocol   Protocol @relation(fields: [protocolId], references: [id])
-  protocolId String   @db.ObjectId
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String   @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime       @default(now())
+  message       String?
+  user          User           @relation(fields: [userId], references: [id], name: "UserToLogs")
+  userId        String         @db.ObjectId
+  protocol      Protocol       @relation(fields: [protocolId], references: [id])
+  protocolId    String         @db.ObjectId
+  budget        AnualBudget?   @relation(fields: [budgetId], references: [id])
+  budgetId      String?        @db.ObjectId
+  reviewer      User?          @relation(fields: [reviewerId], references: [id], name: "ReviewerToLogs")
+  reviewerId    String?        @db.ObjectId
+  action        Action?
+  previousState ProtocolState?
 }
 
 model Protocol {
@@ -74,6 +87,14 @@ model Protocol {
   anualBudgetIds String[]
   logs           Logs[]
   ChatMessage    ChatMessage[]
+  flags          ProtocolFlag[]
+}
+
+type ProtocolFlag {
+  flagName  String
+  state     Boolean  @default(false)
+  comment   String?
+  createdAt DateTime @default(now()) @db.Date
 }
 
 model User {
@@ -90,8 +111,9 @@ model User {
   AcademicUnitIds String[]       @db.ObjectId
   protocols       Protocol[]
   memberDetails   TeamMember?
-  logs            Logs[]
   chat_messages   ChatMessage[]
+  logs            Logs[]         @relation(name: "UserToLogs")
+  reviewerLogs    Logs[]         @relation(name: "ReviewerToLogs")
 }
 
 model TeamMember {
@@ -123,6 +145,15 @@ model TeamMemberCategory {
   price                      HistoricCategoryPrice[] /// @deprecated use `amountIndex` instead
   HistoricTeamMemberCategory HistoricTeamMemberCategory[]
   amountIndex                AmountIndex //FCA or FMR
+  AnualBudgetTeamMember      AnualBudgetTeamMember[]
+  historicAmountIndexes      HistoricAmountIndexes[]
+  specialCategory            Boolean                      @default(false)
+}
+
+type HistoricAmountIndexes {
+  from        DateTime
+  to          DateTime?
+  amountIndex AmountIndex
 }
 
 /// @deprecated this won't be needed after indexing the whole app.
@@ -159,16 +190,17 @@ model AnualBudget {
   protocol          Protocol                @relation(fields: [protocolId], references: [id])
   AcademicUnits     AcademicUnit[]          @relation(fields: [academicUnitsIds], references: [id])
   academicUnitsIds  String[]                @db.ObjectId
+  Logs              Logs[]
 }
 
 type AnualBudgetItem {
   type           String
   detail         String
-  amount         Float
+  amount         Float?      @default(0) /// @deprecated use `amountIndex` instead
+  remaining      Float?      @default(0) /// @deprecated use `remainingIndex` instead
   executions     Execution[]
-  remaining      Float
-  amountIndex    AmountIndex?
-  remainingIndex AmountIndex?
+  amountIndex    AmountIndex
+  remainingIndex AmountIndex
 }
 
 type AmountIndex {
@@ -177,15 +209,17 @@ type AmountIndex {
 }
 
 model AnualBudgetTeamMember {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  teamMemberId   String       @db.ObjectId
-  teamMember     TeamMember   @relation(fields: [teamMemberId], references: [id])
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  teamMemberId   String?             @db.ObjectId
+  teamMember     TeamMember?         @relation(fields: [teamMemberId], references: [id])
+  categoryId     String?             @db.ObjectId
+  category       TeamMemberCategory? @relation(fields: [categoryId], references: [id])
   memberRole     String
   hours          Float
   remainingHours Float
   executions     Execution[]
-  AnualBudget    AnualBudget? @relation(fields: [anualBudgetId], references: [id])
-  anualBudgetId  String?      @db.ObjectId
+  AnualBudget    AnualBudget?        @relation(fields: [anualBudgetId], references: [id])
+  anualBudgetId  String?             @db.ObjectId
 }
 
 model Index {
@@ -218,7 +252,8 @@ type HistoricIndex {
 }
 
 type Execution {
-  amount         Float
+  amount         Float?
+  amountIndex    AmountIndex?
   date           DateTime
   academicUnitId String
 }
@@ -303,19 +338,21 @@ type ProtocolSectionsIdentification {
   courseId        String?                              @db.ObjectId
   career          String? /// @deprecated use careerId instead
   careerId        String                               @db.ObjectId
-  sponsor         String[] /// @deprecated use academicUnitIds instead
   academicUnitIds String[]                             @db.ObjectId
+  sponsor         String[]                             @default([])
   team            ProtocolSectionsIdentificationTeam[]
   title           String
 }
 
 type ProtocolSectionsIdentificationTeam {
-  hours         Float
-  last_name     String? /// @deprecated use relation teamMemberId instead
-  name          String? /// @deprecated use relation teamMemberId instead
-  workingMonths Int?
-  role          String
-  teamMemberId  String? @db.ObjectId
+  hours                 Float
+  last_name             String? /// @deprecated use relation teamMemberId instead
+  name                  String? /// @deprecated use relation teamMemberId instead
+  workingMonths         Int?     @default(12)
+  role                  String
+  teamMemberId          String?  @db.ObjectId
+  toBeConfirmed         Boolean? @default(false)
+  categoryToBeConfirmed String?  @db.ObjectId
 }
 
 type ProtocolSectionsIntroduction {
@@ -366,7 +403,6 @@ enum Role {
 }
 
 enum ProtocolState {
-  NOT_CREATED
   DRAFT
   PUBLISHED
   METHODOLOGICAL_EVALUATION
@@ -408,6 +444,7 @@ enum Action {
   DELETE
   GENERATE_ANUAL_BUDGET
   VIEW_ANUAL_BUDGET
+  REACTIVATE
 }
 
 enum Access {
@@ -423,4 +460,5 @@ enum Access {
   INDEXES
   CAREERS
   EVALUATIONS
+  EMAILS
 }

@@ -9,13 +9,13 @@ import {
   saveMessage,
   setMessagesToRead,
 } from '@repositories/message'
-import { Fieldset } from '@components/fieldset'
+import { FieldGroup } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
-import { FormButton } from '@shared/form/form-button'
 import type { User } from '@prisma/client'
 import { ChatPopover } from './Popover'
 import { Button } from '@components/button'
-import { Loader } from 'tabler-icons-react'
+import { Loader, Send } from 'tabler-icons-react'
+import { Text } from '@components/text'
 
 interface ChatMessagesContextType {
   canSendMessages: boolean
@@ -59,6 +59,8 @@ export default function ChatForm({
     queryFn: async () => {
       return await getMessages(protocolId, take)
     },
+    gcTime: 1000,
+    staleTime: 1000,
     initialData: [],
   })
 
@@ -115,6 +117,7 @@ export default function ChatForm({
   return (
     <ChatPopover
       callbackFn={async () => {
+        await refetch()
         await setMessagesToRead(protocolId, user.id)
         await refetchUnreadMessages()
       }}
@@ -127,7 +130,7 @@ export default function ChatForm({
         >
           {messages!.length > 0 ?
             <div className="w-full space-y-4 pt-4">
-              {messages && messages.length > 9 && (
+              {messages && messages?.length > 9 && (
                 <Button
                   onClick={() => {
                     setTake(take + 10)
@@ -149,8 +152,8 @@ export default function ChatForm({
                   <div
                     className={`max-w-[60vw] rounded p-2 md:max-w-[30vw] xl:max-w-[25vw] ${
                       msg.userId == user.id ?
-                        'bg-primary-950 text-white'
-                      : 'bg-gray-200 text-gray-800'
+                        'bg-primary-950 text-gray-100'
+                      : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
                     }`}
                   >
                     <div className="text-sm">
@@ -159,7 +162,7 @@ export default function ChatForm({
                        text-xs ${
                          msg.userId == user.id ?
                            'text-right text-gray-300'
-                         : 'text-gray-500'
+                         : 'text-gray-500 dark:text-gray-200'
                        }`}
                       >
                         {msg.user?.name}
@@ -172,7 +175,7 @@ export default function ChatForm({
                        text-xs ${
                          msg.userId == user.id ?
                            'text-right text-gray-300'
-                         : 'text-gray-500'
+                         : 'text-gray-500 dark:text-gray-200'
                        }`}
                     >
                       {new Date(msg.createdAt).toLocaleTimeString()}
@@ -181,29 +184,37 @@ export default function ChatForm({
                 </div>
               ))}
             </div>
-          : <p className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400">
+          : <Text className="mb-1 rounded-lg border px-3 py-5 text-sm text-gray-400 dark:border-white/10">
               Chat vacío. Puede comenzar una nueva conversación enviando un
               mensaje nuevo.
-            </p>
+            </Text>
           }
         </div>
-        <div className="sticky bottom-0 bg-white shadow-lg">
+        <div className="sticky bottom-0 bg-white">
           <form onSubmit={onSubmit} className="flex flex-col gap-2 ">
-            <Fieldset className="!mt-0">
+            <FieldGroup className="!mt-0 flex items-center gap-1 space-y-0 dark:lg:bg-gray-900 ">
               <FormInput
                 type="text"
                 label=""
                 value={message}
-                className=" text-xs"
+                className="!mt-0 grow text-xs "
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setMessage(e.target.value)
                 }
                 placeholder="Escriba un mensaje..."
               />
-            </Fieldset>
-            <Button type="submit" disabled={!canSendMessages}>
-              Enviar
-            </Button>
+              <Button
+                className="!-mb-1"
+                outline
+                type="submit"
+                disabled={!canSendMessages}
+              >
+                <Send
+                  data-slot="icon"
+                  className="!size-4.5 !mr-0.5 rotate-45 text-gray-500"
+                />
+              </Button>
+            </FieldGroup>
           </form>
         </div>
       </div>

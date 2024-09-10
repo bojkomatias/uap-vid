@@ -4,6 +4,8 @@ import { Heading, Subheading } from '@components/heading'
 import { Button } from '@components/button'
 import { Plus } from 'tabler-icons-react'
 import { NewCategoryDialog } from 'modules/categories/new-category-dialog'
+import { ContainerAnimations } from '@elements/container-animations'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
 export default async function Page({
   searchParams,
@@ -11,19 +13,23 @@ export default async function Page({
   searchParams: { [key: string]: string }
 }) {
   const [totalRecords, categories] = await getCategories(searchParams)
+  const { currentFCA } = await getCurrentIndexes()
 
   return (
     <>
-      <div className="flex items-end">
-        <Heading>Categorías de miembros de equipo de investigación</Heading>
-        <NewCategoryDialog />
-      </div>
-      <Subheading>
-        Lista de las categorías asignables a los miembros de equipo de un
-        proyecto de investigación.
-      </Subheading>
-
-      <CategoriesTable categories={categories} totalRecords={totalRecords} />
+      <ContainerAnimations duration={0.4} delay={0}>
+        <div className="flex items-end">
+          <Heading>Categorías de miembros de equipo de investigación</Heading>
+          <NewCategoryDialog />
+        </div>
+        <Subheading>
+          Lista de las categorías asignables a los miembros de equipo de un
+          proyecto de investigación.
+        </Subheading>
+      </ContainerAnimations>
+      <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
+        <CategoriesTable categories={categories} totalRecords={totalRecords} currentFCA={currentFCA} />
+      </ContainerAnimations>
     </>
   )
 }

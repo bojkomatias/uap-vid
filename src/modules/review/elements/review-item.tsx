@@ -1,4 +1,5 @@
 'use client'
+
 import type { Review, ReviewQuestion, User } from '@prisma/client'
 import { ReviewVerdict, Role } from '@prisma/client'
 import ReviewTypesDictionary from '@utils/dictionaries/ReviewTypesDictionary'
@@ -8,12 +9,18 @@ import { useRouter } from 'next/navigation'
 import { relativeTimeFormatter } from '@utils/formatters'
 import ReviewQuestionView from './review-question-view'
 import { ChevronRight, Loader } from 'tabler-icons-react'
-import ReviewVerdictBadge from './review-verdict-badge'
 import { emailer } from '@utils/emailer'
 import { markRevised } from '@repositories/review'
 import { useCases } from '@utils/emailer/use-cases'
 import { useQuery } from '@tanstack/react-query'
 import { getAllQuestions } from '@repositories/review-question'
+import { Subheading } from '@components/heading'
+import { Badge, BadgeButton } from '@components/badge'
+import { Strong, Text } from '@components/text'
+import {
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 
 export default function ReviewItem({
   review,
@@ -37,83 +44,69 @@ export default function ReviewItem({
   }
   const [showReviewQuestions, setShowReviewQuestions] = useState(false)
 
-  const { isLoading, data } = useQuery<ReviewQuestion[]>({
-    queryKey: ['questions', review],
-    queryFn: async () => {
-      return await getAllQuestions()
-    },
+  const { isLoading, isFetching, data } = useQuery<ReviewQuestion[]>({
+    queryKey: ['questions', review.id],
+    queryFn: async () => await getAllQuestions(),
   })
+
   if (review.verdict === ReviewVerdict.NOT_REVIEWED) return null
+
   return (
-    <li>
-      <div className="min-w-0 flex-1">
-        <dt className="label">{ReviewTypesDictionary[review.type]}</dt>
-        <div
-          className={cx(
-            'rounded border',
-            review.revised ? 'bg-gray-50 opacity-70' : 'bg-white opacity-100'
-          )}
-        >
-          <button
-            className="group -mb-px flex w-full items-center justify-between space-x-4 rounded-t bg-gray-100 px-2 py-1 text-gray-500"
-            onClick={() => setShowReviewQuestions((prv) => !prv)}
-          >
-            <ReviewVerdictBadge verdict={review.verdict} />
-
-            {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ?
-              isOwner ?
-                <ReviseCheckbox id={review.id} revised={review.revised} />
-              : <label className="label pointer-events-auto">
-                  {review.revised ? 'revisado' : 'no revisado'}
-                </label>
-
+    <li className="px-px">
+      <Subheading className="flex justify-between">
+        {ReviewTypesDictionary[review.type]}
+        <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
+          <Strong className="text-xs/6">
+            {role === Role.ADMIN || role === Role.SECRETARY ?
+              review.reviewer.name
             : null}
-            <span className="flex text-xs font-semibold text-gray-600 group-hover:underline">
-              Ver detalles
-              <ChevronRight
-                className={cx(
-                  'h-4 w-4 transition',
-                  showReviewQuestions && 'rotate-90'
-                )}
-              />
-            </span>
-          </button>
-
-          {showReviewQuestions && (
-            <div className="space-y-4 py-4 pl-2 pr-4">
-              {isLoading ?
-                <Loader />
-              : <div>
-                  {' '}
-                  {review.questions.map((question, index) => (
-                    <ReviewQuestionView
-                      key={question.id}
-                      index={index}
-                      questions={data!}
-                      {...question}
-                    />
-                  ))}
-                </div>
-              }
-            </div>
-          )}
-
-          <div className="-mt-px flex justify-end gap-1 px-3 py-0.5 text-xs">
-            <span className="font-semibold text-gray-700">
-              {role === Role.ADMIN || role === Role.SECRETARY ?
-                review.reviewer.name
-              : null}
-            </span>
-            <span className="font-light text-gray-500">
-              {new Date().getTime() - new Date(review.updatedAt).getTime() < 1 ?
-                getDuration(
-                  new Date().getTime() - new Date(review.updatedAt).getTime()
-                )
-              : 'hace un instante'}
-            </span>
-          </div>
+          </Strong>
+          <Text className="!text-xs/6">
+            {new Date().getTime() - new Date(review.updatedAt).getTime() > 1 ?
+              getDuration(
+                new Date().getTime() - new Date(review.updatedAt).getTime()
+              )
+            : 'hace un instante'}
+          </Text>
         </div>
+      </Subheading>
+      <div className="mt-1 flex justify-between">
+        <Badge dot color={ReviewVerdictColorDictionary[review.verdict]}>
+          {ReviewVerdictDictionary[review.verdict]}
+        </Badge>
+        {review.verdict === ReviewVerdict.APPROVED_WITH_CHANGES ?
+          isOwner ?
+            <ReviseCheckbox id={review.id} revised={review.revised} />
+          : <Text>{review.revised ? 'Revisado' : 'No revisado'}</Text>
+        : null}
+        <BadgeButton onClick={() => setShowReviewQuestions((prv) => !prv)}>
+          Ver evaluación
+          <ChevronRight
+            data-slot="icon"
+            className={cx(
+              'size-4 transition',
+              showReviewQuestions ? 'rotate-90' : ''
+            )}
+          />
+        </BadgeButton>
       </div>
+      {showReviewQuestions && data && (
+        <div className="slide-in-fwd-center mt-4 space-y-4">
+          {isLoading || isFetching ?
+            <Loader className="mx-auto animate-spin text-primary dark:text-white" />
+          : review.questions.map((question, index) => (
+              <ReviewQuestionView
+                key={question.id}
+                index={index}
+                questions={data}
+                approved={question.approved}
+                comment={question.comment}
+                id={question.id}
+              />
+            ))
+          }
+        </div>
+      )}
     </li>
   )
 }

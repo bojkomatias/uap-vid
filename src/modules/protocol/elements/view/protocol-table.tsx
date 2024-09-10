@@ -1,23 +1,32 @@
 'use client'
 
-import type { Prisma, User } from '@prisma/client'
-import ProtocolStatesDictionary from '@utils/dictionaries/ProtocolStatesDictionary'
+import {
+  Role,
+  type Prisma,
+  type ProtocolState,
+  type User,
+} from '@prisma/client'
+import {
+  ProtocolStatesColorDictionary,
+  ProtocolStatesDictionary,
+} from '@utils/dictionaries/ProtocolStatesDictionary'
 import { dateFormatter } from '@utils/formatters'
 import { User as UserIcon } from 'tabler-icons-react'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import ReviewVerdictBadge from '@review/elements/review-verdict-badge'
 import { Badge } from '@components/badge'
-import { cx } from '@utils/cx'
-import { Button } from '@elements/button'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
-import { useSearchParams } from 'next/navigation'
-import ProtocolLogsDrawer from '../logs/log-drawer'
-import { useQuery } from '@tanstack/react-query'
-import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { Strong, Text } from '@components/text'
-import { getActiveCarrersForForm } from '@repositories/career'
+import SearchBar from '@shared/data-table/search-bar'
+import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { getConvocatoriesForFilter } from '@repositories/convocatory'
+import {
+  ReviewVerdictColorDictionary,
+  ReviewVerdictDictionary,
+} from '@utils/dictionaries/ReviewVerdictsDictionary'
 
 type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
   select: {
@@ -25,9 +34,6 @@ type ProtocolWithIncludes = Prisma.ProtocolGetPayload<{
     protocolNumber: true
     state: true
     createdAt: true
-    logs: {
-      include: { user: { select: { name: true } } }
-    }
     convocatory: { select: { id: true; name: true } }
     researcher: {
       select: { id: true; name: true; role: true; email: true }
@@ -56,20 +62,15 @@ export default function ProtocolTable({
   user,
   protocols,
   totalRecords,
+  academicUnits,
+  careers,
 }: {
   user: User
   protocols: ProtocolWithIncludes[]
   totalRecords: number
+  academicUnits: { id: string; name: string; shortname: string }[]
+  careers: { id: string; name: string }[]
 }) {
-  const { data: academicUnits } = useQuery({
-    queryKey: ['academic-units'],
-    queryFn: getAcademicUnitsNameAndShortname,
-  })
-  const { data: careers } = useQuery({
-    queryKey: ['careers'],
-    queryFn: getActiveCarrersForForm,
-  })
-
   const columns = useMemo<ColumnDef<ProtocolWithIncludes>[]>(
     () => [
       {
@@ -88,24 +89,9 @@ export default function ProtocolTable({
         enableSorting: false,
       },
       {
-        accessorKey: 'logs',
-        header: '',
-        cell: ({ row }) => (
-          <ProtocolLogsDrawer
-            logs={row.original.logs}
-            userId={user.id}
-            protocolId={row.original.id}
-          />
-        ),
-        enableHiding: false,
-        enableSorting: false,
-      },
-      {
         accessorKey: 'id',
         header: 'ID',
-        cell: ({ row }) => (
-          <span className="text-xs text-gray-600">{row.original.id}</span>
-        ),
+        cell: ({ row }) => <Badge>{row.original.id}</Badge>,
       },
       {
         accessorKey: 'createdAt',
@@ -172,16 +158,26 @@ export default function ProtocolTable({
       {
         accessorKey: 'sections.duration.modality',
         header: 'Modalidad',
+        cell: ({ row }) => (
+          <Text className="line-clamp-2 max-w-96 whitespace-normal">
+            {row.original.sections.duration.modality}
+          </Text>
+        ),
       },
       {
         accessorKey: 'sections.duration.duration',
         header: 'Duración',
+        cell: ({ row }) => (
+          <Text>{row.original.sections.duration.duration}</Text>
+        ),
       },
       {
         accessorKey: 'state',
         header: 'Estado',
         cell: ({ row }) => (
-          <Badge>{ProtocolStatesDictionary[row.original.state]}</Badge>
+          <Badge color={ProtocolStatesColorDictionary[row.original.state]}>
+            {ProtocolStatesDictionary[row.original.state]}
+          </Badge>
         ),
       },
       {
@@ -195,9 +191,17 @@ export default function ProtocolTable({
         id: 'reviews_0.verdict',
         accessorFn: (row) => row.reviews[0]?.verdict,
         header: 'Veredicto Metodológico',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[0]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[0] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[0].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[0].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -216,9 +220,17 @@ export default function ProtocolTable({
         id: 'reviews_1.verdict',
         accessorFn: (row) => row.reviews[1]?.verdict,
         header: 'Veredicto Interno',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[1]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[1] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[1].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[1].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -236,9 +248,17 @@ export default function ProtocolTable({
         id: 'reviews_2.verdict',
         accessorFn: (row) => row.reviews[2]?.verdict,
         header: 'Veredicto Externo',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[2]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[2] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[2].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[2].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -256,9 +276,17 @@ export default function ProtocolTable({
         id: 'reviews_3.verdict',
         accessorFn: (row) => row.reviews[3]?.verdict,
         header: 'Veredicto Tercero',
-        cell: ({ row }) => (
-          <ReviewVerdictBadge verdict={row.original.reviews[3]?.verdict} />
-        ),
+        cell: ({ row }) =>
+          row.original.reviews[3] && (
+            <Badge
+              dot
+              color={
+                ReviewVerdictColorDictionary[row.original.reviews[3].verdict]
+              }
+            >
+              {ReviewVerdictDictionary[row.original.reviews[3].verdict]}
+            </Badge>
+          ),
         enableSorting: false,
         enableHiding:
           user.role === 'ADMIN' ||
@@ -275,9 +303,9 @@ export default function ProtocolTable({
     convocatory_year: false,
     convocatory_name: false,
     researcher_name: false,
-    'sections_identification.career': false,
-    'sections_duration.modality': false,
-    'sections_duration.duration': false,
+    'sections.identification.career': false,
+    'sections.duration.modality': false,
+    'sections.duration.duration': false,
     'reviews_0.verdict': false,
     'reviews_0.reviewer.name': false,
     'reviews_1.verdict': false,
@@ -294,66 +322,93 @@ export default function ProtocolTable({
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
       rowAsLinkPath="/protocols/"
-      filterableByKey={{
-        filter: 'state',
-        // Slice to avoid NOT_CREATED
-        values: Object.entries(ProtocolStatesDictionary).slice(
-          1,
-          user.role === 'ADMIN' ? undefined : -1
-        ),
-      }}
-      customFilterSlot={
-        user.role === 'ADMIN' || user.role === 'SECRETARY' ?
-          <AcademicUnitFilter />
-        : null
-      }
-      searchBarPlaceholder="Buscar por: Titulo, Investigador, Modalidad, etc"
-    />
+    >
+      <SearchBar placeholder="Titulo, Investigador, Modalidad, etc" />
+      <ConvocatoryFilter />
+      <StateFilter />
+      {user.role === Role.ADMIN || user.role === Role.SECRETARY ?
+        <AcademicUnitFilter academicUnits={academicUnits} />
+      : null}
+    </TanStackTable>
   )
 }
-/**
- * Academic unit filter, specific to business in protocol table
- * @returns
- */
-const AcademicUnitFilter = () => {
+
+function AcademicUnitFilter({
+  academicUnits,
+}: {
+  academicUnits: { id: string; name: string; shortname: string }[]
+}) {
   const update = useUpdateQuery()
   const searchParams = useSearchParams()
-  const currentValues = searchParams?.get('units')?.split('-')
-
-  const values = ['FACEA', 'FCS', 'FHECIS', 'FT', 'CONICET', 'CIICSAC', 'EG']
 
   return (
-    <div className="relative mt-4 flex flex-col items-start text-sm">
-      <div className="relative flex flex-wrap gap-2">
-        {values.map((value, i) => {
-          return (
-            <Button
-              onClick={() => {
-                update({
-                  units:
-                    currentValues ?
-                      currentValues.includes(value) ?
-                        currentValues.filter((e) => e !== value).join('-')
-                      : currentValues.join('-').concat('-', value)
-                    : value,
-                })
-              }}
-              intent="unset"
-              key={i}
-            >
-              <Badge
-                className={cx(
-                  'cursor-pointer transition hover:bg-primary-100',
-                  currentValues?.includes(value) &&
-                    'bg-primary-50 ring-primary/50'
-                )}
-              >
-                {value}
-              </Badge>
-            </Button>
-          )
-        })}
-      </div>
-    </div>
+    <Listbox
+      placeholder="Unidad académica"
+      value={searchParams.get('unit')}
+      onChange={(value: string) => {
+        update({
+          unit: value,
+        })
+      }}
+    >
+      {academicUnits.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.shortname}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+function StateFilter() {
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+
+  const states = Object.keys(ProtocolStatesDictionary) as ProtocolState[]
+  return (
+    <Listbox
+      placeholder="Estado"
+      value={searchParams.get('state')}
+      onChange={(value: string) => {
+        update({
+          state: value,
+        })
+      }}
+    >
+      {states.map((e) => (
+        <ListboxOption key={e} value={e}>
+          <ListboxLabel>{ProtocolStatesDictionary[e]}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
+  )
+}
+
+function ConvocatoryFilter() {
+  const { data } = useQuery({
+    queryKey: ['convocatories'],
+    queryFn: async () => await getConvocatoriesForFilter(),
+  })
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+  return (
+    <Listbox
+      placeholder="Convocatoria"
+      value={searchParams.get('convocatory')}
+      onChange={(value: string) => {
+        update({
+          convocatory: value,
+        })
+      }}
+    >
+      <ListboxOption key={'null'} value={'null'}>
+        <ListboxLabel>Sin convocatoria</ListboxLabel>
+      </ListboxOption>
+      {data?.map((e) => (
+        <ListboxOption key={e.id} value={e.id}>
+          <ListboxLabel>{e.name}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
   )
 }

@@ -14,7 +14,7 @@ import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import type { Prisma } from '@prisma/client'
 import { updateAcademicUnitSecretaries } from '@repositories/academic-unit'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { cx } from '@utils/cx'
 import { useRouter } from 'next/navigation'
@@ -112,8 +112,8 @@ export function EditSecretariesForm({
             <TableRow
               key={value.id}
               className={cx(
-                value.added && 'bg-success-500/20',
-                value.removed && 'bg-error-500/20'
+                value.added && 'bg-teal-500/20',
+                value.removed && 'bg-red-500/20'
               )}
             >
               <TableCell className="font-medium">{value.name}</TableCell>
@@ -185,7 +185,9 @@ export function EditSecretariesForm({
             Cancelar
           </Button>
         )}
-        <FormButton isLoading={isPending}>Actualizar secretarios</FormButton>
+        <SubmitButton isLoading={isPending}>
+          Actualizar secretarios
+        </SubmitButton>
       </FormActions>
     </form>
   )

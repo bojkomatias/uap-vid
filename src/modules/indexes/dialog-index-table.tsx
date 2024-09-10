@@ -26,12 +26,13 @@ export function DialogTableIndex({ values }: { values: HistoricIndex[] }) {
 
   return (
     <>
-      <button
+      <Button
+        plain
         onClick={() => setOpen(true)}
-        className="dark:tex-white font-semibold text-gray-950 underline underline-offset-2"
+        className="dark:tex-white !p-0 !px-1 font-semibold text-gray-950 underline underline-offset-2"
       >
         todos
-      </button>
+      </Button>
       <Dialog open={open} onClose={setOpen} size="2xl">
         <DialogTitle>Total de valores historicos</DialogTitle>
         <DialogDescription>

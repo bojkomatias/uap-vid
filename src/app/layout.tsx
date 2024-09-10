@@ -1,7 +1,6 @@
 import './globals.css'
 import { Montserrat } from 'next/font/google'
 import Providers from './providers'
-import Script from 'next/script'
 
 export const metadata = {
   title: {
@@ -30,9 +29,9 @@ export default async function RootLayout({
           </div>
         </div>
       : null}
-      <body>
-        <div id="notifications-container" className="relative" />
+      <body className="bg-white dark:bg-gray-900 lg:bg-gray-100 dark:lg:bg-gray-950">
         <Providers>{children}</Providers>
+        <div id="notifications-container" className="relative" />
       </body>
     </html>
   )

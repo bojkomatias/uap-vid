@@ -2,17 +2,10 @@
 
 import { signOut } from 'next-auth/react'
 import { MenuButton } from '@headlessui/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { User } from '@prisma/client'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import {
-  Logout,
-  Moon,
-  Moon2,
-  Selector,
-  Settings,
-  Sun,
-} from 'tabler-icons-react'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
+import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
 import {
   Dropdown,
   DropdownMenu,
@@ -22,6 +15,7 @@ import {
   DropdownLabel,
 } from '@components/dropdown'
 import { Avatar } from '@components/avatar'
+import { AnimationsSwapper } from '@shared/animations-swapper'
 
 export function UserDropdown({ user }: { user: User }) {
   const [loading, setLoading] = useState(false)
@@ -48,7 +42,7 @@ export function UserDropdown({ user }: { user: User }) {
           />
         }
         <span className="block text-left">
-          <span className="block text-sm/5 font-medium">
+          <span className="block text-sm/5 font-medium text-black dark:text-white">
             {user.name.split(' ')[0]} {user.name.split(' ')[2]}
           </span>
           <span className="block text-xs/5 text-zinc-500">
@@ -73,7 +67,9 @@ export function UserDropdown({ user }: { user: User }) {
           <Settings data-slot="icon" />
           <DropdownLabel>Cuenta</DropdownLabel>
         </DropdownItem>
+        <DropdownDivider />
         <DarkModeToggler />
+        <AnimationsSwapper />
         <DropdownDivider />
         <DropdownItem
           onClick={() => {
@@ -92,8 +88,6 @@ export function UserDropdown({ user }: { user: User }) {
 const DarkModeToggler = () => {
   const htmlTag = document.querySelector('html')!
   const isDark = htmlTag.classList.contains('dark')
-
-  useEffect(() => {}, [])
 
   return (
     <DropdownItem

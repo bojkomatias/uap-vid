@@ -39,9 +39,7 @@ const ItemListView = ({ data, footer }: ItemListProps) => {
               item.data.length === 0 ?
                 null
               : <Fragment key={i}>
-                  <Text className="mt-1 font-medium italic">
-                    {item.groupLabel}
-                  </Text>
+                  <Strong>{item.groupLabel}</Strong>
                   {item.data.map((row, index) => (
                     <ListRow data={row} key={index} />
                   ))}
@@ -64,7 +62,7 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
   return (
     <div
       className={cx(
-        'relative grid place-items-center',
+        'relative grid place-items-center ',
         data.length == 2 && 'grid-cols-2',
         data.length == 3 && 'grid-cols-3',
         data.length == 4 && 'grid-cols-4'
@@ -73,15 +71,18 @@ const ListRow = ({ data }: { data: ListRowValues }) => {
       {data.map((item, index) => (
         <div
           key={index}
-          className="first:place-self-start last:place-self-end last:text-right"
+          className={cx(
+            'text-wrap first:place-self-start',
+            data.length > 1 && 'last:place-self-end last:text-right'
+          )}
         >
           {item.inverted ?
             <>
-              <Strong>{item.up}</Strong>
+              <Strong className="!break-all">{item.up}</Strong>
               <Text>{item.down}</Text>
             </>
           : <>
-              <Strong>{item.up}</Strong>
+              <Strong className="!break-all">{item.up}</Strong>
               <Text>{item.down}</Text>
             </>
           }

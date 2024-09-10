@@ -59,6 +59,7 @@ export const getAcademicUnitById = async (id?: string) => {
                       },
                     },
                   },
+                  category: true,
                 },
               },
             },
@@ -82,6 +83,7 @@ export const getAcademicUnitById = async (id?: string) => {
                     },
                   },
                 },
+                category: true,
               },
             },
           },
@@ -114,8 +116,6 @@ export const getAllAcademicUnits = cache(
     search,
     sort,
     order,
-    filter,
-    values,
   }: {
     [key: string]: string
   }) => {
@@ -138,7 +138,6 @@ export const getAllAcademicUnits = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -170,7 +169,6 @@ export const getAllAcademicUnits = cache(
                   ],
                 }
               : {},
-              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
           orderBy,

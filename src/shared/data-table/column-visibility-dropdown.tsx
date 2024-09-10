@@ -20,7 +20,7 @@ export default function ColumnVisibilityDropdown({
         Columnas
         <ChevronDown data-slot="icon" />
       </DropdownButton>
-      <DropdownMenu>
+      <DropdownMenu anchor="bottom end">
         {columns.map(
           (column) =>
             column.getCanHide() && (

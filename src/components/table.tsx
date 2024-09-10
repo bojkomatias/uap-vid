@@ -115,9 +115,7 @@ export function TableRow({
             'has-[[data-row-link][data-focus]]:outline has-[[data-row-link][data-focus]]:outline-2 has-[[data-row-link][data-focus]]:-outline-offset-2 has-[[data-row-link][data-focus]]:outline-primary-950 dark:focus-within:bg-white/[2.5%]',
           striped && 'even:bg-gray-950/[2.5%] dark:even:bg-white/[2.5%]',
           href && striped && 'hover:bg-gray-950/5 dark:hover:bg-white/5',
-          href &&
-            !striped &&
-            'hover:bg-gray-950/[2.5%] dark:hover:bg-white/[2.5%]'
+          href && !striped && 'hover:bg-gray-200/60 dark:hover:bg-white/[2.5%]'
         )}
       />
     </TableRowContext.Provider>
@@ -177,6 +175,7 @@ export function TableCell({
           className="absolute inset-0 focus:outline-none"
         />
       )}
+
       {children}
     </td>
   )

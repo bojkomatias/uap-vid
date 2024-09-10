@@ -1,11 +1,12 @@
 'use client'
+
 import type { Prisma } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import { Check, Minus } from 'tabler-icons-react'
 import { Currency } from '@shared/currency'
 import { BadgeButton } from '@components/badge'
+import SearchBar from '@shared/data-table/search-bar'
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
   include: {
@@ -75,7 +76,6 @@ export default function TeamMemberTable({
               />
             : null}
           </>
-
         ),
         enableSorting: false,
       },
@@ -107,15 +107,14 @@ export default function TeamMemberTable({
   }
 
   return (
-    <>
-      <TanStackTable
-        data={teamMembers}
-        columns={columns}
-        totalRecords={totalRecords}
-        initialVisibility={initialVisible}
-        searchBarPlaceholder="Buscar por: Nombre, etc"
-        rowAsLinkPath="/team-members/member/"
-      />
-    </>
+    <TanStackTable
+      data={teamMembers}
+      columns={columns}
+      totalRecords={totalRecords}
+      initialVisibility={initialVisible}
+      rowAsLinkPath="/team-members/member/"
+    >
+      <SearchBar placeholder="Buscar" />
+    </TanStackTable>
   )
 }

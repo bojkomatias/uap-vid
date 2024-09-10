@@ -3,6 +3,7 @@
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import type { Career } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
+import SearchBar from '@shared/data-table/search-bar'
 
 export function CareerTable({
   careers,
@@ -40,12 +41,13 @@ export function CareerTable({
       data={careers}
       columns={columns}
       totalRecords={totalRecords}
-      searchBarPlaceholder="Buscar por nombre de carrera"
       rowAsLinkPath="/careers/edit/"
       initialVisibility={{
         name: true,
         id: false,
       }}
-    />
+    >
+      <SearchBar placeholder="Buscar por: Nombre, etc." />
+    </TanStackTable>
   )
 }

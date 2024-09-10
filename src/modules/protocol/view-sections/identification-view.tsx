@@ -6,6 +6,7 @@ import ItemView from '@protocol/elements/view/item-view'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import { getAcademicUnitByIdWithoutIncludes } from '../../../repositories/academic-unit'
 import { getCareerById, getCourseById } from '@repositories/career'
+import { getAllCategories } from '@repositories/team-member-category'
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
 }
@@ -20,6 +21,8 @@ export default async function IdentificationView({
   const career = await getCareerById(data.careerId)
 
   const course = data.courseId ? await getCourseById(data.courseId) : null
+
+  const categories = await getAllCategories()
 
   const shortData = [
     {
@@ -39,6 +42,7 @@ export default async function IdentificationView({
       value: academicUnits.join(' - '),
     },
   ]
+
   const teamMembersIds = data.team
     .filter((tm) => tm.teamMemberId)
     .map((tm) => tm.teamMemberId) as string[]
@@ -51,26 +55,37 @@ export default async function IdentificationView({
     return {
       fullName,
       role: tm.role,
+      category: tm.categoryToBeConfirmed,
+      toBeConfirmed: tm.toBeConfirmed,
       hours: tm.hours,
     }
   })
 
   const tableData = {
     title: 'Equipo',
-    values: team.reduce((newVal: ListRowValues[], person) => {
+    values: team.reduce((newVal: ListRowValues[], person, idx) => {
       newVal.push([
         {
-          up: person.fullName,
-          down: person.role,
+          up: person.toBeConfirmed ? 'A definir' : person.fullName,
+          down:
+            person.toBeConfirmed ?
+              categories.find((c) => c.id == person.category)?.name
+            : person.role,
         },
         {
-          up: 'Horas semanales',
-          down: person.hours,
+          up: idx == 0 ? '' : '',
+          down: person.hours.toString(),
         },
       ])
       return newVal
     }, []),
   }
+
+  tableData.values.unshift([
+    { up: '', down: 'Miembro de equipo' },
+    { up: '', down: 'Horas semanales' },
+  ])
+
   return (
     <>
       <SectionViewer title="Identificación" description="Datos del proyecto">

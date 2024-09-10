@@ -3,18 +3,18 @@ import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export default async function RootLayout({
   children,
-  drawer,
+  dialog,
 }: {
   children: React.ReactNode
-  drawer: React.ReactNode
+  dialog: React.ReactNode
 }) {
   return (
     <AppLayout>
       <div className="max-lg:hidden">
         <Breadcrumbs />
       </div>
+      {dialog}
       {children}
-      {drawer}
     </AppLayout>
   )
 }

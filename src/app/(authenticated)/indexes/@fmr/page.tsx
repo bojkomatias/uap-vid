@@ -16,7 +16,7 @@ export default async function IndexesPage() {
         <UpdateIndexDialog index={'FMR'} />
       </div>
       <Text>
-        Mostrando los 3 más recientes de {index.values.length} valores
+        Mostrando los 3 registros más recientes de {index.values.length} valores
         historicos en total, acá puede ver{' '}
         <DialogTableIndex values={index.values} />
       </Text>

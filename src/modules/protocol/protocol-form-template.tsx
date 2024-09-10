@@ -28,7 +28,7 @@ import { ProtocolProvider, useProtocol } from 'utils/createContext'
 import InfoTooltip from './elements/tooltip'
 import { cx } from '@utils/cx'
 import { BadgeButton } from '@components/badge'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { Button } from '@components/button'
 import type { z } from 'zod'
 import { createProtocol, updateProtocolById } from '@repositories/protocol'
@@ -82,6 +82,7 @@ export default function ProtocolForm({
   const upsertProtocol = useCallback(
     async (protocol: z.infer<typeof ProtocolSchema>) => {
       const { id, ...restOfProtocol } = protocol
+
       // flow for protocols that don't have ID
       if (!id) {
         const created = await createProtocol(restOfProtocol as Protocol) // Its because enum from zod != prisma enum according to types
@@ -154,9 +155,9 @@ export default function ProtocolForm({
 
         {!form.isValid(path) ?
           form.isDirty(path) ?
-            <AlertCircle className="size-4 stroke-warning-500" />
+            <AlertCircle className="size-4 stroke-yellow-500" />
           : <CircleDashed className="size-3.5 stroke-gray-500" />
-        : <CircleCheck className="size-4 stroke-success-500" />}
+        : <CircleCheck className="size-4 stroke-teal-500" />}
       </BadgeButton>
     ),
     [form, section]
@@ -182,19 +183,20 @@ export default function ProtocolForm({
             })
             return form.validate()
           }
+
           upsertProtocol(form.values)
         }}
       >
         <InfoTooltip>
           <h4>Indicadores de sección</h4>
           <p>
-            <CircleCheck className="mr-2 inline h-4 w-4 stroke-success-500 stroke-2" />
+            <CircleCheck className="mr-2 inline h-4 w-4 stroke-teal-500 stroke-2" />
             Indica que la sección se encuentra completada y sin errores. Cuando
             todas las secciones tengan este indicador, se permite publicar un
             protocolo.
           </p>
           <p>
-            <AlertCircle className="mr-2 inline h-4 w-4 stroke-warning-500 stroke-2" />
+            <AlertCircle className="mr-2 inline h-4 w-4 stroke-yellow-500 stroke-2" />
             Indica que la sección fue modificada pero necesita ser completada
             correctamente, falta algún campo obligatorio o tiene algún error.
           </p>
@@ -267,7 +269,7 @@ export default function ProtocolForm({
             Sección previa
           </Button>
 
-          <FormButton isLoading={isPending}>Guardar</FormButton>
+          <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
 
           <Button
             type="button"

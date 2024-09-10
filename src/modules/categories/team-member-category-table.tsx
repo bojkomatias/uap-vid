@@ -5,13 +5,18 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Currency } from '@shared/currency'
+import SearchBar from '@shared/data-table/search-bar'
+import { BadgeButton } from '@components/badge'
+import { EditCategoryDialog } from './edit-category-dialog'
 
 export default function CategoriesTable({
   categories,
   totalRecords,
+  currentFCA
 }: {
   categories: TeamMemberCategory[]
   totalRecords: number
+  currentFCA: number
 }) {
   const columns = useMemo<ColumnDef<TeamMemberCategory>[]>(
     () => [
@@ -35,6 +40,18 @@ export default function CategoriesTable({
         enableSorting: false,
         cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
       },
+      {
+        accessorKey: 'action',
+        header: '',
+        cell: ({ row }) => (
+          <EditCategoryDialog
+            teamMemberCategory={row.original}
+            currentFCA={currentFCA}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
+      },
     ],
     []
   )
@@ -46,7 +63,8 @@ export default function CategoriesTable({
       columns={columns}
       totalRecords={totalRecords}
       initialVisibility={initialVisible}
-      searchBarPlaceholder="Buscar por nombre de categoría"
-    />
+    >
+      <SearchBar placeholder="Buscar por: Nombre, etc." />
+    </TanStackTable>
   )
 }

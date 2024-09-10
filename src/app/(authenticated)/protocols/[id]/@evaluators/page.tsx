@@ -8,14 +8,12 @@ import {
 } from '@prisma/client'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getAllUsersWithoutResearchers } from '@repositories/user'
-import { UserSearch } from 'tabler-icons-react'
-import { Badge } from '@components/badge'
 import { canAccess, canExecute } from '@utils/scopes'
-import { EvaluatorsByReviewType } from '@utils/dictionaries/EvaluatorsDictionary'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getProtocolMetadata } from '@repositories/protocol'
-import ReviewAssignSelect from '@review/elements/review-assign-select'
+import { AssignEvaluatorSelector } from '@review/elements/review-assign-select'
+import { EvaluatorsDialog } from '@protocol/elements/open-evaluators-dialog'
 
 export default async function ReviewAssignation({
   params,
@@ -134,31 +132,23 @@ export default async function ReviewAssignation({
     // Checks if enabled to assign or re-assign, and if has review, it's data is visible (But not necessarily the action)
 
     return (
-      <div className="relative z-10 my-1 ml-2 max-w-3xl rounded bg-gray-50/50 px-3 py-2 leading-relaxed drop-shadow-sm">
-        {reviewAssignSelectsData.map((data) => (
-          <div
-            key={data.type}
-            className="flex items-center justify-between gap-4"
-          >
-            <div className="flex items-center gap-2">
-              <UserSearch className="h-4 text-gray-600" />
-              <div className="flex-grow text-sm font-medium">
-                {data.review?.reviewer.name ?? (
-                  <span className="text-sm text-gray-500">-</span>
-                )}
-              </div>
-              <Badge>{EvaluatorsByReviewType[data.type]}</Badge>
-            </div>
-            {data.enabled && (
-              <ReviewAssignSelect
-                {...data}
-                protocolId={protocol.id}
-                protocolState={protocol.state}
-              />
-            )}
-          </div>
-        ))}
-      </div>
+      <EvaluatorsDialog>
+        <div className="print:hidden">
+          {reviewAssignSelectsData.map(
+            (data) =>
+              data.enabled && (
+                <AssignEvaluatorSelector
+                  key={data.type}
+                  type={data.type}
+                  users={data.users}
+                  review={data.review}
+                  protocolId={protocol.id}
+                  protocolState={protocol.state}
+                />
+              )
+          )}
+        </div>
+      </EvaluatorsDialog>
     )
   }
 }

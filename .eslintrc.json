@@ -32,5 +32,6 @@
     "@typescript-eslint/no-unused-vars": ["warn"],
     "@typescript-eslint/consistent-type-imports": "warn"
   },
-  "root": true
+  "root": true,
+  "include": ["scripts/**/*"]
 }

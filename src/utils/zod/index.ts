@@ -4,7 +4,7 @@ import { z } from 'zod'
 // ENUMS
 /////////////////////////////////////////
 
-const RoleSchema = z.enum([
+export const RoleSchema = z.enum([
   'RESEARCHER',
   'SECRETARY',
   'METHODOLOGIST',
@@ -13,7 +13,6 @@ const RoleSchema = z.enum([
 ])
 
 const ProtocolStateSchema = z.enum([
-  'NOT_CREATED',
   'DRAFT',
   'PUBLISHED',
   'METHODOLOGICAL_EVALUATION',
@@ -122,6 +121,13 @@ export const CareerSchema = z.object({
 })
 
 export type Career = z.infer<typeof CareerSchema>
+
+export const EmailContentTemplateSchema = z.object({
+  content: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  subject: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  useCase: z.string(),
+  id: z.string().nullable(),
+})
 
 /////////////////////////////////////////
 // PROTOCOL SCHEMA
@@ -265,6 +271,7 @@ export const TeamMemberCategorySchema = z.object({
   name: z.string().min(1, { message: 'El campo no puede ser nulo' }),
   state: z.boolean(),
   amount: z.coerce.number(), //Remove nullable
+  specialCategory: z.boolean().optional().default(false),
 })
 
 /////////////////////////////////////////
@@ -487,7 +494,22 @@ export const IdentificationTeamSchema = z.object({
   name: z.string().nullable(),
   role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   teamMemberId: z.string().nullable(),
-  workingMonths: z.coerce.number().nullable(),
+  workingMonths: z.coerce.number().default(12).nullable(),
+  toBeConfirmed: z.boolean().default(false).nullable(),
+  categoryToBeConfirmed: z.string().nullable(),
+})
+
+export const ConfirmTeamSchema = z.object({
+  team: z.array(
+    z.object({
+      teamMemberId: z
+        .string()
+        .nullable()
+        .refine((val) => val !== null && val.length > 0, {
+          message: 'Debe seleccionar un miembro de equipo',
+        }),
+    })
+  ),
 })
 
 export const IdentificationSchema = z.object({

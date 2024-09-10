@@ -2,7 +2,7 @@ import { getProtocolReviewByReviewer } from '@repositories/review'
 import ReviewForm from './elements/review-form'
 import { getAllQuestions } from '@repositories/review-question'
 
-export default async function ReviewFormTemplate({
+export async function ReviewFormTemplate({
   protocolId,
   userId,
 }: {
@@ -13,9 +13,5 @@ export default async function ReviewFormTemplate({
   const questions = await getAllQuestions()
 
   if (!review) return null
-  return (
-    <div className="w-full lg:w-[28rem] xl:w-[36rem]">
-      <ReviewForm review={review} questions={questions} />
-    </div>
-  )
+  return <ReviewForm review={review} questions={questions} />
 }

@@ -1,4 +1,5 @@
 'use client'
+
 import type { Prisma } from '@prisma/client'
 import TanStackTable from '@shared/data-table/tan-stack-table'
 import { useMemo } from 'react'
@@ -6,8 +7,13 @@ import { type ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { Badge } from '@components/badge'
 import { dateFormatter } from '@utils/formatters'
-import { BudgetYearCombobox } from '@elements/years-combobox'
-import AnualBudgetStateDictionary from '@utils/dictionaries/AnualBudgetStateDictionary'
+import { AnualBudgetStateDictionary } from '@utils/dictionaries/AnualBudgetStateDictionary'
+import SearchBar from '@shared/data-table/search-bar'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { useSearchParams } from 'next/navigation'
+import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+import { useQuery } from '@tanstack/react-query'
+import { getAnualBudgetYears } from '@repositories/anual-budget'
 
 type CustomAnualBudget = Prisma.AnualBudgetGetPayload<{
   select: {
@@ -91,21 +97,45 @@ export default function AnualBudgetTable({
   )
   const initialVisible = { id: false, createdAt: false }
 
-  const yearFilter = () => {
-    return <BudgetYearCombobox />
-  }
+  return (
+    <TanStackTable
+      data={anualBudgets}
+      columns={columns}
+      totalRecords={totalRecords}
+      initialVisibility={initialVisible}
+      rowAsLinkPath="/anual-budgets/budget/"
+    >
+      <SearchBar placeholder="Buscar por: Nombre de protocolo, etc." />
+      <BudgetYearFilter />
+    </TanStackTable>
+  )
+}
+
+function BudgetYearFilter() {
+  const { data } = useQuery({
+    queryKey: ['anual-budget-years'],
+    queryFn: async () => await getAnualBudgetYears(),
+  })
+  const update = useUpdateQuery()
+  const searchParams = useSearchParams()
+
+  const years = Array.from(new Set(data?.map((y) => y.year.toString())))
 
   return (
-    <>
-      <TanStackTable
-        data={anualBudgets}
-        columns={columns}
-        totalRecords={totalRecords}
-        initialVisibility={initialVisible}
-        searchBarPlaceholder="Buscar por nombre de categoría"
-        customFilterSlot2={yearFilter()}
-        rowAsLinkPath="/anual-bugdets/bugdet/"
-      />
-    </>
+    <Listbox
+      placeholder="Año presupuestado"
+      value={searchParams.get('year')}
+      onChange={(value: string) => {
+        update({
+          year: value,
+        })
+      }}
+    >
+      {years.map((year) => (
+        <ListboxOption key={year} value={year.toString()}>
+          <ListboxLabel>{year}</ListboxLabel>
+        </ListboxOption>
+      ))}
+    </Listbox>
   )
 }

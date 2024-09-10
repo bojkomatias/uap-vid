@@ -25,6 +25,7 @@ const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
     Access.INDEXES,
     Access.CAREERS,
     Access.EVALUATIONS,
+    Access.EMAILS,
   ],
 }
 
@@ -60,7 +61,6 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
     Action.EDIT_BY_OWNER,
     Action.PUBLISH,
     Action.ACCEPT,
-    Action.REVIEW,
     Action.APPROVE,
     Action.ASSIGN_TO_METHODOLOGIST,
     Action.ASSIGN_TO_SCIENTIFIC,
@@ -69,6 +69,7 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
     Action.FINISH,
     Action.VIEW_ANUAL_BUDGET,
     Action.GENERATE_ANUAL_BUDGET,
+    Action.REACTIVATE,
   ],
 }
 
@@ -76,13 +77,11 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
  * - Check if an action can be performed according current protocol state
  */
 const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
-  [ProtocolState.NOT_CREATED]: [Action.CREATE],
   [ProtocolState.DRAFT]: [Action.EDIT_BY_OWNER, Action.PUBLISH, Action.DELETE],
   [ProtocolState.PUBLISHED]: [
     Action.ASSIGN_TO_METHODOLOGIST,
     Action.EDIT,
     Action.DISCONTINUE,
-    Action.DELETE,
   ],
   [ProtocolState.METHODOLOGICAL_EVALUATION]: [
     Action.ASSIGN_TO_METHODOLOGIST, // It's a Re-assignation
@@ -111,7 +110,9 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
     Action.GENERATE_ANUAL_BUDGET,
   ],
   [ProtocolState.FINISHED]: [],
-  [ProtocolState.DISCONTINUED]: [],
+  [ProtocolState.DISCONTINUED]: [
+    Action.REACTIVATE
+  ],
   [ProtocolState.DELETED]: [],
 }
 
@@ -133,3 +134,6 @@ export const canAccess = (access: Access, role: Role) =>
  */
 export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
   Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
+
+export const getActionsByRoleAndState = (role: Role, state: ProtocolState) =>
+  Role_SCOPE[role].filter((action) => STATE_SCOPE[state].includes(action))

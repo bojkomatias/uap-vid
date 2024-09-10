@@ -1,7 +1,14 @@
 const WebSocket = require('ws')
-const http = require('http')
+const https = require('https')
+const fs = require('fs')
 
-const server = http.createServer()
+const options = {
+  cert: fs.readFileSync('/app/certs/STAR_uap_edu_ar.crt'),
+  key: fs.readFileSync('/app/certs/uap.edu.ar.key'),
+  ca: fs.readFileSync('/app/certs/CAbundle.crt'),
+}
+
+const server = https.createServer(options)
 const wss = new WebSocket.Server({ server })
 
 // Initialize an object to store chat messages for each room
@@ -63,5 +70,5 @@ wss.on('connection', (ws, req) => {
 
 const port = 3001
 server.listen(port, () => {
-  console.log(`Server is running on port ${port}`)
+  console.log(`Secure WebSocket server is running on port ${port}`)
 })

@@ -11,6 +11,7 @@ import {
 } from 'tabler-icons-react'
 import { Button } from '@components/button'
 import { cx } from '@utils/cx'
+import { Text } from '@components/text'
 /**Receives 4 arguments: the current page number (currentPage), the total records totalRecords from the db (totalRecords), the amount of shown records on a single page (shownRecords) and an optional parameter which is the list length (number of page numbers displayed) which is set by default to 5.*/
 export default function Pagination({
   totalRecords,
@@ -59,7 +60,7 @@ export default function Pagination({
         : <>
             <Button
               title="Primer página"
-              onClick={() => update({ page: 1 })}
+              onClick={() => update({ page: '1' })}
               plain
             >
               <ChevronsLeft data-slot="icon" />
@@ -68,7 +69,7 @@ export default function Pagination({
               title="Página anterior"
               onClick={() =>
                 update({
-                  page: currentPage > 1 ? currentPage - 1 : 1,
+                  page: currentPage > 1 ? (currentPage - 1).toString() : '1',
                 })
               }
               plain
@@ -82,7 +83,8 @@ export default function Pagination({
             <Button
               key={page}
               onClick={() => {
-                if (Number(currentPage) !== page) update({ page: page })
+                if (Number(currentPage) !== page)
+                  update({ page: page.toString() })
               }}
               {...(Number(currentPage) === page ?
                 { outline: true }
@@ -107,8 +109,8 @@ export default function Pagination({
                 update({
                   page:
                     currentPage < allPages.length ?
-                      currentPage + 1
-                    : allPages[allPages.length - 1],
+                      (currentPage + 1).toString()
+                    : allPages[allPages.length - 1].toString(),
                 })
               }
               plain
@@ -120,7 +122,7 @@ export default function Pagination({
               title="Última página"
               onClick={() =>
                 update({
-                  page: allPages[allPages.length - 1],
+                  page: allPages[allPages.length - 1].toString(),
                 })
               }
               plain
@@ -135,14 +137,15 @@ export default function Pagination({
           currentPage={currentPage}
         />
       </div>
-      <span className="flex gap-1 text-xs text-gray-700">
+
+      <div className="flex gap-1 !text-xs text-gray-700 dark:text-gray-300">
         {shownRecords * Number(searchParams?.get('page') || 1) -
           shownRecords +
           1 <
           totalRecords && (
           <>
-            Mostrando registros
-            <span className="font-semibold">
+            <Text>Mostrando registros</Text>
+            <Text className="font-semibold">
               {shownRecords * Number(searchParams?.get('page') || 1) -
                 shownRecords +
                 1}
@@ -153,22 +156,22 @@ export default function Pagination({
               ) ?
                 totalRecords
               : shownRecords * Number(searchParams?.get('page') || 1)}{' '}
-            </span>
-            de{' '}
-            <p
+            </Text>
+            <Text>de</Text>
+            <Text
               className="cursor-pointer border-b border-b-primary/0 transition-all duration-150 hover:border-b-primary"
               onClick={() =>
                 update({
-                  records: totalRecords,
-                  page: 1,
+                  records: totalRecords.toString(),
+                  page: '1',
                 })
               }
             >
               {totalRecords} en total
-            </p>
+            </Text>
           </>
         )}
-      </span>
+      </div>
     </div>
   )
 }

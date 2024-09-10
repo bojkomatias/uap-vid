@@ -4,7 +4,6 @@ import type { AcademicUnitBudget } from '@prisma/client'
 import { type AcademicUnit, type User } from '@prisma/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import TanStackTable from '@shared/data-table/tan-stack-table'
-import { dateFormatter } from '@utils/formatters'
 import { Currency } from '@shared/currency'
 import {
   Dropdown,
@@ -16,6 +15,7 @@ import { Dots } from 'tabler-icons-react'
 import { EditAcademicUnitFormDialog } from './edit-academic-unit-form-dialog'
 import { useState } from 'react'
 import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-dialog'
+import SearchBar from '@shared/data-table/search-bar'
 
 export default function AcademicUnitsTable({
   academicUnits,
@@ -65,7 +65,6 @@ export default function AcademicUnitsTable({
             <Currency amountIndex={row.original.budgets.at(-1)!.amountIndex} />
           : null}
         </>
-
       ),
     },
     {
@@ -117,8 +116,9 @@ export default function AcademicUnitsTable({
           name: true,
           secretariesIds: true,
         }}
-        searchBarPlaceholder="Buscar por nombre de categoría"
-      />
+      >
+        <SearchBar placeholder="Buscar por: Nombre, etc." />
+      </TanStackTable>
       <EditAcademicUnitFormDialog
         academicUnit={currentAcademicUnit}
         onClose={() => setCurrentAcademicUnit(undefined)}

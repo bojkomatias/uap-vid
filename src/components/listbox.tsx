@@ -38,7 +38,7 @@ export function Listbox<T>({
         aria-label={ariaLabel}
         className={cx([
           // Basic layout
-          'group relative block w-full',
+          'group relative block',
           // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
           'before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-sm',
           // Background color is moved to control and shadow is removed in dark mode so hide `before` pseudo
@@ -46,7 +46,7 @@ export function Listbox<T>({
           // Hide default focus styles
           'focus:outline-none',
           // Focus ring
-          'after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-inset after:ring-transparent after:data-[focus]:ring-2 after:data-[focus]:ring-blue-500',
+          'after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-inset after:ring-transparent after:data-[focus]:ring-2 after:data-[focus]:ring-primary-950',
           // Disabled state
           'data-[disabled]:opacity-50 before:data-[disabled]:bg-gray-950/5 before:data-[disabled]:shadow-none',
           className,

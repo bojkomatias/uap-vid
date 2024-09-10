@@ -13,6 +13,7 @@ import {
   Certificate2,
   FileDelta,
   Message,
+  At,
 } from 'tabler-icons-react'
 import { usePathname } from 'next/navigation'
 import { Access, type Convocatory, type User } from '@prisma/client'
@@ -31,6 +32,8 @@ import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
 import { IndexSwapper } from '@shared/index-swapper'
+import Info from 'modules/info'
+import { AnimationsSwapper } from '@shared/animations-swapper'
 
 export function AppSidebar({
   user,
@@ -70,8 +73,14 @@ export function AppSidebar({
         )}
         {convocatory ?
           <SidebarSection>
-            <SidebarHeading> Convocatoria activa</SidebarHeading>
-            <CurrentConvocatory convocatory={convocatory} />
+            <Info
+              title="Convocatoria activa"
+              content={`Días y horas que faltan para que finalice la convocatoria actual.\n Los proyectos de investigación que no hayan sido cargados durante una convocatoria abierta, deben ser aprobados por un administrador de la Vicerrectoría de Investigación y Desarrollo.`}
+            >
+              {' '}
+              <SidebarHeading> Convocatoria activa</SidebarHeading>
+              <CurrentConvocatory convocatory={convocatory} />
+            </Info>
           </SidebarSection>
         : null}
         <SidebarSpacer />
@@ -154,6 +163,13 @@ export const navigation = [
     name: 'Evaluaciones',
     icon: Message,
     href: '/evaluations',
+    scope: Access.EVALUATIONS,
+  },
+
+  {
+    name: 'Emails',
+    icon: At,
+    href: '/emails',
     scope: Access.EVALUATIONS,
   },
 ]

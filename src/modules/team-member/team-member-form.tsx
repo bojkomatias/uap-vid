@@ -16,7 +16,7 @@ import { FieldGroup, Fieldset, FormActions, Legend } from '@components/fieldset'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
-import { FormButton } from '@shared/form/form-button'
+import { SubmitButton } from '@shared/submit-button'
 import { Divider } from '@components/divider'
 import { Text } from '@components/text'
 
@@ -27,10 +27,10 @@ export default function TeamMemberForm({
   onSubmitCallback,
 }: {
   member:
-  | (TeamMember & {
-    categories: HistoricTeamMemberCategory[]
-  } & { user: User | null })
-  | null
+    | (TeamMember & {
+        categories: HistoricTeamMemberCategory[]
+      } & { user: User | null })
+    | null
   researchers: User[]
   academicUnits: {
     id: string
@@ -145,14 +145,14 @@ export default function TeamMemberForm({
             {...form.getInputProps('academicUnitId')}
           />
         </FieldGroup>
-      </Fieldset >
+      </Fieldset>
       <FormActions>
-        <FormButton isLoading={isPending}>
+        <SubmitButton isLoading={isPending}>
           {member ?
             'Actualizar miembro de investigación'
-            : 'Crear miembro de investigación'}
-        </FormButton>
+          : 'Crear miembro de investigación'}
+        </SubmitButton>
       </FormActions>
-    </form >
+    </form>
   )
 }
