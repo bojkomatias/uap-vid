@@ -598,7 +598,7 @@ export default function EmailsTable({
               setOpen(true)
               setDialogContent(emails.find((e) => e.useCase == uc)!)
             }}
-            className="max-w-3xl cursor-pointer rounded-lg border p-4 text-left text-lg font-medium drop-shadow-sm transition hover:bg-black/10 hover:shadow-lg dark:border-gray-700 dark:hover:border-white/30"
+            className="w-full max-w-3xl cursor-pointer rounded-lg border p-4 text-left text-lg font-medium drop-shadow-sm transition hover:bg-black/10 hover:shadow-lg dark:border-gray-700 dark:hover:border-white/30"
           >
             <Badge className="!text-base">{useCasesDictionary[uc]}</Badge>
 
