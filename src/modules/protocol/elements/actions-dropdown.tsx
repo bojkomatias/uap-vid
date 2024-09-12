@@ -140,6 +140,19 @@ export function ActionsDropdown({
       icon: <Badge data-slot="icon" />,
     },
     {
+      action: Action.APPROVE,
+      callback: async () => {
+        const updated = await updateProtocolStateById(
+          protocol.id,
+          Action.APPROVE,
+          protocol.state,
+          ProtocolState.ON_GOING
+        )
+        notifications.show(updated.notification)
+      },
+      icon: <Badge data-slot="icon" />,
+    },
+    {
       action: Action.GENERATE_ANUAL_BUDGET,
       callback: () =>
         router.push(`/generate-budget/${protocol.id}`, { scroll: false }),
@@ -197,7 +210,7 @@ export function ActionsDropdown({
     },
   ]
 
-  const canViewBudgets = actions.includes('VIEW_ANUAL_BUDGET')
+  const canViewBudgets = actions.includes(Action.VIEW_ANUAL_BUDGET)
 
   const [open, setOpen] = useAtom(FlagsDialogAtom)
 

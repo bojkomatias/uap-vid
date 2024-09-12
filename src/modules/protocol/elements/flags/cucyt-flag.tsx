@@ -9,6 +9,7 @@ import { FormTextarea } from '@shared/form/form-textarea'
 import { notifications } from '@elements/notifications'
 import { SubmitButton } from '@shared/submit-button'
 import { FieldGroup, FormActions } from '@components/fieldset'
+import { useRouter } from 'next/navigation'
 
 export default function CucytFlag({
   protocolId,
@@ -17,6 +18,7 @@ export default function CucytFlag({
   protocolId: string
   protocolFlag?: ProtocolFlag
 }) {
+  const router = useRouter()
   const form = useForm({
     initialValues: {
       flagName: 'CUCYT',
@@ -27,6 +29,7 @@ export default function CucytFlag({
 
   const submitCucytFlag = async (flag: Omit<ProtocolFlag, 'createdAt'>) => {
     const updated = await upsertProtocolFlag(protocolId, flag)
+    router.refresh()
     if (updated) {
       notifications.show({
         title: 'Guardado',

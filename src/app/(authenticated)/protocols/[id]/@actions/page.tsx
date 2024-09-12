@@ -1,4 +1,4 @@
-import { ReviewVerdict } from '@prisma/client'
+import { Action, ReviewVerdict } from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
@@ -18,26 +18,36 @@ export default async function ActionsPage({
   const reviews = await getReviewsByProtocol(protocol.id)
 
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
+  let filteredActions = actions
 
   // Edit by owner
-  if (!actions.includes('EDIT') && actions.includes('EDIT_BY_OWNER')) {
-    if (session.user.id === protocol.researcherId) actions.push('EDIT') // I only check for edit in Dropdown, but add it only if is owner.
+  if (
+    !actions.includes(Action.EDIT) &&
+    actions.includes(Action.EDIT_BY_OWNER)
+  ) {
+    if (session.user.id === protocol.researcherId)
+      filteredActions.push(Action.EDIT) // I only check for edit in Dropdown, but add it only if is owner.
   }
   // Publish only if valid
-  if (actions.includes('PUBLISH')) {
+  if (actions.includes(Action.PUBLISH)) {
     const validToPublish = ProtocolSchema.safeParse(protocol)
     if (!validToPublish.success || !protocol.convocatoryId)
-      actions.filter((e) => e !== 'PUBLISH')
+      filteredActions = filteredActions.filter((e) => e !== Action.PUBLISH)
   }
   // Accept only if review have correct verdicts
-  if (actions.includes('ACCEPT')) {
+  if (actions.includes(Action.ACCEPT)) {
     if (reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED))
-      actions.filter((e) => e !== 'ACCEPT')
+      filteredActions = filteredActions.filter((e) => e !== Action.ACCEPT)
+  }
+  //  Approve only if has both protocol flags and review flags
+  if (actions.includes(Action.APPROVE)) {
+    if (protocol.flags.some((flag) => flag.state === false))
+      filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
   }
 
   return (
     <ActionsDropdown
-      actions={actions}
+      actions={filteredActions}
       protocol={protocol}
       canViewLogs={session.user.role === 'ADMIN'}
     />
