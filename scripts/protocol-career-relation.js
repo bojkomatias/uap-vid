@@ -32,6 +32,8 @@ export default async function main() {
         careerId: career_id_dictionary[protocol.sections.identification.career],
       }))
 
+      console.log(updated_protocols)
+
       for (const protocol of updated_protocols) {
         try {
           const result = await protocol_collection.updateOne(
@@ -62,3 +64,5 @@ export default async function main() {
     console.log('Connection closed || ProtocolCareerRelation')
   }
 }
+
+await main()
