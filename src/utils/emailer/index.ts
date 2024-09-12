@@ -13,19 +13,31 @@ export type Emailer = {
 
 export async function getEmailSubjects() {
   const emails = await getEmails()
-  const subjects = emails?.reduce<Record<string, string>>((acc, ac) => {
-    acc[ac.useCase] = ac.subject
-    return acc
-  }, {})
+  const subjects = emails?.reduce<Record<string, string>>(
+    (
+      acc: { [x: string]: any },
+      ac: { useCase: string | number; subject: any }
+    ) => {
+      acc[ac.useCase] = ac.subject
+      return acc
+    },
+    {}
+  )
   return subjects
 }
 
 export async function getEmailContent() {
   const emails = await getEmails()
-  const contents = emails?.reduce<Record<string, string>>((acc, ac) => {
-    acc[ac.useCase] = ac.content
-    return acc
-  }, {})
+  const contents = emails?.reduce<Record<string, string>>(
+    (
+      acc: { [x: string]: any },
+      ac: { useCase: string | number; content: any }
+    ) => {
+      acc[ac.useCase] = ac.content
+      return acc
+    },
+    {}
+  )
   return contents
 }
 
@@ -452,23 +464,26 @@ export async function emailer({
 
     </html>`
 
-  // const transporter = nodemailer.createTransport({
-  //   host: process.env.SMTP_ADDRESS,
-  //   port: Number(process.env.SMTP_PORT),
-  //   secure: false,
-  //   ignoreTLS: true,
-  // })
+  let transporter
 
-  //This transporter can be used for developing.
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-      user: 'nicoskate000@gmail.com',
-      pass: 'alrg hkso hivq bgvn',
-    },
-  })
+  if (process.env.NODE_ENV == 'development') {
+    transporter = nodemailer.createTransport({
+      host: process.env.SMTP_ADDRESS,
+      port: Number(process.env.SMTP_PORT),
+      secure: false,
+      ignoreTLS: true,
+    })
+  } else {
+    transporter = nodemailer.createTransport({
+      host: process.env.SMTP_ADDRESS,
+      port: Number(process.env.SMTP_PORT),
+      secure: false,
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+    })
+  }
 
   const emailObject = {
     from: '"Portal VID - UAP" no-reply@uap.edu.ar',
