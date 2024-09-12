@@ -288,7 +288,7 @@ export default async function main() {
   ]
   try {
     await client.connect()
-    console.log('Connected successfully to MongoDB')
+    console.log('Connected successfully to MongoDB || ReviewQuestionsInsert')
 
     const review_collection = getCollection('Review')
     const reviews = await review_collection.find().toArray()
@@ -347,6 +347,6 @@ export default async function main() {
     console.error('An error occurred:', error)
   } finally {
     await client.close()
-    console.log('Connection closed')
+    console.log('Connection closed || ReviewQuestionsInsert')
   }
 }
