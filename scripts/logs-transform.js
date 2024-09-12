@@ -45,6 +45,7 @@ const ActionFromStateDictionary = {
 }
 
 export default async function main() {
+  console.log('FIRST SCRIPT', process.env.MONGO_URI)
   try {
     await client.connect().then(async () => {
       console.log('Connected successfully to MongoDB || LogsTransform')
