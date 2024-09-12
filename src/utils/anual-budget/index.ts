@@ -1,4 +1,9 @@
-import type { AmountIndex, AnualBudget, Execution, TeamMemberCategory } from '@prisma/client'
+import type {
+  AmountIndex,
+  AnualBudget,
+  Execution,
+  TeamMemberCategory,
+} from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { type AnualBudgetItem } from '@prisma/client'
 import {
@@ -178,9 +183,7 @@ const getLastCategoryPriceIndex = (
 }
 
 export const calculateHourRateGivenTMCategory = (
-  category:
-    | HistoricTeamMemberCategoryWithAllRelations
-    | null
+  category: HistoricTeamMemberCategoryWithAllRelations | null
 ): AmountIndex => {
   if (!category) return { FCA: 0, FMR: 0 } as AmountIndex
   const isObrero = Boolean(category.pointsObrero)
@@ -206,9 +209,7 @@ export const calculateHourRateGivenTMCategory = (
 }
 
 export const calculateHourRateGivenCategory = (
-  category:
-    | TeamMemberCategory
-    | null
+  category: TeamMemberCategory | null
 ): AmountIndex => {
   if (!category) return { FCA: 0, FMR: 0 } as AmountIndex
   const hourRate = category.amountIndex ?? ({ FCA: 0, FMR: 0 } as AmountIndex)
