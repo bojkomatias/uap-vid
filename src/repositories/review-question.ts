@@ -7,7 +7,7 @@ export const getAllQuestionsWithTotalRecords = cache(async () => {
   try {
     return await prisma.$transaction([
       prisma.reviewQuestion.count({}),
-      prisma.reviewQuestion.findMany({}),
+      prisma.reviewQuestion.findMany({ orderBy: [{ index: 'asc' }] }),
     ])
   } catch (e) {
     return []
@@ -38,6 +38,24 @@ export const updateQuestion = cache(
     }
   }
 )
+
+export const updateQuestionIndexes = cache(async (data: ReviewQuestion[]) => {
+  try {
+    data.forEach(async (q) => {
+      const { id } = q
+      console.log(id)
+      const question = await prisma.reviewQuestion.update({
+        where: { id },
+        data: { index: q.index },
+      })
+
+      return question
+    })
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+})
 
 export const getAllQuestions = cache(async () => {
   try {

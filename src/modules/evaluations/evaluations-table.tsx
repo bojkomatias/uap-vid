@@ -11,6 +11,7 @@ import NewQuestionForm from './new-question.form'
 import { Button } from '@elements/button'
 import { Plus } from 'tabler-icons-react'
 import { FormInput } from '@shared/form/form-input'
+import { updateQuestionIndexes } from '@repositories/review-question'
 
 export default function EvaluationsTable({
   questions,
@@ -37,6 +38,10 @@ export default function EvaluationsTable({
   const handleNewClose = () => {
     setNewOpen((prevState) => ({ ...prevState, state: false }))
   }
+
+  const [indexSwap, setSwapIndex] = useState({ oldIndex: 0, newIndex: 1 })
+
+  const dragEventsHandlersMethodological = {}
 
   return (
     <main>
@@ -102,17 +107,68 @@ export default function EvaluationsTable({
             <Plus className="w-3" /> Nueva pregunta de evaluación
           </Button>
           <div className="flex flex-col gap-2">
-            {methodologicalQuestions.map((q) => {
+            {methodologicalQuestions.map((q, i) => {
               return (
-                <div draggable key={q.id} className="truncate">
+                <div key={q.id} className="truncate">
                   <Badge
+                    title={q.question}
+                    draggable
+                    onDrag={(e) => {
+                      console.log(
+                        e.currentTarget
+                          .closest('span')
+                          ?.getAttribute('data-index')
+                      )
+                      setSwapIndex({
+                        ...indexSwap,
+                        oldIndex: Number(
+                          e.currentTarget
+                            .closest('span')
+                            ?.getAttribute('data-index')
+                        ),
+                      })
+                    }}
+                    onDragEnter={(e) => {
+                      e.currentTarget.classList.add('opacity-50')
+                      setSwapIndex({
+                        ...indexSwap,
+                        newIndex: Number(
+                          e.currentTarget
+                            .closest('span')
+                            ?.getAttribute('data-index')
+                        ),
+                      })
+                    }}
+                    onDragLeave={(e) => {
+                      e.currentTarget.classList.remove('opacity-50')
+                    }}
+                    onDragEnd={async (e) => {
+                      ;[
+                        methodologicalQuestions[indexSwap.oldIndex],
+                        methodologicalQuestions[indexSwap.newIndex],
+                      ] = [
+                        methodologicalQuestions[indexSwap.newIndex],
+                        methodologicalQuestions[indexSwap.oldIndex],
+                      ]
+
+                      const updatedMethodologicalQuestions =
+                        methodologicalQuestions.map((q, i) => ({
+                          ...q,
+                          index: i,
+                        }))
+                      console.log(updatedMethodologicalQuestions)
+                      await updateQuestionIndexes(
+                        updatedMethodologicalQuestions
+                      )
+                    }}
+                    data-index={i}
                     onClick={() => {
                       setOpen(true)
                       setQuestionToEdit(q)
                     }}
                     className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100 dark:bg-red-900/70' : 'hover:bg-gray-100'}`}
                   >
-                    {q.question}
+                    {i + 1}. {q.question}
                   </Badge>
                 </div>
               )
@@ -177,17 +233,66 @@ export default function EvaluationsTable({
             <Plus className="w-3" /> Nueva pregunta de evaluación
           </Button>
           <div className="flex flex-col gap-2">
-            {scientificQuestions.map((q) => {
+            {scientificQuestions.map((q, i) => {
               return (
                 <div key={q.id} className="truncate">
                   <Badge
+                    title={q.question}
+                    draggable
+                    onDrag={(e) => {
+                      console.log(
+                        e.currentTarget
+                          .closest('span')
+                          ?.getAttribute('data-index')
+                      )
+                      setSwapIndex({
+                        ...indexSwap,
+                        oldIndex: Number(
+                          e.currentTarget
+                            .closest('span')
+                            ?.getAttribute('data-index')
+                        ),
+                      })
+                    }}
+                    onDragEnter={(e) => {
+                      e.currentTarget.classList.add('opacity-50')
+                      setSwapIndex({
+                        ...indexSwap,
+                        newIndex: Number(
+                          e.currentTarget
+                            .closest('span')
+                            ?.getAttribute('data-index')
+                        ),
+                      })
+                    }}
+                    onDragLeave={(e) => {
+                      e.currentTarget.classList.remove('opacity-50')
+                    }}
+                    onDragEnd={async (e) => {
+                      ;[
+                        scientificQuestions[indexSwap.oldIndex],
+                        scientificQuestions[indexSwap.newIndex],
+                      ] = [
+                        scientificQuestions[indexSwap.newIndex],
+                        scientificQuestions[indexSwap.oldIndex],
+                      ]
+
+                      const updatedScientificQuestions =
+                        scientificQuestions.map((q, i) => ({
+                          ...q,
+                          index: i,
+                        }))
+                      console.log(updatedScientificQuestions)
+                      await updateQuestionIndexes(updatedScientificQuestions)
+                    }}
+                    data-index={i}
                     onClick={() => {
                       setOpen(true)
                       setQuestionToEdit(q)
                     }}
                     className={`w-fit cursor-pointer text-sm  ${!q.active ? 'bg-red-200 hover:bg-red-100 dark:bg-red-900/70' : 'hover:bg-gray-100'}`}
                   >
-                    {q.question}
+                    {i + 1}. {q.question}
                   </Badge>
                 </div>
               )

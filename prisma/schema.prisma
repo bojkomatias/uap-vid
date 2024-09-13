@@ -269,6 +269,7 @@ model ReviewQuestion {
   question String
   active   Boolean
   type     String
+  index    Int?
 }
 
 type ProtocolSections {
