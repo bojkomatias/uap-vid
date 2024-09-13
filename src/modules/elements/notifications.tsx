@@ -11,6 +11,7 @@ type NotificationProps = {
   title: string
   message: string
   intent: 'info' | 'success' | 'error'
+  duration?: number
 }
 
 const duration_default = 5000
@@ -50,7 +51,7 @@ const intents = {
 /**
  * Notification Component
  */
-function Notification({ title, message, intent }: NotificationProps) {
+function Notification({ title, message, intent, duration }: NotificationProps) {
   const id = useId()
 
   const closeNotification = () => {
@@ -65,7 +66,7 @@ function Notification({ title, message, intent }: NotificationProps) {
     }, 100)
     setTimeout(() => {
       closeNotification()
-    }, duration_default)
+    }, duration ?? duration_default)
   })
 
   return (

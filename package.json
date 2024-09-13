@@ -10,7 +10,11 @@
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@mantine/form": "^7.11.2",
+<<<<<<< HEAD
+    "@prisma/client": "^5.19.0",
+=======
     "@prisma/client": "^5.19.1",
+>>>>>>> develop
     "@tabler/icons": "^2.47.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
@@ -55,7 +59,11 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.5.14",
+<<<<<<< HEAD
+    "prisma": "^5.19.0",
+=======
     "prisma": "^5.19.1",
+>>>>>>> develop
     "tailwindcss": "^3.4.6",
     "typescript": "^5.5.3"
   }
