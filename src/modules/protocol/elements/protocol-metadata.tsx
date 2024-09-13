@@ -151,7 +151,9 @@ export async function ProtocolMetadata({
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>
             </Info>
-            {session.user.role === 'ADMIN' ?
+            {(
+              session.user.role === 'ADMIN' || session.user.role === 'SECRETARY'
+            ) ?
               <AssingConvocatoryDialog
                 protocolId={protocol.id}
                 convocatory={protocol.convocatory}

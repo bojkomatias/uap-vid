@@ -93,7 +93,9 @@ export default function EvaluationsTable({
                 questions.filter(
                   (q) =>
                     q.type == 'METHODOLOGICAL' &&
-                    q.question.includes(e.target.value)
+                    q.question
+                      .toLowerCase()
+                      .includes(e.target.value.toLowerCase())
                 )
               )
             }}
@@ -219,7 +221,9 @@ export default function EvaluationsTable({
                 questions.filter(
                   (q) =>
                     q.type == 'SCIENTIFIC' &&
-                    q.question.includes(e.target.value)
+                    q.question
+                      .toLowerCase()
+                      .includes(e.target.value.toLowerCase())
                 )
               )
             }}
