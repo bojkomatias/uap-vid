@@ -12,52 +12,54 @@ import React from 'react'
 import type { z } from 'zod'
 
 export default function NewQuestionForm({ type }: { type: string }) {
-  const form = useForm<z.infer<typeof ReviewQuestionSchema>>({
-    initialValues: {
-      active: true,
-      type: type,
-      question: '',
-    },
-    validate: zodResolver(ReviewQuestionSchema),
-  })
+    const form = useForm<z.infer<typeof ReviewQuestionSchema>>({
+        initialValues: {
+            active: true,
+            type: type,
+            question: '',
+            index: null,
+        },
+        validate: zodResolver(ReviewQuestionSchema),
+    })
 
-  const router = useRouter()
+    const router = useRouter()
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['new_question'],
-    mutationFn: async (values: Omit<ReviewQuestion, 'id'>) => {
-      const result = await newQuestion(values)
-      if (result) {
-        notifications.show({
-          title: 'Pregunta de evaluación creada',
-          message: 'Se creó una nueva pregunta de evaluación con éxito',
-          intent: 'success',
-        })
-        router.refresh()
-      }
-    },
-  })
+    const { mutate, isPending } = useMutation({
+        mutationKey: ['new_question'],
+        mutationFn: async (values: Omit<ReviewQuestion, 'id'>) => {
+            const result = await newQuestion(values)
+            if (result) {
+                notifications.show({
+                    title: 'Pregunta de evaluación creada',
+                    message:
+                        'Se creó una nueva pregunta de evaluación con éxito',
+                    intent: 'success',
+                })
+                router.refresh()
+            }
+        },
+    })
 
-  return (
-    <form
-      onSubmit={form.onSubmit((values) => {
-        mutate(values)
-      })}
-    >
-      <Fieldset>
-        <FieldGroup>
-          <FormTextarea
-            autoFocus
-            value={form.getInputProps('question').value}
-            description="Nueva pregunta"
-            label="Texto de la pregunta"
-            {...form.getInputProps('question')}
-          />
-        </FieldGroup>
-      </Fieldset>
-      <FormActions>
-        <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
-      </FormActions>
-    </form>
-  )
+    return (
+        <form
+            onSubmit={form.onSubmit((values) => {
+                mutate(values)
+            })}
+        >
+            <Fieldset>
+                <FieldGroup>
+                    <FormTextarea
+                        autoFocus
+                        value={form.getInputProps('question').value}
+                        description="Nueva pregunta"
+                        label="Texto de la pregunta"
+                        {...form.getInputProps('question')}
+                    />
+                </FieldGroup>
+            </Fieldset>
+            <FormActions>
+                <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
+            </FormActions>
+        </form>
+    )
 }
