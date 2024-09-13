@@ -10,6 +10,7 @@ import UpdateQuestionForm from './question-form'
 import NewQuestionForm from './new-question.form'
 import { Button } from '@elements/button'
 import { Plus } from 'tabler-icons-react'
+import { FormInput } from '@shared/form/form-input'
 
 export default function EvaluationsTable({
   questions,
@@ -62,9 +63,9 @@ export default function EvaluationsTable({
                     )
                   } else if (methodologicalCheckbox.current?.checked == false) {
                     setMethodologicalQuestions(
-                      questions
-                        .filter((q) => q.type == 'METHODOLOGICAL')!
-                        .filter((q) => q.active)
+                      questions.filter(
+                        (q) => q.type == 'METHODOLOGICAL' && q.active
+                      )
                     )
                   }
                 }}
@@ -73,6 +74,25 @@ export default function EvaluationsTable({
               />
             </div>
           </div>
+          <FormInput
+            placeholder="Buscar pregunta"
+            onChange={(e: any) => {
+              console.log(e.target.value.length)
+              if (e.target.value.length == 0)
+                return setMethodologicalQuestions(
+                  questions.filter(
+                    (q) => q.type == 'METHODOLOGICAL' && q.active
+                  )
+                )
+              setMethodologicalQuestions(
+                questions.filter(
+                  (q) =>
+                    q.type == 'METHODOLOGICAL' &&
+                    q.question.includes(e.target.value)
+                )
+              )
+            }}
+          />
           <Divider />
           <Button
             onClick={() => setNewOpen({ state: true, type: 'METHODOLOGICAL' })}
@@ -84,7 +104,7 @@ export default function EvaluationsTable({
           <div className="flex flex-col gap-2">
             {methodologicalQuestions.map((q) => {
               return (
-                <div key={q.id} className="truncate">
+                <div draggable key={q.id} className="truncate">
                   <Badge
                     onClick={() => {
                       setOpen(true)
@@ -121,9 +141,9 @@ export default function EvaluationsTable({
                     )
                   } else if (scientificCheckbox.current?.checked == false) {
                     setScientificQuestions(
-                      questions
-                        .filter((q) => q.type == 'SCIENTIFIC')!
-                        .filter((q) => q.active)
+                      questions.filter(
+                        (q) => q.type == 'SCIENTIFIC' && q.active
+                      )
                     )
                   }
                 }}
@@ -132,6 +152,22 @@ export default function EvaluationsTable({
               />
             </div>
           </div>
+          <FormInput
+            placeholder="Buscar pregunta"
+            onChange={(e: any) => {
+              if (e.target.value.length == 0)
+                return setScientificQuestions(
+                  questions.filter((q) => q.type == 'SCIENTIFIC' && q.active)
+                )
+              setScientificQuestions(
+                questions.filter(
+                  (q) =>
+                    q.type == 'SCIENTIFIC' &&
+                    q.question.includes(e.target.value)
+                )
+              )
+            }}
+          />
           <Divider />
           <Button
             onClick={() => setNewOpen({ state: true, type: 'SCIENTIFIC' })}
