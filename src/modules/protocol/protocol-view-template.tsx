@@ -16,16 +16,7 @@ export default async function View({
   sections: ProtocolSections
 }) {
   const session = await getServerSession(authOptions)
-
-  if (session?.user.role === Role.METHODOLOGIST)
-    return (
-      <>
-        <IdentificationView data={sections.identification} />
-        <DurationView data={sections.duration} />
-        <DescriptionView data={sections.description} />
-        <MethodologyView data={sections.methodology} />
-      </>
-    )
+  
   return (
     <>
       <IdentificationView data={sections.identification} />
