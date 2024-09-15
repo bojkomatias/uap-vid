@@ -28,12 +28,7 @@ export default function EditButton({
                 : ACTION.EDIT,
             user.role,
             protocol.state
-        ) ||
-        protocol.state === STATE.SCIENTIFIC_EVALUATION ||
-        (protocol.state === STATE.METHODOLOGICAL_EVALUATION &&
-            reviews.length > 2 &&
-            reviews.every((r) => r.verdict === 'APPROVED'))
-    )
+        ))
         return <></>
     return (
         <Link
