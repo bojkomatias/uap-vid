@@ -19,28 +19,30 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
+          timeout: 15m
+          command_timeout: 15m
           script: |
             echo "Starting deployment process..."
-            
+
             echo "Removing existing uap-vid directory..."
             rm -rf uap-vid || { echo "Failed to remove uap-vid directory"; exit 1; }
-            
+
             echo "Cloning repository..."
             git clone https://github.com/bojkomatias/uap-vid.git || { echo "Failed to clone repository"; exit 1; }
-            
+
             echo "Changing to uap-vid directory..."
             cd uap-vid || { echo "Failed to change directory"; exit 1; }
-            
+
             echo "Checking out develop branch..."
             git checkout origin/develop || { echo "Failed to checkout develop branch"; exit 1; }
-            
+
             echo "Copying environment file..."
             cp /home/nodo/apps/enviroments/uap-vid.env ./.env || { echo "Failed to copy environment file"; exit 1; }
-            
+
             echo "Building Docker image..."
             docker build -t uap:latest . || { echo "Failed to build Docker image"; exit 1; }
-            
+
             echo "Starting Docker container..."
             docker-compose up -d --no-deps --force-recreate uap-research || { echo "Failed to start Docker container"; exit 1; }
-            
+
             echo "Deployment process completed successfully."
