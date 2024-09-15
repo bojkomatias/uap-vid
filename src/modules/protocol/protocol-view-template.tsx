@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
-import { Role, type ProtocolSections } from '@prisma/client'
+import {type ProtocolSections } from '@prisma/client'
 import BibliographyView from './view-sections/bibliography-view'
 import DescriptionView from './view-sections/description-view'
 import DurationView from './view-sections/duration-view'
@@ -15,17 +15,7 @@ export default async function View({
 }: {
   sections: ProtocolSections
 }) {
-  const session = await getServerSession(authOptions)
-
-  if (session?.user.role === Role.METHODOLOGIST)
-    return (
-      <>
-        <IdentificationView data={sections.identification} />
-        <DurationView data={sections.duration} />
-        <DescriptionView data={sections.description} />
-        <MethodologyView data={sections.methodology} />
-      </>
-    )
+  
   return (
     <>
       <IdentificationView data={sections.identification} />

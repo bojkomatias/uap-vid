@@ -228,6 +228,7 @@ export const ReviewQuestionSchema = z.object({
   active: z.boolean(),
   type: z.string(),
   question: z.string(),
+  index: z.number().nullable(),
 })
 
 /////////////////////////////////////////

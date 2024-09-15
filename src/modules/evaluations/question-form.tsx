@@ -22,6 +22,7 @@ export default function QuestionForm({
       active: question.active,
       type: question.type,
       question: question.question,
+      index: question.index,
     },
     validate: zodResolver(ReviewQuestionSchema),
   })

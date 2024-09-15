@@ -268,6 +268,23 @@ const verifyUserData = async (
   }
 }
 
+const getAdmins = async () => {
+  try {
+    const result = await prisma.user.findMany({
+      where: {
+        role: {
+          equals: 'ADMIN',
+        },
+      },
+    })
+
+    return result
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 const verifyUserDataMicrosoftUsers = async (
   id: string,
   data: z.infer<typeof VerifyUserDataMicrosoftUsersSchema>
@@ -359,6 +376,7 @@ const deleteUserById = async (id: string) => {
 }
 
 export {
+  getAdmins,
   getUsers,
   getAllOwners,
   getAllUsersWithoutResearchers,
