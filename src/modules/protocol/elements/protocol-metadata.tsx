@@ -35,7 +35,7 @@ export async function ProtocolMetadata({
   if (!session || !protocol) return
 
   return (
-    <div className="-top-6 z-50" id="metadata-container">
+    <div className="-top-6 z-50 print:hidden" id="metadata-container">
       <ContainerAnimations animation={3}>
         <div className="mt-2 flex w-full flex-col gap-2 rounded-lg bg-gray-200/75 px-3 py-2 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
           <div className="flex flex-col justify-between md:flex-row md:items-center">
@@ -151,7 +151,9 @@ export async function ProtocolMetadata({
                 {ProtocolStatesDictionary[protocol.state]}
               </Badge>
             </Info>
-            {session.user.role === 'ADMIN' ?
+            {(
+              session.user.role === 'ADMIN' || session.user.role === 'SECRETARY'
+            ) ?
               <AssingConvocatoryDialog
                 protocolId={protocol.id}
                 convocatory={protocol.convocatory}

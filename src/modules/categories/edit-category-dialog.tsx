@@ -85,14 +85,14 @@ export function EditCategoryDialog({
               />
               <FormInput
                 label="Valor hora"
-                description="El valor de las hora actual, este valor luego es indexado"
+                description="El valor de la hora actual, este valor luego es indexado"
                 type="number"
                 {...form.getInputProps('amount')}
               />
               <FormCheckbox
                 label="No indexada"
                 description="Si la categoría no se indexa, no se actualiza su valor con los indices. El valor de la hora se mantiene fijo en pesos."
-                {...form.getInputProps('specialCategory')}
+                {...form.getInputProps('specialCategory', { type: 'checkbox' })}
               />
             </FieldGroup>
           </Fieldset>

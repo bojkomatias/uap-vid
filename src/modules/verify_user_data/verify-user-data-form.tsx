@@ -34,17 +34,18 @@ export function VerifyUserDataForm({ user }: { user: User }) {
 
   const submitVerifyUserData = useCallback(
     async (userDataUpdated: z.infer<typeof VerifyUserDataSchema>) => {
-      const updated = await verifyUserData(user.id, userDataUpdated)
-      if (updated)
-        notifications.show({
-          title: 'Sus datos fueron guardados con éxito',
-          message: 'Para continuar, vuelva a iniciar sesión',
-          intent: 'success',
-        })
-      startTransition(() => {
+     
+      startTransition(async () => {
+        const updated = await verifyUserData(user.id, userDataUpdated)
+        if (updated)
+          notifications.show({
+            title: 'Sus datos fueron guardados con éxito',
+            message: 'Para continuar, vuelva a iniciar sesión',
+            intent: 'success',
+          })
         setTimeout(() => {
           signOut({ callbackUrl: '/' })
-        }, 2500)
+        }, 5000)
       })
     },
     [user.id]
