@@ -48,7 +48,9 @@ export default async function Budget({ params }: { params: { id: string } }) {
               !protocolFlags?.some((flag) => flag.state == false) &&
               protocolFlags?.length == 2
             ) ?
-              <ApproveAnualBudget id={anualBudget.id} />
+              <>
+                <ApproveAnualBudget id={anualBudget.id} />
+              </>
             : <Info content="Los votos de Comisión Interna y CUCYT no fueron cargados.">
                 <Button className="pointer-events-none" color="teal" disabled>
                   <Check data-slot="icon" />

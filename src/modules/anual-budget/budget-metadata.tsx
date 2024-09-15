@@ -1,4 +1,5 @@
-import { Badge } from '@components/badge'
+import { Badge, BadgeButton } from '@components/badge'
+import { Button } from '@components/button'
 import { Heading, Subheading } from '@components/heading'
 import { Text } from '@components/text'
 import { ContainerAnimations } from '@elements/container-animations'
@@ -8,6 +9,7 @@ import {
   AnualBudgetStateDictionary,
 } from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
+import Info from 'modules/info'
 import Link from 'next/link'
 
 export const BudgetMetadata = ({
@@ -60,12 +62,35 @@ export const BudgetMetadata = ({
         </div>
         <div className="flex grow flex-col justify-between">
           <div className="self-end">
-            <Badge
-              className="!text-sm/6 font-semibold"
-              color={AnualBudgetStateColorDictionary[state]}
-            >
-              {AnualBudgetStateDictionary[state]}
-            </Badge>
+            {state === 'PENDING' ?
+              <Info
+                content={
+                  <>
+                    Para regenerar el presupuesto, puede dirigirse a la{' '}
+                    <BadgeButton
+                      className="!text-sm"
+                      href={`/protocols/${protocolId}`}
+                    >
+                      página del protocolo
+                    </BadgeButton>{' '}
+                    y volver a generar el presupuesto.
+                  </>
+                }
+              >
+                <Badge
+                  className="!text-sm/6 font-semibold"
+                  color={AnualBudgetStateColorDictionary[state]}
+                >
+                  {AnualBudgetStateDictionary[state]}
+                </Badge>
+              </Info>
+            : <Badge
+                className="!text-sm/6 font-semibold"
+                color={AnualBudgetStateColorDictionary[state]}
+              >
+                {AnualBudgetStateDictionary[state]}
+              </Badge>
+            }
           </div>
           <div className="self-end">{children}</div>
         </div>
