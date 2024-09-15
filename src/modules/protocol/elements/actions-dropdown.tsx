@@ -35,6 +35,7 @@ import { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
 import { useAtom } from 'jotai'
 import { reactivateProtocolAndAnualBudget } from '@actions/anual-budget/action'
+import { getAdmins, getUsers } from '@repositories/user'
 
 type ActionOption = {
   action: Action
@@ -117,6 +118,16 @@ export function ActionsDropdown({
               protocolId: updated.data.id,
             })
           })
+          //Notify admin when a protocol is being created when there's no open convocatory
+          if (!protocol.convocatory) {
+            ;(await getAdmins())?.forEach((admin) => {
+              emailer({
+                useCase: useCases.onPublish,
+                email: admin.email!,
+                protocolId: updated.data.id,
+              })
+            })
+          }
         } else {
           console.log(
             'No se pudo enviar emails a los secretarios de investigación'
