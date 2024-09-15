@@ -22,7 +22,8 @@ jobs:
           timeout: 15m
           command_timeout: 15m
           script: |
-            echo "Starting deployment process..."
+            echo "Starting deployment process moving to /home/nodo..."
+            cd /home/nodo
 
             echo "Removing existing uap-vid directory..."
             rm -rf uap-vid || { echo "Failed to remove uap-vid directory"; exit 1; }
