@@ -9,26 +9,29 @@ import { Check } from 'tabler-icons-react'
 export function ApproveAnualBudget({ id }: { id: string }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+
   return (
     <Button
       color="teal"
       disabled={isPending}
       onClick={async () => {
-        const res = await approveAnualBudget(id)
+        startTransition(async () => {
+          const res = await approveAnualBudget(id)
 
-        if (res) {
-          notifications.show({
-            title: 'Presupuesto aprobado',
-            message: 'El presupuesto fue aprobado con éxito',
-            intent: 'success',
+          if (res) {
+            notifications.show({
+              title: 'Presupuesto aprobado',
+              message: 'El presupuesto fue aprobado con éxito',
+              intent: 'success',
+            })
+            return router.refresh()
+          }
+          return notifications.show({
+            title: 'Error al aprobar',
+            message:
+              'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
+            intent: 'error',
           })
-          return startTransition(() => router.refresh())
-        }
-        return notifications.show({
-          title: 'Error al aprobar',
-          message:
-            'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
-          intent: 'error',
         })
       }}
     >

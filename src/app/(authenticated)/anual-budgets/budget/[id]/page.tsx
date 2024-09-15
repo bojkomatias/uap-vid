@@ -8,6 +8,11 @@ import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
 import { RejectAnualBudget } from 'modules/anual-budget/reject-budget'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { AnualBudgetState } from '@prisma/client'
+import { findProtocolById } from '@repositories/protocol'
+import { Check, X } from 'tabler-icons-react'
+import { Button } from '@components/button'
+import Info from 'modules/info'
+import { getAcademicUnitById } from '@repositories/academic-unit'
 
 export default async function Budget({ params }: { params: { id: string } }) {
   const anualBudget = await getAnualBudgetById(params.id)
@@ -18,18 +23,39 @@ export default async function Budget({ params }: { params: { id: string } }) {
   const meta = {
     ...rest,
     title: protocol.sections.identification.title,
-    sponsor: protocol.sections.identification.sponsor,
   }
   const calculations = calculateTotalBudget(anualBudget)
+
+  const protocolFlags = await findProtocolById(protocol.id).then((p) => {
+    return p?.flags
+  })
+
+  const academicUnits = await Promise.all(
+    meta.academicUnitsIds.map((id) => getAcademicUnitById(id))
+  )
+
+  const shortnames = academicUnits.flat().map((ac) => {
+    return ac?.shortname!
+  })
 
   return (
     <>
       <div className="relative w-full">
-        <BudgetMetadata {...meta}>
-          <div className="flex gap-2">
-            {meta.state === AnualBudgetState.PENDING && (
-              <ApproveAnualBudget id={meta.id} />
-            )}
+        <BudgetMetadata {...meta} sponsor={shortnames}>
+          <div className="flex min-w-[15rem] justify-end gap-2">
+            {(
+              meta.state === AnualBudgetState.PENDING &&
+              !protocolFlags?.some((flag) => flag.state == false) &&
+              protocolFlags?.length == 2
+            ) ?
+              <ApproveAnualBudget id={anualBudget.id} />
+            : <Info content="Los votos de Comisión Interna y CUCYT no fueron cargados.">
+                <Button className="pointer-events-none" color="teal" disabled>
+                  <Check data-slot="icon" />
+                  Aprobar presupuesto
+                </Button>
+              </Info>
+            }
             {/* If remainings are 0 then budget is finished */}
             {(
               meta.state === AnualBudgetState.APPROVED &&

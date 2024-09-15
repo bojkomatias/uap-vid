@@ -28,7 +28,7 @@ export const BudgetMetadata = ({
 }) => {
   return (
     <ContainerAnimations animation={5}>
-      <div className="mb-8 mt-2 flex w-full justify-between gap-2 rounded-lg bg-gray-200/75 px-4 py-4 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 print:hidden">
+      <div className="mb-8 mt-2 flex w-full flex-col justify-between gap-2 rounded-lg bg-gray-200/75 px-4 py-4 leading-relaxed drop-shadow-sm dark:bg-gray-800/90 md:flex-row print:hidden">
         <div>
           {' '}
           <Link
@@ -41,7 +41,7 @@ export const BudgetMetadata = ({
           <Subheading>{`Presupuesto ${year}`}</Subheading>
           <div className="flex items-baseline">
             <div className="flex-grow">
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 md:flex-row">
                 <div className="flex gap-2">
                   <Text>Creado:</Text>
                   <Subheading>{dateFormatter.format(createdAt)}</Subheading>
