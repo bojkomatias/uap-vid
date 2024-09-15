@@ -40,7 +40,7 @@ export function CareerForm({
     validate: zodResolver(CareerSchema),
   })
 
-  const submitConvocatory = useCallback(
+  const submitCareer = useCallback(
     async (career: z.infer<typeof CareerSchema>) => {
       const upserted = await upsertCareer(career)
       if (upserted)
@@ -61,7 +61,7 @@ export function CareerForm({
     <form
       onSubmit={form.onSubmit(
         // @ts-ignore --Overriding values
-        (values) => submitConvocatory(values)
+        (values) => submitCareer(values)
       )}
       className="@container"
     >
