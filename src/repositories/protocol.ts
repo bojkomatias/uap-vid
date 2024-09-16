@@ -441,12 +441,19 @@ const getProtocolsByRole = cache(
                 },
               },
             },
+
             {
               researcher: {
                 name: {
                   contains: search,
                   mode: Prisma.QueryMode.insensitive,
                 },
+              },
+            },
+            {
+              protocolNumber: {
+                contains: search,
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           ],

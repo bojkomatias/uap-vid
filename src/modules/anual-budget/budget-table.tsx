@@ -80,7 +80,7 @@ export default function AnualBudgetTable({
         },
       },
       {
-        accessorKey: 'approved',
+        accessorKey: 'state',
         header: 'Estado',
         cell: ({ row }) => (
           <Badge>{AnualBudgetStateDictionary[row.original.state]}</Badge>
