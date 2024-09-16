@@ -41,7 +41,10 @@ export default async function ActionsPage({
   }
   //  Approve only if has both protocol flags and review flags
   if (actions.includes(Action.APPROVE)) {
-    if (protocol.flags.some((flag) => flag.state === false))
+    if (
+      protocol.flags.some((flag) => flag.state === false) ||
+      protocol.flags.length < 2
+    )
       filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
   }
 
