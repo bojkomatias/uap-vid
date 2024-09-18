@@ -153,6 +153,9 @@ export default function EvaluationsTable({
                         methodologicalQuestions[indexSwap.oldIndex],
                       ]
 
+                      //Update state so that the table re renders
+                      setMethodologicalQuestions([...methodologicalQuestions])
+
                       const updatedMethodologicalQuestions =
                         methodologicalQuestions.map((q, i) => ({
                           ...q,
@@ -280,6 +283,9 @@ export default function EvaluationsTable({
                         scientificQuestions[indexSwap.newIndex],
                         scientificQuestions[indexSwap.oldIndex],
                       ]
+
+                      //Update state so that the table re renders
+                      setScientificQuestions([...scientificQuestions])
 
                       const updatedScientificQuestions =
                         scientificQuestions.map((q, i) => ({
