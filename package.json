@@ -30,7 +30,7 @@
     "framer-motion": "^11.3.7",
     "jotai": "^2.9.0",
     "mongodb": "^6.8.0",
-    "next": "^14.2.7",
+    "next": "14.2.5",
     "next-auth": "^4.24.7",
     "nodemailer": "^6.9.14",
     "react": "^18.3.1",
