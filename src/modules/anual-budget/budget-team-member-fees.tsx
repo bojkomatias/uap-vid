@@ -298,6 +298,7 @@ export function BudgetTeamMemberFees({
                           teamMember!.categories.at(-1)?.category.name ??
                           'Sin categoría'
                         }
+                        //ARREGLAR
                         obrero={
                           teamMember!.categories.at(-1)?.pointsObrero ?
                             {
