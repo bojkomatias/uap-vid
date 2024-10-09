@@ -27,12 +27,12 @@ export default async function main() {
 
       const FCA = await indexes_collection.insertOne({
         unit: 'FCA',
-        values: [{ from: now, to: null, price: 4500 }],
+        values: [{ from: now, to: null, price: 1000000 }],
       })
 
       const FMR = await indexes_collection.insertOne({
         unit: 'FMR',
-        values: [{ from: now, to: null, price: 4500 }],
+        values: [{ from: now, to: null, price: 1300000 }],
       })
 
       console.log('Inserted FCA index', FCA.insertedId)

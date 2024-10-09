@@ -8,6 +8,7 @@ import { FileReport } from 'tabler-icons-react'
 import { ContainerAnimations } from '@elements/container-animations'
 import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { getActiveCareersForForm } from '@repositories/career'
+import React from 'react'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
