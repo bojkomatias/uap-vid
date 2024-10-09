@@ -101,6 +101,11 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
                 <TableCell>{member.hours}</TableCell>
                 <TableCell>
                   <Currency
+                    defaultFCA={
+                      !Boolean(
+                        member.teamMember?.categories.at(-1)?.pointsObrero
+                      )
+                    }
                     amountIndex={
                       member.teamMember ?
                         calculateHourRateGivenTMCategory(
@@ -112,6 +117,11 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
                 </TableCell>
                 <TableCell>
                   <Currency
+                    defaultFCA={
+                      !Boolean(
+                        member.teamMember?.categories.at(-1)?.pointsObrero
+                      )
+                    }
                     amountIndex={multiplyAmountIndex(
                       member.teamMember ?
                         calculateHourRateGivenTMCategory(

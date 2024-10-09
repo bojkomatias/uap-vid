@@ -12,7 +12,7 @@ import { EditCategoryDialog } from './edit-category-dialog'
 export default function CategoriesTable({
   categories,
   totalRecords,
-  currentFCA
+  currentFCA,
 }: {
   categories: TeamMemberCategory[]
   totalRecords: number
@@ -38,7 +38,12 @@ export default function CategoriesTable({
         header: 'Valor hora',
         enableHiding: false,
         enableSorting: false,
-        cell: ({ row }) => <Currency amountIndex={row.original.amountIndex!} />,
+        cell: ({ row }) => (
+          <Currency
+            defaultFCA={!Boolean(row.original.name == 'Obrero')}
+            amountIndex={row.original.amountIndex!}
+          />
+        ),
       },
       {
         accessorKey: 'action',

@@ -12,7 +12,13 @@ import { indexSwapAtom } from './index-swapper'
     @amountIndex the indexes values to map and display
     @amount the value to display if value is not indexed
   */
-export function Currency({ amountIndex }: { amountIndex?: AmountIndex }) {
+export function Currency({
+  amountIndex,
+  defaultFCA = true,
+}: {
+  amountIndex?: AmountIndex
+  defaultFCA?: boolean
+}) {
   const [value] = useAtom(indexSwapAtom)
 
   const { isError, data } = useQuery({
@@ -27,7 +33,9 @@ export function Currency({ amountIndex }: { amountIndex?: AmountIndex }) {
   return (
     <Strong>
       {value === 'default' ?
-        currencyFormatter.format(amountIndex.FCA * data.currentFCA)
+        defaultFCA ?
+          currencyFormatter.format(amountIndex.FCA * data.currentFCA)
+        : currencyFormatter.format(amountIndex.FMR * data.currentFMR)
       : value === 'fca' ?
         amountIndex.FCA.toPrecision(3) + ' FCA'
       : amountIndex.FMR.toPrecision(3) + ' FMR'}
