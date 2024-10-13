@@ -4,9 +4,9 @@ WORKDIR /app
 COPY . .
 RUN if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --no-frozen-lockfile; else echo "Lockfile not found." && exit 1; fi
 
-COPY /home/nodo/certs/STAR_uap_edu_ar.crt .
-COPY /home/nodo/certs/uap.edu.ar.key .
-COPY /home/nodo/certs/CAbundle.crt .
+COPY certs/STAR_uap_edu_ar.crt .
+COPY certs/uap.edu.ar.key .
+COPY certs/CAbundle.crt .
 
 EXPOSE 3001
 CMD ["node", "server.js"]
