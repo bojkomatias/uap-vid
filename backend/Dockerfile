@@ -6,7 +6,7 @@ RUN if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --no-fro
 
 COPY certs/STAR_uap_edu_ar.crt .
 COPY certs/uap.edu.ar.key .
-COPY certs/CAbundle.crt .
+#COPY certs/CAbundle.crt .
 
 EXPOSE 3001
 CMD ["node", "server.js"]
