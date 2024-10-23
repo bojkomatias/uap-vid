@@ -1,34 +1,52 @@
 'use server'
-import type {
-    AnualBudget,
-    ProtocolSectionsBudget,
-    AnualBudgetItem,
-    Execution,
-    ProtocolSectionsIdentificationTeam,
-    AnualBudgetTeamMember,
-    AcademicUnit,
+
+import type { AmountIndex } from '@prisma/client'
+import {
+  type AnualBudget,
+  type ProtocolSectionsBudget,
+  type AnualBudgetItem,
+  type Execution,
+  type ProtocolSectionsIdentificationTeam,
+  type AnualBudgetTeamMember,
+  type AcademicUnit,
+  AnualBudgetState,
+  ProtocolState,
+  Action,
 } from '@prisma/client'
+import { getAcademicUnitById } from '@repositories/academic-unit'
 import {
-    getAcademicUnitById,
-    getAcademicUnitsTabs,
-} from '@repositories/academic-unit'
-import {
-    createAnualBudget,
-    createManyAnualBudgetTeamMember,
-    getAnualBudgetById,
-    getAnualBudgetTeamMemberById,
-    newBudgetItemExecution,
-    newTeamMemberExecution,
+  createManyAnualBudgetTeamMember,
+  deleteAnualBudgetTeamMembers,
+  getAnualBudgetById,
+  getAnualBudgetTeamMemberById,
+  newBudgetItemExecution,
+  newTeamMemberExecution,
+  updateAnualBudgetState,
+  upsertAnualBudget,
 } from '@repositories/anual-budget'
-import { findProtocolById } from '@repositories/protocol'
+import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
+import {
+  getLogs,
+  updateLogsBudgetIdOnProtocolReactivation,
+} from '@repositories/log'
+import {
+  findProtocolById,
+  findProtocolByIdWithBudgets,
+  updateProtocolStateById,
+} from '@repositories/protocol'
 import { getTeamMembersByIds } from '@repositories/team-member'
 import {
-    calculateTotalBudgetAggregated,
-    type AnualBudgetTeamMemberWithAllRelations,
+  BudgetSummaryZero,
+  ZeroAmountIndex,
+  subtractAmountIndex,
+  sumAmountIndex,
+} from '@utils/amountIndex'
+import {
+  calculateTotalBudgetAggregated,
+  type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
 import { WEEKS_IN_MONTH } from '@utils/constants'
-
 
 /**
  * Generates an annual budget based on a given protocol ID and year.
@@ -36,371 +54,478 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
  * @param year - The year to generate the budget for.
  * @returns A Promise that resolves to the generated annual budget, or null if the protocol is not found.
  */
-export const generateAnualBudget = async (protocolId: string, year: string) => {
-    const protocol = await findProtocolById(protocolId)
-    //The next few lines of code are to check if there's a generated budget for the protocol already. The logic behind is as it follows: if it finds budgets, it's because there's already a created budget. I also check for the specific year, to be able to generate a new budget for the following year when necessary.
-    const anualBudgetIds = protocol?.anualBudgetIds
-    const anualBudgetsYears = await Promise.all(
-        (anualBudgetIds || []).map(async (id) => {
-            return await getAnualBudgetById(id).then((res) => {
-                return res?.year
-            })
-        })
-    )
+export const generateAnualBudget = async ({
+  protocolId,
+  year,
+  budgetId,
+  reactivated,
+}: {
+  protocolId: string
+  year: number
+  budgetId?: string
+  reactivated?: boolean
+}) => {
+  const protocol = await findProtocolById(protocolId)
+  if (!protocol) return null
 
+  const oldAB = budgetId ? await getAnualBudgetById(budgetId) : null
 
-    if (!protocol || anualBudgetsYears.includes(new Date().getFullYear()))
-        return null
+  // Create the annual budget with all the items listed in the protocol budget section.
+  const ABI = generateAnualBudgetItems(
+    protocol?.sections.budget,
+    year.toString()
+  )
 
-    // Create the annual budget with all the items listed in the protocol budget section.
-    const ABI = generateAnualBudgetItems(protocol?.sections.budget, year)
-    // Create the relation between AC and AnualBudgets
-    const academicUnitsIds = await generateAnualBudgetAcademicUnitRelation(
-        protocol.sections.identification.sponsor
-    )
-    const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> =
-    {
-        protocolId: protocol.id,
-        year: Number(year),
-        budgetItems: ABI,
-        academicUnitsIds,
+  // Handle the case where the annual budget is reactivated
+  if (budgetId && reactivated && oldAB) {
+    for (let i = 0; i < ABI.length; i++) {
+      ABI[i].executions = oldAB.budgetItems[i].executions
+
+      // ABI[].remaining = oldAB.budgetItems[i].remainingIndex - sumatoria de ejecuciones.amountindex
+      const executionsSum = oldAB.budgetItems[i].executions.reduce(
+        (acc, item) => {
+          if (!item || !item.amountIndex) return acc
+          acc = sumAmountIndex([acc, item.amountIndex])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
+
+      const newRemainig = subtractAmountIndex(
+        ABI[i].remainingIndex,
+        executionsSum
+      )
+      ABI[i].remainingIndex = newRemainig
     }
-    const newAnualBudget = await createAnualBudget(data)
+  }
 
-    const duration = protocolDuration(protocol.sections.duration.duration)
+  const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
+    protocolId: protocol.id,
+    year,
+    budgetItems: ABI,
+    academicUnitsIds: protocol.sections.identification.academicUnitIds,
+  }
 
-    // Once the annual budget is created, create the annual budget team members with the references to the annual budget.
-    const ABT = generateAnualBudgetTeamMembersItems(
-        protocol.sections.identification.team,
-        newAnualBudget.id,
-        duration
-    )
+  const newAnualBudget = await upsertAnualBudget(data, budgetId)
+  const duration = protocolDuration(protocol.sections.duration.duration)
 
-    await createManyAnualBudgetTeamMember(ABT)
-    //Added this return to check if the budget was created
-    return newAnualBudget.id
+  // Generate new annual budget team members
+  const ABT = generateAnualBudgetTeamMembers(
+    protocol.sections.identification.team,
+    newAnualBudget.id,
+    duration
+  )
+
+  // Handle the case where the annual budget is reactivated
+  if (budgetId && reactivated && oldAB) {
+    ABT.forEach((newABT) => {
+      const oldABT = oldAB?.budgetTeamMembers.find(
+        (oldABT) => oldABT.teamMemberId === newABT.teamMemberId
+      )
+
+      if (!oldABT) return
+      newABT.executions = oldABT?.executions || []
+
+      const executionsSum = oldABT.executions.reduce((acc, item) => {
+        if (!item.amountIndex) return acc
+        sumAmountIndex([acc, item.amountIndex])
+        return acc
+      }, {} as AmountIndex)
+
+      if (executionsSum?.FCA) {
+        const hourlyRateInFCA =
+          oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 1
+
+        const newRemaining =
+          newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
+
+        newABT.remainingHours = newRemaining
+      }
+    })
+
+    await updateAnualBudgetState(newAnualBudget.id, AnualBudgetState.APPROVED)
+  }
+
+  // If updating an existing budget, delete old team members before creating new ones
+  if (budgetId) {
+    await deleteAnualBudgetTeamMembers(budgetId)
+  }
+
+  // Create new team members
+  await createManyAnualBudgetTeamMember(ABT)
+
+  return newAnualBudget.id
+}
+
+export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
+  const protocol = await findProtocolByIdWithBudgets(protocolId)
+  const protocolLogs = await getLogs({ protocolId })
+
+  const lastProtocolState = protocolLogs?.at(-1)?.previousState
+
+  // if (!protocol || !lastProtocolState)
+  //   return {
+  //     success: false,
+  //     notification: {
+  //       title: 'Error',
+  //       message: 'Ocurrio un error al reactivar el procotolo.',
+  //       intent: 'error',
+  //     } as const,
+  //   }
+
+  const currentYear = new Date().getFullYear()
+  const haveBudgetForCurrentYear = protocol!.anualBudgets.find(
+    (b) => b.year === currentYear
+  )
+
+  let newBudgetId
+
+  if (haveBudgetForCurrentYear) {
+    newBudgetId = await generateAnualBudget({
+      protocolId: protocolId,
+      year: currentYear,
+      budgetId: haveBudgetForCurrentYear.id,
+      reactivated: true,
+    })
+  }
+
+  if (newBudgetId)
+    await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
+
+  return await updateProtocolStateById(
+    protocolId,
+    Action.REACTIVATE,
+    ProtocolState.DISCONTINUED,
+    ProtocolState.ON_GOING,
+    undefined,
+    newBudgetId!
+  )
 }
 
 // Utilities for generating the annual budget from a protocol.
 const generateAnualBudgetItems = (
-    protocolBudgetSection: ProtocolSectionsBudget,
-    year: string
+  protocolBudgetSection: ProtocolSectionsBudget,
+  year: string
 ): AnualBudgetItem[] => {
-    return protocolBudgetSection.expenses.reduce((acc, item) => {
-        const budgetItems = item.data
-            .filter((d) => d.year === year)
-            .map((d) => {
-                return {
-                    type: item.type,
-                    amount: d.amount,
-                    detail: d.detail,
-                    remaining: d.amount,
-                    executions: [] as Execution[],
-                }
-            })
-        acc.push(...budgetItems)
-        return acc
-    }, [] as AnualBudgetItem[])
-}
-
-const generateAnualBudgetTeamMembersItems = (
-    protocolTeam: ProtocolSectionsIdentificationTeam[],
-    anualBudgetId: string | null,
-    duration: number
-): Omit<AnualBudgetTeamMember, 'id'>[] => {
-    return protocolTeam.map((item) => {
+  return protocolBudgetSection.expenses.reduce((acc, item) => {
+    const budgetItems = item.data
+      .filter((d) => d.year === year)
+      .map((d) => {
         return {
-            anualBudgetId: anualBudgetId,
-            teamMemberId: item.teamMemberId!,
-            memberRole: item.role,
-            //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
-            hours: Math.ceil(item.workingMonths && item.workingMonths > 0 ? item.hours * item.workingMonths * WEEKS_IN_MONTH : item.hours * duration),
-            remainingHours: Math.ceil(item.workingMonths && item.workingMonths > 0 ? item.hours * item.workingMonths * WEEKS_IN_MONTH : item.hours * duration),
-            executions: [] as Execution[],
+          type: item.type,
+          detail: d.detail,
+          amount: null,
+          remaining: null,
+          executions: [] as Execution[],
+          amountIndex: d.amountIndex,
+          remainingIndex: d.amountIndex,
         }
-    })
+      })
+    acc.push(...budgetItems)
+    return acc
+  }, [] as AnualBudgetItem[])
 }
 
-const generateAnualBudgetAcademicUnitRelation = async (sponsors: string[]) => {
-    const parsedSponsors = sponsors.map((s) => s.split(' - ')[1])
-    const academicUnits = await getAcademicUnitsTabs()
+const generateAnualBudgetTeamMembers = (
+  protocolTeam: ProtocolSectionsIdentificationTeam[],
+  anualBudgetId: string | null,
+  duration: number
+): Omit<AnualBudgetTeamMember, 'id'>[] => {
+  // @ts-ignore (remove later)
+  return protocolTeam.map((item) => {
+    //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
+    const hours = Math.ceil(
+      item.workingMonths && item.workingMonths > 0 ?
+        item.hours * item.workingMonths * WEEKS_IN_MONTH
+      : item.hours * duration
+    )
 
-    return academicUnits
-        .filter((e) => parsedSponsors.includes(e.shortname))
-        .map((e) => e.id)
+    if (item.toBeConfirmed && item.categoryToBeConfirmed) {
+      return {
+        anualBudgetId: anualBudgetId,
+        memberRole: item.role,
+        hours: hours,
+        remainingHours: hours,
+        categoryId: item.categoryToBeConfirmed,
+        executions: [] as Execution[],
+      }
+    }
+    return {
+      anualBudgetId: anualBudgetId,
+      teamMemberId: item.teamMemberId,
+      memberRole: item.role,
+      hours: hours,
+      remainingHours: hours,
+      executions: [] as Execution[],
+    }
+  })
 }
 
 export const protocolToAnualBudgetPreview = async (
-    protocolId: string,
-    protocolBudgetItems: ProtocolSectionsBudget,
-    protocolTeamMembers: ProtocolSectionsIdentificationTeam[],
-    duration: number
+  protocolId: string,
+  protocolBudgetItems: ProtocolSectionsBudget,
+  protocolTeamMembers: ProtocolSectionsIdentificationTeam[],
+  duration: number
 ) => {
-    const ABI = generateAnualBudgetItems(
-        protocolBudgetItems,
-        new Date().getFullYear().toString()
-    )
-    const ABT = generateAnualBudgetTeamMembersItems(
-        protocolTeamMembers,
-        null,
-        duration
-    )
+  const ABI = generateAnualBudgetItems(
+    protocolBudgetItems,
+    new Date().getFullYear().toString()
+  )
+  const ABT = generateAnualBudgetTeamMembers(
+    protocolTeamMembers,
+    null,
+    duration
+  )
 
-    const thereAreTeamMembers =
-        ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
+  const thereAreTeamMembers =
+    ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
 
-    const teamMembers = thereAreTeamMembers
-        ? await getTeamMembersByIds(ABT.map((t) => t.teamMemberId))
-        : []
+  const teamMembers =
+    thereAreTeamMembers ?
+      await getTeamMembersByIds(
+        ABT.map((t) => t.teamMemberId).filter((id) => id !== null) as string[]
+      )
+    : []
 
-    const ABTWithTeamMemberAndUserData = ABT.map((t) => {
-        const teamMember = teamMembers.find((tm) => tm.id === t.teamMemberId)
-        return {
-            ...t,
-            teamMember,
-        }
-    }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
-
+  const ABTWithTeamMemberAndUserData = ABT.map((t) => {
+    const teamMember = teamMembers.find((tm) => tm.id === t.teamMemberId)
     return {
-        year: new Date().getFullYear().toString(),
-        protocolId: protocolId,
-        budgetItems: ABI,
-        budgetTeamMembers: ABTWithTeamMemberAndUserData,
+      ...t,
+      teamMember,
     }
+  }) as unknown as Omit<AnualBudgetTeamMemberWithAllRelations, 'id'>[]
+
+  return {
+    year: new Date().getFullYear().toString(),
+    protocolId: protocolId,
+    budgetItems: ABI,
+    budgetTeamMembers: ABTWithTeamMemberAndUserData,
+  }
+}
+
+const transformAmountToAmountIndex = async (amount: number) => {
+  const fcaPrice = (await getLatestIndexPriceByUnit('FCA')) || 0
+  const fmrPrice = (await getLatestIndexPriceByUnit('FMR')) || 0
+
+  const amountInFCA = amount / fcaPrice
+  const amountInFMR = amount / fmrPrice
+
+  return {
+    FCA: amountInFCA,
+    FMR: amountInFMR,
+  } as AmountIndex
 }
 
 export const saveNewTeamMemberExecution = async (
-    amount: number,
-    anualBudgetTeamMemberId: string
+  amount: number,
+  anualBudgetTeamMemberId: string
 ) => {
-    const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(
-        anualBudgetTeamMemberId
-    )
+  const anualBudgetTeamMember = await getAnualBudgetTeamMemberById(
+    anualBudgetTeamMemberId
+  )
 
-    if (!anualBudgetTeamMember) return null
+  if (!anualBudgetTeamMember) return null
 
-    const hourlyRate =
-        anualBudgetTeamMember.teamMember.categories
-            .at(-1)
-            ?.category.price.at(-1)?.price || 0
+  const amountIndex = await transformAmountToAmountIndex(amount)
 
-    const amountExcecutedInHours = hourlyRate ? amount / hourlyRate : 0
+  // In this cases team members will exist. Cannot have executions over plain categories.
+  const hourlyRateInFCA =
+    anualBudgetTeamMember.teamMember!.categories.at(-1)?.category.amountIndex
+      ?.FCA || 1
 
-    const remainingHours =
-        anualBudgetTeamMember.remainingHours - amountExcecutedInHours
+  const amountExcecutedInHours =
+    hourlyRateInFCA ? amountIndex.FCA / hourlyRateInFCA : 0
 
-    if (!anualBudgetTeamMember.teamMember.academicUnitId) {
-        return null
-    }
+  const remainingHours =
+    anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
-    const updated = await newTeamMemberExecution(
-        anualBudgetTeamMemberId,
-        amount,
-        remainingHours,
-        anualBudgetTeamMember.teamMember.academicUnitId
-    )
-    return updated
+  if (!anualBudgetTeamMember.teamMember!.academicUnitId) {
+    return null
+  }
+
+  const updated = await newTeamMemberExecution(
+    anualBudgetTeamMemberId,
+    amountIndex,
+    remainingHours,
+    anualBudgetTeamMember.teamMember!.academicUnitId
+  )
+  return updated
 }
 
 export const saveNewItemExecution = async (
-    academicUnitId: string,
-    budgetItemIndex: number,
-    anualBudgetId: string,
-    amount: number
+  academicUnitId: string,
+  budgetItemIndex: number,
+  anualBudgetId: string,
+  amount: number
 ) => {
-    const anualBudget = await getAnualBudgetById(anualBudgetId)
+  const anualBudget = await getAnualBudgetById(anualBudgetId)
 
-    if (!anualBudget) return null
+  if (!anualBudget) return null
 
-    // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
-    // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
-    const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
-        if (index === budgetItemIndex) {
-            item.executions.push({
-                academicUnitId,
-                amount,
-                date: new Date(),
-            })
-            item.remaining =
-                item.amount -
-                item.executions.reduce((acc, item) => acc + item.amount, 0)
-        }
-        return item
-    })
+  // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
+  // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
+  const amountIndex = await transformAmountToAmountIndex(amount)
 
-    const updated = await newBudgetItemExecution(
-        anualBudgetId,
-        updatedBudgetItem
-    )
-    return updated
+  const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
+    if (index === budgetItemIndex) {
+      item.executions.push({
+        academicUnitId,
+        amount: null,
+        amountIndex,
+        date: new Date(),
+      })
+      item.remainingIndex = subtractAmountIndex(
+        item.remainingIndex,
+        amountIndex
+      )
+    }
+    return item
+  })
+
+  const updated = await newBudgetItemExecution(anualBudgetId, updatedBudgetItem)
+  return updated
 }
 
 const getAcademicUnitBudgetSummary = (
-    academicUnits: AcademicUnit[],
-    year: number
+  academicUnits: AcademicUnit[],
+  year: number
 ) => {
-    // Filter the academic unit budgets for the given year
-    const academicUnitBudgetForYear = academicUnits
-        .map((ac) => ac.budgets)
-        .flat()
+  // Filter the academic unit budgets for the given year
+  const academicUnitBudgetForYear = academicUnits
+    .map((ac) => ac.budgets)
+    .flat()
+    .filter((b) => b.from.getFullYear() === year)
+
+  // Calculate the sum of academic unit budget for the given year
+  const sumAcademicUnitBudget = academicUnitBudgetForYear
+    .filter((b) => !b.to)
+    .map((b) => b.amountIndex)
+    .filter(Boolean)
+    .reduce((acc, item) => {
+      //check null
+      if (!item) return acc
+      if (!acc) return item
+      acc = sumAmountIndex([acc, item])
+      return acc
+    }, {} as AmountIndex)
+
+  // Filter the last the academic unit that have budget changes in the given year
+  const academicUnitWithLastBudgetChange = academicUnits
+    .filter((ac) => ac.budgets.some((b) => b.to))
+    .sort((a, b) => {
+      const aLastBudgetChange = a.budgets
         .filter((b) => b.from.getFullYear() === year)
-
-    // Calculate the sum of academic unit budget for the given year
-    const sumAcademicUnitBudget = academicUnitBudgetForYear
-        .filter((b) => !b.to)
-        .map((b) => b.amount)
-        .reduce((acc, item) => acc + item, 0)
-
-    // Filter the last the academic unit that have budget changes in the given year
-    const academicUnitWithLastBudgetChange = academicUnits
-        .filter((ac) => ac.budgets.some((b) => b.to))
-        .sort((a, b) => {
-            const aLastBudgetChange = a.budgets
-                .filter((b) => b.from.getFullYear() === year)
-                .filter((b) => b.to)
-                .at(-1)
-            const bLastBudgetChange = b.budgets
-                .filter((b) => b.from.getFullYear() === year)
-                .filter((b) => b.to)
-                .at(-1)
-            if (!aLastBudgetChange || !bLastBudgetChange) return 0
-            return aLastBudgetChange.from < bLastBudgetChange.from ? -1 : 1
-        })
+        .filter((b) => b.to)
         .at(-1)
+      const bLastBudgetChange = b.budgets
+        .filter((b) => b.from.getFullYear() === year)
+        .filter((b) => b.to)
+        .at(-1)
+      if (!aLastBudgetChange || !bLastBudgetChange) return 0
+      return aLastBudgetChange.from < bLastBudgetChange.from ? -1 : 1
+    })
+    .at(-1)
 
-    // Get the actual and the previous budget in the same year for the academic unit with the last budget change
-    const [before, actual] = academicUnitWithLastBudgetChange
-        ? [
-            academicUnitWithLastBudgetChange.budgets.at(-2)?.amount,
-            academicUnitWithLastBudgetChange.budgets.at(-1)?.amount,
-        ]
-        : [0, 0]
+  // Get the actual and the previous budget in the same year for the academic unit with the last budget change
+  const [before, actual] =
+    academicUnitWithLastBudgetChange ?
+      [
+        academicUnitWithLastBudgetChange.budgets.at(-2)?.amountIndex,
+        academicUnitWithLastBudgetChange.budgets.at(-1)?.amountIndex,
+      ]
+    : [ZeroAmountIndex, ZeroAmountIndex]
 
-    if (!actual) return { value: 0, delta: 0, changeDate: '' }
+  if (!actual)
+    return { value: ZeroAmountIndex, delta: ZeroAmountIndex, changeDate: '' }
 
-    // Calculate a delta value between the actual and the previous budget in the same year
-    const deltaValue = actual && before ? actual - before : actual
+  // Calculate a delta value between the actual and the previous budget in the same year
+  const deltaValue =
+    actual && before ? subtractAmountIndex(actual, before) : actual
 
-    // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
-    const delta = deltaValue
-        ? (sumAcademicUnitBudget / (sumAcademicUnitBudget - deltaValue) - 1) *
-        100
-        : 0
+  // Calculate the delta between the sum of academic unit budget and the previous budget in the same year
+  const delta =
+    deltaValue && sumAcademicUnitBudget ?
+      {
+        FCA:
+          (sumAcademicUnitBudget.FCA /
+            (sumAcademicUnitBudget.FCA - deltaValue.FCA) -
+            1) *
+          100,
+        FMR:
+          (sumAcademicUnitBudget.FMR /
+            (sumAcademicUnitBudget.FMR - deltaValue.FMR) -
+            1) *
+          100,
+      }
+    : ZeroAmountIndex
 
-    return {
-        value: sumAcademicUnitBudget,
-        delta,
-    }
+  return {
+    value: sumAcademicUnitBudget,
+    delta,
+  }
 }
 
-const getProjectedBudgetSummary = (
-    total: number,
-    anualBudgets: Array<
-        AnualBudget & {
-            budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-        }
-    >,
-    year: number
+const removeDuplicates = (
+  inputArray: (AnualBudget & {
+    budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+  })[]
 ) => {
-    const lastCategoryWithPriceChange = anualBudgets
-        .filter((b) => b.year === year)
-        .map((b) => b.budgetTeamMembers)
-        .flat()
-        .map((b) => b.teamMember.categories)
-        .flat()
-        .filter((c) => c.category.price.some((p) => p.to))
-        .sort((a, b) => {
-            const aLastPriceChange = a.category.price.filter((p) => p.to).at(-1)
-            const bLastPriceChange = b.category.price.filter((p) => p.to).at(-1)
-            if (!aLastPriceChange || !bLastPriceChange) return 0
-            return aLastPriceChange.from < bLastPriceChange.from ? -1 : 1
-        })
-        .at(-1)
-    const [before, actual] = [
-        lastCategoryWithPriceChange?.category.price.at(-2),
-        lastCategoryWithPriceChange?.category.price.at(-1),
-    ]
+  const uniqueArray = []
+  const seenItems = new Set()
 
-    const deltaValue =
-        actual && before ? actual.price - before.price : actual?.price
+  for (const item of inputArray) {
+    const budgetItems = item.budgetItems
+    const key = JSON.stringify(budgetItems)
 
-    const delta = deltaValue ? (total / (total - deltaValue) - 1) * 100 : 0
-
-    return {
-        value: total,
-        delta: delta,
+    if (!seenItems.has(key)) {
+      uniqueArray.push(item)
+      seenItems.add(key)
     }
-}
+  }
 
-function removeDuplicates(
-    inputArray: (AnualBudget & {
-        budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    })[]
-) {
-    const uniqueArray = []
-    const seenItems = new Set()
-
-    for (const item of inputArray) {
-        const budgetItems = item.budgetItems
-        const key = JSON.stringify(budgetItems)
-
-        if (!seenItems.has(key)) {
-            uniqueArray.push(item)
-            seenItems.add(key)
-        }
-    }
-
-    return uniqueArray
+  return uniqueArray
 }
 
 export const getBudgetSummary = async (
-    academicUnitId?: string,
-    year: number = new Date().getFullYear()
+  academicUnitId?: string,
+  year: number = new Date().getFullYear()
 ) => {
-    const academicUnits = await getAcademicUnitById(academicUnitId)
+  const academicUnits = await getAcademicUnitById(academicUnitId)
 
-    if (!academicUnits)
-        return {
-            academicUnitBudgetSummary: { value: 0, delta: 0 },
-            projectedBudgetSummary: { value: 0, delta: 0 },
-            projectedBudgetSummaryApproved: { value: 0, delta: 0 },
-            spendedBudget: 0,
-        }
-    const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
-    const anualBudgets = removeDuplicates(list).filter(
-        (ab) => ab.state !== 'REJECTED'
-    )
+  if (!academicUnits) return BudgetSummaryZero
 
-    // This summary is related to protocols budgets
-    const protocolBudgetSummary = calculateTotalBudgetAggregated(
-        anualBudgets,
-        academicUnitId
-    )
+  const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
+  const anualBudgets = removeDuplicates(list).filter(
+    (ab) => ab.state !== AnualBudgetState.REJECTED
+  )
 
-    // This summary is related to academic unit budgets
-    const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(
-        academicUnits,
-        year
-    )
+  // This summary is related to protocols budgets
+  const protocolBudgetSummary = calculateTotalBudgetAggregated(
+    anualBudgets,
+    academicUnitId
+  )
 
-    const projectedBudgetSummary = getProjectedBudgetSummary(
-        protocolBudgetSummary.total,
-        anualBudgets,
-        year
-    )
+  // This summary is related to academic unit budgets
+  const academicUnitBudgetSummary = getAcademicUnitBudgetSummary(
+    academicUnits,
+    year
+  )
 
-    const projectedBudgetSummaryApproved = getProjectedBudgetSummary(
-        protocolBudgetSummary.total,
-        anualBudgets.filter((e) => e.state !== 'PENDING'),
-        year
-    )
+  const projectedBudgetSummary = { value: protocolBudgetSummary.totalPeding }
 
-    return {
-        academicUnitBudgetSummary,
-        projectedBudgetSummary,
-        projectedBudgetSummaryApproved,
-        spendedBudget: protocolBudgetSummary.ABIe + protocolBudgetSummary.ABTe,
-    }
+  const projectedBudgetSummaryApproved = {
+    value: protocolBudgetSummary.totalApproved,
+  }
+
+  return {
+    academicUnitBudgetSummary,
+    projectedBudgetSummary,
+    projectedBudgetSummaryApproved,
+    spendedBudget: sumAmountIndex([
+      protocolBudgetSummary.ABIe,
+      protocolBudgetSummary.ABTe,
+    ]),
+  }
 }
 
 export type BudgetSummaryType = Awaited<ReturnType<typeof getBudgetSummary>>

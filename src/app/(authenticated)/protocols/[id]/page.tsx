@@ -1,19 +1,15 @@
 import View from '@protocol/protocol-view-template'
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { findProtocolById } from 'repositories/protocol'
-import { PDF } from 'modules/protocol-pdf'
 
 export default async function Page({ params }: { params: { id: string } }) {
-    if (params.id === 'new') redirect('/protocols/new/0')
-    const protocol = await findProtocolById(params.id)
-    if (!protocol) {
-        redirect('/protocols')
-    }
+  if (params.id === 'new') redirect('/protocols/new/0')
+  const protocol = await findProtocolById(params.id)
 
-    return (
-        <>
-            <PDF />
-            <View sections={protocol.sections} />
-        </>
-    )
+  if (!protocol) {
+    redirect('/protocols')
+  }
+
+  return <View sections={protocol.sections} />
 }

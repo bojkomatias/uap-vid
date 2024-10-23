@@ -1,36 +1,44 @@
 'use client'
-import SectionTitle from '@protocol/elements/form-section-title'
+
+import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
+import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
+import { useProtocolContext } from '@utils/createContext'
 import { motion } from 'framer-motion'
-import dynamic from 'next/dynamic'
-const Textarea = dynamic(() => import('@protocol/elements/inputs/textarea'))
 
 export function IntroductionForm() {
-    const path = 'sections.introduction.'
+  const form = useProtocolContext()
 
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: -5 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            className="space-y-3"
-        >
-            <SectionTitle title="Introducción al proyecto" />
-            <span />
-            <>
-                <Textarea
-                    path={path + 'state'}
-                    label="estado actual del tema y principales antecedentes en la literatura"
-                />
-                <Textarea
-                    path={path + 'justification'}
-                    label="Justificación científica, académico-institucional y social"
-                />
-                <Textarea
-                    path={path + 'problem'}
-                    label="Definición del problema"
-                />
-                <Textarea path={path + 'objectives'} label="objetivos" />
-            </>
-        </motion.div>
-    )
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -5 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.7 }}
+    >
+      <Fieldset>
+        <Legend>Introducción al proyecto</Legend>
+        <FieldGroup>
+          <FormTitapTextarea
+            label="Estado del arte"
+            description="Describa el estado actual del tema y principales antecedentes en la literatura"
+            {...form.getInputProps('sections.introduction.state')}
+          />
+          <FormTitapTextarea
+            label="Justificación"
+            description="Justifique científica, académica y socialmente el proyecto"
+            {...form.getInputProps('sections.introduction.justification')}
+          />
+          <FormTitapTextarea
+            label="Definición del problema"
+            description="Describa y defina el problema a investigar"
+            {...form.getInputProps('sections.introduction.problem')}
+          />
+          <FormTitapTextarea
+            label="Objetivos"
+            description="Enuncie los objetivos de dicha investigación"
+            {...form.getInputProps('sections.introduction.objectives')}
+          />
+        </FieldGroup>
+      </Fieldset>
+    </motion.div>
+  )
 }

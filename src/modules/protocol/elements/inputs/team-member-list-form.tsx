@@ -1,254 +1,225 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
-import React, { useCallback, useEffect, useState } from 'react'
-import Select from './select'
-import NumberInput from './number-input'
-import { Check, Plus, Selector, Trash, X } from 'tabler-icons-react'
-import { Button } from '@elements/button'
-import { cx } from '@utils/cx'
-import { Combobox } from '@headlessui/react'
-import type { TeamMember } from '@prisma/client'
+import React, { Fragment } from 'react'
+import { Plus, Trash } from 'tabler-icons-react'
+import { getAllTeamMembers } from '@repositories/team-member'
+import {
+  Description,
+  Field,
+  Fieldset,
+  Label,
+  Legend,
+} from '@components/fieldset'
+import { Button } from '@components/button'
+import { FormListbox } from '@shared/form/form-listbox'
+import { FormInput } from '@shared/form/form-input'
+import { FormCombobox } from '@shared/form/form-combobox'
+import { Text } from '@components/text'
+import Info from 'modules/info'
+import { useQuery } from '@tanstack/react-query'
+import { getCategoriesForForm } from '@repositories/team-member-category'
+import { FormSwitch } from '@shared/form/form-switch'
 
 export default function TeamMemberListForm() {
-    const form = useProtocolContext()
-    const path = 'sections.identification.team'
+  const form = useProtocolContext()
 
-    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const { data: teamMembers } = useQuery({
+    queryKey: ['teamMembers'],
+    queryFn: async () => await getAllTeamMembers(),
+  })
 
-    const fetchData = useCallback(async () => {
-        const res = await fetch(`/api/team-members`, {
-            next: { revalidate: 120 },
-        })
-        setTeamMembers(await res.json())
-    }, [])
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => await getCategoriesForForm(),
+  })
 
-    useEffect(() => {
-        fetchData()
-    }, [fetchData])
+  const roles_categories = [
+    'Técnico Asistente',
+    'Técnico Asociado',
+    'Técnico Principal',
+    'Profesional Adjunto',
+    'Profesional Principal',
+  ]
 
-    return (
-        <div>
-            <div className="label text-center">miembros de equipo</div>
-            <div className="space-y-3 rounded-xl border px-4 pb-2 pt-6">
-                {form.values.sections.identification.team.map((_, index) => (
-                    <div
-                        key={index}
-                        id={`row-${index}`}
-                        className="flex w-full items-start justify-around gap-2"
-                    >
-                        <div className="w-48">
-                            <Select
-                                options={[
-                                    'Director',
-                                    'Codirector',
-                                    'Investigador UAP',
-                                    'Investigador Externo UAP',
-                                    'Técnico Asistente',
-                                    'Técnico Asociado',
-                                    'Técnico Principal',
-                                    'Profesional Adjunto',
-                                    'Profesional Principal',
-                                    'Becario CONICET',
-                                    'A definir',
-                                ]}
-                                path={`${path}.${index}.role`}
-                                label={'rol'}
-                            />
-                        </div>
-                        <TeamMemberSelector
-                            teamMembers={teamMembers}
-                            index={index}
-                        />
-                        <div className="w-20">
-                            <NumberInput
-                                path={`${path}.${index}.hours`}
-                                label={'Horas'}
-                            />
-                        </div>
-                        <div className="w-20">
-                            <NumberInput
-                                path={`${path}.${index}.workingMonths`}
-                                label={'Meses'}
-                            />
-                        </div>
-                        <Trash
-                            onClick={() => form.removeListItem(path, index)}
-                            className={`mt-[2.2rem] h-4 flex-shrink cursor-pointer self-start text-primary hover:text-gray-400 active:scale-[0.90] ${
-                                index == 0
-                                    ? 'pointer-events-none invisible'
-                                    : ''
-                            }`}
-                        />
-                    </div>
-                ))}
+  const roles_categories_ids = roles_categories.map((r_c) => {
+    const category = categories?.find((c) => c.name == r_c)
+    return { value: category?.id, label: category?.name }
+  }) as { value: string; label: string }[]
 
-                <Button
-                    onClick={() => {
-                        form.insertListItem(path, {
-                            hours: 0,
-                            last_name: '',
-                            name: '',
-                            role: '',
-                            teamMemberId: null,
-                        })
-
-                        setTimeout(() => {
-                            document
-                                .getElementById(
-                                    `row-${form.values.sections.identification.team.length}`
-                                )
-                                ?.getElementsByTagName('input')[0]
-                                .focus()
-                        }, 10)
-                    }}
-                    intent="outline"
-                    className="mx-auto w-full max-w-xs"
-                >
-                    <p> Añadir otra fila </p>
-                    <Plus className="h-4 text-gray-500" />
-                </Button>
-            </div>
-        </div>
-    )
-}
-
-function TeamMemberSelector({
-    teamMembers,
-    index,
-}: {
-    teamMembers: TeamMember[]
-    index: number
-}) {
-    const form = useProtocolContext()
-    const path = 'sections.identification.team'
-
-    const [query, setQuery] = useState('')
-
-    const filteredPeople =
-        query === ''
-            ? teamMembers
-            : teamMembers.filter((member) => {
-                  return member.name.toLowerCase().includes(query.toLowerCase())
-              })
-
-    return (
-        <div className="flex-grow">
-            <label htmlFor="select-user" className="label">
-                Miembro del equipo
-            </label>
-            <Combobox
-                as="div"
-                value={
-                    form.getInputProps(`${path}.${index}.teamMemberId`).value
+  return (
+    <Fieldset>
+      <Legend>Miembros de Equipo</Legend>
+      <Text>
+        Liste los miembros de equipo con la cantidad de horas semanales o meses
+        totales a trabajar en su defecto
+      </Text>
+      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
+        <Field className="col-span-4">
+          <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
+            <Label>A definir</Label>
+            <Description>Miembro de equipo a definir</Description>
+          </Info>
+        </Field>
+        <Field className="col-span-4">
+          <Label>Rol</Label>
+          <Description>Rol del miembro</Description>
+        </Field>
+        <Field className="col-span-8">
+          <Label>Miembro</Label>
+          <Description>
+            Seleccione miembro de equipo si existe o uno genérico si no
+          </Description>
+        </Field>
+        <Field className="col-span-2">
+          <Label>Horas</Label>
+          <Description>En una semana</Description>
+        </Field>
+        <Field className="col-span-2">
+          <Label>Meses</Label>
+          <Description>En un año</Description>
+        </Field>
+        <span />
+        {form
+          .getValues()
+          .sections.identification.team.map((_: any, index: number) => (
+            <Fragment key={index}>
+              <FormSwitch
+                checked={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
                 }
-                onChange={(e: string) => {
-                    form.setFieldValue(`${path}.${index}.teamMemberId`, e)
-                    form.setFieldValue(`${path}.${index}.name`, '')
-                    form.setFieldValue(`${path}.${index}.last_name`, '')
-                }}
-                className="relative"
-            >
-                <Combobox.Button className="relative w-full">
-                    <Combobox.Input
-                        autoComplete="off"
-                        className="input disabled:bg-gray-100"
-                        placeholder={`Seleccione un docente`}
-                        onChange={(e) => {
-                            setQuery(e.target.value)
-                            form.setFieldValue(
-                                `${path}.${index}.name`,
-                                e.target.value
-                            )
-                            form.setFieldValue(`${path}.${index}.last_name`, '')
-                        }}
-                        displayValue={() =>
-                            teamMembers.find(
-                                (e) =>
-                                    e.id ===
-                                    form.getInputProps(
-                                        `${path}.${index}.teamMemberId`
-                                    ).value
-                            )?.name ??
-                            (form.getInputProps(`${path}.${index}.name`).value +
-                                ' ' +
-                                form.getInputProps(`${path}.${index}.last_name`)
-                                    .value ||
-                                '')
-                        }
-                    />
+                disabled={index == 0}
+                title={
+                  index == 0 ?
+                    "El primer miembro de equipo no puede quedar 'a definir'"
+                  : undefined
+                }
+                label=""
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.toBeConfirmed`
+                )}
+                className="col-span-4"
+              />
 
-                    <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md pr-2 focus:outline-none">
-                        <X
-                            className={cx(
-                                'h-6 w-6 rounded-full p-1 text-gray-400 transition-all duration-200 hover:scale-110 hover:bg-gray-100 hover:stroke-2 hover:text-gray-700 active:scale-95'
-                            )}
-                            onClick={(e) => {
-                                form.setFieldValue(
-                                    `${path}.${index}.teamMemberId`,
-                                    null
-                                )
-                                form.setFieldValue(`${path}.${index}.name`, '')
-                                form.setFieldValue(
-                                    `${path}.${index}.last_name`,
-                                    ''
-                                )
-                                e.stopPropagation()
-                            }}
-                            aria-hidden="true"
-                        />
-                        <Selector
-                            className="h-4 text-gray-600 hover:text-gray-400"
-                            aria-hidden="true"
-                        />
-                    </div>
-                </Combobox.Button>
+              {(
+                form.getInputProps(
+                  `sections.identification.team.${index}.toBeConfirmed`
+                ).value
+              ) ?
+                <FormListbox
+                  className="col-span-4"
+                  label=""
+                  options={roles_categories_ids}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.categoryToBeConfirmed`
+                  )}
+                />
+              : <FormListbox
+                  className="col-span-4"
+                  label=""
+                  options={roleOptions.map((e) => ({ value: e, label: e }))}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.role`
+                  )}
+                />
+              }
+              <FormCombobox
+                className="col-span-8"
+                label=""
+                options={
+                  teamMembers?.map((e) => ({
+                    value: e.id,
+                    label: e.name,
+                  })) ?? []
+                }
+                disabled={
+                  form.getInputProps(
+                    `sections.identification.team.${index}.toBeConfirmed`
+                  ).value
+                }
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.teamMemberId`
+                )}
+              />
 
-                {filteredPeople.length > 0 ? (
-                    <Combobox.Options className="absolute z-20 mt-1.5 max-h-60 w-full overflow-auto rounded border bg-white py-1 text-sm shadow focus:outline-none">
-                        {filteredPeople.map((value) => (
-                            <Combobox.Option
-                                key={value.id}
-                                value={value.id}
-                                className={({ active }) =>
-                                    cx(
-                                        'relative cursor-default select-none py-2 pl-8 pr-2',
-                                        active ? 'bg-gray-100' : 'text-gray-600'
-                                    )
-                                }
-                            >
-                                {({ active, selected }) => (
-                                    <>
-                                        <span className="block truncate font-medium">
-                                            <span
-                                                className={cx(
-                                                    active && 'text-gray-800',
-                                                    selected && 'text-primary'
-                                                )}
-                                            >
-                                                {value.name}
-                                            </span>
-                                        </span>
+              <FormInput
+                className="col-span-2"
+                label=""
+                type="number"
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.hours`
+                )}
+              />
 
-                                        {selected && (
-                                            <span
-                                                className={cx(
-                                                    'absolute inset-y-0 left-0 flex items-center pl-2 text-primary',
-                                                    active ? 'text-white' : ''
-                                                )}
-                                            >
-                                                <Check
-                                                    className="h-4 w-4 text-gray-500"
-                                                    aria-hidden="true"
-                                                />
-                                            </span>
-                                        )}
-                                    </>
-                                )}
-                            </Combobox.Option>
-                        ))}
-                    </Combobox.Options>
-                ) : null}
-            </Combobox>
-        </div>
-    )
+              <FormInput
+                className="col-span-2"
+                label=""
+                type="number"
+                {...form.getInputProps(
+                  `sections.identification.team.${index}.workingMonths`
+                )}
+              />
+
+              {index === 0 ?
+                <span />
+              : <Button plain className="mt-1 self-start">
+                  <Trash
+                    data-slot="icon"
+                    onClick={() =>
+                      form.removeListItem('sections.identification.team', index)
+                    }
+                  />
+                </Button>
+              }
+            </Fragment>
+          ))}
+      </div>
+
+      <Button
+        plain
+        onClick={() => {
+          form.insertListItem('sections.identification.team', {
+            hours: 0,
+            last_name: '',
+            name: '',
+            role: 'Investigador UAP',
+            teamMemberId: null,
+            workingMonths: 12,
+            toBeConfirmed: false,
+            categoryToBeConfirmed: categories?.find(
+              (c) => c.name == 'Técnico Asistente'
+            )?.id,
+          })
+
+          setTimeout(() => {
+            document
+              .getElementById(
+                `row-${form.values.sections.identification.team.length}`
+              )
+              ?.getElementsByTagName('input')[0]
+              .focus()
+          }, 10)
+        }}
+        className="my-1"
+      >
+        <Plus data-slot="icon" />
+        Añadir otro miembro de equipo
+      </Button>
+    </Fieldset>
+  )
 }
+
+const roleOptions = [
+  'Director',
+  'Codirector',
+  'Investigador UAP',
+  'Investigador Externo UAP',
+  'Técnico Asistente',
+  'Técnico Asociado',
+  'Técnico Principal',
+  'Profesional Adjunto',
+  'Profesional Principal',
+  'Becario CONICET',
+  'A definir',
+]

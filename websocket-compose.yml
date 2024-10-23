@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web-socket:
+    image: uapsocket
+    restart: 'always'
+    ports:
+      - '8000:3001'
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - node-next
+
+networks:
+  node-next:
+  exposed-services:
+    external: true

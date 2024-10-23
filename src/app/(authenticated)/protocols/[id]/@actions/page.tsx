@@ -1,83 +1,58 @@
-import AcceptButton from '@protocol/elements/action-buttons/accept'
-import { DeleteButton } from '@protocol/elements/action-buttons/delete'
-import { DiscontinueButton } from '@protocol/elements/action-buttons/discontinue'
-import EditButton from '@protocol/elements/action-buttons/edit'
-import { FinishButton } from '@protocol/elements/action-buttons/finish'
-import { GenerateAnualBudgetButton } from '@protocol/elements/action-buttons/generate-budget-button'
-import PublishButton from '@protocol/elements/action-buttons/publish'
-import { BudgetDropdown } from '@protocol/elements/budgets/budget-dropdown'
+import { Action, ReviewVerdict } from '@prisma/client'
+import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
-import { canExecute } from '@utils/scopes'
+import { getActionsByRoleAndState } from '@utils/scopes'
+import { ProtocolSchema } from '@utils/zod'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 
 export default async function ActionsPage({
-    params,
+  params,
 }: {
-    params: { id: string }
+  params: { id: string }
 }) {
-    const session = await getServerSession(authOptions)
-    const protocol = await findProtocolByIdWithResearcher(params.id)
-    if (!protocol || !session) return
-    const reviews = await getReviewsByProtocol(protocol.id)
+  const session = await getServerSession(authOptions)
+  const protocol = await findProtocolByIdWithResearcher(params.id)
+  if (!protocol || !session) return
+  const reviews = await getReviewsByProtocol(protocol.id)
 
-    return (
-        <div className="flex flex-row-reverse flex-wrap items-center justify-end gap-2 p-1 print:hidden">
-            <FinishButton
-                role={session.user.role}
-                protocol={{
-                    id: protocol.id,
-                    state: protocol.state,
-                }}
-            />
-            <AcceptButton
-                role={session.user.role}
-                protocol={{
-                    id: protocol.id,
-                    state: protocol.state,
-                }}
-                reviews={reviews}
-            />
-            {/* I need to pass the whole protocol to check validity! */}
-            <PublishButton user={session.user} protocol={protocol} />
-            {canExecute(
-                'VIEW_ANUAL_BUDGET',
-                session.user.role,
-                protocol.state
-            ) &&
-                protocol.anualBudgets.length > 0 && (
-                    <BudgetDropdown budgets={protocol.anualBudgets} />
-                )}
-            {canExecute(
-                'GENERATE_ANUAL_BUDGET',
-                session.user.role,
-                protocol.state
-            ) && <GenerateAnualBudgetButton protocolId={protocol.id} />}
+  const actions = getActionsByRoleAndState(session.user.role, protocol.state)
+  let filteredActions = actions
 
-            <EditButton
-                user={session.user}
-                protocol={{
-                    id: protocol.id,
-                    state: protocol.state,
-                    researcherId: protocol.researcherId,
-                }}
-                reviews={reviews}
-            />
-            <DiscontinueButton
-                role={session.user.role}
-                protocol={{
-                    id: protocol.id,
-                    state: protocol.state,
-                }}
-            />
-            <DeleteButton
-                role={session.user.role}
-                protocol={{
-                    id: protocol.id,
-                    state: protocol.state,
-                }}
-            />
-        </div>
+  // Edit by owner
+  if (
+    !actions.includes(Action.EDIT) &&
+    actions.includes(Action.EDIT_BY_OWNER)
+  ) {
+    if (session.user.id === protocol.researcherId)
+      filteredActions.push(Action.EDIT) // I only check for edit in Dropdown, but add it only if is owner.
+  }
+  // Publish only if valid
+  if (actions.includes(Action.PUBLISH)) {
+    const validToPublish = ProtocolSchema.safeParse(protocol)
+    if (!validToPublish.success || !protocol.convocatoryId)
+      filteredActions = filteredActions.filter((e) => e !== Action.PUBLISH)
+  }
+  // Accept only if review have correct verdicts
+  if (actions.includes(Action.ACCEPT)) {
+    if (reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED))
+      filteredActions = filteredActions.filter((e) => e !== Action.ACCEPT)
+  }
+  //  Approve only if has both protocol flags and review flags
+  if (actions.includes(Action.APPROVE)) {
+    if (
+      protocol.flags.some((flag) => flag.state === false) ||
+      protocol.flags.length < 2
     )
+      filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
+  }
+
+  return (
+    <ActionsDropdown
+      actions={filteredActions}
+      protocol={protocol}
+      canViewLogs={session.user.role === 'ADMIN'}
+    />
+  )
 }

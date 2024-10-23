@@ -1,33 +1,36 @@
-import { PageHeading } from '@layout/page-heading'
+import { Heading, Subheading } from '@components/heading'
+import { ContainerAnimations } from '@elements/container-animations'
 import { getAllAcademicUnits } from '@repositories/academic-unit'
-import { getAllSecretaries } from '@repositories/user'
 import AcademicUnitsTable from 'modules/academic-unit/academic-units-table'
+import { NewAcademicUnitFormDialog } from 'modules/academic-unit/new-academic-unit-form-dialog'
 
 export default async function Page({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, academicUnits] = await getAllAcademicUnits(
-        searchParams
-    )
-    const secretaries = await getAllSecretaries()
-    if (!secretaries)
-        return <div>No hay secretarios cargados en el sistema</div>
+  const [totalRecords, academicUnits] = await getAllAcademicUnits(searchParams)
 
-    return (
-        <>
-            <PageHeading title="Unidades Académicas" />
-
-            {academicUnits && academicUnits.length > 0 ? (
-                <AcademicUnitsTable
-                    academicUnits={academicUnits}
-                    secretaries={secretaries}
-                    totalRecords={totalRecords}
-                />
-            ) : (
-                'No se encontraron unidades académicas'
-            )}
-        </>
-    )
+  return (
+    <>
+      <ContainerAnimations duration={0.4} delay={0}>
+        <div className="flex items-end">
+          <Heading>Unidades Académicas</Heading>
+          <NewAcademicUnitFormDialog />
+        </div>
+        <Subheading>
+          Lista de las unidades académicas dadas de alta en el sistema. Puede
+          asignarse secretarios así como un presupuesto anual a las mismas.
+        </Subheading>
+      </ContainerAnimations>
+      <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
+        {academicUnits && academicUnits.length > 0 ?
+          <AcademicUnitsTable
+            academicUnits={academicUnits}
+            totalRecords={totalRecords}
+          />
+        : 'No se encontraron unidades académicas'}
+      </ContainerAnimations>
+    </>
+  )
 }

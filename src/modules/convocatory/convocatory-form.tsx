@@ -1,163 +1,110 @@
 'use client'
-import { Button } from '@elements/button'
+
+import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
-import { cx } from '@utils/cx'
-import type { Convocatory } from '@utils/zod'
+import { upsertConvocatory } from '@repositories/convocatory'
 import { ConvocatorySchema } from '@utils/zod'
 import { useRouter } from 'next/navigation'
+import type { ChangeEvent } from 'react'
 import { useCallback, useTransition } from 'react'
+import { FormInput } from '@shared/form/form-input'
+import type { z } from 'zod'
+import { SubmitButton } from '@shared/submit-button'
 
 export function ConvocatoryForm({
-    convocatory,
-    isNew,
-    column = false,
+  convocatory,
+  onSubmitCallback,
 }: {
-    convocatory: Convocatory
-    isNew: boolean
-    column?: boolean
+  convocatory: z.infer<typeof ConvocatorySchema>
+  onSubmitCallback?: () => void
 }) {
-    const router = useRouter()
+  const router = useRouter()
 
-    const [isPending, startTransition] = useTransition()
-    const form = useForm<Convocatory>({
-        initialValues: convocatory,
-        transformValues: (values) => ({
-            ...values,
-            from: new Date(values.from),
-            to: new Date(values.to),
-        }),
-        validate: zodResolver(ConvocatorySchema),
-    })
+  const [isPending, startTransition] = useTransition()
+  const form = useForm<z.infer<typeof ConvocatorySchema>>({
+    initialValues: {
+      id: convocatory.id,
+      name: convocatory.name,
+      year: convocatory.year,
+      // @ts-ignore -- I am transforming values later
+      from: convocatory.from.toISOString().slice(0, 16),
+      // @ts-ignore
+      to: convocatory.to.toISOString().slice(0, 16),
+    },
+    transformValues: (values) => ({
+      ...values,
+      from: new Date(values.from),
+      to: new Date(values.to),
+    }),
+    validate: zodResolver(ConvocatorySchema),
+  })
 
-    const upsertConvocatory = useCallback(
-        async (convocatory: Convocatory) => {
-            if (isNew) {
-                const res = await fetch(`/api/convocatories`, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(convocatory),
-                })
+  const submitConvocatory = useCallback(
+    async (convocatory: z.infer<typeof ConvocatorySchema>) => {
+      const upserted = await upsertConvocatory(convocatory)
 
-                if (res.status === 200) {
-                    notifications.show({
-                        title: 'Convocatoria creada',
-                        message: 'La convocatoria ha sido creada con éxito',
-                        intent: 'success',
-                    })
-                }
-                router.refresh()
-                return router.push(`/convocatories`)
+      if (upserted)
+        notifications.show({
+          title: 'Convocatoria guardada',
+          message: 'La convocatoria ha sido guardado con éxito',
+          intent: 'success',
+        })
+
+      startTransition(() => {
+        router.refresh()
+        if (onSubmitCallback) onSubmitCallback()
+      })
+    },
+    [router, onSubmitCallback]
+  )
+
+  return (
+    <form
+      onSubmit={form.onSubmit(
+        // @ts-ignore --Overriding values
+        (values) => submitConvocatory(values)
+      )}
+    >
+      <Fieldset>
+        <FieldGroup>
+          <FormInput
+            label="Nombre"
+            description="Nombre de la convocatoria"
+            {...form.getInputProps('name')}
+          />
+          <FormInput
+            label="Año"
+            description="Año en la cual entraría en vigencia"
+            type="number"
+            {...form.getInputProps('year')}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              form.setFieldValue('year', Number(e.target.value))
             }
-            const res = await fetch(`/api/convocatories/${convocatory.id}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(convocatory),
-            })
+          />
+          <FormInput
+            label="Desde"
+            description="Fecha desde que comienza a correr"
+            type="datetime-local"
+            {...form.getInputProps('from')}
+            onChange={(e: any) => form.setFieldValue('from', e.target.value)}
+          />
 
-            if (res.status === 200) {
-                notifications.show({
-                    title: 'Convocatoria guardada',
-                    message: 'La convocatoria ha sido guardado con éxito',
-                    intent: 'success',
-                })
-                startTransition(() => router.refresh())
-            }
-        },
-        [isNew, router]
-    )
+          <FormInput
+            label="Hasta"
+            description="Fecha en la cual finaliza"
+            type="datetime-local"
+            {...form.getInputProps('to')}
+            onChange={(e: any) => form.setFieldValue('to', e.target.value)}
+          />
+        </FieldGroup>
+      </Fieldset>
 
-    return (
-        <form
-            onSubmit={form.onSubmit((values) => upsertConvocatory(values))}
-            className={cx(
-                column
-                    ? 'flex flex-col gap-1'
-                    : 'mx-auto mt-8 max-w-5xl place-items-stretch gap-3 lg:grid lg:grid-cols-2'
-            )}
-        >
-            <div className="p-1">
-                <label className="label">Nombre</label>
-                <input
-                    className="input"
-                    type="text"
-                    placeholder="Convocatoria - AAAA"
-                    {...form.getInputProps('name')}
-                />
-                {form.getInputProps('name').error && (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-                        *{form.getInputProps('name').error}
-                    </p>
-                )}
-            </div>
-            <div className=" p-1">
-                <label className="label">Año</label>
-                <input
-                    className="input"
-                    type="number"
-                    value={form.getInputProps('year').value}
-                    onChange={(e) =>
-                        form.setFieldValue('year', Number(e.target.value))
-                    }
-                />
-                {form.getInputProps('year').error && (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-                        *{form.getInputProps('year').error}
-                    </p>
-                )}
-            </div>
-
-            <div className="p-1">
-                <label className="label">Fecha desde</label>
-                <input
-                    type="datetime-local"
-                    className="input"
-                    defaultValue={new Date(form.getInputProps('from').value)
-                        .toISOString()
-                        .substring(0, 16)}
-                    // @ts-ignore
-                    onChange={(e) => form.setFieldValue('from', e.target.value)}
-                />
-                {form.getInputProps('from').error && (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-                        *{form.getInputProps('from').error}
-                    </p>
-                )}
-            </div>
-            <div className=" p-1">
-                <label className="label">Fecha hasta</label>
-                <input
-                    type="datetime-local"
-                    className="input"
-                    placeholder="Desde"
-                    defaultValue={new Date(form.getInputProps('to').value)
-                        .toISOString()
-                        .substring(0, 16)}
-                    // @ts-ignore
-                    onChange={(e) => form.setFieldValue('to', e.target.value)}
-                />
-
-                {form.getInputProps('to').error && (
-                    <p className=" pl-3 pt-1 text-xs text-gray-600 saturate-[80%]">
-                        *{form.getInputProps('to').error}
-                    </p>
-                )}
-            </div>
-
-            <Button
-                intent="secondary"
-                type="submit"
-                loading={isPending}
-                className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
-            >
-                {isNew ? 'Crear convocatoria' : 'Actualizar convocatoria'}
-            </Button>
-        </form>
-    )
+      <FormActions>
+        <SubmitButton isLoading={isPending}>
+          {!convocatory.id ? 'Crear convocatoria' : 'Actualizar convocatoria'}
+        </SubmitButton>
+      </FormActions>
+    </form>
+  )
 }

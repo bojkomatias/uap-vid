@@ -1,124 +1,136 @@
 'use client'
+
 import {
-    saveNewItemExecution,
-    saveNewTeamMemberExecution,
+  saveNewItemExecution,
+  saveNewTeamMemberExecution,
 } from '@actions/anual-budget/action'
-import { Button } from '@elements/button'
 import { notifications } from '@elements/notifications'
-import CurrencyInput from '@elements/currency-input'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnit } from '@prisma/client'
 import { ExecutionType } from '@utils/anual-budget'
-import { cx } from '@utils/cx'
 import { currencyFormatter } from '@utils/formatters'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useTransition } from 'react'
+import React, { useState, useTransition } from 'react'
 import { z } from 'zod'
+import { FormInput } from '@shared/form/form-input'
+import { parseLocaleNumber } from '@elements/currency-input'
+import { Button } from '@components/button'
+import { SubmitButton } from '@shared/submit-button'
+import { FieldGroup } from '@components/fieldset'
+import { FormCombobox } from '@shared/form/form-combobox'
 
 const BudgetNewExecution = ({
-    academicUnit,
-    maxAmount,
-    budgetItemPositionIndex,
-    anualBudgetTeamMemberId,
-    executionType,
+  academicUnits,
+  maxAmount,
+  budgetItemPositionIndex,
+  anualBudgetTeamMemberId,
+  executionType,
 }: {
-    academicUnit?: AcademicUnit
-    maxAmount: number
-    budgetItemPositionIndex: number
-    anualBudgetTeamMemberId?: string
-    executionType: ExecutionType
+  academicUnits?: AcademicUnit[]
+  maxAmount: number
+  budgetItemPositionIndex: number
+  anualBudgetTeamMemberId?: string
+  executionType: ExecutionType
 }) => {
-    const [isPending, startTransition] = useTransition()
-    const router = useRouter()
-    const path = usePathname()
-    const anualBudgetId = path?.split('/')[3]
+  const [isPending, startTransition] = useTransition()
+  const [isSubmitting, setSubmitting] = useState(false)
+  const router = useRouter()
+  const path = usePathname()
+  const anualBudgetId = path?.split('/')[3]
 
-    const form = useForm({
-        initialValues: {
-            amount: 1000,
-        },
-        validate: zodResolver(
-            z.object({
-                amount: z
-                    .number()
-                    .min(0, { message: 'El valor debe ser mayor a 0' })
-                    .max(maxAmount, {
-                        message: `Monto restante: $${
-                            !maxAmount ? 0 : currencyFormatter.format(maxAmount)
-                        }`,
-                    }),
-            })
-        ),
-        validateInputOnChange: true,
-    })
-    const newExecution = async (amount: number) => {
-        try {
-            if (
-                anualBudgetTeamMemberId &&
-                executionType === ExecutionType.TeamMember
-            ) {
-                await saveNewTeamMemberExecution(
-                    amount,
-                    anualBudgetTeamMemberId
-                )
-            }
+  const form = useForm({
+    initialValues: {
+      amount: 1000,
+      academicUnit: undefined,
+    },
+    validate: zodResolver(
+      z.object({
+        amount: z.coerce
+          .number()
+          .min(1, { message: 'El valor debe ser mayor a 0' })
+          .max(maxAmount, {
+            message: `No puede exceder ${
+              !maxAmount ? 0 : currencyFormatter.format(maxAmount)
+            }`,
+          }),
+      })
+    ),
+  })
 
-            if (executionType === ExecutionType.Item) {
-                if (!academicUnit) return
-                await saveNewItemExecution(
-                    academicUnit.id,
-                    budgetItemPositionIndex,
-                    anualBudgetId!,
-                    amount
-                )
-            }
-            notifications.show({
-                title: 'Ejecución creada',
-                message: 'La ejecución ha sido creada con éxito',
-                intent: 'success',
-            })
-            startTransition(() => router.refresh())
-        } catch (error) {
-            notifications.show({
-                title: 'Error',
-                message: 'Ha ocurrido un error al crear la ejecución',
-                intent: 'error',
-            })
-        }
+  const newExecution = async ({
+    amount,
+    academicUnit,
+  }: {
+    amount: number
+    academicUnit?: string
+  }) => {
+    console.log('SABING ASDASDA', amount)
+    setSubmitting(true)
+    try {
+      if (
+        anualBudgetTeamMemberId &&
+        executionType === ExecutionType.TeamMember
+      ) {
+        await saveNewTeamMemberExecution(amount, anualBudgetTeamMemberId)
+      }
+
+      if (executionType === ExecutionType.Item) {
+        if (!academicUnit)
+          return notifications.show({
+            title: 'Falta unidad académica',
+            message:
+              'Debe seleccionar una unidada académica a la cual se le computa el gasto',
+            intent: 'error',
+          })
+        await saveNewItemExecution(
+          academicUnit,
+          budgetItemPositionIndex,
+          anualBudgetId!,
+          amount
+        )
+      }
+
+      notifications.show({
+        title: 'Ejecución creada',
+        message: 'La ejecución ha sido creada con éxito',
+        intent: 'success',
+      })
+      startTransition(() => {
+        setSubmitting(false)
+        router.refresh()
+      })
+    } catch (error) {
+      setSubmitting(false)
+      notifications.show({
+        title: 'Error',
+        message: 'Ha ocurrido un error al crear la ejecución',
+        intent: 'error',
+      })
     }
-    return (
-        <form className="flex items-baseline gap-2">
-            <div className="flex flex-col ">
-                <CurrencyInput
-                    maxAmount={maxAmount}
-                    defaultPrice={0}
-                    className={cx(
-                        'min-w-[7rem] rounded-md py-2.5 text-xs',
-                        !form.isValid('amount') &&
-                            'border-error-200 bg-error-50'
-                    )}
-                    priceSetter={(e) => form.setFieldValue('amount', e)}
-                />
-                <p className="mt-2 text-xs text-error-500">
-                    {form.getInputProps('amount').error}
-                </p>
-            </div>
+  }
 
-            <Button
-                className="py-2.5 text-xs shadow-sm"
-                intent="secondary"
-                // Disabled if it hasn't changed
-                disabled={!form.isValid('amount') || !form.isDirty('amount')}
-                loading={isPending}
-                onClick={(e) => {
-                    e.preventDefault()
-                    newExecution(form.values.amount)
-                }}
-            >
-                {isPending ? 'Creando' : 'Crear'}
-            </Button>
-        </form>
-    )
+  return (
+    <form onSubmit={form.onSubmit((values) => newExecution(values))}>
+      <FieldGroup className="flex items-end justify-between">
+        {academicUnits ?
+          <FormCombobox
+            label="Unidad academica"
+            options={academicUnits.map((e) => ({ label: e.name, value: e.id }))}
+            {...form.getInputProps('academicUnit')}
+          />
+        : null}
+        <FormInput
+          type="number"
+          label="Monto"
+          {...form.getInputProps('amount')}
+        />
+
+        <SubmitButton isLoading={isSubmitting || isPending}>
+          Cargar
+        </SubmitButton>
+      </FieldGroup>
+    </form>
+  )
 }
 
 export default BudgetNewExecution

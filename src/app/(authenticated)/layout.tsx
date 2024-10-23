@@ -1,18 +1,20 @@
-import Navigation from '@auth/navigation'
+import { AppLayout } from '@auth/navigation'
 import { Breadcrumbs } from '@elements/breadcrumbs'
 
 export default async function RootLayout({
-    children,
-    drawer,
+  children,
+  dialog,
 }: {
-    children: React.ReactNode
-    drawer: React.ReactNode
+  children: React.ReactNode
+  dialog: React.ReactNode
 }) {
-    return (
-        <Navigation>
-            <Breadcrumbs />
-            {children}
-            {drawer}
-        </Navigation>
-    )
+  return (
+    <AppLayout>
+      <div className="max-lg:hidden">
+        <Breadcrumbs />
+      </div>
+      {dialog}
+      {children}
+    </AppLayout>
+  )
 }

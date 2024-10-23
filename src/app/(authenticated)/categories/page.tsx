@@ -1,40 +1,35 @@
-import { PageHeading } from '@layout/page-heading'
-import { cx } from '@utils/cx'
-import { buttonStyle } from '@elements/button/styles'
-import Link from 'next/link'
 import CategoriesTable from 'modules/categories/team-member-category-table'
 import { getCategories } from '@repositories/team-member-category'
+import { Heading, Subheading } from '@components/heading'
+import { Button } from '@components/button'
+import { Plus } from 'tabler-icons-react'
+import { NewCategoryDialog } from 'modules/categories/new-category-dialog'
+import { ContainerAnimations } from '@elements/container-animations'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
 export default async function Page({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: { [key: string]: string }
+  searchParams: { [key: string]: string }
 }) {
-    const [totalRecords, categories] = await getCategories(searchParams)
+  const [totalRecords, categories] = await getCategories(searchParams)
+  const { currentFCA } = await getCurrentIndexes()
 
-    return (
-        <>
-            <PageHeading title="Categorías de miembros de equipo de investigación" />
-            <p className="ml-2 text-sm text-gray-500">
-                Lista de las categorías asignables a los miembros de equipo de
-                un proyecto de investigación.
-            </p>
-            <div className="flex flex-row-reverse">
-                <Link
-                    scroll={false}
-                    href={'/categories/new'}
-                    className={cx(
-                        buttonStyle('secondary'),
-                        'float-right mt-2 w-fit'
-                    )}
-                >
-                    Crear categoría
-                </Link>
-            </div>
-            <CategoriesTable
-                categories={categories}
-                totalRecords={totalRecords}
-            />
-        </>
-    )
+  return (
+    <>
+      <ContainerAnimations duration={0.4} delay={0}>
+        <div className="flex items-end">
+          <Heading>Categorías de miembros de equipo de investigación</Heading>
+          <NewCategoryDialog />
+        </div>
+        <Subheading>
+          Lista de las categorías asignables a los miembros de equipo de un
+          proyecto de investigación.
+        </Subheading>
+      </ContainerAnimations>
+      <ContainerAnimations duration={0.3} delay={0.1} animation={2}>
+        <CategoriesTable categories={categories} totalRecords={totalRecords} currentFCA={currentFCA} />
+      </ContainerAnimations>
+    </>
+  )
 }

@@ -1,65 +1,70 @@
+import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'
+import { AnualBudgetState } from '@prisma/client'
 import type {
-    AcademicUnit,
-    AnualBudgetItem,
-    AnualBudgetState,
-} from '@prisma/client'
-import type {
-    AnualBudgetTeamMemberWithAllRelations,
-    TotalBudgetCalculation,
+  AnualBudgetTeamMemberWithAllRelations,
+  TotalBudgetCalculation,
 } from '@utils/anual-budget'
-import { currencyFormatter } from '@utils/formatters'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
 import { BudgetItems } from './budget-items'
-import { Badge } from '@elements/badge'
-import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants';
+import { Badge } from '@components/badge'
+import type { WEEKS_IN_YEAR, WEEKS_IN_HALF_YEAR } from '../../utils/constants'
+import { Currency } from '@shared/currency'
+import { Text } from '@components/text'
+import { Subheading } from '@components/heading'
+import { ContainerAnimations } from '@elements/container-animations'
+import { getCurrentIndexes } from '@repositories/finance-index'
 
-export function BudgetView({
-    budgetId,
-    state,
-    duration,
-    budgetItems,
-    budgetTeamMembers,
-    calculations,
-    academicUnits,
+export async function BudgetView({
+  budgetId,
+  state,
+  duration,
+  budgetItems,
+  budgetTeamMembers,
+  calculations,
+  academicUnits,
 }: {
-    budgetId: string
-    state: AnualBudgetState
-    duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
-    budgetItems: AnualBudgetItem[]
-    budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-    calculations: TotalBudgetCalculation
-    academicUnits: AcademicUnit[]
+  budgetId: string
+  state: AnualBudgetState
+  duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
+  budgetItems: AnualBudgetItem[]
+  budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+  calculations: TotalBudgetCalculation
+  academicUnits: AcademicUnit[]
 }) {
-    return (
-        <div className="mt-10 space-y-6 ">
-            <BudgetTeamMemberFees
-                editable={state === 'PENDING'}
-                budgetTeamMembers={budgetTeamMembers}
-                ABTe={calculations.ABTe}
-                ABTr={calculations.ABTr}
-                duration={duration}
-            />
+  const currentIndexes = await getCurrentIndexes()
 
-            <BudgetItems
-                academicUnits={academicUnits}
-                budgetId={budgetId}
-                editable={state === 'PENDING'}
-                budgetItems={budgetItems}
-                ABIe={calculations.ABIe}
-                ABIr={calculations.ABIr}
-            />
+  return (
+    <ContainerAnimations animation={3}>
+      <div>
+        <BudgetTeamMemberFees
+          editable={state === AnualBudgetState.PENDING}
+          budgetTeamMembers={budgetTeamMembers}
+          ABTe={calculations.ABTe}
+          ABTr={calculations.ABTr}
+          duration={duration}
+        />
 
-            <div className="flex justify-end pt-4">
-                <Badge className="flex gap-2 text-lg">
-                    {' '}
-                    <span className="font-normal">
-                        Total de presupuesto (ARS):
-                    </span>
-                    <span className="font-semibold">
-                        ${currencyFormatter.format(calculations.total)}
-                    </span>
-                </Badge>
-            </div>
+        <BudgetItems
+          academicUnits={academicUnits}
+          budgetId={budgetId}
+          editable={state === AnualBudgetState.PENDING}
+          budgetItems={budgetItems}
+          ABIe={calculations.ABIe}
+          ABIr={calculations.ABIr}
+          currentIndexes={currentIndexes}
+        />
+
+        <div className="my-10 mb-20 flex justify-end pt-4">
+          <Badge color="teal">
+            <Subheading className="!text-xl !font-normal">
+              Total del presupuesto:
+            </Subheading>
+            <Text className="!text-xl">
+              <Currency amountIndex={calculations.total} />
+            </Text>
+          </Badge>
         </div>
-    )
+      </div>
+    </ContainerAnimations>
+  )
 }

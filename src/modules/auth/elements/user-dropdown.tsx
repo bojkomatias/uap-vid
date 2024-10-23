@@ -1,126 +1,110 @@
 'use client'
+
 import { signOut } from 'next-auth/react'
-import Link from 'next/link'
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { cx } from '@utils/cx'
-import Image from 'next/image'
+import { MenuButton } from '@headlessui/react'
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
 import type { User } from '@prisma/client'
-import RolesDictionary from '@utils/dictionaries/RolesDictionary'
-import { Logout, Settings } from 'tabler-icons-react'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
+import { Logout, Moon, Selector, Settings, Sun } from 'tabler-icons-react'
+import {
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownDivider,
+  DropdownHeader,
+  DropdownLabel,
+} from '@components/dropdown'
+import { Avatar } from '@components/avatar'
+import { AnimationsSwapper } from '@shared/animations-swapper'
 
-export const UserDropdown = ({ user }: { user: User }) => {
-    const [loading, setLoading] = useState(false)
+export function UserDropdown({ user }: { user: User }) {
+  const [loading, setLoading] = useState(false)
 
-    const path = usePathname()
-    if (user) {
-        return (
-            <>
-                <span className="hidden flex-col items-end lg:flex">
-                    <span className="text-xs font-medium">{user.name}</span>
-                </span>
-                <Menu as="div" className="relative ml-1">
-                    <div>
-                        <Menu.Button
-                            disabled={loading}
-                            className="group flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 focus:ring-offset-primary"
-                        >
-                            <span className="sr-only">Open user menu</span>
-                            {user.image ? (
-                                loading ? (
-                                    <div className="flex h-10 w-10 items-center justify-center">
-                                        <span className="loader h-8 w-8"></span>
-                                    </div>
-                                ) : (
-                                    <Image
-                                        src={user.image}
-                                        className="h-10 w-10 overflow-hidden rounded-full"
-                                        alt="Image de usuario"
-                                        width={100}
-                                        height={100}
-                                    />
-                                )
-                            ) : loading ? (
-                                <div className="flex h-10 w-10 items-center justify-center">
-                                    <span className="loader h-8 w-8"></span>
-                                </div>
-                            ) : (
-                                // <UserCircle className="h-10 w-10 stroke-[1.5px]" />
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/30 font-semibold">
-                                    {user.name.split(' ')[0].substring(0, 1) +
-                                        user.name
-                                            .split(' ')
-                                            .at(-1)
-                                            ?.substring(0, 1)}
-                                </div>
-                            )}
-                        </Menu.Button>
-                    </div>
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                    >
-                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="px-4 py-3">
-                                <p className="ml-2 mt-1 text-[0.8rem] font-semibold leading-4 text-gray-800">
-                                    {RolesDictionary[user.role]}
-                                </p>
-                                <p className="ml-2 truncate text-xs font-medium leading-loose text-gray-700">
-                                    {user.email}
-                                </p>
-                            </div>
-                            <div className="py-1">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <Link
-                                            scroll={false}
-                                            href={'/profile'}
-                                            className={cx(
-                                                'block w-full px-6 py-2 text-left text-sm font-medium text-gray-700',
-                                                active && 'bg-gray-100',
-                                                path == '/profile' &&
-                                                    'pointer-events-none bg-gray-100 font-bold'
-                                            )}
-                                            passHref
-                                        >
-                                            <Settings className="-mt-0.5 mr-2 inline h-4 w-4" />
-                                            Cuenta
-                                        </Link>
-                                    )}
-                                </Menu.Item>
-                            </div>
-                            <div className="py-1">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <button
-                                            className={cx(
-                                                'block w-full px-6 py-2 text-left text-sm font-semibold text-gray-700',
-                                                active && 'bg-gray-100'
-                                            )}
-                                            onClick={() => {
-                                                setLoading(true)
-                                                signOut({ callbackUrl: '/' })
-                                            }}
-                                        >
-                                            <Logout className="-mt-0.5 mr-2 inline h-4 w-4" />
-                                            Cerrar sesión
-                                        </button>
-                                    )}
-                                </Menu.Item>
-                            </div>
-                        </Menu.Items>
-                    </Transition>
-                </Menu>
-            </>
-        )
-    }
+  return (
+    <Dropdown>
+      <MenuButton
+        className="flex items-center gap-3 rounded-xl border border-transparent p-1 data-[active]:border-gray-200 data-[hover]:border-gray-200 data-[active]:bg-gray-950/5 data-[hover]:bg-gray-950/5 dark:data-[active]:border-gray-700 dark:data-[hover]:border-gray-700"
+        aria-label="Account options"
+      >
+        {loading ?
+          <div className="flex size-10 items-center justify-center">
+            <span className="loader size-8 text-gray-300 dark:text-gray-700"></span>
+          </div>
+        : user.image ?
+          <Avatar square className="size-10" src={user.image} />
+        : <Avatar
+            square
+            initials={
+              user.name.split(' ')[0].substring(0, 1) +
+              user.name.split(' ').at(-1)?.substring(0, 1)
+            }
+            className="size-10 bg-primary-950 text-white dark:bg-white dark:text-primary-950"
+          />
+        }
+        <span className="block text-left">
+          <span className="block text-sm/5 font-medium text-black dark:text-white">
+            {user.name.split(' ')[0]} {user.name.split(' ')[2]}
+          </span>
+          <span className="block text-xs/5 text-zinc-500">
+            {RolesDictionary[user.role]}
+          </span>
+        </span>
+        <Selector className="ml-auto mr-1 size-4 shrink-0 stroke-gray-400" />
+      </MenuButton>
+      <DropdownMenu className="min-w-[--button-width]">
+        <DropdownHeader>
+          <div className="pr-6">
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">
+              Autenticado como
+            </div>
+            <div className="text-xs/6 font-medium text-zinc-800 dark:text-white">
+              {user.email}
+            </div>
+          </div>
+        </DropdownHeader>
+        <DropdownDivider />
+        <DropdownItem href="/profile">
+          <Settings data-slot="icon" />
+          <DropdownLabel>Cuenta</DropdownLabel>
+        </DropdownItem>
+        <DropdownDivider />
+        <DarkModeToggler />
+        <AnimationsSwapper />
+        <DropdownDivider />
+        <DropdownItem
+          onClick={() => {
+            setLoading(true)
+            signOut({ callbackUrl: '/' })
+          }}
+        >
+          <Logout data-slot="icon" />
+          <DropdownLabel>Cerrar sesión</DropdownLabel>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  )
+}
 
-    return <></>
+const DarkModeToggler = () => {
+  const htmlTag = document.querySelector('html')!
+  const isDark = htmlTag.classList.contains('dark')
+
+  return (
+    <DropdownItem
+      onClick={() => {
+        if (isDark) {
+          htmlTag.classList.remove('dark')
+          localStorage.removeItem('dark-mode')
+        } else {
+          htmlTag.classList.add('dark')
+          localStorage.setItem('dark-mode', 'true')
+        }
+      }}
+    >
+      {isDark ?
+        <Sun data-slot="icon" />
+      : <Moon data-slot="icon" />}
+      <DropdownLabel> {isDark ? 'Modo claro' : 'Modo oscuro'}</DropdownLabel>
+    </DropdownItem>
+  )
 }

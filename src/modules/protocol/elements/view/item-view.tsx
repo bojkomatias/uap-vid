@@ -1,26 +1,29 @@
 import React from 'react'
 import { EmptyStateItem } from './empty-state-item'
+import {
+  DescriptionDetails,
+  DescriptionTerm,
+} from '@components/description-list'
 interface ShortDataProps {
-    title: string
-    value: string
+  title: string
+  value: string | null
 }
 const ItemView = ({ title, value }: ShortDataProps) => {
-    return (
-        <div className="sm:col-span-1">
-            {title === 'Materia' && value.length <= 0 ? null : (
-                <>
-                    <dt className="text-sm font-medium text-gray-500">
-                        {title}
-                    </dt>
-                    {value ? (
-                        <dd className="mt-1 text-sm text-gray-900">{value}</dd>
-                    ) : (
-                        <EmptyStateItem />
-                    )}
-                </>
-            )}
-        </div>
-    )
+  return (
+    <>
+      {title === 'Materia' && value && value.length <= 0 ? null : (
+        <>
+          <DescriptionTerm>{title}</DescriptionTerm>
+          {value ?
+            <DescriptionDetails>{value}</DescriptionDetails>
+          : <DescriptionDetails>
+              <EmptyStateItem />
+            </DescriptionDetails>
+          }
+        </>
+      )}
+    </>
+  )
 }
 
 export default ItemView

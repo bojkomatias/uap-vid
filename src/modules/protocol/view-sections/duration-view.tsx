@@ -26,12 +26,10 @@ const DurationView = ({ data }: DurationViewProps) => {
                 data: item.data.reduce((newVal: ListRowValues[], item) => {
                     newVal.push([
                         {
-                            up: 'Tarea',
-                            down: item.task,
+                            up: '',
+                            down: '• ' + item.task,
                             inverted: true,
                         },
-                        // Fake last to override last:class
-                        { up: '', down: '' },
                     ])
                     return newVal
                 }, []),

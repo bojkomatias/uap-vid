@@ -1,117 +1,104 @@
 'use client'
-import { Button } from '@elements/button'
+
 import { notifications } from '@elements/notifications'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useTransition } from 'react'
+import { z } from 'zod'
+import { RoleSchema } from '@utils/zod'
+import { useForm, zodResolver } from '@mantine/form'
+import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
+import { FormInput } from '@shared/form/form-input'
+import { SubmitButton } from '@shared/submit-button'
+import { FormListbox } from '@shared/form/form-listbox'
+import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 
-import { ROLE } from '@utils/zod'
-import { RoleSelector } from './elements/role-selector'
+const CreateUserSchema = z.object({
+  name: z
+    .string()
+    .min(6, { message: 'El nombre debe tener al menos 6 caracteres' }),
+  email: z.string().email({ message: 'Debe tener el formato de email' }),
+  role: RoleSchema,
+  password: z
+    .string()
+    .min(1, { message: 'La contraseña no puede estar vacía' }),
+})
 
-export default function UserForm() {
-    const router = useRouter()
-    const [newUser, setNewUser] = useState({ role: ROLE.RESEARCHER })
-    const [loading, setLoading] = useState(false)
+export function UserForm() {
+  const router = useRouter()
 
-    const createNewUser = async () => {
-        setLoading(true)
-        const res = await fetch(`/api/auth/signup`, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newUser),
-        })
-        if (res.status === 201) {
-            notifications.show({
-                title: 'Usuario creado',
-                message: 'El usuario fue creado correctamente',
-                intent: 'success',
-            })
-            setLoading(false)
-            router.refresh()
-            router.push('/users')
-        } else if (res.status === 422) {
-            notifications.show({
-                title: 'Usuario existente',
-                message: 'El usuario ya existe',
-                intent: 'error',
-            })
-            setLoading(false)
-        }
+  const [isPending, startTransition] = useTransition()
+  const form = useForm<z.infer<typeof CreateUserSchema>>({
+    initialValues: {
+      name: '',
+      email: '',
+      role: 'RESEARCHER',
+      password: '',
+    },
+    validate: zodResolver(CreateUserSchema),
+    validateInputOnBlur: true,
+  })
+
+  const submitNewUser = async (user: z.infer<typeof CreateUserSchema>) => {
+    const res = await fetch(`/api/auth/signup`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+    if (res.status === 201) {
+      notifications.show({
+        title: 'Usuario creado',
+        message: 'El usuario fue creado correctamente',
+        intent: 'success',
+      })
+      startTransition(() => router.refresh())
     }
+    if (res.status === 422) {
+      return notifications.show({
+        title: 'Usuario existente',
+        message: 'Un usuario ya existe con ese email',
+        intent: 'error',
+      })
+    }
+  }
 
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                createNewUser()
-            }}
-            className="mx-auto mt-28 max-w-5xl place-items-stretch lg:grid lg:grid-cols-2"
-        >
-            <div className="m-3 p-1">
-                <label className="label">Nombre Completo</label>
-                <input
-                    required
-                    className="input"
-                    type="text"
-                    name="name"
-                    placeholder="John Doe"
-                    onChange={(e) =>
-                        setNewUser({
-                            ...newUser,
-                            [e.target.name]: e.target.value,
-                        })
-                    }
-                />
-            </div>
-            <div className="m-3 p-1">
-                <label className="label">Email</label>
-                <input
-                    required
-                    className="input"
-                    type="email"
-                    name="email"
-                    placeholder="ejemplo@uap.edu.ar"
-                    onChange={(e) =>
-                        setNewUser({
-                            ...newUser,
-                            [e.target.name]: e.target.value,
-                        })
-                    }
-                />
-            </div>
-            <div className="m-3 p-1">
-                <label className="label">Contraseña</label>
-                <input
-                    required
-                    className="input"
-                    type="password"
-                    name="password"
-                    placeholder="****"
-                    onChange={(e) =>
-                        setNewUser({
-                            ...newUser,
-                            [e.target.name]: e.target.value,
-                        })
-                    }
-                />
-            </div>
-            <div className="m-3 p-1">
-                <label className="label">Rol</label>
-                <RoleSelector user={newUser} />
-            </div>
-            <Button
-                intent="secondary"
-                type="submit"
-                className="float-right m-4 lg:col-start-2 lg:col-end-3 lg:place-self-end"
-            >
-                {loading ? (
-                    <span className="loader-primary h-4 w-4"></span>
-                ) : (
-                    'Crear Nuevo Usuario'
-                )}
-            </Button>
-        </form>
-    )
+  return (
+    <form onSubmit={form.onSubmit((values) => submitNewUser(values))}>
+      <Fieldset>
+        <FieldGroup>
+          <FormInput
+            label="Nombre"
+            description="Nombre del usuario"
+            {...form.getInputProps('name')}
+          />
+          <FormInput
+            type="email"
+            label="Email"
+            description="Email del nuevo usuario"
+            {...form.getInputProps('email')}
+          />
+          <FormInput
+            type="password"
+            label="Contraseña"
+            description="Una contraseña, luego será modificada por el usuario al ingresar"
+            {...form.getInputProps('password')}
+          />
+          <FormListbox
+            label="Rol"
+            description="El rol mediante el cual el usuario va a interactuar sobre el sistema"
+            options={Object.entries(RolesDictionary).map(([value, label]) => ({
+              value,
+              label,
+            }))}
+            {...form.getInputProps('role')}
+          />
+        </FieldGroup>
+      </Fieldset>
+      <FormActions>
+        <SubmitButton isLoading={isPending}>Crear usuario</SubmitButton>
+      </FormActions>
+    </form>
+  )
 }

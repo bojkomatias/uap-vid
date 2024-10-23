@@ -1,46 +1,42 @@
 'use client'
-import { Button } from '@elements/button'
+import { Button } from '@components/button'
 import { notifications } from '@elements/notifications'
 import { approveAnualBudget } from '@repositories/anual-budget'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
+import { Check } from 'tabler-icons-react'
 
 export function ApproveAnualBudget({ id }: { id: string }) {
-    const router = useRouter()
-    const [isPending, startTransition] = useTransition()
-    return (
-        <Button
-            loading={isPending}
-            intent="secondary"
-            onClick={async () => {
-                const res = await approveAnualBudget(id)
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
 
-                if (!res)
-                    return notifications.show({
-                        title: 'Error al aprobar',
-                        message:
-                            'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
-                        intent: 'error',
-                    })
-                if (res) {
-                    const r = await fetch(
-                        `/api/protocol/${res.protocol.id}/approve`,
-                        {
-                            method: 'PUT',
-                            body: JSON.stringify(res.protocol),
-                        }
-                    )
-                    if (r)
-                        notifications.show({
-                            title: 'Presupuesto aprobado',
-                            message: 'El presupuesto fue aprobado con éxito',
-                            intent: 'success',
-                        })
-                    startTransition(() => router.refresh())
-                }
-            }}
-        >
-            Aprobar presupuesto
-        </Button>
-    )
+  return (
+    <Button
+      color="teal"
+      disabled={isPending}
+      onClick={async () => {
+        startTransition(async () => {
+          const res = await approveAnualBudget(id)
+
+          if (res) {
+            notifications.show({
+              title: 'Presupuesto aprobado',
+              message: 'El presupuesto fue aprobado con éxito',
+              intent: 'success',
+            })
+            return router.refresh()
+          }
+          return notifications.show({
+            title: 'Error al aprobar',
+            message:
+              'Ocurrió un error al aprobar el presupuesto, intente de nuevo',
+            intent: 'error',
+          })
+        })
+      }}
+    >
+      <Check data-slot="icon" />
+      Aprobar presupuesto
+    </Button>
+  )
 }

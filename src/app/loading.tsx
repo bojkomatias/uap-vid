@@ -1,27 +1,28 @@
 export default function Loading() {
-    return (
-        <div className="mx-auto mt-20 w-full max-w-[1600px] animate-pulse">
-            <h2 className="mb-3 h-8 w-1/3 rounded bg-gray-100" />
-            <h3 className="h-5 w-2/3 rounded bg-gray-100" />
-
-            <div className="flex flex-row-reverse">
-                <div className="h-10 w-40 rounded bg-gray-100" />
-            </div>
-            <div className="mx-12 mt-20 space-y-4">
-                <div className="h-12 w-full rounded bg-gray-100" />
-                <div className="space-y-3 px-2">
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                    <div className="h-8 w-full rounded bg-gray-100" />
-                </div>
-            </div>
-        </div>
-    )
+  return (
+    <>
+      <div className="container">
+        <div className="dot"></div>
+        <div className="traveler"></div>
+      </div>
+      <svg width="0" height="0" className="svg">
+        <defs>
+          <filter id="uib-jelly-triangle-ooze">
+            <feGaussianBlur
+              in="SourceGraphic"
+              stdDeviation="3.333"
+              result="blur"
+            />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+              result="ooze"
+            />
+            <feBlend in="SourceGraphic" in2="ooze" />
+          </filter>
+        </defs>
+      </svg>
+    </>
+  )
 }
