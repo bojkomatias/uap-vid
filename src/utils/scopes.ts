@@ -47,6 +47,8 @@ const Role_SCOPE: { [key in keyof typeof Role]: Action[] } = {
     Action.EDIT_BY_OWNER,
     Action.PUBLISH,
     Action.VIEW_ANUAL_BUDGET,
+    Action.ASSIGN_TO_METHODOLOGIST,
+    Action.ASSIGN_TO_SCIENTIFIC,
   ],
   [Role.METHODOLOGIST]: [
     Action.REVIEW,
@@ -110,9 +112,7 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
     Action.GENERATE_ANUAL_BUDGET,
   ],
   [ProtocolState.FINISHED]: [],
-  [ProtocolState.DISCONTINUED]: [
-    Action.REACTIVATE
-  ],
+  [ProtocolState.DISCONTINUED]: [Action.REACTIVATE],
   [ProtocolState.DELETED]: [],
 }
 
