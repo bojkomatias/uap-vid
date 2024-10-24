@@ -71,7 +71,7 @@ export default async function Layout({
     return <ConfirmTeamMembersForm protocol={protocol} />
   else
     return (
-      <>
+      <div className="pointer-events-none ">
         {modal}
         <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
         <ContextMenu
@@ -149,6 +149,6 @@ export default async function Layout({
 
           <ChatFullComponent user={session.user} protocolId={protocol.id} />
         </ContextMenu>
-      </>
+      </div>
     )
 }
