@@ -34,7 +34,6 @@ export function VerifyUserDataForm({ user }: { user: User }) {
 
   const submitVerifyUserData = useCallback(
     async (userDataUpdated: z.infer<typeof VerifyUserDataSchema>) => {
-     
       startTransition(async () => {
         const updated = await verifyUserData(user.id, userDataUpdated)
         if (updated)
@@ -77,6 +76,7 @@ export function VerifyUserDataForm({ user }: { user: User }) {
             {...form.getInputProps('newPassword')}
           />
           <FormInput
+            className="pointer-events-none"
             label="Confirme su nueva contraseña"
             type="password"
             description="Repita la nueva contraseña"
