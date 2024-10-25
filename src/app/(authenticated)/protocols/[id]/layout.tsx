@@ -71,7 +71,7 @@ export default async function Layout({
     return <ConfirmTeamMembersForm protocol={protocol} />
   else
     return (
-      <div className="pointer-events-none ">
+      <div>
         {modal}
         <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
         <ContextMenu

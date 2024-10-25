@@ -87,7 +87,7 @@ export default function ReviewForm({
   )
 
   return (
-    <div id="review-inside-container">
+    <div id="review-inside-container pointer-events-none">
       <div>
         <Heading>Realizar revisión</Heading>
         <Text>
