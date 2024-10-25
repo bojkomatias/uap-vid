@@ -76,7 +76,6 @@ export function VerifyUserDataForm({ user }: { user: User }) {
             {...form.getInputProps('newPassword')}
           />
           <FormInput
-            className="pointer-events-none"
             label="Confirme su nueva contraseña"
             type="password"
             description="Repita la nueva contraseña"
