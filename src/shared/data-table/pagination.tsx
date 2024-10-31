@@ -2,7 +2,7 @@
 import { useMemo } from 'react'
 import RecordsDropdown from './records-dropdown'
 import { useSearchParams } from 'next/navigation'
-import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+import { useUpdateQuery } from 'hooks/updateQuery'
 import {
   ChevronLeft,
   ChevronRight,
