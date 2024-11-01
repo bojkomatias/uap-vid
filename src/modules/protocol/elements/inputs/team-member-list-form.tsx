@@ -41,10 +41,10 @@ export default function TeamMemberListForm() {
     'Profesional Principal',
   ]
 
-  const roles_categories_ids = roles_categories.map((r_c) => {
-    const category = categories?.find((c) => c.name == r_c)
-    return { value: category?.id, label: category?.name }
-  }) as { value: string; label: string }[]
+  const roles_categories_ids = roles_categories.map((r_c) => ({
+    value: categories?.find((c) => c.name === r_c)?.id!,
+    label: r_c,
+  }))
 
   return (
     <Fieldset>
@@ -53,7 +53,7 @@ export default function TeamMemberListForm() {
         Liste los miembros de equipo con la cantidad de horas semanales o meses
         totales a trabajar en su defecto
       </Text>
-      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
+      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1 space-y-2">
         <Field className="col-span-4">
           <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
             <Label>A definir</Label>
@@ -67,7 +67,8 @@ export default function TeamMemberListForm() {
         <Field className="col-span-8">
           <Label>Miembro</Label>
           <Description>
-            Seleccione miembro de equipo si existe o uno genérico si no
+            Seleccione miembro de equipo si existe o escriba su nombre abajo del
+            selector
           </Description>
         </Field>
         <Field className="col-span-2">
@@ -101,7 +102,6 @@ export default function TeamMemberListForm() {
                 )}
                 className="col-span-4"
               />
-
               {(
                 form.getInputProps(
                   `sections.identification.team.${index}.toBeConfirmed`
@@ -110,6 +110,11 @@ export default function TeamMemberListForm() {
                 <FormListbox
                   className="col-span-4"
                   label=""
+                  placeholder={
+                    form.getInputProps(
+                      `sections.identification.team.${index}.toBeConfirmed`
+                    ).value && 'Seleccione una categoría'
+                  }
                   options={roles_categories_ids}
                   {...form.getInputProps(
                     `sections.identification.team.${index}.categoryToBeConfirmed`
@@ -124,24 +129,42 @@ export default function TeamMemberListForm() {
                   )}
                 />
               }
-              <FormCombobox
-                className="col-span-8"
-                label=""
-                options={
-                  teamMembers?.map((e) => ({
-                    value: e.id,
-                    label: e.name,
-                  })) ?? []
-                }
-                disabled={
-                  form.getInputProps(
-                    `sections.identification.team.${index}.toBeConfirmed`
-                  ).value
-                }
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.teamMemberId`
-                )}
-              />
+              <div className="col-span-8 flex flex-col">
+                <FormCombobox
+                  label=""
+                  placeholder="Si el miembro de equipo no existe, escriba el nombre en abajo"
+                  options={
+                    teamMembers?.map((e) => ({
+                      value: e.id,
+                      label: e.name,
+                    })) ?? []
+                  }
+                  disabled={
+                    form.getInputProps(
+                      `sections.identification.team.${index}.toBeConfirmed`
+                    ).value
+                  }
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.teamMemberId`
+                  )}
+                />
+
+                <FormInput
+                  className="float-left"
+                  placeholder="Nombre del miembro de equipo"
+                  label=""
+                  style={{ fontSize: '11px', padding: '1px 10px' }}
+                  type="text"
+                  disabled={
+                    form.getInputProps(
+                      `sections.identification.team.${index}.toBeConfirmed`
+                    ).value
+                  }
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.name`
+                  )}
+                />
+              </div>
 
               <FormInput
                 className="col-span-2"
@@ -151,7 +174,6 @@ export default function TeamMemberListForm() {
                   `sections.identification.team.${index}.hours`
                 )}
               />
-
               <FormInput
                 className="col-span-2"
                 label=""
@@ -160,7 +182,6 @@ export default function TeamMemberListForm() {
                   `sections.identification.team.${index}.workingMonths`
                 )}
               />
-
               {index === 0 ?
                 <span />
               : <Button plain className="mt-1 self-start">
