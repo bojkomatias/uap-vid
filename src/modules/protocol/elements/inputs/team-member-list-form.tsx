@@ -132,7 +132,7 @@ export default function TeamMemberListForm() {
               <div className="col-span-8 flex flex-col">
                 <FormCombobox
                   label=""
-                  placeholder="Si el miembro de equipo no existe, escriba el nombre en abajo"
+                  placeholder="Si el miembro de equipo no existe, escriba el nombre abajo"
                   options={
                     teamMembers?.map((e) => ({
                       value: e.id,
