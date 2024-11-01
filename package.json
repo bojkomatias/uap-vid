@@ -1,6 +1,5 @@
 {
   "private": true,
-  "target": "es2021",
   "scripts": {
     "dev": "next dev",
     "build": "pnpx prisma generate && next build",

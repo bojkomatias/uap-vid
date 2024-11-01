@@ -18,9 +18,8 @@ import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
 import { useForm } from '@mantine/form'
 import { QuestionMark } from 'tabler-icons-react'
-import Info from 'modules/info'
+import Info from '@shared/info'
 import { SubmitButton } from '@shared/submit-button'
-
 
 export const SignIn = () => {
   const router = useRouter()

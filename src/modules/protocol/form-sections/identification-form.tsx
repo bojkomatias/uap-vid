@@ -49,7 +49,7 @@ export function IdentificationForm() {
           />
           <FormCombobox
             label="Carrera"
-            description="Seleccione la carrera que más se relacionada esté al proyecto de investigación"
+            description="Seleccione la carrera que más relacionada esté al proyecto de investigación"
             options={
               careers?.map((e) => ({ value: e.id, label: e.name })) ?? []
             }

@@ -45,7 +45,7 @@ import {
   calculateTotalBudgetAggregated,
   type AnualBudgetTeamMemberWithAllRelations,
 } from '@utils/anual-budget'
-import { protocolDuration } from '@utils/anual-budget/protocol-duration'
+import { protocolDuration } from '@utils/constants'
 import { WEEKS_IN_MONTH } from '@utils/constants'
 
 /**

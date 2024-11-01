@@ -34,7 +34,6 @@ export function VerifyUserDataForm({ user }: { user: User }) {
 
   const submitVerifyUserData = useCallback(
     async (userDataUpdated: z.infer<typeof VerifyUserDataSchema>) => {
-     
       startTransition(async () => {
         const updated = await verifyUserData(user.id, userDataUpdated)
         if (updated)

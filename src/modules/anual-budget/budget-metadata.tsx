@@ -9,7 +9,7 @@ import {
   AnualBudgetStateDictionary,
 } from '@utils/dictionaries/AnualBudgetStateDictionary'
 import { dateFormatter } from '@utils/formatters'
-import Info from 'modules/info'
+import Info from '@shared/info'
 import Link from 'next/link'
 
 export const BudgetMetadata = ({

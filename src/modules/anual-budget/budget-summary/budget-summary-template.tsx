@@ -5,9 +5,9 @@ import { Heading } from '@components/heading'
 import { AnualBudgetStateDictionary } from '@utils/dictionaries/AnualBudgetStateDictionary'
 import type { AmountIndex } from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
-import useBudgetSummary from 'hooks/budgetSummaryHook'
+import useBudgetSummary from 'hooks/budgetSummary'
 import { Currency } from '@shared/currency'
-import Info from 'modules/info'
+import Info from '@shared/info'
 import {
   BudgetCardDoughnut,
   BudgetCardDoughnutDark,
