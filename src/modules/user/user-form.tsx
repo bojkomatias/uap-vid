@@ -16,7 +16,10 @@ const CreateUserSchema = z.object({
   name: z
     .string()
     .min(6, { message: 'El nombre debe tener al menos 6 caracteres' }),
-  email: z.string().email({ message: 'Debe tener el formato de email' }),
+  email: z
+    .string()
+    .email({ message: 'Debe tener el formato de email' })
+    .transform((email) => email.toLowerCase()),
   role: RoleSchema,
   password: z
     .string()
@@ -76,18 +79,18 @@ export function UserForm() {
           <FormInput
             type="email"
             label="Email"
-            description="Email del nuevo usuario"
+            description="Email del usuario"
             {...form.getInputProps('email')}
           />
           <FormInput
             type="password"
             label="Contraseña"
-            description="Una contraseña, luego será modificada por el usuario al ingresar"
+            description="Una contraseña, luego será modificada por el usuario cuando inicie sesión por primera vez"
             {...form.getInputProps('password')}
           />
           <FormListbox
             label="Rol"
-            description="El rol mediante el cual el usuario va a interactuar sobre el sistema"
+            description="El rol mediante el cual el usuario va a interactuar con el sistema"
             options={Object.entries(RolesDictionary).map(([value, label]) => ({
               value,
               label,
