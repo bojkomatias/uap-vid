@@ -1,4 +1,9 @@
-import { Action, ReviewVerdict } from '@prisma/client'
+import {
+  Action,
+  ReviewVerdict,
+  ProtocolFlag,
+  type Prisma,
+} from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
@@ -7,14 +12,27 @@ import { ProtocolSchema } from '@utils/zod'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 
+type ProtocolWithResearcher = Prisma.ProtocolGetPayload<{
+  include: {
+    researcher: { select: { id: true; name: true; email: true } }
+    convocatory: { select: { id: true; name: true } }
+    anualBudgets: {
+      select: { createdAt: true; year: true; id: true; state: true }
+    }
+    flags: true
+  }
+}>
+
 export default async function ActionsPage({
   params,
 }: {
   params: { id: string }
 }) {
   const session = await getServerSession(authOptions)
-  const protocol = await findProtocolByIdWithResearcher(params.id)
-  if (!protocol || !session) return
+  const protocol = (await findProtocolByIdWithResearcher(
+    params.id
+  )) as ProtocolWithResearcher
+  if (!protocol || !session) return null
   const reviews = await getReviewsByProtocol(protocol.id)
 
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
@@ -42,17 +60,11 @@ export default async function ActionsPage({
   //  Approve only if has both protocol flags and review flags
   if (actions.includes(Action.APPROVE)) {
     if (
-      protocol.flags.some((flag) => flag.state === false) ||
-      protocol.flags.length < 2
+      protocol.flags?.some((flag: ProtocolFlag) => flag.state === false) ||
+      protocol.flags?.length < 2
     )
       filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
   }
 
-  return (
-    <ActionsDropdown
-      actions={filteredActions}
-      protocol={protocol}
-      canViewLogs={session.user.role === 'ADMIN'}
-    />
-  )
+  return <ActionsDropdown actions={filteredActions} protocol={protocol} />
 }

@@ -17,21 +17,198 @@ import { getCurrentIndexes } from './finance-index'
 import { logEvent } from './log'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
+import { withLogging } from '@utils/logging'
 
-const findProtocolByIdWithResearcher = cache(
-  async (id: string) =>
-    await prisma.protocol.findUnique({
-      where: {
-        id,
+const getProtocolBudgetData = async (year: string) => {
+  // Get latest FCA index
+  const latestIndex = await prisma.index.findFirst({
+    where: { unit: 'FCA' },
+    include: {
+      values: true,
+    },
+  })
+  if (!latestIndex?.values.length) throw new Error('No FCA index found')
+
+  // Sort values by date and get the latest one
+  const sortedValues = [...latestIndex.values].sort(
+    (a, b) => new Date(b.from).getTime() - new Date(a.from).getTime()
+  )
+  const currentFCA = sortedValues[0].price
+
+  const protocols = await prisma.protocol.findMany({
+    where: {
+      state: {
+        in: [ProtocolState.ACCEPTED, ProtocolState.ON_GOING],
       },
-      include: {
-        researcher: { select: { id: true, name: true, email: true } },
-        convocatory: { select: { id: true, name: true } },
-        anualBudgets: {
-          select: { createdAt: true, year: true, id: true, state: true },
+    },
+    select: {
+      id: true,
+      protocolNumber: true,
+      createdAt: true,
+      state: true,
+      sections: {
+        select: {
+          identification: {
+            select: {
+              title: true,
+              academicUnitIds: true,
+              team: {
+                select: {
+                  name: true,
+                  teamMemberId: true,
+                  role: true,
+                  hours: true,
+                  workingMonths: true,
+                },
+              },
+            },
+          },
+          duration: {
+            select: {
+              duration: true,
+              modality: true,
+            },
+          },
+          budget: {
+            select: {
+              expenses: true,
+            },
+          },
         },
       },
+    },
+  })
+
+  // Get all unique teamMemberIds
+  const teamMemberIds = protocols
+    .flatMap((p) => p.sections.identification.team)
+    .map((t) => t.teamMemberId)
+    .filter((id): id is string => id !== null)
+
+  // Get all unique academic unit IDs
+  const academicUnitIds = protocols
+    .flatMap((p) => p.sections.identification.academicUnitIds || [])
+    .filter((id): id is string => id !== null)
+
+  // Fetch team members data
+  const teamMembers = await prisma.teamMember.findMany({
+    where: {
+      id: { in: teamMemberIds },
+    },
+    include: {
+      categories: {
+        include: {
+          category: {
+            select: {
+              name: true,
+              amountIndex: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  // Fetch academic units data
+  const academicUnits = await prisma.academicUnit.findMany({
+    where: {
+      id: { in: academicUnitIds },
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  })
+
+  // Create maps for quick lookup
+  const teamMemberMap = new Map(teamMembers.map((tm) => [tm.id, tm]))
+  const academicUnitMap = new Map(academicUnits.map((au) => [au.id, au]))
+
+  // Transform protocols into flattened format
+  const flattenedData = protocols.map((protocol) => {
+    const teamMembers = protocol.sections.identification.team.map((member) => {
+      const teamMember =
+        member.teamMemberId ? teamMemberMap.get(member.teamMemberId) : null
+      const currentCategory = teamMember?.categories[0]?.category
+      const hourlyPrice =
+        currentCategory ? currentCategory.amountIndex.FCA * currentFCA : 0
+      const totalCost =
+        hourlyPrice * (member.hours || 0) * (member.workingMonths || 0) * 4
+
+      return {
+        protocolNumber: protocol.protocolNumber,
+        name: member.name || teamMember?.name || 'Desconocido',
+        role: member.role,
+        category: currentCategory?.name || 'Sin categoría',
+        hoursAssigned: member.hours || 0,
+        workingMonths: member.workingMonths || 12,
+        hourlyPrice,
+        totalCost,
+      }
     })
+
+    // Flatten and filter expenses by year
+    const expenses: { name: string; amount: number }[] = []
+    const budgetExpenses = protocol.sections.budget?.expenses || []
+    budgetExpenses.forEach((expenseType: any) => {
+      const type = expenseType.type
+      expenseType.data.forEach((expense: any) => {
+        if (expense.amount && expense.amount !== 0 && expense.year === year) {
+          expenses.push({
+            name: `${type}: ${expense.detail}`,
+            amount: expense.amount,
+          })
+        }
+      })
+    })
+
+    // Get academic unit names
+    const academicUnits = (
+      protocol.sections.identification.academicUnitIds || []
+    ).map((id) => academicUnitMap.get(id)?.name || 'Sin unidad académica')
+
+    // Format year with duration
+    const startYear = new Date(protocol.createdAt ?? '').getFullYear() + 1
+    const duration = protocol.sections.duration?.duration || 0
+    const yearWithDuration = `${startYear} (${duration} meses)`
+
+    return {
+      projectTitle: protocol.sections.identification.title,
+      academicUnits:
+        academicUnits.length > 0 ? academicUnits : ['Sin unidad académica'],
+      teamMembers,
+      expenses,
+      createdAt: protocol.createdAt,
+      state: protocol.state,
+      yearWithDuration,
+    }
+  })
+
+  return flattenedData
+}
+const findProtocolByIdWithResearcher = cache(
+  withLogging(
+    'findProtocolByIdWithResearcher',
+    async (id: string) =>
+      await prisma.protocol.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+
+          state: true,
+          researcherId: true,
+          convocatoryId: true,
+          researcher: { select: { id: true, name: true, email: true } },
+          convocatory: { select: { id: true, name: true } },
+          anualBudgets: {
+            select: { createdAt: true, year: true, id: true, state: true },
+          },
+          flags: true,
+        },
+      })
+  )
 )
 
 const getProtocolMetadata = cache(
@@ -57,12 +234,15 @@ const getProtocolMetadata = cache(
     })
 )
 const findProtocolById = cache(
-  async (id: string) =>
-    await prisma.protocol.findUnique({
-      where: {
-        id,
-      },
-    })
+  withLogging(
+    'findProtocolById',
+    async (id: string) =>
+      await prisma.protocol.findUnique({
+        where: {
+          id,
+        },
+      })
+  )
 )
 
 const findProtocolByIdWithBudgets = cache(
@@ -677,9 +857,9 @@ const getProtocolsByRole = cache(
 )
 
 export {
+  findProtocolByIdWithResearcher,
   findProtocolById,
   getProtocolMetadata,
-  findProtocolByIdWithResearcher,
   updateProtocolById,
   updateProtocolResearcher,
   createProtocol,
@@ -692,4 +872,5 @@ export {
   updateProtocolTeamMembers,
   updateProtocolConvocatory,
   findProtocolByIdWithBudgets,
+  getProtocolBudgetData,
 }

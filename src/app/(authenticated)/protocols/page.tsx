@@ -9,6 +9,7 @@ import { ContainerAnimations } from '@elements/container-animations'
 import { getAcademicUnitsNameAndShortname } from '@repositories/academic-unit'
 import { getActiveCareersForForm } from '@repositories/career'
 import React from 'react'
+import DownloadTabularData from '@protocol/elements/download-tabular-data'
 
 // SSR Server Component, so no need to fetch from api endpoint
 export default async function Page({
@@ -32,8 +33,9 @@ export default async function Page({
   return (
     <>
       <ContainerAnimations duration={0.4} delay={0}>
-        <div className="flex items-end">
+        <div className="flex items-end gap-2">
           <Heading>Lista de proyectos de investigación</Heading>
+          <DownloadTabularData />
           {session.user.role !== 'SCIENTIST' && (
             <Button href={'/protocols/new/0'}>
               <FileReport data-slot="icon" /> Nuevo proyecto
