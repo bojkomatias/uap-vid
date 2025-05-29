@@ -18,8 +18,14 @@ import { FieldGroup, Fieldset, FormActions } from '@components/fieldset'
 import { FormInput } from '@shared/form/form-input'
 import { useForm } from '@mantine/form'
 import { QuestionMark } from 'tabler-icons-react'
+<<<<<<< HEAD
 import Info from '@shared/info'
 import { SubmitButton } from '@shared/submit-button'
+=======
+import Info from 'modules/info'
+import { SubmitButton } from '@shared/submit-button'
+
+>>>>>>> origin/develop
 
 export const SignIn = () => {
   const router = useRouter()

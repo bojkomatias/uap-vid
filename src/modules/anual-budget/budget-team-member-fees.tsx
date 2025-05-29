@@ -226,9 +226,12 @@ export function BudgetTeamMemberFees({
                     </td>
                     <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
                       <Currency
+<<<<<<< HEAD
                         defaultFCA={
                           !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
                         }
+=======
+>>>>>>> origin/develop
                         amountIndex={
                           teamMemberId ?
                             calculateHourRateGivenTMCategory(
@@ -245,9 +248,12 @@ export function BudgetTeamMemberFees({
                       )}
                     >
                       <Currency
+<<<<<<< HEAD
                         defaultFCA={
                           !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
                         }
+=======
+>>>>>>> origin/develop
                         amountIndex={multiplyAmountIndex(
                           teamMemberId ?
                             calculateHourRateGivenTMCategory(
@@ -260,9 +266,12 @@ export function BudgetTeamMemberFees({
                     </td>
                     <td className="px-3 py-5 text-right text-sm text-gray-600 ">
                       <Currency
+<<<<<<< HEAD
                         defaultFCA={
                           !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
                         }
+=======
+>>>>>>> origin/develop
                         amountIndex={multiplyAmountIndex(
                           teamMemberId ?
                             calculateHourRateGivenTMCategory(
@@ -298,7 +307,10 @@ export function BudgetTeamMemberFees({
                           teamMember!.categories.at(-1)?.category.name ??
                           'Sin categoría'
                         }
+<<<<<<< HEAD
                         //ARREGLAR
+=======
+>>>>>>> origin/develop
                         obrero={
                           teamMember!.categories.at(-1)?.pointsObrero ?
                             {

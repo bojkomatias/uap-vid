@@ -226,6 +226,10 @@ const generateAnualBudgetItems = (
   }, [] as AnualBudgetItem[])
 }
 
+<<<<<<< HEAD
+=======
+// TODO: review this function again. We want an specific assignment, not the last one.
+>>>>>>> origin/develop
 const generateAnualBudgetTeamMembers = (
   protocolTeam: ProtocolSectionsIdentificationTeam[],
   anualBudgetId: string | null,
@@ -234,12 +238,24 @@ const generateAnualBudgetTeamMembers = (
   // @ts-ignore (remove later)
   return protocolTeam.map((item) => {
     //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
+<<<<<<< HEAD
     const hours = Math.ceil(
       item.workingMonths && item.workingMonths > 0 ?
         item.hours * item.workingMonths * WEEKS_IN_MONTH
       : item.hours * duration
     )
 
+=======
+    const hoursAssigned =
+      item.assignments.filter((a) => !a.to).at(0)?.hours ?? 0
+
+    const hours = Math.ceil(
+      item.workingMonths && item.workingMonths > 0 ?
+        hoursAssigned * item.workingMonths * WEEKS_IN_MONTH
+      : hoursAssigned * duration
+    )
+
+>>>>>>> origin/develop
     if (item.toBeConfirmed && item.categoryToBeConfirmed) {
       return {
         anualBudgetId: anualBudgetId,

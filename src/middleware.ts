@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 export default withAuth(
   async function middleware(req) {
     const token = await getToken({ req })
+
     //Useful headers. I'm following this thread from StackOverflow https://stackoverflow.com/questions/75362636/how-can-i-get-the-url-pathname-on-a-server-component-next-js-13
     const url = new URL(req.url)
     const origin = url.origin
@@ -103,5 +104,13 @@ export default withAuth(
 
 //Configuration to run for all routes except for Next.js internal routes
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/',
+    '/api/:path*',
+    '/protocols/:path*',
+    '/convocatories/:path*',
+    '/team-members/:path*',
+    '/users/:path*',
+    '/academic-units/:path*',
+  ],
 }

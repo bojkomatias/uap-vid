@@ -479,7 +479,49 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 // PROTOCOL SECTIONS IDENTIFICATION SCHEMA
 /////////////////////////////////////////
+export const TeamAssignmentSchema = z.object({
+  categoryToBeConfirmed: z.string().nullable(),
+  role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  hours: z.coerce
+    .number({
+      invalid_type_error: 'Este campo debe ser numérico',
+    })
+    .min(1, {
+      message: 'Debe ser un numero positivo',
+    })
+    .max(400, {
+      message: 'No se pueden asignar tantas horas',
+    }),
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+})
 
+export const IdentificationTeamSchema = z.object({
+  hours: z.coerce.number().nullable(),
+  last_name: z.string().nullable(),
+  name: z.string().nullable(),
+  role: z.string().nullable(),
+  teamMemberId: z.string().nullable(),
+  workingMonths: z.coerce.number().default(12).nullable(),
+  toBeConfirmed: z.boolean().default(false).nullable(),
+  categoryToBeConfirmed: z.string().nullable(),
+  assignments: z.array(TeamAssignmentSchema),
+})
+
+export const ConfirmTeamSchema = z.object({
+  team: z.array(
+    z.object({
+      teamMemberId: z
+        .string()
+        .nullable()
+        .refine((val) => val !== null && val.length > 0, {
+          message: 'Debe seleccionar un miembro de equipo',
+        }),
+    })
+  ),
+})
+
+<<<<<<< HEAD
 export const IdentificationTeamSchema = z.object({
   hours: z.coerce
     .number({
@@ -530,6 +572,25 @@ export const IdentificationSchema = z.object({
         //Al menos un integrante debe tener el rol de Director,
         const hasDirector = value.some((team) => team.role === 'Director')
 
+=======
+export const IdentificationSchema = z.object({
+  courseId: z.string().nullable().optional(),
+  careerId: z
+    .string()
+    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
+  academicUnitIds: z
+    .string()
+    .array()
+    .min(1, 'Debe selecionar al menos una unidad académica'),
+  title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
+  team: IdentificationTeamSchema.array()
+    .min(1, { message: 'Debe tener al menos un integrante' })
+    .refine(
+      (value) => {
+        //Al menos un integrante debe tener el rol de Director,
+        const hasDirector = value.some((team) => team.role === 'Director')
+
+>>>>>>> origin/develop
         if (!hasDirector) return false
         return true
       },

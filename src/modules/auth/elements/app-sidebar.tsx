@@ -32,7 +32,11 @@ import { CurrentConvocatory } from '@convocatory/timer'
 import { UserDropdown } from './user-dropdown'
 import { signOut } from 'next-auth/react'
 import { IndexSwapper } from '@shared/index-swapper'
+<<<<<<< HEAD
 import Info from '@shared/info'
+=======
+import Info from 'modules/info'
+>>>>>>> origin/develop
 import { AnimationsSwapper } from '@shared/animations-swapper'
 
 export function AppSidebar({

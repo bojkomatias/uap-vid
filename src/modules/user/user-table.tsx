@@ -11,7 +11,11 @@ import {
 import SearchBar from '@shared/data-table/search-bar'
 import { Badge } from '@components/badge'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
+<<<<<<< HEAD
 import { useUpdateQuery } from 'hooks/updateQuery'
+=======
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+>>>>>>> origin/develop
 import { useSearchParams } from 'next/navigation'
 
 type UserWithCount = Prisma.UserGetPayload<{

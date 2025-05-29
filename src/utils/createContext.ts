@@ -22,6 +22,10 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
         workingMonths: 12,
         toBeConfirmed: false,
         categoryToBeConfirmed: null,
+<<<<<<< HEAD
+=======
+        assignments: [],
+>>>>>>> origin/develop
       },
     ],
     title: '',

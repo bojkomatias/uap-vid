@@ -1,5 +1,6 @@
 'use server'
 
+
 import { prisma } from '../utils/bd'
 import type {
   Action,
@@ -234,15 +235,12 @@ const getProtocolMetadata = cache(
     })
 )
 const findProtocolById = cache(
-  withLogging(
-    'findProtocolById',
     async (id: string) =>
-      await prisma.protocol.findUnique({
-        where: {
-          id,
-        },
-      })
-  )
+        await prisma.protocol.findUnique({
+            where: {
+                id,
+            },
+        })
 )
 
 const findProtocolByIdWithBudgets = cache(
@@ -274,13 +272,71 @@ const getResearcherEmailByProtocolId = cache(async (id: string) => {
   }
 })
 
+// Manage the history of assignments.
+const parseIdentificationTeam = (
+  team: ProtocolSectionsIdentificationTeam[]
+) => {
+  const itAssignmentChange = (member: ProtocolSectionsIdentificationTeam) => {
+    const assignment = member.assignments?.find((a) => !a.to)
+    // If there is no assignment, may be the creation of the protocol.
+    if (!assignment) return true
+    const hoursChanged = assignment?.hours !== member.hours
+    const roleChanged = assignment?.role !== member.role
+    const categoryChanged =
+      assignment?.categoryToBeConfirmed !== member.categoryToBeConfirmed
+    const categoryToBeConfirmedChanged =
+      assignment?.categoryToBeConfirmed !== member.categoryToBeConfirmed
+
+    if (
+      hoursChanged ||
+      roleChanged ||
+      categoryChanged ||
+      categoryToBeConfirmedChanged
+    ) {
+      return true
+    }
+    return false
+  }
+
+  const teamWithAssignments = team.map((member) => {
+    const newAssignment = {
+      role: member.role,
+      hours: member.hours,
+      categoryToBeConfirmed: member.categoryToBeConfirmed ?? null,
+      from: new Date(),
+      to: null,
+    }
+
+    // If there is no assignment, may be the creation of the protocol.
+    if (member.assignments.length === 0) {
+      return {
+        ...member,
+        assignments: [newAssignment],
+      }
+    }
+
+    if (itAssignmentChange(member)) {
+      const lastAssignment = member.assignments.filter((a) => !a.to).at(0)
+      return {
+        ...member,
+        assignments: [{ ...lastAssignment, to: new Date() }, newAssignment],
+      }
+    }
+    return {
+      ...member,
+    }
+  })
+
+  return teamWithAssignments
+}
+
 const updateProtocolById = async (id: string, data: Protocol) => {
   try {
     const { currentFCA, currentFMR } = await getCurrentIndexes()
 
     // Parsing the section to have correct formats
     data.sections.identification.team = IdentificationTeamSchema.array().parse(
-      data.sections.identification.team
+      parseIdentificationTeam(data.sections.identification.team)
     )
 
     // Indexing the amount
@@ -478,7 +534,7 @@ const createProtocol = async (data: Protocol) => {
 
     // Parsing the section to have correct formats
     data.sections.identification.team = IdentificationTeamSchema.array().parse(
-      data.sections.identification.team
+      parseIdentificationTeam(data.sections.identification.team)
     )
 
     // Indexing the amounts

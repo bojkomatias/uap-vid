@@ -71,7 +71,11 @@ export default async function Layout({
     return <ConfirmTeamMembersForm protocol={protocol} />
   else
     return (
+<<<<<<< HEAD
       <div>
+=======
+      <>
+>>>>>>> origin/develop
         {modal}
         <FlagsDialog protocolId={protocol.id} protocolFlags={protocol.flags} />
         <ContextMenu
@@ -139,7 +143,11 @@ export default async function Layout({
               duration={0.2}
               id="protocol-container"
               className={cx(
+<<<<<<< HEAD
                 'inset-0 mt-8 space-y-6 overflow-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full print:overflow-hidden',
+=======
+                'inset-0 mt-8 space-y-6 print:overflow-hidden overflow-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full',
+>>>>>>> origin/develop
                 isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
               )}
             >
@@ -149,6 +157,10 @@ export default async function Layout({
 
           <ChatFullComponent user={session.user} protocolId={protocol.id} />
         </ContextMenu>
+<<<<<<< HEAD
       </div>
+=======
+      </>
+>>>>>>> origin/develop
     )
 }

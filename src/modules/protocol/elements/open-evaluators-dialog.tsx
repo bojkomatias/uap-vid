@@ -23,9 +23,15 @@ export function EvaluatorsDialog({ children }: { children: ReactNode }) {
       <Dialog open={open} onClose={() => setOpen(false)} size="xl">
         <DialogTitle>Metodólogo y evaluadores</DialogTitle>
         <DialogDescription className="!text-xs/5">
+<<<<<<< HEAD
           Reasignar evaluador eliminará, si existe, una revision del mismo tipo
           ya creada. Solo puede existir una sola evaluación correspondiente a
           cada etapa del proyecto.
+=======
+          Reasignar evaluador eliminará si existe una revision del mismo tipo ya
+          creada. Solo puede existir una sola evaluación correspondiente a cada
+          etapa del proyecto.
+>>>>>>> origin/develop
         </DialogDescription>
         <Divider className="my-3" />
         {children}

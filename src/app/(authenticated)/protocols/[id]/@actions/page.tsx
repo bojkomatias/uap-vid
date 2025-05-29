@@ -1,14 +1,10 @@
-import {
-  Action,
-  ReviewVerdict,
-  ProtocolFlag,
-  type Prisma,
-} from '@prisma/client'
+import { Action, ReviewVerdict, Prisma } from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getActionsByRoleAndState } from '@utils/scopes'
 import { ProtocolSchema } from '@utils/zod'
+
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 
@@ -29,10 +25,8 @@ export default async function ActionsPage({
   params: { id: string }
 }) {
   const session = await getServerSession(authOptions)
-  const protocol = (await findProtocolByIdWithResearcher(
-    params.id
-  )) as ProtocolWithResearcher
-  if (!protocol || !session) return null
+  const protocol = await findProtocolByIdWithResearcher(params.id)
+  if (!protocol || !session) return
   const reviews = await getReviewsByProtocol(protocol.id)
 
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
@@ -60,11 +54,17 @@ export default async function ActionsPage({
   //  Approve only if has both protocol flags and review flags
   if (actions.includes(Action.APPROVE)) {
     if (
-      protocol.flags?.some((flag: ProtocolFlag) => flag.state === false) ||
-      protocol.flags?.length < 2
+      protocol.flags.some((flag) => flag.state === false) ||
+      protocol.flags.length < 2
     )
       filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
   }
 
-  return <ActionsDropdown actions={filteredActions} protocol={protocol} />
+  return (
+    <ActionsDropdown
+      actions={filteredActions}
+      protocol={protocol}
+      canViewLogs={session.user.role === 'ADMIN'}
+    />
+  )
 }

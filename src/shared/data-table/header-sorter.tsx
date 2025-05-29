@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { flexRender, type Header } from '@tanstack/react-table'
+<<<<<<< HEAD
 import { useUpdateQuery } from 'hooks/updateQuery'
+=======
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
+>>>>>>> origin/develop
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { ArrowDown, ArrowsSort, ArrowUp } from 'tabler-icons-react'

@@ -50,7 +50,10 @@ export default function BudgetExecutionView({
   executions: Execution[]
   positionIndex: number
   executionType: ExecutionType
+<<<<<<< HEAD
   //ARREGLAR / SIMPLIFICAR
+=======
+>>>>>>> origin/develop
   obrero?: {
     pointsObrero: number
     pointPrice: AmountIndex
@@ -71,11 +74,15 @@ export default function BudgetExecutionView({
     queryFn: async () => await getCurrentIndexes(),
   })
 
+<<<<<<< HEAD
   //ARREGLAR
+=======
+>>>>>>> origin/develop
   useEffect(() => {
     if (!academicUnits) return
     setSelectedAcademicUnit(academicUnits[0])
   }, [academicUnits])
+<<<<<<< HEAD
 
   //ARREGLAR
   const filteredAcademicUnits =
@@ -102,6 +109,32 @@ export default function BudgetExecutionView({
       )
   }, [allExecutions, selectedAcademicUnit])
 
+=======
+  const filteredAcademicUnits =
+    query === '' || !academicUnits ?
+      academicUnits
+    : academicUnits.filter((ac) => {
+        return (
+          ac.name.toLowerCase().includes(query.toLowerCase()) ||
+          ac.shortname.toLowerCase().includes(query.toLocaleLowerCase())
+        )
+      })
+  const executionAmountByAcademicUnit = useMemo(() => {
+    if (!allExecutions) return ZeroAmountIndex
+    return allExecutions
+      .filter(
+        (execution) => execution.academicUnitId === selectedAcademicUnit?.id
+      )
+      .reduce(
+        (acc, curr) => {
+          acc = sumAmountIndex([acc, curr.amountIndex ?? ZeroAmountIndex])
+          return acc
+        },
+        { FCA: 0, FMR: 0 } as AmountIndex
+      )
+  }, [allExecutions, selectedAcademicUnit])
+
+>>>>>>> origin/develop
   const maxExecutionAmount = useMemo(() => {
     if (!maxAmountPerAcademicUnit) return remaining
     return subtractAmountIndex(
