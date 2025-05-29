@@ -3,10 +3,7 @@
 import * as Headless from '@headlessui/react'
 import React, { useState } from 'react'
 import { NavbarItem } from './navbar'
-<<<<<<< HEAD
-=======
 import { motion } from 'framer-motion'
->>>>>>> origin/develop
 
 function OpenMenuIcon() {
   return (
@@ -104,11 +101,7 @@ export function SidebarLayout({
 
       {/* Content */}
 
-<<<<<<< HEAD
       <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-64 lg:pr-2 lg:pt-2 ">
-=======
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-64 lg:pr-2 lg:pt-2">
->>>>>>> origin/develop
         <div className="relative h-[calc(100svh-1rem)] grow overflow-y-auto px-6 py-0 sm:p-6 lg:rounded-lg lg:bg-white lg:p-8 lg:shadow-sm lg:ring-1 lg:ring-gray-950/5 dark:lg:bg-gray-900 dark:lg:ring-white/10 print:overflow-visible">
           {children}
         </div>

@@ -6,20 +6,12 @@ import { redirect } from 'next/navigation'
 import { ApproveAnualBudget } from 'modules/anual-budget/approve-budget'
 import { InterruptAnualBudget } from 'modules/anual-budget/interrupt-budget'
 import { RejectAnualBudget } from 'modules/anual-budget/reject-budget'
-<<<<<<< HEAD
-import { protocolDuration } from '@utils/constants'
-=======
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
->>>>>>> origin/develop
 import { AnualBudgetState } from '@prisma/client'
 import { findProtocolById } from '@repositories/protocol'
 import { Check, X } from 'tabler-icons-react'
 import { Button } from '@components/button'
-<<<<<<< HEAD
 import Info from '@shared/info'
-=======
-import Info from 'modules/info'
->>>>>>> origin/develop
 import { getAcademicUnitById } from '@repositories/academic-unit'
 
 export default async function Budget({ params }: { params: { id: string } }) {

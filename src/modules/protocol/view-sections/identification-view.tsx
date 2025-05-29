@@ -52,14 +52,6 @@ export default async function IdentificationView({
   const team = data.team.map((tm) => {
     const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
     const fullName = teamMember ? teamMember.name : `${tm.name} ${tm.last_name}`
-<<<<<<< HEAD
-    return {
-      fullName,
-      role: tm.role,
-      category: tm.categoryToBeConfirmed,
-      toBeConfirmed: tm.toBeConfirmed,
-      hours: tm.hours,
-=======
     // This handles the case where the team member has multiple assignments. Bring the active one.
     const assignment = tm.assignments?.find((a) => !a.to)
     return {
@@ -68,7 +60,6 @@ export default async function IdentificationView({
       category: tm.categoryToBeConfirmed,
       toBeConfirmed: tm.toBeConfirmed,
       hours: assignment?.hours ?? tm.hours ?? 0,
->>>>>>> origin/develop
     }
   })
 

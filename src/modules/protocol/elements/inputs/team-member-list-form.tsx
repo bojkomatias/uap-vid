@@ -15,11 +15,8 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { Text } from '@components/text'
-<<<<<<< HEAD
 import Info from '@shared/info'
-=======
-import Info from 'modules/info'
->>>>>>> origin/develop
+
 import { useQuery } from '@tanstack/react-query'
 import { getCategoriesForForm } from '@repositories/team-member-category'
 import { FormSwitch } from '@shared/form/form-switch'
@@ -45,17 +42,10 @@ export default function TeamMemberListForm() {
     'Profesional Principal',
   ]
 
-<<<<<<< HEAD
-  const roles_categories_ids = roles_categories.map((r_c) => ({
-    value: categories?.find((c) => c.name === r_c)?.id!,
-    label: r_c,
-  }))
-=======
   const roles_categories_ids = roles_categories.map((r_c) => {
     const category = categories?.find((c) => c.name == r_c)
     return { value: category?.id, label: category?.name }
   }) as { value: string; label: string }[]
->>>>>>> origin/develop
 
   return (
     <Fieldset>
@@ -64,11 +54,7 @@ export default function TeamMemberListForm() {
         Liste los miembros de equipo con la cantidad de horas semanales o meses
         totales a trabajar en su defecto
       </Text>
-<<<<<<< HEAD
-      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1 space-y-2">
-=======
       <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
->>>>>>> origin/develop
         <Field className="col-span-4">
           <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
             <Label>A definir</Label>
@@ -82,12 +68,8 @@ export default function TeamMemberListForm() {
         <Field className="col-span-8">
           <Label>Miembro</Label>
           <Description>
-<<<<<<< HEAD
             Seleccione miembro de equipo si existe o escriba su nombre abajo del
             selector
-=======
-            Seleccione miembro de equipo si existe o uno genérico si no
->>>>>>> origin/develop
           </Description>
         </Field>
         <Field className="col-span-2">
@@ -121,7 +103,7 @@ export default function TeamMemberListForm() {
                 )}
                 className="col-span-4"
               />
-<<<<<<< HEAD
+
               {(
                 form.getInputProps(
                   `sections.identification.team.${index}.toBeConfirmed`
@@ -185,49 +167,6 @@ export default function TeamMemberListForm() {
                   )}
                 />
               </div>
-=======
-
-              {(
-                form.getInputProps(
-                  `sections.identification.team.${index}.toBeConfirmed`
-                ).value
-              ) ?
-                <FormListbox
-                  className="col-span-4"
-                  label=""
-                  options={roles_categories_ids}
-                  {...form.getInputProps(
-                    `sections.identification.team.${index}.categoryToBeConfirmed`
-                  )}
-                />
-              : <FormListbox
-                  className="col-span-4"
-                  label=""
-                  options={roleOptions.map((e) => ({ value: e, label: e }))}
-                  {...form.getInputProps(
-                    `sections.identification.team.${index}.role`
-                  )}
-                />
-              }
-              <FormCombobox
-                className="col-span-8"
-                label=""
-                options={
-                  teamMembers?.map((e) => ({
-                    value: e.id,
-                    label: e.name,
-                  })) ?? []
-                }
-                disabled={
-                  form.getInputProps(
-                    `sections.identification.team.${index}.toBeConfirmed`
-                  ).value
-                }
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.teamMemberId`
-                )}
-              />
->>>>>>> origin/develop
 
               <FormInput
                 className="col-span-2"
@@ -237,7 +176,6 @@ export default function TeamMemberListForm() {
                   `sections.identification.team.${index}.hours`
                 )}
               />
-<<<<<<< HEAD
               <FormInput
                 className="col-span-2"
                 label=""
@@ -261,33 +199,6 @@ export default function TeamMemberListForm() {
           ))}
       </div>
 
-=======
-
-              <FormInput
-                className="col-span-2"
-                label=""
-                type="number"
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.workingMonths`
-                )}
-              />
-
-              {index === 0 ?
-                <span />
-              : <Button plain className="mt-1 self-start">
-                  <Trash
-                    data-slot="icon"
-                    onClick={() =>
-                      form.removeListItem('sections.identification.team', index)
-                    }
-                  />
-                </Button>
-              }
-            </Fragment>
-          ))}
-      </div>
-
->>>>>>> origin/develop
       <Button
         plain
         onClick={() => {

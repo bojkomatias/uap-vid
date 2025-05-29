@@ -1,10 +1,6 @@
 import { Badge, BadgeButton } from '@components/badge'
 import { TableFilterDictionary } from '@utils/dictionaries/TableFilterDictionary'
-<<<<<<< HEAD
-import { useUpdateQuery } from 'hooks/updateQuery'
-=======
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
->>>>>>> origin/develop
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { X } from 'tabler-icons-react'

@@ -1,10 +1,7 @@
 'use client'
 
-<<<<<<< HEAD
-import { useUpdateQuery } from 'hooks/updateQuery'
-=======
+
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
->>>>>>> origin/develop
 import { Input, InputGroup } from '@components/input'
 import { Search } from 'tabler-icons-react'
 import { useSearchParams } from 'next/navigation'

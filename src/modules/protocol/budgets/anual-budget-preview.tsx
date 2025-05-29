@@ -1,11 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { TeamMemberRelation } from '@utils/zod'
 import { protocolToAnualBudgetPreview } from '@actions/anual-budget/action'
-<<<<<<< HEAD
-import { protocolDuration } from '@utils/constants'
-=======
 import { protocolDuration } from '@utils/anual-budget/protocol-duration'
->>>>>>> origin/develop
 import { ActionGenerateButton } from './action-generate'
 import {
   Table,

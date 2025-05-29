@@ -13,11 +13,7 @@ import ProtocolNumberUpdate from '@protocol/elements/protocol-number-update'
 import { Heading } from '@components/heading'
 import { Text } from '@components/text'
 import { Divider } from '@components/divider'
-<<<<<<< HEAD
 import Info from '@shared/info'
-=======
-import Info from 'modules/info'
->>>>>>> origin/develop
 import { ContainerAnimations } from '../../elements/container-animations'
 import type { ReactNode } from 'react'
 import { Researcher } from './researcher'

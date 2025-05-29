@@ -18,7 +18,7 @@ import { getAnualBudgetYears } from '@repositories/anual-budget'
 type TeamMember = {
   protocolNumber: string | null
   name: string
-  role: string
+  role: string | null
   category: string
   hoursAssigned: number
   workingMonths: number
@@ -94,7 +94,7 @@ const generateCSV = (data: ProtocolData[]) => {
               )
             : '',
             escapeCSV(member.name),
-            escapeCSV(member.role),
+            escapeCSV(member.role ?? ''),
             escapeCSV(member.category),
             escapeCSV(member.hoursAssigned),
             escapeCSV(member.workingMonths),
@@ -195,7 +195,7 @@ const generateXLSX = async (data: ProtocolData[]) => {
             ]
           : '',
           member.name,
-          member.role,
+          member.role ?? '',
           member.category,
           member.hoursAssigned,
           member.workingMonths,

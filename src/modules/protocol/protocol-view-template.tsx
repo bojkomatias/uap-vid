@@ -1,10 +1,4 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from 'app/api/auth/[...nextauth]/auth'
-<<<<<<< HEAD
 import { type ProtocolSections } from '@prisma/client'
-=======
-import {type ProtocolSections } from '@prisma/client'
->>>>>>> origin/develop
 import BibliographyView from './view-sections/bibliography-view'
 import DescriptionView from './view-sections/description-view'
 import DurationView from './view-sections/duration-view'
@@ -19,10 +13,6 @@ export default async function View({
 }: {
   sections: ProtocolSections
 }) {
-<<<<<<< HEAD
-=======
-  
->>>>>>> origin/develop
   return (
     <>
       <IdentificationView data={sections.identification} />

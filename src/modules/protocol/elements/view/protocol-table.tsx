@@ -16,11 +16,7 @@ import TanStackTable from '@shared/data-table/tan-stack-table'
 import { type ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { Badge } from '@components/badge'
-<<<<<<< HEAD
-import { useUpdateQuery } from 'hooks/updateQuery'
-=======
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
->>>>>>> origin/develop
 import { Strong, Text } from '@components/text'
 import SearchBar from '@shared/data-table/search-bar'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
