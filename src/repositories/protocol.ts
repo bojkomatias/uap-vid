@@ -197,10 +197,13 @@ const findProtocolByIdWithResearcher = cache(
         },
         select: {
           id: true,
-
+          createdAt: true,
+          protocolNumber: true,
           state: true,
           researcherId: true,
           convocatoryId: true,
+          anualBudgetIds: true,
+          sections: true,
           researcher: { select: { id: true, name: true, email: true } },
           convocatory: { select: { id: true, name: true } },
           anualBudgets: {
