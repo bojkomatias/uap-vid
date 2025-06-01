@@ -36,7 +36,7 @@ export default async function Page({
         <div className="flex">
           <Heading>Lista de proyectos de investigación</Heading>
           <div className="flex items-end gap-2">
-            <DownloadTabularData />
+            {session.user.role === 'ADMIN' && <DownloadTabularData />}
 
             {session.user.role !== 'SCIENTIST' && (
               <Button href={'/protocols/new/0'}>
