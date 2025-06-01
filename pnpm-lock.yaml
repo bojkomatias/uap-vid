@@ -8,12 +8,8 @@ importers:
 
   .:
     dependencies:
-      '@headlessui/react':
-        specifier: ^2.1.2
-        version: 2.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mantine/form':
-        specifier: ^7.11.2
-        version: 7.17.7(react@18.3.1)
+      '@headlessui/react': {specifier: ^2.1.2, version: 2.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)}
+      '@mantine/form': {specifier: ^7.11.2, version: 7.17.7(react@18.3.1)}
       '@prisma/client':
         specifier: ^6.8.2
         version: 6.8.2(prisma@6.8.2(typescript@5.8.3))(typescript@5.8.3)
