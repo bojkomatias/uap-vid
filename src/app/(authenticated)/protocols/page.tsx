@@ -33,18 +33,17 @@ export default async function Page({
   return (
     <>
       <ContainerAnimations duration={0.4} delay={0}>
-        <div className="flex items-end gap-2">
+        <div className="flex">
           <Heading>Lista de proyectos de investigación</Heading>
-          <DownloadTabularData />
-        </div>
-        <div className="flex items-end">
-          <Heading>Lista de proyectos de investigación</Heading>
+          <div className="flex items-end gap-2">
+            <DownloadTabularData />
 
-          {session.user.role !== 'SCIENTIST' && (
-            <Button href={'/protocols/new/0'}>
-              <FileReport data-slot="icon" /> Nuevo proyecto
-            </Button>
-          )}
+            {session.user.role !== 'SCIENTIST' && (
+              <Button href={'/protocols/new/0'}>
+                <FileReport data-slot="icon" /> Nuevo proyecto
+              </Button>
+            )}
+          </div>
         </div>
 
         <Subheading>
