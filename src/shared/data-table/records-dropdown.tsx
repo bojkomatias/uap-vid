@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useUpdateQuery } from 'hooks/updateQuery'
+import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { Listbox, ListboxOption } from '@components/listbox'
 
 export default function RecordsDropdown({

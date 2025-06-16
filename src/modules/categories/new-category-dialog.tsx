@@ -86,11 +86,11 @@ export function NewCategoryDialog() {
                 type="number"
                 {...form.getInputProps('amount')}
               />
-              {/* <FormCheckbox
+              <FormCheckbox
                 label="No indexada"
                 description="Si la categoría no se indexa, no se actualiza su valor con los indices."
                 {...form.getInputProps('specialCategory', { type: 'checkbox' })}
-              /> */}
+              />
             </FieldGroup>
           </Fieldset>
 

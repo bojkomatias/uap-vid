@@ -12,6 +12,7 @@ import { indexSwapAtom } from './index-swapper'
     @amountIndex the indexes values to map and display
     @amount the value to display if value is not indexed
   */
+
 export function Currency({
   amountIndex,
   defaultFCA = true,

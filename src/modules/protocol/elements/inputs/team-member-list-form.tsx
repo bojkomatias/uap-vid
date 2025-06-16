@@ -16,6 +16,7 @@ import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { Text } from '@components/text'
 import Info from '@shared/info'
+
 import { useQuery } from '@tanstack/react-query'
 import { getCategoriesForForm } from '@repositories/team-member-category'
 import { FormSwitch } from '@shared/form/form-switch'
@@ -41,10 +42,10 @@ export default function TeamMemberListForm() {
     'Profesional Principal',
   ]
 
-  const roles_categories_ids = roles_categories.map((r_c) => ({
-    value: categories?.find((c) => c.name === r_c)?.id!,
-    label: r_c,
-  }))
+  const roles_categories_ids = roles_categories.map((r_c) => {
+    const category = categories?.find((c) => c.name == r_c)
+    return { value: category?.id, label: category?.name }
+  }) as { value: string; label: string }[]
 
   return (
     <Fieldset>
@@ -53,7 +54,7 @@ export default function TeamMemberListForm() {
         Liste los miembros de equipo con la cantidad de horas semanales o meses
         totales a trabajar en su defecto
       </Text>
-      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1 space-y-2">
+      <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
         <Field className="col-span-4">
           <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
             <Label>A definir</Label>
@@ -102,6 +103,7 @@ export default function TeamMemberListForm() {
                 )}
                 className="col-span-4"
               />
+
               {(
                 form.getInputProps(
                   `sections.identification.team.${index}.toBeConfirmed`

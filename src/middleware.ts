@@ -102,6 +102,7 @@ export default withAuth(
   }
 )
 
+//Configuration to run for all routes except for Next.js internal routes
 export const config = {
   matcher: [
     '/',

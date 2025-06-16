@@ -3,6 +3,7 @@ services:
   web-socket:
     image: uapsocket
     restart: 'always'
+
     ports:
       - '8000:3001'
     build:

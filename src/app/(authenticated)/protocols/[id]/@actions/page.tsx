@@ -1,11 +1,23 @@
-import { Action, ReviewVerdict } from '@prisma/client'
+import { Action, ReviewVerdict, Prisma } from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
 import { getActionsByRoleAndState } from '@utils/scopes'
 import { ProtocolSchema } from '@utils/zod'
+
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
+
+type ProtocolWithResearcher = Prisma.ProtocolGetPayload<{
+  include: {
+    researcher: { select: { id: true; name: true; email: true } }
+    convocatory: { select: { id: true; name: true } }
+    anualBudgets: {
+      select: { createdAt: true; year: true; id: true; state: true }
+    }
+    flags: true
+  }
+}>
 
 export default async function ActionsPage({
   params,

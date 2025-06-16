@@ -8,6 +8,7 @@ import { AnualBudgetState } from '@prisma/client'
 import useBudgetSummary from 'hooks/budgetSummary'
 import { Currency } from '@shared/currency'
 import Info from '@shared/info'
+
 import {
   BudgetCardDoughnut,
   BudgetCardDoughnutDark,

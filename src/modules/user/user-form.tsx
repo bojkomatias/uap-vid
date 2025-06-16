@@ -16,10 +16,12 @@ const CreateUserSchema = z.object({
   name: z
     .string()
     .min(6, { message: 'El nombre debe tener al menos 6 caracteres' }),
+
   email: z
     .string()
     .email({ message: 'Debe tener el formato de email' })
     .transform((email) => email.toLowerCase()),
+
   role: RoleSchema,
   password: z
     .string()

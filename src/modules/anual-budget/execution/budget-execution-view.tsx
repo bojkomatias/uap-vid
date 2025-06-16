@@ -71,13 +71,11 @@ export default function BudgetExecutionView({
     queryFn: async () => await getCurrentIndexes(),
   })
 
-  //ARREGLAR
   useEffect(() => {
     if (!academicUnits) return
     setSelectedAcademicUnit(academicUnits[0])
   }, [academicUnits])
 
-  //ARREGLAR
   const filteredAcademicUnits =
     query === '' || !academicUnits ?
       academicUnits

@@ -479,8 +479,9 @@ export const DurationSchema = z.object({
 /////////////////////////////////////////
 // PROTOCOL SECTIONS IDENTIFICATION SCHEMA
 /////////////////////////////////////////
-
-export const IdentificationTeamSchema = z.object({
+export const TeamAssignmentSchema = z.object({
+  categoryToBeConfirmed: z.string().nullable(),
+  role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
   hours: z.coerce
     .number({
       invalid_type_error: 'Este campo debe ser numérico',
@@ -491,13 +492,20 @@ export const IdentificationTeamSchema = z.object({
     .max(400, {
       message: 'No se pueden asignar tantas horas',
     }),
+  from: z.coerce.date(),
+  to: z.coerce.date().nullable(),
+})
+
+export const IdentificationTeamSchema = z.object({
+  hours: z.coerce.number().nullable(),
   last_name: z.string().nullable(),
   name: z.string().nullable(),
-  role: z.string().min(1, { message: 'El campo no puede estar vacío' }),
+  role: z.string().nullable(),
   teamMemberId: z.string().nullable(),
   workingMonths: z.coerce.number().default(12).nullable(),
   toBeConfirmed: z.boolean().default(false).nullable(),
   categoryToBeConfirmed: z.string().nullable(),
+  assignments: z.array(TeamAssignmentSchema),
 })
 
 export const ConfirmTeamSchema = z.object({
@@ -512,6 +520,7 @@ export const ConfirmTeamSchema = z.object({
     })
   ),
 })
+
 
 export const IdentificationSchema = z.object({
   courseId: z.string().nullable().optional(),
