@@ -44,6 +44,65 @@ const sectionMapper: { [key: number]: JSX.Element } = {
   7: <BibliographyForm />,
 }
 
+// Helper functions
+const sanitizeObjectId = (value: string | null | undefined) => 
+  value === '' ? null : value
+
+const getDefaultSections = () => ({
+  methodology: {
+    considerations: null,
+    analysis: null,
+    detail: null,
+    instruments: null,
+    participants: null,
+    procedures: null,
+    design: null,
+    humanAnimalOrDb: null,
+    place: null,
+    type: '',
+  },
+  publication: {
+    title: '',
+    result: '',
+  },
+  bibliography: {
+    chart: [],
+  },
+})
+
+const sanitizeTeamMember = (member: any) => ({
+  ...member,
+  hours: typeof member.hours === 'string' ? parseInt(member.hours) || 0 : member.hours,
+  teamMemberId: sanitizeObjectId(member.teamMemberId),
+  categoryToBeConfirmed: sanitizeObjectId(member.categoryToBeConfirmed),
+})
+
+const sanitizeProtocolData = (protocol: any) => {
+  const defaults = getDefaultSections()
+  
+  return {
+    ...protocol,
+    convocatoryId: sanitizeObjectId(protocol.convocatoryId),
+    sections: {
+      ...protocol.sections,
+      identification: {
+        ...protocol.sections.identification,
+        courseId: sanitizeObjectId(protocol.sections.identification?.courseId),
+        careerId: sanitizeObjectId(protocol.sections.identification?.careerId),
+        team: protocol.sections.identification?.team?.map(sanitizeTeamMember) || [],
+      },
+      introduction: {
+        ...protocol.sections.introduction,
+        problem: protocol.sections.introduction?.problem || '',
+        state: protocol.sections.introduction?.state || '',
+      },
+      methodology: protocol.sections.methodology || defaults.methodology,
+      publication: protocol.sections.publication || defaults.publication,
+      bibliography: protocol.sections.bibliography || defaults.bibliography,
+    },
+  }
+}
+
 export default function ProtocolForm({
   protocol,
 }: {
@@ -85,27 +144,40 @@ export default function ProtocolForm({
 
       // flow for protocols that don't have ID
       if (!id) {
-        const created = await createProtocol(restOfProtocol as Protocol) // Its because enum from zod != prisma enum according to types
+        // Ensure all required sections are present with default values
+        const completeProtocol = sanitizeProtocolData(restOfProtocol as Protocol)
 
-        if (created) {
-          notifications.show({
-            title: 'Protocolo creado',
-            message: 'El protocolo ha sido creado con éxito',
-            intent: 'success',
+        try {
+          const created = await createProtocol(completeProtocol as Protocol)
+
+          if (created) {
+            notifications.show({
+              title: 'Protocolo creado',
+              message: 'El protocolo ha sido creado con éxito',
+              intent: 'success',
+            })
+
+            // Only when created remove from LocalStorage
+            localStorage.removeItem('temp-protocol')
+
+            return startTransition(() => {
+              router.push(`/protocols/${created.id}`)
+            })
+          }
+          return notifications.show({
+            title: 'Error al crear',
+            message: 'Hubo un error al crear el protocolo',
+            intent: 'error',
           })
-
-          // Only when created remove from LocalStorage
-          localStorage.removeItem('temp-protocol')
-
-          return startTransition(() => {
-            router.push(`/protocols/${created.id}`)
+        } catch (error) {
+          console.error('Error creating protocol:', error)
+          return notifications.show({
+            title: 'Error al crear',
+            message:
+              'Hubo un error al crear el protocolo. Por favor, verifica que todos los campos requeridos estén completos.',
+            intent: 'error',
           })
         }
-        return notifications.show({
-          title: 'Error al crear',
-          message: 'Hubo un error al crear el protocolo',
-          intent: 'error',
-        })
       }
 
       const updated = await updateProtocolById(id, restOfProtocol as Protocol)
