@@ -27,6 +27,7 @@
         "@types/react-csv": "^1.1.10",
         "bcryptjs": "^2.4.3",
         "clsx": "^2.1.1",
+        "exceljs": "^4.4.0",
         "framer-motion": "^11.3.7",
         "jotai": "^2.9.0",
         "mongodb": "^6.8.0",
@@ -39,7 +40,7 @@
         "react-use-websocket": "^4.8.1",
         "tabler-icons-react": "^1.56.0",
         "tailwind-merge": "^2.4.0",
-        "zod": "^3.23.8"
+        "zod": "^3.25.67"
     },
     "devDependencies": {
         "@tailwindcss/container-queries": "^0.1.1",

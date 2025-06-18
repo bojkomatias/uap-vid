@@ -9,7 +9,7 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { FormCombobox } from '@shared/form/form-combobox'
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
 import type { Course } from '@prisma/client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   getActiveCareersForForm,
   getCoursesByCareerId,
@@ -32,6 +32,18 @@ export function IdentificationForm() {
   const [courses, setCourses] = useState<Omit<Course, 'careerId' | 'active'>[]>(
     []
   )
+
+  // Load courses when component mounts if there's a selected career
+  useEffect(() => {
+    const loadInitialCourses = async () => {
+      const careerId = form.values.sections.identification.careerId
+      if (careerId) {
+        const result = await getCoursesByCareerId(careerId)
+        setCourses(result ? result.courses : [])
+      }
+    }
+    loadInitialCourses()
+  }, [form.values.sections.identification.careerId])
 
   return (
     <motion.div
@@ -66,10 +78,6 @@ export function IdentificationForm() {
           <FormCombobox
             label="Materia"
             description="Seleccione una materia si aplica (requerido en caso de PIC)"
-            disabled={
-              !form.getInputProps('sections.identification.careerId').value ||
-              courses.length === 0
-            }
             options={courses.map((e) => ({ value: e.id, label: e.name })) ?? []}
             {...form.getInputProps('sections.identification.courseId')}
           />
