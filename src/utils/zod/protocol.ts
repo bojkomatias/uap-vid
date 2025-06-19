@@ -93,13 +93,79 @@ export const IdentificationSchema = z.object({
     .min(1, { message: 'Debe tener al menos un integrante' })
     .refine(
       (value) => {
-        //Al menos un integrante debe tener el rol de Director,
-        const hasDirector = value.some((team) => team.role === 'Director')
-
-        if (!hasDirector) return false
-        return true
+        // Al menos un integrante debe tener el rol de Director
+        const hasDirector = value.some(
+          (team) => team.role?.trim() === 'Director'
+        )
+        return hasDirector
       },
-      { message: 'Debe tener al menos un Director' }
+      {
+        message:
+          'Debe tener al menos un miembro del equipo con el rol de Director',
+        path: [0, 'role'], // Point to the first team member's role field
+      }
+    )
+    .refine(
+      (value) => {
+        // Verificar que todos los miembros tengan un nombre o teamMemberId
+        return value.every((team) => {
+          if (team.toBeConfirmed) {
+            return team.categoryToBeConfirmed !== null
+          }
+          return (
+            (team.teamMemberId !== null && team.teamMemberId !== '') ||
+            (team.name !== null && team.name !== '')
+          )
+        })
+      },
+      {
+        message:
+          'Todos los miembros del equipo deben tener un nombre o estar seleccionados de la lista',
+      }
+    ),
+})
+
+// Draft schema with more lenient validation
+export const IdentificationDraftSchema = z.object({
+  courseId: z.string().nullable().optional(),
+  careerId: z
+    .string()
+    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
+  academicUnitIds: z.string().array().optional(), // Allow empty for drafts
+  title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
+  team: IdentificationTeamSchema.array()
+    .min(1, { message: 'Debe tener al menos un integrante' })
+    .refine(
+      (value) => {
+        // Al menos un integrante debe tener el rol de Director
+        const hasDirector = value.some(
+          (team) => team.role?.trim() === 'Director'
+        )
+        return hasDirector
+      },
+      {
+        message:
+          'Debe tener al menos un miembro del equipo con el rol de Director',
+        path: [0, 'role'], // Point to the first team member's role field
+      }
+    )
+    .refine(
+      (value) => {
+        // Verificar que todos los miembros tengan un nombre o teamMemberId
+        return value.every((team) => {
+          if (team.toBeConfirmed) {
+            return team.categoryToBeConfirmed !== null
+          }
+          return (
+            (team.teamMemberId !== null && team.teamMemberId !== '') ||
+            (team.name !== null && team.name !== '')
+          )
+        })
+      },
+      {
+        message:
+          'Todos los miembros del equipo deben tener un nombre o estar seleccionados de la lista',
+      }
     ),
 })
 

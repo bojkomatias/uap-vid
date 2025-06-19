@@ -14,6 +14,7 @@ import {
   PublicationForm,
 } from '@protocol/form-sections'
 import { ProtocolSchema } from '@utils/zod'
+import { IdentificationDraftSchema } from '@utils/zod/protocol'
 import { motion } from 'framer-motion'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
@@ -45,7 +46,7 @@ const sectionMapper: { [key: number]: JSX.Element } = {
 }
 
 // Helper functions
-const sanitizeObjectId = (value: string | null | undefined) => 
+const sanitizeObjectId = (value: string | null | undefined) =>
   value === '' ? null : value
 
 const getDefaultSections = () => ({
@@ -68,28 +69,56 @@ const getDefaultSections = () => ({
   bibliography: {
     chart: [],
   },
+  identification: {
+    courseId: null,
+    careerId: '',
+    academicUnitIds: [],
+    title: '',
+    team: [
+      {
+        hours: 0,
+        last_name: '',
+        name: 'Director del Proyecto',
+        role: 'Director',
+        teamMemberId: null,
+        workingMonths: 12,
+        toBeConfirmed: false,
+        categoryToBeConfirmed: null,
+        assignments: [],
+      },
+    ],
+  },
 })
 
 const sanitizeTeamMember = (member: any) => ({
   ...member,
-  hours: typeof member.hours === 'string' ? parseInt(member.hours) || 0 : member.hours,
+  hours:
+    typeof member.hours === 'string' ?
+      parseInt(member.hours) || 0
+    : member.hours,
   teamMemberId: sanitizeObjectId(member.teamMemberId),
   categoryToBeConfirmed: sanitizeObjectId(member.categoryToBeConfirmed),
+  assignments: member.assignments || [],
 })
 
 const sanitizeProtocolData = (protocol: any) => {
   const defaults = getDefaultSections()
-  
+
   return {
     ...protocol,
     convocatoryId: sanitizeObjectId(protocol.convocatoryId),
     sections: {
       ...protocol.sections,
       identification: {
+        ...defaults.identification,
         ...protocol.sections.identification,
         courseId: sanitizeObjectId(protocol.sections.identification?.courseId),
         careerId: sanitizeObjectId(protocol.sections.identification?.careerId),
-        team: protocol.sections.identification?.team?.map(sanitizeTeamMember) || [],
+        academicUnitIds:
+          protocol.sections.identification?.academicUnitIds || [],
+        team:
+          protocol.sections.identification?.team?.map(sanitizeTeamMember) ||
+          defaults.identification.team,
       },
       introduction: {
         ...protocol.sections.introduction,
@@ -145,7 +174,9 @@ export default function ProtocolForm({
       // flow for protocols that don't have ID
       if (!id) {
         // Ensure all required sections are present with default values
-        const completeProtocol = sanitizeProtocolData(restOfProtocol as Protocol)
+        const completeProtocol = sanitizeProtocolData(
+          restOfProtocol as Protocol
+        )
 
         try {
           const created = await createProtocol(completeProtocol as Protocol)
@@ -245,12 +276,17 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
-          // Enforce validity only on first section to Save
-          if (!form.isValid('sections.identification')) {
+
+          // For draft saves, validate with the more lenient draft schema
+          try {
+            IdentificationDraftSchema.parse(form.values.sections.identification)
+          } catch (error: any) {
+            const errorMessage =
+              error.errors?.[0]?.message ||
+              'Hay errores en la sección de identificación'
             notifications.show({
               title: 'No se pudo guardar',
-              message:
-                'Debes completar la sección "Identificación" para poder guardar un borrador',
+              message: errorMessage,
               intent: 'error',
             })
             return form.validate()

@@ -202,17 +202,22 @@ export default function TeamMemberListForm() {
       <Button
         plain
         onClick={() => {
+          const currentTeamLength =
+            form.values.sections.identification.team.length
+          const isFirstMember = currentTeamLength === 0
+
           form.insertListItem('sections.identification.team', {
             hours: 0,
             last_name: '',
             name: '',
-            role: 'Investigador UAP',
+            role: isFirstMember ? 'Director' : 'Investigador UAP',
             teamMemberId: null,
             workingMonths: 12,
             toBeConfirmed: false,
             categoryToBeConfirmed: categories?.find(
               (c) => c.name == 'Técnico Asistente'
             )?.id,
+            assignments: [],
           })
 
           setTimeout(() => {
