@@ -350,7 +350,7 @@ type ProtocolSectionsIdentificationTeam {
   last_name             String? /// @deprecated use relation teamMemberId instead
   name                  String? /// @deprecated use relation teamMemberId instead
   workingMonths         Int?             @default(12)
-  role                  String? /// @deprecated use assignments instead
+  role                  String /// @deprecated use assignments instead
   teamMemberId          String?          @db.ObjectId
   toBeConfirmed         Boolean?         @default(false)
   categoryToBeConfirmed String?          @db.ObjectId
