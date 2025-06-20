@@ -326,7 +326,7 @@ export function ActionsDropdown({
         ) {
           const message =
             checkResults.approve.message ||
-            'Las banderas del protocolo no están aprobadas o faltan banderas requeridas.'
+            'Los votos del protocolo no están aprobadas o faltan votos requeridos.'
           handleAdminOverride(Action.APPROVE, message, async () => {
             const updated = await updateProtocolStateById(
               protocol.id,

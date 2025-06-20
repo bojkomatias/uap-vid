@@ -80,8 +80,12 @@ export default async function ActionsPage({
   const hasUnreviewed = reviews.some(
     (review) => review.verdict === ReviewVerdict.NOT_REVIEWED
   )
-  checkResults.accept.allReviewed = !hasUnreviewed
-  if (hasUnreviewed) {
+  const hasReviews = reviews.length > 0
+  checkResults.accept.allReviewed = hasReviews && !hasUnreviewed
+  if (!hasReviews) {
+    checkResults.accept.message =
+      'No hay evaluaciones asignadas al protocolo. Debe asignar al menos un evaluador antes de aceptar el protocolo.'
+  } else if (hasUnreviewed) {
     checkResults.accept.message =
       'No todas las evaluaciones han sido completadas. Algunas evaluaciones aún están pendientes.'
   }
