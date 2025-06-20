@@ -49,7 +49,7 @@ import { Button } from '@components/button'
 type ActionOption = {
   action: Action
   icon: ReactNode
-  callback: () => void
+  callback: () => Promise<boolean> | boolean
   color?: string
 }
 
@@ -127,20 +127,23 @@ export function ActionsDropdown({
   const executeWithOverride = () => {
     if (adminOverrideDialog.callback) {
       adminOverrideDialog.callback()
+      setAdminOverrideDialog({
+        open: false,
+        action: null,
+        message: '',
+        callback: null,
+      })
       startTranstion(() => router.refresh())
     }
-    setAdminOverrideDialog({
-      open: false,
-      action: null,
-      message: '',
-      callback: null,
-    })
   }
 
   const actionsToOptions: ActionOption[] = [
     {
       action: Action.EDIT,
-      callback: async () => router.push(`/protocols/${protocol.id}/0`),
+      callback: async () => {
+        router.push(`/protocols/${protocol.id}/0`)
+        return false // No admin override dialog opened
+      },
       icon: <Edit data-slot="icon" />,
     },
     {
@@ -209,18 +212,20 @@ export function ActionsDropdown({
             }
             notifications.show(updated.notification)
           })
-          return
+          return true // Admin override dialog was opened
         }
 
         // Normal flow for non-admin or valid protocol
         const parsed = ProtocolSchema.safeParse(protocol)
-        if (parsed.error)
-          return notifications.show({
+        if (parsed.error) {
+          notifications.show({
             title: 'El protocolo no está completo',
             message:
               'Debe completar todas las secciones y los campos requeridos antes de poder publicarlo',
             intent: 'error',
           })
+          return false // No admin override dialog opened
+        }
         // Continues only if parsing goes right
         const updated = await updateProtocolStateById(
           protocol.id,
@@ -274,6 +279,7 @@ export function ActionsDropdown({
           )
         }
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <FileTime data-slot="icon" />,
     },
@@ -294,7 +300,7 @@ export function ActionsDropdown({
             )
             notifications.show(updated.notification)
           })
-          return
+          return true // Admin override dialog was opened
         }
 
         // Normal flow
@@ -305,6 +311,7 @@ export function ActionsDropdown({
           ProtocolState.ACCEPTED
         )
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <Badge data-slot="icon" />,
     },
@@ -329,7 +336,7 @@ export function ActionsDropdown({
             )
             notifications.show(updated.notification)
           })
-          return
+          return true // Admin override dialog was opened
         }
 
         // Normal flow
@@ -340,13 +347,16 @@ export function ActionsDropdown({
           ProtocolState.ON_GOING
         )
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <Badge data-slot="icon" />,
     },
     {
       action: Action.GENERATE_ANUAL_BUDGET,
-      callback: () =>
-        router.push(`/generate-budget/${protocol.id}`, { scroll: false }),
+      callback: () => {
+        router.push(`/generate-budget/${protocol.id}`, { scroll: false })
+        return false // No admin override dialog opened
+      },
       icon: <FileDollar data-slot="icon" />,
     },
   ]
@@ -357,6 +367,7 @@ export function ActionsDropdown({
       callback: async () => {
         const updated = await reactivateProtocolAndAnualBudget(protocol.id)
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <Badge data-slot="icon" className="stroke-emerald-500" />,
     },
@@ -370,6 +381,7 @@ export function ActionsDropdown({
           ProtocolState.FINISHED
         )
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <Flag2 data-slot="icon" className="stroke-green-500" />,
     },
@@ -383,6 +395,7 @@ export function ActionsDropdown({
           ProtocolState.DISCONTINUED
         )
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <ClockPause data-slot="icon" className="stroke-yellow-500" />,
     },
@@ -396,6 +409,7 @@ export function ActionsDropdown({
           ProtocolState.DELETED
         )
         notifications.show(updated.notification)
+        return false // No admin override dialog opened
       },
       icon: <Trash data-slot="icon" className="stroke-red-500" />,
     },
@@ -421,10 +435,10 @@ export function ActionsDropdown({
               <DropdownItem
                 key={i}
                 disabled={isPending}
-                onClick={() => {
+                onClick={async () => {
                   if (x.callback) {
-                    x.callback()
-                    if (!adminOverrideDialog.open) {
+                    const adminOverrideOpened = await x.callback()
+                    if (!adminOverrideOpened) {
                       startTranstion(() => router.refresh())
                     }
                   }
@@ -453,10 +467,12 @@ export function ActionsDropdown({
               <DropdownItem
                 key={i}
                 disabled={isPending}
-                onClick={() => {
+                onClick={async () => {
                   if (x.callback) {
-                    x.callback()
-                    startTranstion(() => router.refresh())
+                    const adminOverrideOpened = await x.callback()
+                    if (!adminOverrideOpened) {
+                      startTranstion(() => router.refresh())
+                    }
                   }
                 }}
               >
