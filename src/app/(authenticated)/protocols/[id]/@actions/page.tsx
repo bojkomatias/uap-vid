@@ -80,8 +80,12 @@ export default async function ActionsPage({
   const hasUnreviewed = reviews.some(
     (review) => review.verdict === ReviewVerdict.NOT_REVIEWED
   )
-  checkResults.accept.allReviewed = !hasUnreviewed
-  if (hasUnreviewed) {
+  const hasReviews = reviews.length > 0
+  checkResults.accept.allReviewed = hasReviews && !hasUnreviewed
+  if (!hasReviews) {
+    checkResults.accept.message =
+      'No hay evaluaciones asignadas al protocolo. Debe asignar al menos un evaluador antes de aceptar el protocolo.'
+  } else if (hasUnreviewed) {
     checkResults.accept.message =
       'No todas las evaluaciones han sido completadas. Algunas evaluaciones aún están pendientes.'
   }
@@ -93,10 +97,10 @@ export default async function ActionsPage({
   checkResults.approve.hasRequiredFlags = hasRequiredFlags
   if (hasInvalidFlags) {
     checkResults.approve.message =
-      'Algunas banderas del protocolo no están aprobadas.'
+      'Alguno de los votos del protocolo no están aprobadas.'
   } else if (!hasRequiredFlags) {
     checkResults.approve.message =
-      'El protocolo no tiene las banderas requeridas (se necesitan al menos 2).'
+      'El protocolo no tiene los votos requeridos (se necesitan al menos 2).'
   }
   const approveChecksFailed = hasInvalidFlags || !hasRequiredFlags
 
