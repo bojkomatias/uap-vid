@@ -31,6 +31,25 @@ export default async function ActionsPage({
 
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
   let filteredActions = actions
+  const isAdmin = session.user.role === 'ADMIN'
+
+  // Check results for admin override
+  const checkResults = {
+    publish: {
+      isValid: false,
+      hasConvocatory: false,
+      message: '',
+    },
+    accept: {
+      allReviewed: false,
+      message: '',
+    },
+    approve: {
+      allFlagsValid: false,
+      hasRequiredFlags: false,
+      message: '',
+    },
+  }
 
   // Edit by owner
   if (
@@ -40,24 +59,75 @@ export default async function ActionsPage({
     if (session.user.id === protocol.researcherId)
       filteredActions.push(Action.EDIT) // I only check for edit in Dropdown, but add it only if is owner.
   }
-  // Publish only if valid
-  if (actions.includes(Action.PUBLISH)) {
-    const validToPublish = ProtocolSchema.safeParse(protocol)
-    if (!validToPublish.success || !protocol.convocatoryId)
+
+  // --- Checks for Publish, Accept, and Approve actions ---
+
+  // Publish
+  const validToPublish = ProtocolSchema.safeParse(protocol)
+  checkResults.publish.isValid = validToPublish.success
+  checkResults.publish.hasConvocatory = !!protocol.convocatoryId
+  if (!validToPublish.success) {
+    checkResults.publish.message =
+      'El protocolo no está completo. Debe completar todas las secciones y los campos requeridos.'
+  } else if (!protocol.convocatoryId) {
+    checkResults.publish.message =
+      'El protocolo no tiene una convocatoria asignada.'
+  }
+  const publishChecksFailed =
+    !checkResults.publish.isValid || !checkResults.publish.hasConvocatory
+
+  // Accept
+  const hasUnreviewed = reviews.some(
+    (review) => review.verdict === ReviewVerdict.NOT_REVIEWED
+  )
+  checkResults.accept.allReviewed = !hasUnreviewed
+  if (hasUnreviewed) {
+    checkResults.accept.message =
+      'No todas las evaluaciones han sido completadas. Algunas evaluaciones aún están pendientes.'
+  }
+
+  // Approve
+  const hasInvalidFlags = protocol.flags.some((flag) => flag.state === false)
+  const hasRequiredFlags = protocol.flags.length >= 2
+  checkResults.approve.allFlagsValid = !hasInvalidFlags
+  checkResults.approve.hasRequiredFlags = hasRequiredFlags
+  if (hasInvalidFlags) {
+    checkResults.approve.message =
+      'Algunas banderas del protocolo no están aprobadas.'
+  } else if (!hasRequiredFlags) {
+    checkResults.approve.message =
+      'El protocolo no tiene las banderas requeridas (se necesitan al menos 2).'
+  }
+  const approveChecksFailed = hasInvalidFlags || !hasRequiredFlags
+
+  // --- Admin Override Logic: Add actions back if missing ---
+  // --- Non-Admin Logic: Filter out actions if checks fail ---
+
+  if (isAdmin) {
+    // For Admins, if the action is not in the list due to state or a failed check, add it.
+    if (!actions.includes(Action.PUBLISH) || publishChecksFailed) {
+      if (!filteredActions.includes(Action.PUBLISH))
+        filteredActions.push(Action.PUBLISH)
+    }
+    if (!actions.includes(Action.ACCEPT) || hasUnreviewed) {
+      if (!filteredActions.includes(Action.ACCEPT))
+        filteredActions.push(Action.ACCEPT)
+    }
+    if (!actions.includes(Action.APPROVE) || approveChecksFailed) {
+      if (!filteredActions.includes(Action.APPROVE))
+        filteredActions.push(Action.APPROVE)
+    }
+  } else {
+    // For non-Admins, filter out actions if they were allowed by state but fail business logic checks.
+    if (publishChecksFailed) {
       filteredActions = filteredActions.filter((e) => e !== Action.PUBLISH)
-  }
-  // Accept only if review have correct verdicts
-  if (actions.includes(Action.ACCEPT)) {
-    if (reviews.some((review) => review.verdict === ReviewVerdict.NOT_REVIEWED))
+    }
+    if (hasUnreviewed) {
       filteredActions = filteredActions.filter((e) => e !== Action.ACCEPT)
-  }
-  //  Approve only if has both protocol flags and review flags
-  if (actions.includes(Action.APPROVE)) {
-    if (
-      protocol.flags.some((flag) => flag.state === false) ||
-      protocol.flags.length < 2
-    )
+    }
+    if (approveChecksFailed) {
       filteredActions = filteredActions.filter((e) => e !== Action.APPROVE)
+    }
   }
 
   return (
@@ -65,6 +135,8 @@ export default async function ActionsPage({
       actions={filteredActions}
       protocol={protocol}
       canViewLogs={session.user.role === 'ADMIN'}
+      userRole={session.user.role}
+      checkResults={checkResults}
     />
   )
 }

@@ -14,9 +14,9 @@ export const initialSectionValues: z.infer<typeof SectionsSchema> = {
     academicUnitIds: [],
     team: [
       {
-        hours: 0,
+        hours: null,
         last_name: null,
-        name: 'Director del Proyecto',
+        name: '',
         role: 'Director',
         teamMemberId: null,
         workingMonths: 12,
