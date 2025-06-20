@@ -85,7 +85,7 @@ export function ConfirmTeamMembersForm({
         <Loader className="mx-auto animate-spin text-primary dark:text-white" />
       : <form
           onSubmit={form.onSubmit((values) => mutate(values.team))}
-          className="mx-auto mt-10 w-fit max-w-xl rounded-lg border border-gray-700 bg-gray-800 p-6"
+          className="mx-auto mt-10 w-fit max-w-xl rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800"
         >
           {' '}
           <Heading>Confirmar miembros de equipo</Heading>
