@@ -97,10 +97,10 @@ export default async function ActionsPage({
   checkResults.approve.hasRequiredFlags = hasRequiredFlags
   if (hasInvalidFlags) {
     checkResults.approve.message =
-      'Algunas banderas del protocolo no están aprobadas.'
+      'Alguno de los votos del protocolo no están aprobadas.'
   } else if (!hasRequiredFlags) {
     checkResults.approve.message =
-      'El protocolo no tiene las banderas requeridas (se necesitan al menos 2).'
+      'El protocolo no tiene los votos requeridos (se necesitan al menos 2).'
   }
   const approveChecksFailed = hasInvalidFlags || !hasRequiredFlags
 
