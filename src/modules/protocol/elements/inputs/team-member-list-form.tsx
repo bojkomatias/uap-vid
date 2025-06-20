@@ -207,7 +207,7 @@ export default function TeamMemberListForm() {
           const isFirstMember = currentTeamLength === 0
 
           form.insertListItem('sections.identification.team', {
-            hours: 0,
+            hours: null,
             last_name: '',
             name: '',
             role: isFirstMember ? 'Director' : 'Investigador UAP',

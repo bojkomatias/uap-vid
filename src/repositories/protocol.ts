@@ -304,7 +304,7 @@ const parseIdentificationTeam = (
   const teamWithAssignments = team.map((member) => {
     const newAssignment = {
       role: member.role,
-      hours: member.hours,
+      hours: member.hours && member.hours > 0 ? member.hours : 1,
       categoryToBeConfirmed: member.categoryToBeConfirmed ?? null,
       from: new Date(),
       to: null,

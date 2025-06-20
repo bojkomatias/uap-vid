@@ -49,6 +49,31 @@ const sectionMapper: { [key: number]: JSX.Element } = {
 const sanitizeObjectId = (value: string | null | undefined) =>
   value === '' ? null : value
 
+const clearInvalidLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    try {
+      const tempProtocol = localStorage.getItem('temp-protocol')
+      if (tempProtocol) {
+        const parsed = JSON.parse(tempProtocol)
+        // If the data has invalid hours values, clear it
+        const hasInvalidHours = parsed?.sections?.identification?.team?.some(
+          (member: any) =>
+            member.hours === 0 ||
+            member.assignments?.some(
+              (assignment: any) => assignment.hours === 0
+            )
+        )
+        if (hasInvalidHours) {
+          localStorage.removeItem('temp-protocol')
+        }
+      }
+    } catch (error) {
+      // If parsing fails, clear the localStorage
+      localStorage.removeItem('temp-protocol')
+    }
+  }
+}
+
 const getDefaultSections = () => ({
   methodology: {
     considerations: null,
@@ -76,7 +101,7 @@ const getDefaultSections = () => ({
     title: '',
     team: [
       {
-        hours: 0,
+        hours: null,
         last_name: '',
         name: 'Director del Proyecto',
         role: 'Director',
@@ -93,12 +118,18 @@ const getDefaultSections = () => ({
 const sanitizeTeamMember = (member: any) => ({
   ...member,
   hours:
-    typeof member.hours === 'string' ?
-      parseInt(member.hours) || 0
+    typeof member.hours === 'string' ? parseInt(member.hours) || null
+    : member.hours === 0 ? null
     : member.hours,
   teamMemberId: sanitizeObjectId(member.teamMemberId),
   categoryToBeConfirmed: sanitizeObjectId(member.categoryToBeConfirmed),
-  assignments: member.assignments || [],
+  assignments: (member.assignments || []).map((assignment: any) => ({
+    ...assignment,
+    hours:
+      typeof assignment.hours === 'string' ? parseInt(assignment.hours) || 1
+      : assignment.hours === 0 ? 1
+      : assignment.hours,
+  })),
 })
 
 const sanitizeProtocolData = (protocol: any) => {
@@ -142,6 +173,11 @@ export default function ProtocolForm({
   const [section, setSection] = useState(pathname?.split('/')[3])
 
   const [isPending, startTransition] = useTransition()
+
+  // Clear invalid localStorage data on component mount
+  useEffect(() => {
+    clearInvalidLocalStorage()
+  }, [])
 
   const form = useProtocol({
     initialValues:
