@@ -362,6 +362,7 @@ type TeamAssignment {
   hours                 Float
   from                  DateTime
   to                    DateTime?
+  workingMonths         Int?             @default(12)
   categoryToBeConfirmed String?   @db.ObjectId
 }
 

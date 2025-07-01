@@ -1,7 +1,7 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
-import React, { Fragment } from 'react'
-import { Plus, Trash } from 'tabler-icons-react'
+import React, { Fragment, useState } from 'react'
+import { Plus, Trash, Edit } from 'tabler-icons-react'
 import { getAllTeamMembers } from '@repositories/team-member'
 import {
   Description,
@@ -23,6 +23,9 @@ import { FormSwitch } from '@shared/form/form-switch'
 
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
+  const [manualInputMode, setManualInputMode] = useState<{
+    [key: number]: boolean
+  }>({})
 
   const { data: teamMembers } = useQuery({
     queryKey: ['teamMembers'],
@@ -47,6 +50,13 @@ export default function TeamMemberListForm() {
     return { value: category?.id, label: category?.name }
   }) as { value: string; label: string }[]
 
+  const toggleManualInput = (index: number) => {
+    setManualInputMode((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }))
+  }
+
   return (
     <Fieldset>
       <Legend>Miembros de Equipo</Legend>
@@ -68,8 +78,8 @@ export default function TeamMemberListForm() {
         <Field className="col-span-8">
           <Label>Miembro</Label>
           <Description>
-            Seleccione miembro de equipo si existe o escriba su nombre abajo del
-            selector
+            Seleccione miembro de equipo existente (si no existe, puede añadirlo
+            manualmente)
           </Description>
         </Field>
         <Field className="col-span-2">
@@ -85,24 +95,25 @@ export default function TeamMemberListForm() {
           .getValues()
           .sections.identification.team.map((_: any, index: number) => (
             <Fragment key={index}>
-              <FormSwitch
-                checked={
-                  form.getInputProps(
+              <div className="col-span-4 flex items-center justify-center">
+                <FormSwitch
+                  checked={
+                    form.getInputProps(
+                      `sections.identification.team.${index}.toBeConfirmed`
+                    ).value
+                  }
+                  disabled={index == 0}
+                  title={
+                    index == 0 ?
+                      "El primer miembro de equipo no puede quedar 'a definir'"
+                    : undefined
+                  }
+                  label=""
+                  {...form.getInputProps(
                     `sections.identification.team.${index}.toBeConfirmed`
-                  ).value
-                }
-                disabled={index == 0}
-                title={
-                  index == 0 ?
-                    "El primer miembro de equipo no puede quedar 'a definir'"
-                  : undefined
-                }
-                label=""
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.toBeConfirmed`
-                )}
-                className="col-span-4"
-              />
+                  )}
+                />
+              </div>
 
               {(
                 form.getInputProps(
@@ -131,41 +142,72 @@ export default function TeamMemberListForm() {
                   )}
                 />
               }
-              <div className="col-span-8 flex flex-col">
-                <FormCombobox
-                  label=""
-                  placeholder="Si el miembro de equipo no existe, escriba el nombre abajo"
-                  options={
-                    teamMembers?.map((e) => ({
-                      value: e.id,
-                      label: e.name,
-                    })) ?? []
-                  }
-                  disabled={
-                    form.getInputProps(
-                      `sections.identification.team.${index}.toBeConfirmed`
-                    ).value
-                  }
-                  {...form.getInputProps(
-                    `sections.identification.team.${index}.teamMemberId`
-                  )}
-                />
+              <div className="col-span-8 flex gap-1">
+                {manualInputMode[index] ?
+                  <FormInput
+                    className="flex-1"
+                    placeholder="Nombre del miembro de equipo"
+                    label=""
+                    type="text"
+                    disabled={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value
+                    }
+                    {...form.getInputProps(
+                      `sections.identification.team.${index}.name`
+                    )}
+                  />
+                : <FormCombobox
+                    className="flex-1"
+                    label=""
+                    placeholder="Seleccione un miembro de equipo"
+                    options={
+                      teamMembers?.map((e) => ({
+                        value: e.id,
+                        label: e.name,
+                      })) ?? []
+                    }
+                    disabled={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value
+                    }
+                    {...form.getInputProps(
+                      `sections.identification.team.${index}.teamMemberId`
+                    )}
+                  />
+                }
 
-                <FormInput
-                  className="float-left"
-                  placeholder="Nombre del miembro de equipo"
-                  label=""
-                  style={{ fontSize: '11px', padding: '1px 10px' }}
-                  type="text"
-                  disabled={
-                    form.getInputProps(
-                      `sections.identification.team.${index}.toBeConfirmed`
-                    ).value
-                  }
-                  {...form.getInputProps(
-                    `sections.identification.team.${index}.name`
-                  )}
-                />
+                {manualInputMode[index] ?
+                  <Button
+                    type="button"
+                    className="bg-blue-600 px-2 py-1 text-xs text-white transition-colors hover:bg-blue-700"
+                    disabled={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value
+                    }
+                    onClick={() => toggleManualInput(index)}
+                    title="Seleccionar de lista"
+                  >
+                    <Edit size={16} />
+                  </Button>
+                : <Button
+                    type="button"
+                    plain
+                    className="px-2 py-1 text-xs transition-colors hover:bg-gray-100"
+                    disabled={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value
+                    }
+                    onClick={() => toggleManualInput(index)}
+                    title="Ingresar manualmente"
+                  >
+                    <Edit size={16} />
+                  </Button>
+                }
               </div>
 
               <FormInput
