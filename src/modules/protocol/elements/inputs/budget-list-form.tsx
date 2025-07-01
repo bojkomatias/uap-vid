@@ -147,9 +147,8 @@ export function BudgetList() {
               return (
                 acc +
                 val.data.reduce((prev, curr) => {
-                  if (isNaN(curr.amount)) curr.amount = 0
-                  else curr.amount
-                  return prev + curr.amount
+                  const amount = Number(curr.amount) || 0
+                  return prev + amount
                 }, 0)
               )
             }, 0) ?? 0
