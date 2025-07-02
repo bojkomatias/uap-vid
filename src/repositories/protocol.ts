@@ -306,6 +306,7 @@ const parseIdentificationTeam = (
       role: member.role,
       hours: member.hours && member.hours > 0 ? member.hours : 1,
       categoryToBeConfirmed: member.categoryToBeConfirmed ?? null,
+      workingMonths: member.workingMonths ?? 12,
       from: new Date(),
       to: null,
     }
@@ -322,7 +323,15 @@ const parseIdentificationTeam = (
       const lastAssignment = member.assignments.filter((a) => !a.to).at(0)
       return {
         ...member,
-        assignments: [{ ...lastAssignment, to: new Date() }, newAssignment],
+        assignments: [
+          {
+            ...lastAssignment,
+            to: new Date(),
+            workingMonths:
+              lastAssignment?.workingMonths ?? member.workingMonths ?? 12,
+          },
+          newAssignment,
+        ],
       }
     }
     return {

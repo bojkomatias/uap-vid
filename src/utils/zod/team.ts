@@ -60,6 +60,7 @@ export const TeamAssignmentSchema = z.object({
     .max(400, {
       message: 'No se pueden asignar tantas horas',
     }),
+  workingMonths: z.coerce.number().default(12).nullable(),
   from: z.coerce.date(),
   to: z.coerce.date().nullable(),
 })
