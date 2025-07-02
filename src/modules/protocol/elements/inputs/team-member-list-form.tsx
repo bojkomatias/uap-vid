@@ -1,8 +1,11 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
 import React, { Fragment, useState } from 'react'
-import { Plus, Trash, Edit } from 'tabler-icons-react'
-import { getAllTeamMembers } from '@repositories/team-member'
+import { Plus, Trash, Edit, UserMinus } from 'tabler-icons-react'
+import {
+  getAllTeamMembers,
+  deactivateTeamMember,
+} from '@repositories/team-member'
 import {
   Description,
   Field,
@@ -11,6 +14,12 @@ import {
   Legend,
 } from '@components/fieldset'
 import { Button } from '@components/button'
+import {
+  Dialog,
+  DialogActions,
+  DialogDescription,
+  DialogTitle,
+} from '@components/dialog'
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
@@ -20,12 +29,22 @@ import Info from '@shared/info'
 import { useQuery } from '@tanstack/react-query'
 import { getCategoriesForForm } from '@repositories/team-member-category'
 import { FormSwitch } from '@shared/form/form-switch'
+import { notifications } from '@elements/notifications'
 
 export default function TeamMemberListForm() {
   const form = useProtocolContext()
   const [manualInputMode, setManualInputMode] = useState<{
     [key: number]: boolean
   }>({})
+  const [deactivateDialog, setDeactivateDialog] = useState<{
+    open: boolean
+    teamMemberIndex: number | null
+    memberName: string
+  }>({
+    open: false,
+    teamMemberIndex: null,
+    memberName: '',
+  })
 
   const { data: teamMembers } = useQuery({
     queryKey: ['teamMembers'],
@@ -50,11 +69,73 @@ export default function TeamMemberListForm() {
     return { value: category?.id, label: category?.name }
   }) as { value: string; label: string }[]
 
+  // Helper function to check if a team member is deactivated
+  const isTeamMemberDeactivated = (index: number) => {
+    const teamMember = form.getValues().sections.identification.team[index]
+    return !!(
+      teamMember?.assignments &&
+      teamMember.assignments.length > 0 &&
+      teamMember.assignments[0]?.to
+    )
+  }
+
   const toggleManualInput = (index: number) => {
     setManualInputMode((prev) => ({
       ...prev,
       [index]: !prev[index],
     }))
+  }
+
+  const showDeactivateDialog = (index: number) => {
+    const teamMember = form.getValues().sections.identification.team[index]
+    const memberName = teamMember.name || 'Miembro sin nombre'
+
+    setDeactivateDialog({
+      open: true,
+      teamMemberIndex: index,
+      memberName,
+    })
+  }
+
+  const handleDeactivateTeamMember = async () => {
+    const { teamMemberIndex } = deactivateDialog
+
+    if (teamMemberIndex === null) return
+
+    const protocolId = form.values.id
+
+    if (!protocolId) {
+      notifications.show({
+        title: 'Error',
+        message: 'No se puede desactivar el miembro: protocolo no guardado',
+        intent: 'error',
+      })
+      return
+    }
+
+    try {
+      const result = await deactivateTeamMember(protocolId, teamMemberIndex)
+
+      if (result.status) {
+        notifications.show(result.notification)
+        // The team member is deactivated but still in the list with updated assignment
+        // You might want to refresh the form data or update the UI to reflect the change
+      } else {
+        notifications.show(result.notification)
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Ocurrió un error al eliminar el miembro del equipo',
+        intent: 'error',
+      })
+    } finally {
+      setDeactivateDialog({
+        open: false,
+        teamMemberIndex: null,
+        memberName: '',
+      })
+    }
   }
 
   return (
@@ -71,7 +152,7 @@ export default function TeamMemberListForm() {
             <Description>Miembro de equipo a definir</Description>
           </Info>
         </Field>
-        <Field className="col-span-4">
+        <Field className="col-span-3">
           <Label>Rol</Label>
           <Description>Rol del miembro</Description>
         </Field>
@@ -93,156 +174,198 @@ export default function TeamMemberListForm() {
         <span />
         {form
           .getValues()
-          .sections.identification.team.map((_: any, index: number) => (
-            <Fragment key={index}>
-              <div className="col-span-4 flex items-center justify-center">
-                <FormSwitch
-                  checked={
-                    form.getInputProps(
+          .sections.identification.team.map((_: any, index: number) => {
+            const isDeactivated = isTeamMemberDeactivated(index)
+            const rowClasses =
+              isDeactivated ?
+                'opacity-50 line-through decoration-red-500 decoration-2 pointer-events-none relative'
+              : ''
+
+            return (
+              <Fragment key={index}>
+                <div
+                  className={`col-span-4 flex items-center justify-center ${rowClasses}`}
+                >
+                  <FormSwitch
+                    checked={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value
+                    }
+                    disabled={index == 0 || isDeactivated}
+                    title={
+                      index == 0 ?
+                        "El primer miembro de equipo no puede quedar 'a definir'"
+                      : isDeactivated ?
+                        'Este miembro ha sido desactivado'
+                      : undefined
+                    }
+                    label=""
+                    {...form.getInputProps(
                       `sections.identification.team.${index}.toBeConfirmed`
-                    ).value
-                  }
-                  disabled={index == 0}
-                  title={
-                    index == 0 ?
-                      "El primer miembro de equipo no puede quedar 'a definir'"
-                    : undefined
-                  }
-                  label=""
-                  {...form.getInputProps(
+                    )}
+                  />
+                </div>
+
+                {(
+                  form.getInputProps(
                     `sections.identification.team.${index}.toBeConfirmed`
-                  )}
-                />
-              </div>
-
-              {(
-                form.getInputProps(
-                  `sections.identification.team.${index}.toBeConfirmed`
-                ).value
-              ) ?
-                <FormListbox
-                  className="col-span-4"
-                  label=""
-                  placeholder={
-                    form.getInputProps(
-                      `sections.identification.team.${index}.toBeConfirmed`
-                    ).value && 'Seleccione una categoría'
+                  ).value
+                ) ?
+                  <FormListbox
+                    className={`col-span-4 ${rowClasses}`}
+                    label=""
+                    placeholder={
+                      form.getInputProps(
+                        `sections.identification.team.${index}.toBeConfirmed`
+                      ).value && 'Seleccione una categoría'
+                    }
+                    options={roles_categories_ids}
+                    disabled={isDeactivated}
+                    {...form.getInputProps(
+                      `sections.identification.team.${index}.categoryToBeConfirmed`
+                    )}
+                  />
+                : <FormListbox
+                    className={`col-span-3 ${rowClasses}`}
+                    label=""
+                    options={roleOptions.map((e) => ({ value: e, label: e }))}
+                    disabled={isDeactivated}
+                    {...form.getInputProps(
+                      `sections.identification.team.${index}.role`
+                    )}
+                  />
+                }
+                <div className={`col-span-8 flex gap-1 ${rowClasses}`}>
+                  {manualInputMode[index] ?
+                    <FormInput
+                      className="flex-1"
+                      placeholder="Nombre del miembro de equipo"
+                      label=""
+                      type="text"
+                      disabled={
+                        isDeactivated ||
+                        form.getInputProps(
+                          `sections.identification.team.${index}.toBeConfirmed`
+                        ).value
+                      }
+                      {...form.getInputProps(
+                        `sections.identification.team.${index}.name`
+                      )}
+                    />
+                  : <FormCombobox
+                      className="flex-1"
+                      label=""
+                      placeholder="Seleccione un miembro de equipo"
+                      options={
+                        teamMembers?.map((e) => ({
+                          value: e.id,
+                          label: e.name,
+                        })) ?? []
+                      }
+                      disabled={
+                        isDeactivated ||
+                        form.getInputProps(
+                          `sections.identification.team.${index}.toBeConfirmed`
+                        ).value
+                      }
+                      {...form.getInputProps(
+                        `sections.identification.team.${index}.teamMemberId`
+                      )}
+                    />
                   }
-                  options={roles_categories_ids}
-                  {...form.getInputProps(
-                    `sections.identification.team.${index}.categoryToBeConfirmed`
-                  )}
-                />
-              : <FormListbox
-                  className="col-span-4"
+
+                  {manualInputMode[index] ?
+                    <Button
+                      type="button"
+                      className="bg-blue-600 px-2 py-1 text-xs text-white transition-colors hover:bg-blue-700"
+                      disabled={
+                        isDeactivated ||
+                        form.getInputProps(
+                          `sections.identification.team.${index}.toBeConfirmed`
+                        ).value
+                      }
+                      onClick={() => toggleManualInput(index)}
+                      title="Seleccionar de lista"
+                    >
+                      <Edit size={16} />
+                    </Button>
+                  : <Button
+                      type="button"
+                      plain
+                      className="px-2 py-1 text-xs transition-colors hover:bg-gray-100"
+                      disabled={
+                        isDeactivated ||
+                        form.getInputProps(
+                          `sections.identification.team.${index}.toBeConfirmed`
+                        ).value
+                      }
+                      onClick={() => toggleManualInput(index)}
+                      title="Ingresar manualmente"
+                    >
+                      <Edit size={16} />
+                    </Button>
+                  }
+                </div>
+
+                <FormInput
+                  className={`col-span-2 ${rowClasses}`}
                   label=""
-                  options={roleOptions.map((e) => ({ value: e, label: e }))}
+                  type="number"
+                  disabled={isDeactivated}
                   {...form.getInputProps(
-                    `sections.identification.team.${index}.role`
+                    `sections.identification.team.${index}.hours`
                   )}
                 />
-              }
-              <div className="col-span-8 flex gap-1">
-                {manualInputMode[index] ?
-                  <FormInput
-                    className="flex-1"
-                    placeholder="Nombre del miembro de equipo"
-                    label=""
-                    type="text"
-                    disabled={
-                      form.getInputProps(
-                        `sections.identification.team.${index}.toBeConfirmed`
-                      ).value
-                    }
-                    {...form.getInputProps(
-                      `sections.identification.team.${index}.name`
-                    )}
-                  />
-                : <FormCombobox
-                    className="flex-1"
-                    label=""
-                    placeholder="Seleccione un miembro de equipo"
-                    options={
-                      teamMembers?.map((e) => ({
-                        value: e.id,
-                        label: e.name,
-                      })) ?? []
-                    }
-                    disabled={
-                      form.getInputProps(
-                        `sections.identification.team.${index}.toBeConfirmed`
-                      ).value
-                    }
-                    {...form.getInputProps(
-                      `sections.identification.team.${index}.teamMemberId`
-                    )}
-                  />
+                <FormInput
+                  className={`col-span-2 ${rowClasses}`}
+                  label=""
+                  type="number"
+                  disabled={isDeactivated}
+                  {...form.getInputProps(
+                    `sections.identification.team.${index}.workingMonths`
+                  )}
+                />
+                {index === 0 ?
+                  <span />
+                : <div className="mt-1 flex gap-1 self-start">
+                    <Button
+                      plain
+                      disabled={isDeactivated}
+                      title={
+                        isDeactivated ?
+                          'Este miembro ya ha sido desactivado'
+                        : 'Desactivar miembro'
+                      }
+                    >
+                      <UserMinus
+                        data-slot="icon"
+                        onClick={() =>
+                          !isDeactivated && showDeactivateDialog(index)
+                        }
+                        className={isDeactivated ? 'text-gray-400' : ''}
+                      />
+                    </Button>
+                    <Button plain>
+                      <Trash
+                        data-slot="icon"
+                        onClick={() =>
+                          form.removeListItem(
+                            'sections.identification.team',
+                            index
+                          )
+                        }
+                      />
+                    </Button>
+                  </div>
                 }
-
-                {manualInputMode[index] ?
-                  <Button
-                    type="button"
-                    className="bg-blue-600 px-2 py-1 text-xs text-white transition-colors hover:bg-blue-700"
-                    disabled={
-                      form.getInputProps(
-                        `sections.identification.team.${index}.toBeConfirmed`
-                      ).value
-                    }
-                    onClick={() => toggleManualInput(index)}
-                    title="Seleccionar de lista"
-                  >
-                    <Edit size={16} />
-                  </Button>
-                : <Button
-                    type="button"
-                    plain
-                    className="px-2 py-1 text-xs transition-colors hover:bg-gray-100"
-                    disabled={
-                      form.getInputProps(
-                        `sections.identification.team.${index}.toBeConfirmed`
-                      ).value
-                    }
-                    onClick={() => toggleManualInput(index)}
-                    title="Ingresar manualmente"
-                  >
-                    <Edit size={16} />
-                  </Button>
-                }
-              </div>
-
-              <FormInput
-                className="col-span-2"
-                label=""
-                type="number"
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.hours`
-                )}
-              />
-              <FormInput
-                className="col-span-2"
-                label=""
-                type="number"
-                {...form.getInputProps(
-                  `sections.identification.team.${index}.workingMonths`
-                )}
-              />
-              {index === 0 ?
-                <span />
-              : <Button plain className="mt-1 self-start">
-                  <Trash
-                    data-slot="icon"
-                    onClick={() =>
-                      form.removeListItem('sections.identification.team', index)
-                    }
-                  />
-                </Button>
-              }
-            </Fragment>
-          ))}
+              </Fragment>
+            )
+          })}
       </div>
 
       <Button
-        plain
+        outline
         onClick={() => {
           const currentTeamLength =
             form.values.sections.identification.team.length
@@ -276,6 +399,43 @@ export default function TeamMemberListForm() {
         <Plus data-slot="icon" />
         Añadir otro miembro de equipo
       </Button>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={deactivateDialog.open}
+        onClose={() =>
+          setDeactivateDialog({
+            open: false,
+            teamMemberIndex: null,
+            memberName: '',
+          })
+        }
+        size="lg"
+      >
+        <DialogTitle>Confirmar desactivación</DialogTitle>
+        <DialogDescription>
+          ¿Está seguro que desea desactivar a "{deactivateDialog.memberName}"?
+          Esta acción marcará el miembro como inactivo pero preservará su
+          información en el historial del proyecto.
+        </DialogDescription>
+        <DialogActions>
+          <Button
+            plain
+            onClick={() =>
+              setDeactivateDialog({
+                open: false,
+                teamMemberIndex: null,
+                memberName: '',
+              })
+            }
+          >
+            Cancelar
+          </Button>
+          <Button color="red" onClick={handleDeactivateTeamMember}>
+            Desactivar miembro
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Fieldset>
   )
 }
