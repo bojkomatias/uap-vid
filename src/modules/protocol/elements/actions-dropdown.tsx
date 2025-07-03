@@ -68,6 +68,10 @@ type CheckResults = {
     hasRequiredFlags: boolean
     message: string
   }
+  edit: {
+    canEdit: boolean
+    message: string
+  }
 }
 
 export function ActionsDropdown({
@@ -141,6 +145,18 @@ export function ActionsDropdown({
     {
       action: Action.EDIT,
       callback: async () => {
+        // Check if admin and protocol cannot be edited normally
+        if (isAdmin && !checkResults.edit.canEdit) {
+          const message =
+            checkResults.edit.message ||
+            'El protocolo no puede ser editado en su estado actual.'
+          handleAdminOverride(Action.EDIT, message, () => {
+            router.push(`/protocols/${protocol.id}/0`)
+          })
+          return true // Admin override dialog was opened
+        }
+
+        // Normal flow
         router.push(`/protocols/${protocol.id}/0`)
         return false // No admin override dialog opened
       },

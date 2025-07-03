@@ -321,17 +321,15 @@ const parseIdentificationTeam = (
     }
 
     if (itAssignmentChange(member)) {
-      const lastAssignment = member.assignments.filter((a) => !a.to).at(0)
+      const existingAssignment =
+        member.assignments.find((a) => !a.to) || member.assignments[0]
       return {
         ...member,
         assignments: [
           {
-            ...lastAssignment,
-            to: new Date(),
-            workingMonths:
-              lastAssignment?.workingMonths ?? member.workingMonths ?? 12,
+            ...newAssignment,
+            to: existingAssignment?.to || null, // Preserve the "to" date if it exists
           },
-          newAssignment,
         ],
       }
     }
@@ -369,7 +367,7 @@ const updateProtocolById = async (id: string, data: Protocol) => {
 
     console.log(
       'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
-      data
+      JSON.stringify(data, null, 2)
     )
 
     data.sections.bibliography.chart.forEach((ref) => {
@@ -383,7 +381,7 @@ const updateProtocolById = async (id: string, data: Protocol) => {
       data,
     })
   } catch (e) {
-    console.log(e)
+    console.log(JSON.stringify(e, null, 2))
     return null
   }
 }

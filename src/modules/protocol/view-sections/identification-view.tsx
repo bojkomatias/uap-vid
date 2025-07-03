@@ -10,6 +10,7 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { Text } from '@components/text'
+import Info from '@shared/info'
 
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
@@ -37,20 +38,33 @@ const TeamTable = ({
 
           {/* Table Rows */}
           {team.map((person, index) => (
-            <div key={index} className="grid grid-cols-3 gap-4 py-1 ">
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ? 'A definir' : person.fullName}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ?
-                  categories.find((c) => c.id == person.category)?.name ||
-                  'Categoría pendiente'
-                : person.role}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.hours.toString()}
-              </Text>
-            </div>
+            <Info
+              content={
+                person.toDate ?
+                  `Este miembro dejó de colaborar en el proyecto el ${new Date(person.toDate).getDate()} de ${new Date(person.toDate).toLocaleString('es-ES', { month: 'long' })} de ${new Date(person.toDate).getFullYear()}`
+                : ''
+              }
+            >
+              <div
+                key={index}
+                className={`grid grid-cols-3 gap-4 py-1 ${
+                  person.active ? '' : 'line-through opacity-50'
+                }`}
+              >
+                <Text className="text-left !text-black">
+                  {person.toBeConfirmed ? 'A definir' : person.fullName}
+                </Text>
+                <Text className="text-left !text-black">
+                  {person.toBeConfirmed ?
+                    categories.find((c) => c.id == person.category)?.name ||
+                    'Categoría pendiente'
+                  : person.role}
+                </Text>
+                <Text className="text-left !text-black">
+                  {person.hours.toString()}
+                </Text>
+              </div>
+            </Info>
           ))}
         </div>
       </DescriptionDetails>
@@ -103,12 +117,15 @@ export default async function IdentificationView({
     const fullName = teamMember ? teamMember.name : `${tm.name} ${tm.last_name}`
     // This handles the case where the team member has multiple assignments. Bring the active one.
     const assignment = tm.assignments?.find((a) => !a.to)
+    const toDate = tm.assignments?.find((a) => a.to)?.to
     return {
       fullName,
       role: assignment?.role ?? tm.role,
       category: tm.categoryToBeConfirmed,
       toBeConfirmed: tm.toBeConfirmed,
       hours: assignment?.hours ?? tm.hours ?? 0,
+      active: !toDate,
+      toDate: toDate ? toDate.toISOString() : null,
     }
   })
 

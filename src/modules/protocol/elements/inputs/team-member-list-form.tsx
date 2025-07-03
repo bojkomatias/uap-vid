@@ -123,19 +123,27 @@ export default function TeamMemberListForm() {
         const currentTeam = form.getValues().sections.identification.team
         const updatedTeam = currentTeam.map((member, index) => {
           if (index === teamMemberIndex) {
-            const currentAssignment = member.assignments?.find((a) => !a.to)
-            if (currentAssignment) {
-              const updatedAssignments = member.assignments.map((assignment) =>
-                assignment === currentAssignment ?
-                  { ...assignment, to: new Date() }
-                : assignment
-              )
+            // There should only be one assignment per team member
+            // Find the active assignment (without a 'to' date) and deactivate it
+            const activeAssignmentIndex = member.assignments?.findIndex(
+              (a) => !a.to
+            )
+            if (
+              activeAssignmentIndex !== undefined &&
+              activeAssignmentIndex !== -1
+            ) {
+              const updatedAssignments = [...(member.assignments || [])]
+              updatedAssignments[activeAssignmentIndex] = {
+                ...updatedAssignments[activeAssignmentIndex],
+                to: new Date(),
+              }
               return {
                 ...member,
                 assignments: updatedAssignments,
               }
             }
           }
+
           return member
         })
 
@@ -400,9 +408,7 @@ export default function TeamMemberListForm() {
             teamMemberId: null,
             workingMonths: 12,
             toBeConfirmed: false,
-            categoryToBeConfirmed: categories?.find(
-              (c) => c.name == 'Técnico Asistente'
-            )?.id,
+            categoryToBeConfirmed: null,
             assignments: [],
           })
 
