@@ -15,63 +15,6 @@ import Info from '@shared/info'
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
 }
-
-// Custom Team Table Component
-const TeamTable = ({
-  team,
-  categories,
-}: {
-  team: any[]
-  categories: any[]
-}) => {
-  return (
-    <>
-      <DescriptionTerm>Integrantes del Equipo de Investigación</DescriptionTerm>
-      <DescriptionDetails>
-        <div className="space-y-2">
-          {/* Table Header */}
-          <div className="grid grid-cols-3 gap-4 border-b border-gray-100 pb-2">
-            <Text className="text-left">Nombre</Text>
-            <Text className="text-left">Rol / Categoría</Text>
-            <Text className="text-left">Horas semanales</Text>
-          </div>
-
-          {/* Table Rows */}
-          {team.map((person, index) => (
-            <Info
-              content={
-                person.toDate ?
-                  `Este miembro dejó de colaborar en el proyecto el ${new Date(person.toDate).getDate()} de ${new Date(person.toDate).toLocaleString('es-ES', { month: 'long' })} de ${new Date(person.toDate).getFullYear()}`
-                : ''
-              }
-            >
-              <div
-                key={index}
-                className={`grid grid-cols-3 gap-4 py-1 ${
-                  person.active ? '' : 'line-through opacity-50'
-                }`}
-              >
-                <Text className="text-left !text-black">
-                  {person.toBeConfirmed ? 'A definir' : person.fullName}
-                </Text>
-                <Text className="text-left !text-black">
-                  {person.toBeConfirmed ?
-                    categories.find((c) => c.id == person.category)?.name ||
-                    'Categoría pendiente'
-                  : person.role}
-                </Text>
-                <Text className="text-left !text-black">
-                  {person.hours.toString()}
-                </Text>
-              </div>
-            </Info>
-          ))}
-        </div>
-      </DescriptionDetails>
-    </>
-  )
-}
-
 export default async function IdentificationView({
   data,
 }: IdentificationProps) {
@@ -124,10 +67,33 @@ export default async function IdentificationView({
       category: tm.categoryToBeConfirmed,
       toBeConfirmed: tm.toBeConfirmed,
       hours: assignment?.hours ?? tm.hours ?? 0,
-      active: !toDate,
-      toDate: toDate ? toDate.toISOString() : null,
     }
   })
+
+  const tableData = {
+    title: 'Equipo',
+    values: team.reduce((newVal: ListRowValues[], person, idx) => {
+      newVal.push([
+        {
+          up: person.toBeConfirmed ? 'A definir' : person.fullName,
+          down:
+            person.toBeConfirmed ?
+              categories.find((c) => c.id == person.category)?.name
+            : person.role,
+        },
+        {
+          up: idx == 0 ? '' : '',
+          down: person.hours.toString(),
+        },
+      ])
+      return newVal
+    }, []),
+  }
+
+  tableData.values.unshift([
+    { up: '', down: 'Miembro de equipo' },
+    { up: '', down: 'Horas semanales' },
+  ])
 
   return (
     <>
