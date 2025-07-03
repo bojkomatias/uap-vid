@@ -38,20 +38,34 @@ const TeamTable = ({
 
           {/* Table Rows */}
           {team.map((person, index) => (
-            <div key={index} className="grid grid-cols-3 gap-4 py-1 ">
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ? 'A definir' : person.fullName}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ?
-                  categories.find((c) => c.id == person.category)?.name ||
-                  'Categoría pendiente'
-                : person.role}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.hours.toString()}
-              </Text>
-            </div>
+            <Info
+              className={`${person.active && 'pointer-events-none'}`}
+              key={index}
+              content={
+                person.toDate ?
+                  `${person.fullName} dejó de colaborar en el proyecto el ${new Date(person.toDate).getDate()} de ${new Date(person.toDate).toLocaleString('es-ES', { month: 'long' })} de ${new Date(person.toDate).getFullYear()}`
+                : ''
+              }
+            >
+              <div
+                className={`grid grid-cols-3 gap-4 py-1 ${
+                  !person.active && 'line-through opacity-50'
+                }`}
+              >
+                <Text className="text-left !text-black">
+                  {person.toBeConfirmed ? 'A definir' : person.fullName}
+                </Text>
+                <Text className="text-left !text-black">
+                  {person.toBeConfirmed ?
+                    categories.find((c) => c.id == person.category)?.name ||
+                    'Categoría pendiente'
+                  : person.role}
+                </Text>
+                <Text className="text-left !text-black">
+                  {person.hours.toString()}
+                </Text>
+              </div>
+            </Info>
           ))}
         </div>
       </DescriptionDetails>
@@ -111,6 +125,8 @@ export default async function IdentificationView({
       category: tm.categoryToBeConfirmed,
       toBeConfirmed: tm.toBeConfirmed,
       hours: assignment?.hours ?? tm.hours ?? 0,
+      active: !toDate,
+      toDate: toDate ? toDate.toISOString() : null,
     }
   })
 
