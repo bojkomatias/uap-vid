@@ -54,7 +54,6 @@ export function BudgetItems({
     <form
       className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
       onSubmit={form.onSubmit(async (values) => {
-        console.log(values)
         if (!editable) return
         const itemsWithRemainingUpdated = Object.values(values).map((item) => {
           const remainingIndex = {

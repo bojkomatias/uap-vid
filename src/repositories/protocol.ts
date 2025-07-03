@@ -19,6 +19,7 @@ import { logEvent } from './log'
 import { getServerSession } from 'next-auth'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { withLogging } from '@utils/logging'
+import { getCurrentConvocatory } from './convocatory'
 
 const getProtocolBudgetData = async (year: string) => {
   // Get latest FCA index
@@ -238,12 +239,12 @@ const getProtocolMetadata = cache(
     })
 )
 const findProtocolById = cache(
-    async (id: string) =>
-        await prisma.protocol.findUnique({
-            where: {
-                id,
-            },
-        })
+  async (id: string) =>
+    await prisma.protocol.findUnique({
+      where: {
+        id,
+      },
+    })
 )
 
 const findProtocolByIdWithBudgets = cache(
@@ -361,6 +362,15 @@ const updateProtocolById = async (id: string, data: Protocol) => {
         }
       })
     })
+
+    const convocatory = await getCurrentConvocatory()
+
+    data.convocatoryId = convocatory?.id ?? null
+
+    console.log(
+      'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
+      data
+    )
 
     data.sections.bibliography.chart.forEach((ref) => {
       ref.year = parseInt(ref.year as any)
@@ -563,6 +573,9 @@ const createProtocol = async (data: Protocol) => {
     data.sections.bibliography.chart.forEach((ref) => {
       ref.year = parseInt(ref.year as any)
     })
+
+    const convocatory = await getCurrentConvocatory()
+    data.convocatoryId = convocatory?.id ?? null
 
     const protocol = await prisma.protocol.create({
       data,

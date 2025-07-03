@@ -36,7 +36,7 @@ import { FlagsDialogAtom } from './flags/flags-dialog'
 import { ProtocolSchema } from '@utils/zod'
 import { useAtom } from 'jotai'
 import { reactivateProtocolAndAnualBudget } from '@actions/anual-budget/action'
-import { getAdmins, getUsers } from '@repositories/user'
+
 import {
   Dialog,
   DialogActions,
@@ -150,11 +150,18 @@ export function ActionsDropdown({
       action: Action.PUBLISH,
       callback: async () => {
         // Check if admin and protocol doesn't pass validation
+        console.log('🔍 Checking publish conditions:', {
+          isAdmin,
+          isValid: checkResults.publish.isValid,
+          hasConvocatory: checkResults.publish.hasConvocatory,
+        })
+
         if (
           isAdmin &&
           (!checkResults.publish.isValid ||
             !checkResults.publish.hasConvocatory)
         ) {
+          console.log('⚠️ Taking ADMIN OVERRIDE path')
           const message =
             checkResults.publish.message ||
             'El protocolo no cumple con los requisitos para ser publicado.'
@@ -166,6 +173,11 @@ export function ActionsDropdown({
               ProtocolState.PUBLISHED
             )
             const secretariesEmails = async (academicUnits: string[]) => {
+              console.log(
+                '🏛️ Getting secretaries for academic units:',
+                academicUnits
+              )
+
               const secretaryEmailPromises = academicUnits.map(async (s) => {
                 return await getSecretariesEmailsByAcademicUnit(s)
               })
@@ -174,37 +186,48 @@ export function ActionsDropdown({
                 await Promise.all(secretaryEmailPromises)
               ).flat()
 
-              return secretaryEmails
+              const emails = secretaryEmails
                 .map((s) => {
                   return s?.secretaries.map((e) => {
                     return e.email
                   })
                 })
                 .flat()
+
+              console.log('📋 Retrieved secretary emails:', emails)
+              return emails
             }
 
             if (updated.status && updated.data) {
+              console.log(
+                '✅ Protocol updated successfully (admin override), starting email process...'
+              )
+              console.log(
+                '🎯 Academic units for secretary lookup:',
+                updated.data.sections.identification.academicUnitIds
+              )
+              console.log(
+                '🔍 Full identification section:',
+                updated.data.sections.identification
+              )
               ;(
                 await secretariesEmails(
-                  updated.data.sections.identification.sponsor
+                  updated.data.sections.identification.academicUnitIds
                 )
               ).forEach((email) => {
-                emailer({
-                  useCase: useCases.onPublish,
-                  email: email!,
-                  protocolId: updated.data.id,
-                })
-              })
-              //Notify admin when a protocol is being created when there's no open convocatory
-              if (!protocol.convocatory) {
-                ;(await getAdmins())?.forEach((admin) => {
+                console.log('🎯 CALLING EMAILER - Sending to:', email)
+                if (email) {
+                  console.log('🚀 About to call emailer function...')
                   emailer({
                     useCase: useCases.onPublish,
-                    email: admin.email!,
+                    email: email,
                     protocolId: updated.data.id,
                   })
-                })
-              }
+                  console.log('📤 Emailer function called')
+                } else {
+                  console.log('⚠️ EMAILER - Skipping null email')
+                }
+              })
             } else {
               console.log(
                 'No se pudo enviar emails a los secretarios de investigación'
@@ -216,6 +239,7 @@ export function ActionsDropdown({
         }
 
         // Normal flow for non-admin or valid protocol
+        console.log('✅ Taking NORMAL FLOW path')
         const parsed = ProtocolSchema.safeParse(protocol)
         if (parsed.error) {
           notifications.show({
@@ -227,13 +251,23 @@ export function ActionsDropdown({
           return false // No admin override dialog opened
         }
         // Continues only if parsing goes right
+        console.log('🔄 Updating protocol state...')
         const updated = await updateProtocolStateById(
           protocol.id,
           Action.PUBLISH,
           protocol.state,
           ProtocolState.PUBLISHED
         )
+        console.log('📝 Protocol update result:', {
+          status: updated.status,
+          hasData: !!updated.data,
+        })
         const secretariesEmails = async (academicUnits: string[]) => {
+          console.log(
+            '🏛️ Getting secretaries for academic units:',
+            academicUnits
+          )
+
           const secretaryEmailPromises = academicUnits.map(async (s) => {
             return await getSecretariesEmailsByAcademicUnit(s)
           })
@@ -242,37 +276,63 @@ export function ActionsDropdown({
             await Promise.all(secretaryEmailPromises)
           ).flat()
 
-          return secretaryEmails
+          const emails = secretaryEmails
             .map((s) => {
               return s?.secretaries.map((e) => {
                 return e.email
               })
             })
             .flat()
+
+          console.log('📋 Retrieved secretary emails:', emails)
+          return emails
         }
 
         if (updated.status && updated.data) {
+          console.log(
+            '✅ Protocol updated successfully, starting email process...'
+          )
+          console.log(
+            '🎯 Academic units for secretary lookup:',
+            updated.data.sections.identification.academicUnitIds
+          )
+          console.log(
+            '🔍 Full identification section:',
+            updated.data.sections.identification
+          )
+          console.log(
+            '🔍 Full sections object:',
+            Object.keys(updated.data.sections)
+          )
+
+          // Check if we have no academic units
+          if (
+            !updated.data.sections.identification.academicUnitIds ||
+            updated.data.sections.identification.academicUnitIds.length === 0
+          ) {
+            console.log('⚠️ No academic units found, emails will not be sent')
+            console.log(
+              '💡 You may need to set academic units in the protocol identification section'
+            )
+          }
           ;(
             await secretariesEmails(
-              updated.data.sections.identification.sponsor
+              updated.data.sections.identification.academicUnitIds
             )
           ).forEach((email) => {
-            emailer({
-              useCase: useCases.onPublish,
-              email: email!,
-              protocolId: updated.data.id,
-            })
-          })
-          //Notify admin when a protocol is being created when there's no open convocatory
-          if (!protocol.convocatory) {
-            ;(await getAdmins())?.forEach((admin) => {
+            console.log('🎯 CALLING EMAILER - Sending to:', email)
+            if (email) {
+              console.log('🚀 About to call emailer function...')
               emailer({
                 useCase: useCases.onPublish,
-                email: admin.email!,
+                email: email,
                 protocolId: updated.data.id,
               })
-            })
-          }
+              console.log('📤 Emailer function called')
+            } else {
+              console.log('⚠️ EMAILER - Skipping null email')
+            }
+          })
         } else {
           console.log(
             'No se pudo enviar emails a los secretarios de investigación'

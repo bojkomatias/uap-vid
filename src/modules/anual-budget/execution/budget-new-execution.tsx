@@ -64,7 +64,6 @@ const BudgetNewExecution = ({
     amount: number
     academicUnit?: string
   }) => {
-    console.log('SABING ASDASDA', amount)
     setSubmitting(true)
     try {
       if (

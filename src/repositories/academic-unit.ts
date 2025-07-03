@@ -272,13 +272,11 @@ export const updateAcademicUnitSecretaries = async (
   }
 }
 
-export const getSecretariesEmailsByAcademicUnit = async (name: string) => {
+export const getSecretariesEmailsByAcademicUnit = async (id: string) => {
   try {
     const academicUnits = prisma.academicUnit.findMany({
       where: {
-        name: {
-          contains: name,
-        },
+        id: id,
       },
       select: {
         secretaries: {

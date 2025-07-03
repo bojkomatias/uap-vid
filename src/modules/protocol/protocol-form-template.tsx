@@ -133,6 +133,7 @@ const sanitizeTeamMember = (member: any) => ({
 })
 
 const sanitizeProtocolData = (protocol: any) => {
+
   const defaults = getDefaultSections()
 
   return {

@@ -47,9 +47,29 @@ export async function emailer({
   protocolId,
   randomString,
 }: Emailer) {
-  // Variable used in template to redirect (hardcoded cause process.env failed.)
-  const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
-  const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  console.log('🔥 EMAILER CALLED:', {
+    useCase,
+    email,
+    protocolId,
+    randomString,
+  })
+
+  try {
+    // Variable used in template to redirect (hardcoded cause process.env failed.)
+    const href = `https://vidonline.uap.edu.ar/protocols/${protocolId}`
+
+    // Check if we can get email content and subjects
+    const emailContent = await getEmailContent()
+    const emailSubjects = await getEmailSubjects()
+
+    console.log('📧 Email data retrieved:', {
+      contentExists: !!emailContent,
+      subjectsExists: !!emailSubjects,
+      currentUseCase: useCase,
+      contentForUseCase: emailContent?.[useCase],
+      subjectForUseCase: emailSubjects?.[useCase],
+    })
+    const html = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -216,7 +236,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}</h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${emailContent?.[useCase] || 'Notificación del sistema'}</h1>
 
           </td>
         </tr>
@@ -257,7 +277,7 @@ export async function emailer({
     </body>
 
     </html>`
-  const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    const htmlEmailUpdate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
     <!--[if gte mso 9]>
@@ -424,7 +444,7 @@ export async function emailer({
         <tr>
           <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${(await getEmailContent())![useCase]}: <span style="font-weight: 800;"> ${randomString}</span></h1>
+      <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">${emailContent?.[useCase] || 'Notificación del sistema'}: <span style="font-weight: 800;"> ${randomString}</span></h1>
 
           </td>
         </tr>
@@ -464,54 +484,81 @@ export async function emailer({
 
     </html>`
 
-  let transporter
+    let transporter
 
-  if (process.env.NODE_ENV == 'development') {
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_ADDRESS,
-      port: Number(process.env.SMTP_PORT),
-      secure: false,
-      ignoreTLS: true,
-    })
-  } else {
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_ADDRESS,
-      port: Number(process.env.SMTP_PORT),
-      secure: false,
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASSWORD,
-      },
-    })
-  }
-
-  const emailObject = {
-    from: '"Portal VID - UAP" no-reply@uap.edu.ar',
-    to: email,
-    subject: (await getEmailSubjects())![useCase],
-    text: (await getEmailContent())![useCase],
-    html: randomString ? htmlEmailUpdate : html,
-  }
-
-  transporter.sendMail(emailObject, (err) => {
-    if (err) {
-      return new Response('Error sending email', { status: 500 })
+    if (process.env.NODE_ENV !== 'development') {
+      transporter = nodemailer.createTransport({
+        host: process.env.SMTP_ADDRESS,
+        port: Number(process.env.SMTP_PORT),
+        secure: false,
+        ignoreTLS: true,
+      })
     } else {
-      return new Response(`Successfully sent email to ${email}`, {
-        status: 250,
+      transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'nicoskate000@gmail.com',
+          pass: 'alrg hkso hivq bgvn',
+        },
       })
     }
-  })
 
-  transporter.verify(function (error, success) {
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.log(`Error sending the email: ${error}`)
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(`Email sent: ${success}`)
+    // In development, send to ghost email instead of real recipients
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    const ghostEmail = 'nicolas.horn@uap.edu.ar' // Dummy email for development
+
+    if (isDevelopment) {
+      console.log(
+        `🔀 DEVELOPMENT MODE: Redirecting email from ${email} to ${ghostEmail}`
+      )
     }
-  })
+
+    const emailObject = {
+      from: '"Portal VID - UAP" no-reply@uap.edu.ar',
+      to: isDevelopment ? ghostEmail : email,
+      bcc: 'nicoskate000@gmail.com',
+      subject: emailSubjects?.[useCase] || 'Notificación del Sistema',
+      text: emailContent?.[useCase] || 'Notificación del sistema',
+      html: randomString ? htmlEmailUpdate : html,
+    }
+
+    console.log('📬 Email object created:', {
+      originalRecipient: email,
+      actualTo: emailObject.to,
+      isDevelopment: isDevelopment,
+      subject: emailObject.subject,
+      hasHtml: !!emailObject.html,
+    })
+
+    transporter.sendMail(emailObject, (err) => {
+      if (err) {
+        console.error('❌ Error sending email:', err)
+        return new Response('Error sending email', { status: 500 })
+      } else {
+        console.log(
+          '✅ Email sent successfully to:',
+          emailObject.to,
+          isDevelopment ? `(redirected from ${email})` : ''
+        )
+        return new Response(`Successfully sent email to ${email}`, {
+          status: 250,
+        })
+      }
+    })
+
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(`❌ Transporter verification failed: ${error}`)
+      } else {
+        console.log(`✅ Transporter verified: ${success}`)
+      }
+    })
+  } catch (error) {
+    console.error('💥 EMAILER ERROR:', error)
+    throw error
+  }
 }
 
 export async function bug_report({
@@ -540,6 +587,7 @@ export async function bug_report({
   const emailObject = {
     from: '"ERROR Sistema VID UAP" no-reply@uap.edu.ar',
     to: 'contact@nicohorn.com',
+    bcc: 'nicoskate000@gmail.com',
     subject: 'Reporte de error',
     text: description.user_description,
     html: JSON.stringify(description, null, '&nbsp;').split('\n').join('<br>'),

@@ -118,8 +118,29 @@ export default function TeamMemberListForm() {
 
       if (result.status) {
         notifications.show(result.notification)
-        // The team member is deactivated but still in the list with updated assignment
-        // You might want to refresh the form data or update the UI to reflect the change
+
+        // Update the local form state to reflect the deactivation immediately
+        const currentTeam = form.getValues().sections.identification.team
+        const updatedTeam = currentTeam.map((member, index) => {
+          if (index === teamMemberIndex) {
+            const currentAssignment = member.assignments?.find((a) => !a.to)
+            if (currentAssignment) {
+              const updatedAssignments = member.assignments.map((assignment) =>
+                assignment === currentAssignment ?
+                  { ...assignment, to: new Date() }
+                : assignment
+              )
+              return {
+                ...member,
+                assignments: updatedAssignments,
+              }
+            }
+          }
+          return member
+        })
+
+        // Update the form state
+        form.setFieldValue('sections.identification.team', updatedTeam)
       } else {
         notifications.show(result.notification)
       }
@@ -394,7 +415,7 @@ export default function TeamMemberListForm() {
               .focus()
           }, 10)
         }}
-        className="my-1"
+        className="mt-4"
       >
         <Plus data-slot="icon" />
         Añadir otro miembro de equipo
