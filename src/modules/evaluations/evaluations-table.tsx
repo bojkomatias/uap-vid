@@ -82,7 +82,6 @@ export default function EvaluationsTable({
           <FormInput
             placeholder="Buscar pregunta"
             onChange={(e: any) => {
-              console.log(e.target.value.length)
               if (e.target.value.length == 0)
                 return setMethodologicalQuestions(
                   questions.filter(
@@ -116,11 +115,6 @@ export default function EvaluationsTable({
                     title={q.question}
                     draggable
                     onDrag={(e) => {
-                      console.log(
-                        e.currentTarget
-                          .closest('span')
-                          ?.getAttribute('data-index')
-                      )
                       setSwapIndex({
                         ...indexSwap,
                         oldIndex: Number(
@@ -158,10 +152,6 @@ export default function EvaluationsTable({
                           ...q,
                           index: i,
                         }))
-                      console.log(updatedMethodologicalQuestions)
-                      await updateQuestionIndexes(
-                        updatedMethodologicalQuestions
-                      )
                     }}
                     data-index={i}
                     onClick={() => {
@@ -244,11 +234,6 @@ export default function EvaluationsTable({
                     title={q.question}
                     draggable
                     onDrag={(e) => {
-                      console.log(
-                        e.currentTarget
-                          .closest('span')
-                          ?.getAttribute('data-index')
-                      )
                       setSwapIndex({
                         ...indexSwap,
                         oldIndex: Number(
@@ -286,7 +271,6 @@ export default function EvaluationsTable({
                           ...q,
                           index: i,
                         }))
-                      console.log(updatedScientificQuestions)
                       await updateQuestionIndexes(updatedScientificQuestions)
                     }}
                     data-index={i}

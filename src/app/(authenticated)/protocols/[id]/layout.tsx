@@ -139,7 +139,7 @@ export default async function Layout({
               duration={0.2}
               id="protocol-container"
               className={cx(
-                'inset-0 mt-8 space-y-6 overflow-auto transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full print:overflow-hidden',
+                'inset-0 mt-8 space-y-6 overflow-auto pr-2.5 transition-all duration-300 ease-in-out @container xl:absolute xl:-mb-8 xl:mt-0 xl:py-8 print:left-full print:overflow-hidden',
 
                 isReviewFormShown || isReviewListShown ? 'left-1/3' : ''
               )}

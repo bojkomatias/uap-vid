@@ -1,5 +1,7 @@
 'use server'
 
+// TODO: Fix naming - "anual" should be "annual" throughout the entire codebase for consistency and professionalism
+
 import type { AmountIndex } from '@prisma/client'
 import {
   type AnualBudget,
@@ -54,6 +56,11 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
  * @param year - The year to generate the budget for.
  * @returns A Promise that resolves to the generated annual budget, or null if the protocol is not found.
  */
+// TODO: This function is too complex and handles multiple responsibilities. Consider breaking it down into smaller functions:
+// - generateBudgetItems
+// - handleReactivation
+// - createTeamMembers
+// - updateBudgetState
 export const generateAnualBudget = async ({
   protocolId,
   year,
@@ -77,11 +84,13 @@ export const generateAnualBudget = async ({
   )
 
   // Handle the case where the annual budget is reactivated
+  // TODO: Extract this reactivation logic into a separate function for better readability
   if (budgetId && reactivated && oldAB) {
     for (let i = 0; i < ABI.length; i++) {
       ABI[i].executions = oldAB.budgetItems[i].executions
 
       // ABI[].remaining = oldAB.budgetItems[i].remainingIndex - sumatoria de ejecuciones.amountindex
+      // TODO: Extract this execution sum calculation into a utility function as it's repeated multiple times
       const executionsSum = oldAB.budgetItems[i].executions.reduce(
         (acc, item) => {
           if (!item || !item.amountIndex) return acc
@@ -117,6 +126,7 @@ export const generateAnualBudget = async ({
   )
 
   // Handle the case where the annual budget is reactivated
+  // TODO: This is duplicate logic from above - consider consolidating reactivation handling
   if (budgetId && reactivated && oldAB) {
     ABT.forEach((newABT) => {
       const oldABT = oldAB?.budgetTeamMembers.find(
@@ -126,6 +136,7 @@ export const generateAnualBudget = async ({
       if (!oldABT) return
       newABT.executions = oldABT?.executions || []
 
+      // TODO: Same execution sum calculation pattern - extract to utility function
       const executionsSum = oldABT.executions.reduce((acc, item) => {
         if (!item.amountIndex) return acc
         sumAmountIndex([acc, item.amountIndex])
@@ -157,12 +168,15 @@ export const generateAnualBudget = async ({
   return newAnualBudget.id
 }
 
+// TODO: Add proper error handling and consistent return types
 export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
   const protocol = await findProtocolByIdWithBudgets(protocolId)
   const protocolLogs = await getLogs({ protocolId })
 
   const lastProtocolState = protocolLogs?.at(-1)?.previousState
 
+  // TODO: Implement proper error handling instead of commenting it out
+  // This error handling should be implemented or removed entirely
   // if (!protocol || !lastProtocolState)
   //   return {
   //     success: false,
@@ -192,6 +206,7 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
   if (newBudgetId)
     await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
 
+  // TODO: Add null safety check for newBudgetId - using non-null assertion (!) can cause runtime errors
   return await updateProtocolStateById(
     protocolId,
     Action.REACTIVATE,
@@ -234,6 +249,7 @@ const generateAnualBudgetTeamMembers = (
   anualBudgetId: string | null,
   duration: number
 ): Omit<AnualBudgetTeamMember, 'id'>[] => {
+  // TODO: Remove @ts-ignore and fix the proper typing instead of suppressing errors
   // @ts-ignore (remove later)
   return protocolTeam.map((item) => {
     //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
@@ -284,8 +300,10 @@ export const protocolToAnualBudgetPreview = async (
     duration
   )
 
+  // TODO: Optimize this check - use .some() instead of .map().filter().length for better performance
   const thereAreTeamMembers =
     ABT.map((x) => x.teamMemberId).filter(Boolean).length > 0
+  // Better: ABT.some(x => x.teamMemberId)
 
   const teamMembers =
     thereAreTeamMembers ?
@@ -336,6 +354,7 @@ export const saveNewTeamMemberExecution = async (
   const amountIndex = await transformAmountToAmountIndex(amount)
 
   // In this cases team members will exist. Cannot have executions over plain categories.
+  // TODO: Define this magic number (1) as a named constant for better maintainability
   const hourlyRateInFCA =
     anualBudgetTeamMember.teamMember!.categories.at(-1)?.category.amountIndex
       ?.FCA || 1
@@ -346,6 +365,7 @@ export const saveNewTeamMemberExecution = async (
   const remainingHours =
     anualBudgetTeamMember.remainingHours - amountExcecutedInHours
 
+  // TODO: Use proper null checking instead of non-null assertion (!) which can cause runtime errors
   if (!anualBudgetTeamMember.teamMember!.academicUnitId) {
     return null
   }
@@ -371,6 +391,7 @@ export const saveNewItemExecution = async (
 
   // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
   // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
+  // TODO: Consider converting budget items to a proper Prisma model for better type safety and data consistency
   const amountIndex = await transformAmountToAmountIndex(amount)
 
   const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
@@ -472,6 +493,9 @@ const getAcademicUnitBudgetSummary = (
   }
 }
 
+// TODO: This function uses JSON.stringify for deduplication which is inefficient and unreliable
+// Consider using a more efficient approach like creating a proper key based on specific properties
+// or using a Set with a proper comparison function
 const removeDuplicates = (
   inputArray: (AnualBudget & {
     budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
@@ -482,6 +506,8 @@ const removeDuplicates = (
 
   for (const item of inputArray) {
     const budgetItems = item.budgetItems
+    // TODO: JSON.stringify for object comparison is inefficient and can be unreliable
+    // Consider using a more robust deduplication strategy
     const key = JSON.stringify(budgetItems)
 
     if (!seenItems.has(key)) {
@@ -536,3 +562,17 @@ export const getBudgetSummary = async (
 }
 
 export type BudgetSummaryType = Awaited<ReturnType<typeof getBudgetSummary>>
+
+// TODO: Additional improvements to consider:
+// 1. Add comprehensive JSDoc comments for all functions
+// 2. Implement proper error handling with consistent return types
+// 3. Create utility functions for common operations (execution sum calculations, etc.)
+// 4. Add input validation for all functions
+// 5. Consider using Result/Either pattern for better error handling
+// 6. Add unit tests for all functions
+// 7. Consider breaking this file into smaller, more focused modules
+// 8. Fix the "anual" vs "annual" naming inconsistency throughout the codebase
+// 9. Replace magic numbers with named constants
+// 10. Improve type safety by removing @ts-ignore and non-null assertions
+// 11. Optimize performance in array operations and object comparisons
+// 12. Consider implementing proper data models for better type safety

@@ -18,7 +18,7 @@ import { FormListbox } from '@shared/form/form-listbox'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { CalendarEvent, Click } from 'tabler-icons-react'
+import { AlertCircle, CalendarEvent, Click } from 'tabler-icons-react'
 import { z } from 'zod'
 
 export function AssingConvocatoryDialog({
@@ -71,11 +71,20 @@ export function AssingConvocatoryDialog({
   return (
     <>
       <BadgeButton
-        color="light"
+        color={convocatory ? 'light' : 'orange'}
         onClick={() => setOpen(true)}
         className="w-fit !text-sm/6 font-semibold"
+        title={
+          convocatory ?
+            'Cambiar convocatoria'
+          : 'El protocolo no se puede publicar sin una convocatoria asignada'
+        }
       >
-        {convocatory?.name ?? 'Sin convocatoria'}
+        {convocatory?.name ?? (
+          <div className="flex animate-pulse items-center gap-2">
+            Sin convocatoria <AlertCircle size={16} />
+          </div>
+        )}
       </BadgeButton>
       <Dialog open={open} onClose={() => setOpen(false)} size="xl">
         <DialogTitle>Asignar convocatoria</DialogTitle>

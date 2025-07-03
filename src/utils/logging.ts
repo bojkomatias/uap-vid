@@ -18,16 +18,16 @@ export async function logServerAction(actionName: string, data: any) {
   const cookieHeader = headersList.get('cookie')
   const sessionToken = getSessionToken(cookieHeader)
 
-  console.log({
-    timestamp: new Date().toISOString(),
-    type: 'server_action',
-    action: actionName,
-    data: JSON.stringify(data),
-    token: sessionToken,
-    headers: Object.fromEntries(headersList.entries()),
-    pathname: headersList.get('x-pathname'),
-    url: headersList.get('x-url'),
-  })
+  // console.log({
+  //   timestamp: new Date().toISOString(),
+  //   type: 'server_action',
+  //   action: actionName,
+  //   data: JSON.stringify(data),
+  //   token: sessionToken,
+  //   headers: Object.fromEntries(headersList.entries()),
+  //   pathname: headersList.get('x-pathname'),
+  //   url: headersList.get('x-url'),
+  // })
 }
 
 // Higher-order function to wrap server actions with logging

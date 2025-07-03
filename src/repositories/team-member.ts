@@ -125,3 +125,79 @@ export const getTeamMembers = async ({
 }
 
 export const getAllTeamMembers = async () => await prisma.teamMember.findMany()
+
+export const deactivateTeamMember = async (
+  protocolId: string,
+  teamMemberIndex: number
+) => {
+  try {
+    const protocol = await prisma.protocol.findUnique({
+      where: { id: protocolId },
+      select: { sections: true },
+    })
+
+    if (!protocol) {
+      throw new Error('Protocol not found')
+    }
+
+    const team = protocol.sections.identification.team
+    if (teamMemberIndex < 0 || teamMemberIndex >= team.length) {
+      throw new Error('Invalid team member index')
+    }
+
+    // Update the team member's current assignment to set the "to" date
+    const updatedTeam = team.map((member, index) => {
+      if (index === teamMemberIndex) {
+        const currentAssignment = member.assignments.find((a) => !a.to)
+        if (currentAssignment) {
+          const updatedAssignments = member.assignments.map((assignment) =>
+            assignment === currentAssignment ?
+              { ...assignment, to: new Date() }
+            : assignment
+          )
+          return {
+            ...member,
+            assignments: updatedAssignments,
+          }
+        }
+      }
+      return member
+    })
+
+    const updatedSections = {
+      ...protocol.sections,
+      identification: {
+        ...protocol.sections.identification,
+        team: updatedTeam,
+      },
+    }
+
+    const result = await prisma.protocol.update({
+      where: { id: protocolId },
+      data: {
+        sections: updatedSections,
+      },
+    })
+
+    return {
+      status: true,
+      data: result,
+      notification: {
+        title: 'Miembro desactivado',
+        message: 'El miembro del equipo fue desactivado con éxito',
+        intent: 'success',
+      } as const,
+    }
+  } catch (error) {
+    console.error('Error deactivating team member:', error)
+    return {
+      status: false,
+      notification: {
+        title: 'Error',
+        message:
+          'Ocurrió un error al intentar desactivar el miembro del equipo',
+        intent: 'error',
+      } as const,
+    }
+  }
+}
