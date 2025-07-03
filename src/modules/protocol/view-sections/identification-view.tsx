@@ -30,11 +30,11 @@ const TeamTable = ({
       <DescriptionDetails>
         <div className="space-y-2">
           {/* Table Header */}
-          <div className="grid grid-cols-3 gap-4 border-b border-gray-100 pb-2">
+          <DescriptionDetails className="grid grid-cols-3 gap-4 !border-t-0  border-b !pt-0 pb-2">
             <Text className="text-left">Nombre</Text>
             <Text className="text-left">Rol / Categoría</Text>
             <Text className="text-left">Horas semanales</Text>
-          </div>
+          </DescriptionDetails>
 
           {/* Table Rows */}
           {team.map((person, index) => (
@@ -52,18 +52,16 @@ const TeamTable = ({
                   !person.active && 'line-through opacity-50'
                 }`}
               >
-                <Text className="text-left !text-black">
+                <Text className="text-left ">
                   {person.toBeConfirmed ? 'A definir' : person.fullName}
                 </Text>
-                <Text className="text-left !text-black">
+                <Text className="text-left ">
                   {person.toBeConfirmed ?
                     categories.find((c) => c.id == person.category)?.name ||
                     'Categoría pendiente'
                   : person.role}
                 </Text>
-                <Text className="text-left !text-black">
-                  {person.hours.toString()}
-                </Text>
+                <Text className="text-left ">{person.hours.toString()}</Text>
               </div>
             </Info>
           ))}

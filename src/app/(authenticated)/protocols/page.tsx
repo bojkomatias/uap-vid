@@ -43,6 +43,7 @@ export default async function Page({
                 <FileReport data-slot="icon" /> Nuevo proyecto
               </Button>
             )}
+
           </div>
         </div>
 
