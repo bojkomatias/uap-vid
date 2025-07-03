@@ -1,10 +1,11 @@
 'use client'
 import { useProtocolContext } from '@utils/createContext'
 import React, { Fragment, useState } from 'react'
-import { Plus, Trash, Edit, UserMinus } from 'tabler-icons-react'
+import { Plus, Trash, Edit, UserMinus, UserPlus } from 'tabler-icons-react'
 import {
   getAllTeamMembers,
   deactivateTeamMember,
+  reactivateTeamMember,
 } from '@repositories/team-member'
 import {
   Description,
@@ -37,6 +38,16 @@ export default function TeamMemberListForm() {
     [key: number]: boolean
   }>({})
   const [deactivateDialog, setDeactivateDialog] = useState<{
+    open: boolean
+    teamMemberIndex: number | null
+    memberName: string
+  }>({
+    open: false,
+    teamMemberIndex: null,
+    memberName: '',
+  })
+
+  const [reactivateDialog, setReactivateDialog] = useState<{
     open: boolean
     teamMemberIndex: number | null
     memberName: string
@@ -91,6 +102,17 @@ export default function TeamMemberListForm() {
     const memberName = teamMember.name || 'Miembro sin nombre'
 
     setDeactivateDialog({
+      open: true,
+      teamMemberIndex: index,
+      memberName,
+    })
+  }
+
+  const showReactivateDialog = (index: number) => {
+    const teamMember = form.getValues().sections.identification.team[index]
+    const memberName = teamMember.name || 'Miembro sin nombre'
+
+    setReactivateDialog({
       open: true,
       teamMemberIndex: index,
       memberName,
@@ -159,6 +181,74 @@ export default function TeamMemberListForm() {
       })
     } finally {
       setDeactivateDialog({
+        open: false,
+        teamMemberIndex: null,
+        memberName: '',
+      })
+    }
+  }
+
+  const handleReactivateTeamMember = async () => {
+    const { teamMemberIndex } = reactivateDialog
+
+    if (teamMemberIndex === null) return
+
+    const protocolId = form.values.id
+
+    if (!protocolId) {
+      notifications.show({
+        title: 'Error',
+        message: 'No se puede reactivar el miembro: protocolo no guardado',
+        intent: 'error',
+      })
+      return
+    }
+
+    try {
+      const result = await reactivateTeamMember(protocolId, teamMemberIndex)
+
+      if (result.status) {
+        notifications.show(result.notification)
+
+        // Update the local form state to reflect the reactivation immediately
+        const currentTeam = form.getValues().sections.identification.team
+        const updatedTeam = currentTeam.map((member, index) => {
+          if (index === teamMemberIndex) {
+            // Find the deactivated assignment (with a 'to' date) and reactivate it
+            const deactivatedAssignmentIndex = member.assignments?.findIndex(
+              (a) => a.to
+            )
+            if (
+              deactivatedAssignmentIndex !== undefined &&
+              deactivatedAssignmentIndex !== -1
+            ) {
+              const updatedAssignments = [...(member.assignments || [])]
+              updatedAssignments[deactivatedAssignmentIndex] = {
+                ...updatedAssignments[deactivatedAssignmentIndex],
+                to: null,
+              }
+              return {
+                ...member,
+                assignments: updatedAssignments,
+              }
+            }
+          }
+          return member
+        })
+
+        // Update the form state
+        form.setFieldValue('sections.identification.team', updatedTeam)
+      } else {
+        notifications.show(result.notification)
+      }
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Ocurrió un error al reactivar el miembro del equipo',
+        intent: 'error',
+      })
+    } finally {
+      setReactivateDialog({
         open: false,
         teamMemberIndex: null,
         memberName: '',
@@ -357,23 +447,21 @@ export default function TeamMemberListForm() {
                 {index === 0 ?
                   <span />
                 : <div className="mt-1 flex gap-1 self-start">
-                    <Button
-                      plain
-                      disabled={isDeactivated}
-                      title={
-                        isDeactivated ?
-                          'Este miembro ya ha sido desactivado'
-                        : 'Desactivar miembro'
-                      }
-                    >
-                      <UserMinus
-                        data-slot="icon"
-                        onClick={() =>
-                          !isDeactivated && showDeactivateDialog(index)
-                        }
-                        className={isDeactivated ? 'text-gray-400' : ''}
-                      />
-                    </Button>
+                    {isDeactivated ?
+                      <Button plain title="Reactivar miembro">
+                        <UserPlus
+                          data-slot="icon"
+                          onClick={() => showReactivateDialog(index)}
+                          className="text-green-600 hover:text-green-700"
+                        />
+                      </Button>
+                    : <Button plain title="Desactivar miembro">
+                        <UserMinus
+                          data-slot="icon"
+                          onClick={() => showDeactivateDialog(index)}
+                        />
+                      </Button>
+                    }
                     <Button plain>
                       <Trash
                         data-slot="icon"
@@ -426,7 +514,7 @@ export default function TeamMemberListForm() {
         Añadir otro miembro de equipo
       </Button>
 
-      {/* Confirmation Dialog */}
+      {/* Deactivate Confirmation Dialog */}
       <Dialog
         open={deactivateDialog.open}
         onClose={() =>
@@ -459,6 +547,42 @@ export default function TeamMemberListForm() {
           </Button>
           <Button color="red" onClick={handleDeactivateTeamMember}>
             Desactivar miembro
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Reactivate Confirmation Dialog */}
+      <Dialog
+        open={reactivateDialog.open}
+        onClose={() =>
+          setReactivateDialog({
+            open: false,
+            teamMemberIndex: null,
+            memberName: '',
+          })
+        }
+        size="lg"
+      >
+        <DialogTitle>Confirmar reactivación</DialogTitle>
+        <DialogDescription>
+          ¿Está seguro que desea reactivar a "{reactivateDialog.memberName}"?
+          Esta acción marcará el miembro como activo nuevamente en el proyecto.
+        </DialogDescription>
+        <DialogActions>
+          <Button
+            plain
+            onClick={() =>
+              setReactivateDialog({
+                open: false,
+                teamMemberIndex: null,
+                memberName: '',
+              })
+            }
+          >
+            Cancelar
+          </Button>
+          <Button color="green" onClick={handleReactivateTeamMember}>
+            Reactivar miembro
           </Button>
         </DialogActions>
       </Dialog>

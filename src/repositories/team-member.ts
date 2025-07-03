@@ -201,3 +201,78 @@ export const deactivateTeamMember = async (
     }
   }
 }
+
+export const reactivateTeamMember = async (
+  protocolId: string,
+  teamMemberIndex: number
+) => {
+  try {
+    const protocol = await prisma.protocol.findUnique({
+      where: { id: protocolId },
+      select: { sections: true },
+    })
+
+    if (!protocol) {
+      throw new Error('Protocol not found')
+    }
+
+    const team = protocol.sections.identification.team
+    if (teamMemberIndex < 0 || teamMemberIndex >= team.length) {
+      throw new Error('Invalid team member index')
+    }
+
+    // Update the team member's assignment to remove the "to" date (reactivate)
+    const updatedTeam = team.map((member, index) => {
+      if (index === teamMemberIndex) {
+        const deactivatedAssignment = member.assignments.find((a) => a.to)
+        if (deactivatedAssignment) {
+          const updatedAssignments = member.assignments.map((assignment) =>
+            assignment === deactivatedAssignment ?
+              { ...assignment, to: null }
+            : assignment
+          )
+          return {
+            ...member,
+            assignments: updatedAssignments,
+          }
+        }
+      }
+      return member
+    })
+
+    const updatedSections = {
+      ...protocol.sections,
+      identification: {
+        ...protocol.sections.identification,
+        team: updatedTeam,
+      },
+    }
+
+    const result = await prisma.protocol.update({
+      where: { id: protocolId },
+      data: {
+        sections: updatedSections,
+      },
+    })
+
+    return {
+      status: true,
+      data: result,
+      notification: {
+        title: 'Miembro reactivado',
+        message: 'El miembro del equipo fue reactivado con éxito',
+        intent: 'success',
+      } as const,
+    }
+  } catch (error) {
+    console.error('Error reactivating team member:', error)
+    return {
+      status: false,
+      notification: {
+        title: 'Error',
+        message: 'Ocurrió un error al intentar reactivar el miembro del equipo',
+        intent: 'error',
+      } as const,
+    }
+  }
+}

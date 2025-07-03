@@ -9,9 +9,16 @@ import {
 } from '../components/dialog'
 import { Trash } from 'tabler-icons-react'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export function ClearLocalStorageButton() {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Only show this component on /protocols/new/0
+  if (pathname !== '/protocols/new/0') {
+    return null
+  }
 
   const handleClearLocalStorage = () => {
     if (typeof window !== 'undefined') {
