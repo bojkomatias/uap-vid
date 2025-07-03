@@ -10,54 +10,11 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { Text } from '@components/text'
+import Info from '@shared/info'
 
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
 }
-
-// Custom Team Table Component
-const TeamTable = ({
-  team,
-  categories,
-}: {
-  team: any[]
-  categories: any[]
-}) => {
-  return (
-    <>
-      <DescriptionTerm>Integrantes del Equipo de Investigación</DescriptionTerm>
-      <DescriptionDetails>
-        <div className="space-y-2">
-          {/* Table Header */}
-          <div className="grid grid-cols-3 gap-4 border-b border-gray-100 pb-2">
-            <Text className="text-left">Nombre</Text>
-            <Text className="text-left">Rol / Categoría</Text>
-            <Text className="text-left">Horas semanales</Text>
-          </div>
-
-          {/* Table Rows */}
-          {team.map((person, index) => (
-            <div key={index} className="grid grid-cols-3 gap-4 py-1 ">
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ? 'A definir' : person.fullName}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.toBeConfirmed ?
-                  categories.find((c) => c.id == person.category)?.name ||
-                  'Categoría pendiente'
-                : person.role}
-              </Text>
-              <Text className="text-left !text-black">
-                {person.hours.toString()}
-              </Text>
-            </div>
-          ))}
-        </div>
-      </DescriptionDetails>
-    </>
-  )
-}
-
 export default async function IdentificationView({
   data,
 }: IdentificationProps) {
@@ -103,6 +60,7 @@ export default async function IdentificationView({
     const fullName = teamMember ? teamMember.name : `${tm.name} ${tm.last_name}`
     // This handles the case where the team member has multiple assignments. Bring the active one.
     const assignment = tm.assignments?.find((a) => !a.to)
+    const toDate = tm.assignments?.find((a) => a.to)?.to
     return {
       fullName,
       role: assignment?.role ?? tm.role,
@@ -111,6 +69,31 @@ export default async function IdentificationView({
       hours: assignment?.hours ?? tm.hours ?? 0,
     }
   })
+
+  const tableData = {
+    title: 'Equipo',
+    values: team.reduce((newVal: ListRowValues[], person, idx) => {
+      newVal.push([
+        {
+          up: person.toBeConfirmed ? 'A definir' : person.fullName,
+          down:
+            person.toBeConfirmed ?
+              categories.find((c) => c.id == person.category)?.name
+            : person.role,
+        },
+        {
+          up: idx == 0 ? '' : '',
+          down: person.hours.toString(),
+        },
+      ])
+      return newVal
+    }, []),
+  }
+
+  tableData.values.unshift([
+    { up: '', down: 'Miembro de equipo' },
+    { up: '', down: 'Horas semanales' },
+  ])
 
   return (
     <>

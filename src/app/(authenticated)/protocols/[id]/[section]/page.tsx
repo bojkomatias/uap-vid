@@ -31,7 +31,10 @@ export default async function Page({
   const protocol = await findProtocolById(params.id)
   if (!protocol) redirect('/protocols')
 
-  if (
+  // Allow admins to edit protocols in any state (admin override)
+  const isAdmin = session.user.role === 'ADMIN'
+  const canEdit =
+    isAdmin ||
     canExecute(
       session.user.id === protocol.researcherId ?
         Action.EDIT_BY_OWNER
@@ -39,8 +42,10 @@ export default async function Page({
       session.user.role,
       protocol.state
     )
-  )
+
+  if (canEdit) {
     return <ProtocolForm protocol={protocol} />
+  }
 
   redirect('/protocols')
 }

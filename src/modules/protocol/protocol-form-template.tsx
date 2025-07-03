@@ -313,7 +313,7 @@ export default function ProtocolForm({
         }}
         onSubmit={(e) => {
           e.preventDefault()
-
+          console.log(form.getValues().sections.identification.team)
           // For draft saves, validate with the more lenient draft schema
           try {
             IdentificationDraftSchema.parse(form.values.sections.identification)

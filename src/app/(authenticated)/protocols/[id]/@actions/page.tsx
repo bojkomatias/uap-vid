@@ -2,11 +2,12 @@ import { Action, ReviewVerdict, Prisma } from '@prisma/client'
 import { ActionsDropdown } from '@protocol/elements/actions-dropdown'
 import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { getReviewsByProtocol } from '@repositories/review'
-import { getActionsByRoleAndState } from '@utils/scopes'
+import { getActionsByRoleAndState, canExecute } from '@utils/scopes'
 import { ProtocolSchema } from '@utils/zod'
 
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
+import { ProtocolStatesDictionary } from '@utils/dictionaries/ProtocolStatesDictionary'
 
 type ProtocolWithResearcher = Prisma.ProtocolGetPayload<{
   include: {
@@ -47,6 +48,10 @@ export default async function ActionsPage({
     approve: {
       allFlagsValid: false,
       hasRequiredFlags: false,
+      message: '',
+    },
+    edit: {
+      canEdit: false,
       message: '',
     },
   }
@@ -104,6 +109,19 @@ export default async function ActionsPage({
   }
   const approveChecksFailed = hasInvalidFlags || !hasRequiredFlags
 
+  // Edit
+  const canEditNormally = canExecute(
+    session.user.id === protocol.researcherId ?
+      Action.EDIT_BY_OWNER
+    : Action.EDIT,
+    session.user.role,
+    protocol.state
+  )
+  checkResults.edit.canEdit = canEditNormally
+  if (!canEditNormally) {
+    checkResults.edit.message = `El protocolo está en estado "${ProtocolStatesDictionary[protocol.state]}" y no puede ser editado normalmente. Solo los administradores pueden editar protocolos en este estado.`
+  }
+
   // --- Admin Override Logic: Add actions back if missing ---
   // --- Non-Admin Logic: Filter out actions if checks fail ---
 
@@ -120,6 +138,10 @@ export default async function ActionsPage({
     if (!actions.includes(Action.APPROVE) || approveChecksFailed) {
       if (!filteredActions.includes(Action.APPROVE))
         filteredActions.push(Action.APPROVE)
+    }
+    // For Admins, always ensure EDIT action is available
+    if (!filteredActions.includes(Action.EDIT)) {
+      filteredActions.push(Action.EDIT)
     }
   } else {
     // For non-Admins, filter out actions if they were allowed by state but fail business logic checks.

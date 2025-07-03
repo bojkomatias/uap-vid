@@ -12,6 +12,7 @@ const parseTeamAssignment = (
     ...team,
     assignments: [
       {
+        workingMonths: 12,
         categoryToBeConfirmed: team.categoryToBeConfirmed ?? null,
         role: team.role!,
         hours: team.hours!,
