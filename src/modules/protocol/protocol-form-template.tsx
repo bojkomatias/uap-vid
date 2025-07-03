@@ -33,6 +33,7 @@ import { SubmitButton } from '@shared/submit-button'
 import { Button } from '@components/button'
 import type { z } from 'zod'
 import { createProtocol, updateProtocolById } from '@repositories/protocol'
+import { ClearLocalStorageButton } from 'modules/clear-local-storage-button'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -133,7 +134,6 @@ const sanitizeTeamMember = (member: any) => ({
 })
 
 const sanitizeProtocolData = (protocol: any) => {
-
   const defaults = getDefaultSections()
 
   return {
@@ -413,9 +413,10 @@ export default function ProtocolForm({
             <ArrowNarrowLeft data-slot="icon" />
             Sección previa
           </Button>
-
-          <SubmitButton isLoading={isPending}>Guardar</SubmitButton>
-
+          <div className="flex items-center gap-2">
+            <SubmitButton isLoading={isPending}>Guardar</SubmitButton>{' '}
+            <ClearLocalStorageButton />
+          </div>
           <Button
             type="button"
             plain
