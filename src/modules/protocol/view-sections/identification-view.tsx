@@ -113,7 +113,8 @@ export default async function IdentificationView({
 
   const team = data.team.map((tm) => {
     const teamMember = teamMembers.find((t) => t.id === tm.teamMemberId)
-    const fullName = teamMember ? teamMember.name : `${tm.name} ${tm.last_name}`
+    const fullName =
+      teamMember ? teamMember.name : `${tm.name} ${tm.last_name ?? ''}`
     // This handles the case where the team member has multiple assignments. Bring the active one.
     const assignment = tm.assignments?.find((a) => !a.to)
     const toDate = tm.assignments?.find((a) => a.to)?.to
