@@ -50,6 +50,17 @@ import {
 import { protocolDuration } from '@utils/constants'
 import { WEEKS_IN_MONTH } from '@utils/constants'
 
+// Utility function to calculate execution sum safely
+const calculateExecutionsSum = (executions: Execution[]): AmountIndex => {
+  return executions.reduce(
+    (acc, execution) => {
+      if (!execution?.amountIndex) return acc
+      return sumAmountIndex([acc, execution.amountIndex])
+    },
+    { FCA: 0, FMR: 0 } as AmountIndex
+  )
+}
+
 /**
  * Generates an annual budget based on a given protocol ID and year.
  * @param protocolId - The ID of the protocol to generate the budget from.
@@ -83,28 +94,27 @@ export const generateAnualBudget = async ({
     year.toString()
   )
 
-  // Handle the case where the annual budget is reactivated
-  // TODO: Extract this reactivation logic into a separate function for better readability
+  // Handle the case where the annual budget is reactivated - FIXED VERSION
   if (budgetId && reactivated && oldAB) {
-    for (let i = 0; i < ABI.length; i++) {
-      ABI[i].executions = oldAB.budgetItems[i].executions
+    // Ensure we have the same number of budget items
+    if (ABI.length !== oldAB.budgetItems.length) {
+      console.warn('Budget items count mismatch during reactivation')
+    }
 
-      // ABI[].remaining = oldAB.budgetItems[i].remainingIndex - sumatoria de ejecuciones.amountindex
-      // TODO: Extract this execution sum calculation into a utility function as it's repeated multiple times
-      const executionsSum = oldAB.budgetItems[i].executions.reduce(
-        (acc, item) => {
-          if (!item || !item.amountIndex) return acc
-          acc = sumAmountIndex([acc, item.amountIndex])
-          return acc
-        },
-        { FCA: 0, FMR: 0 } as AmountIndex
-      )
+    for (let i = 0; i < Math.min(ABI.length, oldAB.budgetItems.length); i++) {
+      const oldItem = oldAB.budgetItems[i]
+      if (!oldItem) continue
 
-      const newRemainig = subtractAmountIndex(
+      ABI[i].executions = oldItem.executions || []
+
+      // Fixed execution sum calculation using utility function
+      const executionsSum = calculateExecutionsSum(oldItem.executions)
+
+      const newRemaining = subtractAmountIndex(
         ABI[i].remainingIndex,
         executionsSum
       )
-      ABI[i].remainingIndex = newRemainig
+      ABI[i].remainingIndex = newRemaining
     }
   }
 
@@ -125,30 +135,26 @@ export const generateAnualBudget = async ({
     duration
   )
 
-  // Handle the case where the annual budget is reactivated
-  // TODO: This is duplicate logic from above - consider consolidating reactivation handling
-  if (budgetId && reactivated && oldAB) {
+  // Handle the case where the annual budget is reactivated - FIXED VERSION
+  if (budgetId && reactivated && oldAB && oldAB.budgetTeamMembers) {
     ABT.forEach((newABT) => {
-      const oldABT = oldAB?.budgetTeamMembers.find(
+      const oldABT = oldAB.budgetTeamMembers.find(
         (oldABT) => oldABT.teamMemberId === newABT.teamMemberId
       )
 
       if (!oldABT) return
-      newABT.executions = oldABT?.executions || []
 
-      // TODO: Same execution sum calculation pattern - extract to utility function
-      const executionsSum = oldABT.executions.reduce((acc, item) => {
-        if (!item.amountIndex) return acc
-        sumAmountIndex([acc, item.amountIndex])
-        return acc
-      }, {} as AmountIndex)
+      newABT.executions = oldABT.executions || []
 
-      if (executionsSum?.FCA) {
+      // Fixed execution sum calculation using utility function
+      const executionsSum = calculateExecutionsSum(oldABT.executions)
+
+      if (executionsSum?.FCA && oldABT.teamMember?.categories?.length) {
         const hourlyRateInFCA =
-          oldABT.teamMember?.categories.at(-1)?.category.amountIndex?.FCA || 1
+          oldABT.teamMember.categories.at(-1)?.category.amountIndex?.FCA || 1
 
-        const newRemaining =
-          newABT.remainingHours - executionsSum.FCA / hourlyRateInFCA
+        const hoursExecuted = executionsSum.FCA / hourlyRateInFCA
+        const newRemaining = Math.max(0, newABT.remainingHours - hoursExecuted)
 
         newABT.remainingHours = newRemaining
       }
@@ -170,51 +176,89 @@ export const generateAnualBudget = async ({
 
 // TODO: Add proper error handling and consistent return types
 export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
-  const protocol = await findProtocolByIdWithBudgets(protocolId)
-  const protocolLogs = await getLogs({ protocolId })
+  try {
+    const protocol = await findProtocolByIdWithBudgets(protocolId)
+    const protocolLogs = await getLogs({ protocolId })
 
-  const lastProtocolState = protocolLogs?.at(-1)?.previousState
+    // Proper error handling instead of commenting it out
+    if (!protocol) {
+      return {
+        status: false,
+        notification: {
+          title: 'Error',
+          message: 'No se encontró el protocolo especificado.',
+          intent: 'error',
+        } as const,
+      }
+    }
 
-  // TODO: Implement proper error handling instead of commenting it out
-  // This error handling should be implemented or removed entirely
-  // if (!protocol || !lastProtocolState)
-  //   return {
-  //     success: false,
-  //     notification: {
-  //       title: 'Error',
-  //       message: 'Ocurrio un error al reactivar el procotolo.',
-  //       intent: 'error',
-  //     } as const,
-  //   }
+    const lastProtocolState = protocolLogs?.at(-1)?.previousState
 
-  const currentYear = new Date().getFullYear()
-  const haveBudgetForCurrentYear = protocol!.anualBudgets.find(
-    (b) => b.year === currentYear
-  )
+    const currentYear = new Date().getFullYear()
+    const haveBudgetForCurrentYear = protocol.anualBudgets.find(
+      (b) => b.year === currentYear
+    )
 
-  let newBudgetId
+    let newBudgetId: string | null = null
 
-  if (haveBudgetForCurrentYear) {
-    newBudgetId = await generateAnualBudget({
-      protocolId: protocolId,
-      year: currentYear,
-      budgetId: haveBudgetForCurrentYear.id,
-      reactivated: true,
-    })
+    // Create or regenerate budget for current year
+    if (haveBudgetForCurrentYear) {
+      newBudgetId = await generateAnualBudget({
+        protocolId: protocolId,
+        year: currentYear,
+        budgetId: haveBudgetForCurrentYear.id,
+        reactivated: true,
+      })
+    } else {
+      // Generate new budget if no budget exists for current year
+      newBudgetId = await generateAnualBudget({
+        protocolId: protocolId,
+        year: currentYear,
+        reactivated: false,
+      })
+    }
+
+    // Validate that budget generation was successful
+    if (!newBudgetId) {
+      return {
+        status: false,
+        notification: {
+          title: 'Error',
+          message:
+            'No se pudo generar el presupuesto anual durante la reactivación.',
+          intent: 'error',
+        } as const,
+      }
+    }
+
+    // Update logs with new budget ID
+    if (newBudgetId) {
+      await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
+    }
+
+    // Update protocol state with proper null safety
+    const result = await updateProtocolStateById(
+      protocolId,
+      Action.REACTIVATE,
+      lastProtocolState || ProtocolState.DISCONTINUED,
+      ProtocolState.ON_GOING,
+      undefined,
+      newBudgetId
+    )
+
+    return result
+  } catch (error) {
+    console.error('Error reactivating protocol and annual budget:', error)
+    return {
+      status: false,
+      notification: {
+        title: 'Error',
+        message:
+          'Ocurrió un error inesperado al reactivar el protocolo y presupuesto.',
+        intent: 'error',
+      } as const,
+    }
   }
-
-  if (newBudgetId)
-    await updateLogsBudgetIdOnProtocolReactivation(protocolId, newBudgetId)
-
-  // TODO: Add null safety check for newBudgetId - using non-null assertion (!) can cause runtime errors
-  return await updateProtocolStateById(
-    protocolId,
-    Action.REACTIVATE,
-    ProtocolState.DISCONTINUED,
-    ProtocolState.ON_GOING,
-    undefined,
-    newBudgetId!
-  )
 }
 
 // Utilities for generating the annual budget from a protocol.
