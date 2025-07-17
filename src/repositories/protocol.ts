@@ -541,6 +541,48 @@ const upsertProtocolFlag = async (
   }
 }
 
+const upsertProtocolFlags = async (
+  id: string,
+  flags: Omit<ProtocolFlag, 'createdAt'>[]
+) => {
+  try {
+    const protocol = await prisma.protocol.findFirst({ where: { id } })
+    let protocolFlags = protocol?.flags || []
+
+    // Update or add each flag
+    flags.forEach((flag) => {
+      const existingFlagIndex = protocolFlags.findIndex(
+        (f) => f.flagName === flag.flagName
+      )
+
+      if (existingFlagIndex !== -1) {
+        // Update existing flag
+        protocolFlags[existingFlagIndex] = {
+          ...protocolFlags[existingFlagIndex],
+          ...flag,
+        }
+      } else {
+        // Add new flag
+        protocolFlags.push({
+          ...flag,
+          createdAt: new Date(),
+        })
+      }
+    })
+
+    // Update the protocol with all flags at once
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id },
+      data: { flags: protocolFlags },
+    })
+
+    return updatedProtocol
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 const patchProtocolNumber = async (id: string, protocolNumber: string) =>
   await prisma.protocol.update({
     where: { id },
@@ -948,6 +990,7 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  upsertProtocolFlags,
   updateProtocolTeamMembers,
   updateProtocolConvocatory,
   findProtocolByIdWithBudgets,

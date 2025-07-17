@@ -255,12 +255,15 @@ const generateAnualBudgetTeamMembers = (
     //If the team member has assigned "custom" workingMonths, those months will be used to calculate the amount of hours in total.
 
     const hoursAssigned =
-      item.assignments.filter((a) => !a.to).at(0)?.hours ?? 0
+      item.assignments.filter((a) => !a.to).at(0)?.hours ?? 1
 
-    const hours = Math.ceil(
-      item.workingMonths && item.workingMonths > 0 ?
-        hoursAssigned * item.workingMonths * WEEKS_IN_MONTH
-      : hoursAssigned * duration
+    const hours = Math.max(
+      1,
+      Math.ceil(
+        item.workingMonths && item.workingMonths > 0 ?
+          hoursAssigned * item.workingMonths * WEEKS_IN_MONTH
+        : hoursAssigned * duration
+      )
     )
 
     if (item.toBeConfirmed && item.categoryToBeConfirmed) {
