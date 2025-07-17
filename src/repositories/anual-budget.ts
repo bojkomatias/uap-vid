@@ -519,26 +519,74 @@ export const interruptAnualBudget = async (id: string) => {
 }
 
 export const reactivatedAnualBudget = async (id: string) => {
-  const AB = await prisma.anualBudget.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      protocol: { select: { id: true } },
-      state: true,
-      budgetItems: true,
-      budgetTeamMembers: true,
-    },
-  })
-  if (!AB || AB.state !== AnualBudgetState.INTERRUPTED) return
+  try {
+    const AB = await prisma.anualBudget.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        protocol: { select: { id: true } },
+        state: true,
+        budgetItems: true,
+        budgetTeamMembers: true,
+      },
+    })
 
-  await prisma.anualBudget.update({
-    where: { id },
-    data: { state: AnualBudgetState.APPROVED },
-    select: { id: true, protocol: { select: { id: true, state: true } } },
-  })
+    if (!AB) {
+      console.error(`Annual budget with id ${id} not found`)
+      return {
+        status: false,
+        message: 'Presupuesto anual no encontrado',
+      }
+    }
 
-  return prisma.protocol.update({
-    where: { id: AB.protocol.id },
-    data: { state: ProtocolState.ON_GOING },
-  })
+    if (AB.state !== AnualBudgetState.INTERRUPTED) {
+      console.error(
+        `Annual budget ${id} is not in INTERRUPTED state. Current state: ${AB.state}`
+      )
+      return {
+        status: false,
+        message: 'El presupuesto anual no está en estado interrumpido',
+      }
+    }
+
+    const session = await getServerSession(authOptions)
+
+    // Update annual budget state to APPROVED
+    await prisma.anualBudget.update({
+      where: { id },
+      data: { state: AnualBudgetState.APPROVED },
+      select: { id: true, protocol: { select: { id: true, state: true } } },
+    })
+
+    // Update protocol state to ON_GOING
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id: AB.protocol.id },
+      data: { state: ProtocolState.ON_GOING },
+    })
+
+    // Log the reactivation
+    if (session?.user?.id) {
+      await logEvent({
+        userId: session.user.id,
+        protocolId: AB.protocol.id,
+        budgetId: id,
+        action: Action.REACTIVATE,
+        message: null,
+        reviewerId: null,
+        previousState: ProtocolState.DISCONTINUED,
+      })
+    }
+
+    return {
+      status: true,
+      data: updatedProtocol,
+      message: 'Presupuesto anual reactivado exitosamente',
+    }
+  } catch (error) {
+    console.error('Error reactivating annual budget:', error)
+    return {
+      status: false,
+      message: 'Error al reactivar el presupuesto anual',
+    }
+  }
 }
