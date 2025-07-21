@@ -30,6 +30,7 @@
     "@types/nodemailer": "^6.4.15",
     "@types/react-csv": "^1.1.10",
     "bcryptjs": "^2.4.3",
+    "chalk": "^5.4.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.0",
     "exceljs": "^4.4.0",

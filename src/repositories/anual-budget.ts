@@ -14,6 +14,7 @@ import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import { logEvent } from './log'
+import chalk from 'chalk'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -347,18 +348,23 @@ export const getAnualBudgetsByAcademicUnit = cache(
       order,
       filter,
       values,
+      year,
     }: {
       [key: string]: string
     },
     academicUnitId?: string
   ) => {
     try {
+      console.log(
+        chalk.gray.bold.bgGreenBright(' GET ANNUAL BUDGET YEAR '),
+        chalk.gray.bold.bgRed(` ${year} `)
+      )
       const orderBy = order && sort ? orderByQuery(sort, order) : {}
       return await prisma.$transaction([
         prisma.anualBudget.count({
           where: {
             AND: [
-              filter == 'year' ? { year: { equals: Number(values) } } : {},
+              year ? { year: { equals: Number(year) } } : {},
               academicUnitId ?
                 { academicUnitsIds: { has: academicUnitId } }
               : {},
@@ -382,9 +388,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                   },
                 }
               : {},
-              filter && values && filter != 'year' ?
-                { [filter]: { in: values.split('-') } }
-              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -394,7 +398,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
           take: Number(records),
           where: {
             AND: [
-              filter == 'year' ? { year: { equals: Number(values) } } : {},
+              year ? { year: { equals: Number(year) } } : {},
               academicUnitId ?
                 { academicUnitsIds: { has: academicUnitId } }
               : {},
@@ -419,9 +423,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                   },
                 }
               : {},
-              filter && values && filter != 'year' ?
-                { [filter]: { in: values.split('-') } }
-              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
           select: {

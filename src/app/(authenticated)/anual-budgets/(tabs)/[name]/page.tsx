@@ -14,7 +14,9 @@ export default async function Page({
     searchParams,
     params.name
   )
+
   const budgetSummary = await getBudgetSummary(params.name)
+  console.log('page.tsx', searchParams)
   return (
     <>
       <BudgetSummary summary={budgetSummary} />
