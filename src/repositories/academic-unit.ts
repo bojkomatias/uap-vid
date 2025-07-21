@@ -50,6 +50,15 @@ export const getAcademicUnitById = async (id?: string) => {
         include: {
           AcademicUnitAnualBudgets: {
             include: {
+              budgetItems: {
+                include: {
+                  executions: {
+                    include: {
+                      academicUnit: true,
+                    },
+                  },
+                },
+              },
               budgetTeamMembers: {
                 include: {
                   teamMember: {
@@ -60,6 +69,11 @@ export const getAcademicUnitById = async (id?: string) => {
                     },
                   },
                   category: true,
+                  executions: {
+                    include: {
+                      academicUnit: true,
+                    },
+                  },
                 },
               },
             },
@@ -74,6 +88,15 @@ export const getAcademicUnitById = async (id?: string) => {
       include: {
         AcademicUnitAnualBudgets: {
           include: {
+            budgetItems: {
+              include: {
+                executions: {
+                  include: {
+                    academicUnit: true,
+                  },
+                },
+              },
+            },
             budgetTeamMembers: {
               include: {
                 teamMember: {
@@ -84,6 +107,11 @@ export const getAcademicUnitById = async (id?: string) => {
                   },
                 },
                 category: true,
+                executions: {
+                  include: {
+                    academicUnit: true,
+                  },
+                },
               },
             },
           },

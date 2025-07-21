@@ -80,5 +80,5 @@ export const BudgetSummaryZero = {
     value: { FCA: 0, FMR: 0 } as AmountIndex,
     delta: { FCA: 0, FMR: 0 } as AmountIndex,
   },
-  spendedBudget: { FCA: 0, FMR: 0 } as AmountIndex,
+  spentBudget: { FCA: 0, FMR: 0 } as AmountIndex,
 }

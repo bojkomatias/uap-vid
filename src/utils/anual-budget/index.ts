@@ -1,5 +1,11 @@
-import type { AmountIndex, Execution, TeamMemberCategory } from '@prisma/client'
+import type {
+  AmountIndex,
+  AnualBudget,
+  Execution,
+  TeamMemberCategory,
+} from '@prisma/client'
 import { Prisma } from '@prisma/client'
+import { type AnualBudgetItem } from '@prisma/client'
 import {
   multiplyAmountIndex,
   subtractAmountIndex,
@@ -18,7 +24,7 @@ const anualBudgetTeamMemberWithAllRelations =
         },
       },
       category: true,
-      executions: true, // Now executions are a direct relation
+      executions: true,
     },
   })
 
@@ -30,7 +36,7 @@ export type AnualBudgetTeamMemberWithAllRelations =
 const anualBudgetItemWithExecutions =
   Prisma.validator<Prisma.AnualBudgetItemDefaultArgs>()({
     include: {
-      executions: true, // Now executions are a direct relation
+      executions: true,
     },
   })
 
@@ -38,34 +44,8 @@ export type AnualBudgetItemWithExecutions = Prisma.AnualBudgetItemGetPayload<
   typeof anualBudgetItemWithExecutions
 >
 
-const anualBudgetWithAllRelations =
-  Prisma.validator<Prisma.AnualBudgetDefaultArgs>()({
-    include: {
-      budgetItems: {
-        include: {
-          executions: true,
-        },
-      },
-      budgetTeamMembers: {
-        include: {
-          teamMember: {
-            include: {
-              categories: { include: { category: true } },
-            },
-          },
-          category: true,
-          executions: true,
-        },
-      },
-      executions: true, // Direct executions relation
-    },
-  })
-
-export type AnualBudgetWithAllRelations = Prisma.AnualBudgetGetPayload<
-  typeof anualBudgetWithAllRelations
->
-
-const HistoricTeamMemberCategoryWithAllRelations =
+// Type for historic team member category with all relations
+const historicTeamMemberCategoryWithAllRelations =
   Prisma.validator<Prisma.HistoricTeamMemberCategoryDefaultArgs>()({
     include: {
       category: true,
@@ -74,7 +54,7 @@ const HistoricTeamMemberCategoryWithAllRelations =
 
 export type HistoricTeamMemberCategoryWithAllRelations =
   Prisma.HistoricTeamMemberCategoryGetPayload<
-    typeof HistoricTeamMemberCategoryWithAllRelations
+    typeof historicTeamMemberCategoryWithAllRelations
   >
 
 const totalExecution = (
@@ -114,10 +94,6 @@ const calculateRemainingABI = (
   amountAcademicUnits: number,
   executionPerAcademicUnit?: AmountIndex
 ): AmountIndex => {
-  if (!abi || abi.length === 0) {
-    return { FCA: 0, FMR: 0 } as AmountIndex
-  }
-
   const totalBudgetItemsAmount = abi.reduce(
     (acc, item) => {
       acc.FCA +=
@@ -132,7 +108,6 @@ const calculateRemainingABI = (
     },
     { FCA: 0, FMR: 0 } as AmountIndex
   )
-
   const amountPerAcademicUnit: AmountIndex = {
     FCA: totalBudgetItemsAmount.FCA / amountAcademicUnits,
     FMR: totalBudgetItemsAmount.FMR / amountAcademicUnits,
@@ -146,7 +121,7 @@ const calculateRemainingABI = (
   }
 
   const totalExecutionAmount = abi
-    .map((bi) => bi.executions || [])
+    .map((bi) => bi.executions)
     .reduce(
       (acc, item) => {
         const totalEx = totalExecution(item)
@@ -182,7 +157,7 @@ const calculateRemainingABTM = (
         },
         { FCA: 0, FMR: 0 } as AmountIndex
       )
-
+    // SORETE
     const ABTMteamMember = abtm
       .filter((item) => item.teamMemberId && !item.categoryId)
       .reduce(
@@ -256,36 +231,39 @@ export const calculateHourRateGivenCategory = (
 }
 
 export const calculateTotalBudget = (
-  anualBudget: AnualBudgetWithAllRelations,
+  anualBudget: AnualBudget & {
+    budgetItems?: AnualBudgetItemWithExecutions[]
+    budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+  },
   academicUnitId?: string
 ) => {
   const amountAcademicUnits = anualBudget.academicUnitsIds.length
 
-  //Executions - now we can use the direct executions relation or the nested ones
+  // Handle the case where budgetItems might not be included
+  const budgetItems = anualBudget.budgetItems || []
+
+  //Executions
   const ABIe = totalExecution(
-    anualBudget.budgetItems?.map((item) => item.executions || []).flat() || [],
+    budgetItems.map((item) => item.executions || []).flat(),
     academicUnitId
   )
   const ABTe = totalExecution(
     academicUnitId ?
-      (anualBudget.budgetTeamMembers || [])
+      anualBudget.budgetTeamMembers
         .filter((tm) => tm.teamMember?.academicUnitId === academicUnitId)
         .map((item) => item.executions || [])
         .flat()
-    : (anualBudget.budgetTeamMembers || [])
-        .map((item) => item.executions || [])
-        .flat(),
-    academicUnitId
+    : anualBudget.budgetTeamMembers.map((item) => item.executions || []).flat()
   )
 
   //Remainings
   const ABIr = calculateRemainingABI(
-    anualBudget.budgetItems || [],
+    budgetItems,
     amountAcademicUnits,
     academicUnitId ? ABIe : undefined
   )
   const ABTr = calculateRemainingABTM(
-    anualBudget.budgetTeamMembers || [],
+    anualBudget.budgetTeamMembers,
     academicUnitId
   )
 
@@ -299,10 +277,21 @@ export const calculateTotalBudget = (
 }
 
 export const calculateTotalBudgetAggregated = (
-  anualBudgets: AnualBudgetWithAllRelations[],
-  academicUnitId?: string
+  anualBudgets: (AnualBudget & {
+    budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+  })[],
+  academicUnitId?: string,
+  year?: number
 ) => {
-  const totalPending = anualBudgets
+  // Default to current year if no year provided
+  const currentYear = year ?? new Date().getFullYear()
+
+  // Filter budgets by year
+  const filteredBudgets = anualBudgets.filter(
+    (anualBudget) => anualBudget.year === currentYear
+  )
+
+  const totalPending = filteredBudgets
     .filter((anualBudget) => anualBudget.state === 'PENDING')
     .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
     .reduce(
@@ -313,7 +302,7 @@ export const calculateTotalBudgetAggregated = (
       { totalPeding: { FCA: 0, FMR: 0 } as AmountIndex }
     )
 
-  const totalApproved = anualBudgets
+  const totalApproved = filteredBudgets
     .filter((anualBudget) => anualBudget.state === 'APPROVED')
     .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
     .reduce(
@@ -324,7 +313,7 @@ export const calculateTotalBudgetAggregated = (
       { totalApproved: { FCA: 0, FMR: 0 } as AmountIndex }
     )
 
-  const result = anualBudgets
+  const result = filteredBudgets
     .map((anualBudget) => calculateTotalBudget(anualBudget, academicUnitId))
     .reduce(
       (acc, item) => {
@@ -344,45 +333,6 @@ export const calculateTotalBudgetAggregated = (
       }
     )
   return { ...result, ...totalPending, ...totalApproved }
-}
-
-// Alternative function that uses direct executions relation from AnualBudget
-export const calculateTotalBudgetUsingDirectExecutions = (
-  anualBudget: AnualBudgetWithAllRelations,
-  academicUnitId?: string
-) => {
-  const amountAcademicUnits = anualBudget.academicUnitsIds.length
-
-  // Filter executions by type and academic unit if needed
-  const budgetItemExecutions = (anualBudget.executions || []).filter(
-    (ex) => ex.budgetItemId
-  )
-  const teamMemberExecutions = (anualBudget.executions || []).filter(
-    (ex) => ex.teamMemberBudgetId
-  )
-
-  //Executions - using direct executions relation
-  const ABIe = totalExecution(budgetItemExecutions, academicUnitId)
-  const ABTe = totalExecution(teamMemberExecutions, academicUnitId)
-
-  //Remainings - these calculations remain the same
-  const ABIr = calculateRemainingABI(
-    anualBudget.budgetItems || [],
-    amountAcademicUnits,
-    academicUnitId ? ABIe : undefined
-  )
-  const ABTr = calculateRemainingABTM(
-    anualBudget.budgetTeamMembers || [],
-    academicUnitId
-  )
-
-  return {
-    ABIe,
-    ABTe,
-    ABIr,
-    ABTr,
-    total: sumAmountIndex([ABIe, ABTe, ABIr, ABTr]),
-  }
 }
 
 export type TotalBudgetCalculation = ReturnType<typeof calculateTotalBudget>

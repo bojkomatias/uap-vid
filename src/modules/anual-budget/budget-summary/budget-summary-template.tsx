@@ -74,12 +74,13 @@ export const BudgetSummary = ({
                 <dd className="relative mt-1 block items-baseline justify-between lg:flex">
                   <div className="flex flex-col items-baseline text-2xl font-semibold text-black/70">
                     <Currency amountIndex={item.total} />
+
                     {item.of ?
                       <Text className="ml-2 text-sm font-medium text-gray-500">
                         de
                         {item.of ?
                           <Currency amountIndex={item.of} />
-                        : 0}
+                        : 0}{' '}
                       </Text>
                     : null}
                   </div>

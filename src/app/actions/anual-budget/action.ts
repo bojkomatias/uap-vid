@@ -49,6 +49,7 @@ import {
 } from '@utils/anual-budget'
 import { protocolDuration } from '@utils/constants'
 import { WEEKS_IN_MONTH } from '@utils/constants'
+import { prisma } from 'utils/bd'
 
 // Utility function to calculate execution sum safely
 const calculateExecutionsSum = (executions: Execution[]): AmountIndex => {
@@ -89,43 +90,59 @@ export const generateAnualBudget = async ({
   const oldAB = budgetId ? await getAnualBudgetById(budgetId) : null
 
   // Create the annual budget with all the items listed in the protocol budget section.
-  const ABI = generateAnualBudgetItems(
+  const budgetItemsData = generateAnualBudgetItems(
     protocol?.sections.budget,
     year.toString()
   )
 
-  // Handle the case where the annual budget is reactivated - FIXED VERSION
-  if (budgetId && reactivated && oldAB) {
-    // Ensure we have the same number of budget items
-    if (ABI.length !== oldAB.budgetItems.length) {
-      console.warn('Budget items count mismatch during reactivation')
-    }
-
-    for (let i = 0; i < Math.min(ABI.length, oldAB.budgetItems.length); i++) {
-      const oldItem = oldAB.budgetItems[i]
-      if (!oldItem) continue
-
-      ABI[i].executions = oldItem.executions || []
-
-      // Fixed execution sum calculation using utility function
-      const executionsSum = calculateExecutionsSum(oldItem.executions)
-
-      const newRemaining = subtractAmountIndex(
-        ABI[i].remainingIndex,
-        executionsSum
-      )
-      ABI[i].remainingIndex = newRemaining
-    }
-  }
-
   const data: Omit<AnualBudget, 'id' | 'createdAt' | 'updatedAt' | 'state'> = {
     protocolId: protocol.id,
     year,
-    budgetItems: ABI,
     academicUnitsIds: protocol.sections.identification.academicUnitIds,
   }
 
   const newAnualBudget = await upsertAnualBudget(data, budgetId)
+
+  // Create budget items separately
+  const budgetItems = await Promise.all(
+    budgetItemsData.map(async (item) => {
+      return await prisma.anualBudgetItem.create({
+        data: {
+          ...item,
+          anualBudgetId: newAnualBudget.id,
+        },
+      })
+    })
+  )
+
+  // Handle the case where the annual budget is reactivated - FIXED VERSION
+  if (budgetId && reactivated && oldAB && oldAB.budgetItems) {
+    // Update remaining amounts based on existing executions
+    for (
+      let i = 0;
+      i < Math.min(budgetItems.length, oldAB.budgetItems.length);
+      i++
+    ) {
+      const oldItem = oldAB.budgetItems[i]
+      const newItem = budgetItems[i]
+      if (!oldItem || !newItem) continue
+
+      // Fixed execution sum calculation using utility function
+      const executionsSum = calculateExecutionsSum(oldItem.executions || [])
+
+      const newRemaining = subtractAmountIndex(
+        newItem.amountIndex,
+        executionsSum
+      )
+
+      // Update the new budget item with the calculated remaining
+      await prisma.anualBudgetItem.update({
+        where: { id: newItem.id },
+        data: { remainingIndex: newRemaining },
+      })
+    }
+  }
+
   const duration = protocolDuration(protocol.sections.duration.duration)
 
   // Generate new annual budget team members
@@ -144,10 +161,8 @@ export const generateAnualBudget = async ({
 
       if (!oldABT) return
 
-      newABT.executions = oldABT.executions || []
-
       // Fixed execution sum calculation using utility function
-      const executionsSum = calculateExecutionsSum(oldABT.executions)
+      const executionsSum = calculateExecutionsSum(oldABT.executions || [])
 
       if (executionsSum?.FCA && oldABT.teamMember?.categories?.length) {
         const hourlyRateInFCA =
@@ -265,26 +280,33 @@ export const reactivateProtocolAndAnualBudget = async (protocolId: string) => {
 const generateAnualBudgetItems = (
   protocolBudgetSection: ProtocolSectionsBudget,
   year: string
-): AnualBudgetItem[] => {
-  return protocolBudgetSection.expenses.reduce((acc, item) => {
-    const budgetItems = item.data
-      .filter((d) => d.year === year)
-      .map((d) => {
-        return {
-          type: item.type,
-          detail: d.detail,
-          amount: null,
-          remaining: null,
-          executions: [] as Execution[],
-          amountIndex: d.amountIndex,
-          remainingIndex: d.amountIndex,
-        }
-      })
-    acc.push(...budgetItems)
-    return acc
-  }, [] as AnualBudgetItem[])
+): Omit<
+  AnualBudgetItem,
+  'id' | 'createdAt' | 'updatedAt' | 'anualBudgetId'
+>[] => {
+  return protocolBudgetSection.expenses.reduce(
+    (acc, item) => {
+      const budgetItems = item.data
+        .filter((d) => d.year === year)
+        .map((d) => {
+          return {
+            type: item.type,
+            detail: d.detail,
+            amount: null,
+            remaining: null,
+            amountIndex: d.amountIndex,
+            remainingIndex: d.amountIndex,
+          }
+        })
+      acc.push(...budgetItems)
+      return acc
+    },
+    [] as Omit<
+      AnualBudgetItem,
+      'id' | 'createdAt' | 'updatedAt' | 'anualBudgetId'
+    >[]
+  )
 }
-
 
 // TODO: review this function again. We want an specific assignment, not the last one.
 
@@ -436,28 +458,27 @@ export const saveNewItemExecution = async (
 
   if (!anualBudget) return null
 
-  // As the budget items are'nt a prisma model, we need to update the budget item manually and update the whole list.
-  // A good solution would be transform budget items into a prisma model, but requires various minor fixes in the code, most of them related with custom types.
-  // TODO: Consider converting budget items to a proper Prisma model for better type safety and data consistency
+  // Get the budget item by index
+  const budgetItem = anualBudget.budgetItems[budgetItemIndex]
+  if (!budgetItem) return null
+
   const amountIndex = await transformAmountToAmountIndex(amount)
 
-  const updatedBudgetItem = anualBudget?.budgetItems.map((item, index) => {
-    if (index === budgetItemIndex) {
-      item.executions.push({
-        academicUnitId,
-        amount: null,
-        amountIndex,
-        date: new Date(),
-      })
-      item.remainingIndex = subtractAmountIndex(
-        item.remainingIndex,
-        amountIndex
-      )
-    }
-    return item
-  })
+  // Calculate new remaining amount
+  const newRemainingIndex = subtractAmountIndex(
+    budgetItem.remainingIndex,
+    amountIndex
+  )
 
-  const updated = await newBudgetItemExecution(anualBudgetId, updatedBudgetItem)
+  // Create execution and update budget item using the new function
+  const updated = await newBudgetItemExecution(
+    budgetItem.id,
+    amountIndex,
+    newRemainingIndex,
+    academicUnitId,
+    amount
+  )
+
   return updated
 }
 
@@ -543,19 +564,13 @@ const getAcademicUnitBudgetSummary = (
 // TODO: This function uses JSON.stringify for deduplication which is inefficient and unreliable
 // Consider using a more efficient approach like creating a proper key based on specific properties
 // or using a Set with a proper comparison function
-const removeDuplicates = (
-  inputArray: (AnualBudget & {
-    budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
-  })[]
-) => {
-  const uniqueArray = []
+const removeDuplicates = <T extends AnualBudget>(inputArray: T[]) => {
+  const uniqueArray: T[] = []
   const seenItems = new Set()
 
   for (const item of inputArray) {
-    const budgetItems = item.budgetItems
-    // TODO: JSON.stringify for object comparison is inefficient and can be unreliable
-    // Consider using a more robust deduplication strategy
-    const key = JSON.stringify(budgetItems)
+    // Use budget ID as the key for deduplication since budgetItems are now a relation
+    const key = item.id
 
     if (!seenItems.has(key)) {
       uniqueArray.push(item)
@@ -575,9 +590,13 @@ export const getBudgetSummary = async (
   if (!academicUnits) return BudgetSummaryZero
 
   const list = academicUnits.map((ac) => ac.AcademicUnitAnualBudgets).flat()
-  const anualBudgets = removeDuplicates(list).filter(
-    (ab) => ab.state !== AnualBudgetState.REJECTED
-  )
+
+  // Cast to the correct type that includes all relations needed for calculations
+  const anualBudgets = removeDuplicates(
+    list as (AnualBudget & {
+      budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
+    })[]
+  ).filter((ab) => ab.state !== AnualBudgetState.REJECTED)
 
   // This summary is related to protocols budgets
   const protocolBudgetSummary = calculateTotalBudgetAggregated(
@@ -601,7 +620,7 @@ export const getBudgetSummary = async (
     academicUnitBudgetSummary,
     projectedBudgetSummary,
     projectedBudgetSummaryApproved,
-    spendedBudget: sumAmountIndex([
+    spentBudget: sumAmountIndex([
       protocolBudgetSummary.ABIe,
       protocolBudgetSummary.ABTe,
     ]),
@@ -623,3 +642,5 @@ export type BudgetSummaryType = Awaited<ReturnType<typeof getBudgetSummary>>
 // 10. Improve type safety by removing @ts-ignore and non-null assertions
 // 11. Optimize performance in array operations and object comparisons
 // 12. Consider implementing proper data models for better type safety
+
+
