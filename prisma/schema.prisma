@@ -30,6 +30,7 @@ model AcademicUnit {
   academicUnitAnualBudgetsIds String[]             @db.ObjectId
   TeamMembers                 TeamMember[]
   Careers                     Career[]
+  executions                  Execution[]
 }
 
 type AcademicUnitBudget {
@@ -88,6 +89,7 @@ model Protocol {
   logs           Logs[]
   ChatMessage    ChatMessage[]
   flags          ProtocolFlag[]
+  executions     Execution[]
 }
 
 type ProtocolFlag {
@@ -183,7 +185,7 @@ model AnualBudget {
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @default(now())
   state             AnualBudgetState        @default(PENDING)
-  budgetItems       AnualBudgetItem[]
+  budgetItems       AnualBudgetItem[]       // Now a proper relation instead of embedded type
   budgetTeamMembers AnualBudgetTeamMember[]
   year              Int
   protocolId        String                  @db.ObjectId
@@ -191,16 +193,49 @@ model AnualBudget {
   AcademicUnits     AcademicUnit[]          @relation(fields: [academicUnitsIds], references: [id])
   academicUnitsIds  String[]                @db.ObjectId
   Logs              Logs[]
+  executions        Execution[]
 }
 
-type AnualBudgetItem {
+model Execution {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  amount         Float?       
+  amountIndex    AmountIndex?
+  date           DateTime     @default(now())
+  
+  // Required relations - Protocol, AnualBudget, AcademicUnit
+  protocolId     String       @db.ObjectId
+  protocol       Protocol     @relation(fields: [protocolId], references: [id])
+  anualBudgetId  String       @db.ObjectId
+  anualBudget    AnualBudget  @relation(fields: [anualBudgetId], references: [id])
+  academicUnitId String       @db.ObjectId
+  academicUnit   AcademicUnit @relation(fields: [academicUnitId], references: [id])
+  
+  // Relations to what this execution belongs to (optional)
+  budgetItemId         String?               @db.ObjectId
+  budgetItem           AnualBudgetItem?      @relation(fields: [budgetItemId], references: [id])
+  teamMemberBudgetId   String?               @db.ObjectId
+  teamMemberBudget     AnualBudgetTeamMember? @relation(fields: [teamMemberBudgetId], references: [id])
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model AnualBudgetItem {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
   type           String
   detail         String
-  amount         Float?      @default(0) /// @deprecated use `amountIndex` instead
-  remaining      Float?      @default(0) /// @deprecated use `remainingIndex` instead
-  executions     Execution[]
+  amount         Float?        @default(0) /// @deprecated use `amountIndex` instead
+  remaining      Float?        @default(0) /// @deprecated use `remainingIndex` instead
   amountIndex    AmountIndex
   remainingIndex AmountIndex
+  executions     Execution[]
+  
+  // Relation to the annual budget
+  anualBudgetId  String        @db.ObjectId
+  anualBudget    AnualBudget   @relation(fields: [anualBudgetId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 type AmountIndex {
@@ -249,13 +284,6 @@ type HistoricIndex {
   from  DateTime
   to    DateTime?
   price Float
-}
-
-type Execution {
-  amount         Float?
-  amountIndex    AmountIndex?
-  date           DateTime
-  academicUnitId String
 }
 
 type ReviewQuestionType {
