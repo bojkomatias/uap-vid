@@ -3,8 +3,8 @@ import * as dotenv from 'dotenv'
 import path from 'path'
 
 // Load environment variables from the project root
-dotenv.config({ path: path.resolve(__dirname, '../../.env') })
-dotenv.config({ path: path.resolve(__dirname, '../../.env.local') })
+dotenv.config({ path: path.resolve(__dirname, './.env') })
+dotenv.config({ path: path.resolve(__dirname, './.env.local') })
 
 // Verify DATABASE_URL is available
 if (!process.env.DATABASE_URL) {
