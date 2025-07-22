@@ -60,14 +60,10 @@ export function BudgetItems({
   const { currentFMR } = currentIndexes
 
   // Helper function to calculate executed amount for a budget item
-  const calculateExecutedAmount = (executions: any[]): AmountIndex => {
-    return executions.reduce(
-      (acc, execution) => {
-        if (!execution?.amountIndex) return acc
-        return sumAmountIndex([acc, execution.amountIndex])
-      },
-      { FCA: 0, FMR: 0 } as AmountIndex
-    )
+  const calculateExecutedAmount = (executions: any[]): number => {
+    return executions.reduce((acc, execution) => {
+      return acc + (execution.amount ?? 0)
+    }, 0)
   }
 
   const openItemDialog = (item: AnualBudgetItemWithExecutions) => {
@@ -327,11 +323,10 @@ export function BudgetItems({
                     Ejecutado
                   </Text>
                   <Subheading className="text-xl">
-                    <Currency
-                      amountIndex={calculateExecutedAmount(
-                        selectedItem.executions
-                      )}
-                    />
+                    {new Intl.NumberFormat('es-AR', {
+                      style: 'currency',
+                      currency: 'ARS',
+                    }).format(calculateExecutedAmount(selectedItem.executions))}
                   </Subheading>
                 </div>
                 <div className="rounded-lg bg-orange-50 p-4 text-center dark:bg-orange-900/20">

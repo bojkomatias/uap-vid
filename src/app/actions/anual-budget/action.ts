@@ -31,7 +31,10 @@ import {
   updateAnualBudgetState,
   upsertAnualBudget,
 } from '@repositories/anual-budget'
-import { getLatestIndexPriceByUnit } from '@repositories/finance-index'
+import {
+  getLatestIndexPriceByUnit,
+  getCurrentIndexes,
+} from '@repositories/finance-index'
 import {
   getLogs,
   updateLogsBudgetIdOnProtocolReactivation,
@@ -57,14 +60,22 @@ import { WEEKS_IN_MONTH } from '@utils/constants'
 import { prisma } from 'utils/bd'
 
 // Utility function to calculate execution sum safely
-const calculateExecutionsSum = (executions: Execution[]): AmountIndex => {
-  return executions.reduce(
-    (acc, execution) => {
-      if (!execution?.amountIndex) return acc
-      return sumAmountIndex([acc, execution.amountIndex])
-    },
-    { FCA: 0, FMR: 0 } as AmountIndex
-  )
+const calculateExecutionsSum = async (
+  executions: Execution[]
+): Promise<AmountIndex> => {
+  // Get current exchange rates
+  const indexes = await getCurrentIndexes()
+  const { currentFCA, currentFMR } = indexes
+
+  const totalAmount = executions.reduce((acc, execution) => {
+    return acc + (execution.amount ?? 0)
+  }, 0)
+
+  // Convert total amount to AmountIndex using current exchange rates
+  return {
+    FCA: totalAmount / currentFCA,
+    FMR: totalAmount / currentFMR,
+  } as AmountIndex
 }
 
 /**
@@ -144,14 +155,8 @@ export const generateAnualBudget = async ({
 
       if (!oldItem || !originalItem) continue
 
-      // Calculate total executed amount for this item
-      const executedAmount = oldItem.executions.reduce(
-        (acc: any, execution: any) => {
-          if (!execution?.amountIndex) return acc
-          return sumAmountIndex([acc, execution.amountIndex])
-        },
-        { FCA: 0, FMR: 0 }
-      )
+      // Calculate total executed amount for this item using actual amounts
+      const executedAmount = await calculateExecutionsSum(oldItem.executions)
 
       // Calculate remaining amount: original amount - executed amount
       const remainingAmount = subtractAmountIndex(
@@ -239,7 +244,9 @@ export const generateAnualBudget = async ({
 
       if (oldABT) {
         // Update existing team member budget
-        const executionsSum = calculateExecutionsSum(oldABT.executions || [])
+        const executionsSum = await calculateExecutionsSum(
+          oldABT.executions || []
+        )
 
         let newRemainingHours = newABT.remainingHours
 
@@ -714,7 +721,7 @@ export const getBudgetSummary = async (
   ).filter((ab) => ab.state !== AnualBudgetState.REJECTED)
 
   // This summary is related to protocols budgets - NOW FILTERED BY YEAR
-  const protocolBudgetSummary = calculateTotalBudgetAggregated(
+  const protocolBudgetSummary = await calculateTotalBudgetAggregated(
     anualBudgets,
     academicUnitId,
     year // Pass the year parameter to filter by selected year
@@ -745,15 +752,25 @@ export const getBudgetSummary = async (
     value: protocolBudgetSummary.totalApproved,
   }
 
+  // Convert actual spent amount back to AmountIndex for UI consistency
+  const totalActualSpent =
+    protocolBudgetSummary.ABIeActual + protocolBudgetSummary.ABTeActual
+  const indexes = await getCurrentIndexes()
+  const { currentFCA, currentFMR } = indexes
+
+  const spentBudgetForDisplay: AmountIndex = {
+    FCA: totalActualSpent / currentFCA,
+    FMR: totalActualSpent / currentFMR,
+  }
+
   const result = {
     academicUnitBudgetSummary,
     projectedBudgetSummary, // NOW: Total projected consumption (pending + approved)
     projectedBudgetSummaryPending, // BREAKDOWN: Only pending budgets
     projectedBudgetSummaryApproved, // BREAKDOWN: Only approved budgets
-    spentBudget: sumAmountIndex([
-      protocolBudgetSummary.ABIe,
-      protocolBudgetSummary.ABTe,
-    ]),
+    spentBudget: spentBudgetForDisplay, // AmountIndex based on actual amounts converted at current rates
+    // Keep the actual amount for reference
+    spentBudgetActual: totalActualSpent,
   }
 
   // DEBUG: Log all budget summary values for debugging
@@ -780,7 +797,14 @@ export const getBudgetSummary = async (
     '📊 projectedBudgetSummaryApproved.value:',
     projectedBudgetSummaryApproved.value
   )
-  console.log('📊 spentBudget (executions):', result.spentBudget)
+  console.log(
+    '📊 spentBudget (converted to AmountIndex for display):',
+    result.spentBudget
+  )
+  console.log(
+    '📊 spentBudgetActual (actual amount spent):',
+    result.spentBudgetActual
+  )
   console.log('📊 protocolBudgetSummary (raw breakdown):', {
     ABIe: protocolBudgetSummary.ABIe,
     ABTe: protocolBudgetSummary.ABTe,
@@ -789,6 +813,8 @@ export const getBudgetSummary = async (
     total: protocolBudgetSummary.total,
     totalPeding: protocolBudgetSummary.totalPeding,
     totalApproved: protocolBudgetSummary.totalApproved,
+    ABIeActual: protocolBudgetSummary.ABIeActual,
+    ABTeActual: protocolBudgetSummary.ABTeActual,
   })
 
   return result

@@ -1,7 +1,11 @@
 import React from 'react'
 
 const BudgetCardDoughnut = ({ percentage }: { percentage: string }) => {
-  const strokeDasharray = `${percentage} 100`
+  const percentageNum = parseFloat(percentage) || 0
+  const radius = 10
+  const circumference = 2 * Math.PI * radius // ~62.83
+  const strokeDasharray = `${(percentageNum / 100) * circumference} ${circumference}`
+
   return (
     <div className="absolute -bottom-1 right-1 h-16 w-16">
       <svg className="h-full w-full" viewBox="0 0 24 24" fill="none">
@@ -20,6 +24,7 @@ const BudgetCardDoughnut = ({ percentage }: { percentage: string }) => {
           strokeWidth="2"
           strokeDasharray={strokeDasharray}
           strokeLinecap="round"
+          transform="rotate(-90 12 12)" // Start from top instead of right
         ></circle>
         <text
           x="50%"
@@ -37,7 +42,11 @@ const BudgetCardDoughnut = ({ percentage }: { percentage: string }) => {
 }
 
 const BudgetCardDoughnutDark = ({ percentage }: { percentage: string }) => {
-  const strokeDasharray = `${percentage} 100`
+  const percentageNum = parseFloat(percentage) || 0
+  const radius = 10
+  const circumference = 2 * Math.PI * radius // ~62.83
+  const strokeDasharray = `${(percentageNum / 100) * circumference} ${circumference}`
+
   return (
     <div className="absolute -bottom-1 right-1 h-16 w-16">
       <svg className="h-full w-full" viewBox="0 0 24 24" fill="none">
@@ -56,6 +65,7 @@ const BudgetCardDoughnutDark = ({ percentage }: { percentage: string }) => {
           strokeWidth="2"
           strokeDasharray={strokeDasharray}
           strokeLinecap="round"
+          transform="rotate(-90 12 12)" // Start from top instead of right
         ></circle>
         <text
           x="50%"

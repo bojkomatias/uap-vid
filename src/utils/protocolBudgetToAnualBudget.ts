@@ -1,9 +1,25 @@
 import type {
-  AnualBudgetItem,
   ProtocolSectionsBudget,
   ProtocolSectionsIdentificationTeam,
 } from '@prisma/client'
 import { getCurrentIndexes } from '@repositories/finance-index'
+
+// Type for creating budget items (without auto-generated fields)
+type BudgetItemForCreation = {
+  type: string
+  detail: string
+  amount: number
+  remaining: number
+  executions: never[]
+  amountIndex: {
+    FCA: number
+    FMR: number
+  }
+  remainingIndex: {
+    FCA: number
+    FMR: number
+  }
+}
 
 export const protocolBudgetToAnualBudget = async (
   id: string,
@@ -11,7 +27,7 @@ export const protocolBudgetToAnualBudget = async (
   protocolTeamMembers: ProtocolSectionsIdentificationTeam[]
 ) => {
   const prices = await getCurrentIndexes()
-  const budgetItems: AnualBudgetItem[] = protocolBudgetItems['expenses']
+  const budgetItems: BudgetItemForCreation[] = protocolBudgetItems['expenses']
     .map((e) => {
       return e.data.map((d) => {
         return {

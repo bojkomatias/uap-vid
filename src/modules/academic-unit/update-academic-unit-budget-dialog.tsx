@@ -20,10 +20,32 @@ import {
 import { notifications } from '@elements/notifications'
 import { useForm, zodResolver } from '@mantine/form'
 import type { AcademicUnitBudget } from '@prisma/client'
-import { updateAcademicUnitBudget } from '@repositories/academic-unit'
+import {
+  updateCurrentYearBudget,
+  getAcademicUnitWithBudgetsById,
+} from '@repositories/academic-unit'
+
+type BudgetForDialog = {
+  id: string
+  year: number
+  amountIndex: {
+    FCA: number
+    FMR: number
+  }
+  from: Date
+  to: Date | null
+  createdAt: Date
+  updatedAt: Date
+}
 import { SubmitButton } from '@shared/submit-button'
 import { FormInput } from '@shared/form/form-input'
-import { currencyFormatter, dateFormatter } from '@utils/formatters'
+import { dateFormatter } from '@utils/formatters'
+
+// Number formatter for index values (without currency symbols)
+const indexFormatter = new Intl.NumberFormat('es-AR', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState, useTransition } from 'react'
 import { z } from 'zod'
@@ -31,7 +53,7 @@ import { z } from 'zod'
 export function UpdateAcademicUnitBudgetDialog({
   onClose,
   academicUnitId,
-  academicUnitBudgets,
+  academicUnitBudgets: _,
 }: {
   onClose: () => void
   academicUnitId?: string
@@ -40,13 +62,29 @@ export function UpdateAcademicUnitBudgetDialog({
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
+  const [budgets, setBudgets] = useState<BudgetForDialog[]>([])
+  const [isLoadingBudgets, setIsLoadingBudgets] = useState(false)
 
   useEffect(() => {
-    if (academicUnitId) setOpen(true)
+    if (academicUnitId) {
+      setOpen(true)
+      // Fetch budgets when dialog opens
+      setIsLoadingBudgets(true)
+      getAcademicUnitWithBudgetsById(academicUnitId)
+        .then((data) => {
+          if (data?.budgets) {
+            setBudgets([...data.budgets].reverse())
+          }
+        })
+        .catch(console.error)
+        .finally(() => setIsLoadingBudgets(false))
+    }
   }, [academicUnitId])
 
   const closeModal = () => {
     setOpen(false)
+    setBudgets([])
+    setIsLoadingBudgets(false)
     setTimeout(() => onClose(), 200)
   }
 
@@ -59,21 +97,33 @@ export function UpdateAcademicUnitBudgetDialog({
 
   const submitNewBudget = useCallback(
     async ({ value }: { value: number }) => {
-      const updated = await updateAcademicUnitBudget(academicUnitId!, value)
+      const updated = await updateCurrentYearBudget(academicUnitId!, value)
 
-      if (updated)
+      if (updated) {
         notifications.show({
           title: 'Unidad académica guardada',
           message: 'La unidad académica ha sido guardado con éxito',
           intent: 'success',
         })
 
+        // Refresh the budgets in the dialog
+        setIsLoadingBudgets(true)
+        getAcademicUnitWithBudgetsById(academicUnitId!)
+          .then((data) => {
+            if (data?.budgets) {
+              setBudgets([...data.budgets].reverse())
+            }
+          })
+          .catch(console.error)
+          .finally(() => setIsLoadingBudgets(false))
+      }
+
       startTransition(() => {
         router.refresh()
-        closeModal()
+        form.reset()
       })
     },
-    [router, academicUnitId]
+    [router, academicUnitId, form]
   )
 
   return (
@@ -100,7 +150,9 @@ export function UpdateAcademicUnitBudgetDialog({
           </SubmitButton>
         </form>
 
-        {academicUnitBudgets ?
+        {isLoadingBudgets ?
+          <div className="mt-8 text-center">Cargando presupuestos...</div>
+        : budgets.length > 0 ?
           <Table bleed dense className="mt-8">
             <TableHead>
               <TableRow>
@@ -110,32 +162,25 @@ export function UpdateAcademicUnitBudgetDialog({
               </TableRow>
             </TableHead>
             <TableBody>
-              {academicUnitBudgets.map((value) => (
-                // To address once we have a convertor
-                <TableRow key={value.amountIndex.FCA}>
+              {budgets.map((value) => (
+                <TableRow key={value.id}>
                   <TableCell className="font-medium">
-                    {currencyFormatter.format(value.amountIndex.FCA)}
+                    {indexFormatter.format(value.amountIndex.FCA)}
                   </TableCell>
                   <TableCell className="font-medium">
-                    {value.to ? null : <Badge color="teal">Actual</Badge>}
+                    {value.year === new Date().getFullYear() ?
+                      <Badge color="teal">Actual</Badge>
+                    : null}
                   </TableCell>
                   <TableCell>
-                    Desde:{' '}
-                    <span className="font-medium">
-                      {dateFormatter.format(value.from)}
-                    </span>
-                    {value.to && ' hasta: '}
-                    {value.to && (
-                      <span className="font-medium">
-                        {dateFormatter.format(value.to)}
-                      </span>
-                    )}
+                    <span className="font-medium">Año {value.year}</span>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-        : 'No se encontraron'}
+        : <div className="mt-8 text-center">No se encontraron presupuestos</div>
+        }
       </DialogBody>
       <DialogActions>
         <Button onMouseDown={closeModal} plain>

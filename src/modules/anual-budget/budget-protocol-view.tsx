@@ -86,7 +86,7 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
 
   const { budgetItems, budgetTeamMembers, protocol } = budget
 
-  const calculations = calculateTotalBudget(budget)
+  const calculations = await calculateTotalBudget(budget)
 
   // Helper function to find the deactivation date for a team member
   const findDeactivationDate = (teamMemberId: string | null): Date | null => {

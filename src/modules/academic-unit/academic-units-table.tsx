@@ -17,16 +17,27 @@ import { useState } from 'react'
 import { UpdateAcademicUnitBudgetDialog } from './update-academic-unit-budget-dialog'
 import SearchBar from '@shared/data-table/search-bar'
 
+// Updated type to match what's actually returned from getAllAcademicUnits
+type AcademicUnitWithBudgets = AcademicUnit & {
+  budgets: {
+    year: number
+    amountIndex: {
+      FCA: number
+      FMR: number
+    }
+  }[]
+}
+
 export default function AcademicUnitsTable({
   academicUnits,
   totalRecords,
 }: {
-  academicUnits: AcademicUnit[]
+  academicUnits: AcademicUnitWithBudgets[]
   totalRecords: number
 }) {
   // Controls the Academic Unit modal
   const [currentAcademicUnit, setCurrentAcademicUnit] = useState<
-    AcademicUnit | undefined
+    AcademicUnitWithBudgets | undefined
   >()
 
   // Controls budget modal
@@ -38,7 +49,7 @@ export default function AcademicUnitsTable({
     | undefined
   >(undefined)
 
-  const columns: ColumnDef<AcademicUnit>[] = [
+  const columns: ColumnDef<AcademicUnitWithBudgets>[] = [
     {
       accessorKey: 'name',
       header: 'Unidad Académica',
@@ -61,8 +72,8 @@ export default function AcademicUnitsTable({
       enableSorting: false,
       cell: ({ row }) => (
         <>
-          {row.original.budgets.length > 0 ?
-            <Currency amountIndex={row.original.budgets.at(-1)!.amountIndex} />
+          {row.original.budgets && row.original.budgets.length > 0 ?
+            <Currency amountIndex={row.original.budgets[0].amountIndex} />
           : null}
         </>
       ),
@@ -88,7 +99,7 @@ export default function AcademicUnitsTable({
                 onClick={() => {
                   setCurrentAcademicUnitBudgets({
                     academicUnitId: row.original.id,
-                    academicUnitBudgets: row.original.budgets.reverse(),
+                    academicUnitBudgets: [], // Will be fetched by the dialog
                   })
                 }}
               >

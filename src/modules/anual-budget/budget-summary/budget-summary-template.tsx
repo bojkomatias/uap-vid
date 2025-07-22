@@ -147,16 +147,16 @@ export const BudgetSummary = ({
 
   const budgetCards: BudgetCardData[] = [
     stats[0], // Academic unit card
-    stats[1], // Total projected card
+    stats[1], // Total projected card - already points to academic unit budget
     {
       name: 'Aprobados',
       total: summary?.projectedBudgetSummaryApproved?.value ?? stats[1].total,
-      of: summary?.projectedBudgetSummary?.value ?? stats[1].total,
+      of: summary?.academicUnitBudgetSummary.value ?? { FCA: 0, FMR: 0 }, // Change to total budget instead of projected budget
     },
     {
       name: 'Consumo ejecutado',
-      total: summary?.spentBudget ?? { FCA: 0, FHECIS: 0, FT: 0, FMR: 0 },
-      of: stats[0].total,
+      total: summary?.spentBudget ?? { FCA: 0, FMR: 0 },
+      of: summary?.academicUnitBudgetSummary.value ?? { FCA: 0, FMR: 0 }, // Change to total budget instead of projected budget
       indicator: 'graph',
     },
   ]

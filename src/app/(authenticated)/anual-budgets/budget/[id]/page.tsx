@@ -24,7 +24,7 @@ export default async function Budget({ params }: { params: { id: string } }) {
     ...rest,
     title: protocol.sections.identification.title,
   }
-  const calculations = calculateTotalBudget(anualBudget)
+  const calculations = await calculateTotalBudget(anualBudget)
 
   const protocolFlags = await findProtocolById(protocol.id).then((p) => {
     return p?.flags

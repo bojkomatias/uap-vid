@@ -70,14 +70,10 @@ export function BudgetTeamMemberFees({
   }
 
   // Helper function to calculate executed amount for a team member
-  const calculateExecutedAmount = (executions: any[]): AmountIndex => {
-    return executions.reduce(
-      (acc, execution) => {
-        if (!execution?.amountIndex) return acc
-        return sumAmountIndex([acc, execution.amountIndex])
-      },
-      { FCA: 0, FMR: 0 } as AmountIndex
-    )
+  const calculateExecutedAmount = (executions: any[]): number => {
+    return executions.reduce((acc, execution) => {
+      return acc + (execution.amount ?? 0)
+    }, 0)
   }
 
   const openMemberDialog = (member: AnualBudgetTeamMemberWithAllRelations) => {
@@ -289,16 +285,10 @@ export function BudgetTeamMemberFees({
                         {!editable && (
                           <td className="px-3 py-4 text-right">
                             <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                              <Currency
-                                defaultFCA={
-                                  !Boolean(
-                                    teamMember?.categories.at(-1)?.pointsObrero
-                                  )
-                                }
-                                amountIndex={calculateExecutedAmount(
-                                  executions
-                                )}
-                              />
+                              {new Intl.NumberFormat('es-AR', {
+                                style: 'currency',
+                                currency: 'ARS',
+                              }).format(calculateExecutedAmount(executions))}
                             </div>
                           </td>
                         )}
@@ -500,17 +490,12 @@ export function BudgetTeamMemberFees({
                     Total Ejecutado
                   </Text>
                   <Subheading className="text-xl">
-                    <Currency
-                      defaultFCA={
-                        !Boolean(
-                          selectedMember.teamMember?.categories.at(-1)
-                            ?.pointsObrero
-                        )
-                      }
-                      amountIndex={calculateExecutedAmount(
-                        selectedMember.executions
-                      )}
-                    />
+                    {new Intl.NumberFormat('es-AR', {
+                      style: 'currency',
+                      currency: 'ARS',
+                    }).format(
+                      calculateExecutedAmount(selectedMember.executions)
+                    )}
                   </Subheading>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">

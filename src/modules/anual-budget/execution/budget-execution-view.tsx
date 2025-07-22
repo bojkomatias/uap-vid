@@ -86,18 +86,14 @@ export default function BudgetExecutionView({
         )
       })
   const executionAmountByAcademicUnit = useMemo(() => {
-    if (!allExecutions) return ZeroAmountIndex
+    if (!allExecutions) return 0
     return allExecutions
       .filter(
         (execution) => execution.academicUnitId === selectedAcademicUnit?.id
       )
-      .reduce(
-        (acc, curr) => {
-          acc = sumAmountIndex([acc, curr.amountIndex ?? ZeroAmountIndex])
-          return acc
-        },
-        { FCA: 0, FMR: 0 } as AmountIndex
-      )
+      .reduce((acc, curr) => {
+        return acc + (curr.amount ?? 0)
+      }, 0)
   }, [allExecutions, selectedAcademicUnit])
 
   const maxExecutionAmount = useMemo(() => {
