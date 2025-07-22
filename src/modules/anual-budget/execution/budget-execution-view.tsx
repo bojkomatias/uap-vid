@@ -101,12 +101,10 @@ export default function BudgetExecutionView({
   }, [allExecutions, selectedAcademicUnit])
 
   const maxExecutionAmount = useMemo(() => {
-    if (!maxAmountPerAcademicUnit) return remaining
-    return subtractAmountIndex(
-      maxAmountPerAcademicUnit,
-      executionAmountByAcademicUnit
-    )
-  }, [maxAmountPerAcademicUnit, remaining, executionAmountByAcademicUnit])
+    // Simply use the remaining amount for this specific item
+    // The maxAmountPerAcademicUnit restriction was too limiting
+    return remaining
+  }, [remaining])
 
   return (
     <>
@@ -158,17 +156,36 @@ export default function BudgetExecutionView({
             <Strong>Nueva ejecución</Strong>
           </Subheading>
 
+          {/* Debug Information */}
+          <div className="mb-4 rounded bg-gray-100 p-2 text-xs dark:bg-gray-800">
+            <strong>Debug Info:</strong>
+            <br />
+            Remaining FCA: {remaining.FCA}
+            <br />
+            Remaining FMR: {remaining.FMR}
+            <br />
+            Current FCA Index: {priceData?.currentFCA}
+            <br />
+            Old Max Amount:{' '}
+            {priceData ? remaining.FCA * priceData.currentFCA : 0}
+            <br />
+            New Max Amount: 10000000
+            <br />
+            Remaining in Currency: <Currency amountIndex={remaining} />
+          </div>
+
           {remaining !== ZeroAmountIndex ?
             <BudgetNewExecution
               academicUnits={academicUnits}
-              maxAmount={
-                priceData ? maxExecutionAmount.FCA * priceData.currentFCA : 0
-              }
+              maxAmount={10000000}
               anualBudgetTeamMemberId={anualBudgetTeamMemberId}
               executionType={executionType}
               budgetItemPositionIndex={positionIndex}
             />
-          : null}
+          : <div className="text-center text-gray-500">
+              <strong>No hay fondos restantes para ejecutar</strong>
+            </div>
+          }
         </div>
         <Divider />
         <div>

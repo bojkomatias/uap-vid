@@ -10,6 +10,7 @@ import {
   multiplyAmountIndex,
   subtractAmountIndex,
   sumAmountIndex,
+  ZeroAmountIndex,
 } from '@utils/amountIndex'
 
 // Utils for calculating the total budget or intermediate values once the annual budget is created.
@@ -267,12 +268,48 @@ export const calculateTotalBudget = (
     academicUnitId
   )
 
+  // Calculate total from original budget amounts, not executed + remaining
+  // This ensures consistency for reactivated budgets
+  const totalBudgetItems = budgetItems.reduce(
+    (acc, item) => {
+      const itemAmount =
+        academicUnitId ?
+          {
+            FCA: item.amountIndex.FCA / amountAcademicUnits,
+            FMR: item.amountIndex.FMR / amountAcademicUnits,
+          }
+        : item.amountIndex
+      return sumAmountIndex([acc, itemAmount])
+    },
+    { FCA: 0, FMR: 0 } as AmountIndex
+  )
+
+  const totalTeamMembers = anualBudget.budgetTeamMembers
+    .filter((tm) =>
+      academicUnitId ? tm.teamMember?.academicUnitId === academicUnitId : true
+    )
+    .reduce(
+      (acc, tm) => {
+        const memberTotal =
+          tm.teamMemberId ?
+            multiplyAmountIndex(getLastCategoryPriceIndex(tm), tm.hours)
+          : multiplyAmountIndex(
+              tm.category?.amountIndex ?? ZeroAmountIndex,
+              tm.hours
+            )
+        return sumAmountIndex([acc, memberTotal])
+      },
+      { FCA: 0, FMR: 0 } as AmountIndex
+    )
+
+  const total = sumAmountIndex([totalBudgetItems, totalTeamMembers])
+
   return {
     ABIe,
     ABTe,
     ABIr,
     ABTr,
-    total: sumAmountIndex([ABIe, ABTe, ABIr, ABTr]),
+    total,
   }
 }
 

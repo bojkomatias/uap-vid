@@ -29,7 +29,12 @@ export function Currency({
 
   if (isError || !data) return
 
-  if (!amountIndex) return <Strong>-</Strong>
+  if (
+    !amountIndex ||
+    typeof amountIndex.FCA !== 'number' ||
+    typeof amountIndex.FMR !== 'number'
+  )
+    return <Strong>-</Strong>
 
   return (
     <Strong>

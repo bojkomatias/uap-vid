@@ -7,7 +7,11 @@ import type {
   AnualBudgetItem,
   AmountIndex,
 } from '@prisma/client'
-import { sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import {
+  sumAmountIndex,
+  ZeroAmountIndex,
+  subtractAmountIndex,
+} from '@utils/amountIndex'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
@@ -118,7 +122,7 @@ export const getAnualBudgetById = cache(async (id: string) => {
             sections: {
               select: {
                 identification: {
-                  select: { title: true, sponsor: true },
+                  select: { title: true, sponsor: true, team: true },
                 },
                 duration: { select: { duration: true } },
               },
@@ -355,10 +359,6 @@ export const getAnualBudgetsByAcademicUnit = cache(
     academicUnitId?: string
   ) => {
     try {
-      console.log(
-        chalk.gray.bold.bgGreenBright(' GET ANNUAL BUDGET YEAR '),
-        chalk.gray.bold.bgRed(` ${year} `)
-      )
       const orderBy = order && sort ? orderByQuery(sort, order) : {}
       return await prisma.$transaction([
         prisma.anualBudget.count({
@@ -473,7 +473,7 @@ export const newTeamMemberExecution = async (
   // Create the execution as a separate document
   const execution = await prisma.execution.create({
     data: {
-      amount: amount,
+      amount: amount ? Number(amount) : null,
       amountIndex: amountIndex,
       date: new Date(),
       protocolId: teamMemberBudget.AnualBudget.protocolId,
@@ -544,7 +544,7 @@ export const newBudgetItemExecution = async (
   // Create the execution as a separate document
   const execution = await prisma.execution.create({
     data: {
-      amount: amount,
+      amount: amount ? Number(amount) : null,
       amountIndex: amountIndex,
       date: new Date(),
       protocolId: budgetItem.anualBudget.protocolId,
@@ -695,79 +695,5 @@ export const interruptAnualBudget = async (id: string) => {
     return { success: true }
   } catch (e) {
     return { success: false, message: e }
-  }
-}
-
-
-export const reactivatedAnualBudget = async (id: string) => {
-  try {
-    const AB = await prisma.anualBudget.findFirst({
-      where: { id },
-      select: {
-        id: true,
-        protocol: { select: { id: true } },
-        state: true,
-        budgetItems: true,
-        budgetTeamMembers: true,
-      },
-    })
-
-    if (!AB) {
-      console.error(`Annual budget with id ${id} not found`)
-      return {
-        status: false,
-        message: 'Presupuesto anual no encontrado',
-      }
-    }
-
-    if (AB.state !== AnualBudgetState.INTERRUPTED) {
-      console.error(
-        `Annual budget ${id} is not in INTERRUPTED state. Current state: ${AB.state}`
-      )
-      return {
-        status: false,
-        message: 'El presupuesto anual no está en estado interrumpido',
-      }
-    }
-
-    const session = await getServerSession(authOptions)
-
-    // Update annual budget state to APPROVED
-    await prisma.anualBudget.update({
-      where: { id },
-      data: { state: AnualBudgetState.APPROVED },
-      select: { id: true, protocol: { select: { id: true, state: true } } },
-    })
-
-    // Update protocol state to ON_GOING
-    const updatedProtocol = await prisma.protocol.update({
-      where: { id: AB.protocol.id },
-      data: { state: ProtocolState.ON_GOING },
-    })
-
-    // Log the reactivation
-    if (session?.user?.id) {
-      await logEvent({
-        userId: session.user.id,
-        protocolId: AB.protocol.id,
-        budgetId: id,
-        action: Action.REACTIVATE,
-        message: null,
-        reviewerId: null,
-        previousState: ProtocolState.DISCONTINUED,
-      })
-    }
-
-    return {
-      status: true,
-      data: updatedProtocol,
-      message: 'Presupuesto anual reactivado exitosamente',
-    }
-  } catch (error) {
-    console.error('Error reactivating annual budget:', error)
-    return {
-      status: false,
-      message: 'Error al reactivar el presupuesto anual',
-    }
   }
 }

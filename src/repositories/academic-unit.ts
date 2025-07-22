@@ -48,6 +48,9 @@ export const getAcademicUnitById = async (id?: string) => {
     if (!id)
       return prisma.academicUnit.findMany({
         include: {
+          budgets: {
+            orderBy: { year: 'desc' },
+          },
           AcademicUnitAnualBudgets: {
             include: {
               budgetItems: {
@@ -86,6 +89,9 @@ export const getAcademicUnitById = async (id?: string) => {
         id,
       },
       include: {
+        budgets: {
+          orderBy: { year: 'desc' },
+        },
         AcademicUnitAnualBudgets: {
           include: {
             budgetItems: {
@@ -137,6 +143,58 @@ export const getAcademicUnitWithSecretariesById = async (id: string) => {
   })
 }
 
+// NEW: Get academic unit with its budgets
+export const getAcademicUnitWithBudgetsById = async (id: string) => {
+  return await prisma.academicUnit.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      shortname: true,
+      budgets: {
+        orderBy: { year: 'desc' },
+        select: {
+          id: true,
+          year: true,
+          amountIndex: true,
+          from: true,
+          to: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+  })
+}
+
+// NEW: Get current budget for an academic unit (latest year)
+export const getCurrentBudgetForAcademicUnit = async (id: string) => {
+  const currentYear = new Date().getFullYear()
+
+  return await prisma.academicUnitBudget.findFirst({
+    where: {
+      academicUnitId: id,
+      year: { in: [currentYear, currentYear - 1] }, // Try current year, fall back to previous
+    },
+    orderBy: { year: 'desc' },
+  })
+}
+
+// NEW: Get budget for specific academic unit and year
+export const getBudgetForAcademicUnitAndYear = async (
+  academicUnitId: string,
+  year: number
+) => {
+  return await prisma.academicUnitBudget.findUnique({
+    where: {
+      academicUnitId_year: {
+        academicUnitId,
+        year,
+      },
+    },
+  })
+}
+
 export const getAllAcademicUnits = cache(
   async ({
     records = '10',
@@ -173,16 +231,22 @@ export const getAllAcademicUnits = cache(
         prisma.academicUnit.findMany({
           skip: Number(records) * (Number(page) - 1),
           take: Number(records),
-          // Grab the model, and  bring relational data
           select: {
             id: true,
             name: true,
             shortname: true,
-            budgets: true,
+            // Updated: Now includes the new budget relation
+            budgets: {
+              orderBy: { year: 'desc' },
+              take: 1, // Get only the most recent budget for listing
+              select: {
+                year: true,
+                amountIndex: true,
+              },
+            },
             secretariesIds: true,
             academicUnitAnualBudgetsIds: true,
           },
-          // Add all the globally searchable fields
           where: {
             AND: [
               search ?
@@ -203,9 +267,6 @@ export const getAllAcademicUnits = cache(
         }),
       ])
 
-      // const academicUnits = await prisma.academicUnit.findMany({
-      //     include: { secretaries: true },
-      // })
       return academicUnits
     } catch (error) {
       return []
@@ -233,10 +294,17 @@ export const upsertAcademicUnit = async (
 ) => {
   const { id, ...rest } = academicUnit
   try {
-    if (!id)
-      return await prisma.academicUnit.create({
+    if (!id) {
+      // When creating a new academic unit, also create default budgets
+      const newUnit = await prisma.academicUnit.create({
         data: academicUnit,
       })
+
+      // Create default budgets for 2024 and 2025
+      await createDefaultBudgetsForAcademicUnit(newUnit.id)
+
+      return newUnit
+    }
 
     return await prisma.academicUnit.update({ where: { id }, data: rest })
   } catch (error) {
@@ -245,41 +313,127 @@ export const upsertAcademicUnit = async (
   }
 }
 
+// NEW: Create default budgets for a new academic unit
+export const createDefaultBudgetsForAcademicUnit = async (
+  academicUnitId: string
+) => {
+  const defaultAmountIndex = { FCA: 20, FMR: 20 }
+  const requiredYears = [2024, 2025]
+
+  const budgetPromises = requiredYears.map((year) =>
+    prisma.academicUnitBudget.upsert({
+      where: {
+        academicUnitId_year: {
+          academicUnitId,
+          year,
+        },
+      },
+      update: {}, // Don't update if exists
+      create: {
+        academicUnitId,
+        year,
+        amountIndex: defaultAmountIndex,
+        from: new Date(`${year}-01-01`),
+        to: new Date(`${year}-12-31`),
+      },
+    })
+  )
+
+  return await Promise.all(budgetPromises)
+}
+
+// UPDATED: New budget update function for the new model
 export const updateAcademicUnitBudget = async (
-  id: string,
+  academicUnitId: string,
+  year: number,
   newValue: number
 ) => {
   try {
-    // Pull values
+    // Pull current indexes
     const { currentFCA, currentFMR } = await getCurrentIndexes()
 
-    // Get the current budgets
-    const { budgets } = await prisma.academicUnit.findFirstOrThrow({
-      where: { id },
-      select: { budgets: true },
-    })
-
-    if (budgets.length > 0) {
-      // If has budget, end the period of the last one
-      budgets.at(-1)!.to = new Date()
+    // Calculate the new amount index
+    const newAmountIndex = {
+      FCA: newValue / currentFCA,
+      FMR: newValue / currentFMR,
     }
-    // Append the new one
-    budgets.push({
-      from: new Date(),
-      to: null,
-      amount: null,
-      amountIndex: { FCA: newValue / currentFCA, FMR: newValue / currentFMR },
-    })
-    // update the array in the db
-    const result = await prisma.academicUnit.update({
-      where: { id },
-      data: { budgets },
+
+    // Update or create the budget for the specific year
+    const result = await prisma.academicUnitBudget.upsert({
+      where: {
+        academicUnitId_year: {
+          academicUnitId,
+          year,
+        },
+      },
+      update: {
+        amountIndex: newAmountIndex,
+        updatedAt: new Date(),
+      },
+      create: {
+        academicUnitId,
+        year,
+        amountIndex: newAmountIndex,
+        from: new Date(`${year}-01-01`),
+        to: new Date(`${year}-12-31`),
+      },
     })
 
     return result
   } catch (error) {
     console.info(error)
     return null
+  }
+}
+
+// NEW: Update budget for current year (convenience function)
+export const updateCurrentYearBudget = async (
+  academicUnitId: string,
+  newValue: number
+) => {
+  const currentYear = new Date().getFullYear()
+  return updateAcademicUnitBudget(academicUnitId, currentYear, newValue)
+}
+
+// NEW: Get budget value in current currency for a specific year
+export const getBudgetValueForYear = async (
+  academicUnitId: string,
+  year: number
+): Promise<number | null> => {
+  try {
+    const budget = await getBudgetForAcademicUnitAndYear(academicUnitId, year)
+    if (!budget) return null
+
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    // Calculate current value using FCA (you might want to make this configurable)
+    return budget.amountIndex.FCA * currentFCA
+  } catch (error) {
+    console.info(error)
+    return null
+  }
+}
+
+// NEW: Get all budget values for an academic unit
+export const getAllBudgetValuesForAcademicUnit = async (
+  academicUnitId: string
+) => {
+  try {
+    const budgets = await prisma.academicUnitBudget.findMany({
+      where: { academicUnitId },
+      orderBy: { year: 'desc' },
+    })
+
+    const { currentFCA, currentFMR } = await getCurrentIndexes()
+
+    return budgets.map((budget) => ({
+      ...budget,
+      currentValueFCA: budget.amountIndex.FCA * currentFCA,
+      currentValueFMR: budget.amountIndex.FMR * currentFMR,
+    }))
+  } catch (error) {
+    console.info(error)
+    return []
   }
 }
 
@@ -318,4 +472,26 @@ export const getSecretariesEmailsByAcademicUnit = async (id: string) => {
   } catch (error) {
     return null
   }
+}
+
+// NEW: Helper function to ensure academic unit has required budgets
+export const ensureAcademicUnitHasRequiredBudgets = async (
+  academicUnitId: string
+) => {
+  const requiredYears = [2024, 2025]
+  const existingBudgets = await prisma.academicUnitBudget.findMany({
+    where: { academicUnitId },
+    select: { year: true },
+  })
+
+  const existingYears = existingBudgets.map((b) => b.year)
+  const missingYears = requiredYears.filter(
+    (year) => !existingYears.includes(year)
+  )
+
+  if (missingYears.length > 0) {
+    await createDefaultBudgetsForAcademicUnit(academicUnitId)
+  }
+
+  return missingYears.length
 }

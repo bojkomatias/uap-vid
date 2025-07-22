@@ -110,6 +110,7 @@ const STATE_SCOPE: { [key in keyof typeof ProtocolState]: Action[] } = {
     Action.FINISH,
     Action.VIEW_ANUAL_BUDGET,
     Action.GENERATE_ANUAL_BUDGET,
+    Action.EDIT, // Allow editing (including team members) for ongoing protocols
   ],
   [ProtocolState.FINISHED]: [],
   [ProtocolState.DISCONTINUED]: [Action.REACTIVATE],

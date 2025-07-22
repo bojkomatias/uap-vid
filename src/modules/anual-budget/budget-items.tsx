@@ -1,22 +1,22 @@
 'use client'
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
-import type {
-  AcademicUnit,
-  AmountIndex,
-  AnualBudgetItem,
-  Index,
-} from '@prisma/client'
+import type { AcademicUnit, AmountIndex, Index } from '@prisma/client'
 import { updateAnualBudgetItems } from '@repositories/anual-budget'
-import { ExecutionType } from '@utils/anual-budget'
+import {
+  ExecutionType,
+  type AnualBudgetItemWithExecutions,
+} from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import BudgetExecutionView from './execution/budget-execution-view'
+import BudgetNewExecution from './execution/budget-new-execution'
 import { useRouter } from 'next/navigation'
 import { Currency } from '@shared/currency'
 import {
   divideAmountIndex,
   subtractAmountIndex,
   sumAmountIndex,
+  ZeroAmountIndex,
 } from '@utils/amountIndex'
 import { Button } from '@components/button'
 import { Text } from '@components/text'
@@ -24,6 +24,13 @@ import { Heading, Subheading } from '@components/heading'
 import { FormInput } from '@shared/form/form-input'
 import { useAtom } from 'jotai'
 import { indexSwapAtom } from '@shared/index-swapper'
+import {
+  Dialog,
+  DialogTitle,
+  DialogBody,
+  DialogActions,
+} from '@components/dialog'
+import { useState } from 'react'
 
 export function BudgetItems({
   budgetId,
@@ -36,7 +43,7 @@ export function BudgetItems({
 }: {
   budgetId: string
   editable: boolean
-  budgetItems: AnualBudgetItem[]
+  budgetItems: AnualBudgetItemWithExecutions[]
   ABIe: AmountIndex
   ABIr: AmountIndex
   academicUnits: AcademicUnit[]
@@ -44,257 +51,374 @@ export function BudgetItems({
 }) {
   const router = useRouter()
   const form = useForm({ initialValues: budgetItems })
+  const [selectedItem, setSelectedItem] =
+    useState<AnualBudgetItemWithExecutions | null>(null)
 
   if (budgetItems.length < 1) return null
 
   const { currentFCA } = currentIndexes
   const { currentFMR } = currentIndexes
 
+  // Helper function to calculate executed amount for a budget item
+  const calculateExecutedAmount = (executions: any[]): AmountIndex => {
+    return executions.reduce(
+      (acc, execution) => {
+        if (!execution?.amountIndex) return acc
+        return sumAmountIndex([acc, execution.amountIndex])
+      },
+      { FCA: 0, FMR: 0 } as AmountIndex
+    )
+  }
+
+  const openItemDialog = (item: AnualBudgetItemWithExecutions) => {
+    setSelectedItem(item)
+  }
+
+  const closeItemDialog = () => {
+    setSelectedItem(null)
+  }
+
   return (
-    <form
-      className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
-      onSubmit={form.onSubmit(async (values) => {
-        if (!editable) return
-        const itemsWithRemainingUpdated = Object.values(values).map((item) => {
-          const remainingIndex = {
-            FCA: item.amount! / currentFCA,
-            FMR: item.amount! / currentFMR,
+    <div className="overflow-auto">
+      <form
+        className="mt-10 rounded-lg border p-4 dark:border-gray-800 print:border-none"
+        onSubmit={form.onSubmit(async (values) => {
+          if (!editable) return
+          const itemsWithRemainingUpdated = Object.values(values).map(
+            (item) => {
+              const remainingIndex = {
+                FCA: item.amount! / currentFCA,
+                FMR: item.amount! / currentFMR,
+              }
+              const amountIndex = {
+                FCA: item.amount! / currentFCA,
+                FMR: item.amount! / currentFMR,
+              }
+              if (item.amount) {
+                return { ...item, amountIndex, remainingIndex, amount: null }
+              }
+              return { ...item, amount: null }
+            }
+          )
+          const res = await updateAnualBudgetItems(
+            budgetId,
+            itemsWithRemainingUpdated
+          )
+          if (res) {
+            notifications.show({
+              title: 'Valores actualizados',
+              message: 'Los montos a aprobar fueron actualizados con éxito',
+              intent: 'success',
+            })
+            router.refresh()
+          } else {
+            notifications.show({
+              title: 'No se pudo actualizar',
+              message: 'Ocurrió un error al actualizar los datos',
+              intent: 'error',
+            })
           }
-          const amountIndex = {
-            FCA: item.amount! / currentFCA,
-            FMR: item.amount! / currentFMR,
-          }
-          if (item.amount) {
-            return { ...item, amountIndex, remainingIndex, amount: null }
-          }
-          return { ...item, amount: null }
-        })
-        const res = await updateAnualBudgetItems(
-          budgetId,
-          itemsWithRemainingUpdated
-        )
-        if (res) {
-          notifications.show({
-            title: 'Valores actualizados',
-            message: 'Los montos a aprobar fueron actualizados con éxito',
-            intent: 'success',
-          })
-          router.refresh()
-        } else {
-          notifications.show({
-            title: 'No se pudo actualizar',
-            message: 'Ocurrió un error al actualizar los datos',
-            intent: 'error',
-          })
-        }
-      })}
-    >
-      <div className="flex items-center">
-        <div className="flex w-full items-center justify-between">
-          <Heading>Lista de gastos directos</Heading>
-          {editable && (
-            <Button
-              outline
-              type="submit"
-              disabled={!form.isDirty()}
-              className="print:hidden"
-            >
-              Guardar valores actualizados
-            </Button>
-          )}
-        </div>
-      </div>
-
-      <div className="-mx-4 mt-8 flow-root sm:mx-0">
-        <table className="min-w-full">
-          <colgroup>
-            <col className={cx(!editable ? 'w-[45%]' : 'w-[50%]')} />
-            <col className={cx(!editable ? 'w-[15%]' : 'w-[20%]')} />
-            <col className={cx(!editable ? 'w-[15%]' : 'w-[20%]')} />
-            <col className={cx(!editable ? 'w-[15%]' : 'hidden')} />
-            <col className={cx(!editable ? 'w-[10%]' : 'hidden')} />
-          </colgroup>
-          <thead className="border-b text-gray-700 dark:border-gray-700">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
+        })}
+      >
+        <div className="flex items-center">
+          <div className="flex w-full items-center justify-between">
+            <div>
+              <Heading>Lista de gastos directos</Heading>
+              <Text className="mt-1 text-sm text-gray-500">
+                Haga clic en cualquier fila para ver detalles y gestionar
+                ejecuciones
+              </Text>
+            </div>
+            {editable && (
+              <Button
+                outline
+                type="submit"
+                disabled={!form.isDirty()}
+                className="print:hidden"
               >
-                <Subheading>Detalle</Subheading>
-              </th>
-              <th
-                scope="col"
-                className={cx(
-                  'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
-                  !editable && 'table-cell'
-                )}
-              >
-                <Subheading>Restante</Subheading>
-              </th>
-              <th
-                scope="col"
-                className={cx(
-                  'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
-                  !editable && 'table-cell'
-                )}
-              >
-                <Subheading>Ejecutado</Subheading>
-              </th>
-              <th
-                scope="col"
-                className={cx(
-                  'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
-                  !!editable && 'table-cell'
-                )}
-              >
-                <Subheading>A aprobar</Subheading>
-              </th>
-              <th
-                scope="col"
-                className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
-              >
-                <Subheading>Total</Subheading>
-              </th>
-              <th
-                scope="col"
-                className={cx(
-                  'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0 print:hidden',
-                  !editable && 'table-cell'
-                )}
-              >
-                <Subheading>Ejecuciones</Subheading>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {budgetItems.map(
-              (
-                {
-                  detail,
-                  type,
-                  amountIndex: amount,
-                  remainingIndex: remaining,
-                  executions,
-                },
-                i
-              ) => (
-                <tr
-                  key={i}
-                  className="relative border-b text-gray-600 dark:border-gray-800"
-                >
-                  <td className="max-w-0 py-5 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
-                    <Subheading>{detail}</Subheading>
-                    <Text>{type}</Text>
-                  </td>
-                  <td
-                    className={cx(
-                      'hidden px-3 py-5 text-right text-sm',
-                      !editable && 'table-cell'
-                    )}
-                  >
-                    <Currency amountIndex={remaining} />
-                  </td>
-                  <td
-                    className={cx(
-                      'hidden px-3 py-5 text-right text-sm',
-                      !editable && 'table-cell'
-                    )}
-                  >
-                    <Currency
-                      amountIndex={subtractAmountIndex(amount, remaining)}
-                    />
-                  </td>
-                  <td
-                    className={cx(
-                      'hidden px-3 py-5 text-right text-sm ',
-                      !!editable && 'float-right flex items-center gap-2'
-                    )}
-                  >
-                    $
-                    <FormInput
-                      type="number"
-                      defaultValue={
-                        form.getInputProps(`${i}.amountIndex.FCA`).value *
-                        currentFCA
-                      }
-                      className={cx('ml-full float-right w-32')}
-                      {...form.getInputProps(`${i}.amount`)}
-                    />
-                  </td>
-
-                  <td className="table-cell px-3 py-5 text-right text-sm">
-                    <Currency amountIndex={amount} />
-                  </td>
-                  <td
-                    className={cx(
-                      'hidden text-right print:hidden',
-                      !editable && 'table-cell'
-                    )}
-                  >
-                    <BudgetExecutionView
-                      academicUnits={academicUnits}
-                      maxAmountPerAcademicUnit={divideAmountIndex(
-                        sumAmountIndex(budgetItems.map((bi) => bi.amountIndex)),
-                        academicUnits.length
-                      )}
-                      allExecutions={budgetItems
-                        .map((bi) => bi.executions)
-                        .flat()}
-                      positionIndex={i}
-                      remaining={remaining}
-                      title={detail}
-                      executionType={ExecutionType.Item}
-                      itemName={type}
-                      executions={executions}
-                    />
-                  </td>
-                </tr>
-              )
+                Guardar valores actualizados
+              </Button>
             )}
-          </tbody>
+          </div>
+        </div>
 
-          <tfoot>
-            <tr>
-              <th
-                scope="row"
-                colSpan={!editable ? 3 : 2}
-                className="table-cell pl-4 pt-6 text-left text-sm font-normal text-gray-500 sm:text-right"
-              >
-                <Text>Ejecutado</Text>{' '}
-              </th>
-              <td className="px-3 pt-6 text-right text-sm text-gray-500">
-                {!editable ?
-                  <Currency amountIndex={ABIe} />
-                : '-'}
-              </td>
-            </tr>
-            <tr>
-              <th
-                scope="row"
-                colSpan={!editable ? 3 : 2}
-                className="table-cell pl-4 pt-4 text-left text-sm font-normal text-gray-500 sm:text-right"
-              >
-                <Text>Restante</Text>
-              </th>
-              <td className="px-3 pt-4 text-right text-sm text-gray-500">
-                <Currency amountIndex={ABIr} />
-              </td>
-            </tr>
-            <tr>
-              <th
-                scope="row"
-                colSpan={!editable ? 3 : 2}
-                className="table-cell pl-4 pt-4 text-left text-sm font-semibold text-gray-700 sm:text-right"
-              >
-                <Subheading>Total</Subheading>
-              </th>
-              <td className="px-3 pt-4 text-right text-sm font-semibold text-gray-700">
-                <Currency amountIndex={sumAmountIndex([ABIe, ABIr])} />
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </form>
+        <div className="-mx-4 mt-8 flow-root sm:mx-0">
+          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <colgroup>
+                <col className={cx(!editable ? 'w-[45%]' : 'w-[50%]')} />
+                <col className={cx(!editable ? 'w-[15%]' : 'w-[20%]')} />
+                <col className={cx(!editable ? 'w-[15%]' : 'w-[20%]')} />
+                <col className={cx(!editable ? 'w-[25%]' : 'w-[10%]')} />
+              </colgroup>
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <Subheading>Detalle</Subheading>
+                  </th>
+                  <th
+                    className={cx(
+                      'hidden px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100',
+                      !editable && 'table-cell'
+                    )}
+                  >
+                    <Subheading>Restante</Subheading>
+                  </th>
+                  <th
+                    className={cx(
+                      'hidden px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100',
+                      !editable && 'table-cell'
+                    )}
+                  >
+                    <Subheading>Ejecutado</Subheading>
+                  </th>
+                  <th
+                    className={cx(
+                      'hidden px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100',
+                      !!editable && 'table-cell'
+                    )}
+                  >
+                    <Subheading>A aprobar</Subheading>
+                  </th>
+                  <th className="px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <Subheading>Total</Subheading>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+                {budgetItems.map((item, i) => (
+                  <tr
+                    key={i}
+                    onClick={() => !editable && openItemDialog(item)}
+                    className={cx(
+                      'transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50',
+                      !editable && 'cursor-pointer'
+                    )}
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col">
+                        <Subheading className="text-gray-900 dark:text-gray-100">
+                          {item.detail}
+                        </Subheading>
+                        <Text className="text-gray-500 dark:text-gray-400">
+                          {item.type}
+                        </Text>
+                      </div>
+                    </td>
+                    <td
+                      className={cx(
+                        'hidden px-3 py-4 text-right',
+                        !editable && 'table-cell'
+                      )}
+                    >
+                      <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        <Currency amountIndex={item.remainingIndex} />
+                      </div>
+                    </td>
+                    <td
+                      className={cx(
+                        'hidden px-3 py-4 text-right',
+                        !editable && 'table-cell'
+                      )}
+                    >
+                      <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        <Currency
+                          amountIndex={subtractAmountIndex(
+                            item.amountIndex,
+                            item.remainingIndex
+                          )}
+                        />
+                      </div>
+                    </td>
+                    <td
+                      className={cx(
+                        'hidden px-3 py-4 text-right',
+                        !!editable && 'table-cell'
+                      )}
+                    >
+                      <div className="flex items-center justify-end gap-2">
+                        <span className="text-sm text-gray-600">$</span>
+                        <FormInput
+                          type="number"
+                          className="w-32 text-right font-semibold"
+                          {...form.getInputProps(`${i}.amount`)}
+                          value={form.getInputProps(`${i}.amount`).value ?? ''}
+                          onChange={(e) =>
+                            form.setFieldValue(
+                              `${i}.amount`,
+                              e.target.value || null
+                            )
+                          }
+                        />
+                      </div>
+                    </td>
+
+                    <td className="px-3 py-4 text-right">
+                      <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
+                        <Currency amountIndex={item.amountIndex} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Summary Section */}
+          <div className="mt-6 rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Ejecutado
+                </Text>
+                <div className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                  {!editable ?
+                    <Currency amountIndex={ABIe} />
+                  : '-'}
+                </div>
+              </div>
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Restante
+                </Text>
+                <div className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                  <Currency amountIndex={ABIr} />
+                </div>
+              </div>
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Total
+                </Text>
+                <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                  <Currency amountIndex={sumAmountIndex([ABIe, ABIr])} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {/* Item Details Dialog */}
+      {selectedItem && (
+        <Dialog open={!!selectedItem} onClose={closeItemDialog} size="2xl">
+          <DialogTitle>{selectedItem.detail}</DialogTitle>
+          <DialogBody>
+            <div className="space-y-6">
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Tipo
+                  </Text>
+                  <Text className="font-medium">{selectedItem.type}</Text>
+                </div>
+                <div>
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Detalle
+                  </Text>
+                  <Text className="font-medium">{selectedItem.detail}</Text>
+                </div>
+              </div>
+
+              {/* Financial Summary */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="rounded-lg bg-green-50 p-4 text-center dark:bg-green-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Ejecutado
+                  </Text>
+                  <Subheading className="text-xl">
+                    <Currency
+                      amountIndex={calculateExecutedAmount(
+                        selectedItem.executions
+                      )}
+                    />
+                  </Subheading>
+                </div>
+                <div className="rounded-lg bg-orange-50 p-4 text-center dark:bg-orange-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Restante
+                  </Text>
+                  <Subheading className="text-xl">
+                    <Currency amountIndex={selectedItem.remainingIndex} />
+                  </Subheading>
+                </div>
+                <div className="rounded-lg bg-blue-50 p-4 text-center dark:bg-blue-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Total Presupuestado
+                  </Text>
+                  <Subheading className="text-xl text-blue-700 dark:text-blue-300">
+                    <Currency amountIndex={selectedItem.amountIndex} />
+                  </Subheading>
+                </div>
+              </div>
+
+              {/* New Execution Section */}
+              {!editable &&
+                selectedItem.remainingIndex &&
+                (selectedItem.remainingIndex.FCA > 0 ||
+                  selectedItem.remainingIndex.FMR > 0) && (
+                  <div className="border-t pt-4">
+                    <Subheading className="mb-3">Nueva Ejecución</Subheading>
+                    <BudgetNewExecution
+                      academicUnits={academicUnits}
+                      maxAmount={selectedItem.remainingIndex.FCA}
+                      executionType={ExecutionType.Item}
+                      budgetItemPositionIndex={budgetItems.findIndex(
+                        (item) => item.id === selectedItem.id
+                      )}
+                    />
+                  </div>
+                )}
+
+              {/* Execution History */}
+              {selectedItem.executions.length > 0 && (
+                <div className="border-t pt-4">
+                  <Subheading className="mb-3">
+                    Historial de Ejecuciones ({selectedItem.executions.length})
+                  </Subheading>
+                  <div className="max-h-48 space-y-2 overflow-y-auto">
+                    {selectedItem.executions
+                      .slice()
+                      .reverse()
+                      .map((execution, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
+                        >
+                          <div>
+                            <Text className="font-medium">
+                              {execution.date.toLocaleDateString('es-ES')}
+                            </Text>
+                          </div>
+                          <Text className="font-semibold">
+                            <Currency
+                              amountIndex={
+                                execution.amountIndex ?? ZeroAmountIndex
+                              }
+                            />
+                          </Text>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedItem.executions.length === 0 && !editable && (
+                <div className="py-6 text-center text-gray-500">
+                  <Text>
+                    No hay ejecuciones registradas para este elemento.
+                  </Text>
+                </div>
+              )}
+            </div>
+          </DialogBody>
+          <DialogActions>
+            <Button plain onClick={closeItemDialog}>
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+    </div>
   )
 }

@@ -1,7 +1,12 @@
-import type { AcademicUnit, AmountIndex, AnualBudgetItem } from '@prisma/client'
+import type {
+  AcademicUnit,
+  AmountIndex,
+  ProtocolSectionsIdentificationTeam,
+} from '@prisma/client'
 import { AnualBudgetState } from '@prisma/client'
 import type {
   AnualBudgetTeamMemberWithAllRelations,
+  AnualBudgetItemWithExecutions,
   TotalBudgetCalculation,
 } from '@utils/anual-budget'
 import { BudgetTeamMemberFees } from './budget-team-member-fees'
@@ -22,14 +27,16 @@ export async function BudgetView({
   budgetTeamMembers,
   calculations,
   academicUnits,
+  protocolTeam,
 }: {
   budgetId: string
   state: AnualBudgetState
   duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
-  budgetItems: AnualBudgetItem[]
+  budgetItems: AnualBudgetItemWithExecutions[]
   budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
   calculations: TotalBudgetCalculation
   academicUnits: AcademicUnit[]
+  protocolTeam: ProtocolSectionsIdentificationTeam[]
 }) {
   const currentIndexes = await getCurrentIndexes()
 
@@ -42,6 +49,7 @@ export async function BudgetView({
           ABTe={calculations.ABTe}
           ABTr={calculations.ABTr}
           duration={duration}
+          protocolTeam={protocolTeam}
         />
 
         <BudgetItems

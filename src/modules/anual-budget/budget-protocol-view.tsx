@@ -24,6 +24,7 @@ import {
 } from '@components/table'
 import { Subheading } from '@components/heading'
 import { Button } from '@components/button'
+import { Badge } from '@components/badge'
 
 type Budget = Prisma.AnualBudgetGetPayload<{
   include: {
@@ -33,11 +34,26 @@ type Budget = Prisma.AnualBudgetGetPayload<{
         sections: {
           select: {
             identification: {
-              select: { title: true; sponsor: true }
+              select: { title: true; sponsor: true; team: true }
             }
             duration: { select: { duration: true } }
           }
         }
+      }
+    }
+    budgetItems: {
+      include: {
+        executions: {
+          include: {
+            academicUnit: true
+          }
+          orderBy: {
+            date: 'desc'
+          }
+        }
+      }
+      orderBy: {
+        createdAt: 'asc'
       }
     }
     budgetTeamMembers: {
@@ -51,6 +67,14 @@ type Budget = Prisma.AnualBudgetGetPayload<{
           }
         }
         category: true
+        executions: {
+          include: {
+            academicUnit: true
+          }
+          orderBy: {
+            date: 'desc'
+          }
+        }
       }
     }
     AcademicUnits: true
@@ -60,9 +84,24 @@ type Budget = Prisma.AnualBudgetGetPayload<{
 export async function BudgetProtocolView({ budget }: { budget: Budget }) {
   const router = useRouter()
 
-  const { budgetItems, budgetTeamMembers } = budget
+  const { budgetItems, budgetTeamMembers, protocol } = budget
 
   const calculations = calculateTotalBudget(budget)
+
+  // Helper function to find the deactivation date for a team member
+  const findDeactivationDate = (teamMemberId: string | null): Date | null => {
+    if (!teamMemberId || !protocol.sections.identification.team) return null
+
+    const protocolMember = protocol.sections.identification.team.find(
+      (pm) => pm.teamMemberId === teamMemberId
+    )
+
+    if (!protocolMember?.assignments) return null
+
+    // Find assignment with 'to' date (deactivated assignment)
+    const deactivatedAssignment = protocolMember.assignments.find((a) => a.to)
+    return deactivatedAssignment?.to || null
+  }
 
   return (
     // Cannot delay router back for animation transition because it bugs out.
@@ -94,11 +133,26 @@ export async function BudgetProtocolView({ budget }: { budget: Budget }) {
             {budgetTeamMembers.map((member) => (
               <TableRow key={member.id}>
                 <TableCell colSpan={2} className="font-medium">
-                  {member.teamMember ?
-                    member.teamMember.name
-                  : member.category?.name}
+                  <div className="flex flex-col gap-1">
+                    <div>
+                      {member.teamMember ?
+                        member.teamMember.name
+                      : member.category?.name}
+                    </div>
+                    {(() => {
+                      const deactivationDate = findDeactivationDate(
+                        member.teamMemberId
+                      )
+                      return deactivationDate ?
+                          <Badge color="red" className="w-fit text-xs">
+                            Finalizado:{' '}
+                            {deactivationDate.toLocaleDateString('es-ES')}
+                          </Badge>
+                        : null
+                    })()}
+                  </div>
                 </TableCell>
-                <TableCell>{member.hours}</TableCell>
+                <TableCell>{member.hours.toFixed(1)}</TableCell>
                 <TableCell>
                   <Currency
                     defaultFCA={

@@ -75,6 +75,7 @@ export default async function Budget({ params }: { params: { id: string } }) {
         budgetTeamMembers={budgetTeamMembers}
         academicUnits={anualBudget.AcademicUnits}
         calculations={calculations}
+        protocolTeam={protocol.sections.identification.team}
       />
     </>
   )

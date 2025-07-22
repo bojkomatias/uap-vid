@@ -8,8 +8,7 @@
     "lint": "next lint --fix",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
@@ -64,6 +63,7 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "prisma": "^6.8.2",
     "tailwindcss": "^3.4.6",
+    "tsx": "^4.7.0",
     "typescript": "^5.5.3"
   }
 }

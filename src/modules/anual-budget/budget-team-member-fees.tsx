@@ -2,6 +2,8 @@
 import { notifications } from '@elements/notifications'
 import { useForm } from '@mantine/form'
 import { updateAnualBudgetTeamMemberHours } from '@repositories/anual-budget'
+import type { AmountIndex } from '@prisma/client'
+import type { ProtocolSectionsIdentificationTeam } from '@prisma/client'
 import {
   ExecutionType,
   type AnualBudgetTeamMemberWithAllRelations,
@@ -10,9 +12,9 @@ import {
 } from '@utils/anual-budget'
 import { cx } from '@utils/cx'
 import BudgetExecutionView from './execution/budget-execution-view'
+import BudgetNewExecution from './execution/budget-new-execution'
 import { useRouter } from 'next/navigation'
 import type { WEEKS_IN_HALF_YEAR, WEEKS_IN_YEAR } from '@utils/constants'
-import type { AmountIndex } from '@prisma/client'
 import { Currency } from '@shared/currency'
 import {
   multiplyAmountIndex,
@@ -24,21 +26,68 @@ import { Heading, Subheading } from '@components/heading'
 import { FormInput } from '@shared/form/form-input'
 import { Badge } from '@components/badge'
 import { Text } from '@components/text'
+import {
+  Dialog,
+  DialogTitle,
+  DialogBody,
+  DialogActions,
+} from '@components/dialog'
+import { useState } from 'react'
+import { InfoCircle } from 'tabler-icons-react'
 
 export function BudgetTeamMemberFees({
   editable,
   budgetTeamMembers,
   ABTe,
   ABTr,
+  protocolTeam,
 }: {
   editable: boolean
   budgetTeamMembers: AnualBudgetTeamMemberWithAllRelations[]
   ABTe: AmountIndex
   ABTr: AmountIndex
   duration: typeof WEEKS_IN_YEAR | typeof WEEKS_IN_HALF_YEAR
+  protocolTeam: ProtocolSectionsIdentificationTeam[]
 }) {
   const router = useRouter()
   const form = useForm({ initialValues: budgetTeamMembers })
+  const [selectedMember, setSelectedMember] =
+    useState<AnualBudgetTeamMemberWithAllRelations | null>(null)
+
+  // Helper function to find the deactivation date for a team member
+  const findDeactivationDate = (teamMemberId: string | null): Date | null => {
+    if (!teamMemberId) return null
+
+    const protocolMember = protocolTeam.find(
+      (pm) => pm.teamMemberId === teamMemberId
+    )
+
+    if (!protocolMember?.assignments) return null
+
+    // Find assignment with 'to' date (deactivated assignment)
+    const deactivatedAssignment = protocolMember.assignments.find((a) => a.to)
+    return deactivatedAssignment?.to || null
+  }
+
+  // Helper function to calculate executed amount for a team member
+  const calculateExecutedAmount = (executions: any[]): AmountIndex => {
+    return executions.reduce(
+      (acc, execution) => {
+        if (!execution?.amountIndex) return acc
+        return sumAmountIndex([acc, execution.amountIndex])
+      },
+      { FCA: 0, FMR: 0 } as AmountIndex
+    )
+  }
+
+  const openMemberDialog = (member: AnualBudgetTeamMemberWithAllRelations) => {
+    setSelectedMember(member)
+  }
+
+  const closeMemberDialog = () => {
+    setSelectedMember(null)
+  }
+
   return (
     <div className="overflow-auto">
       <form
@@ -68,7 +117,13 @@ export function BudgetTeamMemberFees({
       >
         <div className="flex items-center">
           <div className="flex w-full items-center justify-between">
-            <Heading>Honorarios</Heading>
+            <div>
+              <Heading>Honorarios</Heading>
+              <Text className="mt-1 text-sm text-gray-500">
+                Haga clic en cualquier fila para ver detalles y gestionar
+                ejecuciones
+              </Text>
+            </div>
             {editable && (
               <Button
                 type="submit"
@@ -83,290 +138,486 @@ export function BudgetTeamMemberFees({
         </div>
 
         <div className="-mx-4 mt-8 flow-root sm:mx-0">
-          <table className="min-w-full">
-            <colgroup>
-              <col className={cx(!editable ? ' w-[30%]' : ' w-[38%]')} />
-              <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
-              <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
-              <col className={!editable ? 'w-[12%]' : 'w-[20%]'} />
-              <col className={!editable ? 'w-[12%]' : 'hidden'} />
-              <col className={!editable ? 'w-[12%]' : 'hidden'} />
-              <col className={!editable ? 'w-[10%]' : 'hidden'} />
-            </colgroup>
-
-            <thead className=" border-b text-gray-700 dark:border-gray-700">
-              <tr>
-                <th
-                  scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0"
-                >
-                  <Subheading>Miembro</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
-                >
-                  <Subheading>Horas anuales</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className={cx(
-                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
-                    !editable && 'sm:table-cell'
+          <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <Subheading>Miembro del Equipo</Subheading>
+                  </th>
+                  <th className="px-3 py-4 text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <Subheading>Horas</Subheading>
+                  </th>
+                  {!editable && (
+                    <th className="px-3 py-4 text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      <Subheading>Restantes</Subheading>
+                    </th>
                   )}
-                >
-                  <Subheading>Horas restantes</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className="hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700 sm:table-cell"
-                >
-                  <Subheading>Valor hora</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className={cx(
-                    'hidden px-3 py-3.5 text-right text-sm font-semibold text-gray-700',
-                    !editable && 'sm:table-cell'
+                  {!editable && (
+                    <th className="px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      <Subheading>Ejecutado</Subheading>
+                    </th>
                   )}
-                >
-                  <Subheading>Restante</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className="table-cell px-3 py-3.5 text-right text-sm font-semibold text-gray-700"
-                >
-                  <Subheading>Total</Subheading>
-                </th>
-                <th
-                  scope="col"
-                  className={cx(
-                    'hidden py-3.5 pr-3 text-right text-sm font-semibold text-gray-700 sm:pr-0 print:hidden',
-                    !editable && 'table-cell'
-                  )}
-                >
-                  <Subheading>Ejecuciones</Subheading>
-                </th>
-              </tr>
-            </thead>
+                  <th className="px-3 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <Subheading>Total Presupuestado</Subheading>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+                {budgetTeamMembers.map(
+                  (
+                    {
+                      teamMemberId,
+                      teamMember,
+                      id: anualBudgetTeamMemberId,
+                      executions,
+                      memberRole,
+                      hours,
+                      remainingHours,
+                      categoryId,
+                      category,
+                    },
+                    i
+                  ) => {
+                    const deactivationDate = findDeactivationDate(teamMemberId)
+                    const isDeactivated = !!deactivationDate
+                    const member = {
+                      teamMemberId,
+                      teamMember,
+                      id: anualBudgetTeamMemberId,
+                      executions,
+                      memberRole,
+                      hours,
+                      remainingHours,
+                      categoryId,
+                      category,
+                      anualBudgetId: budgetTeamMembers[i].anualBudgetId,
+                    } as AnualBudgetTeamMemberWithAllRelations
 
-            <tbody>
-              {budgetTeamMembers.map(
-                (
-                  {
-                    teamMemberId,
-                    teamMember,
-                    id: anualBudgetTeamMemberId,
-                    executions,
-                    memberRole,
-                    hours,
-                    remainingHours,
-                    categoryId,
-                    category,
-                  },
-                  i
-                ) => (
-                  <tr
-                    className="border-b dark:border-gray-800"
-                    key={teamMemberId ?? categoryId}
-                  >
-                    <td className="max-w-0 py-2 pl-4 pr-3 text-sm sm:pl-0 print:py-0">
-                      <Subheading>
-                        {teamMember ? teamMember.name : 'A definir'}
-                      </Subheading>
-                      <div className="mt-1.5 flex flex-col gap-1 truncate text-gray-500">
-                        <div className="flex gap-2">
-                          <Badge>Rol: </Badge>
-                          <Text>{memberRole}</Text>
-                        </div>
-
-                        <div className="flex gap-2">
-                          <Badge>Categoría: </Badge>
-                          <Text>
-                            {teamMemberId ?
-                              teamMember?.categories.at(-1)?.category.name
-                            : category?.name}
-                          </Text>
-                          <div>
-                            {(
-                              teamMemberId &&
-                              teamMember?.categories.at(-1)?.pointsObrero
-                            ) ?
-                              <Text className="text-gray-600">
-                                {'[ '}
-                                {teamMember.categories.at(-1)?.pointsObrero}
-                                {' ]'}
-                              </Text>
-                            : null}
+                    return (
+                      <tr
+                        key={teamMemberId ?? categoryId}
+                        onClick={() => openMemberDialog(member)}
+                        className={cx(
+                          'cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50',
+                          isDeactivated && 'bg-red-50/30 dark:bg-red-900/10'
+                        )}
+                      >
+                        {/* Member Info Column */}
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <Subheading className="text-gray-900 dark:text-gray-100">
+                              {teamMember ? teamMember.name : 'A definir'}
+                            </Subheading>
+                            {isDeactivated && (
+                              <Badge
+                                color="red"
+                                className="whitespace-nowrap text-xs"
+                              >
+                                Finalizado{' '}
+                                {deactivationDate.toLocaleDateString('es-ES')}
+                              </Badge>
+                            )}
                           </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="table-cell px-3 py-5 text-right text-sm text-gray-600">
-                      {!editable ?
-                        <Text>{hours}</Text>
-                      : <FormInput
-                          type="number"
-                          {...form.getInputProps(`${i}.hours`)}
-                          className={cx(
-                            form.isDirty(`${i}.hours`) && '!border-yellow-200',
-                            'float-right w-20'
-                          )}
-                          placeholder={form.getInputProps(`${i}.hours`).value}
-                        />
-                      }
-                    </td>
-                    <td
-                      className={cx(
-                        'hidden px-3 py-5 text-right text-sm text-gray-600',
-                        !editable && 'sm:table-cell'
-                      )}
-                    >
-                      <Text>{remainingHours.toFixed(2)}</Text>
-                    </td>
-                    <td className="hidden px-3 py-5 text-right text-sm text-gray-600 sm:table-cell">
-                      <Currency
-                        defaultFCA={
-                          !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
-                        }
-                        amountIndex={
-                          teamMemberId ?
-                            calculateHourRateGivenTMCategory(
-                              teamMember?.categories.at(-1) ?? null
-                            )
-                          : calculateHourRateGivenCategory(category)
-                        }
-                      />
-                    </td>
-                    <td
-                      className={cx(
-                        'hidden px-3 py-5 text-right text-sm text-gray-600',
-                        !editable && 'sm:table-cell'
-                      )}
-                    >
-                      <Currency
-                        defaultFCA={
-                          !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
-                        }
-                        amountIndex={multiplyAmountIndex(
-                          teamMemberId ?
-                            calculateHourRateGivenTMCategory(
-                              teamMember?.categories.at(-1) ?? null
-                            )
-                          : calculateHourRateGivenCategory(category),
-                          remainingHours
+                        </td>
+
+                        {/* Hours Column */}
+                        <td className="px-3 py-4 text-center">
+                          {!editable ?
+                            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                              {hours.toFixed(1)}
+                            </div>
+                          : <FormInput
+                              type="number"
+                              {...form.getInputProps(`${i}.hours`)}
+                              className={cx(
+                                form.isDirty(`${i}.hours`) &&
+                                  '!border-yellow-200',
+                                'mx-auto w-20 text-center font-semibold'
+                              )}
+                              placeholder={
+                                form.getInputProps(`${i}.hours`).value
+                              }
+                            />
+                          }
+                          <div className="mt-1 text-xs text-gray-500">
+                            <Currency
+                              defaultFCA={
+                                !Boolean(
+                                  teamMember?.categories.at(-1)?.pointsObrero
+                                )
+                              }
+                              amountIndex={
+                                teamMemberId ?
+                                  calculateHourRateGivenTMCategory(
+                                    teamMember?.categories.at(-1) ?? null
+                                  )
+                                : calculateHourRateGivenCategory(category)
+                              }
+                            />
+                            /hora
+                          </div>
+                        </td>
+
+                        {/* Remaining Hours Column (only in view mode) */}
+                        {!editable && (
+                          <td className="px-3 py-4 text-center">
+                            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                              {remainingHours.toFixed(1)}
+                            </div>
+                            <div className="mt-1 text-xs text-gray-500">
+                              <Currency
+                                defaultFCA={
+                                  !Boolean(
+                                    teamMember?.categories.at(-1)?.pointsObrero
+                                  )
+                                }
+                                amountIndex={multiplyAmountIndex(
+                                  teamMemberId ?
+                                    calculateHourRateGivenTMCategory(
+                                      teamMember?.categories.at(-1) ?? null
+                                    )
+                                  : calculateHourRateGivenCategory(category),
+                                  remainingHours
+                                )}
+                              />
+                            </div>
+                          </td>
                         )}
-                      />
-                    </td>
-                    <td className="px-3 py-5 text-right text-sm text-gray-600 ">
-                      <Currency
-                        defaultFCA={
-                          !Boolean(teamMember?.categories.at(-1)?.pointsObrero)
-                        }
-                        amountIndex={multiplyAmountIndex(
-                          teamMemberId ?
-                            calculateHourRateGivenTMCategory(
-                              teamMember?.categories.at(-1) ?? null
-                            )
-                          : calculateHourRateGivenCategory(category),
-                          hours
+
+                        {/* Executed Amount Column (only in view mode) */}
+                        {!editable && (
+                          <td className="px-3 py-4 text-right">
+                            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                              <Currency
+                                defaultFCA={
+                                  !Boolean(
+                                    teamMember?.categories.at(-1)?.pointsObrero
+                                  )
+                                }
+                                amountIndex={calculateExecutedAmount(
+                                  executions
+                                )}
+                              />
+                            </div>
+                          </td>
                         )}
-                      />
-                    </td>
-                    {/* Cannot create execution when is pending or have pending team member */}
-                    <td
-                      className={cx(
-                        'hidden text-right print:hidden',
-                        !editable && !categoryId && 'table-cell'
-                      )}
-                    >
-                      <BudgetExecutionView
-                        positionIndex={i}
-                        remaining={multiplyAmountIndex(
-                          teamMemberId ?
-                            calculateHourRateGivenTMCategory(
-                              teamMember?.categories.at(-1) ?? null
-                            )
-                          : calculateHourRateGivenCategory(category),
-                          remainingHours
-                        )}
-                        executions={executions}
-                        anualBudgetTeamMemberId={anualBudgetTeamMemberId}
-                        title={teamMember?.name ?? 'A definir'}
-                        executionType={ExecutionType.TeamMember}
-                        itemName={
-                          teamMember!.categories.at(-1)?.category.name ??
-                          'Sin categoría'
-                        }
-                        //ARREGLAR
-                        obrero={
-                          teamMember!.categories.at(-1)?.pointsObrero ?
-                            {
-                              pointsObrero:
-                                teamMember!.categories.at(-1)?.pointsObrero ??
-                                0,
-                              pointPrice:
-                                teamMember!.categories.at(-1)?.category
-                                  .amountIndex ?? ZeroAmountIndex,
-                              hourlyRate:
+
+                        {/* Total Column */}
+                        <td className="px-3 py-4 text-right">
+                          <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
+                            <Currency
+                              defaultFCA={
+                                !Boolean(
+                                  teamMember?.categories.at(-1)?.pointsObrero
+                                )
+                              }
+                              amountIndex={multiplyAmountIndex(
                                 teamMemberId ?
                                   calculateHourRateGivenTMCategory(
                                     teamMember?.categories.at(-1) ?? null
                                   )
                                 : calculateHourRateGivenCategory(category),
-                            }
-                          : undefined
-                        }
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th
-                  scope="row"
-                  colSpan={!editable ? 5 : 3}
-                  className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right "
-                >
-                  <Text>Ejecutado</Text>
-                </th>
-                <td className="px-3 pt-6 text-right text-sm text-gray-500">
+                                hours
+                              )}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  }
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Summary Section */}
+          <div className="mt-6 rounded-lg bg-gray-50 p-6 dark:bg-gray-800">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Ejecutado
+                </Text>
+                <div className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   {!editable ?
                     <Currency amountIndex={ABTe} />
                   : '-'}
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  colSpan={!editable ? 5 : 3}
-                  className="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:table-cell sm:pl-0 sm:text-right"
-                >
-                  <Text>Restante</Text>
-                </th>
-                <td className="px-3 pt-4 text-right text-sm text-gray-500">
+                </div>
+              </div>
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Restante
+                </Text>
+                <div className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   <Currency amountIndex={ABTr} />
-                </td>
-              </tr>
-              <tr>
-                <th
-                  scope="row"
-                  colSpan={!editable ? 5 : 3}
-                  className="pl-4 pr-3 pt-6 text-left text-sm font-semibold text-gray-700 sm:table-cell sm:pl-0 sm:text-right"
-                >
-                  <Subheading>Total</Subheading>
-                </th>
-
-                <td className="px-3 pt-4 text-sm font-semibold text-gray-700 lg:text-right">
+                </div>
+              </div>
+              <div className="text-center">
+                <Text className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  Total
+                </Text>
+                <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
                   <Currency amountIndex={sumAmountIndex([ABTr, ABTe])} />
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
+
+      {/* Member Details Dialog */}
+      {selectedMember && (
+        <Dialog open={!!selectedMember} onClose={closeMemberDialog} size="2xl">
+          <DialogTitle>
+            {selectedMember.teamMember ?
+              selectedMember.teamMember.name
+            : 'A definir'}
+          </DialogTitle>
+          <DialogBody>
+            <div className="space-y-6">
+              {/* Status and Basic Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Estado
+                  </Text>
+                  <div>
+                    {(() => {
+                      const deactivationDate = findDeactivationDate(
+                        selectedMember.teamMemberId
+                      )
+                      return deactivationDate ?
+                          <Badge color="red" className="text-xs">
+                            Finalizado{' '}
+                            {deactivationDate.toLocaleDateString('es-ES')}
+                          </Badge>
+                        : <Badge color="green" className="text-xs">
+                            Activo
+                          </Badge>
+                    })()}
+                  </div>
+                </div>
+                <div>
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Rol
+                  </Text>
+                  <Text className="font-medium">
+                    {selectedMember.memberRole}
+                  </Text>
+                </div>
+              </div>
+
+              {/* Category Information */}
+              <div>
+                <Text className="mb-2 text-sm font-medium text-gray-500">
+                  Categoría
+                </Text>
+                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Text className="font-medium">
+                        {selectedMember.teamMemberId ?
+                          selectedMember.teamMember?.categories.at(-1)?.category
+                            .name
+                        : selectedMember.category?.name}
+                      </Text>
+                      {selectedMember.teamMemberId &&
+                        selectedMember.teamMember?.categories.at(-1)
+                          ?.pointsObrero && (
+                          <Text className="text-sm text-gray-500">
+                            Obrero -{' '}
+                            {
+                              selectedMember.teamMember.categories.at(-1)
+                                ?.pointsObrero
+                            }{' '}
+                            puntos
+                          </Text>
+                        )}
+                    </div>
+                    <div className="text-right">
+                      <Text className="text-sm text-gray-500">
+                        Valor por hora
+                      </Text>
+                      <Text className="font-semibold">
+                        <Currency
+                          defaultFCA={
+                            !Boolean(
+                              selectedMember.teamMember?.categories.at(-1)
+                                ?.pointsObrero
+                            )
+                          }
+                          amountIndex={
+                            selectedMember.teamMemberId ?
+                              calculateHourRateGivenTMCategory(
+                                selectedMember.teamMember?.categories.at(-1) ??
+                                  null
+                              )
+                            : calculateHourRateGivenCategory(
+                                selectedMember.category
+                              )
+                          }
+                        />
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hours and Budget Summary */}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="rounded-lg bg-blue-50 p-4 text-center dark:bg-blue-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Horas Asignadas
+                  </Text>
+                  <Subheading className="text-2xl">
+                    {selectedMember.hours.toFixed(1)}
+                  </Subheading>
+                </div>
+                <div className="rounded-lg bg-orange-50 p-4 text-center dark:bg-orange-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Horas Restantes
+                  </Text>
+                  <Subheading className="text-2xl">
+                    {selectedMember.remainingHours.toFixed(1)}
+                  </Subheading>
+                </div>
+                <div className="rounded-lg bg-green-50 p-4 text-center dark:bg-green-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Horas Ejecutadas
+                  </Text>
+                  <Subheading className="text-2xl">
+                    {(
+                      selectedMember.hours - selectedMember.remainingHours
+                    ).toFixed(1)}
+                  </Subheading>
+                </div>
+              </div>
+
+              {/* Financial Summary */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Total Ejecutado
+                  </Text>
+                  <Subheading className="text-xl">
+                    <Currency
+                      defaultFCA={
+                        !Boolean(
+                          selectedMember.teamMember?.categories.at(-1)
+                            ?.pointsObrero
+                        )
+                      }
+                      amountIndex={calculateExecutedAmount(
+                        selectedMember.executions
+                      )}
+                    />
+                  </Subheading>
+                </div>
+                <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
+                  <Text className="mb-1 text-sm font-medium text-gray-500">
+                    Total Presupuestado
+                  </Text>
+                  <Subheading className="text-xl text-blue-700 dark:text-blue-300">
+                    <Currency
+                      defaultFCA={
+                        !Boolean(
+                          selectedMember.teamMember?.categories.at(-1)
+                            ?.pointsObrero
+                        )
+                      }
+                      amountIndex={multiplyAmountIndex(
+                        selectedMember.teamMemberId ?
+                          calculateHourRateGivenTMCategory(
+                            selectedMember.teamMember?.categories.at(-1) ?? null
+                          )
+                        : calculateHourRateGivenCategory(
+                            selectedMember.category
+                          ),
+                        selectedMember.hours
+                      )}
+                    />
+                  </Subheading>
+                </div>
+              </div>
+
+              {/* New Execution Section */}
+              {!editable &&
+                !selectedMember.categoryId &&
+                selectedMember.remainingHours > 0 && (
+                  <div className="border-t pt-4">
+                    <Subheading className="mb-3">Nueva Ejecución</Subheading>
+                    <BudgetNewExecution
+                      maxAmount={
+                        multiplyAmountIndex(
+                          selectedMember.teamMemberId ?
+                            calculateHourRateGivenTMCategory(
+                              selectedMember.teamMember?.categories.at(-1) ??
+                                null
+                            )
+                          : calculateHourRateGivenCategory(
+                              selectedMember.category
+                            ),
+                          selectedMember.remainingHours
+                        ).FCA
+                      }
+                      anualBudgetTeamMemberId={selectedMember.id}
+                      executionType={ExecutionType.TeamMember}
+                      budgetItemPositionIndex={0}
+                    />
+                  </div>
+                )}
+
+              {/* Execution History */}
+              {selectedMember.executions.length > 0 && (
+                <div className="border-t pt-4">
+                  <Subheading className="mb-3">
+                    Historial de Ejecuciones ({selectedMember.executions.length}
+                    )
+                  </Subheading>
+                  <div className="max-h-48 space-y-2 overflow-y-auto">
+                    {selectedMember.executions
+                      .reverse()
+                      .map((execution, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
+                        >
+                          <div>
+                            <Text className="font-medium">
+                              {execution.date.toLocaleDateString('es-ES')}
+                            </Text>
+                          </div>
+                          <Text className="font-semibold">
+                            <Currency
+                              amountIndex={
+                                execution.amountIndex ?? ZeroAmountIndex
+                              }
+                            />
+                          </Text>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedMember.executions.length === 0 &&
+                !editable &&
+                !selectedMember.categoryId && (
+                  <div className="py-6 text-center text-gray-500">
+                    <Text>
+                      No hay ejecuciones registradas para este miembro.
+                    </Text>
+                  </div>
+                )}
+            </div>
+          </DialogBody>
+          <DialogActions>
+            <Button plain onClick={closeMemberDialog}>
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </div>
   )
 }
