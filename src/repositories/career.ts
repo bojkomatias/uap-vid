@@ -26,12 +26,15 @@ export const getActiveCareersForForm = cache(async () => {
   }
 })
 
-export const getCoursesByCareerId = cache(async (id: string) => {
-  return await prisma.career.findFirst({
-    where: { id },
-    select: { courses: { select: { id: true, name: true } } },
-  })
-})
+export const getCoursesByCareerId = cache(
+  async (id: string | null | undefined) => {
+    if (!id) return null
+    return await prisma.career.findFirst({
+      where: { id },
+      select: { courses: { select: { id: true, name: true } } },
+    })
+  }
+)
 
 export const getAllCareers = cache(
   async ({
@@ -97,9 +100,10 @@ export const getAllCareers = cache(
   }
 )
 
-export const getCareerById = cache(async (id: string) => {
+export const getCareerById = cache(async (id: string | null | undefined) => {
   try {
-    const result = prisma.career.findFirst({
+    if (!id) return null
+    const result = await prisma.career.findFirst({
       include: { courses: true },
       where: { id },
     })
@@ -111,7 +115,7 @@ export const getCareerById = cache(async (id: string) => {
 
 export const getCourseById = cache(async (id: string) => {
   try {
-    const result = prisma.course.findFirst({
+    const result = await prisma.course.findFirst({
       where: { id },
     })
     return result

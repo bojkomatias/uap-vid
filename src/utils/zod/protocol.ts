@@ -83,7 +83,15 @@ export const IdentificationSchema = z.object({
   courseId: z.string().nullable().optional(),
   careerId: z
     .string()
-    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
+    .nullable()
+    .optional()
+    .refine(
+      (value) => value === null || value === undefined || value.length > 0,
+      {
+        message:
+          'Debe seleccionar una carrera que se relacione con el proyecto',
+      }
+    ),
   academicUnitIds: z
     .string()
     .array()
@@ -128,9 +136,7 @@ export const IdentificationSchema = z.object({
 // Draft schema with more lenient validation
 export const IdentificationDraftSchema = z.object({
   courseId: z.string().nullable().optional(),
-  careerId: z
-    .string()
-    .min(1, 'Debe seleccionar una carrera que se relacione con el proyecto'),
+  careerId: z.string().nullable().optional(), // More lenient for drafts
   academicUnitIds: z.string().array().optional(), // Allow empty for drafts
   title: z.string().min(6, { message: 'Debe tener al menos 6 caracteres' }),
   team: IdentificationTeamSchema.array()

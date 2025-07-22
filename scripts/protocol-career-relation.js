@@ -18,21 +18,48 @@ export default async function main() {
 
       const protocol_collection = getCollection('Protocol')
       const protocols = await protocol_collection.find().toArray()
+      console.log(`Found ${protocols.length} protocols`)
 
       const career_collection = getCollection('Career')
       const careers = await career_collection.find().toArray()
+      console.log(`Found ${careers.length} careers`)
 
       const career_id_dictionary = careers.reduce((acc, ac) => {
         acc[ac.name] = ac._id
         return acc
       }, {})
 
-      const updated_protocols = protocols.map((protocol) => ({
-        protocol_id: protocol._id,
-        careerId: career_id_dictionary[protocol.sections.identification.career],
-      }))
+      console.log('Available careers:', Object.keys(career_id_dictionary))
 
-      for (const protocol of updated_protocols) {
+      const updated_protocols = protocols.map((protocol) => {
+        const careerName = protocol.sections?.identification?.career
+        const careerId = career_id_dictionary[careerName]
+
+        if (!careerName) {
+          console.log(
+            `Protocol ${protocol._id}: No career name found in sections.identification.career`
+          )
+        } else if (!careerId) {
+          console.log(
+            `Protocol ${protocol._id}: Career "${careerName}" not found in careers dictionary`
+          )
+        } else {
+          console.log(
+            `Protocol ${protocol._id}: Found career "${careerName}" -> ${careerId}`
+          )
+        }
+
+        return {
+          protocol_id: protocol._id,
+          careerId: careerId,
+          careerName: careerName,
+        }
+      })
+
+      const protocols_to_update = updated_protocols.filter((p) => p.careerId)
+      console.log(`${protocols_to_update.length} protocols will be updated`)
+
+      for (const protocol of protocols_to_update) {
         try {
           const result = await protocol_collection.updateOne(
             { _id: new ObjectId(protocol.protocol_id) },
@@ -45,6 +72,10 @@ export default async function main() {
           if (result.modifiedCount > 0) {
             console.log(
               `Updated protocol ${protocol.protocol_id}: ${result.modifiedCount} document modified, career related through ObjectId`
+            )
+          } else {
+            console.log(
+              `Protocol ${protocol.protocol_id}: No changes made (possibly already has careerId)`
             )
           }
         } catch (error) {
