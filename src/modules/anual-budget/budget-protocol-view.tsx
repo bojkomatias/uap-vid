@@ -2,7 +2,7 @@
 import type { Prisma } from '@prisma/client'
 import {
   calculateHourRateGivenTMCategory,
-  calculateTotalBudget,
+  type TotalBudgetCalculation,
 } from '@utils/anual-budget'
 import { Currency } from '@shared/currency'
 import { multiplyAmountIndex, sumAmountIndex } from '@utils/amountIndex'
@@ -81,12 +81,16 @@ type Budget = Prisma.AnualBudgetGetPayload<{
   }
 }>
 
-export async function BudgetProtocolView({ budget }: { budget: Budget }) {
+export function BudgetProtocolView({
+  budget,
+  calculations,
+}: {
+  budget: Budget
+  calculations: TotalBudgetCalculation
+}) {
   const router = useRouter()
 
   const { budgetItems, budgetTeamMembers, protocol } = budget
-
-  const calculations = await calculateTotalBudget(budget)
 
   // Helper function to find the deactivation date for a team member
   const findDeactivationDate = (teamMemberId: string | null): Date | null => {
