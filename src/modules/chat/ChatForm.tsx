@@ -19,20 +19,7 @@ import { Text } from '@components/text'
 
 interface ChatMessagesContextType {
   canSendMessages: boolean
-  sendMessage: (content: string) => void
-}
-
-type SendMessageType = {
-  content: {
-    content: string
-    thread: string
-    userId: string
-    protocolId: string
-    createdAt: Date
-    read: boolean
-    user: { name: string }
-  }
-  type: 'SEND_MESSAGE'
+  sendMessage: (payload: any) => void
 }
 
 export default function ChatForm({
@@ -55,7 +42,7 @@ export default function ChatForm({
     isFetching,
   } = useQuery({
     refetchOnMount: 'always',
-    queryKey: ['messages', protocolId],
+    queryKey: ['messages', protocolId, take],
     queryFn: async () => {
       return await getMessages(protocolId, take)
     },
@@ -87,19 +74,11 @@ export default function ChatForm({
       })
 
       if (savedMessage) {
-        const websocket_new_message: SendMessageType = {
-          content: {
-            content: newMessage,
-            thread: 'Test',
-            protocolId: protocolId,
-            userId: user.id,
-            createdAt: new Date(),
-            read: false,
-            user: { name: user.name },
-          },
-          type: 'SEND_MESSAGE',
+        const broadcastPayload = {
+          ...savedMessage,
+          user: { name: user.name },
         }
-        sendMessage(JSON.stringify(websocket_new_message))
+        sendMessage(broadcastPayload)
       }
       return savedMessage
     },
@@ -134,9 +113,6 @@ export default function ChatForm({
                 <Button
                   onClick={() => {
                     setTake(take + 10)
-                    setTimeout(() => {
-                      refetch()
-                    }, 100)
                   }}
                 >
                   {isFetching ?
