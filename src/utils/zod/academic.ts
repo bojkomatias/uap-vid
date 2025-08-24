@@ -45,13 +45,9 @@ export const ConvocatorySchema = z
       message: 'La fecha no puede ser menor a la actual',
     }),
     to: z.coerce.date(),
-    year: z
-      .number({
-        invalid_type_error: 'Este campo debe ser numérico',
-      })
-      .min(new Date().getFullYear(), {
-        message: 'Debe ser igual o mayor al año actual',
-      }),
+    year: z.number({
+      invalid_type_error: 'Este campo debe ser numérico',
+    }),
   })
   .refine((data) => data.to > data.from, {
     message: 'No puede preceder a fecha desde',
