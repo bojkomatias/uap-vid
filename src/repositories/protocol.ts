@@ -343,6 +343,12 @@ const parseIdentificationTeam = (
 
 const updateProtocolById = async (id: string, data: Protocol) => {
   try {
+    // Get current protocol state to check if it's ongoing
+    const currentProtocol = await prisma.protocol.findUnique({
+      where: { id },
+      select: { state: true },
+    })
+
     const { currentFCA, currentFMR } = await getCurrentIndexes()
 
     // Parsing the section to have correct formats
@@ -366,7 +372,7 @@ const updateProtocolById = async (id: string, data: Protocol) => {
     data.convocatoryId = convocatory?.id ?? null
 
     console.log(
-      'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
+      'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
       JSON.stringify(data, null, 2)
     )
 
@@ -374,12 +380,39 @@ const updateProtocolById = async (id: string, data: Protocol) => {
       ref.year = parseInt(ref.year as any)
     })
 
-    return await prisma.protocol.update({
+    const result = await prisma.protocol.update({
       where: {
         id,
       },
       data,
     })
+
+    // If protocol is ongoing, synchronize budget team members after update
+    if (currentProtocol?.state === 'ON_GOING') {
+      try {
+        const { syncProtocolTeamMembersWithBudget } = await import(
+          '@actions/anual-budget/action'
+        )
+        const syncResult = await syncProtocolTeamMembersWithBudget(id)
+
+        if (syncResult.status) {
+          console.log(
+            `✅ Budget synchronization completed for protocol ${id}:`,
+            syncResult.operations
+          )
+        } else {
+          console.warn(
+            `⚠️ Budget synchronization failed for protocol ${id}:`,
+            syncResult.message
+          )
+        }
+      } catch (syncError) {
+        console.error('❌ Error during budget synchronization:', syncError)
+        // Don't fail the main operation if sync fails
+      }
+    }
+
+    return result
   } catch (e) {
     console.log(JSON.stringify(e, null, 2))
     return null
@@ -463,7 +496,7 @@ const updateProtocolTeamMembers = async (
   try {
     const currentProtocol = await prisma.protocol.findUnique({
       where: { id },
-      select: { sections: true },
+      select: { sections: true, state: true },
     })
 
     if (!currentProtocol) {
@@ -485,9 +518,35 @@ const updateProtocolTeamMembers = async (
       },
     })
 
+    // If protocol is ongoing, synchronize budget team members
+    if (currentProtocol.state === 'ON_GOING') {
+      try {
+        const { syncProtocolTeamMembersWithBudget } = await import(
+          '@actions/anual-budget/action'
+        )
+        const syncResult = await syncProtocolTeamMembersWithBudget(id)
+
+        if (syncResult.status) {
+          console.log(
+            `✅ Budget synchronization completed for protocol ${id}:`,
+            syncResult.operations
+          )
+        } else {
+          console.warn(
+            `⚠️ Budget synchronization failed for protocol ${id}:`,
+            syncResult.message
+          )
+        }
+      } catch (syncError) {
+        console.error('❌ Error during budget synchronization:', syncError)
+        // Don't fail the main operation if sync fails
+      }
+    }
+
     return result.researcherId
   } catch (e) {
     console.error('Error updating protocol team members:', e)
+    throw e
   }
 }
 
@@ -532,6 +591,48 @@ const upsertProtocolFlag = async (
     const updatedProtocol = await prisma.protocol.update({
       where: { id },
       data: { flags: updatedFlags },
+    })
+
+    return updatedProtocol
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+const upsertProtocolFlags = async (
+  id: string,
+  flags: Omit<ProtocolFlag, 'createdAt'>[]
+) => {
+  try {
+    const protocol = await prisma.protocol.findFirst({ where: { id } })
+    let protocolFlags = protocol?.flags || []
+
+    // Update or add each flag
+    flags.forEach((flag) => {
+      const existingFlagIndex = protocolFlags.findIndex(
+        (f) => f.flagName === flag.flagName
+      )
+
+      if (existingFlagIndex !== -1) {
+        // Update existing flag
+        protocolFlags[existingFlagIndex] = {
+          ...protocolFlags[existingFlagIndex],
+          ...flag,
+        }
+      } else {
+        // Add new flag
+        protocolFlags.push({
+          ...flag,
+          createdAt: new Date(),
+        })
+      }
+    })
+
+    // Update the protocol with all flags at once
+    const updatedProtocol = await prisma.protocol.update({
+      where: { id },
+      data: { flags: protocolFlags },
     })
 
     return updatedProtocol
@@ -948,6 +1049,7 @@ export {
   getResearcherEmailByProtocolId,
   patchProtocolNumber,
   upsertProtocolFlag,
+  upsertProtocolFlags,
   updateProtocolTeamMembers,
   updateProtocolConvocatory,
   findProtocolByIdWithBudgets,

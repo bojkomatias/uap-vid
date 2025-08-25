@@ -563,12 +563,7 @@ export function ActionsDropdown({
             protocol.anualBudgets.map((budget) => (
               <DropdownItem
                 key={budget.id}
-                disabled={isPending}
-                onClick={() => {
-                  router.push(`/anual-budget-view/${budget.id}`, {
-                    scroll: false,
-                  })
-                }}
+                href={`/anual-budgets/budget/${budget.id}`}
               >
                 <FileDollar data-slot="icon" />
                 <DropdownLabel>Presupuesto {budget.year}</DropdownLabel>

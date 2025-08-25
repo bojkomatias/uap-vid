@@ -145,7 +145,7 @@ const sanitizeProtocolData = (protocol: any) => {
         ...defaults.identification,
         ...protocol.sections.identification,
         courseId: sanitizeObjectId(protocol.sections.identification?.courseId),
-        careerId: sanitizeObjectId(protocol.sections.identification?.careerId),
+        careerId: protocol.sections.identification?.careerId || '', // Convert null to empty string for form compatibility
         academicUnitIds:
           protocol.sections.identification?.academicUnitIds || [],
         team:
@@ -329,7 +329,24 @@ export default function ProtocolForm({
             return form.validate()
           }
 
-          upsertProtocol(form.values)
+          // Sanitize data before saving - convert empty strings to null for database
+          const sanitizedValues = {
+            ...form.values,
+            sections: {
+              ...form.values.sections,
+              identification: {
+                ...form.values.sections.identification,
+                careerId: sanitizeObjectId(
+                  form.values.sections.identification.careerId
+                ),
+                courseId: sanitizeObjectId(
+                  form.values.sections.identification.courseId
+                ),
+              },
+            },
+          }
+
+          upsertProtocol(sanitizedValues)
         }}
       >
         <InfoTooltip>

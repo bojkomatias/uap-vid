@@ -36,7 +36,7 @@ export default function useBudgetSummary({
           },
           {
             name: 'Consumo ejecutado',
-            total: summary?.spendedBudget ?? ZeroAmountIndex,
+            total: summary?.spentBudget ?? ZeroAmountIndex,
             of:
               approved ?
                 summary?.projectedBudgetSummaryApproved?.value
@@ -44,11 +44,11 @@ export default function useBudgetSummary({
             delta:
               approved ?
                 divideAmountIndexByAmountIndex(
-                  summary?.spendedBudget,
+                  summary?.spentBudget,
                   summary?.projectedBudgetSummaryApproved?.value
                 )
               : divideAmountIndexByAmountIndex(
-                  summary?.spendedBudget,
+                  summary?.spentBudget,
                   summary.projectedBudgetSummary.value
                 ),
             indicator: 'graph',
@@ -81,7 +81,7 @@ export default function useBudgetSummary({
     summary?.academicUnitBudgetSummary.value,
     summary.projectedBudgetSummary.value,
     summary?.projectedBudgetSummaryApproved?.value,
-    summary?.spendedBudget,
+    summary?.spentBudget,
   ])
   return {
     stats,

@@ -47,12 +47,13 @@ const BudgetNewExecution = ({
       z.object({
         amount: z.coerce
           .number()
-          .min(1, { message: 'El valor debe ser mayor a 0' })
-          .max(maxAmount, {
-            message: `No puede exceder ${
-              !maxAmount ? 0 : currencyFormatter.format(maxAmount)
-            }`,
-          }),
+          .min(1, { message: 'El valor debe ser mayor a 0' }),
+        // Temporarily disabled max validation
+        // .max(maxAmount, {
+        //   message: `No puede exceder ${
+        //     !maxAmount ? 0 : currencyFormatter.format(maxAmount)
+        //   }`,
+        // }),
       })
     ),
   })

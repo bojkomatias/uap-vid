@@ -8,10 +8,20 @@ export default async function AllAnualBudgetPage({
 }: {
   searchParams: { [key: string]: string }
 }) {
-  const [totalRecords, anualBudgets] =
-    await getAnualBudgetsByAcademicUnit(searchParams)
+  // Get current year if no year is provided in searchParams
+  const currentYear = new Date().getFullYear()
+  const year = searchParams.year ? parseInt(searchParams.year) : currentYear
 
-  const budgetSummary = await getBudgetSummary()
+  // Create updated searchParams with explicit year
+  const searchParamsWithYear = {
+    ...searchParams,
+    year: year.toString(),
+  }
+
+  const [totalRecords, anualBudgets] =
+    await getAnualBudgetsByAcademicUnit(searchParamsWithYear)
+
+  const budgetSummary = await getBudgetSummary(undefined, year)
   return (
     <>
       <BudgetSummary summary={budgetSummary} allAcademicUnits />

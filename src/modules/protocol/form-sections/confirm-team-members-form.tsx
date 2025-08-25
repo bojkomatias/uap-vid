@@ -63,9 +63,13 @@ export function ConfirmTeamMembersForm({
     mutationFn: async (values: ProtocolSectionsIdentificationTeam[]) => {
       const result = await updateProtocolTeamMembers(protocol.id, values)
       if (result) {
+        const isOngoing = protocol.state === 'ON_GOING'
         notifications.show({
           title: 'Protocolo actualizado',
-          message: 'Se guardaron los miembros de equipo correctamente',
+          message:
+            isOngoing ?
+              'Se guardaron los miembros de equipo correctamente y se actualizó automáticamente el presupuesto anual'
+            : 'Se guardaron los miembros de equipo correctamente',
           intent: 'success',
         })
         router.refresh()

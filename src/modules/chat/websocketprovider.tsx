@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import type { ChatMessage } from '@prisma/client'
 
 interface ChatMessagesContextType {
-  sendMessage: (content: string) => void
+  sendMessage: (payload: any) => void
   canSendMessages: boolean
 }
 
@@ -35,34 +35,52 @@ export const WebSocketMessagesProvider = ({
 
   useEffect(() => {
     if (lastMessage && lastMessage.data) {
-      const { type, payload } = JSON.parse(lastMessage.data)
+      let parsed
+      try {
+        parsed = JSON.parse(lastMessage.data)
+      } catch {
+        return
+      }
+      const { type, payload } = parsed || {}
       switch (type) {
         case MESSAGE_TYPE.INITIAL_DATA:
-          queryClient.setQueryData(queryKey, payload.reverse())
+          if (Array.isArray(payload)) {
+            queryClient.setQueriesData(
+              { queryKey, exact: false },
+              (old: any) => {
+                // Replace only if empty; otherwise, keep existing DB-fetched data
+                if (Array.isArray(old) && old.length > 0) return old
+                return payload.reverse()
+              }
+            )
+          }
           break
         case MESSAGE_TYPE.NEW_MESSAGE:
-          queryClient.setQueryData(queryKey, (oldData: ChatMessage[]) => {
-            if (Array.isArray(oldData)) {
-              return [payload, ...oldData]
-            }
+          queryClient.setQueriesData(
+            { queryKey, exact: false },
+            (oldData: ChatMessage[]) => {
+              if (Array.isArray(oldData)) {
+                return [payload, ...oldData]
+              }
 
-            return [payload]
-          })
+              return [payload]
+            }
+          )
 
           break
         default:
           break
       }
     }
-  }, [lastMessage, queryClient])
+  }, [lastMessage, queryClient, queryKey])
 
   const sendMessage = useCallback(
-    (content: any) => {
+    (payload: any) => {
       if (canSendMessages)
         sM(
           JSON.stringify({
             type: MESSAGE_TYPE.SEND_MESSAGE,
-            content,
+            payload,
           })
         )
     },

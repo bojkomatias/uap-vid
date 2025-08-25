@@ -7,13 +7,18 @@ import type {
   AnualBudgetItem,
   AmountIndex,
 } from '@prisma/client'
-import { sumAmountIndex, ZeroAmountIndex } from '@utils/amountIndex'
+import {
+  sumAmountIndex,
+  ZeroAmountIndex,
+  subtractAmountIndex,
+} from '@utils/amountIndex'
 import { orderByQuery } from '@utils/query-helper/orderBy'
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 import { prisma } from 'utils/bd'
 import { logEvent } from './log'
+import chalk from 'chalk'
 
 export const getAnualBudgetYears = cache(async () => {
   return await prisma.anualBudget.findMany({ select: { year: true } })
@@ -117,11 +122,26 @@ export const getAnualBudgetById = cache(async (id: string) => {
             sections: {
               select: {
                 identification: {
-                  select: { title: true, sponsor: true },
+                  select: { title: true, sponsor: true, team: true },
                 },
                 duration: { select: { duration: true } },
               },
             },
+          },
+        },
+        budgetItems: {
+          include: {
+            executions: {
+              include: {
+                academicUnit: true,
+              },
+              orderBy: {
+                date: 'desc',
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'asc',
           },
         },
         budgetTeamMembers: {
@@ -132,12 +152,36 @@ export const getAnualBudgetById = cache(async (id: string) => {
               },
             },
             category: true,
+            executions: {
+              include: {
+                academicUnit: true,
+              },
+              orderBy: {
+                date: 'desc',
+              },
+            },
           },
         },
         AcademicUnits: true,
+        executions: {
+          include: {
+            academicUnit: true,
+            budgetItem: true,
+            teamMemberBudget: {
+              include: {
+                teamMember: true,
+                category: true,
+              },
+            },
+          },
+          orderBy: {
+            date: 'desc',
+          },
+        },
       },
     })
   } catch (error) {
+    console.error('Error fetching annual budget:', error)
     return null
   }
 })
@@ -191,7 +235,6 @@ export const upsertAnualBudget = async (
       where: { id },
       data: {
         year: data.year,
-        budgetItems: data.budgetItems,
         academicUnitsIds: data.academicUnitsIds,
       },
     })
@@ -241,9 +284,29 @@ export const updateAnualBudgetItems = async (
   budgetItems: AnualBudgetItem[]
 ) => {
   try {
-    return await prisma.anualBudget.update({
+    // With the new schema, we need to update each budget item individually
+    // since they are now separate documents
+    const updatePromises = budgetItems.map(async (item) => {
+      return prisma.anualBudgetItem.update({
+        where: { id: item.id },
+        data: {
+          amount: item.amount,
+          remaining: item.remaining,
+          amountIndex: item.amountIndex,
+          remainingIndex: item.remainingIndex,
+        },
+      })
+    })
+
+    await Promise.all(updatePromises)
+
+    // Return the updated annual budget
+    return await prisma.anualBudget.findUnique({
       where: { id },
-      data: { budgetItems },
+      include: {
+        budgetItems: true,
+        budgetTeamMembers: true,
+      },
     })
   } catch (error) {
     console.log(error)
@@ -289,6 +352,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
       order,
       filter,
       values,
+      year,
     }: {
       [key: string]: string
     },
@@ -300,7 +364,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
         prisma.anualBudget.count({
           where: {
             AND: [
-              filter == 'year' ? { year: { equals: Number(values) } } : {},
+              year ? { year: { equals: Number(year) } } : {},
               academicUnitId ?
                 { academicUnitsIds: { has: academicUnitId } }
               : {},
@@ -324,9 +388,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                   },
                 }
               : {},
-              filter && values && filter != 'year' ?
-                { [filter]: { in: values.split('-') } }
-              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
         }),
@@ -336,7 +398,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
           take: Number(records),
           where: {
             AND: [
-              filter == 'year' ? { year: { equals: Number(values) } } : {},
+              year ? { year: { equals: Number(year) } } : {},
               academicUnitId ?
                 { academicUnitsIds: { has: academicUnitId } }
               : {},
@@ -361,9 +423,7 @@ export const getAnualBudgetsByAcademicUnit = cache(
                   },
                 }
               : {},
-              filter && values && filter != 'year' ?
-                { [filter]: { in: values.split('-') } }
-              : {},
+              filter && values ? { [filter]: { in: values.split('-') } } : {},
             ],
           },
           select: {
@@ -388,25 +448,135 @@ export const newTeamMemberExecution = async (
   anualBudgetTeamMemberId: string,
   amountIndex: AmountIndex,
   remainingHours: number,
-  academicUnitId: string
+  academicUnitId: string,
+  amount?: number
 ) => {
-  return await prisma.anualBudgetTeamMember.update({
+  // First, get the team member budget to get required IDs
+  const teamMemberBudget = await prisma.anualBudgetTeamMember.findUnique({
     where: { id: anualBudgetTeamMemberId },
-    data: {
-      executions: { push: { academicUnitId, amountIndex, date: new Date() } },
-      remainingHours: remainingHours,
+    include: {
+      AnualBudget: {
+        select: {
+          id: true,
+          protocolId: true,
+        },
+      },
     },
   })
+
+  if (!teamMemberBudget || !teamMemberBudget.AnualBudget) {
+    throw new Error(
+      'Team member budget not found or not associated with an annual budget'
+    )
+  }
+
+  // Create the execution as a separate document
+  const execution = await prisma.execution.create({
+    data: {
+      amount: amount ? Number(amount) : null,
+      amountIndex: amountIndex,
+      date: new Date(),
+      protocolId: teamMemberBudget.AnualBudget.protocolId,
+      anualBudgetId: teamMemberBudget.AnualBudget.id,
+      academicUnitId: academicUnitId,
+      budgetItemId: null, // This execution is for team member, not budget item
+      teamMemberBudgetId: anualBudgetTeamMemberId,
+    },
+  })
+
+  // Update the remaining hours on the team member budget
+  const updatedTeamMemberBudget = await prisma.anualBudgetTeamMember.update({
+    where: { id: anualBudgetTeamMemberId },
+    data: {
+      remainingHours: remainingHours,
+    },
+    include: {
+      executions: {
+        include: {
+          academicUnit: true,
+        },
+        orderBy: {
+          date: 'desc',
+        },
+      },
+      teamMember: {
+        include: {
+          categories: { include: { category: true } },
+        },
+      },
+      category: true,
+    },
+  })
+
+  return {
+    execution,
+    teamMemberBudget: updatedTeamMemberBudget,
+  }
 }
 
+// Updated function for creating budget item executions
 export const newBudgetItemExecution = async (
-  id: string,
-  budgetItems: AnualBudgetItem[]
+  anualBudgetItemId: string,
+  amountIndex: AmountIndex,
+  remainingIndex: AmountIndex,
+  academicUnitId: string,
+  amount?: number
 ) => {
-  return await prisma.anualBudget.update({
-    where: { id },
-    data: { budgetItems: budgetItems },
+  // First, get the budget item to get required IDs
+  const budgetItem = await prisma.anualBudgetItem.findUnique({
+    where: { id: anualBudgetItemId },
+    include: {
+      anualBudget: {
+        select: {
+          id: true,
+          protocolId: true,
+        },
+      },
+    },
   })
+
+  if (!budgetItem || !budgetItem.anualBudget) {
+    throw new Error(
+      'Budget item not found or not associated with an annual budget'
+    )
+  }
+
+  // Create the execution as a separate document
+  const execution = await prisma.execution.create({
+    data: {
+      amount: amount ? Number(amount) : null,
+      amountIndex: amountIndex,
+      date: new Date(),
+      protocolId: budgetItem.anualBudget.protocolId,
+      anualBudgetId: budgetItem.anualBudget.id,
+      academicUnitId: academicUnitId,
+      budgetItemId: anualBudgetItemId,
+      teamMemberBudgetId: null, // This is for budget item, not team member
+    },
+  })
+
+  // Update the remaining index on the budget item
+  const updatedBudgetItem = await prisma.anualBudgetItem.update({
+    where: { id: anualBudgetItemId },
+    data: {
+      remainingIndex: remainingIndex,
+    },
+    include: {
+      executions: {
+        include: {
+          academicUnit: true,
+        },
+        orderBy: {
+          date: 'desc',
+        },
+      },
+    },
+  })
+
+  return {
+    execution,
+    budgetItem: updatedBudgetItem,
+  }
 }
 
 export const approveAnualBudget = async (id: string) => {
@@ -473,11 +643,20 @@ export const interruptAnualBudget = async (id: string) => {
         id: true,
         protocol: { select: { id: true } },
         state: true,
-        budgetItems: true,
-        budgetTeamMembers: true,
+        budgetItems: {
+          include: {
+            executions: true,
+          },
+        },
+        budgetTeamMembers: {
+          include: {
+            executions: true,
+          },
+        },
       },
     })
     if (!AB || AB.state !== AnualBudgetState.APPROVED) return
+
     // Match budget Items amount to execution and remaining 0
     AB.budgetItems.forEach((bi) => {
       bi.amountIndex = sumAmountIndex(
@@ -485,6 +664,7 @@ export const interruptAnualBudget = async (id: string) => {
       )
       bi.remainingIndex = ZeroAmountIndex
     })
+
     // Match only paid hours and remaining to 0
     AB.budgetTeamMembers.forEach((btm) => {
       btm.hours = btm.hours - btm.remainingHours
@@ -516,29 +696,4 @@ export const interruptAnualBudget = async (id: string) => {
   } catch (e) {
     return { success: false, message: e }
   }
-}
-
-export const reactivatedAnualBudget = async (id: string) => {
-  const AB = await prisma.anualBudget.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      protocol: { select: { id: true } },
-      state: true,
-      budgetItems: true,
-      budgetTeamMembers: true,
-    },
-  })
-  if (!AB || AB.state !== AnualBudgetState.INTERRUPTED) return
-
-  await prisma.anualBudget.update({
-    where: { id },
-    data: { state: AnualBudgetState.APPROVED },
-    select: { id: true, protocol: { select: { id: true, state: true } } },
-  })
-
-  return prisma.protocol.update({
-    where: { id: AB.protocol.id },
-    data: { state: ProtocolState.ON_GOING },
-  })
 }

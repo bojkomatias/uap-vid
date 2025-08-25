@@ -3,16 +3,18 @@ const https = require('https')
 const fs = require('fs')
 
 const options = {
-  cert: fs.readFileSync('/app/certs/STAR_uap_edu_ar.crt'),
-  key: fs.readFileSync('/app/certs/uap.edu.ar.key'),
-  ca: fs.readFileSync('/app/certs/CAbundle.crt'),
+  cert: fs.readFileSync(
+    process.env.WS_CERT || '/app/certs/STAR_uap_edu_ar.crt'
+  ),
+  key: fs.readFileSync(process.env.WS_KEY || '/app/certs/uap.edu.ar.key'),
+  ca: fs.readFileSync(process.env.WS_CA || '/app/certs/CAbundle.crt'),
 }
 
 const server = https.createServer(options)
-const wss = new WebSocket.Server({ server })
+const wss = new WebSocket.Server({ server, maxPayload: 1024 * 1024 })
 
-// Initialize an object to store chat messages for each room
-let chatRooms = {}
+// Track connected clients per room
+const rooms = new Map()
 
 const MESSAGE_TYPE = {
   INITIAL_DATA: 'INITIAL_DATA',
@@ -24,51 +26,86 @@ wss.on('connection', (ws, req) => {
   const chatId = req.url.split('/')[1]
   console.log(`Client connected. Room ID: ${chatId}`)
 
-  // Initialize the chat room if it doesn't exist
-  if (!chatRooms[chatId]) {
-    chatRooms[chatId] = []
+  // Register client in the room
+  if (!rooms.has(chatId)) {
+    rooms.set(chatId, new Set())
   }
-
-  // Send the initial chat messages for this room to the newly connected client
-  ws.send(
-    JSON.stringify({
-      type: MESSAGE_TYPE.INITIAL_DATA,
-      payload: chatRooms[chatId],
-    })
-  )
+  rooms.get(chatId).add(ws)
 
   // Assign the chatId to the WebSocket connection
   ws.chatId = chatId
 
-  ws.on('message', (message) => {
-    const parsedMessage = JSON.parse(message)
-    if (parsedMessage.type === MESSAGE_TYPE.SEND_MESSAGE) {
-      const { content } = JSON.parse(parsedMessage.content)
+  // Heartbeat to detect dead connections
+  ws.isAlive = true
+  ws.on('pong', () => {
+    ws.isAlive = true
+  })
 
-      // Add the new message to the room's message history
-      chatRooms[chatId].push(content)
-      console.log(`New message in room ${chatId}:`, content)
+  ws.on('message', (message) => {
+    let data
+    try {
+      data = JSON.parse(message)
+    } catch (err) {
+      console.warn('Invalid JSON received, ignoring message')
+      return
+    }
+
+    if (data.type === MESSAGE_TYPE.SEND_MESSAGE) {
+      const { payload } = data
 
       // Send the new message to all clients in the same room
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN && client.chatId === chatId) {
-          client.send(
-            JSON.stringify({
-              type: MESSAGE_TYPE.NEW_MESSAGE,
-              payload: content,
-            })
-          )
-        }
-      })
+      const clientsInRoom = rooms.get(chatId)
+      if (clientsInRoom) {
+        clientsInRoom.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(
+              JSON.stringify({
+                type: MESSAGE_TYPE.NEW_MESSAGE,
+                payload,
+              })
+            )
+          }
+        })
+      }
     }
   })
 
+  ws.on('error', (err) => {
+    console.error(`WebSocket error in room ${chatId}:`, err)
+  })
+
   ws.on('close', () => {
+    const clientsInRoom = rooms.get(chatId)
+    if (clientsInRoom) {
+      clientsInRoom.delete(ws)
+      if (clientsInRoom.size === 0) {
+        rooms.delete(chatId)
+      }
+    }
     console.log(`Client disconnected from room ${chatId}`)
   })
 })
 
-const port = 3001
+// Heartbeat interval for all clients
+const interval = setInterval(() => {
+  wss.clients.forEach((socket) => {
+    if (socket.isAlive === false) {
+      return socket.terminate()
+    }
+    socket.isAlive = false
+    try {
+      socket.ping()
+    } catch (e) {
+      // ignore
+    }
+  })
+}, 30000)
+
+wss.on('close', () => {
+  clearInterval(interval)
+})
+
+const port = process.env.WS_PORT || 3001
 server.listen(port, () => {
   console.log(`Secure WebSocket server is running on port ${port}`)
 })

@@ -9,6 +9,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      - WS_CERT=/certs/wildcard.uap.edu.ar.crt
+      - WS_KEY=/certs/wildcard.uap.edu.ar.key
+      - WS_CA=/certs/CAbundle.crt
+      - WS_PORT=3001
+    volumes:
+      - /home/nodo/certs:/certs:ro
     networks:
       - node-next
 

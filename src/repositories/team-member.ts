@@ -133,7 +133,7 @@ export const deactivateTeamMember = async (
   try {
     const protocol = await prisma.protocol.findUnique({
       where: { id: protocolId },
-      select: { sections: true },
+      select: { sections: true, state: true },
     })
 
     if (!protocol) {
@@ -179,12 +179,40 @@ export const deactivateTeamMember = async (
       },
     })
 
+    // If protocol is ongoing, synchronize budget team members
+    if (protocol.state === 'ON_GOING') {
+      try {
+        const { syncProtocolTeamMembersWithBudget } = await import(
+          '@actions/anual-budget/action'
+        )
+        const syncResult = await syncProtocolTeamMembersWithBudget(protocolId)
+
+        if (syncResult.status) {
+          console.log(
+            `✅ Budget synchronization completed for protocol ${protocolId}:`,
+            syncResult.operations
+          )
+        } else {
+          console.warn(
+            `⚠️ Budget synchronization failed for protocol ${protocolId}:`,
+            syncResult.message
+          )
+        }
+      } catch (syncError) {
+        console.error('❌ Error during budget synchronization:', syncError)
+        // Don't fail the main operation if sync fails
+      }
+    }
+
     return {
       status: true,
       data: result,
       notification: {
         title: 'Miembro desactivado',
-        message: 'El miembro del equipo fue desactivado con éxito',
+        message:
+          protocol.state === 'ON_GOING' ?
+            'El miembro del equipo fue desactivado y el presupuesto se actualizó automáticamente'
+          : 'El miembro del equipo fue desactivado con éxito',
         intent: 'success',
       } as const,
     }
@@ -192,10 +220,114 @@ export const deactivateTeamMember = async (
     console.error('Error deactivating team member:', error)
     return {
       status: false,
+      data: null,
       notification: {
         title: 'Error',
+        message: 'No se pudo desactivar el miembro del equipo',
+        intent: 'error',
+      } as const,
+    }
+  }
+}
+
+export const reactivateTeamMember = async (
+  protocolId: string,
+  teamMemberIndex: number
+) => {
+  try {
+    const protocol = await prisma.protocol.findUnique({
+      where: { id: protocolId },
+      select: { sections: true, state: true },
+    })
+
+    if (!protocol) {
+      throw new Error('Protocol not found')
+    }
+
+    const team = protocol.sections.identification.team
+    if (teamMemberIndex < 0 || teamMemberIndex >= team.length) {
+      throw new Error('Invalid team member index')
+    }
+
+    // Update the team member's assignment to remove the "to" date (reactivate)
+    const updatedTeam = team.map((member, index) => {
+      if (index === teamMemberIndex) {
+        const deactivatedAssignment = member.assignments.find((a) => a.to)
+        if (deactivatedAssignment) {
+          const updatedAssignments = member.assignments.map((assignment) =>
+            assignment === deactivatedAssignment ?
+              { ...assignment, to: null }
+            : assignment
+          )
+          return {
+            ...member,
+            assignments: updatedAssignments,
+          }
+        }
+      }
+      return member
+    })
+
+    const updatedSections = {
+      ...protocol.sections,
+      identification: {
+        ...protocol.sections.identification,
+        team: updatedTeam,
+      },
+    }
+
+    const result = await prisma.protocol.update({
+      where: { id: protocolId },
+      data: {
+        sections: updatedSections,
+      },
+    })
+
+    // If protocol is ongoing, synchronize budget team members
+    if (protocol.state === 'ON_GOING') {
+      try {
+        const { syncProtocolTeamMembersWithBudget } = await import(
+          '@actions/anual-budget/action'
+        )
+        const syncResult = await syncProtocolTeamMembersWithBudget(protocolId)
+
+        if (syncResult.status) {
+          console.log(
+            `✅ Budget synchronization completed for protocol ${protocolId}:`,
+            syncResult.operations
+          )
+        } else {
+          console.warn(
+            `⚠️ Budget synchronization failed for protocol ${protocolId}:`,
+            syncResult.message
+          )
+        }
+      } catch (syncError) {
+        console.error('❌ Error during budget synchronization:', syncError)
+        // Don't fail the main operation if sync fails
+      }
+    }
+
+    return {
+      status: true,
+      data: result,
+      notification: {
+        title: 'Miembro reactivado',
         message:
-          'Ocurrió un error al intentar desactivar el miembro del equipo',
+          protocol.state === 'ON_GOING' ?
+            'El miembro del equipo fue reactivado y el presupuesto se actualizó automáticamente'
+          : 'El miembro del equipo fue reactivado con éxito',
+        intent: 'success',
+      } as const,
+    }
+  } catch (error) {
+    console.error('Error reactivating team member:', error)
+    return {
+      status: false,
+      data: null,
+      notification: {
+        title: 'Error',
+        message: 'No se pudo reactivar el miembro del equipo',
         intent: 'error',
       } as const,
     }

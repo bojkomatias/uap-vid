@@ -24,7 +24,7 @@ export default async function Budget({ params }: { params: { id: string } }) {
     ...rest,
     title: protocol.sections.identification.title,
   }
-  const calculations = calculateTotalBudget(anualBudget)
+  const calculations = await calculateTotalBudget(anualBudget)
 
   const protocolFlags = await findProtocolById(protocol.id).then((p) => {
     return p?.flags
@@ -43,21 +43,20 @@ export default async function Budget({ params }: { params: { id: string } }) {
       <div className="relative w-full">
         <BudgetMetadata {...meta} sponsor={shortnames}>
           <div className="flex min-w-[15rem] justify-end gap-2">
-            {(
-              meta.state === AnualBudgetState.PENDING &&
-              !protocolFlags?.some((flag) => flag.state == false) &&
-              protocolFlags?.length == 2
-            ) ?
-              <>
-                <ApproveAnualBudget id={anualBudget.id} />
-              </>
-            : <Info content="Los votos de Comisión Interna y CUCYT no fueron cargados.">
-                <Button className="pointer-events-none" color="teal" disabled>
-                  <Check data-slot="icon" />
-                  Aprobar presupuesto
-                </Button>
-              </Info>
-            }
+            {meta.state === AnualBudgetState.PENDING &&
+              ((
+                !protocolFlags?.some((flag) => flag.state == false) &&
+                protocolFlags?.length == 2
+              ) ?
+                <>
+                  <ApproveAnualBudget id={anualBudget.id} />
+                </>
+              : <Info content="Los votos de Comisión Interna y CUCYT no fueron cargados.">
+                  <Button className="pointer-events-none" color="teal" disabled>
+                    <Check data-slot="icon" />
+                    Aprobar presupuesto
+                  </Button>
+                </Info>)}
             {/* If remainings are 0 then budget is finished */}
             {(
               meta.state === AnualBudgetState.APPROVED &&
@@ -76,6 +75,7 @@ export default async function Budget({ params }: { params: { id: string } }) {
         budgetTeamMembers={budgetTeamMembers}
         academicUnits={anualBudget.AcademicUnits}
         calculations={calculations}
+        protocolTeam={protocol.sections.identification.team}
       />
     </>
   )
