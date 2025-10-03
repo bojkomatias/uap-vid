@@ -5,6 +5,7 @@ export enum useCases {
   onPublish = 'onPublish',
   onApprove = 'onApprove',
   changeUserEmail = 'changeUserEmail',
+  passwordReset = 'passwordReset',
 }
 
 export const useCasesDictionary: { [key: string]: string } = {
@@ -14,4 +15,5 @@ export const useCasesDictionary: { [key: string]: string } = {
   onPublish: 'Publicación de protocolo',
   onApprove: 'Aprobación de protocolo',
   changeUserEmail: 'Cambio de email',
+  passwordReset: 'Recuperación de contraseña',
 }

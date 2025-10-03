@@ -135,6 +135,15 @@ export const SignIn = () => {
                   />
                 </FieldGroup>
               </Fieldset>
+              <div className="mb-4 text-right">
+                <button
+                  type="button"
+                  onClick={() => router.push('/forgot-password')}
+                  className="text-sm text-primary-950 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
               <FormActions>
                 <SubmitButton isLoading={loading}>Iniciar sesión</SubmitButton>
               </FormActions>
