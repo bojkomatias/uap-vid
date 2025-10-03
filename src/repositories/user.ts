@@ -187,7 +187,10 @@ const findUserByEmail = cache(
     })
 )
 
-const updateUserById = async (id: string, data: User) => {
+const updateUserById = async (
+  id: string,
+  data: Omit<User, 'id'> | Partial<User>
+) => {
   try {
     const user = await prisma.user.update({
       where: {
