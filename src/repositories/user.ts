@@ -197,6 +197,8 @@ const updateUserById = async (id: string, data: User) => {
     })
     return user
   } catch (error) {
+    console.error('❌ Error in updateUserById:', error)
+    console.error('Failed data:', JSON.stringify(data, null, 2))
     return null
   }
 }
