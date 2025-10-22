@@ -346,7 +346,7 @@ const updateProtocolById = async (id: string, data: Protocol) => {
     // Get current protocol state to check if it's ongoing
     const currentProtocol = await prisma.protocol.findUnique({
       where: { id },
-      select: { state: true },
+      select: { state: true, convocatoryId: true },
     })
 
     const { currentFCA, currentFMR } = await getCurrentIndexes()
@@ -367,9 +367,15 @@ const updateProtocolById = async (id: string, data: Protocol) => {
       })
     })
 
-    const convocatory = await getCurrentConvocatory()
-
-    data.convocatoryId = convocatory?.id ?? null
+    // Only set convocatory if the protocol doesn't have one yet
+    // This prevents overwriting the convocatory when editing existing protocols
+    if (!currentProtocol?.convocatoryId && !data.convocatoryId) {
+      const convocatory = await getCurrentConvocatory()
+      data.convocatoryId = convocatory?.id ?? null
+    } else if (!data.convocatoryId) {
+      // Preserve existing convocatoryId if data doesn't specify one
+      data.convocatoryId = currentProtocol?.convocatoryId ?? null
+    }
 
     console.log(
       'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
