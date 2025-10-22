@@ -28,6 +28,9 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+# Generate Prisma Client using the installed version
+RUN corepack enable pnpm && pnpm prisma generate
+
 RUN \
     if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
     else echo "Lockfile not found." && exit 1; \

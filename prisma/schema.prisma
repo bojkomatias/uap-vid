@@ -20,14 +20,14 @@ model ChatMessage {
 }
 
 model AcademicUnit {
-  id                          String                  @id @default(auto()) @map("_id") @db.ObjectId
+  id                          String               @id @default(auto()) @map("_id") @db.ObjectId
   name                        String
   shortname                   String
-  secretaries                 User[]                  @relation(fields: [secretariesIds], references: [id])
-  secretariesIds              String[]                @db.ObjectId
-  budgets                     AcademicUnitBudget[]    // Now a proper relation to the new model
-  AcademicUnitAnualBudgets    AnualBudget[]           @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
-  academicUnitAnualBudgetsIds String[]                @db.ObjectId
+  secretaries                 User[]               @relation(fields: [secretariesIds], references: [id])
+  secretariesIds              String[]             @db.ObjectId
+  budgets                     AcademicUnitBudget[] // Now a proper relation to the new model
+  AcademicUnitAnualBudgets    AnualBudget[]        @relation(fields: [academicUnitAnualBudgetsIds], references: [id])
+  academicUnitAnualBudgetsIds String[]             @db.ObjectId
   TeamMembers                 TeamMember[]
   Careers                     Career[]
   executions                  Execution[]
@@ -44,7 +44,7 @@ model AcademicUnitBudget {
   academicUnitId String       @db.ObjectId
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-  
+
   // Ensure unique budget per academic unit per year
   @@unique([academicUnitId, year])
 }
@@ -205,7 +205,7 @@ model AnualBudget {
   createdAt         DateTime                @default(now())
   updatedAt         DateTime                @default(now())
   state             AnualBudgetState        @default(PENDING)
-  budgetItems       AnualBudgetItem[]       // Now a proper relation instead of embedded type
+  budgetItems       AnualBudgetItem[] // Now a proper relation instead of embedded type
   budgetTeamMembers AnualBudgetTeamMember[]
   year              Int
   protocolId        String                  @db.ObjectId
@@ -217,11 +217,11 @@ model AnualBudget {
 }
 
 model Execution {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  amount         Float?       
-  amountIndex    AmountIndex?
-  date           DateTime     @default(now())
-  
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Float?
+  amountIndex AmountIndex?
+  date        DateTime     @default(now())
+
   // Required relations - Protocol, AnualBudget, AcademicUnit
   protocolId     String       @db.ObjectId
   protocol       Protocol     @relation(fields: [protocolId], references: [id])
@@ -229,33 +229,33 @@ model Execution {
   anualBudget    AnualBudget  @relation(fields: [anualBudgetId], references: [id])
   academicUnitId String       @db.ObjectId
   academicUnit   AcademicUnit @relation(fields: [academicUnitId], references: [id])
-  
+
   // Relations to what this execution belongs to (optional)
-  budgetItemId         String?               @db.ObjectId
-  budgetItem           AnualBudgetItem?      @relation(fields: [budgetItemId], references: [id])
-  teamMemberBudgetId   String?               @db.ObjectId
-  teamMemberBudget     AnualBudgetTeamMember? @relation(fields: [teamMemberBudgetId], references: [id])
-  
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  budgetItemId       String?                @db.ObjectId
+  budgetItem         AnualBudgetItem?       @relation(fields: [budgetItemId], references: [id])
+  teamMemberBudgetId String?                @db.ObjectId
+  teamMemberBudget   AnualBudgetTeamMember? @relation(fields: [teamMemberBudgetId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model AnualBudgetItem {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
   type           String
   detail         String
-  amount         Float?        @default(0) /// @deprecated use `amountIndex` instead
-  remaining      Float?        @default(0) /// @deprecated use `remainingIndex` instead
+  amount         Float?      @default(0) /// @deprecated use `amountIndex` instead
+  remaining      Float?      @default(0) /// @deprecated use `remainingIndex` instead
   amountIndex    AmountIndex
   remainingIndex AmountIndex
   executions     Execution[]
-  
+
   // Relation to the annual budget
-  anualBudgetId  String        @db.ObjectId
-  anualBudget    AnualBudget   @relation(fields: [anualBudgetId], references: [id], onDelete: Cascade)
-  
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  anualBudgetId String      @db.ObjectId
+  anualBudget   AnualBudget @relation(fields: [anualBudgetId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 type AmountIndex {
@@ -410,7 +410,7 @@ type TeamAssignment {
   hours                 Float
   from                  DateTime
   to                    DateTime?
-  workingMonths         Int?             @default(12)
+  workingMonths         Int?      @default(12)
   categoryToBeConfirmed String?   @db.ObjectId
 }
 
