@@ -62,26 +62,37 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({ user }) => {
       if (!user || !user.email) return false
-      const userExist = await findUserByEmail(user.email)
+
+      // Normalize email to prevent duplicates
+      const normalizedEmail = user.email.toLowerCase().trim()
+
+      const userExist = await findUserByEmail(normalizedEmail)
       if (userExist) {
-        await updateUserByEmail(user.email, {
+        await updateUserByEmail(normalizedEmail, {
           ...userExist,
           lastLogin: new Date(),
         })
       } else {
-        await saveUser({
+        const newUser = await saveUser({
           name: user.name!,
-          email: user.email,
+          email: normalizedEmail,
           image: user.image,
           role: 'RESEARCHER',
           lastLogin: new Date(),
         })
+
+        // If saveUser returns null, it means a duplicate was detected
+        if (!newUser) {
+          console.error(`Failed to create user with email ${normalizedEmail} - possible duplicate`)
+          // Still allow login, they should be able to sign in with existing account
+        }
       }
       return true
     },
     jwt: async ({ token, user }) => {
       if (user && user.email) {
-        const userFromDb = await findUserByEmail(user.email)
+        const normalizedEmail = user.email.toLowerCase().trim()
+        const userFromDb = await findUserByEmail(normalizedEmail)
         if (userFromDb) token.user = userFromDb
       }
       return token

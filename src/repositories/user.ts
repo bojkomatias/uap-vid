@@ -182,7 +182,7 @@ const findUserByEmail = cache(
   async (email: string) =>
     await prisma.user.findUnique({
       where: {
-        email,
+        email: email.toLowerCase().trim(),
       },
     })
 )
@@ -358,11 +358,28 @@ const saveUser = async (data: {
   lastLogin?: Date
 }) => {
   try {
+    // Normalize email to prevent duplicates
+    const normalizedEmail = data.email.toLowerCase().trim()
+
+    // Check if user already exists with normalized email
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    })
+
+    if (existingUser) {
+      console.warn(`User with email ${normalizedEmail} already exists`)
+      return null
+    }
+
     const user = await prisma.user.create({
-      data,
+      data: {
+        ...data,
+        email: normalizedEmail,
+      },
     })
     return user
   } catch (error) {
+    console.error('Error creating user:', error)
     return null
   }
 }
