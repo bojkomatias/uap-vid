@@ -249,7 +249,7 @@ export function DuplicateUsersManager() {
                       </TableCell>
                       <TableCell>{user.name}</TableCell>
                       <TableCell>
-                        <Badge color="zinc">{user.role}</Badge>
+                        <Badge color="gray">{user.role}</Badge>
                       </TableCell>
                       <TableCell>
                         {user.lastLogin ?
