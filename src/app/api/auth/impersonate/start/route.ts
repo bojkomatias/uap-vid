@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     const impersonatedUser = {
       ...userToImpersonate,
       // Ensure password is not included in token
-      password: undefined,
+      password: null,
     }
 
     const originalUser = {
