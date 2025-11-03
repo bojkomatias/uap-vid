@@ -10,8 +10,8 @@ import { Access, Action, ProtocolState, Role } from '@prisma/client'
 const Role_ACCESS: { [key in keyof typeof Role]: Access[] } = {
   [Role.RESEARCHER]: [Access.PROTOCOLS, Access.REVIEWS],
   [Role.SECRETARY]: [Access.PROTOCOLS, Access.REVIEWS, Access.EVALUATORS],
-  [Role.METHODOLOGIST]: [Access.PROTOCOLS],
-  [Role.SCIENTIST]: [Access.PROTOCOLS],
+  [Role.METHODOLOGIST]: [Access.PROTOCOLS, Access.REVIEWS],
+  [Role.SCIENTIST]: [Access.PROTOCOLS, Access.REVIEWS],
   [Role.ADMIN]: [
     Access.PROTOCOLS,
     Access.CONVOCATORIES,
@@ -127,14 +127,64 @@ export const canAccess = (access: Access, role: Role) =>
   Role_ACCESS[role].includes(access)
 
 /**
+ * Actions that elevated roles (SECRETARY, METHODOLOGIST, SCIENTIST) cannot perform on their own protocols
+ * These are privileged actions that could create conflicts of interest
+ */
+const ELEVATED_ACTIONS: Action[] = [
+  Action.PUBLISH,
+  Action.ACCEPT,
+  Action.APPROVE,
+  Action.DISCONTINUE,
+  Action.FINISH,
+  Action.REACTIVATE,
+  Action.REVIEW,
+  Action.ASSIGN_TO_METHODOLOGIST,
+  Action.ASSIGN_TO_SCIENTIFIC,
+]
+
+/**
  * Check Execution Permission according to ProtocolState and Role
  * @param action
  * @param role
  * @param state
+ * @param userId - Optional: Current user's ID
+ * @param protocolResearcherId - Optional: Protocol owner's ID
  * @returns
+ *
+ * Global Rule: Elevated roles (SECRETARY, METHODOLOGIST, SCIENTIST) cannot perform
+ * privileged actions (state changes, evaluations, assignments) on their own protocols.
+ * Only ADMIN and RESEARCHER roles can perform all actions on protocols they own.
  */
-export const canExecute = (action: Action, role: Role, state: ProtocolState) =>
-  Role_SCOPE[role].includes(action) && STATE_SCOPE[state].includes(action)
+export const canExecute = (
+  action: Action,
+  role: Role,
+  state: ProtocolState,
+  userId?: string,
+  protocolResearcherId?: string
+) => {
+  const hasRolePermission = Role_SCOPE[role].includes(action)
+  const hasStatePermission = STATE_SCOPE[state].includes(action)
+
+  // If basic permission check fails, deny immediately
+  if (!hasRolePermission || !hasStatePermission) {
+    return false
+  }
+
+  // Global rule: Prevent elevated roles from performing privileged actions on their own protocols
+  // Only ADMIN and RESEARCHER can perform privileged actions on protocols they own
+  if (
+    userId &&
+    protocolResearcherId &&
+    userId === protocolResearcherId &&
+    role !== Role.ADMIN &&
+    role !== Role.RESEARCHER &&
+    ELEVATED_ACTIONS.includes(action)
+  ) {
+    return false
+  }
+
+  return true
+}
 
 export const getActionsByRoleAndState = (role: Role, state: ProtocolState) =>
   Role_SCOPE[role].filter((action) => STATE_SCOPE[state].includes(action))

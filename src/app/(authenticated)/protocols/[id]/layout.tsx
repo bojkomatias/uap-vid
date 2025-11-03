@@ -60,7 +60,9 @@ export default async function Layout({
   const isReviewFormShown = canExecute(
     Action.REVIEW,
     session.user.role,
-    protocol.state
+    protocol.state,
+    session.user.id,
+    protocol.researcher.id
   )
 
   const areThereTeamMembersNotConfirmed = protocol.sections.identification.team

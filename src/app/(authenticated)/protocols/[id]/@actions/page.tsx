@@ -33,6 +33,7 @@ export default async function ActionsPage({
   const actions = getActionsByRoleAndState(session.user.role, protocol.state)
   let filteredActions = actions
   const isAdmin = session.user.role === 'ADMIN'
+  const isOwner = session.user.id === protocol.researcherId
 
   // Check results for admin override
   const checkResults = {
@@ -120,6 +121,21 @@ export default async function ActionsPage({
   checkResults.edit.canEdit = canEditNormally
   if (!canEditNormally) {
     checkResults.edit.message = `El protocolo está en estado "${ProtocolStatesDictionary[protocol.state]}" y no puede ser editado normalmente. Solo los administradores pueden editar protocolos en este estado.`
+  }
+
+  // --- Global Rule: Filter out elevated actions for elevated roles on their own protocols ---
+  // Elevated roles (SECRETARY, METHODOLOGIST, SCIENTIST) cannot perform privileged actions on their own protocols
+  // Filter each action through canExecute with ownership parameters
+  if (!isAdmin && isOwner) {
+    filteredActions = filteredActions.filter((action) =>
+      canExecute(
+        action,
+        session.user.role,
+        protocol.state,
+        session.user.id,
+        protocol.researcherId
+      )
+    )
   }
 
   // --- Admin Override Logic: Add actions back if missing ---

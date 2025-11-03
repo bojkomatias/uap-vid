@@ -53,7 +53,9 @@ export default async function ReviewAssignation({
         enabled: canExecute(
           Action.ASSIGN_TO_METHODOLOGIST,
           session.user.role,
-          protocol.state
+          protocol.state,
+          session.user.id,
+          protocol.researcher.id
         ),
         review:
           reviews.find((review) => review.type === ReviewType.METHODOLOGICAL) ??
@@ -71,7 +73,9 @@ export default async function ReviewAssignation({
           canExecute(
             Action.ASSIGN_TO_SCIENTIFIC,
             session.user.role,
-            protocol.state
+            protocol.state,
+            session.user.id,
+            protocol.researcher.id
           ) &&
           (methodologicalVerdict === ReviewVerdict.APPROVED ||
             methodologicalVerdict === ReviewVerdict.APPROVED_WITH_CHANGES),
@@ -92,7 +96,9 @@ export default async function ReviewAssignation({
           canExecute(
             Action.ASSIGN_TO_SCIENTIFIC,
             session.user.role,
-            protocol.state
+            protocol.state,
+            session.user.id,
+            protocol.researcher.id
           ) &&
           (methodologicalVerdict === ReviewVerdict.APPROVED ||
             methodologicalVerdict === ReviewVerdict.APPROVED_WITH_CHANGES),
@@ -114,7 +120,9 @@ export default async function ReviewAssignation({
           canExecute(
             Action.ASSIGN_TO_SCIENTIFIC,
             session.user.role,
-            protocol.state
+            protocol.state,
+            session.user.id,
+            protocol.researcher.id
           ) &&
           reviews.filter(
             (e) =>
