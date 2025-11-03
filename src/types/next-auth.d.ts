@@ -7,11 +7,19 @@ declare module 'next-auth' {
    */
   interface Session {
     user: User & DefaultSession['user']
+    impersonating?: {
+      originalUser: User & DefaultSession['user']
+      isActive: boolean
+    }
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
     user: User & DefaultSession['user']
+    impersonating?: {
+      originalUser: User & DefaultSession['user']
+      isActive: boolean
+    }
   }
 }

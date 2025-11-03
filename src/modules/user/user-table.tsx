@@ -13,6 +13,7 @@ import { Badge } from '@components/badge'
 import { Listbox, ListboxLabel, ListboxOption } from '@components/listbox'
 import { useUpdateQuery } from '@utils/query-helper/updateQuery'
 import { useSearchParams } from 'next/navigation'
+import { ImpersonateUserButton } from './impersonate-user-button'
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: { _count: true }
@@ -79,6 +80,18 @@ export default function UserTable({
             {RolesDictionary[row.original.role]}
           </Badge>
         ),
+      },
+      {
+        id: 'actions',
+        header: 'Acciones',
+        cell: ({ row }) => (
+          <ImpersonateUserButton
+            userId={row.original.id}
+            userName={row.original.name}
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
       },
     ],
     []

@@ -89,7 +89,18 @@ export const authOptions: NextAuthOptions = {
       }
       return true
     },
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user, trigger }) => {
+      // If impersonating, keep the impersonation state and don't override
+      if (token.impersonating?.isActive) {
+        return token
+      }
+
+      // Handle session update trigger
+      if (trigger === 'update') {
+        return token
+      }
+
+      // Initial sign-in: set user data from database
       if (user && user.email) {
         const normalizedEmail = user.email.toLowerCase().trim()
         const userFromDb = await findUserByEmail(normalizedEmail)
@@ -100,6 +111,10 @@ export const authOptions: NextAuthOptions = {
     session: async ({ session, token }) => {
       if (token) {
         session.user = token.user as User
+        // Pass impersonation state to session
+        if (token.impersonating) {
+          session.impersonating = token.impersonating
+        }
       }
       return session
     },
