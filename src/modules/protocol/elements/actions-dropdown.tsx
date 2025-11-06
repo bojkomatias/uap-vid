@@ -163,6 +163,15 @@ export function ActionsDropdown({
       icon: <Edit data-slot="icon" />,
     },
     {
+      action: Action.EDIT_BY_OWNER,
+      callback: async () => {
+        // Same logic as EDIT action for protocol owners
+        router.push(`/protocols/${protocol.id}/0`)
+        return false // No admin override dialog opened
+      },
+      icon: <Edit data-slot="icon" />,
+    },
+    {
       action: Action.PUBLISH,
       callback: async () => {
         // Check if admin and protocol doesn't pass validation
