@@ -69,7 +69,6 @@ export const authOptions: NextAuthOptions = {
       const userExist = await findUserByEmail(normalizedEmail)
       if (userExist) {
         await updateUserByEmail(normalizedEmail, {
-          ...userExist,
           lastLogin: new Date(),
         })
       } else {

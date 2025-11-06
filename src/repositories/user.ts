@@ -220,7 +220,7 @@ const updateUserRoleById = async (id: string, role: Role) => {
   }
 }
 
-const updateUserByEmail = async (email: string, data: User) => {
+const updateUserByEmail = async (email: string, data: Partial<User>) => {
   try {
     const user = await prisma.user.update({
       where: {
