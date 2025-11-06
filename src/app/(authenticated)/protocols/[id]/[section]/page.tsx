@@ -40,7 +40,9 @@ export default async function Page({
         Action.EDIT_BY_OWNER
       : Action.EDIT,
       session.user.role,
-      protocol.state
+      protocol.state,
+      session.user.id,
+      protocol.researcherId
     )
 
   if (canEdit) {

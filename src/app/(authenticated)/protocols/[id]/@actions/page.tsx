@@ -116,7 +116,9 @@ export default async function ActionsPage({
       Action.EDIT_BY_OWNER
     : Action.EDIT,
     session.user.role,
-    protocol.state
+    protocol.state,
+    session.user.id,
+    protocol.researcherId
   )
   checkResults.edit.canEdit = canEditNormally
   if (!canEditNormally) {
