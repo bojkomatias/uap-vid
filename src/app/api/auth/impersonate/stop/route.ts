@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         ...token,
         user: {
           ...originalUserFromDb,
-          password: undefined, // Never include password in token
+          password: null, // Never include password in token
         },
         impersonating: undefined,
       },

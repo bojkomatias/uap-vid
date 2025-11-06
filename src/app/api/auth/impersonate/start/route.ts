@@ -97,6 +97,10 @@ export async function POST(request: Request) {
       email: session.user.email,
       role: session.user.role,
       dni: session.user.dni,
+      lastLogin: session.user.lastLogin,
+      password: session.user.password,
+      image: session.user.image,
+      AcademicUnitIds: session.user.AcademicUnitIds,
     }
 
     // Create new token with impersonation data
