@@ -14,7 +14,7 @@ function getSessionToken(cookieHeader: string | null): string | null {
 }
 
 export async function logServerAction(actionName: string, data: any) {
-  const headersList = headers()
+  const headersList = await headers()
   const cookieHeader = headersList.get('cookie')
   const sessionToken = getSessionToken(cookieHeader)
 

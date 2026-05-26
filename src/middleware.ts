@@ -1,5 +1,38 @@
-import { Access } from '@prisma/client'
-import { canAccess } from '@utils/scopes'
+// Duplicated from @prisma/client to avoid importing Prisma in Edge Runtime
+const Access = {
+    PROTOCOLS: 'PROTOCOLS',
+    USERS: 'USERS',
+    EVALUATORS: 'EVALUATORS',
+    REVIEWS: 'REVIEWS',
+    CONVOCATORIES: 'CONVOCATORIES',
+    ACADEMIC_UNITS: 'ACADEMIC_UNITS',
+    TEAM_MEMBERS: 'TEAM_MEMBERS',
+    MEMBER_CATEGORIES: 'MEMBER_CATEGORIES',
+    ANUAL_BUDGETS: 'ANUAL_BUDGETS',
+    INDEXES: 'INDEXES',
+    CAREERS: 'CAREERS',
+    EVALUATIONS: 'EVALUATIONS',
+    EMAILS: 'EMAILS',
+} as const
+type Access = (typeof Access)[keyof typeof Access]
+
+// Duplicated from @utils/scopes to avoid importing Prisma in Edge Runtime
+const Role_ACCESS: Record<string, Access[]> = {
+    RESEARCHER: [Access.PROTOCOLS, Access.REVIEWS],
+    SECRETARY: [Access.PROTOCOLS, Access.REVIEWS, Access.EVALUATORS],
+    METHODOLOGIST: [Access.PROTOCOLS],
+    SCIENTIST: [Access.PROTOCOLS],
+    ADMIN: [
+        Access.PROTOCOLS, Access.CONVOCATORIES, Access.REVIEWS,
+        Access.EVALUATORS, Access.USERS, Access.ACADEMIC_UNITS,
+        Access.TEAM_MEMBERS, Access.MEMBER_CATEGORIES,
+        Access.ANUAL_BUDGETS, Access.INDEXES, Access.CAREERS,
+        Access.EVALUATIONS, Access.EMAILS,
+    ],
+}
+const canAccess = (access: Access, role: string) =>
+    Role_ACCESS[role]?.includes(access) ?? false
+
 import { getToken } from 'next-auth/jwt'
 import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'

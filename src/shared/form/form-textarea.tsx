@@ -2,7 +2,7 @@ import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
 import type { TextareaProps } from '@components/textarea'
 import { Textarea } from '@components/textarea'
 
-import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { GetInputPropsReturnType } from './types'
 
 export function FormTextarea(
   props: { label: string; description?: string } & GetInputPropsReturnType &

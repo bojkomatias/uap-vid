@@ -1,7 +1,7 @@
 import type { ComboboxProps, Option } from '@components/combobox'
 import { Combobox } from '@components/combobox'
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
-import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { GetInputPropsReturnType } from './types'
 
 export function FormCombobox({
   label,

@@ -1,7 +1,7 @@
 import { Description, ErrorMessage, Field, Label } from '@components/fieldset'
 import { Switch, type SwitchProps } from '@components/switch'
 
-import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { GetInputPropsReturnType } from './types'
 
 export function FormSwitch(
   props: {

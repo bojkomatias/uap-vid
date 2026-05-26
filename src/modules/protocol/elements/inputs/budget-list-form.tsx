@@ -2,7 +2,6 @@ import { CurrencyDollar, Plus, Trash } from 'tabler-icons-react'
 import { useProtocolContext } from '@utils/createContext'
 import { currencyFormatter } from '@utils/formatters'
 import {
-  Description,
   Field,
   Fieldset,
   Label,
@@ -46,10 +45,8 @@ export function BudgetList() {
 
   return (
     <Fieldset>
-      <Legend>Cuadro de gastos directos</Legend>
       <Text className="mb-2">
-        Liste los gastos detallando monto y año donde se necesitaran, deje
-        vacías las categorias que no sean necesarias
+        Deje vacías las categorías que no utilizará.
       </Text>
       {arraysOfData.map(({ key, array }, i) => (
         <>
@@ -59,16 +56,13 @@ export function BudgetList() {
               .length > 0 && (
               <>
                 <Field className="col-span-12">
-                  <Label>Detalle</Label>
-                  <Description>Detalle lo que se solicita</Description>
+                  <Label>Descripción</Label>
                 </Field>
                 <Field className="col-span-5">
-                  <Label>Monto</Label>
-                  <Description>Coste actual del ítem</Description>
+                  <Label>Costo actual</Label>
                 </Field>
                 <Field className="col-span-3">
-                  <Label>Año</Label>
-                  <Description>Año en el que se usará</Description>
+                  <Label>Año en el que se usará</Label>
                 </Field>
                 <span />
               </>

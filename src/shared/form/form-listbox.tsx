@@ -7,7 +7,7 @@ import {
   ListboxLabel,
   ListboxOption,
 } from '@components/listbox'
-import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { GetInputPropsReturnType } from './types'
 
 export function FormListbox({
   label,
@@ -28,7 +28,7 @@ export function FormListbox({
       <Label>{label}</Label>
       <Description>{description}</Description>
       <Listbox invalid={!!error} className="w-full" {...props}>
-        {options.map(({ value, label, description }) => (
+        {options.map(({ value, label, description }: Option) => (
           <ListboxOption key={value} value={value}>
             <ListboxLabel>{label}</ListboxLabel>
             {description && (

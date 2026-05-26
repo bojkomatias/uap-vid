@@ -6,15 +6,16 @@ import AnualBudgetTable from 'modules/anual-budget/budget-table'
 export default async function AllAnualBudgetPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
+  const resolvedSearchParams = await searchParams
   // Get current year if no year is provided in searchParams
   const currentYear = new Date().getFullYear()
-  const year = searchParams.year ? parseInt(searchParams.year) : currentYear
+  const year = resolvedSearchParams.year ? parseInt(resolvedSearchParams.year) : currentYear
 
   // Create updated searchParams with explicit year
   const searchParamsWithYear = {
-    ...searchParams,
+    ...resolvedSearchParams,
     year: year.toString(),
   }
 

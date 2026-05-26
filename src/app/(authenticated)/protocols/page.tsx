@@ -15,16 +15,18 @@ import DownloadTabularData from '@protocol/elements/download-tabular-data'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
   const session = await getServerSession(authOptions)
 
   if (!session) return
 
+  const resolvedSearchParams = await searchParams
+
   const [totalRecords, protocols] = await getProtocolsByRole(
     session.user.role,
     session.user.id,
-    searchParams
+    resolvedSearchParams
   )
 
   const academicUnits = await getAcademicUnitsNameAndShortname()

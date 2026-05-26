@@ -10,9 +10,10 @@ import { getCurrentIndexes } from '@repositories/finance-index'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const [totalRecords, categories] = await getCategories(searchParams)
+  const resolvedSearchParams = await searchParams
+  const [totalRecords, categories] = await getCategories(resolvedSearchParams)
   const { currentFCA } = await getCurrentIndexes()
 
   return (

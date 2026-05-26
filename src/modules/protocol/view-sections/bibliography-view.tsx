@@ -1,6 +1,6 @@
 import type { ProtocolSectionsBibliography } from '@prisma/client'
-import type { ListRowValues } from '@protocol/elements/view/item-list-view'
-import ItemListView from '@protocol/elements/view/item-list-view'
+import TextItemView from '@protocol/elements/view/text-item-view'
+import { chartToBibliographyHtml } from '@utils/bibliography'
 import SectionViewer from '../elements/view/section-viewer'
 
 interface BibliographyViewProps {
@@ -8,29 +8,17 @@ interface BibliographyViewProps {
 }
 
 const BibliographyView = ({ data }: BibliographyViewProps) => {
-  const tableData = {
-    title: 'Fuentes de información',
-    values: data.chart.reduce((newVal: ListRowValues[], item) => {
-      newVal.push([
-        {
-          up: item.title,
-          down: item.author,
-        },
-        {
-          up: 'Año',
-          down: item.year,
-        },
-      ])
-      return newVal
-    }, []),
-  }
+  const content =
+    data.content && data.content.trim().length > 0 ?
+      data.content
+    : chartToBibliographyHtml(data.chart)
 
   return (
     <SectionViewer
       title="Bibliografía"
       description="Recursos a ser utilizados en la investigación"
     >
-      <ItemListView data={tableData} />
+      <TextItemView title="Fuentes de información" content={content || null} />
     </SectionViewer>
   )
 }

@@ -6,6 +6,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { cx } from '@utils/cx'
 import CharacterCount from '@tiptap/extension-character-count'
+import Link from '@tiptap/extension-link'
 
 import {
   ArrowBackUp,
@@ -51,6 +52,18 @@ const Tiptap = ({
         types: ['heading', 'paragraph'],
       }),
       CharacterCount.configure(),
+      Link.configure({
+        autolink: true,
+        linkOnPaste: true,
+        openOnClick: false,
+        defaultProtocol: 'https',
+        HTMLAttributes: {
+          class:
+            'text-primary-600 underline dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300',
+          rel: 'noopener noreferrer',
+          target: '_blank',
+        },
+      }),
     ],
     editorProps: {
       attributes: {

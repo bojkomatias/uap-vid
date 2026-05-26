@@ -8,9 +8,10 @@ import { UserPlus } from 'tabler-icons-react'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const [totalRecords, teamMembers] = await getTeamMembers(searchParams)
+  const resolvedSearchParams = await searchParams
+  const [totalRecords, teamMembers] = await getTeamMembers(resolvedSearchParams)
 
   return (
     <>

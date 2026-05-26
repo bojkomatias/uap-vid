@@ -116,6 +116,10 @@ model User {
   dni                Int?
   password           String?
   image              String?
+  cvFileKey          String?
+  cvFileName         String?
+  cvFileSize         Int?
+  cvUploadedAt       DateTime?            @db.Date
   role               Role                 @default(RESEARCHER)
   Review             Review[]
   AcademicUnits      AcademicUnit[]       @relation(fields: [AcademicUnitIds], references: [id])
@@ -332,13 +336,15 @@ type ProtocolSections {
 }
 
 type ProtocolSectionsBibliography {
-  chart ProtocolSectionsBibliographyChart[]
+  chart   ProtocolSectionsBibliographyChart[]
+  content String                              @default("")
 }
 
 type ProtocolSectionsBibliographyChart {
   author String
   title  String
   year   Int
+  url    String?
 }
 
 type ProtocolSectionsBudget {
@@ -358,13 +364,15 @@ type ProtocolSectionsBudgetExpensesData {
 }
 
 type ProtocolSectionsDescription {
-  discipline String
-  field      String
-  line       String
-  technical  String
-  objective  String
-  type       String
-  words      String
+  discipline             String
+  field                  String
+  line                   String
+  technical              String
+  objective              String
+  type                   String
+  words                  String
+  methodologicalApproach String?
+  methodologicalDesign   String?
 }
 
 type ProtocolSectionsDuration {
@@ -435,8 +443,9 @@ type ProtocolSectionsMethodology {
 }
 
 type ProtocolSectionsPublication {
-  title  String
-  result String
+  title                String?
+  result               String
+  technologicalResult  String?
 }
 
 enum ReviewType {

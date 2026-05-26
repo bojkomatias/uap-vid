@@ -6,10 +6,11 @@ import { findProtocolByIdWithResearcher } from '@repositories/protocol'
 import { TeamMemberRelation } from '@utils/zod'
 
 export default async function ModalPage({
-  params: { protocolId },
+  params,
 }: {
-  params: { protocolId: string }
+  params: Promise<{ protocolId: string }>
 }) {
+  const { protocolId } = await params
   const protocol = await findProtocolByIdWithResearcher(protocolId)
   if (!protocol) return
 

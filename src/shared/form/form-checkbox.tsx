@@ -1,7 +1,7 @@
 import type { CheckboxProps } from '@components/checkbox'
 import { Checkbox, CheckboxField } from '@components/checkbox'
 import { Description, Label } from '@components/fieldset'
-import type { GetInputPropsReturnType } from '@mantine/form/lib/types'
+import type { GetInputPropsReturnType } from './types'
 
 export function FormCheckbox({
   label,

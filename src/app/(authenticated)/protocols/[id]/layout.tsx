@@ -29,15 +29,16 @@ export default async function Layout({
   modal,
   children,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
   evaluators: ReactNode
   actions: ReactNode
   modal: ReactNode
   children: ReactNode
 }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
   if (!session) return
-  if (params.id === 'new') {
+  if (id === 'new') {
     if (session.user.role === 'SCIENTIST') redirect('/protocols')
     return (
       <>
@@ -46,10 +47,10 @@ export default async function Layout({
       </>
     )
   }
-  const protocol = await getProtocolMetadata(params.id)
+  const protocol = await getProtocolMetadata(id)
   if (!protocol) redirect('/protocols')
 
-  const reviews = await getReviewsByProtocol(params.id)
+  const reviews = await getReviewsByProtocol(id)
 
   const isReviewListShown =
     reviews &&
@@ -105,7 +106,7 @@ export default async function Layout({
                 </ContainerAnimations>
               : null
             }
-            params={params}
+            params={{ id }}
             actions={actions}
             evaluators={evaluators}
           />

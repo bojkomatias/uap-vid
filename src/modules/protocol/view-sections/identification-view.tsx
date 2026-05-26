@@ -10,7 +10,9 @@ import {
   DescriptionTerm,
 } from '@components/description-list'
 import { Text } from '@components/text'
+import { Link } from '@components/link'
 import Info from '@shared/info'
+import { FileText } from 'tabler-icons-react'
 
 interface IdentificationProps {
   data: ProtocolSectionsIdentification
@@ -26,7 +28,7 @@ const TeamTable = ({
 }) => {
   return (
     <>
-      <DescriptionTerm>Integrantes del Equipo de Investigación</DescriptionTerm>
+      <DescriptionTerm>Equipo de investigación</DescriptionTerm>
       <DescriptionDetails>
         <div className="space-y-2">
           {/* Table Header */}
@@ -52,8 +54,18 @@ const TeamTable = ({
                   !person.active && 'line-through opacity-50'
                 }`}
               >
-                <Text className="text-left ">
+                <Text className="flex items-center gap-2 text-left">
                   {person.toBeConfirmed ? 'A definir' : person.fullName}
+                  {person.cvUserId && person.hasCv && (
+                    <Link
+                      href={`/api/files/cv/${person.cvUserId}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 text-xs text-primary-700 hover:underline dark:text-primary-300"
+                    >
+                      <FileText className="size-3.5" />
+                      CV
+                    </Link>
+                  )}
                 </Text>
                 <Text className="text-left ">
                   {person.toBeConfirmed ?
@@ -87,7 +99,7 @@ export default async function IdentificationView({
 
   const shortData = [
     {
-      title: 'Título',
+      title: 'Título descriptivo del proyecto',
       value: data.title,
     },
     {
@@ -99,7 +111,7 @@ export default async function IdentificationView({
       value: course?.name,
     },
     {
-      title: 'Ente/s Patrocinante',
+      title: 'Fuente de financiamiento',
       value: academicUnits.filter(Boolean).join(' - '),
     },
   ]
@@ -126,6 +138,8 @@ export default async function IdentificationView({
       hours: assignment?.hours ?? tm.hours ?? 0,
       active: !toDate,
       toDate: toDate ? toDate.toISOString() : null,
+      cvUserId: teamMember?.user?.id ?? null,
+      hasCv: Boolean(teamMember?.user?.cvFileKey),
     }
   })
 

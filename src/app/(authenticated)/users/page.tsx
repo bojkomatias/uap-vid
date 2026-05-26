@@ -7,9 +7,10 @@ import { ContainerAnimations } from '@elements/container-animations'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const [totalRecords, users] = await getUsers(searchParams)
+  const resolvedSearchParams = await searchParams
+  const [totalRecords, users] = await getUsers(resolvedSearchParams)
 
   return (
     <>

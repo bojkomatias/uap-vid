@@ -1,6 +1,7 @@
 import { authOptions } from 'app/api/auth/[...nextauth]/auth'
 import { getServerSession } from 'next-auth'
 import { getReviewsByReviewerId } from '@repositories/review'
+import { getCvMetadata } from '@repositories/cv'
 import { Heading, Subheading } from '@components/heading'
 import { RolesDictionary } from '@utils/dictionaries/RolesDictionary'
 import Image from 'next/image'
@@ -13,6 +14,7 @@ import { Button } from '@components/button'
 import { Text } from '@components/text'
 import { NewEmailForm } from 'modules/profile/new-email-form'
 import { NewPasswordForm } from 'modules/profile/new-password-form'
+import { CvUploadForm } from 'modules/profile/cv-upload-form'
 import Clipboard from '@elements/clipboard'
 import { ReviewerCertificate } from 'modules/profile/reviewer-certificate'
 import { Role } from '@prisma/client'
@@ -21,7 +23,10 @@ export default async function Page() {
   const session = await getServerSession(authOptions)
   if (!session) return
   const user = session.user
-  const reviews = await getReviewsByReviewerId(session.user.id)
+  const [reviews, cv] = await Promise.all([
+    getReviewsByReviewerId(session.user.id),
+    getCvMetadata(session.user.id),
+  ])
 
   return (
     <>
@@ -57,6 +62,17 @@ export default async function Page() {
         <DescriptionTerm>Rol</DescriptionTerm>
         <DescriptionDetails>{RolesDictionary[user.role]}</DescriptionDetails>
       </DescriptionList>
+
+      <div className="mt-8 print:hidden">
+        <CvUploadForm
+          userId={user.id}
+          initial={{
+            cvFileName: cv?.cvFileName ?? null,
+            cvFileSize: cv?.cvFileSize ?? null,
+            cvUploadedAt: cv?.cvUploadedAt ?? null,
+          }}
+        />
+      </div>
 
       <Heading className="mt-8 print:hidden">Editar cuenta</Heading>
       {!user.password ?

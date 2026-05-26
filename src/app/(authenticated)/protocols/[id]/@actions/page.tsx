@@ -23,10 +23,11 @@ type ProtocolWithResearcher = Prisma.ProtocolGetPayload<{
 export default async function ActionsPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
-  const protocol = await findProtocolByIdWithResearcher(params.id)
+  const protocol = await findProtocolByIdWithResearcher(id)
   if (!protocol || !session) return
   const reviews = await getReviewsByProtocol(protocol.id)
 

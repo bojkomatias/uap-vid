@@ -10,7 +10,6 @@ import {
   DurationForm,
   IdentificationForm,
   IntroductionForm,
-  MethodologyForm,
   PublicationForm,
 } from '@protocol/form-sections'
 import { ProtocolSchema } from '@utils/zod'
@@ -34,6 +33,7 @@ import { Button } from '@components/button'
 import type { z } from 'zod'
 import { createProtocol, updateProtocolById } from '@repositories/protocol'
 import { ClearLocalStorageButton } from 'modules/clear-local-storage-button'
+import { chartToBibliographyHtml } from '@utils/bibliography'
 
 const sectionMapper: { [key: number]: JSX.Element } = {
   0: <IdentificationForm />,
@@ -41,9 +41,8 @@ const sectionMapper: { [key: number]: JSX.Element } = {
   2: <BudgetForm />,
   3: <DescriptionForm />,
   4: <IntroductionForm />,
-  5: <MethodologyForm />,
-  6: <PublicationForm />,
-  7: <BibliographyForm />,
+  5: <PublicationForm />,
+  6: <BibliographyForm />,
 }
 
 // Helper functions
@@ -66,6 +65,21 @@ const clearInvalidLocalStorage = () => {
         )
         if (hasInvalidHours) {
           localStorage.removeItem('temp-protocol')
+          return
+        }
+
+        // Migrate old bibliography format (chart-only) to new format (content).
+        // Old drafts only have `chart`; the new form binds to `content`.
+        const bibliography = parsed?.sections?.bibliography
+        const hasLegacyBibliography =
+          bibliography &&
+          bibliography.chart.length > 0
+        if (hasLegacyBibliography) {
+          parsed.sections.bibliography = {
+            chart: [],
+            content: chartToBibliographyHtml(bibliography.chart),
+          }
+          localStorage.setItem('temp-protocol', JSON.stringify(parsed))
         }
       }
     } catch (error) {
@@ -91,9 +105,11 @@ const getDefaultSections = () => ({
   publication: {
     title: '',
     result: '',
+    technologicalResult: '',
   },
   bibliography: {
     chart: [],
+    content: '',
   },
   identification: {
     courseId: null,
@@ -120,16 +136,16 @@ const sanitizeTeamMember = (member: any) => ({
   ...member,
   hours:
     typeof member.hours === 'string' ? parseInt(member.hours) || null
-    : member.hours === 0 ? null
-    : member.hours,
+      : member.hours === 0 ? null
+        : member.hours,
   teamMemberId: sanitizeObjectId(member.teamMemberId),
   categoryToBeConfirmed: sanitizeObjectId(member.categoryToBeConfirmed),
   assignments: (member.assignments || []).map((assignment: any) => ({
     ...assignment,
     hours:
       typeof assignment.hours === 'string' ? parseInt(assignment.hours) || 1
-      : assignment.hours === 0 ? 1
-      : assignment.hours,
+        : assignment.hours === 0 ? 1
+          : assignment.hours,
   })),
 })
 
@@ -159,7 +175,18 @@ const sanitizeProtocolData = (protocol: any) => {
       },
       methodology: protocol.sections.methodology || defaults.methodology,
       publication: protocol.sections.publication || defaults.publication,
-      bibliography: protocol.sections.bibliography || defaults.bibliography,
+      bibliography: (() => {
+        const incoming = protocol.sections.bibliography
+        if (!incoming) return defaults.bibliography
+        const hasContent =
+          typeof incoming.content === 'string' &&
+          incoming.content.trim().length > 0
+        return {
+          chart: incoming.chart ?? [],
+          content:
+            hasContent ? incoming.content : chartToBibliographyHtml(incoming.chart),
+        }
+      })(),
     },
   }
 }
@@ -188,7 +215,7 @@ export default function ProtocolForm({
         localStorage.getItem('temp-protocol')
       ) ?
         JSON.parse(localStorage.getItem('temp-protocol')!)
-      : protocol,
+        : protocol,
     validate: zodResolver(ProtocolSchema),
     validateInputOnBlur: true,
   })
@@ -197,7 +224,7 @@ export default function ProtocolForm({
     // Validate if not existing path goes to section 0
     if (
       pathname &&
-      !['0', '1', '2', '3', '4', '5', '6', '7'].includes(
+      !['0', '1', '2', '3', '4', '5', '6'].includes(
         pathname?.split('/')[3]
       )
     )
@@ -296,8 +323,8 @@ export default function ProtocolForm({
         {!form.isValid(path) ?
           form.isDirty(path) ?
             <AlertCircle className="size-4 stroke-yellow-500" />
-          : <CircleDashed className="size-3.5 stroke-gray-500" />
-        : <CircleCheck className="size-4 stroke-teal-500" />}
+            : <CircleDashed className="size-3.5 stroke-gray-500" />
+          : <CircleCheck className="size-4 stroke-teal-500" />}
       </BadgeButton>
     ),
     [form, section]
@@ -309,7 +336,7 @@ export default function ProtocolForm({
         onBlur={() => {
           pathname?.split('/')[2] === 'new' && typeof window !== 'undefined' ?
             localStorage.setItem('temp-protocol', JSON.stringify(form.values))
-          : null
+            : null
         }}
         onSubmit={(e) => {
           e.preventDefault()
@@ -381,7 +408,7 @@ export default function ProtocolForm({
           />
           <SectionButton
             path={'sections.duration'}
-            label={'Duración'}
+            label={'Tipo y duración'}
             value={'1'}
           />
           <SectionButton
@@ -399,22 +426,17 @@ export default function ProtocolForm({
             label={'Introducción'}
             value={'4'}
           />
-          <SectionButton
-            path={'sections.methodology'}
-            label={'Metodología'}
-            value={'5'}
-          />
 
           <SectionButton
             path={'sections.publication'}
-            label={'Publicación'}
-            value={'6'}
+            label={'Producción'}
+            value={'5'}
           />
 
           <SectionButton
             path={'sections.bibliography'}
             label={'Bibliografía'}
-            value={'7'}
+            value={'6'}
           />
         </motion.div>
 
@@ -437,7 +459,7 @@ export default function ProtocolForm({
           <Button
             type="button"
             plain
-            disabled={section === '7'}
+            disabled={section === '6'}
             onClick={() => setSection((p) => (Number(p) + 1).toString())}
           >
             Sección siguiente

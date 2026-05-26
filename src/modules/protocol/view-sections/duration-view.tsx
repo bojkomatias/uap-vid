@@ -14,7 +14,7 @@ const DurationView = ({ data }: DurationViewProps) => {
             value: data.duration,
         },
         {
-            title: 'Modalidad',
+            title: 'Tipo de proyecto',
             value: data.modality,
         },
     ]
@@ -38,8 +38,8 @@ const DurationView = ({ data }: DurationViewProps) => {
     }
     return (
         <SectionViewer
-            title="Duración"
-            description="Detalles de la duración del proyecto"
+            title="Tipo y duración"
+            description="Detalles del tipo y duración del proyecto"
         >
             {shortData.map((item) => (
                 <ItemView

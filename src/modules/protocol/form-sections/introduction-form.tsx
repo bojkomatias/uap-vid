@@ -18,23 +18,20 @@ export function IntroductionForm() {
         <Legend>Introducción al proyecto</Legend>
         <FieldGroup>
           <FormTitapTextarea
-            label="Estado del arte"
-            description="Describa el estado actual del tema y principales antecedentes en la literatura"
+            label="Estado actual del tema y principales antecedentes en la literatura"
             {...form.getInputProps('sections.introduction.state')}
           />
           <FormTitapTextarea
-            label="Justificación"
-            description="Justifique científica, académica y socialmente el proyecto"
+            label="Justificación teórica, práctica, metodológica, social, económica y técnica"
+            description="Desarrollar todos los tipos de justificación que se apliquen al tipo de investigación"
             {...form.getInputProps('sections.introduction.justification')}
           />
           <FormTitapTextarea
             label="Definición del problema"
-            description="Describa y defina el problema a investigar"
             {...form.getInputProps('sections.introduction.problem')}
           />
           <FormTitapTextarea
             label="Objetivos"
-            description="Enuncie los objetivos de dicha investigación"
             {...form.getInputProps('sections.introduction.objectives')}
           />
         </FieldGroup>

@@ -8,7 +8,6 @@ import {
   reactivateTeamMember,
 } from '@repositories/team-member'
 import {
-  Description,
   Field,
   Fieldset,
   Label,
@@ -24,7 +23,6 @@ import {
 import { FormListbox } from '@shared/form/form-listbox'
 import { FormInput } from '@shared/form/form-input'
 import { FormCombobox } from '@shared/form/form-combobox'
-import { Text } from '@components/text'
 import Info from '@shared/info'
 
 import { useQuery } from '@tanstack/react-query'
@@ -258,36 +256,24 @@ export default function TeamMemberListForm() {
 
   return (
     <Fieldset>
-      <Legend>Miembros de Equipo</Legend>
-      <Text>
-        Liste los miembros de equipo con la cantidad de horas semanales o meses
-        totales a trabajar en su defecto
-      </Text>
+      <Legend>Equipo de investigación</Legend>
       <div className="mt-2 grid grid-cols-[repeat(21,minmax(0,1fr))] gap-1">
         <Field className="col-span-4">
           <Info content="Puede especificar que va a haber una persona con un rol específico trabajando en el proyecto de investigación. Si el presupuesto es aprobado, debe confirmar el nombre de esta persona antes de comenzar con el proyecto de investigación.">
-            <Label>A definir</Label>
-            <Description>Miembro de equipo a definir</Description>
+            <Label>Miembro por definir</Label>
           </Info>
         </Field>
         <Field className="col-span-3">
           <Label>Rol</Label>
-          <Description>Rol del miembro</Description>
         </Field>
         <Field className="col-span-8">
-          <Label>Miembro</Label>
-          <Description>
-            Seleccione miembro de equipo existente (si no existe, puede añadirlo
-            manualmente)
-          </Description>
+          <Label>Nombre y apellido</Label>
         </Field>
         <Field className="col-span-2">
-          <Label>Horas</Label>
-          <Description>En una semana</Description>
+          <Label>Horas semanales</Label>
         </Field>
         <Field className="col-span-2">
           <Label>Meses</Label>
-          <Description>En un año</Description>
         </Field>
         <span />
         {form
@@ -511,7 +497,7 @@ export default function TeamMemberListForm() {
         className="mt-4"
       >
         <Plus data-slot="icon" />
-        Añadir otro miembro de equipo
+        Añadir integrante del equipo
       </Button>
 
       {/* Deactivate Confirmation Dialog */}

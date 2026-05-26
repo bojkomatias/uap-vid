@@ -8,7 +8,6 @@ import {
   Label,
   Legend,
 } from '@components/fieldset'
-import { Text } from '@components/text'
 import { Button } from '@components/button'
 
 type LeafItemProps = { [key: string]: string | string[] | number }
@@ -41,14 +40,11 @@ export function ChronogramList() {
 
   return (
     <Fieldset>
-      <Legend>Cronograma de tareas</Legend>
-      <Text className="mb-2">
-        Cuadro de tareas átomicas por cada semestre de la investigación
-      </Text>
+      <Legend>Cronograma y descripción de tareas de cada integrante del equipo de investigación</Legend>
       {arraysOfData.map(({ key, array }, i) => (
         <Field key={i}>
           <Label>{key}</Label>
-          <Description>Liste las tareas del {key}</Description>
+          <Description></Description>
           {array.map((_, index) => (
             <div key={`${i}.data` + index} className="flex gap-0.5">
               <FormInput

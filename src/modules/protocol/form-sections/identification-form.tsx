@@ -55,13 +55,12 @@ export function IdentificationForm() {
         <Legend>Identificación</Legend>
         <FieldGroup>
           <FormInput
-            label="Título"
-            description="Un título descriptivo de su proyecto"
+            label="Título descriptivo del proyecto"
             {...form.getInputProps('sections.identification.title')}
           />
           <FormCombobox
             label="Carrera"
-            description="Seleccione la carrera que más relacionada esté al proyecto de investigación"
+            description="Indique la carrera con la que se relaciona el proyecto"
             options={
               careers?.map((e) => ({ value: e.id, label: e.name })) ?? []
             }
@@ -77,7 +76,7 @@ export function IdentificationForm() {
           <AssignmentInfo />
           <FormCombobox
             label="Materia"
-            description="Seleccione una materia si aplica (requerido en caso de PIC)"
+            description="Indique la asignatura con la que se relaciona el proyecto (si aplica)"
             options={courses.map((e) => ({ value: e.id, label: e.name })) ?? []}
             {...form.getInputProps('sections.identification.courseId')}
           />
@@ -85,8 +84,7 @@ export function IdentificationForm() {
           <TeamMemberListForm />
           <FormListbox
             multiple
-            label="Ente patrocinante"
-            description="Seleccione una o más unidades académicas o entes patrocinantes que auspician el proyecto"
+            label="Fuente de financiamiento"
             options={
               academicUnits?.map((e) => ({
                 value: e.id,

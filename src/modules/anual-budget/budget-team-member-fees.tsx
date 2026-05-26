@@ -203,7 +203,9 @@ export function BudgetTeamMemberFees({
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <Subheading className="text-gray-900 dark:text-gray-100">
-                              {teamMember ? teamMember.name : 'A definir'}
+                              {teamMember ?
+                                teamMember.name
+                              : 'Miembro de equipo a definir'}
                             </Subheading>
                             {isDeactivated && (
                               <Badge
@@ -361,7 +363,7 @@ export function BudgetTeamMemberFees({
           <DialogTitle>
             {selectedMember.teamMember ?
               selectedMember.teamMember.name
-            : 'A definir'}
+            : 'Miembro de equipo a definir'}
           </DialogTitle>
           <DialogBody>
             <div className="space-y-6">

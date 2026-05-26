@@ -377,12 +377,8 @@ const updateProtocolById = async (id: string, data: Protocol) => {
       data.convocatoryId = currentProtocol?.convocatoryId ?? null
     }
 
-    console.log(
-      'PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA PROTOCOL DATA ',
-      JSON.stringify(data, null, 2)
-    )
 
-    data.sections.bibliography.chart.forEach((ref) => {
+    (data.sections.bibliography.chart).forEach((ref) => {
       ref.year = parseInt(ref.year as any)
     })
 
@@ -673,9 +669,9 @@ const createProtocol = async (data: Protocol) => {
           FMR: expense.amount / currentFMR,
         }
       })
-    })
+    });
 
-    data.sections.bibliography.chart.forEach((ref) => {
+    (data.sections.bibliography.chart).forEach((ref) => {
       ref.year = parseInt(ref.year as any)
     })
 
@@ -824,12 +820,12 @@ const getProtocolsByRole = cache(
             },
           ],
         }
-      : {}
+        : {}
 
     const convocatoryFilter =
       convocatory ?
         { convocatoryId: convocatory === 'null' ? null : convocatory }
-      : {}
+        : {}
 
     const stateFilter = state ? { state: state as ProtocolState } : {}
 
@@ -848,7 +844,7 @@ const getProtocolsByRole = cache(
             },
           },
         }
-      : {}
+        : {}
 
     const queryBuilder = async () => {
       if (role === Role.RESEARCHER)

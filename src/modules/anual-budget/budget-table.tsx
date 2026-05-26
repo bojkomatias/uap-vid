@@ -124,7 +124,7 @@ function BudgetYearFilter() {
   return (
     <Listbox
       placeholder="Año presupuestado"
-      value={searchParams.get('year')}
+      value={searchParams.get('year') ?? undefined}
       onChange={(value: string) => {
         update({
           year: value,

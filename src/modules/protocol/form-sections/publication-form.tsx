@@ -2,7 +2,6 @@
 
 import { FieldGroup, Fieldset, Legend } from '@components/fieldset'
 import { FormListbox } from '@shared/form/form-listbox'
-import { FormTitapTextarea } from '@shared/form/form-tiptap-textarea'
 import { useProtocolContext } from '@utils/createContext'
 import { motion } from 'framer-motion'
 
@@ -16,18 +15,17 @@ export function PublicationForm() {
       transition={{ duration: 0.7 }}
     >
       <Fieldset>
-        <Legend>Publicación científica</Legend>
+        <Legend>Producción</Legend>
         <FieldGroup>
           <FormListbox
             label="Producción científica"
-            description="Qué se espera como producto final al cabo de realizar la investigación"
             options={results.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.publication.result')}
           />
-          <FormTitapTextarea
-            label="Título"
-            description="Titulación propuesta para el libro o revista a publicar"
-            {...form.getInputProps('sections.publication.title')}
+          <FormListbox
+            label="Producción tecnológica"
+            options={technologicalResults.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.publication.technologicalResult')}
           />
         </FieldGroup>
       </Fieldset>
@@ -36,3 +34,5 @@ export function PublicationForm() {
 }
 
 const results = ['Artículo científico', 'Capítulo de libro', 'Libro']
+
+const technologicalResults = ['Patente', 'Software', 'Prototipo', 'Informe técnico']

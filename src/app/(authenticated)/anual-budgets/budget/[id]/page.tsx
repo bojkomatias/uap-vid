@@ -14,8 +14,9 @@ import { Button } from '@components/button'
 import Info from '@shared/info'
 import { getAcademicUnitById } from '@repositories/academic-unit'
 
-export default async function Budget({ params }: { params: { id: string } }) {
-  const anualBudget = await getAnualBudgetById(params.id)
+export default async function Budget({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const anualBudget = await getAnualBudgetById(id)
   if (!anualBudget) redirect('/')
 
   const { budgetItems, budgetTeamMembers, protocol, ...rest } = anualBudget

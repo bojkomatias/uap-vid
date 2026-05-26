@@ -10,9 +10,10 @@ import { ContainerAnimations } from '@elements/container-animations'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const [totalRecords, convocatories] = await getAllConvocatories(searchParams)
+  const resolvedSearchParams = await searchParams
+  const [totalRecords, convocatories] = await getAllConvocatories(resolvedSearchParams)
   const currentConvocatory = await getCurrentConvocatory()
 
   return (

@@ -9,6 +9,10 @@ services:
       dockerfile: ./Dockerfile
     env_file:
       - ../apps/enviroments/uap-vid.env
+    environment:
+      - UPLOAD_DIR=/app/uploads
+    volumes:
+      - ./uploads:/app/uploads
     networks:
       - node-next
       - exposed-services

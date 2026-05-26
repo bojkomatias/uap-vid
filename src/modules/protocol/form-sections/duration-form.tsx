@@ -17,12 +17,11 @@ export function DurationForm() {
       transition={{ duration: 0.7 }}
     >
       <Fieldset>
-        <Legend>Duración</Legend>
+        <Legend>Tipo y duración</Legend>
         <Info />
         <FieldGroup>
           <FormListbox
-            label="Modalidad"
-            description="La modalidad que corresponde al proyecto"
+            label="Tipo de proyecto"
             options={modalities.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.duration.modality')}
             onBlur={() => {
@@ -32,7 +31,6 @@ export function DurationForm() {
           />
           <FormListbox
             label="Duración"
-            description="Seleccione la duración en meses que el proyecto va a tomar"
             disabled={!form.values.sections.duration.modality}
             options={duration(form.values.sections.duration.modality).map(
               (e) => ({ value: e, label: e })
@@ -58,11 +56,7 @@ export function DurationForm() {
 
 const modalities = [
   'Proyecto regular de investigación (PRI)',
-  'Proyecto de investigación con becados (PIB)',
   'Proyecto de investigación desde las cátedras (PIC)',
-  'Proyecto de investigación institucional (PII)',
-  'Proyecto de investigación interfacultades (PIIF)',
-  'Proyecto I + D + i (PIDi)',
   'Proyecto Tesis Posgrado (PTP)',
 ]
 

@@ -7,19 +7,20 @@ export default async function Page({
   params,
   searchParams,
 }: {
-  params: { academicUnitId: string }
-  searchParams: { [key: string]: string }
+  params: Promise<{ academicUnitId: string }>
+  searchParams: Promise<{ [key: string]: string }>
 }) {
+  const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
   const currentYear = new Date().getFullYear()
-  const year = searchParams.year ? parseInt(searchParams.year) : currentYear
+  const year = resolvedSearchParams.year ? parseInt(resolvedSearchParams.year) : currentYear
 
   const [totalRecords, anualBudgets] = await getAnualBudgetsByAcademicUnit(
-    searchParams,
-    params.academicUnitId
+    resolvedSearchParams,
+    resolvedParams.academicUnitId
   )
 
-  const budgetSummary = await getBudgetSummary(params.academicUnitId, year)
-  console.log('page.tsx', params.academicUnitId)
+  const budgetSummary = await getBudgetSummary(resolvedParams.academicUnitId, year)
   return (
     <>
       <BudgetSummary summary={budgetSummary} />

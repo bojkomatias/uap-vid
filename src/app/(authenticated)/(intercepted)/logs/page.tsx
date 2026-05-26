@@ -7,9 +7,10 @@ import { redirect } from 'next/navigation'
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const logs = await getLogs(searchParams)
+  const resolvedSearchParams = await searchParams
+  const logs = await getLogs(resolvedSearchParams)
 
   if (!logs) redirect('/protocols')
 

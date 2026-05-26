@@ -9,11 +9,11 @@ interface DescriptionViewProps {
 const DescriptionView = ({ data }: DescriptionViewProps) => {
   const shortData = [
     {
-      title: 'Campo',
+      title: 'Campo de aplicación',
       value: data.field,
     },
     {
-      title: 'Disciplina',
+      title: 'Área de investigación',
       value: data.discipline,
     },
     {
@@ -21,8 +21,16 @@ const DescriptionView = ({ data }: DescriptionViewProps) => {
       value: data.line,
     },
     {
-      title: 'Tipo de investigación',
+      title: 'Tipo de investigación según el propósito',
       value: data.type,
+    },
+    {
+      title: 'Tipo de investigación según el enfoque metodológico',
+      value: data.methodologicalApproach ?? '',
+    },
+    {
+      title: 'Tipo de investigación según el diseño metodológico',
+      value: data.methodologicalDesign ?? '',
     },
     {
       title: 'Objetivo',

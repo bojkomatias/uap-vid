@@ -7,9 +7,10 @@ import { NewAcademicUnitFormDialog } from 'modules/academic-unit/new-academic-un
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { [key: string]: string }
+  searchParams: Promise<{ [key: string]: string }>
 }) {
-  const [totalRecords, academicUnits] = await getAllAcademicUnits(searchParams)
+  const resolvedSearchParams = await searchParams
+  const [totalRecords, academicUnits] = await getAllAcademicUnits(resolvedSearchParams)
 
   return (
     <>

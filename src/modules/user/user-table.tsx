@@ -108,7 +108,7 @@ function RoleFilter() {
   return (
     <Listbox
       placeholder="Rol de usuario"
-      value={searchParams.get('role')}
+      value={searchParams.get('role') ?? undefined}
       onChange={(value: string) => {
         update({
           role: value,

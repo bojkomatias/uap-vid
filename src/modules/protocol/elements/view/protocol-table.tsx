@@ -344,7 +344,7 @@ function AcademicUnitFilter({
   return (
     <Listbox
       placeholder="Unidad académica"
-      value={searchParams.get('unit')}
+      value={searchParams.get('unit') ?? undefined}
       onChange={(value: string) => {
         update({
           unit: value,
@@ -368,7 +368,7 @@ function StateFilter() {
   return (
     <Listbox
       placeholder="Estado"
-      value={searchParams.get('state')}
+      value={searchParams.get('state') ?? undefined}
       onChange={(value: string) => {
         update({
           state: value,
@@ -394,7 +394,7 @@ function ConvocatoryFilter() {
   return (
     <Listbox
       placeholder="Convocatoria"
-      value={searchParams.get('convocatory')}
+      value={searchParams.get('convocatory') ?? undefined}
       onChange={(value: string) => {
         update({
           convocatory: value,

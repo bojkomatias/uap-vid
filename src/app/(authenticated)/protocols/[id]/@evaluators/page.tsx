@@ -18,10 +18,11 @@ import { EvaluatorsDialog } from '@protocol/elements/open-evaluators-dialog'
 export default async function ReviewAssignation({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
-  const protocol = await getProtocolMetadata(params.id)
+  const protocol = await getProtocolMetadata(id)
   if (!session || !protocol) return
 
   if (

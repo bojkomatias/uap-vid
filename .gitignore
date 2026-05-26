@@ -50,3 +50,8 @@ next-env.d.ts
 
 sensitive.json
 nul
+
+.claude
+
+# local uploads (CVs, etc.)
+/uploads

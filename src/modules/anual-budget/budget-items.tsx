@@ -239,7 +239,7 @@ export function BudgetItems({
                           className="w-32 text-right font-semibold"
                           {...form.getInputProps(`${i}.amount`)}
                           value={form.getInputProps(`${i}.amount`).value ?? ''}
-                          onChange={(e) =>
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             form.setFieldValue(
                               `${i}.amount`,
                               e.target.value || null

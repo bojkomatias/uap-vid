@@ -4,11 +4,12 @@ import { getTeamMemberById } from '@repositories/team-member'
 import { getAllNonTeamMembers } from '@repositories/user'
 import TeamMemberForm from 'modules/team-member/team-member-form'
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const member = params.id === 'new' ? null : await getTeamMemberById(params.id)
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const member = id === 'new' ? null : await getTeamMemberById(id)
 
   const researchers = await getAllNonTeamMembers(
-    params.id !== 'new' ? params.id : undefined
+    id !== 'new' ? id : undefined
   )
 
   const academicUnits = await getAcademicUnitsTabs()

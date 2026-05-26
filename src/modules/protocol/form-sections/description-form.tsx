@@ -22,8 +22,7 @@ export function DescriptionForm() {
         <Legend>Descripción del proyecto</Legend>
         <FieldGroup>
           <FormListbox
-            label="Disciplina y área"
-            description="Disciplina general y área especifica que involucra el proyecto"
+            label="Área de investigación"
             options={disciplines.map((d) => ({ value: d, label: d }))}
             {...form.getInputProps('sections.description.discipline')}
             onBlur={() => {
@@ -32,7 +31,6 @@ export function DescriptionForm() {
           />
           <FormCombobox
             label="Línea de investigación"
-            description="Seleccione la línea de investicación del proyecto"
             options={
               !lines(form.values.sections.description.discipline) ?
                 []
@@ -48,35 +46,40 @@ export function DescriptionForm() {
             {...form.getInputProps('sections.description.line')}
           />
           <FormTitapTextarea
-            label="Resumen técnico"
-            description="Redacte un resumen breve entre 150 y 250 palabras"
+            label="Resumen técnico, con una extensión mínima de 150 palabras y máxima de 250 palabras"
             {...form.getInputProps('sections.description.technical')}
           />
           <FormInput
             label="Palabras clave"
-            description="Liste todas las palabras claves que ayuden a describir el proyecto"
             {...form.getInputProps('sections.description.words')}
           />
           <FieldInfo />
           <FormListbox
-            label="Aplicación"
-            description="El campo de aplicación del proyecto"
+            label="Campo de aplicación"
             options={fields.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.description.field')}
           />
           <ObjectiveInfo />
           <FormListbox
             label="Objetivo socioeconómico"
-            description="Objetivo de la investigación en terminos socioeconómicos"
             options={objective.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.description.objective')}
           />
           <TypeInfo />
           <FormListbox
-            label="Tipo de investigación"
-            description="El tipo de la investigación a realizar"
+            label="Tipo de investigación según el propósito"
             options={type.map((e) => ({ value: e, label: e }))}
             {...form.getInputProps('sections.description.type')}
+          />
+          <FormListbox
+            label="Tipo de investigación según el enfoque metodológico"
+            options={methodologicalApproachOptions.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.description.methodologicalApproach')}
+          />
+          <FormListbox
+            label="Tipo de investigación según el diseño metodológico"
+            options={methodologicalDesignOptions.map((e) => ({ value: e, label: e }))}
+            {...form.getInputProps('sections.description.methodologicalDesign')}
           />
         </FieldGroup>
       </Fieldset>
@@ -424,5 +427,20 @@ const objective = [
 const type = [
   'Investigación básica',
   'Investigación aplicada',
-  'Desarrollo experimental',
+  'Investigación experimental',
+]
+
+const methodologicalApproachOptions = [
+  'Cualitativa',
+  'Cuantitativa',
+  'Mixta',
+  'Ninguna de estas',
+]
+
+const methodologicalDesignOptions = [
+  'Documental',
+  'De campo',
+  'Experimental',
+  'No experimental',
+  'Ninguna de estas',
 ]

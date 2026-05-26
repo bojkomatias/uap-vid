@@ -10,12 +10,13 @@ import { Action, ProtocolState } from '@prisma/client'
 export default async function Page({
   params,
 }: {
-  params: { id: string; section: string }
+  params: Promise<{ id: string; section: string }>
 }) {
+  const { id, section } = await params
   const session = await getServerSession(authOptions)
   if (!session) return
 
-  if (params.id === 'new') {
+  if (id === 'new') {
     if (session.user.role !== 'SCIENTIST')
       return (
         <ProtocolForm
@@ -28,7 +29,7 @@ export default async function Page({
       )
   }
 
-  const protocol = await findProtocolById(params.id)
+  const protocol = await findProtocolById(id)
   if (!protocol) redirect('/protocols')
 
   // Allow admins to edit protocols in any state (admin override)

@@ -5,8 +5,9 @@ import {
 } from '@repositories/team-member-category'
 import { CategorizationDialog } from 'modules/team-member/categorization-dialog'
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const member = await getTeamMemberById(params.id)
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const member = await getTeamMemberById(id)
   const categories = await getAllCategories()
   const obreroCategory = await getObreroCategory()
 

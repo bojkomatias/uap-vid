@@ -57,9 +57,9 @@ const BudgetTable = ({ data }: { data: ProtocolSectionsBudget }) => {
 
               {/* Table Header */}
               <div className="grid grid-cols-3 gap-4 border-b border-gray-100 pb-2">
-                <Text className="text-left">Detalle</Text>
-                <Text className="text-left">Año</Text>
-                <Text className="text-left">Monto</Text>
+                <Text className="text-left">Descripción</Text>
+                <Text className="text-left">Año en el que se usará</Text>
+                <Text className="text-left">Costo actual</Text>
               </div>
 
               {/* Expense Items */}

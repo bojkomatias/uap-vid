@@ -295,51 +295,13 @@ export const upsertAcademicUnit = async (
   const { id, ...rest } = academicUnit
   try {
     if (!id) {
-      // When creating a new academic unit, also create default budgets
-      const newUnit = await prisma.academicUnit.create({
-        data: academicUnit,
-      })
-
-      // Create default budgets for 2024 and 2025
-      await createDefaultBudgetsForAcademicUnit(newUnit.id)
-
-      return newUnit
+      return await prisma.academicUnit.create({ data: academicUnit })
     }
-
     return await prisma.academicUnit.update({ where: { id }, data: rest })
   } catch (error) {
     console.info(error)
     return null
   }
-}
-
-// NEW: Create default budgets for a new academic unit
-export const createDefaultBudgetsForAcademicUnit = async (
-  academicUnitId: string
-) => {
-  const defaultAmountIndex = { FCA: 20, FMR: 20 }
-  const requiredYears = [2024, 2025]
-
-  const budgetPromises = requiredYears.map((year) =>
-    prisma.academicUnitBudget.upsert({
-      where: {
-        academicUnitId_year: {
-          academicUnitId,
-          year,
-        },
-      },
-      update: {}, // Don't update if exists
-      create: {
-        academicUnitId,
-        year,
-        amountIndex: defaultAmountIndex,
-        from: new Date(`${year}-01-01`),
-        to: new Date(`${year}-12-31`),
-      },
-    })
-  )
-
-  return await Promise.all(budgetPromises)
 }
 
 // UPDATED: New budget update function for the new model
@@ -474,24 +436,3 @@ export const getSecretariesEmailsByAcademicUnit = async (id: string) => {
   }
 }
 
-// NEW: Helper function to ensure academic unit has required budgets
-export const ensureAcademicUnitHasRequiredBudgets = async (
-  academicUnitId: string
-) => {
-  const requiredYears = [2024, 2025]
-  const existingBudgets = await prisma.academicUnitBudget.findMany({
-    where: { academicUnitId },
-    select: { year: true },
-  })
-
-  const existingYears = existingBudgets.map((b) => b.year)
-  const missingYears = requiredYears.filter(
-    (year) => !existingYears.includes(year)
-  )
-
-  if (missingYears.length > 0) {
-    await createDefaultBudgetsForAcademicUnit(academicUnitId)
-  }
-
-  return missingYears.length
-}
